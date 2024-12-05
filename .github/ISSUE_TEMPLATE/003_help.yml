@@ -45,10 +45,3 @@ body:
         Please verify that you've followed these steps:
           - I have searched [openvela Documentation](https://github.com/open-vela/docs) and didn't find an answer to my question.
           - Search [existing issues](https://github.com/open-vela/docs/issues) (including [closed](https://github.com/open-vela/docs/issues?q=is%3Aissue+is%3Aclosed))
-
-  - type: checkboxes
-    attributes:
-      label: "Verification"
-      options:
-        - label: "I have verified before submitting the report."
-          required: true

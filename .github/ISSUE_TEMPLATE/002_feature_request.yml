@@ -53,10 +53,3 @@ body:
 
         Please verify that you've followed these steps:
           - Search [existing feature requests](https://github.com/open-vela/docs/issues) (including [closed](https://github.com/open-vela/docs/issues?q=is%3Aissue+is%3Aclosed))
-
-  - type: checkboxes
-    attributes:
-      label: "Verification"
-      options:
-        - label: "I have verified before submitting the report."
-          required: true
