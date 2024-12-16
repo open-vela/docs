@@ -197,3 +197,50 @@ Quits GDB:
 6. Start a debug session.
 
     In order to start a debug session, first select the configuration named Launch Program using the Configuration dropdown in the Run and Debug view. select `Debug openvela`, start your debug session with F5.
+
+## Use Clion(Remote Debug)
+
+1. download clion from here (recommend newer version) https://www.jetbrains.com/clion/
+
+2. Config SSH Configurations
+
+   click `Customize | All Settings` to menu from Welcome page
+   (if you already open a project click `File | Close Project` back to welcome page)
+
+   click the `+` button and fill the ssh info (then check) like this
+   ![003.png](images/003.png)
+
+3. Config and Choose Remote Project
+
+   On Welcome page select `Remote Development | SSH | New Project`
+   select the ssh connection we config before and click the button `Check Connection and Continute`
+   choose ide then select the project when we clone before
+   then click `Start IDE and Connect`
+   
+   ![004.png](images/004.png)
+
+   wait for download finish and `Authenticate` like this
+   ![005.png](images/005.png)
+
+4. Create Debug Configuration
+
+   click `Add Configuration | Remote GDB Server` and config like this
+   ![006.png](images/006.png)
+
+   Target can be created with default(just a target)
+   ![007.png](images/007.png)
+
+5. Launch openvela Emulator with the `-s` and `-S` options to use gdb.
+
+    ```
+    ./emulator.sh vela -qemu -S -s
+    ```
+
+6. Start a debug session.
+
+   click debug icon then we can debug
+   ![008.png](images/008.png)
+
+   (you would get the confirmation when you do the first debug)
+   ![009.png](images/009.png)
+   ![010.png](images/010.png)
