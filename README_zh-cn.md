@@ -45,7 +45,7 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | [frameworks](../../../../open-vela/frameworks) | openvela 服务框架：主要包含蓝牙、电话、图形、多媒体、应用框架、安全、系统服务框架（KVDB、OTA、healthd、binder、charger 等）。|
 | [vendor](../../../../open-vela/vendor) | 芯片原厂的驱动和框架。 |
-| [nuttx](../../../../open-vela/nuttx) | 基于开源实时操作系统 NuttX 打造的内核，提供基础的内核功能，包括任务调度、跨进程通信、文件系统、TCP/IP 协议栈、设备驱动和电源管理等，同时对上提供标准的 POSIX 接口。需要对 NuttX 操作系统有更深入了解，可以在 [Apache NuttX](https://nuttx.apache.org/) 官网查看更多信息。 |
+| [nuttx](../../../../open-vela/nuttx) | 基于开源实时操作系统 NuttX 打造的内核，提供基础的内核功能，包括任务调度、跨进程通信、文件系统、TCP/IP 协议栈、设备驱动和电源管理等，同时对上提供标准的 POSIX 接口。如果您想要对 NuttX 操作系统有更深入了解，可以在 [Apache NuttX](https://nuttx.apache.org/) 官网查看更多信息。 |
 | [apps](../../../../open-vela/apps) | `apps` 是开源实时操作系统（NuttX）的应用程序库，包含了一系列为 NuttX RTOS 设计的应用程序和实用工具。这些应用程序和工具包括 shell 命令行工具、文件系统工具、网络工具等，它们可以帮助开发者更方便地开发和调试基于 NuttX RTOS 的嵌入式系统。 |
 | [external](../../../../open-vela/external) | openvela 引入的三方库。 |
 | [tests](../../../../open-vela/tests) | 该仓库包含接口测试，具体包括多媒体、文件系统、内存管理和 socket 通信等核心 API 的测试。 |
