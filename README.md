@@ -39,6 +39,19 @@ If you want to experience openvela, we provide a fully functional simulator that
 3. [Compile openvela source code](./Getting_Started/Build_Vela_from_sources.md)
 4. [Run build artifacts on openvela Emulator](./Getting_Started/Run_Vela_on_Vela_Emulator.md)
 
+## Sub-repository List  
+
+| Sub-repository Link                                         | Description                                                  |  
+| :--------------------------------------------------------- | :--------------------------------------------------------- |  
+| [frameworks](../../../../open-vela/frameworks)            | openvela service framework: primarily includes Bluetooth, telephony, graphics, multimedia, application frameworks, security, and system service frameworks (KVDB, OTA, healthd, binder, charger, etc.). |  
+| [packages](../../../../open-vela/packages)                | Business-side application examples: demo and sample code (`sample code`). |  
+| [vendor](../../../../open-vela/vendor)                    | Drivers and frameworks provided by the original chip manufacturers.      |  
+| [nuttx](../../../../open-vela/nuttx)                      | A kernel built on the open-source real-time operating system NuttX, providing essential kernel functions, including task scheduling, inter-process communication, file systems, TCP/IP stack, device drivers, and power management, while offering a standard POSIX interface. For a deeper understanding of the NuttX operating system, more information can be found on the [Apache NuttX](https://nuttx.apache.org/) website. |  
+| [apps](../../../../open-vela/apps)                        | This repository mainly contains two parts: <br> <ol> <li>Extensions based on the NuttX community: nsh, net, examples, builtin_apps, etc.</li> <li>System libraries: LVGL and libuv, etc.</li> </ol>  |  
+| [external](../../../../open-vela/external)                | Third-party libraries introduced by openvela.             |  
+| [tests](../../../../open-vela/tests)                      | This repository contains interface tests, specifically including core API tests for multimedia, file systems, memory management, and socket communication. |  
+| [docs](../../../../open-vela/docs)                        | Developer documentation for openvela.        |
+
 ## Examples
 
 * [Music Player Example](./Examples/Music_Player_Example.md)
