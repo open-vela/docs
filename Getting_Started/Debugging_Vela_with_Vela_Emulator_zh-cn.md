@@ -198,14 +198,14 @@ d <breakpoint-number>
 
     为了启动调试会话，首先使用 `Run and Debug` 视图中的 `Configuration` 下拉列表，选择 `Debug openvela` 的配置。设置启动配置后，使用 `F5` 启动调试会话。
 
-## 使用Clion(远程调试)
+## 使用 Clion (远程调试)
 
-1. 下载并且安装Clion(建议使用较新版本) https://www.jetbrains.com/clion/
+1. 下载并且安装 Clion (建议使用较新版本) https://www.jetbrains.com/clion/
 
 2. 打开 SSH Configurations 菜单
    
    可以在 Welcome 页面 `Customize | All Settings` 打开菜单
-   (如果已经打开工程 可以点击 `File | Close Project` 返回welcome页面)
+   (如果已经打开工程 可以点击 `File | Close Project` 返回 Welcome 页面)
    
    点击 `+` 符号 填写好相应信息后测试连接成功后保存 例如
    ![003.png](images/003.png)
@@ -213,8 +213,8 @@ d <breakpoint-number>
 3. 配置并选择远程工程
    
    在 Welcome 页面 选择 `Remote Development | SSH | New Project`
-   再选择刚才创建的SSH连接 点击右下角 `Check Connection and Continute`
-   选择一个 IDE 版本 然后项目路径选择克隆下来的vela工程路径根目录后点击Start IDE and Connect 例如
+   再选择刚才创建的 SSH 连接 点击右下角 `Check Connection and Continute`
+   选择一个 IDE 版本 然后项目路径选择克隆下来的 vela 工程路径根目录后点击 Start IDE and Connect 例如
    ![004.png](images/004.png)
    
    等待下载完成后点击确定 Authenticate
@@ -236,10 +236,10 @@ d <breakpoint-number>
 
 6. 开始调试会话
    
-   点击debug按钮即可进行调试
+   点击 debug 按钮即可进行调试
 
    ![008.png](images/008.png)
 
-   (如果弹出认证对话框 输入密码或者选择配置的ssh key即可)
+   (如果弹出认证对话框 输入密码或者选择配置的 ssh key 即可)
    ![009.png](images/009.png)
    ![010.png](images/010.png)
