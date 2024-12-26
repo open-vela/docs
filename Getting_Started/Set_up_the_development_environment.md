@@ -33,7 +33,7 @@ libc++-dev libc++abi-dev libprotobuf-dev protobuf-compiler protobuf-c-compiler m
 
 Run the following command to install Repo Launcher:
 
-```
+```bash
 curl https://storage.googleapis.com/git-repo-downloads/repo > repo
 chmod +x repo
 sudo mv repo /usr/local/bin/
@@ -45,23 +45,22 @@ The Repo Launcher provides a Python script that initializes a checkout and downl
 
 The configuration system of openvela uses [KConfig](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt). KConfig configures the system via a series of interactive menu-based frontends, part of the kconfig-frontends package.Whether to use a package or build it from source depends on the current operating system. The source code is available in [NuttX tools repository](https://bitbucket.org/nuttx/tools/src/master/kconfig-frontends/).
 
-```
+```bash
 sudo apt install kconfig-frontends
 ```
 
 ## Install Python
 
-```
+```bash
 sudo apt install python3 python3-pip python-is-python3
 ```
 
 ## Install Python package
 
-```
+```bash
 sudo pip3 install kconfiglib pyelftools cxxfilt
 ```
 
 ## Next steps
 
-Refer to [Compile the openvela source code](./Download_Vela_sources.md).
-
+Refer to [Download openvela code](./Download_Vela_sources.md).
