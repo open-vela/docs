@@ -1,0 +1,14 @@
+# This is a basic workflow to help you get started with Actions
+
+name: checkpatch
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  checkpatch:
+    uses: open-vela/public-actions/.github/workflows/checkpatch.yml@trunk
+    secrets: inherit

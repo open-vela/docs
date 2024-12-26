@@ -1,119 +1,116 @@
-# Music Player Demo
+# Demo of music player
 
 \[ English | [简体中文](Music_Player_Example_zh-cn.md) \]
 
 ## Introduction
 
-This article describes how to run the music player demo in openvela Emulator.
+This article describes how to run the music player demo on openvela Emulator.
 
 ## Prerequisites
 
-1. To build a development environment, please refer to [Environment Building](../Getting_Started/Set_up_the_development_environment.md).
+1. Set up the development environment. Refer to [Environment Setup](../Getting_Started/Set_up_the_development_environment.md).
 
-2. To download the source code, please refer to [Download openvela source code](../Getting_Started/Download_Vela_sources.md).
+2. Download the source code. Refer to [Download openvela source code](../Getting_Started/Download_Vela_sources.md).
 
-## Step 1 Configure the project
+## Step 1: Configure the project
 
-1. Switch to the root directory of the openvela repository and execute the following command to configure the music player.
-    > The simulator configuration file (defconfig) is in the `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` directory. Use `build.sh` to configure and compile the code of the development board.
+1. Switch to the root directory of openvela repository and execute the following command to configure the music player.
 
-    ```Bash
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
-    ```
+   > The emulator configuration file (defconfig) is in the “vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/” directory, and the development board code is configured and compiled using “build.sh”.
 
-    - build.sh: compilation script, used to configure and compile openvela code
-    - vendor/openvela/boards/vela/configs/*: configuration path
-    - menuconfig: open the menuconfig page and modify the configuration of the project code.
+   ```Bash
+   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
+   ```
 
-    After execution, the following interface appears:
-    ![img](images/020.png)
+   - build.sh: A script for compilation used to configure and compile openvela code.
+   - vendor/openvela/boards/vela/configs/\*：configuration path
+   - menuconfig: Open the menuconfig page to modify the configuration of the project code.
 
-2. Press the `/` key to search and modify the following configurations one by one:
+   The following screen appears after execution:
+   ![img](images/020.png)
 
-    ```Bash
-    LVX_USE_DEMO_MUSIC_PLAYER=y
-    LVX_MUSIC_PLAYER_DATA_ROOT="/data"
-    ```
+2. Press the “/” key to search and modify the following configurations:
 
-    > Take `LVX_MUSIC_PLAYER_DATA_ROOT` as an example, and the modification method of `LVX_USE_DEMO_MUSIC_PLAYER` configuration is the same.
+   ```Bash
+   LVX_USE_DEMO_MUSIC_PLAYER=y
+   LVX_MUSIC_PLAYER_DATA_ROOT="/data"
+   ```
 
-    1. Enter the configuration to be searched `LVX_USE_DEMO_MUSIC_PLAYER`, which supports fuzzy search, such as `music_player`, find the corresponding configuration, and press Enter to enter the configuration.
+   1. Enter the configuration “LVX_USE_DEMO_MUSIC_PLAYER” to be searched. Fuzzy search is supported; for example, “music_player” will get the corresponding configuration. Press the Enter key to enter that configuration.
+      ![img](images/021.png)
 
-        ![img](images/021.png)
+   2. Press the spacebar, and a \* that appears in [ ] indicates that the configuration is turned on.
+      ![img](images/022.png)
 
-    2. Press the space bar, and `*` appears in `[ ]` to open the configuration.
+   3. Set “LVX_MUSIC_PLAYER_DATA_ROOT” to “/data”, and press Enter to save the current configuration.
+      ![img](images/023.png)
 
-        ![img](images/022.png)
+   4. Press the letter Q to bring up the exit Save screen as follows.
+      ![img](images/024.png)
 
-    3. Set `LVX_MUSIC_PLAYER_DATA_ROOT` to `/data`, and press Enter to save the current configuration item after modification.
+   5. Press the letter Y to save the configuration and exit the Modify Configuration page.
 
-        ![img](images/023.png)
+## Step 2: Compile the project
 
-    4. Press the `Q` key to pop up the following exit save interface. 
+1. Switch to the root directory of openvela repository and execute the following commands one by one in a terminal:
 
-        ![img](images/024.png)
+   ```Bash
+   # Clean up build artifacts
+   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j$(nproc)
 
-    5. Press the letter `Y` key to save the configuration and exit the configuration modification page.
+   # Start to build
+   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
+   ```
 
-## Step 2 Compile the project
+2. After successful execution, you will get the following files:
 
-1. Switch to the root directory of the openvela repository and execute the following commands in the terminal:
+   ```
+   ./nuttx
+   ├── vela_ap.elf
+   ├── vela_ap.bin
+   ```
 
-    ```Bash
-    # Clean up build artifacts
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j$(nproc)
+## Step 3: Launch the emulator and push resources
 
-    # Start building
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
-    ```
+The font and image resources used by the music player are located in “apps/packages/demos/music_player/res”.To push these resources to the corresponding file paths mounted by the emulator, follow the steps below.
 
-2. After successful execution, the following files will be obtained:
+1. Switch to the root directory of openvela repository and start the emulator:
 
-    ```C++
-    ./nuttx
-    ├── vela_ap.elf
-    ├── vela_ap.bin
-    ```
+   ```Bash
+   ./emulator.sh vela
+   ```
 
-## Step 3 Start the simulator and push resources
-The font and image resources used in the music player are located in `apps/packages/demos/music_player/res`. To push these resources to the corresponding file path mounted by the simulator, follow the steps below.
+2. Push resources to the device by using emulator-supported ADB. Open a new terminal in the root directory of openvela repository, type “adb push” followed by the file path to transfer the resources to the appropriate location.
 
-1. Switch to the root directory of the openvela repository and start the emulator:
+   ```Bash
+   #Install adb
+   sudo apt install android-tools-adb
 
-    ```Bash
-    ./emulator.sh vela
-    ```
+   #Push resources
+   adb push apps/packages/demos/music_player/res /data/
+   ```
 
-2. Use `ADB` supported by the emulator to push resources to the device. Open a new terminal in the code root directory and enter `adb push` followed by the file path to transfer the resources to the corresponding location.
+## Step 4: Start the music player
 
-    ```Bash
-    # Install adb
-    sudo apt install android-tools-adb
-
-    # Push resources
-    adb push apps/packages/demos/music_player/res /data/
-    ```
-
-## Step 4 Start the music player
-
-Enter the following command in the simulator's terminal environment `openvela-ap>`:
+Enter the following command in the emulator's terminal environment “openvela-ap”:
 
 ```Bash
 music_player &
 ```
+
 ![img](images/025.png)
 
-## Step 5 Exit Demo
+## Step 5: Exit Demo
 
-Close the simulator and exit Demo, as shown below:
+Shut down the emulator to exit Demo, as shown below:
 
 ![img](images/026.png)
 
 ## FAQ
 
-### How to customize the music player
+### How to customize the music player?
 
-1. Modify the relevant configuration under `apps/packages/demos/music_player/res`, and add new music media files under the `res/musics` directory. The format currently only supports `*.wav`. You can convert media files in formats such as `*.mp3/aac/m4a` to `*.wav` format by yourself. Then modify the `res/musics/manifest.json` file in the directory:
+1. Modify the configuration under “apps/packages/demos/music_player/res” to add new music media files in the “res/musics” directory. Only the “\_.wav” format is currently supported. You can convert file formats “_.mp3/aac/m4a” to “\*.wav”.Then, modify the “res/musics/manifest.json” file in that directory:
 
     ```JSON
     {
@@ -130,49 +127,49 @@ Close the simulator and exit Demo, as shown below:
     }
     ```
 
-    | Parameters | Parameter description |
-    | :--------- | :--------------------------------------- |
-    | path | The file path of the media to be played |
-    | name | The name of the media |
-    | artist | The name of the artist |
-    | cover | The path of the cover. If no cover is provided, the cover will be displayed. |
-    | total_time | The total playing time of the media, in `milliseconds`. |
-    | color | Theme color, not used yet. |
+   | Parameters                      | Description of parameters                                                                         |
+   | :------------------------------ | :------------------------------------------------------------------------------------------------ |
+   | path                            | File path of the media item to be played                                                          |
+   | name                            | Name of the media item                                                                            |
+   | artist                          | Name of the artist                                                                                |
+   | cover                           | Cover path. If no cover is provided, the cover will be displayed. |
+   | total_time | The total playing duration of the media item in “milliseconds”.                   |
+   | color                           | Theme color, not currently used.                                                  |
 
-    Refer to this format and add the media you want to play to the configuration file.
+   Refer to the format. Add the media item you want to play to that configuration file.
 
-    For example, to add a music file called `Happiness.wav` with a playing duration of `186,507 ms`, you can modify it as follows.
+   For example, to add music “Happiness.wav” with a playing time of 186,507 ms, you can modify it as follows.
 
-      ```JSON
-      {
-        "musics": [
-          {
-            "path": "UnamedRhythm.wav",
-            "name": "UnamedRhythm",
-            "artist": "Benign X",
-            "cover": "UnamedRhythm.png",
-            "total_time": 12000,
-            "color": "#114514"
-          },
-          {
-            "path": "Happiness.wav",
-            "name": "Xin",
-            "artist": "Tang",
-            "cover": "Good.png",
-            "total_time": 186507,
-            "color": "#252525"
-          },
-        ]
-      }
-      ```
+   ```JSON
+   {
+     "musics": [
+       {
+         "path": "UnamedRhythm.wav",
+         "name": "UnamedRhythm",
+         "artist": "Benign X",
+         "cover": "UnamedRhythm.png",
+         "total_time": 12000,
+         "color": "#114514"
+       },
+       {
+         "path": "Happiness.wav",
+         "name": "Xin",
+         "artist": "Tang",
+         "cover": "Good.png",
+         "total_time": 186507,
+         "color": "#252525"
+       },
+     ]
+   }
+   ```
 
-    After modifying the configuration, you need to push the resources again. Execute the following command:
+   After modifying the configuration, you need to push resources again by executing the following command:
 
     ```Bash
     # Push resources
     adb push apps/packages/demos/music_player/res /data/
     ```
 
-2. Exit the simulator.
+2. Exit the emulator.
 
-3. Repeat [Step 3](#step-3-start-the-simulator-and-push-resources) and [Step 4](#step-4-start-the-music-player).
+3. Execute [Step 3](#step-3-launch-the-emulator-and-push-resources) and [Step 4](#step-4-start-the-music-player) again.
