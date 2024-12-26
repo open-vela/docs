@@ -24,9 +24,9 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Comprehensive Connectivity Suite**: openvela offers broad protocol support, including Bluetooth BR/EDR/LE, LE Mesh, WiFi, Matter, IEEE802.15.4, and LTE Cat1, Ethernet, CAN/LIN, etc. Additionally, it seamlessly integrates with Xiaomi HyperConnect protocols.
 
-- **Rich Developer Tools**: openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dumb, and log analysis tools. 
+- **Rich Developer Tools**: openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dumb, and log analysis tools.
 
-## Supported Platforms
+## Supported platforms
 
 openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS, CEVA, etc.) and platforms. See the full list on the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page.
 
@@ -53,9 +53,9 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 ## Examples
 
-* [Music player](./Examples/Music_Player_Example.md)
-* [Smart band](./Examples/Smart_Band_Example.md)
-* [Bike computer](./Examples/X_Track.md)
+- [Music player](./Examples/Music_Player_Example.md)
+- [Smart band](./Examples/Smart_Band_Example.md)
+- [Bike computer](./Examples/X_Track.md)
 
 ## Code contribution
 
