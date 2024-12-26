@@ -1,7 +1,9 @@
 # FAQ
 
-## 1 What programming languages ​​can be used to develop applications for openvela
-Native is mainly C/C++, and quick applications use javascript.
+## 1. What language can openvela use to develop applications?
 
-## 2 What is the relationship between Xiaomi vela and openvela
-Openvela and Xiaomi vela are based on the same set of code, and openvela is an open source version.
+Native programs mainly use C/C++. JavaScript is used for fast apps.
+
+## 2. Relationship between Xiaomi Vela and openvela
+
+openvela and Xiaomi vela are based on the same code, and openvela is an open source version.

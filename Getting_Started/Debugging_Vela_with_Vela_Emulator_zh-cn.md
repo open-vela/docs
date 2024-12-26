@@ -6,7 +6,7 @@
 
 使用下列命令，在 Ubuntu 22.04 版本的系统上安装所需的软件包：
 
-```
+```bash
 sudo apt update
 sudo apt install gdb-multiarch
 ```
@@ -17,17 +17,17 @@ openvela Emulator 支持通过 GDB 远程连接工具（gdbstub）使用 GDB。�
 
 要启用与 GDB 服务器的连接，您需要将 `-qemu -S -s` 参数传递给 `emulator.sh`。
 
-```
+```bash
 ./emulator.sh vela -qemu -S -s
 ```
 
 打开新的终端，运行 `gdb-multiarch`：
 
-```
+```bash
 gdb-multiarch nuttx/nuttx
 ```
 
-```
+```bash
 GNU gdb (Ubuntu 12.1-0ubuntu1~22.04.2) 12.1
 Copyright (C) 2022 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
@@ -50,11 +50,11 @@ Reading symbols from nuttx/nuttx...
 
 连接后，可以在模拟环境中像调试其他应用程序一样进行调试。
 
-```
+```bash
 (gdb) target remote localhost:1234
 ```
 
-```
+```bash
 Remote debugging using localhost:1234
 __start () at armv7-a/arm_head.S:207
 207		cpsid		if, #PSR_MODE_SYS
@@ -62,21 +62,21 @@ __start () at armv7-a/arm_head.S:207
 
 设置一个断点：
 
-```
+```bash
 (gdb) b nx_start
 ```
 
-```
+```bash
 Breakpoint 1 at 0x601cdc: file init/nx_start.c, line 317.
 ```
 
 继续执行：
 
-```
+```bash
 (gdb) c
 ```
 
-```
+```bash
 Continuing.
 
 Breakpoint 1, nx_start () at init/nx_start.c:317
@@ -85,7 +85,7 @@ Breakpoint 1, nx_start () at init/nx_start.c:317
 
 显示源代码：
 
-```
+```bash
 (gdb) l
 ```
 
@@ -104,11 +104,11 @@ Breakpoint 1, nx_start () at init/nx_start.c:317
 
 显示当前 GDB 会话的所有断点信息：
 
-```
+```bash
 (gdb) info break
 ```
 
-```
+```bash
 Num     Type           Disp Enb Address    What
 1       breakpoint     keep y   0x00601cdc in nx_start at init/nx_start.c:317
 	breakpoint already hit 1 time
@@ -116,30 +116,30 @@ Num     Type           Disp Enb Address    What
 
 启用或禁用断点：
 
-```
+```bash
 disable <breakpoint-number>
 enable <breakpoint-number>
 ```
 
 删除断点：
 
-```
+```bash
 d <breakpoint-number>
 ```
 
 退出 GDB：
 
-```
+```bash
 (gdb) q
 ```
 
 ## 使用 Visual Studio Code
 
-1. 从 https://code.visualstudio.com/ 安装 Visual Studio Code。
+1. 单击[此处](https://code.visualstudio.com/)下载安装 Visual Studio Code。
 
 2. 安装 Visual Studio Code 扩展。
 
-    ```
+    ```bash
     code --install-extension ms-vscode.cpptools-extension-pack
     ```
 
@@ -151,21 +151,21 @@ d <breakpoint-number>
 
     例如，使用下列命令，可以打开当前目录，作为 Visual Studio Code 的工作区。
 
-    ```
+    ```bash
     code .
     ```
 
 4. 添加启动配置。
 
-    在 Visual Studio Code 中调试或运行 openvela 源码，在调试视图上选择`Run and Debug`，或者按`F5`键，Visual Studio Code 会运行当前的活动文件。
+    在 Visual Studio Code 中调试或运行 openvela 源码，在调试视图上选择 `Run and Debug`，或者按 `F5` 键，Visual Studio Code 会运行当前的活动文件。
 
-    对于大部分调试场景，创建启动配置文件很有用，可以用于配置和保存调试设置详细信息。将调试配置信息保存在位于工作区（项目根文件夹）的 `.vscode` 文件夹中或用户设置或工作区设置中的 `launch.json` 文件中。
+    在大多数调试场景中，创建启动配置文件是非常有用的。它可以配置和保存调试的详细设置。你可以将这些配置信息保存在工作区（项目根文件夹）的 `.vscode` 文件夹中的 `launch.json` 文件中，或直接保存在用户设置或工作区设置中。
 
     要创建 `launch.json` 文件，请在运行启动视图中选择 `create a launch.json file`。
 
     以下是用于调试 openvela 的启动配置：
 
-    ```
+    ```bash
     {
         // Use IntelliSense to learn about possible attributes.
         // Hover to view descriptions of existing attributes.
@@ -186,11 +186,11 @@ d <breakpoint-number>
     }
     ```
 
-    返回文件资源管理器视图 (Ctrl+Shift+E)，可以看到Visual Studio Code 已经创建一个“.vscode”文件夹并将“launch.json”文件添加到工作区。
+    返回文件资源管理器视图 (Ctrl+Shift+E)，可以看到 Visual Studio Code 已经创建一个“.vscode”文件夹并将“launch.json”文件添加到工作区。
 
 5. 通过传递 `-s` 和 `-S` 选项启动 openvela Emulator 来使用 GDB。
 
-    ```
+    ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 

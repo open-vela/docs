@@ -1,24 +1,24 @@
-# Set up the development environment
+# Setting up the Development Environment
 
 \[ English | [简体中文](Set_up_the_development_environment_zh-cn.md) \]
 
 ## Hardware requirements
 
-The development workstation should meet or exceed following hardware requirements:
+The development workstation should meet the following hardware requirements:
 
-- A 64-bit x86 system.
-- At least 80 GB of free disk space to check out and build the code.
-- A minimum of 16 GB of RAM.
+- 64-bit x 86 system
+- At least 80 GB of remaining hard disk space for downloading and compiling source codes.
+- At least 16 GB of RAM
 
 ## Operating system requirements
 
-The development workstation must run any 64-bit Linux distribution. 
+You need to run a 64-bit Linux distribution on the development workstation.
 
-## Install required packages
+## Install required software packages
 
-It is recommended to compile openvela using Ubuntu 22.04. Run the following command to install the required packages on Ubuntu 22.04:
+Use Ubuntu 22.04 to compile openvela. Run the following command to install the required packages on Ubuntu 22.04:
 
-```
+```bash
 sudo apt install \
 bison flex gettext texinfo libncurses5-dev libncursesw5-dev xxd \
 git gperf automake libtool build-essential gperf genromfs \
@@ -31,7 +31,7 @@ libc++-dev libc++abi-dev libprotobuf-dev protobuf-compiler protobuf-c-compiler m
 
 ## Install Repo
 
-Run the following command to install the Repo Launcher:
+Run the following command to install Repo Launcher:
 
 ```
 curl https://storage.googleapis.com/git-repo-downloads/repo > repo
@@ -39,11 +39,11 @@ chmod +x repo
 sudo mv repo /usr/local/bin/
 ```
 
-The Repo Launcher provides a Python script that can initialize the checkout and download the full Repo tool.
+The Repo Launcher provides a Python script that initializes a checkout and downloads the full Repo tool.
 
 ## Install KConfig frontend
 
-openvela configuration system uses [KConfig](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt) which is exposed via a series of interactive menu-based frontends, part of the kconfig-frontends package. Depending on your OS you may use a precompiled package or you will have to build it from source, which is available in the [NuttX tools repository](https://bitbucket.org/nuttx/tools/src/master/kconfig-frontends/):
+The configuration system of openvela uses [KConfig](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt). KConfig configures the system via a series of interactive menu-based frontends, part of the kconfig-frontends package.Whether to use a package or build it from source depends on the current operating system. The source code is available in [NuttX tools repository](https://bitbucket.org/nuttx/tools/src/master/kconfig-frontends/).
 
 ```
 sudo apt install kconfig-frontends
@@ -55,13 +55,13 @@ sudo apt install kconfig-frontends
 sudo apt install python3 python3-pip python-is-python3
 ```
 
-## Install Python packages
+## Install Python package
 
 ```
 sudo pip3 install kconfiglib pyelftools cxxfilt
 ```
 
-## What to do next
+## Next steps
 
-Please refer to [Download openvela sources](./Download_Vela_sources.md).
+Refer to [Compile the openvela source code](./Download_Vela_sources.md).
 

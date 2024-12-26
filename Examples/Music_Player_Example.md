@@ -36,6 +36,8 @@ This article describes how to run the music player demo on openvela Emulator.
    LVX_MUSIC_PLAYER_DATA_ROOT="/data"
    ```
 
+   > Take LVX_USE_DEMO_MUSIC_PLAYER as an example for illustration. The other configurations are modified is the same way.
+
    1. Enter the configuration “LVX_USE_DEMO_MUSIC_PLAYER” to be searched. Fuzzy search is supported; for example, “music_player” will get the corresponding configuration. Press the Enter key to enter that configuration.
       ![img](images/021.png)
 

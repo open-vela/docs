@@ -13,7 +13,7 @@ openvela Emulator 具备以下优势：
 * 用于加载并运行 openvela 镜像的专属运行模式，能够跳过针对 Android 的特殊操作
 * 在 openvela 模式加载 openvela 自有内核
 * 在 openvela 模式加载 openvela 自有系统分区
-* 为 GNSS 仿真器提供 NMEA 校验支持
+* 为 `GNSS` 仿真器提供 `NMEA` 校验支持
 
 支持下列 Host：
 
@@ -49,16 +49,17 @@ openvela Emulator 具备以下优势：
     ```
 
 2. openvela 启动进入 `nsh` 后，在 `openvela-ap>` 内运行如下命令：
+
     ```Bash
     lvgldemo &
     ```
+
     执行后效果如下：
     ![img](images/001.png)
 
 3. 退出 openvela Emulator 实例，如下图所示：
 
     ![img](images/002.png)
-
 
 ## 控制 openvela Emulator
 

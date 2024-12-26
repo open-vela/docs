@@ -2,13 +2,13 @@
 
 \[ English | [简体中文](CONTRIBUTING_zh-cn.md) \]
 
-openvela is developed by an active team of software engineers and researchers. You are welcome to join the openvela open source community and make any contribution to improve this project!
+openvela is developed by an active team of software engineers and researchers.You are welcome to join openvela, an open source community, and contribute in any way to this project!
 
-openvela mainly follows the Apache License 2.0 license, please refer to the LICENSE file for details.
+openvela is mainly subject to Apache License 2.0. See the LICENSE file for details.
 
 ## Sign the CLA
 
-In order to participate in community contributions, you need to sign the corresponding Contributor License Agreement (CLA). Here are the specific steps for different platforms:
+In order to participate in community contributions, you need to sign a Contributor License Agreement before contributing to the community. Here are the specific steps for different platforms:
 
 - **Gitee platform**:
   - Please visit the [Gitee CLA signing page](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) to complete the signing.
@@ -19,27 +19,30 @@ In order to participate in community contributions, you need to sign the corresp
 
 ## Bug reports
 
-If you think you have found a bug in openvela, first make sure you have tested with the latest version of openvela (your problem may already be fixed).
+If you think there is an error in openvela, make sure you have tested it with the latest version of openvela (the problem may have been fixed).
 
 If not, search the issue list to see if there is already a similar problem.
 
-## Feature requests
+## Feature request
 
-Please submit an issue describing the feature you would like to see added, why you need it, and how you expect it to work.
+Please submit an issue describing the feature you would like to add, why you need it, and how it is expected to work.
 
-## Contributing code and documentation changes
+## Contributing code and documentation
 
-If you want to add new features or fix some bugs to openvela, please check if there are similar issues. If not, please create a new issue to discuss your ideas with others.
+If you want to add new features to openvela or fix some bugs, first check if similar issues already exist. If not, create a new issue and share your views.
 
-### Branch strategy
 
-- **trunk**: The **trunk** branch does not accept pull request
-- **dev**: Fork the code from the **dev** branch and push a pull request
+### Branching strategy
 
-### Tips for code changes
+- **trunk**: **trunk** branches do not accept pull requests
+- **dev**: fork code from **dev** branch and push a pull request
 
-- Following these tips prior to raising a pull request will speed up the review cycle.
-- Add integration tests, if applicable
+### Tips Before Submitting Code
+
+Follow these tips before making a pull request to speed up the review.
+
+- Add appropriate unit tests
+- Add integration tests if applicable
 - Lines that are not part of your change should not be edited (e.g. don't format unchanged lines, don't reorder existing imports)
 - Add the appropriate license headers to any new files
 
@@ -47,25 +50,25 @@ If you want to add new features or fix some bugs to openvela, please check if th
 
 1. Test your changes
 
-    Run the test suite to make sure that nothing is broken.
-
+    Run the test suite to make sure that nothing is wrong.
+  
 2. Sign the Contributor License Agreement
 
-    Please make sure you have signed our Contributor License Agreement. We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask this of all contributors in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once.
+    Make sure you have signed our Contributor License Agreement (CLA). We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask all contributors to sign it in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once.
 
 3. **Rebase your changes**
 
-    Update your local repository with the most recent code from the main openvela repository, and rebase your branch on top of the latest main branch. We prefer your initial changes to be squashed into a single commit. Later, if we ask you to make changes, add them as separate commits. This makes them easier to review. As a final step before merging we will either ask you to squash all commits yourself or we'll do it for you.
+    Update your local repository with the latest code from the main openvela repository, and rebase your branch on top of the latest main branch. We prefer your initial changes to be squashed into a single commit. Later, if we ask you to make changes, add them as separate commits. This makes them easier to review. As a final step before merging, we will either ask you to squash all commits yourself or we'll do it for you.
 
 4. Submit a pull request
 
-    Push your local changes to your forked copy of the repository and submit a pull request. In the pull request, choose a title which sums up the changes that you have made, and in the body provide more details about what your changes do. Also mention the number of the issue where discussion has taken place, eg "Closes #123".
+  Push your local changes to your forked copy of the repository and submit a pull request. In the pull request, choose a title which sums up the changes made. In the body text, provide details about the changes. Also mention the number of the issue; for example, “Closing #123".
 
-### How to deal with conflicts
+### Resolving Conflicts
 
-Normally, you don't need to rebase your pull request unless there is a merge conflict with the master branch. When GitHub prompts that your pull request "cannot be merged automatically", use the following command to rebase your pull request onto the latest master branch:
+When the platform indicates that your pull request "can't automatically merge", use the following command to rebase the pull request on top of the latest main branch:
 
-1. Rebase to the latest master branch
+1. Rebase to the latest main branch
 
     ```Bash
     git remote add upstream https://github.com/open-vela/[repository].git
@@ -73,13 +76,13 @@ Normally, you don't need to rebase your pull request unless there is a merge con
     git rebase upstream/dev
     ```
 
-2. Git may show some conflicts when it cannot merge, such as `conflict.cpp`, you need to manually modify the file to resolve the conflict and mark it as resolved after resolution
+2. Git may show conflicts when it can't merge, e.g. “conflict.cpp”. You need to modify the file manually to resolve the conflict, and mark it as resolved afterwards
 
     ```Bash
     git add conflict.cpp
     ```
 
-3. You can continue the rebase by the following ways
+3. Continue rebasing with:
 
     ```Bash
     git rebase --continue

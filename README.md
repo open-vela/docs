@@ -6,13 +6,13 @@
 
 \[ English | [简体中文](README_zh-cn.md) \]
 
-## openvela Introduction
+## Introduction to openvela
 
 openvela is an operating system specifically crafted for the AIoT industry, with a focus on being lightweight, standards-compliant, secure, and highly scalable. It has become the technology of choice for millions of IoT devices and AI gadgets, including smart watches, fitness bands, smart speakers, earbuds, smart appliances, and robotics.
 
 The name "Vela" is originated from the Latin term for "sail," which is also the name of the constellation resembling a sail in the southern sky. We aspire to partner with developers and set sail on a voyage through the AIoT landscape.
 
-## Technical Advantages
+## Technical advantages
 
 - **Highly Scalable**: openvela has been designed to be modular and scalable, allowing it to easily adapt to a wide range of IoT applications. It can fit in a small BLE module with 32KB RAM, and scale up to a powerful smart display device with 512MB RAM, highly scalable!
 
@@ -28,13 +28,13 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## Supported Platforms
 
-openvela supports a wide variety of architectures and platforms. See the full list on the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page.
+openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS, CEVA, etc.) and platforms. See the full list on the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page.
 
-## Quick Start
+## Quick start
 
-If you want to experience openvela, we provide a fully functional simulator that can be used without a hardware platform. For more information, please refer to the following guide.
+If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform.For more information, refer to the following guide.
 
-1. [Prepare the development environment](./Getting_Started/Set_up_the_development_environment.md)
+1. [Set up the development environment](./Getting_Started/Set_up_the_development_environment.md)
 2. [Download openvela source code](./Getting_Started/Download_Vela_sources.md)
 3. [Compile openvela source code](./Getting_Started/Build_Vela_from_sources.md)
 4. [Run build artifacts on openvela Emulator](./Getting_Started/Run_Vela_on_Vela_Emulator.md)
@@ -53,24 +53,27 @@ If you want to experience openvela, we provide a fully functional simulator that
 
 ## Examples
 
-* [Music Player Example](./Examples/Music_Player_Example.md)
-* [Smart Band Example](./Examples/Smart_Band_Example.md)
-* [Bicycle Track Example](./Examples/X_Track.md)
+* [Music player](./Examples/Music_Player_Example.md)
+* [Smart band](./Examples/Smart_Band_Example.md)
+* [Bike computer](./Examples/X_Track.md)
 
-## Code Contributions
+## Code contribution
 
-Contribute: [Contribution Guideline](./CONTRIBUTING.md).
+Contribute: [Code contribution guide](./CONTRIBUTING.md).
 
-## License Agreement
+## License agreement
 
 The code in this repository is licensed under the Apache 2.0 license. You can find more information about Apache 2.0 license [here](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
-Third-party license: [Third-Party Open-Source Software and License Notice](Third_Party_and_Open_Source_Components.md)
+openvela uses third-party open source software and license description. Refer to [third-party open source software description](Third_Party_and_Open_Source_Components.md)
 
 ## Contact
 
-In order to better manage and respond to feedback and support requests, we recommend contacting us through the following methods:
+In order to better manage and respond to feedback and support requests, we recommend contacting us by:
 
-- **Issues**: If you have any questions, suggestions, or find any bugs, please submit a new issue on the Issues page. Please try to provide detailed information so that we can understand and solve the problem faster.
+- **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page.Try to provide detailed information, so that we can understand and solve the problem faster.
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
 - **Discussions**: If you have a broader topic or discussion, you can start a new discussion on the Discussions page.
+
+We appreciate every user's feedback and support. Communicating through the GitHub/Gitee platform is helpful for us to maintain and improve the project.
+

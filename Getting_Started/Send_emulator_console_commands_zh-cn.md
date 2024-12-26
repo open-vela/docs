@@ -12,7 +12,7 @@
 
 1. 打开终端窗口并输入以下命令：
 
-    ```
+    ```bash
     telnet localhost console-port
     ```
 
@@ -34,7 +34,7 @@
 
     下面是一个会话示例：
 
-    ```
+    ```bash
     $ telnet localhost 5554
     Trying ::1...
     telnet: connect to address ::1: Connection refused
@@ -154,9 +154,9 @@
 
 * `geo nmea sentence`
 
-  向模拟设备发送 NMEA 0183 语句，就像是从模拟的 GPS 调制解调器发送的一样。让 sentence 以“$GP”开头。 目前仅支持“$GPGGA”和“$GPRCM”语句。以下示例是一个 GPGGA（全球定位系统定位数据）语句，它描述了 GPS 接收器接收的时间、位置和定位数据：
+  向模拟设备发送 `NMEA 0183` 语句，就像是从模拟的 GPS 调制解调器发送的一样。让 sentence 以 “$GP” 开头。 目前仅支持“$GPGGA” 和 “$GPRCM” 语句。以下示例是一个 GPGGA（全球定位系统定位数据）语句，它描述了 GPS 接收器接收的时间、位置和定位数据：
   
-  ```
+  ```bash
   geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
   ```
 
@@ -166,7 +166,7 @@
 
   列出所有虚假事件类型。对于包含代码的事件，代码数列在右侧的圆括号中。
 
-  ```
+  ```bash
   event types
   event <type> can be an integer or one of the following aliases:
       EV_SYN
@@ -237,7 +237,7 @@
 
   列出所有传感器及其状态。下面是 sensor status 命令的输出示例：
 
-  ```
+  ```bash
   sensor status
   acceleration: enabled.
   gyroscope: enabled.
@@ -263,7 +263,7 @@
 
   获取 `sensor-name` 的设置。以下示例会获取加速度传感器的值：
 
-  ```
+  ```bash
   sensor get acceleration
   acceleration = 2.23517e-07:9.77631:0.812348
   ```
@@ -274,6 +274,6 @@
 
   设置 sensor-name 的值。以下示例将加速度传感器设为以英文冒号分隔的 x、y 和 z 值。
   
-  ```
+  ```bash
   sensor set acceleration 2.23517e-07:9.77631:0.812348
   ```

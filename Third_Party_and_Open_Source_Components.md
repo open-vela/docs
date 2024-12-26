@@ -1,4 +1,4 @@
-| **Components** | **License** | **Whether there is a modification** | **Open source code address** |
+| **Components** | **License** | **Is there any modification** | **Open source code address** |
 | --------------------- | ------------------------------------------------------------ | -------------- | ------------------------------------------------------------ |
 | libsodium             | ISC License                                                  | No           | https://github.com/jedisct1/libsodium                        |
 | minmea                | MIT License                                                  | Yes          | https://github.com/kosma/minmea                              |

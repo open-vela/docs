@@ -16,9 +16,9 @@
 
 ## 安装必备的软件包
 
-推荐使用 Ubuntu 22.04 版本编译 openvela。运行以下命令，在 Ubuntu 22.04 版本上安装必备的软件包：
+使用 Ubuntu 22.04 版本编译 openvela。运行以下命令，在 Ubuntu 22.04 版本上安装必备的软件包：
 
-```
+```bash
 sudo apt install \
 bison flex gettext texinfo libncurses5-dev libncursesw5-dev xxd \
 git gperf automake libtool build-essential gperf genromfs \
@@ -33,7 +33,7 @@ libc++-dev libc++abi-dev libprotobuf-dev protobuf-compiler protobuf-c-compiler m
 
 运行以下命令安装 Repo 启动器:
 
-```
+```bash
 curl https://storage.googleapis.com/git-repo-downloads/repo > repo
 chmod +x repo
 sudo mv repo /usr/local/bin/
@@ -45,22 +45,22 @@ Repo 启动器会提供一个 Python 脚本，该脚本可以初始化检出，�
 
 openvela 配置系统使用 [KConfig](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt) ，作为 kconfig-frontends 软件包的一部分，KConfig 通过一系列基于交互式菜单的前端对系统进行配置。使用软件包还是从源码构建取决于当前的操作系统，源码地址位于 [NuttX tools repository](https://bitbucket.org/nuttx/tools/src/master/kconfig-frontends/)。
 
-```
+```bash
 sudo apt install kconfig-frontends
 ```
 
 ## 安装 Python
 
-```
+```bash
 sudo apt install python3 python3-pip python-is-python3
 ```
 
 ## 安装 Python 包
 
-```
+```bash
 sudo pip3 install kconfiglib pyelftools cxxfilt
 ```
 
 ## 后续步骤
-请参阅 [下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。
 
+请参阅 [下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。

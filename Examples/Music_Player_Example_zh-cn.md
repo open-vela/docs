@@ -35,6 +35,8 @@
     LVX_MUSIC_PLAYER_DATA_ROOT="/data"
     ```
 
+    > 以LVX_USE_DEMO_MUSIC_PLAYER为例进行操作，其余配置方式相同。
+
     1. 输入待搜索的配置 `LVX_USE_DEMO_MUSIC_PLAYER`，支持模糊搜索，例如 `music_player`，找到对应的配置，按回车键进入该配置。
     ![img](images/021.png)
 

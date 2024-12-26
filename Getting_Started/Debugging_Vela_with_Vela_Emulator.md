@@ -2,32 +2,32 @@
 
 \[ English | [简体中文](./Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
 
-## Use GDB Console
+## Using GDB Console
 
-Use the following commands to install the required packages on Ubuntu 22.04:
+Use the following commands to install the required package on a Ubuntu 22.04 system:
 
-```
+```bash
 sudo apt update
 sudo apt install gdb-multiarch
 ```
 
-Openvela Emulator supports working with gdb via gdb’s remote-connection facility (the “gdbstub”). This allows you to debug guest code in the same way that you might with a low-level debug facility like JTAG on real hardware. You can stop and start the virtual machine, examine state like registers and memory, and set breakpoints and watchpoints.
+openvela Emulator supports working with GDB via its remote connection tool (gdbstub).You can debug openvela code as if the debugging is done on real hardware with low-level tools such as JTAG.You can stop and start the virtual machine, check the status of registers and memory, and set breakpoints and watchpoints.
 
-In order to use gdb, launch openvela Emulator with the `-s` and `-S` options. The `-s` option will make openvela Emulator listen for an incoming connection from gdb on TCP port 1234, and `-S` will make openvela Emulator not start the guest until you tell it to from gdb.
+In order to use GDB, launch openvela Emulator with the “-s” and ”-S” options. The “-s” option lets openvela Emulator listen for an incoming connection from GDB on TCP port 1234, whereas the “-S” lets openvela Emulator not start the guest virtual machine until there is notification from GDB.
 
-To enable connection to the GDB server, you need to pass `-qemu -S -s` parameter to `emulator.sh`.
+To enable the connection to the GDB server, you need to send the “-qemu -S –s” parameter to “emulator.sh”.
 
-```
+```bash
 ./emulator.sh vela -qemu -S -s
 ```
 
-Open a new Terminal, run `gdb-multiarch`:
+Open a new terminal and run “gdb-multiarch”:
 
-```
+```bash
 gdb-multiarch nuttx/nuttx
 ```
 
-```
+```bash
 GNU gdb (Ubuntu 12.1-0ubuntu1~22.04.2) 12.1
 Copyright (C) 2022 Free Software Foundation, Inc.
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
@@ -46,46 +46,46 @@ Type "apropos word" to search for commands related to "word"...
 Reading symbols from nuttx/nuttx...
 ```
 
-To connect to openvela Emulator's GDB server using your host GDB, you need to create a remote connection.
+You need to create a remote connection, so that the host’s GDB will be connected to the GDB Server of openvela Emulator.
 
-Once you are connected, you can debug your emulated environment like you would debug any other program.
+Once connected, debugging can be done in a simulated environment, just like how other applications are debugged.
 
-```
+```bash
 (gdb) target remote localhost:1234
 ```
 
-```
+```bash
 Remote debugging using localhost:1234
 __start () at armv7-a/arm_head.S:207
 207		cpsid		if, #PSR_MODE_SYS
 ```
 
-To set a breakpoint:
+Set a breakpoint:
 
-```
+```bash
 (gdb) b nx_start
 ```
 
-```
+```bash
 Breakpoint 1 at 0x601cdc: file init/nx_start.c, line 317.
 ```
 
-To Continues execution:
+Continue to execute:
 
-```
+```bash
 (gdb) c
 ```
 
-```
+```bash
 Continuing.
 
 Breakpoint 1, nx_start () at init/nx_start.c:317
 317	{
 ```
 
-To display source code:
+Display the source code:
 
-```
+```bash
 (gdb) l
 ```
 
@@ -102,70 +102,70 @@ To display source code:
 321
 ```
 
-Display information on all breakpoints in your GDB session:
+Display all the breakpoint information in the current GDB session:
 
-```
+```bash
 (gdb) info break
 ```
 
-```
+```bash
 Num     Type           Disp Enb Address    What
 1       breakpoint     keep y   0x00601cdc in nx_start at init/nx_start.c:317
 	breakpoint already hit 1 time
 ```
 
-Enable or Disable breakpoint:
+Enable or disable breakpoints:
 
-```
+```bash
 disable <breakpoint-number>
 enable <breakpoint-number>
 ```
 
-Delete breakpoint:
+Delete breakpoints:
 
-```
+```bash
 d <breakpoint-number>
 ```
 
-Quits GDB:
+Exit GDB:
 
-```
+```bash
 (gdb) q
 ```
 
-## Use Visual Studio Code
+## Using Visual Studio Code
 
-1. Install Visual Studio Code from https://code.visualstudio.com/ .
+1. Visit https://code.visualstudio.com/ to install Visual Studio Code.
 
-2. Install Visual Studio Code Extension.
+2. Install the Visual Studio Code extension.
 
-    ```
+    ```bash
     code --install-extension ms-vscode.cpptools-extension-pack
     ```
 
-3. Open openvela workspace
+3. Open the openvela workspace.
 
-    You can open vela workspace by using the `File` > `Open Folder`... menu, and then selecting vela folder.
+   To open the workspace, go to the “File” > “Open Folder”... menu, and select the folder where openvela is located.
 
-    Alternatively, if you launch VS Code from a terminal, you can pass the vela source path to a folder as the first argument to the code command for opening.
+   Alternatively, if you launch Visual Studio Code using a terminal, you can use the source code path of openvela as the first parameter for a “code” command.
 
-    For example, use the following command to open the current folder (.) with VS Code:
+   For example, use the following command to open the current directory as a workspace for Visual Studio Code.
 
-    ```
+    ```bash
     code .
     ```
 
-4. Add Launch configurations
+4. Add the startup configuration.
 
-    To run or debug vela source in VS Code, select `Run and Debug` on the Debug start view or press `F5` and VS Code will try to run your currently active file.
+   To debug or run the openvela source code in Visual Studio Code, select “Run and Debug” on the Debug view or press F5. Then, Visual Studio Code will run the current active file.
 
-    However, for most debugging scenarios, creating a launch configuration file is beneficial because it allows you to configure and save debugging setup details. VS Code keeps debugging configuration information in a launch.json file located in a .vscode folder in your workspace (project root folder) or in your user settings or workspace settings.
+   For most debugging scenarios, it is useful to create a startup configuration file that can be used to configure and save the debug settings. Save the debug configurations in a “launch.json” file located in a “.vscode” folder in the workspace (project’s root folder) or in the user settings or workspace settings.
 
-    To create a `launch.json` file, select `create a launch.json file` in the Run start view.
+   To create a “launch.json” file, select “create a launch.json file” in the Run start view.
 
-    Here is the launch configuration for openvela debugging:
+   The following is the startup configurations for debugging openvela:
 
-    ```
+    ```bash
     {
         // Use IntelliSense to learn about possible attributes.
         // Hover to view descriptions of existing attributes.
@@ -186,14 +186,14 @@ Quits GDB:
     }
     ```
 
-    If you go back to the File Explorer view (Ctrl+Shift+E), you'll see that VS Code has created a `.vscode` folder and added the `launch.json` file to your workspace.
+   If you go back to the File Explorer view (Ctrl+Shift+E), you will see that Visual Studio Code has created a “.vscode” folder and added the “launch.json” file to the workspace.
 
-5. Launch openvela Emulator with the `-s` and `-S` options to use gdb.
+5. Launch openvela Emulator with the “-s” and “-S” options to use GDB.
 
-    ```
+    ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 
 6. Start a debug session.
 
-    In order to start a debug session, first select the configuration named Launch Program using the Configuration dropdown in the Run and Debug view. select `Debug openvela`, start your debug session with F5.
+   To start a debug session, use the “Configuration” drop-down list in the Run and Debug view and select the “Debug openvela” configuration.After setting the startup configuration, use `F5` to start a debug session.

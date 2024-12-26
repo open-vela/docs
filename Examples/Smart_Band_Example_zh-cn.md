@@ -128,7 +128,7 @@ Bandx 中使用的字体和图像资源位于 `apps/packages/demos/bandx/resourc
 ![img](images/026.png)
 
 ## 常见问题
-### 1 adb 命令找不到
+### 1. adb 命令找不到
 
 #### 原因
 未安装 `adb` 工具。
@@ -140,7 +140,7 @@ Bandx 中使用的字体和图像资源位于 `apps/packages/demos/bandx/resourc
 sudo apt install android-tools-adb
 ```
 
-### 2 字体显示为乱码
+### 2. 字体显示为乱码
 
 #### 原因
 未正确加载字体资源。

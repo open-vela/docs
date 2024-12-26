@@ -1,4 +1,4 @@
-# Send emulator console commands
+# Sending Emulator Console Commands
 
 \[ English | [简体中文](./Send_emulator_console_commands_zh-cn.md) \]
 
@@ -6,25 +6,25 @@ Each running virtual device provides a console that lets you query and control t
 
 ## Start and stop a console session
 
-To access the console and enter commands from a terminal window, use `telnet` to connect to the console port and provide your authentication token. Each time the console displays `OK`, it's ready to accept commands. There isn't a typical prompt.
+To access the console and enter commands, use `telnet` at a terminal window to connect to the console port and provide the authentication token.Whenever the console displays “OK”, it's ready to accept commands.A typical prompt is usually not displayed.
 
-To connect to the console of a running virtual device:
+To connect to the console of a running virtual device, do the following:
 
 1. Open a terminal window and enter the following command:
 
-    ```
+    ```bash
     telnet localhost console-port
     ```
 
     The emulator listens for connections on ports 5554 to 5585 and accepts connections from localhost only.
 
-    The `adb devices` command prints a list of running virtual devices and their console port numbers.
+   Also, the `adb devices` command produces a list of running virtual devices and their console port numbers.
 
-2. After the console displays `OK`, enter the `auth auth_token` command.
+2. After the console displays “OK”, enter the “auth auth_token” command.
 
-    Before you can enter console commands, the emulator console requires authentication. `auth_token` must match the contents of the `.emulator_console_auth_token` file in your home directory.
+   Before you can enter console commands, the emulator console requires authentication."auth_token” must match the contents of the “.emulator_console_auth_token” file in your Home directory.
 
-    If that file doesn't exist, the `telnet localhost console-port` command creates the file, which contains a randomly generated authentication token. To disable authentication, delete the token from the `.emulator_console_auth_token` file or create an empty file if it doesn't exist.
+   If that file doesn't exist, the `telnet localhost console-port` command creates the file, which contains a randomly generated authentication token.To disable authentication, delete the token from the `.emulator_console_auth_token` file or create an empty file (if that file doesn't exist).
 
 3. After you're connected to the console, enter console commands.
 
@@ -32,9 +32,9 @@ To connect to the console of a running virtual device:
 
 4. To exit the console session, enter `quit` or `exit`.
 
-    Here's an example session:
+   The following session is an example:
 
-    ```
+    ```bash
     $ telnet localhost 5554
     Trying ::1...
     telnet: connect to address ::1: Connection refused
@@ -96,77 +96,77 @@ To connect to the console of a running virtual device:
 
 ### General commands
 
-* `avd {stop|start|status|name}`
+- `avd {stop|start|status|name}`
 
-  Queries, controls, and manages the virtual device, as follows:
+  Query, control and manage the virtual device, as follows:
 
-  * stop: Stops the execution of the device.
+  - stop: Stop the execution of the device.
 
-  * start: Starts the execution of the device.
+  - start: Start the execution of the device.
 
-  * status: Queries the virtual device status, which can be running or stopped.
+  - status: Query the virtual device status, which can be running or stopped.
 
-  * name: Queries the virtual device name.
+  - name: Query the virtual device name.
 
-* `kill`
+- `kill`
 
-  Terminates the virtual device.
+  Terminate the virtual device.
 
-* `ping`
+- `ping`
 
-  Checks whether the virtual device is running.
+  Check whether the virtual device is running.
 
-* rotate
+- rotate
 
-  Rotates the AVD counterclockwise in 45 degree increments.
+  Rotate the AVD counterclockwise in 45 degree increments.
 
 ### Port redirection
 
-* `redir list`
+- `redir list`
 
-  Lists the current port redirection.
+  List the current port redirection.
 
-* `redir add protocol:host-port:guest-port`
+- `redir add protocol:host-port:guest-port`
 
-  Adds a new port redirection, as follows:
+  Add a new port redirection, as follows:
 
-  * `protocol`: Must be either tcp or udp.
+  - “protocol”: Must be either tcp or udp.
 
-  * `host-port`: The port number to open on the host.
+  - "host-port": The port number to open on the host.
 
-  * `guest-port`: The port number to route data to on the emulator.
+  - "guest-port": The port number to route data to on the emulator.
 
-* `redir del protocol:host-port`
+- `redir del protocol:host-port`
 
-  Deletes a port redirection.
+  Delete a port redirection.
 
-  * `protocol`: Must be either tcp or udp.
+  - “protocol”: Must be either tcp or udp.
 
-  * `host-port`: The port number to open on the host.
+  - "host-port": The port number to open on the host.
 
 ### Geographic location
 
-Sets the geographic location reported to the apps running inside an emulator by sending a GPS fix to the emulator.
+Set the geographic location reported to the apps running inside an emulator by sending a GPS locator to the emulator.
 
-* `geo fix longitude latitude [altitude] [satellites] [velocity]`
+- `geo fix longitude latitude [altitude] [satellites] [velocity]`
 
-  Sends a simple GPS fix to the emulator. Specify `longitude` and `latitude` in decimal degrees. Use a number from 1 to 12 to specify the number of `satellites` to use to determine the position, and specify `altitude` in meters and `velocity` in knots.
+  Send a simple GPS locator to the emulator. Specify “longitude” and “latitude” in decimal degrees.Use a number from 1 to 12 to specify the number of “satellites” used to determine the position, and specify “altitude” in meters and “velocity” in knots.
 
-* `geo nmea sentence`
+- `geo nmea sentence`
 
-  Sends an NMEA 0183 sentence to the emulated device as if it were sent from an emulated GPS modem. Start sentence with '$GP'. Only '$GPGGA' and '$GPRCM' sentences are currently supported. The following example is a GPGGA (Global Positioning System Fix Data) sentence that gets the time, position, and fix data for a GPS receiver:
+  Send an NMEA 0183 sentence to the emulated device as if it is sent from an emulated GPS modem.Start the sentence with "$GP". Only "$GPGGA" and "$GPRCM" sentences are currently supported.The following example is a GPGGA (Global Positioning System Fix Data) sentence that gets the time, position, and fix data for a GPS receiver:
   
-  ```
+  ```bash
   geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
   ```
 
 ### Fake hardware events
 
-* `event types`
+- `event types`
 
   Lists all fake event types. For events that have codes, the number of codes is listed in parentheses on the right.
 
-  ```
+  ```bash
   event types
   event <type> can be an integer or one of the following aliases:
       EV_SYN
@@ -185,59 +185,59 @@ Sets the geographic location reported to the apps running inside an emulator by 
   OK
   ```
 
-* `event send types [types ...]`
+- `event send types [types ...]`
 
-  Sends one or more fake event types.
+  Send one or more fake event types.
 
-* `event codes type`
+- `event codes type`
 
-  Lists the event codes for the specified fake event type.
+  List the event codes for the specified fake event type.
 
-* `event send type[:code]:[value] [...]`
+- `event send type[:code]:[value] [...]`
 
-  Sends one or more fake events with optional codes and code values.
+  Send one or more fake events with optional codes and code values.
 
   To discover exactly which event to send, you can use the adb command while manually pressing the buttons on the emulator.
 
-* `event text message`
+- `event text message`
 
-  Sends a string of characters that simulate keypresses. The message must be a UTF-8 string. Unicode posts are reverse-mapped according to the current device keyboard, and unsupported characters are discarded silently.
+  Send a string of characters that simulate keystrokes.The message must be a UTF-8 string. Unicode messages are reverse-mapped according to the current device keyboard, and unsupported characters are discarded silently.
 
-### Power state controls
+### Power state control
 
-* `power display`
+- `power display`
 
-  Displays battery and charger state.
+  Display battery and charger state.
 
-* `power ac {on|off}`
+- `power ac {on|off}`
 
-  Sets AC charging state to on or off.
+  Set AC charging state to on or off.
 
-* `power status {unknown|charging|discharging|not-charging|full}`
+- `power status {unknown|charging|discharging|not-charging|full}`
 
-  Changes battery status as specified.
+  Change battery status as specified.
 
-* `power present {true|false}`
+- `power present {true|false}`
 
-  Sets battery presence state.
+  Set battery presence state.
 
-* `power health {unknown|good|overheat|dead|overvoltage|failure}`
+- `power health {unknown|good|overheat|dead|overvoltage|failure}`
 
-  Sets battery health state.
+  Set battery health state.
 
-* `power capacity percent`
+- `power capacity percent`
 
   Sets remaining battery capacity state as a percent from 0 to 100.
 
 ### Manage sensors on the emulator
 
-These commands relate to which sensors are available in the AVD. Besides using the `sensor` command, you can see and adjust the settings in the emulator in the `Virtual sensors` screen in the `Accelerometer` and `Additional sensors` tabs.
+These commands relate to the sensors available in AVD. In addition to using the “sensor” command, you can see and adjust the settings in the “Accelerometer” and “Additional sensors” tabs on the emulator’s “Virtual sensors” screen.
 
-* `sensor status`
+- `sensor status`
 
-  Lists all sensors and their status. The following is example output for the sensor status command:
+  List all sensors and their status.The following is an example of the “sensor status” command’s output:
 
-  ```
+  ```bash
   sensor status
   acceleration: enabled.
   gyroscope: enabled.
@@ -259,21 +259,21 @@ These commands relate to which sensors are available in the AVD. Besides using t
   acceleration-uncalibrated: enabled.
   ```
 
-* `sensor get sensor-name`
+- `sensor get sensor-name`
 
-  Gets the settings for `sensor-name`. The following example gets the value for the acceleration sensor:
+  Get the settings for "sensor-name". The following example gets the value for the acceleration sensor:
 
-  ```
+  ```bash
   sensor get acceleration
   acceleration = 2.23517e-07:9.77631:0.812348
   ```
 
-  The `acceleration` values separated by colons(:) refer to the x, y, and z coordinates for the virtual sensors.
+  The “acceleration” values separated by colons(:) refer to the x, y, and z coordinates for the virtual sensors.
 
-* `sensor set sensor-name value-x:value-y:value-z`
+- `sensor set sensor-name value-x:value-y:value-z`
 
-  Sets the values for sensor-name. The following example sets the acceleration sensor to the x, y, and z values separated by colons.
-  
-  ```
+  Set the values for “sensor-name”.The following example set the acceleration sensor to the x, y, and z values separated by colons.
+
+  ```bash
   sensor set acceleration 2.23517e-07:9.77631:0.812348
   ```
