@@ -34,10 +34,10 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 
 如果您想要体验 openvela，我们提供一个功能完备的模拟器，无需硬件平台即可使用。有关详细信息，请参阅如下指南。
 
-1. [准备开发环境](./Getting_Started/Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 源码](./Getting_Started/Download_Vela_sources_zh-cn.md)
-3. [编译 openvela 源码](./Getting_Started/Build_Vela_from_sources_zh-cn.md)
-4. [在 openvela Emulator 上运行编译产物](./Getting_Started/Run_Vela_on_Vela_Emulator_zh-cn.md)
+1. [准备开发环境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
+2. [下载 openvela 源码](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
+3. [编译 openvela 源码](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
+4. [在 openvela Emulator 上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
 
 ## 子仓库列表
 
@@ -53,9 +53,9 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 
 ## 示例
 
-- [音乐播放器示例](./Examples/Music_Player_Example_zh-cn.md)
-- [智能手环示例](./Examples/Smart_Band_Example_zh-cn.md)
-- [自行车码表示例](./Examples/X_Track_zh-cn.md)
+- [音乐播放器示例](./zh-cn/demo/Music_Player_Example_zh-cn.md)
+- [智能手环示例](./zh-cn/demo//Smart_Band_Example_zh-cn.md)
+- [自行车码表示例](./zh-cn/demo/X_Track_zh-cn.md)
 
 ## 代码贡献
 

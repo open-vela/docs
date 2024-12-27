@@ -34,10 +34,10 @@ openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS
 
 If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform.For more information, refer to the following guide.
 
-1. [Set up the development environment](./Getting_Started/Set_up_the_development_environment.md)
-2. [Download openvela source code](./Getting_Started/Download_Vela_sources.md)
-3. [Compile openvela source code](./Getting_Started/Build_Vela_from_sources.md)
-4. [Run build artifacts on openvela Emulator](./Getting_Started/Run_Vela_on_Vela_Emulator.md)
+1. [Set up the development environment](./en/quickstart/Set_up_the_development_environment.md)
+2. [Download openvela source code](./en/quickstart/Download_Vela_sources.md)
+3. [Compile openvela source code](./en/quickstart/Build_Vela_from_sources.md)
+4. [Run build artifacts on openvela Emulator](./en/quickstart/Run_Vela_on_Vela_Emulator.md)
 
 ## Sub-repository List  
 
@@ -53,9 +53,9 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 ## Examples
 
-- [Music player](./Examples/Music_Player_Example.md)
-- [Smart band](./Examples/Smart_Band_Example.md)
-- [Bike computer](./Examples/X_Track.md)
+- [Music player](./en/demo/Music_Player_Example.md)
+- [Smart band](./en/demo/Smart_Band_Example.md)
+- [Bike computer](./en/demo/X_Track.md)
 
 ## Code contribution
 
