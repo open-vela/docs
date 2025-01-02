@@ -53,9 +53,9 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 
 ## 示例
 
-- [音乐播放器示例](./zh-cn/demo/Music_Player_Example_zh-cn.md)
-- [智能手环示例](./zh-cn/demo//Smart_Band_Example_zh-cn.md)
-- [自行车码表示例](./zh-cn/demo/X_Track_zh-cn.md)
+- [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
+- [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
+- [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)
 
 ## 代码贡献
 
