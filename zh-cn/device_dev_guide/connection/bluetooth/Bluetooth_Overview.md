@@ -1,11 +1,21 @@
 # 蓝牙概述
 
+- [蓝牙概述](#蓝牙概述)
+  - [简介](#简介)
+  - [架构图](#架构图)
+  - [代码目录](#代码目录)
+- [开发指南](#开发指南)
+  - [蓝牙应用开发](#蓝牙应用开发)
+  - [蓝牙驱动开发](#蓝牙驱动开发)
+    - [实现驱动](#实现驱动)
+    - [注册驱动](#注册驱动)
+    - [备注](#备注)
+
 ## 简介
 
 openvela 蓝牙已经通过 Bluetooth 5.4 认证。目前支持的蓝牙能力包括：
 
 - Core
-
   - BR/EDR/BLE
   - GAP
   - L2CAP
@@ -18,7 +28,6 @@ openvela 蓝牙已经通过 Bluetooth 5.4 认证。目前支持的蓝牙能力�
 - HID
 - HOGP
 - LEA
-
   - TMAP
   - CAP
   - BAP/ASCS/PACS/BASS
@@ -30,11 +39,62 @@ openvela 蓝牙已经通过 Bluetooth 5.4 认证。目前支持的蓝牙能力�
 
 openvela 蓝牙目前还能够支持多种开源、闭源协议栈，如Zephyr、Bluez、Bluedroid、Barrot等。
 
+## 架构图
+
+![](./img/Bluetooth_arch.png)
+
+- openvela 蓝牙 Framework 为 `Android Native`、可穿戴、音箱和 IoT 等应用提供了统一的编程接口 API。
+- 这些 API 提供的蓝牙能力包括开关、扫描、连接、配对等，均由一套完善的蓝牙服务组件来完成。
+- 为了支持多种协议栈，蓝牙 Framework 定义了一套统一的协议栈适配层接口 `SAL API`，使各个三方协议栈，可以方便地接入 openvela。接入新的协议栈时，除了适配 `SAL API`，还需要针对 `NuttX` 的 `POSIX API` 来适配，从而使其可以更高效地运行在 `NuttX` 上。
+
+## 代码目录
+
+[frameworks_bluetooth](https://github.com/open-vela/frameworks_bluetooth) 仓库下载后，会映射到文件夹 frameworks/connectivity/bluetooth，其代码目录结构如下图所示：
+
+```bash
+├── Android.bp                     * Android 编译配置文件 *
+├── CMakeLists.txt                 * CMake 编译配置文件 *
+├── feature                        * 目录：快应用 Feature API *
+│   ├── include
+│   ├── jidl
+│   └── src
+├── framework                      * 目录：蓝牙Framework API *
+│   ├── api
+│   ├── binder
+│   ├── common
+│   ├── dbus
+│   ├── include                    ** 蓝牙Framework API声明（可被APP引用） **
+│   └── socket
+├── frameworkBluetooth.go          * Android 编译 go 文件 *
+├── img                            * README.md 使用到的图形文件 *
+├── Kconfig                        * 编译配置描述文件 *
+├── LICENSE                        * License 文件 *
+├── Make.defs                      * 在NuttX中增加Bluetooth Framework *
+├── Make.dep                       * 编译依赖关系 *
+├── Makefile                       * 编译规则配置文件 *
+├── Makefile.host                  * 编译规则配置文件 *
+├── README.md                      * 仓库说明文档（英文） *
+├── README_zh-cn.md                * 仓库说明文档（中文） *
+├── service                        * 目录：蓝牙Services *
+│   ├── common
+│   ├── ipc
+│   ├── profiles
+│   ├── src
+│   ├── stacks
+│   ├── utils
+│   ├── vendor
+│   └── vhal
+├── tests                          * 目录：测试Samples代码 *
+└── tools                          * 目录：bttool工具代码 *
+```
+
+# 开发指南
+
 ## 蓝牙应用开发
 
 对于第三方应用开发者，可以使用 openvela  快应用 QuickApp Feature ，它是基于 QuickJS 引擎使用 C++ 实现的一系列 API 接口，为三方应用提供系统访问能力，更多详情请参见[蓝牙接口](https://doc.quickapp.cn/features/system/bluetooth.html)。
 
-另外，还提供了 NDK 接口来使用蓝牙系统的所有能力。可以参阅目录 framework/include 中的头文件获取更多信息。
+另外，蓝牙 Framework 还提供了 NDK 接口来使用蓝牙系统的所有能力。可以参阅目录 framework/include 中的头文件获取更多信息。
 
 ## 蓝牙驱动开发
 
