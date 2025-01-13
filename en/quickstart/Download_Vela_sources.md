@@ -39,7 +39,7 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
         repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
-## Download the openvela source code
+## Download source code
 
 Run the following command to download the source code tree of openvela to your working directory:
 
