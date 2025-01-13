@@ -18,6 +18,7 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
    - Github (Public key registration is required. Refer to [Github documents](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account):
 
         ```bash
+        git init
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
         git lfs install
@@ -29,6 +30,7 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
    - Gitee (Public key registration is required. Refer to [Gitee document](https://gitee.com/help/articles/4191):
 
         ```bash
+        git init
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
         git lfs install
