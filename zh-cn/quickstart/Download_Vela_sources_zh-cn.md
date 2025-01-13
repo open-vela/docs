@@ -33,7 +33,6 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
         ```bash
         repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         
-
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
         cd .repo/manifests 
