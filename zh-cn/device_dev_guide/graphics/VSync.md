@@ -546,7 +546,7 @@ static void lcdc_te_irq(int irq, void *context, void *arg)
 
 ### （不推荐）阻塞方式
 
-使用信号量进行同步，相当于对 Framebuffer 进行加锁操作，渲染器每次开始渲染时都需要拿到锁才能进行绘制，否则就会处于阻塞状态，参见此[链接](https://github.com/open-vela/nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c)。
+使用信号量进行同步，相当于对 Framebuffer 进行加锁操作，渲染器每次开始渲染时都需要拿到锁才能进行绘制，否则就会处于阻塞状态，代码请参见此[链接](https://github.com/open-vela/nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c)。
 
 ## 相关仓库
 
