@@ -24,10 +24,11 @@
 ### 两种实现方式
 
 - 打开 `CONFIG_LIBC_LOCALTIME`：
-  - `localtime` 的实现依赖 `zoneinfo`，可以根据时区正确转换时间。 
+  - `localtime` 的实现依赖 `zoneinfo`，可以根据时区正确转换时间。
   - 优点：支持时区转换，功能更完善。
   - 缺点：会增加代码体积， **增加约 6.4KB**。
-   ![img](./figures/001.png)
+
+    ![img](./figures/001.png)
 
 - 未打开 `CONFIG_LIBC_LOCALTIME`：
   - `localtime` 和 `gmtime` 的效果相同，直接返回 UTC 时间，不进行时区转换。
