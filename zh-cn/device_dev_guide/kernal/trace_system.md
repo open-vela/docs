@@ -512,8 +512,8 @@ int main(int argc, FAR char *argv[])
      ```Bash
       ap> trace start 
       ap> hello
-      ap> trace dump -a
-      ap> trace dump -a /data/trace.txt   # vendor/sim/boards/vela/resource/trace.txt
+      ap> trace dump
+      ap> trace dump /data/trace.txt   # vendor/sim/boards/vela/resource/trace.txt
       ```
 
     ![img](./figures/007.png)
