@@ -11,7 +11,7 @@
 - CODE int (*ioctl)(FAR struct bt_driver_s *btdev, int cmd, unsigned long arg);
 - CODE void (*close)(FAR struct bt_driver_s *btdev);
 
-上述成员函数的实现依赖于 `HCI（Hardware Control Interface）` 的实际工作方式，也就是 `Host` 和 `Controller` 之间的物理总线。
+上述成员函数的实现依赖于 `HCI（Host Controller Interface）` 的实际工作方式，也就是 `Host` 和 `Controller` 之间的物理总线。
 
 ### 示例
 
@@ -89,11 +89,17 @@
 实现上述结构体类型的变量后，需要通过如下 API 注册该驱动实例，使用其中一个 API 即可。
 
 - `bt_driver_register()`
+
+    > **说明**
+    >
+    > 注册后缀 `id` 值为 0
 - `bt_driver_register_with_id(FAR struct bt_driver_s *driver, int id)`
 
-int bt_driver_register(FAR struct bt_driver_s *drv);
+    > **说明**
+    >
+    > 说明：注册指定 id 编号
 
-类型定义可参考头文件 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h)。调用关系如下图所示：
+`int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h)。调用关系如下图所示：
 
 ![img](img/bt_driver.png)
 
@@ -181,7 +187,7 @@ void drivers_initialize(void)
 
     > **说明**
     >
-    > 由于蓝牙驱动所注册文件节点对应的 `file_operations write` 函数，会校验数据是否符合 BTH4 格式，检验成功后，才会再> 将数据传入实现的 `sample_send` 函数。
+    > 由于蓝牙驱动所注册文件节点对应的 `file_operations write` 函数，会校验数据是否符合 BTH4 格式，检验成功后，才会再将数据传入实现的 `sample_send` 函数。
 
     ```C
     openvela-ap> echo "Hello openvelabluetooth" > /dev/ttyHCI2
