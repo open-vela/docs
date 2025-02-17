@@ -255,13 +255,13 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 ### 1、驱动分层设计
 
-1. Upper Half
+1. 上半部分（Upper Half）
 
    - 提供应用程序级的通用接口，主要实现 `file_operations` 中的函数集。
-   - 针对 ADC 驱动，`drivers/analog/adc.c` 文件描述了上半部分的操作逻辑。
-   - 上半部分的实现是通用的，适用于所有 ADC 设备，无需针对具体硬件进行修改。
+   - 针对 ADC 驱动，`drivers/analog/adc.c` 文件描述了 Upper Half 的操作逻辑。
+   - Upper Half 的实现是通用的，适用于所有 ADC 设备，无需针对具体硬件进行修改。
 
-2. Lower Half
+2. 下半部分（Lower Half）
 
 - 基于特定平台的硬件驱动程序，负责实现硬件级的控制，例如寄存器操作。
 - 针对特定硬件的实现，例如 `arch/arm/src/lpc43xx/lpc43_adc.c` 文件，描述了 LPC43xx 平台的 ADC 硬件驱动。
@@ -275,7 +275,7 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 1. 芯片相关（Lower Half）
 
    - 负责硬件的实际操作，例如寄存器读写和中断处理。
-   - 在中断处理函数中，会回调 upper half 的接口，例如通过消息队列通知上层应用数据已准备好。
+   - 在中断处理函数中，会回调 Upper half 的接口，例如通过消息队列通知上层应用数据已准备好。
 
 2. 通用框架（Upper Half）
 
@@ -284,7 +284,7 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 3. 板级部分
 
-   - 负责将 upper half 和 lower half 绑定在一起，建立连接并注册到文件系统中。
+   - 负责将 Upper half 和 Lower half 绑定在一起，建立连接并注册到文件系统中。
    - 该部分的接口通常在系统启动（boot）阶段被调用。
 
 ### 3、其他驱动的实现
