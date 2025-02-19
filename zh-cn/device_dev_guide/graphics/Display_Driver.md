@@ -32,4 +32,9 @@ openvela 已集成图形库 NxWM，但由于其功能相对简单，无法满足
     - SPI (QSPI)
     - I2C
 
-关于 Graphics Driver 的适配方法，将在 Display 章节的两个子章节中详细介绍。
+## 二、相关文档
+
+关于 Graphics Driver 的适配方法，请参见：
+
+- [Framebuffer_Driver](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/graphics/Framebuffer_Driver.md)
+- [LCD_Driver](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/graphics/LCD_Driver.md)

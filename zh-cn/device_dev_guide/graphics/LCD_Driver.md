@@ -174,7 +174,7 @@ struct lcd_planeinfo_s
 4. `getarea`
    - 从指定的矩形区域读取像素数据。
 
-##### 平面颜色特性
+##### Plane 颜色特性
 
 1. `buffer`
    - 功能：工作区缓冲区，每个 LCD 设备一个，多个图层（layer）共享一个缓冲区。
@@ -193,7 +193,7 @@ LCD Framebuffer 是 openvela 对 LCD 驱动程序（LCD driver）的一层 Frame
 根据 [Framebuffer Driver](Framebuffer_Driver.md) 的描述，LCD Framebuffer 驱动实现了以下三个核心接口：
 
 - `up_fbinitialize`：初始化 Framebuffer 和 LCD 驱动。
-- `up_fbgetvplane`：获取视频平面信息。
+- `up_fbgetvplane`：获取 Video Plane 信息。
 - `up_fbuninitialize`：释放 Framebuffer 和相关资源。
 
 在 `up_fbinitialize` 函数中，完成了对 LCD 驱动的初始化调用。
