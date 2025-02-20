@@ -16,12 +16,11 @@ prebuilts/gcc/linux/arm/arm-none-eabi/include/stdatomic.h
 ### 2、原子操作的实现方式
 
 - 硬件支持：如果编译器支持目标 CPU 架构的原子操作指令，则原子操作将在硬件层面保证原子性。
-- 软件实现：如果编译器不支持原子操作指令，可以使用通用原子操作接口。此时需要配置 `CONFIG_LIBC_ARCH_ATOMIC`，通用接口通过关中断实现，具体实现见 [arch_atomic.c](https://github.com/apache/nuttx/blob/master/libs/libc/machine/arch_atomic.c)。
+- 软件实现：如果编译器不支持原子操作指令，可以使用通用原子操作接口。此时需要配置 `CONFIG_LIBC_ARCH_ATOMIC`，通用接口通过关中断实现，具体实现见 [arch_atomic.c](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/arch_atomic.c)。
 
     相关配置文件路径：
 
-  - [nuttx/libs/libc/machine/Kconfig](https://github.com/apache/nuttx/blob/master/libs/libc/machine/Kconfig)
-  - [nuttx/libs/libc/machine/Make.defs](https://github.com/apache/nuttx/blob/master/libs/libc/machine/Make.defs)
+  - [nuttx/libs/libc/machine/Make.defs](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/Make.defs)
 
 ### 3、配置选项说明
 
