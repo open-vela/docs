@@ -12,7 +12,7 @@ openvela 提供了内置的 `curl` 工具，这是一种基于命令行的文件
 CONFIG_LIB_ZLIB=y
 CONFIG_CRYPTO_MBEDTLS=y
 CONFIG_LIB_CURL=y
-CONFIG_TOOLS_CURL=y
+CONFIG_UTILS_CURL=y
 ```
 
 > **注意**
