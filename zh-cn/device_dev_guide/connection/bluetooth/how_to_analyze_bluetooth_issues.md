@@ -14,6 +14,7 @@
     - [方法：观察音乐源设备（手机）是否设置了绝对音量](#方法观察音乐源设备手机是否设置了绝对音量)
     - [方法：观察本地设备是否设置了绝对音量](#方法观察本地设备是否设置了绝对音量)
     - [方法：观察音乐源设备（手机）是否改变了音频幅值](#方法观察音乐源设备手机是否改变了音频幅值)
+    - [方法：观察是否打开了AVRCP配置](#方法观察是否打开了avrcp配置)
   - [典型问题](#典型问题)
     - [问题: 不能控制播放、暂停](#问题-不能控制播放暂停)
     - [问题: 不能受音乐源设备（手机）控制调节音量](#问题-不能受音乐源设备手机控制调节音量)
@@ -202,6 +203,22 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 <img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_aac_payload_length.png" alt="sniffer:通过Payload Length判断AAC音量" width="50%">
 
+<a id="方法：观察是否打开了AVRCP配置"></a>
+
+### 方法：观察是否打开了AVRCP配置
+
+通常可以通过.config文件观察是否打开了AVRCP配置。在编译产物中，.config文件位于蓝牙服务所在核路径下，例如：
+```
+image/sim-vela/vela/.config
+image/qemu-vela/goldfish-armeabi-v7a-ap/.config
+```
+AVRCP相关配置如下：
+
+```
+CONFIG_BLUETOOTH_AVRCP_TARGET=y
+CONFIG_BLUETOOTH_AVRCP_CONTROL=y
+```
+
 ## 典型问题
 
 ### 问题: 不能控制播放、暂停
@@ -218,7 +235,7 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 * [观察设备是否支持AVRCP](#方法：观察设备是否支持AVRCP)
 
-  * 若音乐源设备（A2DP-SRC）不支持AVRCP-TG，或音乐播放设备（A2DP-SNK）不支持AVRCP-CT，则建议观察编译选项，是否打开了相应设置。
+  * 若音乐源设备（A2DP-SRC）不支持AVRCP-TG，或音乐播放设备（A2DP-SNK）不支持AVRCP-CT，则建议[观察是否打开了相应配置](#方法：观察是否打开了AVRCP配置)。
     
   * 若音乐源设备（A2DP-SRC）未能正确的注册或开启AVRCP-TG服务，或者音乐播放设备（A2DP-SNK）未能正确的注册或开启AVRCP-CT服务，则建议根据syslog观察失败原因。
     
