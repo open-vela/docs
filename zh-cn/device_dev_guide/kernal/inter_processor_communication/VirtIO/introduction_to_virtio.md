@@ -883,4 +883,4 @@ VirtIO 的传输层定义了 Driver 和 Device 之间的通信方式。以下是
 
 ## 五、参考文档
 
-- https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.pdf
+- [Virtual I/O Device (VIRTIO) Version 1.2](https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.pdf)
