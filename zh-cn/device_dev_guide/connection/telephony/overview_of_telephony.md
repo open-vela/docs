@@ -9,7 +9,7 @@
 oFono 是一个面向基于 Linux 的嵌入式移动设备和桌面系统的 Telephony Host Stack（电话主机栈）。它采用了 GPLv2 协议。oFono 使用 C 语言、GLib 和 DBus 实现，支持多种类型的调制解调器（Modem），例如：
 
 - ATModem（基于 AT 命令的调制解调器）
-- RILModem（集成AOSP RIL格式的调制解调器）
+- RILModem（集成 AOSP RIL 格式的调制解调器）
 - ISIModem（集成 SIM 调制解调器）
 
 基于 oFono 的技术优势和开源生态，openvela 选择 oFono 作为基础，扩展开发 openvela Telephony 子系统，以满足蜂窝通信的功能需求。
@@ -43,30 +43,31 @@ TAPI 内部按照业务功能划分为多个模块，每个模块的功能和代
 
 | **模块** | **文件**                       | **说明**                    |
 | :------- | :----------------------------- | :-------------------------- |
-| 公共接口 | `tapi_manager.c``tapi.h`       | 提供 Telephony 公共接口。   |
+| 公共接口 | `tapi_manager.c`<br>`tapi.h`       | 提供 Telephony 公共接口。   |
 | 工具接口 | `tapi_utils.c/h`               | 提供 Telephony 工具类接口。 |
-| 通话接口 | `tapi_call.c/h``tapi_ussd.c/h` | 通话管理接口。              |
+| 通话接口 | `tapi_call.c/h`<br>`tapi_ussd.c/h` | 通话管理接口。              |
 | 网络接口 | `tapi_network.c/h`             | 网络注册接口。              |
 | 数据接口 | `tapi_gprs.c/h`                | 提供数据服务接口。          |
-| SIM 接口 | `tapi_sim.c/h``tapi_stk.c/h`   | SIM 卡管理接口。            |
+| SIM 接口 | `tapi_sim.c/h`<br>`tapi_stk.c/h`   | SIM 卡管理接口。            |
 | 短信接口 | `tapi_sms.c/h`                 | 短信管理接口。              |
 | IMS 接口 | `tapi_ims.c/h`                 | 提供 IMS 服务接口。         |
 | 测试工具 | `telephony_tools.c`            | 提供客户端模拟工具。        |
 
 ### 2、openvela RIL 说明
 
-####  RIL 功能概述
+#### RIL 功能概述
 
 openvela Telephony 通过 RIL 机制与调制解调器（Modem）交互。Telephony 层通过 Socket 与 RILD 进程通信，而 RILD 进程内嵌 Vendor RIL，用于与 Modem 交互。
 
 #### RIL 设计原则
 
 - 对标 AOSP：openvela RIL 接口参考 Android 12 RIL AOSP 的设计。
-  - Android 4.3 已支持的 RIL 接口，其参数保持与 Android 4.3 一致。
-  - Android 12 新增的接口根据 openvela 的业务需求挑选实现，参数保持与 Android 一致。
+  - oFono原生已支持Android 4.3 的 RIL 接口，其参数与 Android 4.3 一致。
+  - openVela基于Android 12 RIL接口，根据 openvela 的业务需求挑选，RIL参数保持与 Android 一致。
   - 对于 Android 定义的 CDMA 和 NR5G 相关接口，由于无业务需求，openvela 不支持。
-  - 对于 IMS 相关接口，由于没有 AOSP 的统一规范，进行了单独设计。
-- 数据结构：请求参数和响应参数均参考 oFono 源码 `gril/parcel.h` 中的 Socket 字节流数据结构定义。
+  - 对于 IMS 相关接口，由于没有 AOSP 的统一规范，按照openvela需求独立设计。
+  - openvela按照业务需求扩展定制部分接口。
+- 数据结构：请求参数和响应参数均参考 oFono 源码 gril/parcel.h 中的 Socket 字节流数据结构定义。
 
 ### 3、openvela Reference RIL 介绍
 
@@ -79,7 +80,8 @@ openvela Reference RIL 提供了一套适用于 QEMU Emulator 的参考实现，
 openvela Reference RIL 将 RIL 模块拆分为以下两部分：
 
 1. openvela LibRIL：openvela RIL 的接口标准。
-2. Reference QEMU RIL：适用于 QEMU 模拟器的参考实现。 调制解调器（Modem）芯片厂商可以参考 Reference QEMU RIL 实现 Vendor RIL 模块，通过 Vendor RIL 与 Modem 实现控制面交互。在商用产品中，openvela LibRIL 和 Vendor RIL 共同实现完整的 RIL 功能。
+2. Reference QEMU RIL：适用于 QEMU 模拟器的参考实现。
+调制解调器（Modem）芯片厂商可以参考 Reference QEMU RIL 实现 Vendor RIL 模块，通过 Vendor RIL 与 Modem 实现控制面交互。在商用产品中，openvela LibRIL 和 Vendor RIL 共同实现完整的 RIL 功能。
 
 ## 四、Telephony 业务适配
 
@@ -87,7 +89,7 @@ openvela Reference RIL 将 RIL 模块拆分为以下两部分：
 
 - 蜂窝应用层 APP：调用 TAPI（Telephony API）接口，实现 UI 应用的控制和显示。
 - 蜂窝控制面逻辑 Vendor RIL：实现与 Modem 的控制面交互，参考 openvela Reference QEMU RIL。
-- 语音数据面和数据流：适配语音和数据的传输逻辑。
+- 蜂窝数据面：适配语音流和数据流的传输逻辑。
 
 以下分别介绍语音流和数据流的适配方案。
 
