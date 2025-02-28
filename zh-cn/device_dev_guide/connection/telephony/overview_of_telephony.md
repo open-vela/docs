@@ -1,4 +1,4 @@
-# openvela Telephony 概述
+# Telephony 概述
 
 ## 一、背景
 
@@ -12,17 +12,17 @@ oFono 是一个面向基于 Linux 的嵌入式移动设备和桌面系统的 Tel
 - RILModem（集成 AOSP RIL 格式的调制解调器）
 - ISIModem（集成 SIM 调制解调器）
 
-基于 oFono 的技术优势和开源生态，openvela 选择 oFono 作为基础，扩展开发 openvela Telephony 子系统，以满足蜂窝通信的功能需求。
+基于 oFono 的技术优势和开源生态，openvela 选择 oFono 作为基础，扩展开发 Telephony 子系统，以满足蜂窝通信的功能需求。
 
 ## 三、openvela 的移动通信解决方案
 
-openvela 将 oFono 集成到系统中，并增强了其移动通信能力，例如支持 VoLTE（Voice over LTE）语音通话，从而提升了物联网实时操作系统的移动通信能力。通过层级封装和解耦，以及多样化的芯片平台集成方式，openvela 系统的整体移动通信解决方案能够让上层 openvela 应用程序（APP） 实现跨平台复用，为用户提供最佳的通信体验。
+openvela 将 oFono 集成到系统中，并增强了其移动通信能力，例如支持 VoLTE（Voice over LTE）语音通话，从而提升了物联网实时操作系统的移动通信能力。通过层级封装和解耦，以及多样化的芯片平台集成方式，openvela 系统的整体移动通信解决方案能够让上层应用程序（APP） 实现跨平台复用，为用户提供最佳的通信体验。
 
-基于 oFono 作为 openvela Telephony 的服务层，系统对外提供 TAPI（Telephony API） 接口，下层对接 RIL（Radio Interface Layer） 层，实现完整的 Telephony 功能。
+基于 oFono 作为 Telephony 的服务层，系统对外提供 TAPI（Telephony API） 接口，下层对接 RIL（Radio Interface Layer） 层，实现完整的 Telephony 功能。
 
 ![img](./figures/001.svg)
 
-### 1、openvela Telephony API（TAPI）说明
+### 1、Telephony API（TAPI）说明
 
 #### TAPI 功能概述
 
@@ -33,7 +33,7 @@ TAPI 是一个基于 DBus Lib 库的 oFono D-Bus 接口封装层，主要目标�
 
 #### TAPI 架构图
 
-以下是 openvela Telephony API 的架构图：
+以下是 Telephony API 的架构图：
 
 ![img](./figures/002.svg)
 
@@ -53,31 +53,31 @@ TAPI 内部按照业务功能划分为多个模块，每个模块的功能和代
 | IMS 接口 | `tapi_ims.c/h`                 | 提供 IMS 服务接口。         |
 | 测试工具 | `telephony_tools.c`            | 提供客户端模拟工具。        |
 
-### 2、openvela RIL 说明
+### 2、RIL 说明
 
 #### RIL 功能概述
 
-openvela Telephony 通过 RIL 机制与调制解调器（Modem）交互。Telephony 层通过 Socket 与 RILD 进程通信，而 RILD 进程内嵌 Vendor RIL，用于与 Modem 交互。
+Telephony 通过 RIL 机制与调制解调器（Modem）交互。Telephony 层通过 Socket 与 RILD 进程通信，而 RILD 进程内嵌 Vendor RIL，用于与 Modem 交互。
 
 #### RIL 设计原则
 
 - 对标 AOSP：openvela RIL 接口参考 Android 12 RIL AOSP 的设计。
-  - oFono原生已支持Android 4.3 的 RIL 接口，其参数与 Android 4.3 一致。
-  - openVela基于Android 12 RIL接口，根据 openvela 的业务需求挑选，RIL参数保持与 Android 一致。
+  - oFono 原生已支持 Android 4.3 的 RIL 接口，其参数与 Android 4.3 一致。
+  - openvela基于Android 12 RIL接口，根据 openvela 的业务需求挑选，RIL 参数保持与 Android 一致。
   - 对于 Android 定义的 CDMA 和 NR5G 相关接口，由于无业务需求，openvela 不支持。
-  - 对于 IMS 相关接口，由于没有 AOSP 的统一规范，按照openvela需求独立设计。
+  - 对于 IMS 相关接口，由于没有 AOSP 的统一规范，按照 openvela 需求独立设计。
   - openvela按照业务需求扩展定制部分接口。
 - 数据结构：请求参数和响应参数均参考 oFono 源码 gril/parcel.h 中的 Socket 字节流数据结构定义。
 
-### 3、openvela Reference RIL 介绍
+### 3、Reference RIL 介绍
 
 #### Reference RIL 的功能
 
-openvela Reference RIL 提供了一套适用于 QEMU Emulator 的参考实现，用于模拟电话、短信、上网等 Telephony 功能，方便在 QEMU 模拟器上调试应用程序的 Telephony 功能。
+Reference RIL 提供了一套适用于 QEMU Emulator 的参考实现，用于模拟电话、短信、上网等 Telephony 功能，方便在 QEMU 模拟器上调试应用程序的 Telephony 功能。
 
 #### Reference RIL 的模块划分
 
-openvela Reference RIL 将 RIL 模块拆分为以下两部分：
+Reference RIL 将 RIL 模块拆分为以下两部分：
 
 1. openvela LibRIL：openvela RIL 的接口标准。
 2. Reference QEMU RIL：适用于 QEMU 模拟器的参考实现。
@@ -103,7 +103,7 @@ TAPI -> oFono voice -> RIL -> Modem
 
 #### 语音数据面
 
-语音数据面由 Modem 与 Audio DSP 直接交互，完成语音流的收发和编解码。当前 openvela Telephony 支持以下语音功能：
+语音数据面由 Modem 与 Audio DSP 直接交互，完成语音流的收发和编解码。当前 Telephony 支持以下语音功能：
 
 - LTE IMS 的 VoLTE 语音。
 - GSM 和 WCDMA 下的 CS 语音。

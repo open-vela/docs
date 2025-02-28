@@ -64,7 +64,7 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 
     定义测试的 PROGNAME 及 MAINSRC 文件。参考如下样例，根据实际情况完成 Makefile 编写。
 
-    注意：**PROGNAME 必须以 cmocka_ 开头****。**
+    注意：**PROGNAME 必须以 cmocka_ 开头**。
 
    ```Makefile
    include $(APPDIR)/Make.defs
