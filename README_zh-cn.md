@@ -4,7 +4,7 @@
 
 <h1 align="center">openvela</h1>
 
-\[ [English](README.md) | 简体中文 \]
+\[ [English](README.md) | 简体中文 | [繁體中文](README_zh-tw.md) \]
 
 ## openvela 简介
 
