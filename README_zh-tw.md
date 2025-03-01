@@ -59,19 +59,19 @@ openvela 支援許多不同的架構（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 
 ## 貢獻
 
-- [原始碼貢獻指南](CONTRIBUTING_zh-cn.md)
+- [原始碼貢獻指南](CONTRIBUTING_zh-tw.md)
 - [文件貢獻指南](./zh-cn/contribute/process/doc_dev_process.md)
 
 ## 授權
 
 這個代碼庫中的代碼使用 Apache 2.0 授權。你可以在[這裡](https://www.apache.org/licenses/LICENSE-2.0.txt)找到更多關於 Apache 2.0 授權的資訊。
 
-openvela 引用第三方開源軟體及授權說明，參考[第三方開源軟體說明](Third_Party_and_Open_Source_Components_zh-cn.md)。
+openvela 引用第三方開源軟體及授權說明，參考[第三方開源軟體說明](Third_Party_and_Open_Source_Components_zh-tw.md)。
 
 ## 聯絡方式
 
 為了更好的管理和處裡回饋及技術支援，建議通過以下方式聯絡我們：
 
 - **Issues**: 如果你有任何問題、建議或是發現任何的 Bug，請在 Issues 頁面中發起一個新的 Issue。盡可能提供詳細的資訊，讓我們能更快的釐清問題並解決。
-- **Pull Requests**: 如果你發現問題並修復了，歡迎發起 Pull Request。請確認依照我們的[貢獻指南](./CONTRIBUTING_zh-cn.md)。
+- **Pull Requests**: 如果你發現問題並修復了，歡迎發起 Pull Request。請確認依照我們的[貢獻指南](./CONTRIBUTING_zh-tw.md)。
 - **Discussions**: 如果你有更多的想法，可以在 Discussions 頁面發起一個新的討論。
