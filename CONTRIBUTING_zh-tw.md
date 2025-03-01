@@ -15,7 +15,7 @@ openvela 主要遵循 Apache License 2.0 授權，具體請查看 LICENSE 文件
   - 您可以通過 [我的 CLA 狀態](https://gitee.com/profile/clas) 查看簽署狀態。
 
 - **GitHub 平台**:
-  - 在提交新的 Pull Request (PR) 后，系统会提示您完成 CLA 的签署。请根据提示操作以完成签署流程。
+  - 提交新的 Pull Request (PR) 後，系統會提示您完成 CLA 的簽署。請根據提示操作以完成簽署流程。
 
 ## 錯誤報告
 
@@ -34,7 +34,7 @@ openvela 主要遵循 Apache License 2.0 授權，具體請查看 LICENSE 文件
 ### 分支策略
 
 - **trunk**：**trunk** 分支不接受 pull request。
-- **dev**：從 **dev** 分支 fork 代碼，並推送到 pull request。
+- **dev**：從 **dev** 分支 fork 代碼，並發送到 pull request。
 
 ### 提交程式碼前提示
 
@@ -61,7 +61,7 @@ openvela 主要遵循 Apache License 2.0 授權，具體請查看 LICENSE 文件
 
 4. 發送 pull request
 
-    將本機變更推送到您 fork 的儲存庫副本，並發送 pull request。在 pull request 中，選擇一個簡潔的標題來總結您的更改，並在正文中提供詳細說明。請提及相關問題的編號，例如「關閉 #123」。
+    將本機變更發送到您 fork 的儲存庫副本，並發送 pull request。在 pull request 中，選擇一個簡潔的標題來總結您的更改，並在正文中提供詳細說明。請提及相關問題的編號，例如「關閉 #123」。
 
 ### 衝突的處理方式
 
@@ -87,7 +87,7 @@ openvela 主要遵循 Apache License 2.0 授權，具體請查看 LICENSE 文件
     git rebase --continue
     ```
 
-4. 推送到你的 fork，然後 pull request 將會更新
+4. 發送到你的 fork，然後 pull request 將會更新
 
     ```Bash
     git push --force
