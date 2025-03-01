@@ -1,6 +1,6 @@
 # Contributing to openvela
 
-\[ English | [简体中文](CONTRIBUTING_zh-cn.md) \]
+\[ English | [简体中文](CONTRIBUTING_zh-cn.md) | [繁體中文](CONTRIBUTING_zh-tw.md) \]
 
 openvela is developed by an active team of software engineers and researchers.You are welcome to join openvela, an open source community, and contribute in any way to this project!
 
