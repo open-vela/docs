@@ -52,8 +52,8 @@ CONFIG_ALLOW_BSD_COMPONENTS=y
 以下是 Telephony API 的相关配置项：
 
 ```Makefile
-// 启用 Telephony 功能，建议子项保持默认配置：  
-// 单卡产品 "active modem count" 配置为 1
+// 1. 启用 Telephony 功能，建议子项保持默认配置：  
+// 2. 单卡产品 "active modem count" 配置为 1
 // "modem path" 配置为 /ril_0  
 CONFIG_TELEPHONY=y
 CONFIG_TELEPHONY_TOOL=y

@@ -66,7 +66,7 @@ Telephony 通过 RIL 机制与调制解调器（Modem）交互。Telephony 层�
   - openvela基于Android 12 RIL接口，根据 openvela 的业务需求挑选，RIL 参数保持与 Android 一致。
   - 对于 Android 定义的 CDMA 和 NR5G 相关接口，由于无业务需求，openvela 不支持。
   - 对于 IMS 相关接口，由于没有 AOSP 的统一规范，按照 openvela 需求独立设计。
-  - openvela按照业务需求扩展定制部分接口。
+  - openvela 按照业务需求扩展定制部分接口。
 - 数据结构：请求参数和响应参数均参考 oFono 源码 gril/parcel.h 中的 Socket 字节流数据结构定义。
 
 ### 3、Reference RIL 介绍
