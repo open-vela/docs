@@ -28,6 +28,15 @@
     - [问题: 不能控制播放、暂停](#问题-不能控制播放暂停)
     - [问题: 不能受音乐源设备（手机）控制调节音量](#问题-不能受音乐源设备手机控制调节音量)
 - [通话问题](#通话问题)
+  - [分析方法](#分析方法-1)
+    - [方法：观察是否建立了HFP连接](#方法观察是否建立了hfp连接)
+    - [方法：观察设备是否支持HFP](#方法观察设备是否支持hfp)
+    - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
+    - [方法：观察是否向Media设置了SCO音频参数](#方法观察是否向media设置了sco音频参数)
+    - [方法：观察AG端是否收到了HF端的Answer请求](#方法观察ag端是否收到了hf端的answer请求)
+  - [典型问题](#典型问题-1)
+    - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
+    - [问题：HF端接通电话，HF端无声](#问题hf端接通电话hf端无声)
 - [数据传输问题](#数据传输问题)
 
 ---
@@ -477,7 +486,7 @@ AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要
 
   * 若本地设备设置了绝对音量，但观察不到本地音量变化，建议在Vela Media侧观察音量未能生效的原因。
 
-  * 若本地设备为能正确设置绝对音量，建议根据syslog判断未能设置音量的原因。
+  * 若本地设备未能正确设置绝对音量，建议根据syslog判断未能设置音量的原因。
 
 * [观察手机是否改变了音频幅值](#方法：观察手机是否改变了音频幅值)
 
@@ -486,5 +495,145 @@ AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要
   * 若使用相对音量时，手机正确改变了音频幅值，建议Vela Media侧观察音量变化未能体现的原因。
 
 # 通话问题
+本章介绍Hands-Free Profile（HFP）相关问题常用的分析、定位方法。
+HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF）两个角色。通常，AG是音频网关，负责音频设备输入输出，典型设备为手机，HF作为音频网关的远程音频输入/输出设备，典型设备为耳机。
+
+## 分析方法
+
+<a id="方法：观察是否建立了HFP连接"></a>
+
+### 方法：观察是否建立了HFP连接
+
+通常，可以通过syslog，snoop log，或者air log观察是否建立了HFP连接。
+
+#### 1 通过syslog观察是否建立了HFP连接
+
+典型log如下：
+
+* HFP HF 连接对端设备（HFP AG）成功
+```
+[hf_stm]: Enter State=Connected, Peer=[AA:AA:AA:AA:AA:AA]
+```
+* HFP AG 连接对端设备（HFP HF）成功
+```
+[ag_stm]: Enter State=Connected, Peer=[AA:AA:AA:AA:AA:AA]
+```
+#### 2 通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因
+
+典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc.png" alt="snoop:HFP连接" width="50%">
+
+CMER命令的交互标志着SLC建立完成，可参考下图spec中SLC建立流程，其中实线为必须操作，其余为可选操作。
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc_core.png" alt="snoop:HFP连接规范" width="50%">
+
+<a id="方法：观察设备是否支持HFP"></a>
+
+### 方法：观察设备是否支持HFP
+
+当两个设备均未能发起HFP连接时，建议观察双方设备是否支持HFP。通常，可以通过syslog，snoop log，或者air log观察设备是否支持HFP。
+
+#### 1 通过syslog观察设备是否支持HFP
+
+典型log如下：
+
+* HFP HF 服务注册成功
+```
+[service_manager]: HFP-HF service register success
+```
+* HFP HF 服务开启成功
+```
+[service_manager]: service_on_startup {HFP-HF} start ret:1
+```
+* HFP AG 服务注册成功
+```
+[service_manager]: HFP-AG service register success
+```
+* HFP AG 服务开启成功
+```
+[service_manager]: service_on_startup {HFP-AG} start ret:1
+```
+
+#### 2 通过snoop log或air log观察双方设备是否支持HFP
+
+典型log如下：
+
+* SDP中，声明支持HFP-HF角色
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_sdp.png" alt="snoop:HFP-AG服务" width="50%">
+
+* SDP中，声明支持HFP-AG角色
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_sdp.png" alt="snoop:HFP-HF服务" width="50%">
+
+<a id="方法：观察是否建立了SCO连接"></a>
+
+### 方法：观察是否建立了SCO连接
+
+两台设备之间传输通话语音需要建立SCO连接。通常，可以通过syslog，snoop log，或者air log观察SCO是否建立成功。
+
+#### 1 通过syslog观察是否建立了SCO连接
+* HFP HF SCO建立完成并通知Media
+```
+[hf_stm]: Enter State=AudioOn, Peer=[AA:AA:AA:AA:AA:AA]
+```
+* HFP AG SCO建立完成并通知Media
+```
+[ag_stm]: Enter State=AudioOn, Peer=[AA:AA:AA:AA:AA:AA]
+```
+<a id="方法：观察是否向Media设置了SCO音频参数"></a>
+
+### 方法：观察是否向Media设置了SCO音频参数
+
+AG和HF都需要在SCO建立完成之后向Media设置了SCO音频参数，典型log如下：
+```
+[Media_proxy_once:430] policy:audio:0x20556fd4 HFPSampleRate set_int 16000 _ ret:0 resp:0
+[Media_proxy_once:430] policy:audio:0x20556fec AvailableDevices include sco apply ret:0 resp:0
+```
+
+<a id="方法：观察AG端是否收到了HF端的Answer请求"></a>
+
+### 方法：观察AG端是否收到了HF端的Answer请求
+
+HF端发起Answer请求，需要向AG端发送ATA命令，通常，可以通过syslog，snoop log，或者air log观察AG是否收到了HF的Answer请求。
+
+#### 1 通过syslog观察AG是否收到了HF的Anser请求
+
+```
+[hfp_ag]: ag_service_notify_call_answered
+```
+## 典型问题
+
+<a id="问题：AG端接通电话，HF端通话无声"></a>
+
+### 问题：AG端接通电话，HF端通话无声
+
+AG端接通电话，HF端通话无声的问题可能有多种原因导致，可考虑的定位方法包括：
+
+* [观察是否建立了HFP连接](#方法：观察是否建立了HFP连接)
+
+  * 若双方设备中，至少一方发起了连接，但连接失败，建议对比典型log，分析连接失败的原因。
+
+  * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持HFP](#方法：观察设备是否支持HFP)。
+
+* [观察双方设备是否建立了SCO连接](#方法：观察是否建立了SCO连接)
+
+  * 若HFP连接成功，建议观察双方设备是否建立了SCO连接，通常，应当由AG设备发起SCO连接，在AG侧，通常由App发起SCO连接。（部分场景协议栈自己发起，需结合源码分析）。
+  * 若双方均未能发起SCO连接，建议检查AG侧App为什么没有发起SCO连接。
+  * 若发起SCO连接，但是连接失败，建议对比典型log，分析失败原因。
+  * 若SCO建立成功，建议[观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)。
+* [观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)
+  * 若蓝牙成功设置了SCO音频参数，则蓝牙侧完成了音频传输的必要流程，建议Vela Media侧观察无声的原因。
+  * 若未设置SCO音频参数，则检查是蓝牙未发送给Meida，还是发了但是卡在了和Media的跨进程通信。
+
+
+<a id="问题：HF端接通电话，HF端无声"></a>
+
+### 问题：HF端接通电话，HF端无声
+
+* [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
+  * 若AG端未到了HF端的Answer请求，则检查syslog，snoop或空口log分析原因。
+  * 若AG端收到了HF端的Answer请求，则参考[问题: AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
 
 # 数据传输问题
