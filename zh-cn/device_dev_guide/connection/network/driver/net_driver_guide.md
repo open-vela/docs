@@ -557,7 +557,7 @@ wapi reconnect wlan0     # 从 wapi.conf 加载配置并重新联网
 以下是 Linux 中相关实现的参考代码链接：
 
 - [wext-sme.c](https://elixir.bootlin.com/linux/latest/source/net/wireless/wext-sme.c#L43)（具体实现）
-- [wext-compat.c](https://elixir.bootlin.com/linux/latest/source/net/wireless/wext-compat.c#L1463)（连接转接实现）
+- [wext-compat.c](https://elixir.bootlin.com/linux/latest/source/net/wireless/wext-compat.c#L1463)（兼容性实现）
 
 ## 六、测试工具
 
