@@ -18,7 +18,7 @@ void syslog(int priority, const char *format, ...);
 
 `syslog` 支持多等级、多通道的日志打印，能够以带有时间戳、CPU ID 和进程 ID（PID）的格式输出日志。其整体框架如下图所示：
 
-![img](./figures/008.svg)
+![img](./figures/001.svg)
 
 ### 4、工作流程
 

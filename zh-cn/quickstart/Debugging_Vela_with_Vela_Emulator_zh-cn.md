@@ -2,7 +2,7 @@
 
 \[ [English](./../../en/quickstart/Debugging_Vela_with_Vela_Emulator.md) | 简体中文 \]
 
-## 使用 GDB Console
+## 一、使用 GDB Console
 
 使用下列命令，在 Ubuntu 22.04 版本的系统上安装所需的软件包：
 
@@ -133,7 +133,7 @@ d <breakpoint-number>
 (gdb) q
 ```
 
-## 使用 Visual Studio Code
+## 二、使用 Visual Studio Code
 
 1. 单击[此处](https://code.visualstudio.com/)下载安装 Visual Studio Code。
 
@@ -198,7 +198,7 @@ d <breakpoint-number>
 
     为了启动调试会话，首先使用 `Run and Debug` 视图中的 `Configuration` 下拉列表，选择 `Debug openvela` 的配置。设置启动配置后，使用 `F5` 启动调试会话。
 
-## 使用 Clion (远程调试)
+## 三、使用 Clion (远程调试)
 
 1. 下载并且安装 Clion (建议使用较新版本) https://www.jetbrains.com/clion/
 

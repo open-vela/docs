@@ -1,4 +1,4 @@
-# 音乐播放器Demo
+# 音乐播放器 Demo
 
 \[ [English](./../../en/demo/Music_Player_Example.md) | 简体中文 \]
 

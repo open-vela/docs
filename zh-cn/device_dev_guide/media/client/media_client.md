@@ -2,11 +2,11 @@
 
 [[English](./README.md)|简体中文]
 
-## **概述**
+## 一、**概述**
 
 Media Client 提供了一组与 Media Server 进行交互的接口和工具。它支持各种媒体操作，如播放音频和视频、录制音频、管理音频焦点、设置媒体策略以及处理媒体会话等。Client 端的各个模块分别封装了**同步接口**和**异步接口**，以供用户调用。用户可以选择使用异步操作并与服务器进行高效通信。
 
-## **项目目录**
+## 二、**项目目录**
 ```tree
 .
 ├── media_dtmf.c
@@ -25,11 +25,11 @@ Media Client 提供了一组与 Media Server 进行交互的接口和工具。�
 ├── py_mediatool.py
 └── README.md
 ```
-## **模块介绍**
+## 三、**模块介绍**
 
  Client 端封装了 Media Focus、Media Graph、Media Policy、Media Session 各个模块的同步接口和异步接口。此外，Client 端也支持同步RPC和异步RPC的接口，用于和Server通信。
 
-### **Media Focus**
+### 1、**Media Focus**
 
  Media Focus 模块实现了客户端对 Focus 信令的管理与请求操作。
 - 同步接口：
@@ -41,7 +41,7 @@ Media Client 提供了一组与 Media Server 进行交互的接口和工具。�
   - 在请求焦点时，会进行一系列的异步操作，包括连接服务器、发送 Ping 请求、开始监听、发送焦点请求等，最终调用用户定义的 Focus 回调函数返回。
   - 放弃焦点时，发送放弃请求并断开与服务器的连接，释放资源等。
 
-### **Media Graph**
+### 2、**Media Graph**
 
  Client 端的 Media Graph 模块实现了对音频处理的功能，涵盖媒体播放器（Media Player）和媒体录制器（Media Recorder）的操作接口。其主要用于与 Media Server 交互以管理 Media Player 和 Media Recorder 的相关操作，且分别封装了同步接口和异步接口。
 - 同步接口：
@@ -52,7 +52,7 @@ Media Client 提供了一组与 Media Server 进行交互的接口和工具。�
   - 支持 **Media Player**和 **Media Recorder** 的各种操作，包括打开、关闭、准备、播放、暂停、停止、定位、设置属性、获取属性等。
   - 通过 **media_uv_stream_send** 接口将相应的指令发送给 Server，并设置 Server 响应的回调函数。
 
-### **Media Policy**
+### 3、**Media Policy**
 
  Client 端的 Media Policy 提供了设置和获取各种 Media Policy 参数的接口，通过与服务器交互实现对 Media Policy 的灵活控制和查询，可用于调整音频设置、管理设备使用及控制媒体播放特性。
 - 同步接口：
@@ -61,13 +61,13 @@ Media Client 提供了一组与 Media Server 进行交互的接口和工具。�
 - 异步接口：
   - **media_uv_policy.c** 提供 Client 以异步方式设置和获取各种Policy相关参数的接口。
   - 支持获取音频模式、设备使用状态等。
-### **Media Session**
+### 4、**Media Session**
 
 Media Session 在 Media Client 中负责媒体会话管理，包括打开和关闭会话、注册与取消注册、设置事件回调及处理事件通知、进行播放控制操作（如开始、暂停、停止、切换歌曲、增减音量等）以及查询会话状态和元数据等功能。
 - 同步接口：**media_session.c**
 - 异步接口：**media_uv_session.c**
 
-### **Media RPC通信**
+### 5、**Media RPC通信**
 
 Client 端封装了和 Server 通信的接口，支持同步和异步两种方式。
 - 同步 RPC ：

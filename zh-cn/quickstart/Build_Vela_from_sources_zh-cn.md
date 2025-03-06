@@ -2,11 +2,11 @@
 
 \[ [English](./../../en/quickstart/Build_Vela_from_sources.md) | 简体中文 \]
 
-## 使用 build.sh 构建 openvela
+## 一、使用 build.sh 构建 openvela
 
 在安装完 openvela 所需软件包及下载完 openvela 源码后，您可以将 openvela 源码编译成可以在开发板上运行的二进制文件。
 
-### 初始化配置
+### 1、初始化配置
 
 第一步是基于已存在的配置为目标开发板初始化 openvela 配置。
 

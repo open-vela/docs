@@ -4,7 +4,7 @@
 
 采用 Mediatool 测试程序，用于测试 Media Framework API，可模拟实际使用场景。
 
-## **配置 Mediatool 工具**
+## 一、**配置 Mediatool 工具**
 
   配置使用 mediatool 工具的 CPU ,比如 AP :
 ```shell
@@ -23,7 +23,7 @@ CONFIG_LIB_FFMPEG_CONFIGURATION="--disable-sse --enable-avcodec
 CONFIG_LIB_PFW=y
 ```
 
-## **Sim 环境运行 Mediatool**
+## 二、**Sim 环境运行 Mediatool**
 
 1. 运行 ap ，audio 虚拟机：
    ```shell
@@ -38,7 +38,7 @@ CONFIG_LIB_PFW=y
    ap>mediatool
    ```
 
-## **测试方法**
+## 三、**测试方法**
 
 - 播放音频文件( URL 模式 )：
    ```shell

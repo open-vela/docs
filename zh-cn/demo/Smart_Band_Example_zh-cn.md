@@ -1,4 +1,4 @@
-# 手环Bandx Demo
+# 手环 Bandx Demo
 
 \[ [English](../../en/demo/Smart_Band_Example.md) | 简体中文 \]
 

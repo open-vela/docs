@@ -1,6 +1,6 @@
 # 安全配置
 
-## 简介
+## 一、简介
 
 本文介绍如何通过 Kconfig 配置，在设备或模拟器上搭建 TEE（Trusted Execution Environment）和安全服务框架。配置内容涵盖 TEE 核 和 AP 核，包括以下核心模块：
 
@@ -8,13 +8,13 @@
 - 跨核通信配置：实现 AP 核与 TEE 核的高效通信。
 - 应用 CA（Client Application）和 TA（Trusted Application）：支持客户端应用和可信应用的运行。
 
-## 架构图
+## 二、架构图
 
 以下架构图展示了 TEE 和安全服务框架的核心组成部分及其运行环境。
 
 ![img](figures/001.svg)
 
-## 代码目录
+## 三、代码目录
 
 | 序号 | 代码目录                                   | 描述                |
 | :--- | :----------------------------------------- | :------------------ |
@@ -24,7 +24,7 @@
 | 4    | `frameworks/security/optee_vela`           | OPTEE Vela 相关代码 |
 | 5    | `external/optee/optee_test/optee_test`     | OP-TEE 测试代码     |
 
-## TEE 核配置
+## 四、TEE 核配置
 
 以下内容介绍了 TEE 核的配置项，包括跨核通信、WAMR 运行时环境及 TA（Trusted Application）的相关功能配置。  
 
@@ -46,7 +46,7 @@
 | 14   | `CONFIG_TA_PIN`                                    | 否       | `y``n` | PIN 码功能 TA                              |                          |
 | 15   | `CONFIG_TA_TRIAD`                                  | 否       | `y``n` | 三元组功能 TA                              |                          |
 
-## AP 核配置
+## 五、AP 核配置
 
 | 序号 | 配置项                   | 是否必选 | 默认值 | 功能描述                               |
 | :--- | :----------------------- | :------- | :----- | :------------------------------------- |
@@ -57,7 +57,7 @@
 | 5    | `CA_PIN_API`             | 否       | `y``n` | PIN 码功能 CA 的 API                   |
 | 6    | `CA_TRIAD_API`           | 否       | `y``n` | 三元组功能 CA 的 API                   |
 
-## qemu/sim 模拟平台配置
+## 六、qemu/sim 模拟平台配置
 
 在 `qemu/sim` 模拟平台上，不需要独立的 TEE 核来提供安全环境。可以将 TEE 核功能模拟为一个独立的 AP 服务进程。因此，需要完成以下调整：   1. 通信方式调整：将跨核通信方式从 PRMSG 修改为 LOCAL SOCKET 通信。   2. 配置迁移：将 TEE 核相关的配置移至 AP 核。
 
