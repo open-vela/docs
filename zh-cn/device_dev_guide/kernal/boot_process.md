@@ -1,6 +1,6 @@
 # 启动流程
 
-## 板级初始化顺序
+## 一、板级初始化顺序
 
 openvela 板级初始化流程如下：
 
@@ -24,7 +24,7 @@ nx_start->
 - `board_app_finalinitialize`：用于板级最终的初始化，通过 boardctl（BOARDIOC_FINALINIT）被调用，执行上下文是 nsh task。有对文件访问需求的驱动初始化（TP、Charger、Audio PA 、BMI、PPG 和 GPS）需要挪到这个里面，可直接操作文件，不需要使用 delay work 的方式推后执行。
 - `rcS`：第二阶段脚本，主要用于启动其他的应用程序，包含 miwear、algo_service、gpsd 和 healthd 等，执行时机是 nsh 可输入前。
 
-## 启动脚本
+## 二、启动脚本
 
 openvela 的启动脚本 rcS 和 rc.sysinit，是由 nsh task 通过 nshlib 进行加载和解析的，启动脚本的位置由 config 指定：
 1. CONFIG_ETC_ROMFSMOUNTPT/CONFIG_NSH_SYSINITSCRIPT
@@ -56,12 +56,12 @@ ifeq ($(CONFIG_ETC_ROMFS),y)
 endif
 ```
 
-## 调用关系
+## 三、调用关系
 
 下面流程图展示了 openvela 启动流程中的调用关系，具体准确流程，以实际代码为准。
 
 ![本地图片](./figures/boot_process.svg)
 
-## 相关链接
+## 四、相关链接
 
 [(Clickable) Call Graph for Apache NuttX Real-Time Operating System (lupyuen.github.io)](https://lupyuen.github.io/articles/unicorn2)

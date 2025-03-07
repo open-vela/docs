@@ -1,17 +1,17 @@
 # 时间系统
 
-## 简介
+## 一、简介
 
 本文档提供了时间系统的概述，包括关键时间概念、时间类型、API 和管理时间及时区的命令。
 
-## 前置概念
+## 二、前置概念
 
-### 世界标准时间（UTC）
+### 1、世界标准时间（UTC）
 
 - 定义：UTC 是全球统一的时间标准。
 - 与北京时间（CST）的关系：北京时间比 UTC 快 8 小时，即 UTC+8。
 
-### 日历时间（Calendar Time）
+### 2、日历时间（Calendar Time）
 
 - 定义：日历时间是一种相对时间，用秒数表示从某个标准时间点到当前时刻的时间间隔。
 - 特点
@@ -19,7 +19,7 @@
   - 标准时间点：通常以 UTC 时间 1970-01-01 00:00:00 为基准时间点（即 Unix 时间纪元）。
   - 表示方式：以秒数形式表示，常用于计算机系统中作为时间戳。
 
-## `localtime` 在 openvela 中的实现说明
+## 三、`localtime` 在 openvela 中的实现说明
 
 ### 两种实现方式
 
@@ -35,7 +35,7 @@
   - 优点：节省空间，无额外开销。
   - 缺点：不支持时区转换。
 
-## 设置时区
+## 四、设置时区
 
 `tzset` 函数
 
@@ -44,9 +44,9 @@
   - `timezone` ：当前时区相对于 UTC 的偏移（以秒为单位）。
   - `daylight` ：是否启用夏令时（非零表示启用）。
 
-### 1 TZ 环境变量格式
+### 1、TZ 环境变量格式
 
-#### 1 字符串格式
+#### 字符串格式
 
 `TZ` 环境变量支持以下格式：
 
@@ -88,7 +88,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
    - `/time` 表示具体时间（可选）。
 
-#### 2 文件路径格式
+#### 文件路径格式
 
 `TZ` 环境变量支持通过文件路径指定时区信息，格式如下：
 
@@ -101,9 +101,9 @@ std offset[dst[offset][,start[/time],end[/time]]]
 2. 解析规则。
    找到时区文件后，会根据 `tzfile` 格式解析文件内容，加载对应的时区信息。
 
-### 2 `zoneinfo` 制作与挂载说明
+### 2、`zoneinfo` 制作与挂载说明
 
-#### 1. `zoneinfo` 制作流程
+#### `zoneinfo` 制作流程
 
 1. `tzfile` 格式
 
@@ -124,7 +124,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
    - 使用 Linux 工具 `genromfs` 将 `tzbin` 目录打包为 `romfs` 格式的镜像文件。
    - 该镜像文件可挂载到设备上，供程序使用。
 
-#### 2. 在模拟器和板子上的挂载方式
+#### 在模拟器和板子上的挂载方式
 
 ##### 在模拟器（sim）中挂载
 
@@ -168,7 +168,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
    - 挂载后即可使用时区文件。
 
-#### 3. `zoneinfo` 制作工具
+#### `zoneinfo` 制作工具
 
 1. 自动生成。
 
@@ -190,7 +190,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
         mount -t romfs /dev/ram10 zoneinfo
         ```
 
-#### 4. 指定时区文件位置
+#### 指定时区文件位置
 
 如果需要指定 `zoneinfo` 文件的位置，可以设置宏：
 
@@ -198,7 +198,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
 CONFIG_LIBC_TZDIR=/zoneinfo
 ```
 
-### 3 设置时区的方法
+### 3、设置时区的方法
 
 #### 通过启动脚本设置时区
 
@@ -240,7 +240,7 @@ set TZ "NZST-12:00:00NZDT-13:00:00,M10.1.0,M3.3.0"
 timedatectl set-timezone Asia/Tokyo
 ```
 
-## 多核时区设置说明
+## 五、多核时区设置说明
 
 在多核系统中，openvela 建议：
 
@@ -262,7 +262,7 @@ timedatectl set-timezone Asia/Tokyo
 - 如果多核需要访问 `zoneinfo` 文件：
   - 当资源存储在 eMMC 中，其他核需要通过 `rpmsgfs` 才能访问 `tzfile` 信息。
 
-## 时间类型
+## 六、时间类型
 
 `time_t`
 
@@ -317,9 +317,9 @@ timedatectl set-timezone Asia/Tokyo
     };
     ```
 
-## 时间 API
+## 七、时间 API
 
-### 常用时间 API
+### 1、常用时间 API
 
 `time_t time(FAR time_t *timep)`
 
@@ -357,7 +357,7 @@ timedatectl set-timezone Asia/Tokyo
 
 - 描述：用于获取时钟精度，最高精度是纳秒。
 
-### 时间转换 API
+### 2、时间转换 API
 
 `time_t timegm(FAR struct tm *tmp)`
 
@@ -399,7 +399,7 @@ timedatectl set-timezone Asia/Tokyo
 
 - 描述：返回两次时间的差值，单位为秒。
 
-### 高精度时间 API
+### 3、高精度时间 API
 
 `int gettimeofday(FAR struct timeval *tv, FAR struct timezone *tz)`
 
@@ -425,28 +425,28 @@ timedatectl set-timezone Asia/Tokyo
 
 - 描述：获取系统的运行时间（内核版 API）。
 
-## 命令说明
+## 八、命令说明
 
-### 查看系统运行时间
+### 1、查看系统运行时间
 
 ```Bash
 ap> uptime
 14:11:37 up 3 days, 16:49, load average: 0.07, 0.07, 0.07
 ```
 
-### 设置时区
+### 2、设置时区
 
 ```Bash
 ap> timedatectl set-timezone Asia/Tokyo
 ```
 
-### 设置时间
+### 3、设置时间
 
 ```Bash
 ap> date -s "May 11 11:11:21 2022"
 ```
 
-### 查看本地时间
+### 4、查看本地时间
 
 （默认显示 localtime，无时区时显示 UTC）
 
@@ -455,14 +455,14 @@ ap> date
 Wed, Oct 22 14:11:54 2104
 ```
 
-### 查看 UTC 时间
+### 5、查看 UTC 时间
 
 ```Bash
 ap> date -u
 Wed, Oct 22 14:13:21 2104
 ```
 
-### 查看时间和时区信息
+### 6、查看时间和时区信息
 
 ```Bash
 ap> timedatectl
@@ -471,6 +471,3 @@ ap> timedatectl
  Universal time: Mon, Oct 17 08:23:46 2022 UTC
       RTC time: Mon, Oct 17 08:23:47 2022
 ```
-
-
-## 相关文档
