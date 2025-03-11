@@ -14,8 +14,12 @@
   - [典型问题](#发现连接配对典型问题)
   - [问题: 经典蓝牙设备主动绑定对方设备失败](#问题-经典蓝牙设备主动绑定对方设备失败)
 - [音频传输问题](#音频传输问题)
-- [音乐播放控制问题](#音乐播放控制问题)
   - [分析方法](#分析方法)
+    - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+    - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+    - [方法：观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+- [音乐播放控制问题](#音乐播放控制问题)
+  - [分析方法](#分析方法-1)
     - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
     - [方法：观察设备是否支持AVRCP](#方法观察设备是否支持avrcp)
     - [方法：观察是否发送了播放、暂停请求](#方法观察是否发送了播放暂停请求)
@@ -237,9 +241,121 @@
 
 # 音频传输问题
 
+本章介绍Advanced Audio Distribution Profile（A2DP）和Audio/Video Distribution Transport Protocol（AVDTP）相关问题常用的分析、定位方法。AVDTP负责控制音频/视频的传输过程，而A2DP定义了音频数据的编码和传输规范，通过这两个协议配合工作，可以实现在蓝牙设备之间高质量的音频传输。
+A2DP是蓝牙音频分发配置协议，包含Sink（SNK）和Source（SRC）两个角色。通常，SRC是音频源，SNK是音频接收方。Vela蓝牙服务框架中，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为A2DP-SNK，蓝牙音乐源设备（例如手机/手表）可以为A2DP-SRC。
+AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Discovery过程、Get All Capabilities/Get Capabilities过程、Stream Configuration过程、Get All Capabilities/Get Capabilities过程、Stream Configuration过程、Stream Establishment、 Stream Start等AVDTP信令过程。AVDTP信令过程的发起方称为Initiator（INT），信令过程的接收方称为Acceptor (ACP)。
+蓝牙设备传输音频时需要建立两条AVDTP连接。首先建立AVDTP signaling连接，用于编解码参数的协商和media连接的控制，协商完成（AVDTP open）后，再建立AVDTP media连接，用于传输音频数据。
+蓝牙和Media之间有两条transport channel，分别为control channel和data channel，其中，control channel用于传输控制信息，data channel用于传输音频数据。
+
+## 分析方法
+
+<a id="方法：观察是否打开了蓝牙和之间的transport"></a>
+
+通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否打开。
+
+典型的log如下：
+
+* A2DP SRC的transport成功打开
+```
+[a2dp_control]: a2dp_ctrl_cb, path:[a2dp_source_ctrl], event:TRANSPORT_OPEN_EVT
+[a2dp_control]: a2dp_data_cb, path:[a2dp_source_data], event:TRANSPORT_OPEN_EVT
+```
+* A2DP SNK的transport成功打开
+```
+[a2dp_control]: a2dp_ctrl_cb, path:[a2dp_sink_ctrl], event:TRANSPORT_OPEN_EVT
+[a2dp_control]: a2dp_data_cb, path:[a2dp_sink_data], event:TRANSPORT_OPEN_EVT
+```
+
+<a id="方法：观察是否建立了AVDTP signaling连接"></a>
+
+### 方法：观察是否建立了AVDTP signaling连接
+
+通常，可以通过snoop log或者air log观察是否建立了AVDTP signaling连接。
+
+#### 1 通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因
+
+AVDTP signaling连接成功的典型log如下，其中两个设备间建立的第一条AVDTP连接为AVDTP signaling连接。
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_signaling_establishment.png" alt="snoop:AVDTP signaling连接" width="50%">
+
+<a id="方法：观察是否建立了AVDTP media连接"></a>
+
+### 方法：观察是否建立了AVDTP media连接
+
+建立AVDTP media连接之前，可能会进行Discovery、Get（ALL）Capabilities、set/get Configuration、Stream Establishment等过程，其中，Set Configuration和Stream Establishment过程是必须的。通常，可以通过syslog、snoop log或者air log观察是否建立了AVDTP media连接
+
+#### 1 通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因
+
+下面log中，Command是AVDTP Int，回复Accept的是AVDTP Acp。
+
+##### 1.1 AVDTP Discovery
+
+可选的，在建立AVDTP media连接之前，可以发起AVDTP Discovery过程，用于发现对方设备可用的Stream End Point(SEP)。通常，发起AVDTP signaling连接的设备会发起这一过程。典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_discovery.png" alt="snoop:AVDTP discovery" width="50%">
+
+log有显示Acp的序号从1到6,说明对方设备的SEP一共有6个。
+
+##### 1.2 AVDTP Get Capabilities
+
+可选的，在建立AVDTP media连接之前，可以通过Get Capabilities或者Get All Capabilities获取对方SEP的具体信息。通常，发起AVDTP signaling连接的设备会发起这一流程。典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_get_capabilities.png" alt="snoop:AVDTP get capabilities" width="50%">
+
+log显示本地设备获取对方设备的1号SEP的Capabilities。
+
+##### 1.3 AVDTP Set Configuration
+
+在建立AVDTP media连接之前，需要通过Set Configuration过程选定双方的SEP，以及编解码参数。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_set_configuration.png" alt="snoop:AVDTP set configuration" width="50%">
+
+log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
+
+##### 1.4 AVDTP Stream Establishment
+
+在建立AVDTP media连接之前，需要通过Open打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="50%">
+
+##### 1.5 AVDTP media连接成功
+
+完成Set Configuration和Stream Establish流程后，需要建立第二条AVDTP连接，也就是AVDTP media连接。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_media_establishment.png" alt="snoop:AVDTP media连接" width="50%">
+
+通常，AVDTP Open过程后面的L2CAP（PSM=AVDTP）是AVDTP media连接。
+
+#### 2 通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因
+
+典型log如下：
+
+* 本地设备被连接
+```
+[a2dp_stm]: ProcessEvent, State=Idle, Peer=[11:22:33:44:55:66], Event=CONNECTED_EVT
+[a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
+```
+* 本地设备主动连接对端设备
+```
+[a2dp_stm]: ProcessEvent, State=Opening, Peer=[11:22:33:44:55:66], Event=CONNECTED_EVT
+[a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
+```
+
+<a id="方法：观察Media是否成功设置了codec"></a>
+
+### 方法：观察Media是否成功设置了codec
+
+传输或播放音乐前，需要在Media子系统设置编解码参数。可以通过syslog观察Media是否成功设置了编解码参数。
+
+典型log如下：
+
+```
+[a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_CONFIG_DONE
+```
+
 # 音乐播放控制问题
 
-本章介绍Audio/Vedio Remote Control Profile（AVRCP）相关问题常用的分析、定位方法。  
+本章介绍Audio/Vedio Remote Control Profile（AVRCP）相关问题常用的分析、定位方法。
 AVRCP是蓝牙音视频遥控协议，包含Controller（CT）和Target（TG）两个角色。通常，CT是控制方，TG是受控方。Vela蓝牙服务框架中，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为AVRCP-CT，蓝牙音乐源设备（例如手机/手表/手环）可以为AVRCP-TG。
 
 ## 分析方法
