@@ -45,7 +45,7 @@ openvela Emulator 具备以下优势：
 1. 切换到 openvela 仓库根目录下，通过传递 `vela` 选项至 emulator.sh 来启动一个 openvela Emulator 实例。
 
     ```Bash
-    sudo apt install pulseaudio
+    sudo apt install -y pulseaudio
     ./emulator.sh vela
     ```
 
