@@ -45,6 +45,7 @@ The following goldfish-specific drivers have been implemented in openvela:
 1. Switch to the root directory of openvela repository, and start an instance of openvela Emulator by passing the option “vela” to emulator.sh
 
     ```Bash
+    sudo apt install -y pulseaudio
     ./emulator.sh vela
     ```
 
