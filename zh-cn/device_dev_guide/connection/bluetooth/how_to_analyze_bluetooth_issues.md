@@ -4,6 +4,15 @@
 # 目录
 
 - [发现、连接、配对问题](#发现连接配对问题)
+  - [分析方法](#发现连接配对分析方法)
+      - [方法：观察是否对方设备未打开可连接模式(Page Timeout)](#方法观察是否对方设备未打开可连接模式)
+      - [方法：观察是否ACL连接超时断开(Connection Timeout)](#方法观察是否ACL连接超时断开)
+      - [方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开)
+      - [方法：观察是否本地配对信息无效(Linkey Missing)](#方法观察是否本地配对信息无效)
+      - [方法：观察是否对方配对信息无效(Linkey Missing)](#方法观察是否对方配对信息无效)
+
+  - [典型问题](#发现连接配对典型问题)
+  - [问题: 经典蓝牙设备主动绑定对方设备失败](#问题-经典蓝牙设备主动绑定对方设备失败)
 - [音频传输问题](#音频传输问题)
 - [音乐播放控制问题](#音乐播放控制问题)
   - [分析方法](#分析方法)
@@ -24,6 +33,207 @@
 ---
 
 # 发现、连接、配对问题
+
+<a id="发现连接配对分析方法"></a>
+
+## 分析方法
+
+<a id="方法：观察是否对方设备未打开可连接模式"></a>
+
+### 方法：观察是否对方设备未打开可连接模式
+通常，可以通过第三方设备、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否打开可连接模式。
+
+#### 1 通过第三方设备观察是否连接成功
+使用第三个设备，在蓝牙设置界面主动发起绑定过程，观察能否和对方设备绑定成功，排除对方设备未打开可连接模式
+
+#### 2 通过airlog观察是否Page成功
+观察空口log，检查是否对方不响应Page过程的ID包，其中，spec标准流程如下:
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="50%">
+
+依据spec流程链路层page ID包发出去后，对方设备是否回复ID。如下空口log看Page过程的ID包，对方未响应，因此对方未打开可连接模式。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="50%">
+
+#### 3 通过协议栈syslog观察是否Page成功
+观察协议栈syslog，检查若是出现PageTimeout，对应错误码04。
+
+```text
+[08/09 19:26:38.620200] [28] [ap] ---->[HCI][CMDN][P:1,$:1][-Create_Connection][status:PAGE TIMEOUT | 04]
+[08/09 19:26:38.621300] [28] [ap]      [Connection_Complete][T:0x200ed280]
+[08/09 19:26:38.622400] [28] [ap] GAP_IND_CONNECTION_EVENT: <addr: 28:02:2e:82:b9:22.0><type: 2><status: 0><error: 4>
+```
+
+#### 4 通过HCI log可观察是否Page成功
+如下，观察HCI log看Create Connection对应的HCI Connection Complete事件为Page timeout，则表示对方未打开可连接模式。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="50%">
+
+
+<a id="方法观察是否ACL连接超时断开"></a>
+
+### 方法：观察是否ACL连接超时断开（Connection Timeout）
+
+通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否异常超时断开连接。
+
+#### 1 通过蓝牙服务log可观察是否超时断开
+如下，可通过btservice的log事件CONNECTION_STATE_DISCONNECTED，08错误表示连接超时断开错误码。
+
+```text
+[2024-12-31 20:04:31] [06/04 03:10:58.173500] [26] [ap] [660][adapter-svc]: ACL connection state changed, addr:28:02:2E:82:B9:22, link:0, state:CONNECTION_STATE_DISCONNECTED, status:0, reason:8
+```
+
+#### 2 观察空口log，是否超时断开ACL连接
+
+如下，可以通过空口log看，连接数据包在retry多次，直到最终超时断开。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="50%">
+
+
+#### 3 观察snoop log，是否超时断开
+如下，观察snoop log蓝牙断开连接事件HCI Disconnect Complete事件，对应reason为connection timeout。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="50%">
+
+
+<a id="方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开"></a>
+
+### 方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开
+
+通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察双方是否有Profile连接，导致连接断开。
+
+#### 1 观察蓝牙服务log，是否有Profile连接
+观察本地btservice log，设备绑定成功后，没有A2DP、SPP等Profile连接，ACL连接成功一段事件后，出现ACL连接断开事件
+如下，从btservice log看acl建立连接成功，SDP完成后，未连接其他Profile连接，最终断开错误码reason:19，表示对方主动断开。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="50%">
+
+#### 2 观察HCI log，是否有Profile连接
+如下，从HCI log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备断开Remote User Terminated Connection（图上是对方主动断开，也很有可能本地协议栈主动断开）。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="50%">
+
+#### 3 观察空口log，是否有Profile连接
+如下，从空口log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备Detach断开（图上是对方主动断开，也很有可能本地协议栈主动断开）。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="50%">
+
+<a id="方法观察是否本地配对信息无效"></a>
+
+### 方法：观察是否本地配对信息无效（Linkey Missing）
+
+#### 1 观察HCI log，手表本地配对信息无效，手机保存上次配对信息
+如下，HCI log看本地linkkey未空，发起配对时Host端回复Negative Reply，然后重启发起配对，最终在Simple Pairing Complete阶段提示Authentication Fail，断开连接。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="50%">
+
+#### 2 观察空口log，手表本地配对信息无效，手机保存上次配对信息
+如下，从空口log看，手表本地配对信息无效，手机保存上次配对信息,提示DH Key Check失败。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="50%">
+
+#### 3 观察协议栈log，手表本地配对信息无效，手机保存上次配对信息
+如下，观察协议栈log，手表本地配对信息无效，手机保存上次配对信息,从协议栈的HCI log Authentication_Complete时收到PIN OR KEY MISSING，最终配对失败。
+
+```text
+[ 1103.523193] [13] [cp]    ->[L2CAP,PSM:3][Out][Request:][RequestNum:0]
+[ 1103.526428] [13] [cp] ---->[HCISEC][Go][Link_Bondable][Link_Bonded][Node_Encrypt]
+[ 1103.526916] [13] [cp]    ->[Link:P256,LinkKey,Bonded,Bondable[key_type:Unauthenticated Combination Key generated from P256 | 07]
+[ 1103.527282] [13] [cp]    ->[SSP_Enable][SC_Enable][SSP:OK][LinkKey_Good]
+[ 1103.527526] [13] [cp]    ->[Local_Bondable:General]
+[ 1103.528625] [13] [cp] ---->[HCI][CMDN][P:0,$:2][+Authentication_Requested]
+[ 1103.532348] [13] [cp] ---->[HCI][*Send][AID:0,PLen:2][Authentication_Requested]
+[ 1103.532653] [13] [cp]    ->[connection_handle:0129 | 81,00]
+[ 1103.537719] [13] [cp] 
+------>FSM Func Start<------
+[ 1103.538024] [13] [cp] ---->[HCI][*Recv][AID:0,PLen:4][Command_Status]
+[ 1103.538269] [13] [cp]    ->[status:OK | 00]
+[ 1103.538574] [13] [cp]    ->[num_hci_command_packets:05 | 05]
+[ 1103.538818] [13] [cp]    ->[command_opcode:Authentication_Requested]
+[ 1103.542419] [13] [cp] 
+------>FSM Func Start<------
+[ 1103.542785] [13] [cp] ---->[HCI][*Recv][AID:0,PLen:6][Link_Key_Request]
+[ 1103.543029] [13] [cp]    ->[bd:3c,13,5a,d5,a3,f6]
+[ 1103.544311] [13] [cp] ---->[HCI][CMDN][P:1,$:2][+Link_Key_Request_Reply]
+[ 1103.550903] [13] [cp] ---->[HCI][*Send][AID:0,PLen:22][Link_Key_Request_Reply]
+[ 1103.551330] [13] [cp]    ->[bd:3c,13,5a,d5,a3,f6]
+[ 1103.551635] [13] [cp]    ->[link_key:22,04,a4,2b,af,19,c3,ac,bc,02,f5,63,19,46,59,8d]
+[ 1103.557250] [13] [cp] 
+------>FSM Func Start<------
+[ 1103.557617] [13] [cp] ---->[HCI][*Recv][AID:0,PLen:10][Command_Complete]
+[ 1103.557861] [13] [cp]    ->[num_hci_command_packets:05 | 05]
+[ 1103.558166] [13] [cp]    ->[command_opcode:Link_Key_Request_Reply]
+[ 1103.558410] [13] [cp]    ->[status:OK | 00]
+[ 1103.558654] [13] [cp]    ->[bd:3c,13,5a,d5,a3,f6]
+[ 1103.560180] [13] [cp] ---->[HCI][CMDN][P:2,$:2][-Link_Key_Request_Reply][status:OK | 00]
+[ 1103.560607] [13] [cp]    ->[COMMAND_COMPLETE][T:0x205658c0]
+[ 1103.579223] [13] [cp] 
+------>FSM Func Start<------
+[ 1103.579528] [13] [cp] ---->[HCI][*Recv][AID:0,PLen:3][Authentication_Complete]
+[ 1103.579833] [13] [cp]    ->[status:PIN OR KEY MISSING | 06]
+[ 1103.580078] [13] [cp]    ->[connection_handle:0129 | 81,00]
+[ 1103.581848] [13] [cp] ---->[HCI][CMDN][P:1,$:2][-Authentication_Requested][status:PIN OR KEY MISSING | 06]
+[ 1103.582275] [13] [cp]    ->[Authentication_Complete][T:0x205680e0]
+[ 1103.583557] [13] [cp] ---->[HCISEC][ResultEv][Failed:0x6][Ev:Authenticate]
+------>FSM Func Start<------
+[ 1104.618957] [13] [cp] ---->[HCI][Link][ACL][IdleExpire]
+[ 1104.619201] [13] [cp]    ->[Local:[Identity:82,77,16,b2,4e,7b,Pub]]
+[ 1104.619506] [13] [cp]    ->[Remote:[BREDR][Identity:3c,13,5a,d5,a3,f6,Pub][LELink:3c,13,5a,d5,a3,f6,Pub]]
+[ 1104.619934] [13] [cp]    ->[HDL:0x81][Sending:0][Recv:N:0][Initiator][Connection_Completed][Master][Ref:0][READY_OK][LinkMode:Active]
+[ 1104.621215] [13] [cp] ---->[HCI][CMDN][P:0,$:2][+Disconnect]
+[ 1104.625915] [13] [cp] ---->[HCI][*Send][AID:0,PLen:3][Disconnect]
+[ 1104.626281] [13] [cp]    ->[connection_handle:0129 | 81,00]
+[ 1104.626586] [13] [cp]    ->[reason:REMOTE USER TERMINATED CONNECTION | 13]
+```
+
+<a id="方法观察是否对方配对信息无效"></a>
+
+### 方法：观察是否对方配对信息无效（Linkey Missing）
+
+#### 1 观察HCI log，手机配对信息无效，本地配对信息有效
+如下，snoop  log看本地发起绑定过程，上报hci Authentication completed事件，对应的原因是PIN Or Key Missing。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="50%">
+
+#### 2 观察空口log，手机配对信息无效，本地配对信息有效
+如下, air log看本地发起绑定，在LMP Authentication过程，提示LMP Not Accepted，原因是PIN Or Key Missing。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="50%">
+
+<a id="发现连接配对典型问题"></a>
+
+## 典型问题
+
+<a id="问题-经典蓝牙设备主动绑定对方设备失败"></a>
+
+### 问题：经典蓝牙设备主动绑定对方设备失败
+
+设备主动绑定失败，可通过下面方法，进一步定位原因。
+
+* [观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)
+  * 若是对方设备未打开可连接模式，建议观察手机端未打开可连接模式原因。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察是否对方设备未打开可连接模式(Page Timeout)](#方法观察是否对方设备未打开可连接模式)
+  * 若是对方设备未打开可连接模式，建议观察手机端未打开可连接模式原因。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察是否ACL连接超时断开(Connection Timeout)](#方法观察是否ACL连接超时断开)
+  * 若是在通信距离有效方位内，，出现链路层连接超时，请补充空口log及HCI log，一般需要芯片厂商进一步确认蓝牙Controller行为。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开)
+  * 若ACL连接成功后，未连接A2DP、HID等Profile，设备会断开，符合预期。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察是否本地配对信息无效(Linkey Missing)](#方法观察是否本地配对信息无效)
+  * 若本地Linkey无效或者丢失（离线取消配对），对方绑定信息有效，手表主动发起配对可能失败，符合预期。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察是否对方配对信息无效(Linkey Missing)](#方法观察是否对方配对信息无效)
+  * 若对方Linkey无效或者丢失（离线取消配对），本地绑定信息有效，手表主动发起配对可能失败，符合预期。
+  * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，再进一步分析。
+
 
 # 音频传输问题
 
