@@ -16,13 +16,12 @@
 
    - 默认情况下，配置项使用默认值，因此不会出现在 `defconfig` 文件中。
    - 在 `.config` 文件中可以看到其默认值为 `"/data/persist.db"`。如果您期望的值不同，可以通过 `menuconfig` 查找并设置对应的配置项。
-      - ![img](./figures/002.png)
+     ![img](./figures/002.png)
 
 3. 示例：打开 `FTL_WRITEBUFFER` 配置。 若需要打开 `FTL_WRITEBUFFER` 配置，请按照以下步骤操作：
 
    1. 在 `.config` 文件中确认该配置是否存在。如果配置不存在，建议使用 `menuconfig` 打开。不要直接在 `defconfig` 文件中强行添加 `CONFIG_FTL_WRITEBUFFER=y`，因为该配置项依赖其他配置。
 
-      ![img](./figures/003.png)
       ![img](./figures/004.png)
 
    2. `CONFIG_FTL_WRITEBUFFER` 依赖于 `CONFIG_DRVR_WRITEBUFFER`，如果未同时启用 `CONFIG_DRVR_WRITEBUFFER`，即使手动修改 `defconfig`，配置也不会生效。
@@ -33,8 +32,6 @@
          CONFIG_FTL_WRITEBUFFER=y  
          CONFIG_DRVR_WRITEBUFFER=y  
          ```
-
-      ![img](./figures/005.PNG)
 
 > **注意**
 >
@@ -98,9 +95,9 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 
    在 `menuconfig` 界面中，可以输入 `/` 键后跟配置关键字进行搜索。例如，搜索 `EXAMPLES_HELLO`：
 
-    > **注意**
+    > **说明**
     >
-    > 如果搜索结果中存在 `depends on`，需继续搜索依赖的配置并将其使能（enable）。
+    > 如果搜索结果中存在 `depends on`，需输入 `?` 继续搜索依赖的配置并将其使能（enable）。
 
     ![img](./figures/008.png)
 
