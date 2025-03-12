@@ -1,12 +1,12 @@
 # Kconfig User Guide  
 
-## 一、Overview  
+## 1. Overview  
 
 `Kconfig` provides a mechanism for configuring projects during the build process and supports various types of configuration options, such as integers, strings, and Boolean values. Using `Kconfig` files, developers can define dependencies among options, default values, and how options are combined. For detailed information about the `Kconfig` language, see [Kconfig Documentation](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt).  
 
 Similar to most large operating systems, openvela uses `Kconfig` to manage project configurations. Developers can use the visual interface provided by `menuconfig` to configure, build, and tailor the openvela system with ease.  
 
-## 二、Usage Examples  
+## 2. Usage Examples  
 
 In project configuration, if you need to set a specific configuration option, follow these steps to check and configure it:  
 
@@ -39,7 +39,7 @@ In project configuration, if you need to set a specific configuration option, fo
 > **Note**  
 > Using the `menuconfig` tool ensures that all configuration dependencies are complete and correct.  
 
-## 三、File Functions  
+## 3. File Functions  
 
 When openvela is built for the first time, it uses the specified `arch` and `board` parameters to locate the corresponding project’s `defconfig` as the system's initial configuration. Based on this file, the system expands and combines configurations to eventually generate the complete `.config` file. The generated `.config` file is then copied to `config.h`, providing support for conditional compilation and runtime usage in the code.  
 
@@ -77,7 +77,7 @@ In the openvela simulator environment, the typical paths for each file are as fo
 - **`.config` file path**: `nuttx/.config`  
 - **`config.h` file path**: `nuttx/include/config.h`  
 
-## Four: Usage Methods  
+## 4. Usage Methods  
 
 Below are some useful configuration and operation tips when using openvela:  
 
@@ -132,7 +132,7 @@ Below are some useful configuration and operation tips when using openvela:
    - Press the `ESC` key to exit the configuration interface, and press `y` to save modifications when prompted.  
    - To force an exit, use `Ctrl` + `C`. However, unsaved changes may be lost.  
 
-## 五、Related Documentation  
+## 5. Related Documentation  
 
 The following links provide additional details about using Kconfig:  
 
