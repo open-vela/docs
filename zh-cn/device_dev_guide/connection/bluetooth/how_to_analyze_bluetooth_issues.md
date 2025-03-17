@@ -14,12 +14,13 @@
     - [问题：经典蓝牙设备主动绑定对方设备失败](#问题经典蓝牙设备主动绑定对方设备失败)
 - [音频传输问题](#音频传输问题)
   - [分析方法](#分析方法-1)
+    - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
     - [方法：观察是否打开了蓝牙和之间的transport](#方法观察是否打开了蓝牙和之间的transport)
     - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
     - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
     - [方法：观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
     - [方法：观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
-    - [方法：观察A2DP SRC是否停止传输音频包](#方法观察a2dp-src是否停止传输音频包)
+    - [方法：观察A2DP SRC是否停止音频流传输](#方法观察a2dp-src是否停止音频流传输)
     - [方法：观察AVDTP signaling连接是否断开](#方法观察avdtp-signaling连接是否断开)
 - [音乐播放控制问题](#音乐播放控制问题)
   - [分析方法](#分析方法-2)
@@ -264,7 +265,9 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Disc
 
 ## 分析方法
 
-<a id="方法：观察是否打开了蓝牙和之间的transport"></a>
+<a id="方法：观察是否打开了蓝牙和Media之间的transport"></a>
+
+### 方法：观察是否打开了蓝牙和Media之间的transport
 
 ### 方法：观察是否打开了蓝牙和之间的transport
 
@@ -378,13 +381,13 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 
 #### 1 通过syslog观察A2DP SRC是否开始播放音乐
 
-A2DP SRC开始播音乐是Media告诉蓝牙的，典型log如下：
+在A2DP SRC端，Vela蓝牙服务开始播放音乐的流程由来自Media的命令触发，典型log如下：
 
 ```
-[a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_STAR
+[a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_START
 ```
 
-蓝牙收到Media开始播音乐的标志，A2DP SRC会进入Started状态，典型log如下：
+当蓝牙服务收到开始播放音乐的命令时，会开始AVDTP Stream Start流程，并在流程成功结束后进入Started状态，典型log如下：
 
 ```
 [a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=STREAM_START_REQ
@@ -395,34 +398,36 @@ A2DP SRC开始播音乐是Media告诉蓝牙的，典型log如下：
 
 #### 2 通过air log观察A2DP SRC是否开始播放音乐
 
-开始播音乐之前，会执行Stream Start过程，播音乐过程中会有media packey传输，典型log如下：
+在音频流开始传输之前，A2DP SRC会发起Stream Start流程。在音频流传输过程中，A2DP SRC会向SNK发送media packets，典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="50%">
 
 
 <a id="方法：观察A2DP SRC是否停止传输音频包"></a>
 
-### 方法：观察A2DP SRC是否停止传输音频包
+### 方法：观察A2DP SRC是否停止音频流传输
 
-通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否停止传输音频包。
+通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否停止音频流传输。
 
-#### 1 通过syslog观察A2DP SRC是否停止传输音频包
+#### 1 通过syslog观察A2DP SRC是否停止音频流传输
 
-Media告诉蓝牙停止传输media packet或者蓝牙持续2s从Media读不到数据时，都会执行Stream Suspend过程。
+当Vela设备为A2DP SRC时，蓝牙服务有两个途径终止传输音频数据。
+* 当收到Media发送的STOP命令时。
+* 当连续2秒不能从Media获取音频数据时。
 
-Media告诉蓝牙停止传输media packet，典型log如下：
+收到Media发送的STOP命令时，典型log如下：
 
 ```
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_STOP
 ```
 
-蓝牙2s从media读不到数据，syslog中会打印如下log，且持续时间约2s：
+蓝牙2秒从media读不到数据，syslog中会打印如下log，且持续时间约2秒：
 
 ```
 [src_sbc]: a2dp_sbc_send_frames, underflow :6
 ```
 
-蓝牙执行Stream Suspend过程的典型log如下：
+蓝牙服务发起Stream Suspend流程的典型log如下：
 
 ```
 [a2dp_stm]: ProcessEvent, State=Started, Peer=[11:22:33:44:55:66], Event=STREAM_SUSPEND_REQ
@@ -459,11 +464,9 @@ AVDTP signaling断开的原因有：应用告诉蓝牙断开A2DP连接，蓝牙�
 
 #### 2 通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因
 
-snoop log中AVDTP signaling连接断开有两种可能：本地设备主动断开连接，对端设备请求断开连接。断开连接之前会执行Stream Release过程，且Stream Release过程的L2CAP的CID和A2DP signaling连接的L2CAP的CID是一致的。本地设备的snoop log中，本地设备主动断开连接的典型log如下：
+snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，对端设备请求断开连接。本地设备的snoop log中，本地设备主动断开连接的典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="50%">
-
-本地设备的snoop log中，对端设备请求断开连接时，L2CAP Disconnection Request的箭头方向和上述log相反。
 
 # 音乐播放控制问题
 
