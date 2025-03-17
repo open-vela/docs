@@ -15,7 +15,6 @@
 - [音频传输问题](#音频传输问题)
   - [分析方法](#分析方法-1)
     - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
-    - [方法：观察是否打开了蓝牙和之间的transport](#方法观察是否打开了蓝牙和之间的transport)
     - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
     - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
     - [方法：观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
@@ -268,8 +267,6 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Disc
 <a id="方法：观察是否打开了蓝牙和Media之间的transport"></a>
 
 ### 方法：观察是否打开了蓝牙和Media之间的transport
-
-### 方法：观察是否打开了蓝牙和之间的transport
 
 通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否打开。
 
