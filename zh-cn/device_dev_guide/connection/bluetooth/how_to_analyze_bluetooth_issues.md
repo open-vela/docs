@@ -399,7 +399,6 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="50%">
 
-
 <a id="方法：观察A2DP SRC是否停止传输音频包"></a>
 
 ### 方法：观察A2DP SRC是否停止音频流传输
@@ -412,7 +411,7 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 * 当收到Media发送的STOP命令时。
 * 当连续2秒不能从Media获取音频数据时。
 
-收到Media发送的STOP命令时，典型log如下：
+蓝牙服务收到Media发送的STOP命令时，典型log如下：
 
 ```
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_STOP
