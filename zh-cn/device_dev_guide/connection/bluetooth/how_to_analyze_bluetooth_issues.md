@@ -10,8 +10,11 @@
     - [方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功但是未有profile连接acl主动断开)
     - [方法：观察是否本地配对信息无效（Linkey Missing）](#方法观察是否本地配对信息无效linkey-missing)
     - [方法：观察是否对方配对信息无效（Linkey Missing）](#方法观察是否对方配对信息无效linkey-missing)
+    - [方法：观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
+    - [方法：观察对方是否发起回连操作](#方法观察对方是否发起回连操作)
   - [典型问题](#典型问题)
     - [问题：经典蓝牙设备主动绑定对方设备失败](#问题经典蓝牙设备主动绑定对方设备失败)
+    - [问题：耳机断开后回连手表失败](#问题耳机断开后回连手表失败)
 - [音频传输问题](#音频传输问题)
   - [分析方法](#分析方法-1)
     - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
@@ -221,6 +224,52 @@
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="50%">
 
+<a id="观察本地是否打开可连接模式"></a>
+
+### 方法：观察本地是否打开可连接模式
+
+#### 1 观察手表进入蓝牙耳机可连接模式
+如下，进入蓝牙耳机搜索连接页面，让手表进入可连接模式。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="50%">
+
+
+#### 2 观察miwear syslog，手表进入可连接模式
+如下，观察miwear syslog，确认手表scan mode会进入CONNECTABLE模式。
+
+```text
+[42] [ap] [bt] bind_manager_set_visibility: scan mode: [CONNECTABLE DISCOVERABLE]
+```
+
+#### 3 观察snoop log、 airlog等，手表进入可连接模式
+
+通过，如上[观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)，确认手表scan mode会进入CONNECTABLE模式。
+
+<a id="方法观察对方是否发起回连操作"></a>
+
+### 方法：观察对方是否发起回连操作
+
+#### 1 观察蓝牙服务syslog，耳机端发起回连操作
+
+如下，通过蓝牙服务syslog，观察对方是否发起回连接请求。
+
+```text
+[27] [ap] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
+[27] [ap] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
+[27] [ap] [688][adapter-svc]: ACL Connect Request from :XX:XX:XX:XX:2E:43
+```
+
+#### 2 观察snoop log，耳机端发起回连操作
+
+如下，snoop log看耳机端发起回连操作，最终连接成功。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="50%">
+
+#### 3 观察空口log，耳机端发起回连操作
+如下，空口log看手机发起回连操作，最终连接成功。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="50%">
+
 <a id="发现连接配对典型问题"></a>
 
 ## 典型问题
@@ -240,7 +289,7 @@
   * 否则，建议按照如下步骤进一步分析。
 
 * [观察是否ACL连接超时断开(Connection Timeout)](#方法观察是否ACL连接超时断开)
-  * 若是在通信距离有效方位内，，出现链路层连接超时，请补充空口log及HCI log，一般需要芯片厂商进一步确认蓝牙Controller行为。
+  * 若是在通信距离有效方位内，出现链路层连接超时，请补充空口log及HCI log，一般需要芯片厂商进一步确认蓝牙Controller行为。
   * 否则，建议按照如下步骤进一步分析。
 
 * [观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开)
@@ -254,6 +303,20 @@
 * [观察是否对方配对信息无效(Linkey Missing)](#方法观察是否对方配对信息无效)
   * 若对方Linkey无效或者丢失（离线取消配对），本地绑定信息有效，手表主动发起配对可能失败，符合预期。
   * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，再进一步分析。
+
+<a id="问题-耳机断开后回连手表失败"></a>
+
+### 问题：耳机断开后回连手表失败
+
+耳机回连手表行为，是由耳机端发起，同时需要手表打开可发现连接模式。可通过下面方法，进一步定位原因。
+
+* [观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
+  * 若是手表设备未打开可连接模式，建议手表停留在耳机连接设置页面，保证手表进入可发现连接模式。
+  * 否则，建议按照如下步骤进一步分析。
+  
+* [观察对方是否发起回连操作](#方法观察对方是否发起回连操作)
+  * 若耳机未主动发起回连请求， 则需要耳机端进一步分析。
+  * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，手表端进一步分析。
 
 
 # 音频传输问题
