@@ -11,15 +11,15 @@
 1. LCD 控制器以固定 60Hz（周期大约为 16ms）的频率搬运 Framebuffer 的内容到屏幕上，每次数据搬运时间为8ms。
 2. 渲染器（Render）以 100Hz（周期 10ms）的频率在 Framebuffer 上进行渲染，每次的渲染时间为 8ms。渲染的内容为一个蓝色矩形从左往右做平移动画。
 
-    ![](./figures/001.svg)
+    ![img](./figures/001.svg)
 
 在实体机上进行验证，发现屏幕上显示的内容不是一个完整的矩形，而是一个上下断裂的矩形，和预期显示的内容并不一致。这个现象叫 [Screen Tearing](https://zh.wikipedia.org/zh-hans/畫面撕裂)（**画面撕裂**），如下图所示：
 
-![](./figures/002.svg)
+![img](./figures/002.svg)
 
 导致画面撕裂的根本原因其实就是内存踩踏。LCD 在读取 Framebuffer 的过程中，渲染器又往 Framebuffer 写入了新的数据，导致屏幕上同时显示了新帧和旧帧。时序如下图所示：
 
-![](./figures/003.svg)
+![img](./figures/003.svg)
 
 要解决这种情况，就需要引入一种同步机制，用来保证渲染器和 LCD buffer 操作之间不会有踩踏情况的发生，从而避免出现画面撕裂的情况。
 
@@ -33,11 +33,11 @@
 
 那是不是只要简单地将渲染放到 LCD 发送 buffer 之后再做呢？如下图所示：
 
-![](./figures/004.svg)
+![img](./figures/004.svg)
 
 看似解决了问题，但是要注意的一点是，渲染器的性能会受很多因素影响，比如系统调度、页面复杂程度、GPU 绘制性能。这就导致渲染时间是不固定的，渲染时间有可能很短，也有可能很长，如果渲染时间大于 LCD 两次 buffer 发送的间隔时间，依然会导致画面撕裂的发生，如下图所示：
 
-![](./figures/005.svg)
+![img](./figures/005.svg)
 
 为了解决渲染耗时不固定的问题，需要再引入一帧 buffer，原因有以下几点：
 
@@ -69,7 +69,7 @@
 
 MCU 和屏幕的简化版硬件连接如下图：
 
-![](./figures/006.svg)
+![img](./figures/006.svg)
 
 - TE (Tearing Effect)：用于接收屏幕发送过来的同步信号，屏幕硬件会在每次即将显示新的帧之前，改变这个引脚的电平，MCU 通过 GPIO 中断接收和处理 TE 事件。
 - MIPI：用于传输命令和数据的接口，LCD 控制器和 LCD 之间沟通的桥梁，CPU 通过操作 LCD 控制器来控制屏幕显示的内容，LCD 控制器也会在每次传输完毕后，通过中断来通知 CPU buffer 已经发送完成。
@@ -78,23 +78,23 @@ LCD 驱动程序需要提供两个中断服务函数，用于接收和处理 LCD
 
 - TE（Tearing Effect）中断服务函数：在 LCD 即将开始发送的时候会被调用，用于将被发送的 buffer 地址写入 LCD 控制器。
 
-  ```C
-  static void lcdc_te_irq(int irq, void *context, void *arg)
-  {
-  }
-  ```
+    ```C
+    static void lcdc_te_irq(int irq, void *context, void *arg)
+    {
+    }
+    ```
 
 - Framebuffer 传输完成中断服务函数：由 LCD 控制器触发，在 LCD 发送结束的时候会被调用。
 
-  ```C
-  static void lcdc_framedone_irq(int irq, void *context, void *arg)
-  {
-  }
-  ```
+    ```C
+    static void lcdc_framedone_irq(int irq, void *context, void *arg)
+    {
+    }
+    ```
 
 下图显示了 TE IRQ 和 Framedone IRQ 产生事件的时间点。需要注意的是，TE IRQ 要提前于 LCD 传输启动时间点，这段时间用于配置寄存器。
 
-![](./figures/007.svg)
+![img](./figures/007.svg)
 
 **说明**
 
@@ -131,7 +131,7 @@ static void lcdc_irqconfig(void)
 
 libuv 的核心是基于 [poll](https://man7.org/linux/man-pages/man2/poll.2.html) 实现的，poll 相对于传统的信号量，最核心的优点是可以同时监控多个事件是否发生。只要有一个事件发生，poll 就会退出阻塞状态，libuv 原理如下图所示：
 
-![](./figures/008.svg)
+![img](./figures/008.svg)
 
 openvela 的 Framebuffer 驱动框架提供了 `poll` 所需要的[接口](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c)，用于监控 Framebuffer 是否处于可写状态：
 
@@ -219,7 +219,7 @@ union fb_paninfo_u
 
 从 LCD 控制器的视角看，在每次准备发送前先检查队列是否有待发送 buffer，如果有则取出一帧开始发送，如果没有则维持旧的一帧进行显示。
 
-![](./figures/009.svg)
+![img](./figures/009.svg)
 
 渲染器通过调用 `FBIOPAN_DISPLAY` ioctl 接口向底层的 panbuf 队列推入数据。
 

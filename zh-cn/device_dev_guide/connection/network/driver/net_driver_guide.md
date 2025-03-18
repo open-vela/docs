@@ -242,19 +242,19 @@ bool netpkt_is_fragmented(FAR netpkt_t *pkt);
 
 - `wdog`：
 
-  - 内核实现的定时操作机制，可用于定时回调某函数。例如，定时任务的执行。
-  - 参考文档：
-  - [System Time and Clock — NuttX latest documentation (apache.org)](https://nuttx.apache.org/docs/latest/reference/os/time_clock.html#watchdog-timer-interfaces)
+    - 内核实现的定时操作机制，可用于定时回调某函数。例如，定时任务的执行。
+    - 参考文档：
+    - [System Time and Clock — NuttX latest documentation (apache.org)](https://nuttx.apache.org/docs/latest/reference/os/time_clock.html#watchdog-timer-interfaces)
 
 - `work_queue`： 内核利用独立线程实现的异步执行机制，与 Linux 的工作队列类似，可用于任务的异步处理。例如：
 
-  - 网络数据包的收发处理
-  - 中断的下半部处理
-  -  参考文档：[工作队列]()
+    - 网络数据包的收发处理
+    - 中断的下半部处理
+    - 参考文档：[工作队列]()
 
 - `ninfo`，`nwarn`，`nerr`： 用于打印不同等级的日志（Log），便于调试网络模块。 打开网络模块的日志功能需要启用以下配置选项：
 
-  - ```Makefile
+    ```Makefile
     CONFIG_DEBUG_NET
     CONFIG_DEBUG_NET_ERROR
     CONFIG_DEBUG_WARN

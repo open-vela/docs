@@ -219,69 +219,69 @@ Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不
 
 - 任务开始与结束
 
-  ```C
-  // 任务开始结束，始终开启
-  void sched_note_start(FAR struct tcb_s *tcb);
-  void sched_note_stop(FAR struct tcb_s *tcb);
-  ```
+    ```C
+    // 任务开始结束，始终开启
+    void sched_note_start(FAR struct tcb_s *tcb);
+    void sched_note_stop(FAR struct tcb_s *tcb);
+    ```
 
 - 任务调度（需启用 `CONFIG_SCHED_INSTRUMENTATION_SWITCH`）
 
-  ```C
-  // 任务调度, CONFIG_SCHED_INSTRUMENTATION_SWITCH
-  void sched_note_suspend(FAR struct tcb_s *tcb);
-  void sched_note_resume(FAR struct tcb_s *tcb);
-  ```
+    ```C
+    // 任务调度, CONFIG_SCHED_INSTRUMENTATION_SWITCH
+    void sched_note_suspend(FAR struct tcb_s *tcb);
+    void sched_note_resume(FAR struct tcb_s *tcb);
+    ```
 
 - 多核任务调度（需启用 `CONFIG_SMP` 和 `CONFIG_SCHED_INSTRUMENTATION_SWITCH`）
 
-  ```C
-  // 多核任务调度, CONFIG_SMP && CONFIG_SCHED_INSTRUMENTATION_SWITCH
-  void sched_note_cpu_start(FAR struct tcb_s *tcb, int cpu);
-  void sched_note_cpu_started(FAR struct tcb_s *tcb);
-  void sched_note_cpu_pause(FAR struct tcb_s *tcb, int cpu);
-  void sched_note_cpu_paused(FAR struct tcb_s *tcb);
-  void sched_note_cpu_resume(FAR struct tcb_s *tcb, int cpu);
-  void sched_note_cpu_resumed(FAR struct tcb_s *tcb);
-  ```
+    ```C
+    // 多核任务调度, CONFIG_SMP && CONFIG_SCHED_INSTRUMENTATION_SWITCH
+    void sched_note_cpu_start(FAR struct tcb_s *tcb, int cpu);
+    void sched_note_cpu_started(FAR struct tcb_s *tcb);
+    void sched_note_cpu_pause(FAR struct tcb_s *tcb, int cpu);
+    void sched_note_cpu_paused(FAR struct tcb_s *tcb);
+    void sched_note_cpu_resume(FAR struct tcb_s *tcb, int cpu);
+    void sched_note_cpu_resumed(FAR struct tcb_s *tcb);
+    ```
 
 #### 锁相关 API
 
 - 调度锁（需启用 `CONFIG_SCHED_INSTRUMENTATION_PREEMPTION`）
 
-  ```C
-  // 调度锁，CONFIG_SCHED_INSTRUMENTATION_PREEMPTION
-  void sched_note_premption(FAR struct tcb_s *tcb, bool locked);
-  ```
+    ```C
+    // 调度锁，CONFIG_SCHED_INSTRUMENTATION_PREEMPTION
+    void sched_note_premption(FAR struct tcb_s *tcb, bool locked);
+    ```
 
 - 临界区（需启用 `CONFIG_SCHED_INSTRUMENTATION_CSECTION`）
 
-  ```C
-  // 临界区， CONFIG_SCHED_INSTRUMENTATION_CSECTION
-  void sched_note_csection(FAR struct tcb_s *tcb, bool enter);
-  ```
+    ```C
+    // 临界区， CONFIG_SCHED_INSTRUMENTATION_CSECTION
+    void sched_note_csection(FAR struct tcb_s *tcb, bool enter);
+    ```
 
 - 自旋锁（需启用 `CONFIG_SCHED_INSTRUMENTATION_SPINLOCK`）
 
-  ```C
-  // 自旋锁，CONFIG_SCHED_INSTRUMENTATION_SPINLOCK
-  void sched_note_spinlock(FAR struct tcb_s *tcb, FAR volatile spinlock_t *spinlock, int type);
-  ```
+    ```C
+    // 自旋锁，CONFIG_SCHED_INSTRUMENTATION_SPINLOCK
+    void sched_note_spinlock(FAR struct tcb_s *tcb, FAR volatile spinlock_t *spinlock, int type);
+    ```
 
 #### 中断与系统调用相关 API
 
 - 中断处理（需启用 `CONFIG_SCHED_INSTRUMENTATION_IRQHANDLER`）
 
-  ```C
-  void sched_note_irqhandler(int irq, FAR void *handler, bool enter);  
-  ```
+    ```C
+    void sched_note_irqhandler(int irq, FAR void *handler, bool enter);  
+    ```
 
 - 系统调用（需启用 `CONFIG_SCHED_INSTRUMENTATION_SYSCALL`）
 
-  ```C
-  void sched_note_syscall_enter(int nr, int argc, ...);  
-  void sched_note_syscall_leave(int nr, uintptr_t result);  
-  ```
+    ```C
+    void sched_note_syscall_enter(int nr, int argc, ...);  
+    void sched_note_syscall_leave(int nr, uintptr_t result);  
+    ```
 
 ### 2 自定义打点 API
 
@@ -291,8 +291,8 @@ Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不
 
 以下是 `sched_note` 提供的 API 列表及其功能说明：
 
-- 输出事件信息 
-    
+- 输出事件信息
+
     记录事件信息，用于调试和性能分析。
 
     ```C
@@ -304,7 +304,7 @@ Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不
     #define sched_note_printf(tag, fmt, ...) 
     ```
 
-- 函数打点（多次使用） 
+- 函数打点（多次使用）
 
     在函数中添加打点，可在不同函数中多次使用。
 
@@ -509,12 +509,12 @@ int main(int argc, FAR char *argv[])
 
 1. 生成 Trace 文件。
 
-     ```Bash
-      ap> trace start 
-      ap> hello
-      ap> trace dump
-      ap> trace dump /data/trace.txt   # vendor/sim/boards/vela/resource/trace.txt
-      ```
+    ```Bash
+    ap> trace start 
+    ap> hello
+    ap> trace dump
+    ap> trace dump /data/trace.txt   # vendor/sim/boards/vela/resource/trace.txt
+    ```
 
     ![img](./figures/007.png)
 
@@ -740,12 +740,12 @@ private:
 
     以下是使用 `trace dump` 命令后的输出结果示例：
 
-   ```C
-   hello-7   [0]   3.187400000: sched_wakeup_new: comm=hello pid=7 target_cpu=0
-   hello-7   [0]   3.187400000: tracing_mark_write: B|7|hello_main
-   hello-7   [0]   4.197700000: tracing_mark_write: I|7|printf
-   hello-7   [0]   4.187700000: tracing_mark_write: E|7|hello_main
-   ```
+    ```C
+    hello-7   [0]   3.187400000: sched_wakeup_new: comm=hello pid=7 target_cpu=0
+    hello-7   [0]   3.187400000: tracing_mark_write: B|7|hello_main
+    hello-7   [0]   4.197700000: tracing_mark_write: I|7|printf
+    hello-7   [0]   4.187700000: tracing_mark_write: E|7|hello_main
+    ```
 
 3. 查看时序图。
 
@@ -783,25 +783,25 @@ __cyg_profile_func_exit(void *this_fn, void *call_site)
 
 1. 启用功能选项。 在 `menuconfig` 中启用以下配置项：
 
-      ```Makefile
-      CONFIG_SCHED_INSTRUMENTATION_FUNCTION 
-      ```
+    ```Makefile
+    CONFIG_SCHED_INSTRUMENTATION_FUNCTION 
+    ```
 
 2. 为模块启用插桩。 在目标模块的 `Makefile` 中添加以下编译选项：
 
-      ```Makefile
-      CFLAGS += -finstrument-functions 
-      ```
+    ```Makefile
+    CFLAGS += -finstrument-functions 
+    ```
 
     此选项会为模块中的所有函数自动插桩，记录函数开始和结束信息。
 
 3. 排除特定文件或函数。
     在 `Makefile` 中添加以下参数，可以排除指定文件或函数的插桩：
 
-      ```Makefile
-      // 排除所有以函数名中包含 up 或 mm 的函数
-      CFLAGS += -finstrument-functions-exclude-function-list=up,mm
+    ```Makefile
+    // 排除所有以函数名中包含 up 或 mm 的函数
+    CFLAGS += -finstrument-functions-exclude-function-list=up,mm
       
-      // 排除路径中包含 arch 或 board 的文件
-      CFLAGS += -finstrument-functions-exclude-file-list=arch,board
-      ```
+    // 排除路径中包含 arch 或 board 的文件
+    CFLAGS += -finstrument-functions-exclude-file-list=arch,board
+    ```

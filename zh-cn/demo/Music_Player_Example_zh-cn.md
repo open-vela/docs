@@ -54,7 +54,7 @@
 ## 步骤二 编译项目
 
 1. 切换到 openvela 仓库的根目录，在终端内依次执行如下命令：
-   
+
     ```Bash
     # 清理构建产物
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j$(nproc)
@@ -65,13 +65,14 @@
 
 2. 成功执行后，将得到以下文件：
 
-    ```
+    ```Bash
     ./nuttx
     ├── vela_ap.elf
     ├── vela_ap.bin
     ```
 
 ## 步骤三 启动模拟器并推送资源
+
 音乐播放器运行中会使用到的字体和图片资源位于`apps/packages/demos/music_player/res`中。要将这些资源推送到模拟器挂载的相应文件路径，可以按照以下步骤操作。
 
 1. 切换到 openvela 仓库的根目录，启动模拟器：
@@ -97,6 +98,7 @@
 ```Bash
 music_player &
 ```
+
 ![img](images/025.png)
 
 ## 步骤五 退出 Demo

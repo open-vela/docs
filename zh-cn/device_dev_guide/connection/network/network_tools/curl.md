@@ -35,19 +35,19 @@ CONFIG_UTILS_CURL=y
 
     在 PC 上运行以下命令，启动一个 HTTP 服务器。
 
-   - 如果安装的是 Python 2：
+    - 如果安装的是 Python 2：
 
         ```Python
         python -m SimpleHTTPServer
         ```
 
-   - 如果安装的是 Python 3 或更高版本：
+    - 如果安装的是 Python 3 或更高版本：
 
         ```Nginx
         python -m http.server  
         ```
 
-   执行上述命令后，PC 会将当前目录作为根目录启动一个 HTTP 服务器。
+    执行上述命令后，PC 会将当前目录作为根目录启动一个 HTTP 服务器。
 
 2. 准备传输的文件。
 
@@ -194,8 +194,8 @@ curl -L -o /data/test.mp3 https://example.com
 
 1. 示例说明。
 
-   - `https://example.com` 是示例地址，请替换为实际的文件下载链接。
-   - `/data/test.mp3` 是保存文件的路径，请根据实际需求修改。
+    - `https://example.com` 是示例地址，请替换为实际的文件下载链接。
+    - `/data/test.mp3` 是保存文件的路径，请根据实际需求修改。
 
 2. 重定向。
 
@@ -203,8 +203,8 @@ curl -L -o /data/test.mp3 https://example.com
 
 3. URL 格式。
 
-   - 在设备上运行时，URL 前后请不要使用引号 `""`。
-   - 在 PC 上运行时，URL 可以使用引号 `""`。
+    - 在设备上运行时，URL 前后请不要使用引号 `""`。
+    - 在 PC 上运行时，URL 可以使用引号 `""`。
 
 4. 特殊字符转义。
 

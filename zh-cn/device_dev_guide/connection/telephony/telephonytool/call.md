@@ -28,9 +28,9 @@ listen-call [slot_id][event_id]
 
 - slot_id: 设置要监听的插槽，目前仅支持 `0`。
 - event_id:
-  - `0`: 呼叫状态变化（call state change）。
-  - `1`: 紧急号码列表变化（ecc list change）。
-  - `2`: 回铃音变化（ringback tone change）。
+    - `0`: 呼叫状态变化（call state change）。
+    - `1`: 紧急号码列表变化（ecc list change）。
+    - `2`: 回铃音变化（ringback tone change）。
 
 #### 示例
 
@@ -118,8 +118,8 @@ dial [slot_id][number][hide_call_id]
 - slot_id: 设置要使用的插槽，目前仅支持 `0`。
 - number: 要拨打的电话号码。
 - hide_call_id: 是否隐藏本机号码：
-  - `0`: 显示本机号码（show）。
-  - `1`: 隐藏本机号码（hide）。
+    - `0`: 显示本机号码（show）。
+    - `1`: 隐藏本机号码（hide）。
 
 #### 示例
 
@@ -307,8 +307,8 @@ swap [slot_id][action]
 
 - slot_id: 设置要使用的插槽，目前仅支持 `0`。
 - action: 指定切换操作：
-  - `1`: 切换到保持通话（hold call）。
-  - `0`: 切换到活动通话（unhold call）。
+    - `1`: 切换到保持通话（hold call）。
+    - `0`: 切换到活动通话（unhold call）。
 
 #### 示例
 
@@ -464,7 +464,7 @@ telephonytool> get-ecclist 0
 [57889.839500] [28] [ DEBUG] [ap] ecc number : 112,0,1
 ```
 
-### 15、is-ecc 
+### 15、is-ecc
 
 #### 命令说明
 

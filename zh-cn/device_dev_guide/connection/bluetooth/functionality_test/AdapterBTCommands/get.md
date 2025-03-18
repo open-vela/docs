@@ -295,10 +295,10 @@ bttool> get class
 
 1. 在执行以下命令之前，请确保已通过 `bttool` 控制台启用蓝牙适配器。启用命令如下：
 
-     ```Plain
-      ap> bttool
-      bttool> enable
-      ```
+    ```Plain
+    ap> bttool
+    bttool> enable
+    ```
 
 2. 此外，应确保有其他设备与本地蓝牙适配器建立过蓝牙连接并完成绑定，否则该命令无意义。
 
@@ -349,10 +349,10 @@ bttool> get bonded 1
 
 1. 在执行以下命令之前，请确保已通过 `bttool` 控制台启用蓝牙适配器。启用命令如下：
 
-     ```Plain
-      ap> bttool
-      bttool> enable
-      ```
+    ```Plain
+    ap> bttool
+    bttool> enable
+    ```
 
 2. 此外，应确保有其他设备与本地蓝牙适配器建立了蓝牙连接，否则该命令无意义。
 

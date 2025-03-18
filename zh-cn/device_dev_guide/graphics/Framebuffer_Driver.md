@@ -95,14 +95,14 @@ errout_with_fb:
 从代码中可以看出，Framebuffer 针对 LCD 设备驱动程序提供了以下 3 个接口，驱动程序需要自行实现：
 
 1. `void up_fbinitialize(int display)`
-   - 用于初始化硬件 LCD 控制器。
-   - 例如，在 STM32 平台上，`up_fbinitialize` 函数需要初始化 LTDC（LCD-TFT 控制器）或 MIPI 接口，并完成 DSI 外设和 LCD IC 的初始化。
+    - 用于初始化硬件 LCD 控制器。
+    - 例如，在 STM32 平台上，`up_fbinitialize` 函数需要初始化 LTDC（LCD-TFT 控制器）或 MIPI 接口，并完成 DSI 外设和 LCD IC 的初始化。
 2. `FAR struct fb_vtable_s *up_fbgetvplane(int display, int vplane)`
-   - 获取 LCD 的 `fb_vtable_s` 结构体信息。
-   - `fb_vtable_s` 是 Framebuffer 的核心结构，包含了 Framebuffer 的所有接口。通过实现该函数，LCD 控制器可以将自身信息注册到 Framebuffer 框架中。
-   - 驱动程序可以参考以下示例实现：
-      - `drivers/video/vnc/vnc_fbdev.c`
-      - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
+    - 获取 LCD 的 `fb_vtable_s` 结构体信息。
+    - `fb_vtable_s` 是 Framebuffer 的核心结构，包含了 Framebuffer 的所有接口。通过实现该函数，LCD 控制器可以将自身信息注册到 Framebuffer 框架中。
+    - 驱动程序可以参考以下示例实现：
+        - `drivers/video/vnc/vnc_fbdev.c`
+        - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
 3. `void up_fbuninitialize(int display)`
    - 执行与 `up_fbinitialize` 相反的操作，用于释放资源。通常可以实现为空，不执行任何操作。
 
@@ -111,38 +111,39 @@ errout_with_fb:
 `fb_vtable_s` 是 Framebuffer 的核心结构，定义了与视频硬件交互的接口。以下是其主要功能模块：
 
 1. 核心功能
-   - `getvideoinfo`：获取视频控制器配置和颜色平面信息。
-   - `getplaneinfo`：获取指定颜色平面的信息。
+
+    - `getvideoinfo`：获取视频控制器配置和颜色平面信息。
+    - `getplaneinfo`：获取指定颜色平面的信息。
 2. 可选功能（根据配置启用）
-   - 颜色映射（`CONFIG_FB_CMAP`）：
-      - `getcmap`：获取当前颜色映射表。
-      - `putcmap`：更新颜色映射表。
-   - 硬件光标（`CONFIG_FB_HWCURSOR`）：
-      - `getcursor`：获取光标属性。
-      - `setcursor`：设置光标配置。
-   - 显示更新（`CONFIG_FB_UPDATE`）：
-      - `updatearea`：通知硬件更新指定显示区域。
-   - 垂直同步（`CONFIG_FB_SYNC`）：
-      - `waitforvsync`：等待垂直同步信号，避免屏幕撕裂。
-   - 叠加管理（`CONFIG_FB_OVERLAY`）：
-      - `getoverlayinfo`：获取叠加层的配置信息。
-      - `settransp`：设置叠加层的透明度。
-      - `setchromakey`：设置叠加层的色键。
-      - `setcolor`：用指定颜色填充叠加层。
-      - `setblank`：启用或禁用叠加层。
-      - `setarea`：设置叠加操作的活动区域。
-      - 叠加层的 Blit 和 Blend 操作（`CONFIG_FB_OVERLAY_BLIT`）：
-        - `blit`：在叠加层之间执行 Blit 操作。
-        - `blend`：在叠加层之间执行 Blend 操作。
+    - 颜色映射（`CONFIG_FB_CMAP`）：
+        - `getcmap`：获取当前颜色映射表。
+        - `putcmap`：更新颜色映射表。
+    - 硬件光标（`CONFIG_FB_HWCURSOR`）：
+        - `getcursor`：获取光标属性。
+        - `setcursor`：设置光标配置。
+    - 显示更新（`CONFIG_FB_UPDATE`）：
+        - `updatearea`：通知硬件更新指定显示区域。
+    - 垂直同步（`CONFIG_FB_SYNC`）：
+        - `waitforvsync`：等待垂直同步信号，避免屏幕撕裂。
+    - 叠加管理（`CONFIG_FB_OVERLAY`）：
+        - `getoverlayinfo`：获取叠加层的配置信息。
+        - `settransp`：设置叠加层的透明度。
+        - `setchromakey`：设置叠加层的色键。
+        - `setcolor`：用指定颜色填充叠加层。
+        - `setblank`：启用或禁用叠加层。
+        - `setarea`：设置叠加操作的活动区域。
+        - 叠加层的 Blit 和 Blend 操作（`CONFIG_FB_OVERLAY_BLIT`）：
+            - `blit`：在叠加层之间执行 Blit 操作。
+            - `blend`：在叠加层之间执行 Blend 操作。
 3. 其他控制功能
-   - 显示平移：
-      - `pandisplay`：为多缓冲区显示执行平移操作。
-   - 帧率控制：
-      - `setframerate`：设置 Framebuffer 的刷新率。
-      - `getframerate`：获取当前刷新率。
-   - 电源管理：
-      - `getpower`：获取面板的电源状态。
-      - `setpower`：启用或禁用面板电源。
+    - 显示平移：
+        - `pandisplay`：为多缓冲区显示执行平移操作。
+    - 帧率控制：
+        - `setframerate`：设置 Framebuffer 的刷新率。
+        - `getframerate`：获取当前刷新率。
+    - 电源管理：
+        - `getpower`：获取面板的电源状态。
+        - `setpower`：启用或禁用面板电源。
 
 #### 3.1 示例代码
 

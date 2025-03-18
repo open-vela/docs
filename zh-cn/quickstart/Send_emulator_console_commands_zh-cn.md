@@ -100,13 +100,13 @@
 
   查询、控制和管理虚拟设备，具体说明如下：
 
-  * stop：停止设备的执行。
+    * stop：停止设备的执行。
 
-  * start：开始设备的执行。
+    * start：开始设备的执行。
 
-  * status：查询虚拟设备状态，可以是 running 或 stopped。
+    * status：查询虚拟设备状态，可以是 running 或 stopped。
 
-  * name：查询虚拟设备名称。
+    * name：查询虚拟设备名称。
 
 * `kill`
 
@@ -130,19 +130,19 @@
 
   添加新的端口重定向，具体说明如下：
 
-  * `protocol`：必须是 tcp 或 udp。
+    * `protocol`：必须是 tcp 或 udp。
 
-  * `host-port`：要在主机上打开的端口号。
+    * `host-port`：要在主机上打开的端口号。
 
-  * `guest-port`：要在模拟器上将数据传输到的端口号。
+    * `guest-port`：要在模拟器上将数据传输到的端口号。
 
 * `redir del protocol:host-port`
 
   删除端口重定向。
 
-  * `protocol`：必须是 tcp 或 udp。
+    * `protocol`：必须是 tcp 或 udp。
 
-  * `host-port`：要在主机上打开的端口号。
+    * `host-port`：要在主机上打开的端口号。
 
 ### 3、地理位置
 

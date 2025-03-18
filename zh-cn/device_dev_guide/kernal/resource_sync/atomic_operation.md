@@ -20,7 +20,7 @@ prebuilts/gcc/linux/arm/arm-none-eabi/include/stdatomic.h
 
     相关配置文件路径：
 
-  - [nuttx/libs/libc/machine/Make.defs](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/Make.defs)
+    - [nuttx/libs/libc/machine/Make.defs](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/Make.defs)
 
 ### 3、配置选项说明
 

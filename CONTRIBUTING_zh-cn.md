@@ -11,11 +11,11 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
 为了参与社区贡献，您需要签署相应的“贡献者许可协议”（Contributor License Agreement, CLA）。以下是针对不同平台的具体步骤：
 
 - **Gitee 平台**:
-  - 请访问 [Gitee CLA 签署页面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成签署。
-  - 您可以通过 [我的 CLA 状态](https://gitee.com/profile/clas) 查看签署状态。
+    - 请访问 [Gitee CLA 签署页面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成签署。
+    - 您可以通过 [我的 CLA 状态](https://gitee.com/profile/clas) 查看签署状态。
 
 - **GitHub 平台**:
-  - 在提交新的 Pull Request (PR) 后，系统会提示您完成 CLA 的签署。请根据提示操作以完成签署流程。
+    - 在提交新的 Pull Request (PR) 后，系统会提示您完成 CLA 的签署。请根据提示操作以完成签署流程。
 
 ## 二、错误报告
 

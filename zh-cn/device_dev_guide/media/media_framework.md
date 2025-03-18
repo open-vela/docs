@@ -41,17 +41,22 @@ Media Policy 通过 **PFW** 来构造路由策略、音频策略等各种状态�
 
 ### 6、**Media RPC**
 
-  双 socket 通信模型：不论是否跨核，我们都使用两个独立的 socket 来实现通信。
-  - **Trans socket** 负责传输 Client 到 Server 的控制命令，同时回传 RPC 执行结果。
-  - **Notify socket** 负责传输 Server 到 Client 的消息通知，通过回调传递给用户。
+双 socket 通信模型：不论是否跨核，我们都使用两个独立的 socket 来实现通信。
 
-  ![Media RPC架构图](./images/MediaRPC.jpg)
+- Trans socket
+负责传输 Client 到 Server 的控制命令，同时回传 RPC 执行结果。
 
-  **通用性**：对于 Player、Recorder、Session、Policy、Focus 用户，RPC 机制都是通用的，允许应用程序在不同 CPU 之间进行通信。
+- Notify socket
+负责传输 Server 到 Client 的消息通知，通过回调传递给用户。
 
-  **模式支持** ：Media Framework 支持同步与异步模式的 RPC 。
-  - **同步模式**：客户端发送请求并等待服务器响应，适用于需要立即反馈的场景。
-  - **异步模式**：客户端发送请求后立即返回，服务器在处理完请求后通过回调通知客户端，提供高效的通信机制，确保数据传输的可靠性和实时性。
+![Media RPC架构图](./images/MediaRPC.jpg)
+
+通用性：对于 Player、Recorder、Session、Policy、Focus 用户，RPC 机制都是通用的，允许应用程序在不同 CPU 之间进行通信。
+
+模式支持 ：Media Framework 支持同步与异步模式的 RPC 。
+
+    - 同步模式：客户端发送请求并等待服务器响应，适用于需要立即反馈的场景。
+    - 异步模式：客户端发送请求后立即返回，服务器在处理完请求后通过回调通知客户端，提供高效的通信机制，确保数据传输的可靠性和实时性。
 
 ## 三、**Media Framework 架构**
 
@@ -65,4 +70,4 @@ Media Policy 通过 **PFW** 来构造路由策略、音频策略等各种状态�
 
  采用 Mediatool 测试程序，用于测试 Media Framework API，可模拟实际使用场景。
 
-[使用Mediatool工具测试Media Framework API](./mediatool_zh-cn.md)
+[使用 Mediatool工具测试 Media Framework API](./mediatool_zh-cn.md)

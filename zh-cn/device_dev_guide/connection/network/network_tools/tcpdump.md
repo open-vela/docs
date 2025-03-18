@@ -18,7 +18,7 @@ CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192
 
 ## 三、操作使用
 
-###  1、tcpdump参数说明
+### 1、tcpdump参数说明
 
 ```Bash
 指定抓包的网卡名称
@@ -37,10 +37,10 @@ CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192
 
 1. 准备工作。
 
-   在使用 `tcpdump` 抓包之前，需要完成以下准备工作：
+    在使用 `tcpdump` 抓包之前，需要完成以下准备工作：
 
-   - 准备存储目录：确保设备上有可用的目录用于存储抓包文件，具体路径取决于设备的存储方式。
-   - 挂载宿主机目录（适用于 openvela SIM 环境）：可以将宿主机的目录挂载到设备中，便于存储抓包文件。
+    - 准备存储目录：确保设备上有可用的目录用于存储抓包文件，具体路径取决于设备的存储方式。
+    - 挂载宿主机目录（适用于 openvela SIM 环境）：可以将宿主机的目录挂载到设备中，便于存储抓包文件。
 
         ```Bash
         # 以SIM为例，挂载host上的目录到/data1
@@ -51,31 +51,31 @@ CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192
 
     使用 `tcpdump` 命令抓取网络数据包，以下是常见的操作方法：
 
-   - 基本抓包。
+    - 基本抓包。
 
-       直接执行 `tcpdump` 命令，指定网卡和保存路径：
+        直接执行 `tcpdump` 命令，指定网卡和保存路径：
 
-       ```Bash
-       # 将eth0的网络包保存至test.pcap
-       tcpdump -i eth0 -w /data1/test.pcap
-       ```
+        ```Bash
+        # 将eth0的网络包保存至test.pcap
+        tcpdump -i eth0 -w /data1/test.pcap
+        ```
 
-   - 后台抓包。
+    - 后台抓包。
 
-     如果需要在抓包的同时执行其他命令，可以将 `tcpdump` 设置为后台运行（在命令末尾加 `&`）：
+        如果需要在抓包的同时执行其他命令，可以将 `tcpdump` 设置为后台运行（在命令末尾加 `&`）：
 
-       ```Bash
-       # 后台将eth0的网络包保存至test.pcap
-       tcpdump -i eth0 -w /data1/test.pcap &
-       ```
+        ```Bash
+        # 后台将eth0的网络包保存至test.pcap
+        tcpdump -i eth0 -w /data1/test.pcap &
+        ```
 
 3. 退出。
 
-   - 前台运行退出。
+    - 前台运行退出。
 
         按下 `Ctrl+C` 退出 `tcpdump`，会正常保存抓包文件并退出。
 
-   - 后台运行退出。
+    - 后台运行退出。
 
         如果 `tcpdump` 在后台运行，可以通过以下命令结束进程：
 

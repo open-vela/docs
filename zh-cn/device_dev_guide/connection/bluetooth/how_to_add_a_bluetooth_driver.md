@@ -68,9 +68,9 @@
 
 3. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中，完成 `struct bt_driver_s` 结构体的定义。
 
-   以下代码展示了一个完整的 `struct bt_driver_s` 结构体初始化示例，其中函数指针被赋值为上面定义的示例函数：
+    以下代码展示了一个完整的 `struct bt_driver_s` 结构体初始化示例，其中函数指针被赋值为上面定义的示例函数：
 
-   ```C
+    ```C
     /* 初始化一个 bt_driver_s 实例，并将函数指针赋值为上面定义的示例函数 */
     struct bt_driver_s sample_driver =
     {
@@ -141,15 +141,15 @@ void drivers_initialize(void)
 
 2. 编译结束后，在终端输入如下命令运行程序：
 
-   ```Bash
-   ./emulator.sh vela -no-window -qemu
-   ```
+    ```Bash
+    ./emulator.sh vela -no-window -qemu
+    ```
 
 3. 查看编写的驱动示例是否成功注册到了 openvela 中，执行如下命令：
 
-   ```Bash
-   ls /dev
-   ```
+    ```Bash
+    ls /dev
+    ```
 
     效果如下图所示：
 

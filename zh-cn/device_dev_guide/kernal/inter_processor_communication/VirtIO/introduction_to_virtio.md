@@ -49,9 +49,9 @@ Virtqueue 是一块由 guest 申请的共享内存区域，guest 和 host 可以
 Virtqueue 有两种类型：
 
 1. Split Virtqueue 初始的 VirtIO queue 实现方式，每个 vring 分为三部分：
-   - Descriptor Table
-   - Available Ring
-   - Used Ring
+    - Descriptor Table
+    - Available Ring
+    - Used Ring
 
 2. Packed Virtqueue 在 VirtIO v1.1 中提出，将 Split Virtqueue 的Descriptor Table、Available Ring 和Used Ring 合并为一个结构，对缓存和硬件更加友好。
 
@@ -71,20 +71,20 @@ Split Virtqueue 的结构如下：
 
 1. Descriptor Table
 
-   Descriptor Table用于描述 Driver 和 Device 交互的数据 buffer，包含以下信息：
-   - Buffer 地址
-   - Buffer 长度
-   - 标志位（用于实现额外功能）
+    Descriptor Table用于描述 Driver 和 Device 交互的数据 buffer，包含以下信息：
+    - Buffer 地址
+    - Buffer 长度
+    - 标志位（用于实现额外功能）
 2. Available Ring 和 Used Ring
 
-   Available Ring和Used Ring用于管理数据的发送和接收流程：
-   - Driver 发送数据：
-      - Driver 将包含发送数据的 Descriptor Table索引放置在 Available Ring 中，供 Device 获取。
-      - Device 收到数据后，将 Descriptor Table索引放置在 Used Ring 中，表示数据已归还给 Driver。
-   - Driver 接收数据：
-      - Driver 将包含空白内存的 Descriptor Table 索引放置在 Available Ring 中，供后端驱动获取。
-      - 后端驱动将要发送的数据填充到空白内存中，并将索引放置在 Used Ring 中。
-      - Driver 从 Used Ring 中获取对应的Descriptor Table，从而获取到数据。
+    Available Ring和Used Ring用于管理数据的发送和接收流程：
+    - Driver 发送数据：
+        - Driver 将包含发送数据的 Descriptor Table索引放置在 Available Ring 中，供 Device 获取。
+        - Device 收到数据后，将 Descriptor Table索引放置在 Used Ring 中，表示数据已归还给 Driver。
+    - Driver 接收数据：
+        - Driver 将包含空白内存的 Descriptor Table 索引放置在 Available Ring 中，供后端驱动获取。
+        - 后端驱动将要发送的数据填充到空白内存中，并将索引放置在 Used Ring 中。
+        - Driver 从 Used Ring 中获取对应的Descriptor Table，从而获取到数据。
 
 ### 4、数据结构
 
@@ -122,15 +122,15 @@ struct indirect_descriptor_table {
 ##### 字段说明
 
 1. addr：
-   - buffer 的物理地址。
+    - buffer 的物理地址。
 2. len：
-   - buffer 的长度。
+    - buffer 的长度。
 3. flags：
-   - VIRTQ_DESC_F_NEXT： 如果置位，表示当前 buffer 是链表的一部分，`next` 字段指向下一个 buffer 在 Descriptor Table 中的位置。
-   - VIRTQ_DESC_F_WRITE： 如果置位，表示该 buffer 为设备可写；如果未置位，表示该 buffer 为设备只读。
-   - VIRTQ_DESC_F_INDIRECT： 如果置位，表示使用间接Descriptor Table（二级表）来传输 buffer。
+    - VIRTQ_DESC_F_NEXT： 如果置位，表示当前 buffer 是链表的一部分，`next` 字段指向下一个 buffer 在 Descriptor Table 中的位置。
+    - VIRTQ_DESC_F_WRITE： 如果置位，表示该 buffer 为设备可写；如果未置位，表示该 buffer 为设备只读。
+    - VIRTQ_DESC_F_INDIRECT： 如果置位，表示使用间接Descriptor Table（二级表）来传输 buffer。
 4. next：
-   - 如果 `flags & VIRTQ_DESC_F_NEXT` 为真，表示下一个 buffer 在 Descriptor Table 中的位置。
+    - 如果 `flags & VIRTQ_DESC_F_NEXT` 为真，表示下一个 buffer 在 Descriptor Table 中的位置。
 
 ##### Descriptor Table 示例
 
@@ -212,17 +212,17 @@ struct virtq_used {
 ##### 字段说明
 
 1. flags：
-   - VIRTQ_USED_F_NO_NOTIFY： 如果置位，Driver 不会向 Device 发送中断通知（notification）。
+    - VIRTQ_USED_F_NO_NOTIFY： 如果置位，Driver 不会向 Device 发送中断通知（notification）。
 2. idx：
-   - 指向 `virtq_used.ring[]` 的有效边界，表示当前已用描述符的数量。
+    - 指向 `virtq_used.ring[]` 的有效边界，表示当前已用描述符的数量。
 3. ring：
-   - id：Descriptor Table 的索引，Driver 可通过 `desc_table[ring[x].id]` 获取对应的 buffer 信息。
-   - len：Device 写入到可写 buffer（即 `VIRTQ_DESC_F_WRITE`）中的字节数，支持 buffer 链。
+    - id：Descriptor Table 的索引，Driver 可通过 `desc_table[ring[x].id]` 获取对应的 buffer 信息。
+    - len：Device 写入到可写 buffer（即 `VIRTQ_DESC_F_WRITE`）中的字节数，支持 buffer 链。
 4. avail_event：
-   - 当启用 VIRTIO_F_EVENT_IDX 特性时，`flags` 中的 VIRTQ_USED_F_NO_NOTIFY 无效。
-   - Driver 的通知行为由 `avail_event` 决定：
-      - 当 Driver 写入 Available Ring 时，如果 `avail_ring.idx == avail_event`，则发送通知；否则不发送。
-   - 该机制用于控制 Driver 通知的节奏，减少不必要的中断。
+    - 当启用 VIRTIO_F_EVENT_IDX 特性时，`flags` 中的 VIRTQ_USED_F_NO_NOTIFY 无效。
+    - Driver 的通知行为由 `avail_event` 决定：
+        - 当 Driver 写入 Available Ring 时，如果 `avail_ring.idx == avail_event`，则发送通知；否则不发送。
+    - 该机制用于控制 Driver 通知的节奏，减少不必要的中断。
 
 ##### Used Ring 示例
 
@@ -253,16 +253,16 @@ struct vring {
 ##### 字段说明
 
 1. num：
-   - Virtqueue 的长度，表示Descriptor Table、Available Ring 和 Used Ring 的大小。
-   - `num` 的值始终为 2 的幂。
+    - Virtqueue 的长度，表示Descriptor Table、Available Ring 和 Used Ring 的大小。
+    - `num` 的值始终为 2 的幂。
 2. desc：
-   - Descriptor Table 的数组地址。
+    - Descriptor Table 的数组地址。
 3. avail：
-   - Available Ring 的地址。
-   - 用于存储 Driver 提供的可用描述符索引。
+    - Available Ring 的地址。
+    - 用于存储 Driver 提供的可用描述符索引。
 4. used：
-   - Used Ring 的地址。
-   - 用于存储 Device 返回的已用描述符索引。
+    - Used Ring 的地址。
+    - 用于存储 Device 返回的已用描述符索引。
 
 ##### Vring 数据结构图
 
@@ -346,23 +346,23 @@ struct virtqueue {
 ##### 字段说明
 
 1. vq_name：
-   - 当前 Virtqueue 的名称，用于标识 Virtqueue。
+    - 当前 Virtqueue 的名称，用于标识 Virtqueue。
 2. vq_queue_index：
-   - Virtqueue 的索引号。一个 VirtIO Driver 可以包含多个 Virtqueue，通过该字段区分。
+    - Virtqueue 的索引号。一个 VirtIO Driver 可以包含多个 Virtqueue，通过该字段区分。
 3. vq_nentries：
-   - Virtqueue 的最大容量，表示队列中可容纳的 buffer 数量。
+    - Virtqueue 的最大容量，表示队列中可容纳的 buffer 数量。
 4. callback：
-   - 当 Virtqueue 收到消息时触发的回调函数，类似于中断机制。
+    - 当 Virtqueue 收到消息时触发的回调函数，类似于中断机制。
 5. priv：
-   - Virtqueue 的私有数据。虽然当前未使用，但在 OpenAMP 社区的 MMIO 传输层中有应用。
+    - Virtqueue 的私有数据。虽然当前未使用，但在 OpenAMP 社区的 MMIO 传输层中有应用。
 6. notify：
-   - 用于通知对端更新 Virtqueue 的函数。调用后，对端的 Virtqueue 的回调函数会被触发。
+    - 用于通知对端更新 Virtqueue 的函数。调用后，对端的 Virtqueue 的回调函数会被触发。
 7. vring：
-   - 关联的 vring 结构，负责管理 Descriptor Table、Available Ring 和 Used Ring。
+    - 关联的 vring 结构，负责管理 Descriptor Table、Available Ring 和 Used Ring。
 8. vq_free_cnt：
-   - 当前 Virtqueue 中空闲描述符的数量，表示队列的剩余容量。
+    - 当前 Virtqueue 中空闲描述符的数量，表示队列的剩余容量。
 9. vq_queued_cnt：
-   - 当前 Virtqueue 中已使用的描述符数量，表示队列中已占用的容量。
+    - 当前 Virtqueue 中已使用的描述符数量，表示队列中已占用的容量。
 10. vq_desc_head_idx：
     - 未使用的 Descriptor Table 的头索引。所有空闲描述符会形成一个链表，该字段指向链表的头部。
 11. vq_used_cons_idx：
@@ -389,29 +389,30 @@ struct virtqueue {
 在 Driver 发送数据与 Device 接收数据的过程中，双方通过 Descriptor Table、Available Ring 和 Used Ring 进行协作。以下是具体步骤：
 
 1. Driver 准备数据：
-   - Driver 将数据 buffer 填充到 Descriptor Table 中，并更新对应 `tx virtqueue` 的 `avail_ring.idx`，表示有新的数据可用。
+
+    - Driver 将数据 buffer 填充到 Descriptor Table 中，并更新对应 `tx virtqueue` 的 `avail_ring.idx`，表示有新的数据可用。
 2. Driver 通知 Device：
-   - Driver 调用向 Device 发送中断，告知有新的数据可用。
+    - Driver 调用向 Device 发送中断，告知有新的数据可用。
 3. Device 获取数据：
-   - Device 从 Available Ring 中获取描述符索引（`desc[avail.ring[last_avail_idx + 1]]`），并找到对应的 buffer。
+    - Device 从 Available Ring 中获取描述符索引（`desc[avail.ring[last_avail_idx + 1]]`），并找到对应的 buffer。
 4. Device 处理数据：
-   - Device 根据描述符信息读取只读区域并填充可写区域。
-   - 数据处理方式因设备类型和特性而异。
+    - Device 根据描述符信息读取只读区域并填充可写区域。
+    - 数据处理方式因设备类型和特性而异。
 5. Device 归还数据：
-   - Device 将处理完成的数据通过 Used Ring 归还给 Driver，并更新 `rx virtqueue` 的 `used_ring.idx`，表示有新的数据已归还。
+    - Device 将处理完成的数据通过 Used Ring 归还给 Driver，并更新 `rx virtqueue` 的 `used_ring.idx`，表示有新的数据已归还。
 6. Device 通知 Driver：
-   - Device 调用通知函数，向 Driver 发送中断，告知有新的数据已归还。
+    - Device 调用通知函数，向 Driver 发送中断，告知有新的数据已归还。
 7. Driver 获取数据：
-   - Driver 从 Used Ring 中获取描述符索引（`desc[used.ring[last_used_idx + 1].id]`），并找到对应的 buffer。
+    - Driver 从 Used Ring 中获取描述符索引（`desc[used.ring[last_used_idx + 1].id]`），并找到对应的 buffer。
 8. Driver 处理数据：
-   - Driver 根据接收到的数据执行相应的处理。具体处理方式因设备类型和特性而异。
+    - Driver 根据接收到的数据执行相应的处理。具体处理方式因设备类型和特性而异。
 
 #### 5.3 Device 发送与 Driver 接收
 
 Device 发送 / Driver 接收数据的流程，与 Driver 发送 / Device 接收的流程基本一致，唯一的区别在于：
 
 - Buffer 管理：
-  - 所有 buffer 均由 Driver 管理。Device 发送的数据来自于 Driver 预先填充到 Available Ring 中。
+    - 所有 buffer 均由 Driver 管理。Device 发送的数据来自于 Driver 预先填充到 Available Ring 中。
 
 ### 6、收发的无锁实现
 
@@ -841,13 +842,13 @@ Feature 协商通过共享内存区域完成，用于存储 Device 端支持的�
 
 1. Device 写入自己的 Feature：
 
-   Device 将自身支持的 Feature 写入 `device feature`。
+    Device 将自身支持的 Feature 写入 `device feature`。
 2. Driver 读取并计算最终 Feature：
 
-   Driver 读取 `device feature`，与自身支持的 Feature 进行按位与操作，得到最终的 Feature Bit，并写入到 `gfeature`。
+    Driver 读取 `device feature`，与自身支持的 Feature 进行按位与操作，得到最终的 Feature Bit，并写入到 `gfeature`。
 3. Device 读取最终 Feature：
 
-   Device 读取 `gfeature`，完成 Feature 协商。此时，Device 和 Driver 都只使用双方均支持的特性（`gfeature`）进行交互。
+    Device 读取 `gfeature`，完成 Feature 协商。此时，Device 和 Driver 都只使用双方均支持的特性（`gfeature`）进行交互。
 
 通过上述机制，实现了 Feature 的协商、扩展和前后兼容。
 

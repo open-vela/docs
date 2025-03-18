@@ -68,9 +68,9 @@ iperf 支持以下参数设定：
     iperf -s --rpmsg <name>
     ```
 
-  - `<name>` 为任意字符串，只需与 client 指定的 `name` 匹配即可。
+    - `<name>` 为任意字符串，只需与 client 指定的 `name` 匹配即可。
 
-  - rpmsg socket 暂时不支持 DGRAM 模式（`-u`）。
+    - rpmsg socket 暂时不支持 DGRAM 模式（`-u`）。
 
 - 建立 local socket server 指令：
 
@@ -78,9 +78,9 @@ iperf 支持以下参数设定：
     iperf -s --local <path> [-u]
     ```
 
-  - `<path>` 为任意字符串，只需与 client 指定的 `path` 匹配即可。
+    - `<path>` 为任意字符串，只需与 client 指定的 `path` 匹配即可。
 
-  - local socket 可以搭配 `-u` 参数测试 DGRAM 模式（类似于 UDP）。
+    - local socket 可以搭配 `-u` 参数测试 DGRAM 模式（类似于 UDP）。
 
 ### 3、建立 client 并连接 server
 

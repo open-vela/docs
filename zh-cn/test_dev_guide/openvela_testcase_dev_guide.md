@@ -118,8 +118,8 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 
 - 编写 src 目录下测试用例文件。
 
-  - 测试用例文件命名：以关键字 **“test_”**  开头，包含 feature name，例如`te``st_mytest_example_01.c`。
-  - 测试函数命名：以关键字 **“test_”**  开头，例如`test_mytest_example_01(FAR void **state)`。
+    - 测试用例文件命名：以关键字 **“test_”**  开头，包含 feature name，例如`te``st_mytest_example_01.c`。
+    - 测试函数命名：以关键字 **“test_”**  开头，例如`test_mytest_example_01(FAR void **state)`。
 
   完整样例如下：
 
@@ -154,9 +154,9 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 
 - 编写 include 目录下头文件。
 
-  - 头文件命名：建议包含 feature 和 test 关键字，例如`mytest.h`。
-  - 测试函数定义，例如`void test_mytest_example_01(FAR void **state)`。
-  - 定义测试用例集的宏，将所有需要测试的 case 添加进来。
+    - 头文件命名：建议包含 feature 和 test 关键字，例如`mytest.h`。
+    - 测试函数定义，例如`void test_mytest_example_01(FAR void **state)`。
+    - 定义测试用例集的宏，将所有需要测试的 case 添加进来。
 
 完整样例如下：
 
@@ -409,7 +409,7 @@ void test_mytest_example_01(FAR void **state)
 
 - openvela 中实现了 cmocka 的命令行工具，用于灵活的执行测试用例，下面展示了使用其打印用例、执行指定用例的方式。
 
-  - 打印所有用例，执行如下命令：
+    - 打印所有用例，执行如下命令：
 
     ```Bash
     cmocka -l
@@ -417,7 +417,7 @@ void test_mytest_example_01(FAR void **state)
 
     <img src="./figures/2.3.png" alt="img" style="zoom:150%;" />
 
-  - 执行 TestNuttxMm01 用例，-t 参数会匹配相应的用例名称。
+    - 执行 TestNuttxMm01 用例，-t 参数会匹配相应的用例名称。
 
     ```Bash
     cmocka -t TestNuttxMm01

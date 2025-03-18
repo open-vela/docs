@@ -5,10 +5,10 @@
 openvela 蓝牙已经通过 Bluetooth 5.4 认证。目前支持的蓝牙能力包括：
 
 - Core
-  - BR/EDR/BLE
-  - GAP
-  - L2CAP
-  - GATT Client/Server
+    - BR/EDR/BLE
+    - GAP
+    - L2CAP
+    - GATT Client/Server
 - A2DP SRC/SNK
 - AVRCP CT/TG
 - HFP AG/HF
@@ -17,20 +17,20 @@ openvela 蓝牙已经通过 Bluetooth 5.4 认证。目前支持的蓝牙能力�
 - HID
 - HOGP
 - LEA
-  - TMAP
-  - CAP
-  - BAP/ASCS/PACS/BASS
-  - CSIP/CSIS
-  - MCP/MCS
-  - CCP/TBS
-  - VCP/VCS
+    - TMAP
+    - CAP
+    - BAP/ASCS/PACS/BASS
+    - CSIP/CSIS
+    - MCP/MCS
+    - CCP/TBS
+    - VCP/VCS
 - Mesh
 
 openvela 蓝牙目前还能够支持多种开源、闭源协议栈，如Zephyr、Bluez、Bluedroid、Barrot等。
 
 ## 二、架构图
 
-![](./img/Bluetooth_arch.png)
+![img](./img/Bluetooth_arch.png)
 
 - openvela 蓝牙 Framework 为 `Android Native`、可穿戴、音箱和 IoT 等应用提供了统一的编程接口 API。
 - 这些 API 提供的蓝牙能力包括开关、扫描、连接、配对等，均由一套完善的蓝牙服务组件来完成。
@@ -108,7 +108,7 @@ openvela 蓝牙支持多种驱动架构，下文将以目前常用的 BTH4 驱�
 
 类型定义可参考头文件 nuttx/include/nuttx/wireless/bluetooth/bt_driver.h。调用关系如下图所示：
 
-![](img/bt_driver.png)
+![img](img/bt_driver.png)
 
 #### 备注
 

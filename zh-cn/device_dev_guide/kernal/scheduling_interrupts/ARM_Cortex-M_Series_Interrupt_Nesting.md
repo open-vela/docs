@@ -11,17 +11,17 @@
 在以下两种情况下，系统支持零延迟中断嵌套：
 
 - 无中断栈，只有进程栈。
-  - 默认支持中断嵌套。
-  - 正常情况下和触发中断异常时都使用由 MSP（Main Stack Pointer）指向的当前进程栈。
-  - 需要注意：此模式可能需要配置更大的进程栈。
+    - 默认支持中断嵌套。
+    - 正常情况下和触发中断异常时都使用由 MSP（Main Stack Pointer）指向的当前进程栈。
+    - 需要注意：此模式可能需要配置更大的进程栈。
 
 - 有中断栈。
-  - 需要配置 `CONFIG_ARCH_INTERRUPTSTACK`（详情请参见 [CONFIG 配置](#1config-配置)）。
-  - Handler 模式（触发中断/异常时进入）：硬件会自动切换到 MSP，系统初始化完成后，MSP 始终指向中断栈，中断/异常处理过程运行在中断栈上。
-  - Thread 模式（正常进程执行时进入）：使用 PSP（Process Stack Pointer），系统初始化完成后，PSP 始终指向当前进程栈，进程执行过程运行在进程栈上。
-  - 系统复位（Reset）后：
-    - 系统处于 Thread 模式，特权等级，硬件默认使用 MSP，MSP 默认指向 `_vectors` 表中的 `IDLE_STACK`（详情请参见 [系统初始化](#2系统初始化)）。
-    - 系统初始化过程中会调整 MSP 和 PSP，将 MSP 指向中断栈顶，PSP 指向 IDLE 进程栈的当前位置。
+    - 需要配置 `CONFIG_ARCH_INTERRUPTSTACK`（详情请参见 [CONFIG 配置](#1config-配置)）。
+    - Handler 模式（触发中断/异常时进入）：硬件会自动切换到 MSP，系统初始化完成后，MSP 始终指向中断栈，中断/异常处理过程运行在中断栈上。
+    - Thread 模式（正常进程执行时进入）：使用 PSP（Process Stack Pointer），系统初始化完成后，PSP 始终指向当前进程栈，进程执行过程运行在进程栈上。
+    - 系统复位（Reset）后：
+        - 系统处于 Thread 模式，特权等级，硬件默认使用 MSP，MSP 默认指向 `_vectors` 表中的 `IDLE_STACK`（详情请参见 [系统初始化](#2系统初始化)）。
+        - 系统初始化过程中会调整 MSP 和 PSP，将 MSP 指向中断栈顶，PSP 指向 IDLE 进程栈的当前位置。
 
 #### 零延迟中断优先级排布
 
@@ -112,37 +112,37 @@ const void * const _vectors[] locate_data(".vectors") =
 在未开启中断栈的情况下，新平台移植需要满足以下要求：
 
 1. 硬件复位后的状态：
-   - `CONTROL.SELSP = 0`，默认使用 MSP，并指向 `IDLE_STACK`。
-   - 系统此时处于 Thread 模式，特权等级。
+    - `CONTROL.SELSP = 0`，默认使用 MSP，并指向 `IDLE_STACK`。
+    - 系统此时处于 Thread 模式，特权等级。
 2. Reset 入口实现：
-   - 在 vendor 代码中实现 Reset 入口 `__start` 时，应保持以上状态。
-   - 在整个系统运行过程中始终使用 MSP，不能使用 PSP（Process Stack Pointer，进程栈指针）。
+    - 在 vendor 代码中实现 Reset 入口 `__start` 时，应保持以上状态。
+    - 在整个系统运行过程中始终使用 MSP，不能使用 PSP（Process Stack Pointer，进程栈指针）。
 
 #### 开启中断栈的情况
 
 在开启中断栈的情况下，新平台移植需要满足以下要求：
 
 1. 硬件复位后的状态：
-   - `CONTROL.SELSP = 0`，默认使用 MSP，并指向 `IDLE_STACK`。
-   - 系统此时处于 Thread 模式，特权等级。
+    - `CONTROL.SELSP = 0`，默认使用 MSP，并指向 `IDLE_STACK`。
+    - 系统此时处于 Thread 模式，特权等级。
 2. Reset 入口实现：
-   - 在 vendor 代码中实现 Reset 入口 `__start` 时，应保持以上状态。
-   - 在系统初始化过程中，会调用 `arm_initialize_stack` 切换栈：
-      - 将 MSP 指向中断栈顶。
-      - 将 PSP 指向 `IDLE` 进程栈的当前位置。
-      - 设置 `CONTROL.SELSP = 1`，启用 PSP。
-      - ARMv8-M 还需要设置 PSPLIM 和 MSPLIM。
+    - 在 vendor 代码中实现 Reset 入口 `__start` 时，应保持以上状态。
+    - 在系统初始化过程中，会调用 `arm_initialize_stack` 切换栈：
+        - 将 MSP 指向中断栈顶。
+        - 将 PSP 指向 `IDLE` 进程栈的当前位置。
+        - 设置 `CONTROL.SELSP = 1`，启用 PSP。
+        - ARMv8-M 还需要设置 PSPLIM 和 MSPLIM。
 3. 支持 OTA 的情况： 如果支持 OTA，可能存在多个固件（如 `boot`、`ota`、`ap` 等）。在 `boot` 跳转到 `ap` 运行时，需要注意以下事项：
-   - 跳转前的状态：
-      - `CONTROL.SELSP = 1`，使用 PSP 指向 `boot` 的进程栈。
-      - MSP 指向 `boot` 的中断栈。
-   - 跳转到 `ap` 的要求：
-      - 需要正确设置栈指针寄存器，确保当前使用的栈指针指向 `ap` 的 `IDLE` 进程栈。
-      - 以下是两种常见情况：
-        - `CONTROL.SELSP = 1`：使用 PSP 指向 `ap` 的 `IDLE` 栈。（ARMv8-M 还需要设置 PSPLIM）。
-        - `CONTROL.SELSP = 0`：使用 MSP 指向 `ap` 的 `IDLE` 栈。（ARMv8-M 还需要设置 MSPLIM）。
-   - Reset 入口实现的注意事项：
-      - 需要注意，进入 `__start` 时可能并非硬件复位状态，因此需要额外处理。
+    - 跳转前的状态：
+        - `CONTROL.SELSP = 1`，使用 PSP 指向 `boot` 的进程栈。
+        - MSP 指向 `boot` 的中断栈。
+    - 跳转到 `ap` 的要求：
+        - 需要正确设置栈指针寄存器，确保当前使用的栈指针指向 `ap` 的 `IDLE` 进程栈。
+        - 以下是两种常见情况：
+            - `CONTROL.SELSP = 1`：使用 PSP 指向 `ap` 的 `IDLE` 栈。（ARMv8-M 还需要设置 PSPLIM）。
+            - `CONTROL.SELSP = 0`：使用 MSP 指向 `ap` 的 `IDLE` 栈。（ARMv8-M 还需要设置 MSPLIM）。
+    - Reset 入口实现的注意事项：
+        - 需要注意，进入 `__start` 时可能并非硬件复位状态，因此需要额外处理。
 
 ### 4、中断优先级设置
 
@@ -178,12 +178,12 @@ CONFIG_ARMV8M_USEBASEPRI=y
 #### 注意事项
 
 1. 中断向量表配置：
-   - 默认中断向量表中，`exception_direct` 采用 C 函数调用方式，仅保存部分上下文。
-   - 这种方式与 `up_schedule_sigaction` 的实现不兼容。
-   - 可以通过 PendSV（挂起服务调用）进行 `sigaction` 转发来规避兼容性问题。
+    - 默认中断向量表中，`exception_direct` 采用 C 函数调用方式，仅保存部分上下文。
+    - 这种方式与 `up_schedule_sigaction` 的实现不兼容。
+    - 可以通过 PendSV（挂起服务调用）进行 `sigaction` 转发来规避兼容性问题。
 2. 特殊处理：
-   - 在 `vector table` 中，需要对平台所需的 SMP Call 中断号进行特殊处理。
-   - 使用宏定义 `ARCH_HAVE_CUSTOM_VECTORS` 来启用定制中断向量表。
+    - 在 `vector table` 中，需要对平台所需的 SMP Call 中断号进行特殊处理。
+    - 使用宏定义 `ARCH_HAVE_CUSTOM_VECTORS` 来启用定制中断向量表。
 
 #### 参考示例
 

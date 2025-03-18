@@ -11,11 +11,11 @@ openvela is mainly subject to Apache License 2.0. See the LICENSE file for detai
 In order to participate in community contributions, you need to sign a Contributor License Agreement before contributing to the community. Here are the specific steps for different platforms:
 
 - **Gitee platform**:
-  - Please visit the [Gitee CLA signing page](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) to complete the signing.
-  - You can check the signing status through [My CLA Status](https://gitee.com/profile/clas).
+    - Please visit the [Gitee CLA signing page](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) to complete the signing.
+    - You can check the signing status through [My CLA Status](https://gitee.com/profile/clas).
 
 - **GitHub platform**:
-  - After submitting a new Pull Request (PR), the system will prompt you to complete the CLA signing. Please follow the prompts to complete the signing process.
+    - After submitting a new Pull Request (PR), the system will prompt you to complete the CLA signing. Please follow the prompts to complete the signing process.
 
 ## Bug reports
 

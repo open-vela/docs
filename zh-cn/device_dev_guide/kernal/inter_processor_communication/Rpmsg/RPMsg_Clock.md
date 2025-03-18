@@ -22,10 +22,6 @@ CONFIG_CLK_RPMSG=y
 
 Client 端能够访问或控制 Server 端时钟资源的前提是，Server 端已完成实际时钟子系统的初始化，即通过调用 `clk_register` 完成时钟资源的注册。Client 端无需进行时钟注册。
 
-有关时钟注册的示例代码，请参考以下链接：
-
-https://github.com/FishsemiCode/nuttx/tree/song-u1/drivers/clk/song。
-
 ### 2、获取时钟实例
 
 在访问或控制时钟资源时，需要通过时钟资源的名称来获取时钟实例。
@@ -40,10 +36,10 @@ FAR struct clk_s *clk_get(FAR const char *name)；
 #### 参数说明
 
 - Server 端：
-  - `clk_get` 函数的参数为调用 `clk_register` 时传入的时钟资源名称。
+    - `clk_get` 函数的参数为调用 `clk_register` 时传入的时钟资源名称。
 - Client 端：
-  - `clk_get` 函数的参数需要包含 Server 端的 CPU 名称（`cpuname`）以及时钟资源名称。
-  - 例如：假设 Server 端的 CPU 名称为 `"ap"`，需要访问的时钟资源名称为 `"spi_clk"`，则 Client 端调用 `clk_get` 函数时，传入的参数应为 `"ap/spi_clk"`。
+    - `clk_get` 函数的参数需要包含 Server 端的 CPU 名称（`cpuname`）以及时钟资源名称。
+    - 例如：假设 Server 端的 CPU 名称为 `"ap"`，需要访问的时钟资源名称为 `"spi_clk"`，则 Client 端调用 `clk_get` 函数时，传入的参数应为 `"ap/spi_clk"`。
 
 ## 四、工作原理
 
@@ -177,4 +173,5 @@ static int clk_rpmsg_enable_handler(FAR struct rpmsg_endpoint *ept,
    - 通过 `rpmsg_send` 将操作结果返回给 Client 端。
 
 ## 五、相关文档
-- 有关时钟驱动的设计，请参考 [Clock](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/power_mgt/Clock.md) 。
+
+- 有关时钟驱动的设计，请参考 [Clock](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/power_mgt/Clock.md)。

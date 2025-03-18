@@ -260,7 +260,7 @@ endif
 
 - 进入 `menuconfig` 后，启用 `hello_main`。
 
-  ![img](./figures/001.png)
+    ![img](./figures/001.png)
 
 ### 3、编译和运行
 

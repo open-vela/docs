@@ -52,18 +52,18 @@ openvela 支持标准的 `mount()` 命令，该命令允许将块驱动程序绑
 
 - `pthread_create`
 
-  - 新任务不会创建新的任务组（group）。
-  - 不会复制文件描述符（fd），直接使用父任务组的 fd 列表。
+    - 新任务不会创建新的任务组（group）。
+    - 不会复制文件描述符（fd），直接使用父任务组的 fd 列表。
 
 - `kthread_create`
 
-  - 新任务不会创建新的任务组（group）。
-  - 不会复制文件描述符（fd），使用内核公共的 fd 列表，即 `g_kthread_group` 的 fd 列表。
+    - 新任务不会创建新的任务组（group）。
+    - 不会复制文件描述符（fd），使用内核公共的 fd 列表，即 `g_kthread_group` 的 fd 列表。
 
 - `task_create`
 
-  - 新任务会创建新的任务组（group）。
-  - 会复制父任务的文件描述符（fd）列表。
+    - 新任务会创建新的任务组（group）。
+    - 会复制父任务的文件描述符（fd）列表。
 
 ## 二、数据结构
 
@@ -97,16 +97,16 @@ struct inode
 
     包含标志位，用于标识文件类型及其他状态。例如：
 
-  - `Character driver`
-  - `Block driver`
-  - `Mount point`
-  - `Special OS type`
-  - `Named semaphore`
-  - `Message Queue`
-  - `Shared memory region`
-  - `Soft link`
+    - `Character driver`
+    - `Block driver`
+    - `Mount point`
+    - `Special OS type`
+    - `Named semaphore`
+    - `Message Queue`
+    - `Shared memory region`
+    - `Soft link`
 
-- `i_private` 
+- `i_private`
 
     在驱动程序中，通常用于存放私有数据。
 
@@ -337,28 +337,28 @@ struct filelist
 
 - 功能：VFS 层是文件系统的适配层，屏蔽了底层文件系统的差异，为用户层提供统一的文件操作接口。
 - 特点：
-  - 用户层应用程序无需关心底层文件系统的具体类型。
-  - VFS 提供了通用接口，使得文件操作具有一致性。
+    - 用户层应用程序无需关心底层文件系统的具体类型。
+    - VFS 提供了通用接口，使得文件操作具有一致性。
 - 作用：通过适配不同的实际文件系统，VFS 层实现了文件系统的抽象化，简化了用户层的操作复杂度。
 
 #### 实际文件系统层
 
 - 功能：实际文件系统层负责实现具体的文件系统逻辑，包括数据的存储和管理。
 - 特点：
-  - 需要块设备支持的文件系统：
-    - 通过块设备驱动实现数据存储和读取。
-    - 示例：FAT、ROMFS、SMARTFS、NXFFS。
-  - 不需要块设备支持的文件系统：
-    - 直接管理数据，适用于特殊场景。
-    - 示例：BINFS、PROCFS、NFS、TMPFS。
+    - 需要块设备支持的文件系统：
+        - 通过块设备驱动实现数据存储和读取。
+        - 示例：FAT、ROMFS、SMARTFS、NXFFS。
+    - 不需要块设备支持的文件系统：
+        - 直接管理数据，适用于特殊场景。
+        - 示例：BINFS、PROCFS、NFS、TMPFS。
 - 作用：根据文件系统的特点，以不同的方式管理和存储数据。
 
 #### MTD（`Memory Technology Devices`）层
 
 - 功能：MTD 层是文件系统与底层存储硬件之间的桥梁。
 - 特点：
-  - 向上提供统一的 MTD 接口，供文件系统访问。
-  - 向下对接不同的硬件设备，处理与存储硬件的交互。
+    - 向上提供统一的 MTD 接口，供文件系统访问。
+    - 向下对接不同的硬件设备，处理与存储硬件的交互。
 - 作用：通过抽象硬件差异，MTD 层使文件系统能够在多种存储硬件上正常工作。
 
 ### 2、挂载流程
@@ -594,8 +594,8 @@ int nx_mount(FAR const char *source, FAR const char *target,
 
 1. （可选）查找文件系统操作函数集和块设备驱动（若需要）。
 
-   - 调用 `mount_findfs()` 函数，根据传入的参数 `filesystemtype` 查找对应的文件系统操作函数集 `mops`。
-   - 如果文件系统需要块设备支持，则调用 `find_blockdriver()` 函数，根据传入的参数 `source` 查找对应的块设备驱动。
+    - 调用 `mount_findfs()` 函数，根据传入的参数 `filesystemtype` 查找对应的文件系统操作函数集 `mops`。
+    - 如果文件系统需要块设备支持，则调用 `find_blockdriver()` 函数，根据传入的参数 `source` 查找对应的块设备驱动。
 
     目的：
     确定文件系统的操作方式，并关联相应的块设备驱动（如果需要），为后续的挂载操作做准备。
@@ -608,8 +608,8 @@ int nx_mount(FAR const char *source, FAR const char *target,
 
     根据传入的参数 `target`，查找需要挂载的路径对应的 `inode` 节点：
 
-   - 如果找到对应的 `inode`，检查其是否为有效的目录节点。
-   - 如果未找到对应的 `inode`，调用 `inode_reserve()` 函数创建一个新的 `mountpt_inode` 节点。
+    - 如果找到对应的 `inode`，检查其是否为有效的目录节点。
+    - 如果未找到对应的 `inode`，调用 `inode_reserve()` 函数创建一个新的 `mountpt_inode` 节点。
 
     目的：
 
@@ -623,8 +623,8 @@ int nx_mount(FAR const char *source, FAR const char *target,
 
     调用 `mops->bind()` 函数将文件系统与块设备驱动进行绑定：
 
-   - 对于不需要块设备支持的文件系统，`bind()` 函数可能无需特殊处理。
-   - 对于需要块设备支持的文件系统，`bind()` 函数会将文件系统的整体状态保存在`fshandle` 中。
+    - 对于不需要块设备支持的文件系统，`bind()` 函数可能无需特殊处理。
+    - 对于需要块设备支持的文件系统，`bind()` 函数会将文件系统的整体状态保存在`fshandle` 中。
 
     目的：
 

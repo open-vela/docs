@@ -28,11 +28,11 @@ listen-network [slot_id][event_id]
 
 - slot_id：设置要监听的卡槽，目前仅支持 `0`。
 - event_id：事件 ID，支持以下事件类型：
-  - `MSG_NETWORK_STATE_CHANGE_IND`：网络状态变化指示。
-  - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`：语音注册状态变化指示。
-  - `MSG_CELLINFO_CHANGE_IND`：小区信息变化指示。
-  - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：信号强度变化指示。
-  - `MSG_NITZ_STATE_CHANGE_IND`：NITZ（Network Identity and Time Zone）状态变化指示。
+    - `MSG_NETWORK_STATE_CHANGE_IND`：网络状态变化指示。
+    - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`：语音注册状态变化指示。
+    - `MSG_CELLINFO_CHANGE_IND`：小区信息变化指示。
+    - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：信号强度变化指示。
+    - `MSG_NITZ_STATE_CHANGE_IND`：NITZ（Network Identity and Time Zone）状态变化指示。
 
 #### 示例
 

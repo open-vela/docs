@@ -28,9 +28,9 @@ listen-sim [slot_id][event_id]
 
 - slot_id: 设置要监听的插槽，目前仅支持 `0`。
 - event_id: 要监听的事件 ID，支持以下事件：
-  - `MSG_SIM_STATE_CHANGE_IND`: SIM 状态变更事件。
-  - `MSG_SIM_UICC_APP_ENABLED_CHANGE_IND`: SIM UICC 应用启用状态变更事件。
-  - `MSG_SIM_ICCID_CHANGE_IND`: SIM ICCID（集成电路卡标识符）变更事件。
+    - `MSG_SIM_STATE_CHANGE_IND`: SIM 状态变更事件。
+    - `MSG_SIM_UICC_APP_ENABLED_CHANGE_IND`: SIM UICC 应用启用状态变更事件。
+    - `MSG_SIM_ICCID_CHANGE_IND`: SIM ICCID（集成电路卡标识符）变更事件。
 
 #### 示例
 
@@ -602,8 +602,8 @@ telephonytool> get-uicc-enablement 0
 ```
 
 - state:
-  - `0` 表示 UICC 应用未启用。
-  - `1` 表示 UICC 应用已启用。
+    - `0` 表示 UICC 应用未启用。
+    - `1` 表示 UICC 应用已启用。
 
 ### 19、set-uicc-enablement
 
@@ -619,8 +619,8 @@ set-uicc-enablement [slot_id][[state]
 
 - slot_id: 设置要查询的插槽，目前仅支持 `0`。
 - state: 指定 UICC 应用的目标状态：
-  - `0`: 禁用 UICC 应用。
-  - `1`: 启用 UICC 应用。
+    - `0`: 禁用 UICC 应用。
+    - `1`: 启用 UICC 应用。
 
 #### 示例
 

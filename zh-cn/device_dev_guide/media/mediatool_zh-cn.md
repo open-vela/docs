@@ -6,13 +6,16 @@
 
 ## 一、**配置 Mediatool 工具**
 
-  配置使用 mediatool 工具的 CPU ,比如 AP :
+配置使用 mediatool 工具的 CPU ,比如 AP :
+
 ```shell
 CONFIG_MEDIA=y                        // 需要使用 Media 功能的 cpu, enable 该选项
 CONFIG_MEDIA_TOOL=y                   // 开启mediatool 工具
 CONFIG_MEDIA_SERVER_CPUNAME='audio'   // 提供Media 能力的 cpu name
- ```
- 提供 media 能力（运行着 mediad ）的 CPU,  比如 AUDIO:
+```
+
+提供 media 能力（运行着 mediad ）的 CPU,  比如 AUDIO:
+
 ```shell
 CONFIG_MEDIA_SERVER=y                 // 提供 Media 能力的 cpu, enable 该选项
 CONFIG_MEDIA_SERVER_CONFIG_PATH="/etc/media/" // 设置media相关配置文件放置目录, 默认
@@ -26,65 +29,81 @@ CONFIG_LIB_PFW=y
 ## 二、**Sim 环境运行 Mediatool**
 
 1. 运行 ap ，audio 虚拟机：
-   ```shell
-   sudo ./nuttx
-   ```
+
+    ```shell
+    sudo ./nuttx
+    ```
+
 2. 挂载目录，/music 存放媒体文件，首先把host路径挂载当前核上（ap）：
-   ```shell
-   ap>mount -t hostfs -o fs=/home/jhd/music /music
-   ```
+
+    ```shell
+    ap>mount -t hostfs -o fs=/home/jhd/music /music
+    ```
+
 3. 运行 mediatool 工具：
-   ```shell
-   ap>mediatool
-   ```
+
+    ```shell
+    ap>mediatool
+    ```
 
 ## 三、**测试方法**
 
 - 播放音频文件( URL 模式 )：
-   ```shell
-   open Music
-   prepare 0 url music/1.mp3          //采用 URL 模式播放
-   start 0                            //启动播放
-   stop 0                             //停止播放
-   close 0                            //关闭播放
-   ```
+
+    ```shell
+    open Music
+    prepare 0 url music/1.mp3          //采用 URL 模式播放
+    start 0                            //启动播放
+    stop 0                             //停止播放
+    close 0                            //关闭播放
+    ```
 
 - 播放音频文件(Buffer模式)：
-   ```shell
-   open Music
-   prepare 0 buffer /music/1.mp3      //采用 Buffer 模式播放
-   start 0
-   stop 0
-   close 0
-   ```
+
+    ```shell
+    open Music
+    prepare 0 buffer /music/1.mp3      //采用 Buffer 模式播放
+    start 0
+    stop 0
+    close 0
+    ```
+
 - 录制音频文件(URL模式)：
-   ```shell
-   copen cap
-   prepare 0 url music/2.opus
-   start 0                            //启动录制
-   stop 0                             //停止录制
-   close 0                            //关闭录制
-   ```
+
+    ```shell
+    copen cap
+    prepare 0 url music/2.opus
+    start 0                            //启动录制
+    stop 0                             //停止录制
+    close 0                            //关闭录制
+    ```
+
 - 录制音频文件(Buffer模式)：
-   ```shell
-   copen cap
-   prepare 0 buffer /music/b3.opus format=opus:sample_rate=16000:ch_layout=mono
-   start 0
-   stop 0
-   close 0
-   ```
+
+    ```shell
+    copen cap
+    prepare 0 buffer /music/b3.opus format=opus:sample_rate=16000:ch_layout=mono
+    start 0
+    stop 0
+    close 0
+    ```
+
 - 播放控制：
-   ```shell
-   pause 0                            //暂停播放
-   resume 0                           //恢复播放
-   seek 0 1000                        //跳转到1000ms处播放
-   ```
+
+    ```shell
+    pause 0                            //暂停播放
+    resume 0                           //恢复播放
+    seek 0 1000                        //跳转到1000ms处播放
+    ```
+
 - 调整音量：
-   ```shell
-   volume 0 50                       //设置音量为50%
-   ```
+
+    ```shell
+    volume 0 50                       //设置音量为50%
+    ```
 
 - mediatool 提供 debug 指令，方便日志调试：
-   ```shell
-   mediatool>dump
-   ```
+
+    ```shell
+    mediatool>dump
+    ```

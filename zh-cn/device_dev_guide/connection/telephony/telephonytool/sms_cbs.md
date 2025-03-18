@@ -202,8 +202,8 @@ telephonytool> get-cell-broadcast-power 0
 ```
 
 - state:
-  - `1`: 表示小区广播功能已启用。
-  - `0`: 表示小区广播功能已禁用。
+    - `1`: 表示小区广播功能已启用。
+    - `0`: 表示小区广播功能已禁用。
 
 ### 6、set-cell-broadcast-power
 
@@ -219,8 +219,8 @@ set-cell-broadcast-power [slot_id][state]
 
 - slot_id: 设置要监听的插槽，目前仅支持 `0`。
 - state:
-  - `0`: 关闭接收小区广播。
-  - `1`: 开启接收小区广播。
+    - `0`: 关闭接收小区广播。
+    - `1`: 开启接收小区广播。
 
 #### 示例
 
@@ -240,8 +240,8 @@ telephonytool> [18220.661800] [21] [  INFO] [ap] [0,0105]> RIL_REQUEST_GSM_SET_B
 ```
 
 - state:
-  - `1`: 表示小区广播功能已成功启用。
-  - `0`: 表示小区广播功能已成功关闭。
+    - `1`: 表示小区广播功能已成功启用。
+    - `0`: 表示小区广播功能已成功关闭。
 
 ### 7、get-cell-broadcast-topics
 
