@@ -4,7 +4,7 @@
 
 openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开发者可根据需求开发相关测试用例，在开发阶段提前发现缺陷，提高代码质量。本文介绍如何使用该框架开发测试用例。
 
-## 1、代码目录
+## 二、代码目录
 
 ```Bash
 ├─tests
@@ -16,9 +16,9 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 │    └── testsuites                                   #cmocka 测试工具集
 ```
 
-## 2、开发测试用例
+## 三、开发测试用例
 
-### 2.1 新建用例目录
+### 1、新建用例目录
 
 将所有 cmocka 编写的测试用例放在`tests`目录下。当需要使用 cmocka 编写新的测试用例时，操作步骤如下：
 
@@ -97,7 +97,7 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
    endif
    ```
 
-### 2.2 编写测试用例
+### 2、编写测试用例
 
 在 src 文件夹下新建测试用例文件，建议一个文件只包含一条测试用例。目录结构如下：
 
@@ -200,7 +200,7 @@ void test_mytest_example_02(FAR void **state);
 void test_mytest_example_03(FAR void **state);
 ```
 
-### 2.3 编写测试入口文件
+### 3、编写测试入口文件
 
 为了更好的将各模块测试用例和测试用例入口解耦，保证各模块的修改不会引起整个测试集不可用，将测试入口文件独立出来，放在该模块测试用例根目录下，完整目录结构如下所示：
 
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
 }
 ```
 
-### 2.4 定义 setup 和 teardown 函数
+### 4、定义 setup 和 teardown 函数
 
 针对某一类 case，他们有相同的 `setup` 和`teardown`，即测试环境初始化和测试结束后销毁（例如释放内存，网络重置等）。可以将 `setup` 和 `teardown` 抽离出来，放到公共目录 `util` 下，目录结构如下：
 
@@ -313,7 +313,7 @@ void test_mytest_example_02(FAR void **state)
 }
 ```
 
-### 2.5 使用 state 指针
+### 5、使用 state 指针
 
 在 setup 函数中创建的变量可由 state 指针传递给测试用例。state 指针实现如下：
 
@@ -350,7 +350,7 @@ void test_mytest_example_03(FAR void **state)
 }
 ```
 
-### 2.6 断言
+### 6、断言
 
 cmocka 提供了一组用于测试逻辑条件的断言，其使用方法和标准 C 中的 assert 相同，实现如下：
 
@@ -369,7 +369,7 @@ void test_mytest_example_01(FAR void **state)
 }
 ```
 
-## 二 执行测试用例
+## 四 执行测试用例
 
 ### 1、编译测试用例
 
@@ -381,7 +381,7 @@ void test_mytest_example_01(FAR void **state)
    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
    ```
 
-   <img src="./pictures/1.1.1.png" alt="img" style="zoom:150%;" />
+   <img src="./figures/1.1.1.png" alt="img" style="zoom:150%;" />
 
 2. 使用 menuconfig 打开模块定义的测试用例开关（CONFIG_MYTEST_TEST）。
 
