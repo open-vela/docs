@@ -16,8 +16,6 @@
 
 为了解决这一问题，openvela 支持在运行环境中查看特定线程的栈信息。
 
-
-
 ## 二、配置说明
 
 ### 1、通用配置说明
@@ -51,8 +49,6 @@ CONFIG_UNWINDER_ARM
 ```
 
 目前，openvela 支持 ARM、RISC-V 和 Xtensa 三种体系结构的 backtrace 功能，各架构的配置和实现如下。
-
-
 
 ### 2、ARM
 
@@ -102,8 +98,6 @@ CONFIG_SCHED_BACKTRACE=y
 ```
 
 更多信息参考：[RISC-V Backtrace 实现](https://github.com/open-vela/nuttx/blob/dev/arch/risc-v/src/common/riscv_backtrace.c)
-
-
 
 ### 4、Xtensa
 
@@ -223,8 +217,6 @@ extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd)
     apps/netutils/telnetd/telnetd_daemon.c:240 (discriminator 3)
     nuttx/libs/libc/sched/task_startup.c:151
     ```
-
-
 
 #### 使用 `dumpstack [pid_start] [pid_end]` 查看多个进程堆栈
 
