@@ -10,8 +10,7 @@ void syslog(int priority, const char *format, ...);
 
 ### 2、注意事项
 
-- 内核中禁止直接调用 `syslog` 输出日志。
-    在内核中，请使用 `include/debug.h` 中定义的日志宏，或者根据需求自定义类似的宏以确保日志的统一性和规范性。
+内核中禁止直接调用 `syslog` 输出日志。在内核中，请使用 `include/debug.h` 中定义的日志宏，或者根据需求自定义类似的宏以确保日志的统一性和规范性。
 
 ### 3、功能概述
 
