@@ -117,8 +117,6 @@ CONFIG_UTILS_CURL=y
     if __name__ == "__main__":
         print("curl -X POST -F file=@./a.log %s:4321/upload/" % my_ip())
         uvicorn.run(app, host="0.0.0.0", port=4321)
-
-        
     ```
 
 2. 安装依赖。
@@ -158,15 +156,15 @@ CONFIG_UTILS_CURL=y
 
 5. 注意事项。
 
-- 如果上传失败，请在本地电脑上运行以下命令检查网络配置：
+    - 如果上传失败，请在本地电脑上运行以下命令检查网络配置：
 
-    ```Nginx
-    ifconfig
-    ```
+        ```Nginx
+        ifconfig
+        ```
 
-    确认本地电脑的 IP 地址（WAN 口 IP），并替换命令中的 `<PC_IP>`。
+        确认本地电脑的 IP 地址（WAN 口 IP），并替换命令中的 `<PC_IP>`。
 
-- 确保设备和本地电脑在同一网络下，且本地电脑的防火墙允许端口 `4321` 的访问。
+    - 确保设备和本地电脑在同一网络下，且本地电脑的防火墙允许端口 `4321` 的访问。
 
 ### 3、获取网页内容
 
@@ -177,10 +175,9 @@ curl www.example.com
 ```
 
 > 说明
-
-- > 上述命令会对 `www.example.com` 域名发起一个 GET 请求，并将返回的网页内容打印到当前窗口。
-
-- > `www.example.com` 仅为示例，请替换为实际的目标网址。
+>
+> - 上述命令会对 `www.example.com` 域名发起一个 GET 请求，并将返回的网页内容打印到当前窗口。
+> - `www.example.com` 仅为示例，请替换为实际的目标网址。
 
 ### 4、获取网络文件
 

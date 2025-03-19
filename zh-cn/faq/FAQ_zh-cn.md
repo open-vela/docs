@@ -6,4 +6,4 @@
 Native 主要是 C/C++，快应用使用 javascript。
 
 ## 二、 Xiaomi Vela 和 openvela 的关系
-openvela 和 Xiaomi vela 基于同一套代码实现，openvela 是开源版本。
+openvela 和 Xiaomi Vela 基于同一套代码实现，openvela 是开源版本。

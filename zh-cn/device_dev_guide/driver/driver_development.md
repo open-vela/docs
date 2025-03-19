@@ -177,8 +177,8 @@ int register_driver(FAR const char *path, FAR const struct file_operations *fops
 
 3. 设置私有数据。
 
-   - 将 `priv` 数据存储到 `inode` 的私有字段中。
-   - 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
+    - 将 `priv` 数据存储到 `inode` 的私有字段中。
+    - 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
 
 ## 二 驱动内部结构
 

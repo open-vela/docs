@@ -243,8 +243,7 @@ bool netpkt_is_fragmented(FAR netpkt_t *pkt);
 - `wdog`：
 
     - 内核实现的定时操作机制，可用于定时回调某函数。例如，定时任务的执行。
-    - 参考文档：
-    - [System Time and Clock — NuttX latest documentation (apache.org)](https://nuttx.apache.org/docs/latest/reference/os/time_clock.html#watchdog-timer-interfaces)
+    - 参考文档：[System Time and Clock — NuttX latest documentation (apache.org)](https://nuttx.apache.org/docs/latest/reference/os/time_clock.html#watchdog-timer-interfaces)
 
 - `work_queue`： 内核利用独立线程实现的异步执行机制，与 Linux 的工作队列类似，可用于任务的异步处理。例如：
 
@@ -502,25 +501,25 @@ dhcpd wlan0 &
 
 1. 通过 ESSID 连接：
 
-     ```Bash
-      ifup wlan0
-      wapi mode wlan0 2
-      wapi psk wlan0 <psk> 3
-      wapi freq wlan0 1 1
-      wapi essid wlan0 <ssid> 1
-      renew wlan0
-      ```
+    ```Bash
+    ifup wlan0
+    wapi mode wlan0 2
+    wapi psk wlan0 <psk> 3
+    wapi freq wlan0 1 1
+    wapi essid wlan0 <ssid> 1
+    renew wlan0
+    ```
 
 2. 通过 BSSID 连接：
 
-     ```Bash
-      ifup wlan0
-      wapi mode wlan0 2
-      wapi psk wlan0 <psk> 3
-      wapi freq wlan0 1 1
-      wapi ap wlan0 <bssid>
-      renew wlan0
-      ```
+    ```Bash
+    ifup wlan0
+    wapi mode wlan0 2
+    wapi psk wlan0 <psk> 3
+    wapi freq wlan0 1 1
+    wapi ap wlan0 <bssid>
+    renew wlan0
+    ```
 
 ##### 配置保存与加载
 
@@ -537,20 +536,20 @@ wapi reconnect wlan0     # 从 wapi.conf 加载配置并重新联网
 
 1. 双重功能支持： 模组既可以连接到环境中的无线热点（STA 模式），又可以允许外部无线终端接入（AP 模式）。
 2. DHCP 功能支持：
-   - 在 `wlan0` 接口上支持 DHCP Client 功能，从外部无线热点动态获取 IP 地址。
-   - 在 `wlan1` 接口上支持 DHCP Server 功能，为外部无线终端动态分配 IP 地址。
+    - 在 `wlan0` 接口上支持 DHCP Client 功能，从外部无线热点动态获取 IP 地址。
+    - 在 `wlan1` 接口上支持 DHCP Server 功能，为外部无线终端动态分配 IP 地址。
 3. 接口独立性： STA 和 AP 两个网络接口独立工作，互不干扰：
-   - 一个接口的 UP/DOWN 状态发生变化时，另一个接口不受影响。
-   - 一个接口上有 Wi-Fi 连接建立或释放时，另一个接口上的 Wi-Fi 连接不受影响。
+    - 一个接口的 UP/DOWN 状态发生变化时，另一个接口不受影响。
+    - 一个接口上有 Wi-Fi 连接建立或释放时，另一个接口上的 Wi-Fi 连接不受影响。
 
 #### 驱动实现注意事项
 
 1. 弃用方法：
-   - WAPI_ESSID_DELAY_ON 方式已经弃用。
+    - WAPI_ESSID_DELAY_ON 方式已经弃用。
 2. 新的连接逻辑：
-   - 设置 AP 的 MAC 地址时，如果没有设置过 ESSID（扩展服务集标识符），则不会触发任何动作。
-   - 当设置 ESSID 时，会触发连接操作。
-   - 如果之前已经设置过 ESSID，再设置 AP 的 MAC 地址时，也会触发新的连接。
+    - 设置 AP 的 MAC 地址时，如果没有设置过 ESSID（扩展服务集标识符），则不会触发任何动作。
+    - 当设置 ESSID 时，会触发连接操作。
+    - 如果之前已经设置过 ESSID，再设置 AP 的 MAC 地址时，也会触发新的连接。
 
 #### 参考实现代码
 

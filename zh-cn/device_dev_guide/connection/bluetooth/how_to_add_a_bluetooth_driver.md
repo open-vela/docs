@@ -97,7 +97,7 @@
 
     > **说明**
     >
-    > 说明：注册指定 id 编号
+    > 注册指定 id 编号
 
 `int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h)。调用关系如下图所示：
 

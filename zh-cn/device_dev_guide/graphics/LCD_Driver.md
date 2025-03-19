@@ -31,9 +31,11 @@ void board_lcd_uninitialize(void);
 1. `board_lcd_initialize`
 
     用于初始化 LCD 芯片，包括 SPI 初始化、LCD 寄存器配置等硬件相关操作。
+
 2. `board_lcd_uninitialize`
 
     用于销毁 LCD 相关资源，例如关闭电源、释放内存等。
+
 3. `board_lcd_getdev`
 
     获取 LCD 设备实例，并实现 `struct lcd_dev_s` 定义的一系列方法。该函数是 LCD 驱动的核心，开发者需要实现 `struct lcd_dev_s` 中定义的所有方法。
@@ -166,13 +168,13 @@ struct lcd_planeinfo_s
 ##### 数据传输接口
 
 1. `putrun`
-   - 向某一行写入指定数量（`npixels`）的像素数据。
+    - 向某一行写入指定数量（`npixels`）的像素数据。
 2. `putarea`
-   - 向指定的矩形区域写入像素数据。
+    - 向指定的矩形区域写入像素数据。
 3. `getrun`
-   - 从某一行读取指定数量（`npixels`）的像素数据。
+    - 从某一行读取指定数量（`npixels`）的像素数据。
 4. `getarea`
-   - 从指定的矩形区域读取像素数据。
+    - 从指定的矩形区域读取像素数据。
 
 ##### Plane 颜色特性
 

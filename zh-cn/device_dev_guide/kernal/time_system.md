@@ -28,7 +28,7 @@
     - 优点：支持时区转换，功能更完善。
     - 缺点：会增加代码体积， **增加约 6.4KB**。
 
-      ![img](./figures/001.png)
+        ![img](./figures/001.png)
 
 - 未打开 `CONFIG_LIBC_LOCALTIME`：
     - `localtime` 和 `gmtime` 的效果相同，直接返回 UTC 时间，不进行时区转换。
@@ -178,7 +178,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
     - 运行 `Makefile` 后，生成 `romfs_zoneinfo.img` 文件。
 
-       ![img](./figures/004.png)
+        ![img](./figures/004.png)
 
 2. 挂载生成的镜像文件。
 

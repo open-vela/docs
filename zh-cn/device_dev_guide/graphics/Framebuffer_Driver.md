@@ -104,7 +104,7 @@ errout_with_fb:
         - `drivers/video/vnc/vnc_fbdev.c`
         - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
 3. `void up_fbuninitialize(int display)`
-   - 执行与 `up_fbinitialize` 相反的操作，用于释放资源。通常可以实现为空，不执行任何操作。
+    - 执行与 `up_fbinitialize` 相反的操作，用于释放资源。通常可以实现为空，不执行任何操作。
 
 ### `3、struct fb_vtable_s` 结构
 
@@ -114,6 +114,7 @@ errout_with_fb:
 
     - `getvideoinfo`：获取视频控制器配置和颜色平面信息。
     - `getplaneinfo`：获取指定颜色平面的信息。
+
 2. 可选功能（根据配置启用）
     - 颜色映射（`CONFIG_FB_CMAP`）：
         - `getcmap`：获取当前颜色映射表。
@@ -135,6 +136,7 @@ errout_with_fb:
         - 叠加层的 Blit 和 Blend 操作（`CONFIG_FB_OVERLAY_BLIT`）：
             - `blit`：在叠加层之间执行 Blit 操作。
             - `blend`：在叠加层之间执行 Blend 操作。
+
 3. 其他控制功能
     - 显示平移：
         - `pandisplay`：为多缓冲区显示执行平移操作。

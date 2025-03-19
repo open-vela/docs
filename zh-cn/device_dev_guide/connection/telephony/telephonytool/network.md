@@ -171,7 +171,7 @@ telephonytool> get-signalstrength 0
 [   53.030000] [35] [ DEBUG] [ap] telephonytool_cmd_query_signalstrength, slotId : 0 rssi :2147483647 rsrp :-68 rsrq :2147483647 rssnr :2147483647 cqi : 2147483647 level :4
 ```
 
-## 6、get-display-name
+### 6、get-display-name
 
 #### 命令说明
 
@@ -259,7 +259,7 @@ get-voice-nwtype 0
 [  117.115200] [35] [ DEBUG] [ap] telephonytool_cmd_get_voice_networktype, slotId : 0 value :0
 ```
 
-## 9、get-voice-registered
+### 9、get-voice-registered
 
 #### 命令说明
 

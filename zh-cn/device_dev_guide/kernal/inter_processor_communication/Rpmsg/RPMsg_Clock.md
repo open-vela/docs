@@ -108,11 +108,11 @@ static int clk_rpmsg_enable(FAR struct clk_s *clk)
 **处理逻辑说明**
 
 1. 获取通信端点：
-   - 函数通过 `clk_rpmsg_get_ept` 获取与目标 Server 端 的通信端点。如果通信端点不存在，则返回错误代码 `-ENODEV`。
+    - 函数通过 `clk_rpmsg_get_ept` 获取与目标 Server 端 的通信端点。如果通信端点不存在，则返回错误代码 `-ENODEV`。
 2. 构造消息：
-   - 函数通过 `rpmsg_get_tx_payload_buffer` 分配消息缓冲区，并将时钟名称复制到消息中。
+    - 函数通过 `rpmsg_get_tx_payload_buffer` 分配消息缓冲区，并将时钟名称复制到消息中。
 3. 发送请求并接收响应：
-   - 函数调用 `clk_rpmsg_sendrecv` 将 `CLK_RPMSG_ENABLE` 请求发送到 Server 端，并等待响应。
+    - 函数调用 `clk_rpmsg_sendrecv` 将 `CLK_RPMSG_ENABLE` 请求发送到 Server 端，并等待响应。
 
 ### 3、Server 端的请求处理
 
@@ -164,13 +164,13 @@ static int clk_rpmsg_enable_handler(FAR struct rpmsg_endpoint *ept,
 处理逻辑说明：
 
 1. 获取时钟实例：
-   - 函数通过 `clk_rpmsg_get_clk` 获取指定名称的时钟实例。
-   - 如果时钟实例存在，则调用 `clk_enable` 函数启用时钟。
-   - 如果时钟实例不存在，则返回错误代码 `-ENOENT`。
+    - 函数通过 `clk_rpmsg_get_clk` 获取指定名称的时钟实例。
+    - 如果时钟实例存在，则调用 `clk_enable` 函数启用时钟。
+    - 如果时钟实例不存在，则返回错误代码 `-ENOENT`。
 2. 更新计数器：
-   - 如果时钟启用成功（`clk_enable` 返回 0），则增加时钟的引用计数 `clkrp->count`。
+    - 如果时钟启用成功（`clk_enable` 返回 0），则增加时钟的引用计数 `clkrp->count`。
 3. 返回结果：
-   - 通过 `rpmsg_send` 将操作结果返回给 Client 端。
+    - 通过 `rpmsg_send` 将操作结果返回给 Client 端。
 
 ## 五、相关文档
 
