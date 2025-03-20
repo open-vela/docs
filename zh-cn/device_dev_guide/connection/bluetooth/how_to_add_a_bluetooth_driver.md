@@ -93,6 +93,7 @@
     > **说明**
     >
     > 注册后缀 `id` 值为 0
+
 - `bt_driver_register_with_id(FAR struct bt_driver_s *driver, int id)`
 
     > **说明**

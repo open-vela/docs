@@ -15,6 +15,7 @@
 ## 步骤一 配置项目
 
 1. 切换到 openvela 仓库的根目录，执行如下命令来配置音乐播放器。
+
     > 模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译开发板的代码。
 
     ```Bash
