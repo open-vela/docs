@@ -21,6 +21,14 @@
     - [方法：观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
     - [方法：观察A2DP SRC是否停止音频流传输](#方法观察a2dp-src是否停止音频流传输)
     - [方法：观察AVDTP signaling连接是否断开](#方法观察avdtp-signaling连接是否断开)
+    - [方法：观察air log中的音频包序列号是否连续](#方法观察air-log中的音频包序列号是否连续)
+    - [方法：观察air log中1秒内发送的音频数据样本点数量](#方法观察air-log中1秒内发送的音频数据样本点数量)
+    - [方法：观察air log中音频数据是否存在重传](#方法观察air-log中音频数据是否存在重传)
+  - [典型问题](#典型问题-1)
+    - [问题: 连接两对耳机时，出现断连和无声的问题](#问题-连接两对耳机时出现断连和无声的问题)
+    - [问题: 连接耳机播放音乐，耳机无声](#问题-连接耳机播放音乐耳机无声)
+    - [问题: 连接耳机播放音频文件，音频文件开头缺失](#问题-连接耳机播放音频文件音频文件开头缺失)
+    - [问题: 语音播报，结尾处有pop音](#问题-语音播报结尾处有pop音)
 - [音乐播放控制问题](#音乐播放控制问题)
   - [分析方法](#分析方法-2)
     - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
@@ -34,7 +42,7 @@
     - [方法：观察是否打开了AVRCP配置](#方法观察是否打开了avrcp配置)
     - [方法：观察音量变化是否由蓝牙引起](#方法观察音量变化是否由蓝牙引起)
     - [方法：观察音量变化由AVRCP或是HFP控制](#方法观察音量变化由avrcp或是hfp控制)
-  - [典型问题](#典型问题-1)
+  - [典型问题](#典型问题-2)
     - [问题: 不能控制播放、暂停](#问题-不能控制播放暂停)
     - [问题：意外的播放、暂停](#问题意外的播放暂停)
     - [问题: 不能受音乐源设备（手机）控制调节音量](#问题-不能受音乐源设备手机控制调节音量)
@@ -46,7 +54,7 @@
     - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
     - [方法：观察是否向Media设置了SCO音频参数](#方法观察是否向media设置了sco音频参数)
     - [方法：观察AG端是否收到了HF端的Answer请求](#方法观察ag端是否收到了hf端的answer请求)
-  - [典型问题](#典型问题-2)
+  - [典型问题](#典型问题-3)
     - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
     - [问题：HF端接通电话，HF端无声](#问题hf端接通电话hf端无声)
 - [数据传输问题](#数据传输问题)
@@ -279,6 +287,7 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Disc
 [a2dp_control]: a2dp_ctrl_cb, path:[a2dp_source_ctrl], event:TRANSPORT_OPEN_EVT
 [a2dp_control]: a2dp_data_cb, path:[a2dp_source_data], event:TRANSPORT_OPEN_EVT
 ```
+
 * A2DP SNK的transport成功打开
 ```
 [a2dp_control]: a2dp_ctrl_cb, path:[a2dp_sink_ctrl], event:TRANSPORT_OPEN_EVT
@@ -354,6 +363,7 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 [a2dp_stm]: ProcessEvent, State=Idle, Peer=[11:22:33:44:55:66], Event=CONNECTED_EVT
 [a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
 ```
+
 * 本地设备主动连接对端设备
 ```
 [a2dp_stm]: ProcessEvent, State=Opening, Peer=[11:22:33:44:55:66], Event=CONNECTED_EVT
@@ -410,7 +420,9 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 #### 1 通过syslog观察A2DP SRC是否停止音频流传输
 
 当Vela设备为A2DP SRC时，蓝牙服务有两个途径终止传输音频数据。
+
 * 当收到Media发送的STOP命令时。
+
 * 当连续2秒不能从Media获取音频数据时。
 
 蓝牙服务收到Media发送的STOP命令时，典型log如下：
@@ -465,6 +477,134 @@ AVDTP signaling断开的原因有：应用告诉蓝牙断开A2DP连接，蓝牙�
 snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，对端设备请求断开连接。本地设备的snoop log中，本地设备主动断开连接的典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="50%">
+
+<a id="方法：观察air log中的音频包序列号是否连续"></a>
+
+### 方法：观察air log中的音频包序列号是否连续
+
+AVDTP Media Packet的包头中有一个字段，名字叫做Sequence Number。
+
+每一次Stream Start过程开始后，Sequence Number都从0开始，每发送一个AVDTP Media Packet，Sequence Number加1。
+
+典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_sequence_number.png" alt="sniffer:AVDTP media packet sequence number" width="50%">
+
+<a id="方法：观察air log中1秒内发送的音频数据样本点数量"></a>
+
+### 方法：观察air log中1秒内发送的音频数据样本点数量
+
+AVDTP Media Packet的包头中有一个字段，名字叫做Time Stamp，该字段是音频包的采样时刻。
+
+在air log中，截取1秒内的音频包，开始和结束音频包之间的Time Stamp差是该时间段内传输的音频数据样本点数量。
+
+通常，1秒内音频数据的样本点应当等于或近似等于采样率，典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_normal.png" alt="sniffer:normal AVDTP media packet sequence number" width="50%">
+
+上述log中，实际传输的样本点数量为：5949440 - 5904896 = 44546，与预期接近。
+
+1秒内音频数据的样本点数量远大于采样率时，air log中会看到密集的包，典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_abnormal.png" alt="sniffer:abnormal AVDTP media packet sequence number" width="50%">
+
+上述log中，实际传输的样本点数量为：7395456 - 7270656 = 124800，远超预期。
+
+<a id="方法：观察air log中音频数据是否存在重传"></a>
+
+### 方法：观察air log中音频数据是否存在重传
+
+air log中基带包有两个参数可以用来判断包是否存在重传，分别是SEQN和ARQC。正常情况下，SEQN的值在0和1之间交替变化，对端设备回复的ARQN是ACK。若出现重传，基带包中的SEQN值维持不变。
+
+空口出现重传的原因有两种：
+
+* 设备发送的包没收到对端的回复
+
+* 设备发送的包收到了对端的回复，但回复的ARQN是NAK
+
+设备发送的包没收到对端的回复，典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_no_response.png" alt="sniffer:packet with no response" width="50%">
+
+上述log中，设备发了3次2-DH5包，前两次的包没收到对端设备的回复，SEQN值维持不变，第三次的包收到了对端设备的回复，且回复的ARQN是ACK，SEQN发生了变化，重传结束。
+
+设备发送的包收到了对端的回复，但回复的ARQN是NAK，典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_NAK_response.png" alt="sniffer:packet with NAK response" width="50%">
+
+上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变，第二次的包收到了对端设备的回复，且回复的ARQN是ACK，由于对端回复的包也是重传的包，SEQN维持不变，重传结束。
+
+## 典型问题
+
+### 问题: 连接两对耳机时，出现断连和无声的问题
+
+Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连接连接一对耳机。当手表需要连接另一对耳机时，需要先断开前一对耳机。针对多设备切换导致的无声问题，可以按以下顺序排查：
+
+* [观察是否断开了第一耳机](#方法观察avdtp-signaling连接是否断开)
+
+  * 若应用未能发送第一耳机断开请求，建议在App侧观察未能发送的原因。
+
+  * 若应用发送了第一耳机断开请求，但未能断开，建议对比典型log，观察断开流程中是否出现异常。
+
+  * 若应用在连接第二耳机前，正确断开了第一耳机，建议[观察是否连接了第二耳机](#方法观察是否建立了avdtp-media连接)
+
+* [观察是否连接了第二耳机](#方法观察是否建立了avdtp-media连接)
+
+  * 若应用未能发送第二耳机连接请求，建议在App侧观察未能发送的原因。
+
+  * 若应用发送了第二耳机连接请求，但未能建立AVDTP signaling连接，建议对比典型log，观察建立signaling连接中是否出现异常。
+
+  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议对比典型log，观察建立media连接中是否出现异常。
+
+  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
+
+  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+  * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
+
+  * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+
+### 问题: 连接耳机播放音乐，耳机无声
+
+* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+
+  * 若AVDTP signaling连接未建立，建议对比典型log，观察建立signaling连接中是否出现异常。
+
+  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+
+* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+
+  * 若两个设备之间的AVDTP media连接未建立，建议对比典型log，观察建立media连接中是否出现异常。
+
+  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
+
+  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+  * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
+
+  * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+
+### 问题: 连接耳机播放音频文件，音频文件开头缺失
+
+* [观察sequence number是否连续](#方法观察air-log中的音频包序列号是否连续)
+
+  * 若air log中出问题的音频流中存在音频包序列号不连续，建议Vela蓝牙测观察音频流中音频包的序列号不连续的原因。
+
+  * 若音频包序列号连续，建议Vela Media测观察发送的音频包是否完整。
+
+### 问题: 语音播报，结尾处有pop音
 
 # 音乐播放控制问题
 
