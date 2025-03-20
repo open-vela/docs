@@ -100,7 +100,7 @@ nuttx/arch/risc-v/src/qemu-rv
 - 启动接口。
 - 片内外设初始化接口。
 
-API 列表及详细信息可参考[此链接](https://nuttx.apache.org/docs/latest/reference/os/arch.html)。
+API 列表及详细信息可参考 [此链接](https://nuttx.apache.org/docs/latest/reference/os/arch.html)。
 
 #### Chip 层 API 示例
 

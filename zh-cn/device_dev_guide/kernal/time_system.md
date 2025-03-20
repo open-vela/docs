@@ -111,7 +111,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 2. 数据库下载。
 
-    从[时区数据库](https://www.iana.org/time-zones)下载最新的时区数据。
+    从 [时区数据库](https://www.iana.org/time-zones) 下载最新的时区数据。
 
 3. 生成 `tzbin`目录。
 

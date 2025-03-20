@@ -50,7 +50,7 @@ openvela 的 Framebuffer 用户接口类似于 Linux 系统，通过 VFS（虚�
 
 ### 2、下层驱动接口
 
-openvela 的 Framebuffer 驱动接口用于管理 LCD 设备，设计相对简单。开发者可以参考 [video/fb.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/video/fb.h)和 [/drivers/video/fb.c](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c) 文件中的实现。以下是 `fb_register()` 函数的源码，展示了与 Framebuffer 设备驱动相关的重要部分：
+openvela 的 Framebuffer 驱动接口用于管理 LCD 设备，设计相对简单。开发者可以参考 [video/fb.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/video/fb.h) 和 [/drivers/video/fb.c](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c) 文件中的实现。以下是 `fb_register()` 函数的源码，展示了与 Framebuffer 设备驱动相关的重要部分：
 
 ```C
 int fb_register(int display, int plane)
@@ -317,7 +317,7 @@ CONFIG_VIDEO_FB
 
 ### 3、处理 VSync
 
-为了避免屏幕撕裂并提高渲染性能，建议在实现中处理 VSync（垂直同步）。VSync 的具体实现和优化方法，请参考 [VSync](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/graphics/VSync.md)。
+为了避免屏幕撕裂并提高渲染性能，建议在实现中处理 VSync（垂直同步）。VSync 的具体实现和优化方法，请参考 [VSync](./VSync.md)。
 
 ## 五、相关仓
 

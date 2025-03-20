@@ -8,9 +8,9 @@
 
 ## 前提条件
 
-1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
@@ -27,6 +27,7 @@
     - menuconfig：打开 menuconfig 页面，修改项目代码的配置。
 
     执行后出现如下界面：
+
     ![img](images/020.png)
 
 2. 按下 `/` 键逐个搜索修改如下配置：
@@ -39,16 +40,20 @@
     > 以LVX_USE_DEMO_MUSIC_PLAYER为例进行操作，其余配置方式相同。
 
     1. 输入待搜索的配置 `LVX_USE_DEMO_MUSIC_PLAYER`，支持模糊搜索，例如 `music_player`，找到对应的配置，按回车键进入该配置。
-    ![img](images/021.png)
+
+        ![img](images/021.png)
 
     2. 按下空格键，`[ ]` 中出现 `*` 表示打开该配置。
-    ![img](images/022.png)
+
+        ![img](images/022.png)
 
     3. 将 `LVX_MUSIC_PLAYER_DATA_ROOT` 设置为 `/data`，修改后按下回车键保存当前配置项。
-    ![img](images/023.png)
+
+        ![img](images/023.png)
 
     4. 按下 `Q` 键，弹出如下退出保存界面。
-    ![img](images/024.png)
+
+        ![img](images/024.png)
 
     5. 按下字母`Y` 键保存配置，退出修改配置页面。
 
@@ -174,4 +179,4 @@ music_player &
 
 2. 退出模拟器。
 
-3. 重新执行[步骤三](#步骤三-启动模拟器并推送资源)和[步骤四](#步骤四-启动音乐播放器)。
+3. 重新执行 [步骤三](#步骤三-启动模拟器并推送资源) 和 [步骤四](#步骤四-启动音乐播放器)。

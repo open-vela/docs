@@ -375,27 +375,27 @@ void test_mytest_example_01(FAR void **state)
 
 1. 使用 menuconfig 打开 `TESTING_CMOCKA` 开关。 
 
-   注意：`TESTING_CMOCKA`依赖 `LIBC_REGEX`，而 `LIBC_REGEX` 依赖`ALLOW_MIT_COMPONENTS`，如果这两个config没有打开，需要先将其打开 。
+    注意：`TESTING_CMOCKA`依赖 `LIBC_REGEX`，而 `LIBC_REGEX` 依赖`ALLOW_MIT_COMPONENTS`，如果这两个config没有打开，需要先将其打开 。
 
-   ```Bash
-   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
-   ```
+    ```Bash
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
+    ```
 
-   <img src="./figures/1.1.1.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/1.1.1.png" alt="img" style="zoom:150%;" />
 
 2. 使用 menuconfig 打开模块定义的测试用例开关（CONFIG_MYTEST_TEST）。
 
-   <img src="./figures/1.2.1.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/1.2.1.png" alt="img" style="zoom:150%;" />
 
 3. 进行编译，执行如下命令：
 
-   ```Bash
-   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -e -Werror -j20
-   ```
+    ```Bash
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -e -Werror -j20
+    ```
 
 ### 2、执行测试用例
 
- 编译完成后进入到 nsh，执行如下命令：
+编译完成后进入到 nsh，执行如下命令：
 
 ```Bash
 ./emulator.sh vela
@@ -403,9 +403,9 @@ void test_mytest_example_01(FAR void **state)
 
 <img src="./figures/2.1.png" alt="img" style="zoom:150%;" />
 
--  输入对应 PROGNAME 进行测试，这种方式会按顺序将 group 中的测试用例全部跑一遍，如果需要某个测试用里的执行结果则必须等待一段时间。
+- 输入对应 PROGNAME 进行测试，这种方式会按顺序将 group 中的测试用例全部跑一遍，如果需要某个测试用里的执行结果则必须等待一段时间。
 
-  <img src="./figures/2.2.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/2.2.png" alt="img" style="zoom:150%;" />
 
 - openvela 中实现了 cmocka 的命令行工具，用于灵活的执行测试用例，下面展示了使用其打印用例、执行指定用例的方式。
 

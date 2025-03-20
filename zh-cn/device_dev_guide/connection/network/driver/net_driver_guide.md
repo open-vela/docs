@@ -593,8 +593,8 @@ Where:
 
 有关 iperf2 和 iperf3 的详细使用说明，请参考以下文档：
 
-- [iperf2](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/connection/network/network_tools/iperf2.md)
-- [iperf3](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/connection/network/network_tools/iperf3.md)
+- [iperf2](../network_tools/iperf2.md)
+- [iperf3](../network_tools/iperf3.md)
 
 ### 3、wapi
 
@@ -606,4 +606,4 @@ Where:
 
 有关 tcpdump 的详细使用说明，请参考以下文档：
 
-- [tcpdump](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/connection/network/network_tools/tcpdump.md)
+- [tcpdump](../network_tools/tcpdump.md)

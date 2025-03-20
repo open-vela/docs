@@ -60,11 +60,11 @@ Media Policy 通过 **PFW** 来构造路由策略、音频策略等各种状态�
 
 ## 三、**Media Framework 架构**
 
-![Media 分布式Server架构图](./images/Distributed_Server_Architecture_zh-cn.jpg)
+![Media 分布式 Server 架构图](./images/Distributed_Server_Architecture_zh-cn.jpg)
 
-[Client模块](./client/media_client.md)
+[Client 模块](./client/media_client.md)
 
-[Server模块](./server/media_server.md)
+[Server 模块](./server/media_server.md)
 
 ## 四、**测试 Media Framework**
 

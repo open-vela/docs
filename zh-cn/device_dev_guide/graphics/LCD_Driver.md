@@ -192,7 +192,7 @@ LCD Framebuffer 是 openvela 对 LCD 驱动程序（LCD driver）的一层 Frame
 
 ### 1、LCD Framebuffer 模式的核心接口
 
-根据 [Framebuffer Driver](Framebuffer_Driver.md) 的描述，LCD Framebuffer 驱动实现了以下三个核心接口：
+根据 [Framebuffer Driver](./Framebuffer_Driver.md) 的描述，LCD Framebuffer 驱动实现了以下三个核心接口：
 
 - `up_fbinitialize`：初始化 Framebuffer 和 LCD 驱动。
 - `up_fbgetvplane`：获取 Video Plane 信息。

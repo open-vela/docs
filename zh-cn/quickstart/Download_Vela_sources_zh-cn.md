@@ -15,7 +15,7 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
 
 2. 初始化用于操作源码的工作目录:
 
-    - Github（需注册公钥，请参考[Github文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)）：
+    - Github（需注册公钥，请参考 [Github文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)）：
 
         ``` bash
         repo init --partial-clone -u git@github.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
@@ -28,7 +28,7 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
         cd ../../
         ```
 
-    - Gitee（需注册公钥，请参考[码云文档](https://gitee.com/help/articles/4191)）：
+    - Gitee（需注册公钥，请参考 [码云文档](https://gitee.com/help/articles/4191)）：
 
         ```bash
         repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
@@ -51,4 +51,4 @@ repo sync -c -j$(nproc)
 
 ## 三、后续步骤
 
-请参阅[编译 openvela 源码](./Build_Vela_from_sources_zh-cn.md)。
+请参阅 [编译 openvela 源码](./Build_Vela_from_sources_zh-cn.md)。

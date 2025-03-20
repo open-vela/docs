@@ -81,7 +81,7 @@ openvela 蓝牙目前还能够支持多种开源、闭源协议栈，如Zephyr�
 
 ### 1、蓝牙应用开发
 
-对于第三方应用开发者，可以使用 openvela  快应用 QuickApp Feature ，它是基于 QuickJS 引擎使用 C++ 实现的一系列 API 接口，为三方应用提供系统访问能力，更多详情请参见[蓝牙接口](https://doc.quickapp.cn/features/system/bluetooth.html)。
+对于第三方应用开发者，可以使用 openvela  快应用 QuickApp Feature ，它是基于 QuickJS 引擎使用 C++ 实现的一系列 API 接口，为三方应用提供系统访问能力，更多详情请参见 [蓝牙接口](https://doc.quickapp.cn/features/system/bluetooth.html)。
 
 另外，蓝牙 Framework 还提供了 NDK 接口来使用蓝牙系统的所有能力。可以参阅目录 framework/include 中的头文件获取更多信息。
 
@@ -120,6 +120,6 @@ openvela 蓝牙支持多种驱动架构，下文将以目前常用的 BTH4 驱�
 
 ## 五、相关仓
 
-- [frameworks_bluetooth](../../../../open-vela/frameworks/bluetooth)：该仓库旨在为应用程序开发者提供丰富的蓝牙应用编程接口，包括 API 接口层、各种 Service 服务组件层、SAL 协议栈适配层和 HAL 硬件适配层。此外，仓库还配备了 [bttool](../bluetooth/functionality_test/bttool_cmd.md) 等工具，一方面可直接用于用于测试蓝牙功能；另一方面可用于蓝牙应用编程时相关 API 的 Sample 参考代码。
-- [external_zblue](../../../../open-vela/external/zblue)：该仓库源自于 Zephyr 社区，但 openvela 对很多功能进行了补充和增强。
-- [docs](../../../../open-vela/docs)：该仓库提供更多关于蓝牙模块的技术文档。
+- [frameworks_bluetooth](https://github.com/open-vela/frameworks_bluetooth)：该仓库旨在为应用程序开发者提供丰富的蓝牙应用编程接口，包括 API 接口层、各种 Service 服务组件层、SAL 协议栈适配层和 HAL 硬件适配层。此外，仓库还配备了 [bttool](../bluetooth/functionality_test/bttool_cmd.md) 等工具，一方面可直接用于用于测试蓝牙功能；另一方面可用于蓝牙应用编程时相关 API 的 Sample 参考代码。
+- [external_zblue](https://github.com/open-vela/external_zblue)：该仓库源自于 Zephyr 社区，但 openvela 对很多功能进行了补充和增强。
+- [docs](https://github.com/open-vela/docs)：该仓库提供更多关于蓝牙模块的技术文档。

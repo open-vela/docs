@@ -135,7 +135,7 @@ d <breakpoint-number>
 
 ## 二、使用 Visual Studio Code
 
-1. 单击[此处](https://code.visualstudio.com/)下载安装 Visual Studio Code。
+1. 单击 [此处](https://code.visualstudio.com/) 下载安装 Visual Studio Code。
 
 2. 安装 Visual Studio Code 扩展。
 
@@ -200,7 +200,7 @@ d <breakpoint-number>
 
 ## 三、使用 Clion (远程调试)
 
-1. 下载并且安装 Clion (建议使用较新版本) https://www.jetbrains.com/clion/
+1. 下载并且安装 [Clion (建议使用较新版本)](https://www.jetbrains.com/clion/)
 
 2. 打开 SSH Configurations 菜单
 

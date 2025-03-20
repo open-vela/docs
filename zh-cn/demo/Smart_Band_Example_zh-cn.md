@@ -9,13 +9,14 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
 ## 前提条件
 
-1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
 1. 切换到 openvela 仓库的根目录，执行如下命令来配置手环 Bandx。
+
     > 模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译模拟器的代码。
 
     ```cpp
@@ -151,4 +152,4 @@ sudo apt install android-tools-adb
 
 #### 解决方案
 
-请按[步骤三](#步骤三-启动模拟器并推送资源)进行资源推送。
+请按 [步骤三](#步骤三-启动模拟器并推送资源) 进行资源推送。
