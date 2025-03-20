@@ -14,24 +14,24 @@
 
 2. 示例：配置 KVDB 存储路径。 以配置 `KVDB` 的数据库存储路径 `CONFIG_KVDB_PERSIST_PATH` 为例：
 
-   - 默认情况下，配置项使用默认值，因此不会出现在 `defconfig` 文件中。
-   - 在 `.config` 文件中可以看到其默认值为 `"/data/persist.db"`。如果您期望的值不同，可以通过 `menuconfig` 查找并设置对应的配置项。
-     ![img](./figures/002.png)
+    - 默认情况下，配置项使用默认值，因此不会出现在 `defconfig` 文件中。
+    - 在 `.config` 文件中可以看到其默认值为 `"/data/persist.db"`。如果您期望的值不同，可以通过 `menuconfig` 查找并设置对应的配置项。
+        ![img](./figures/002.png)
 
 3. 示例：打开 `FTL_WRITEBUFFER` 配置。 若需要打开 `FTL_WRITEBUFFER` 配置，请按照以下步骤操作：
 
-   1. 在 `.config` 文件中确认该配置是否存在。如果配置不存在，建议使用 `menuconfig` 打开。不要直接在 `defconfig` 文件中强行添加 `CONFIG_FTL_WRITEBUFFER=y`，因为该配置项依赖其他配置。
+    1. 在 `.config` 文件中确认该配置是否存在。如果配置不存在，建议使用 `menuconfig` 打开。不要直接在 `defconfig` 文件中强行添加 `CONFIG_FTL_WRITEBUFFER=y`，因为该配置项依赖其他配置。
 
-      ![img](./figures/004.png)
+        ![img](./figures/004.png)
 
-   2. `CONFIG_FTL_WRITEBUFFER` 依赖于 `CONFIG_DRVR_WRITEBUFFER`，如果未同时启用 `CONFIG_DRVR_WRITEBUFFER`，即使手动修改 `defconfig`，配置也不会生效。
+    2. `CONFIG_FTL_WRITEBUFFER` 依赖于 `CONFIG_DRVR_WRITEBUFFER`，如果未同时启用 `CONFIG_DRVR_WRITEBUFFER`，即使手动修改 `defconfig`，配置也不会生效。
 
-   3. 通过 `menuconfig`，会自动处理所有依赖项，并更新 `defconfig` 文件。更新后的配置如下：
+    3. 通过 `menuconfig`，会自动处理所有依赖项，并更新 `defconfig` 文件。更新后的配置如下：
 
-         ```Plain
-         CONFIG_FTL_WRITEBUFFER=y  
-         CONFIG_DRVR_WRITEBUFFER=y  
-         ```
+        ```Plain
+        CONFIG_FTL_WRITEBUFFER=y  
+        CONFIG_DRVR_WRITEBUFFER=y  
+        ```
 
 > **注意**
 >
@@ -41,18 +41,23 @@
 
 openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找到对应项目的 `defconfig` 作为系统的初始配置，并基于此文件拓展与组合，最终生成完整配置文件 `.config`。生成的 `.config` 文件会被复制为 `config.h`，以支持代码中的条件编译和运行时使用。
 
-#### 1、各文件详细说明
+### 1、各文件详细说明
 
 1. `defconfig`
-   - 系统配置的最小集合，用于指定默认的基本配置项。系统根据此文件和配置项之间的依赖关系生成完整的 `.config` 配置文件。
-   - `defconfig` 文件中所有配置项都会按字母顺序排列。推荐通过 `menuconfig` 工具添加或删除配置项。直接修改 `defconfig` 文件可能会导致冗余配置或顺序不一致的问题。
-2. `.config`
-   - `.config` 文件是基于 `defconfig` 文件生成的完整配置，包含所有扩展和组合后的配置项。
-   - `menuconfig` 的操作会读取本地的 `.config` 文件，允许用户根据需求修改配置。工具在完成配置调整后会自动将 `.config` 中的更改同步回 `defconfig` 文件。
-3. config.h
-   - `config.h` 文件从 `.config` 文件生成，包含所有配置信息，用于支持代码的条件编译和运行时操作。
 
-#### 2、编译流程示例
+    - 系统配置的最小集合，用于指定默认的基本配置项。系统根据此文件和配置项之间的依赖关系生成完整的 `.config` 配置文件。
+    - `defconfig` 文件中所有配置项都会按字母顺序排列。推荐通过 `menuconfig` 工具添加或删除配置项。直接修改 `defconfig` 文件可能会导致冗余配置或顺序不一致的问题。
+  
+2. `.config`
+
+    - `.config` 文件是基于 `defconfig` 文件生成的完整配置，包含所有扩展和组合后的配置项。
+    - `menuconfig` 的操作会读取本地的 `.config` 文件，允许用户根据需求修改配置。工具在完成配置调整后会自动将 `.config` 中的更改同步回 `defconfig` 文件。
+
+3. config.h
+
+    - `config.h` 文件从 `.config` 文件生成，包含所有配置信息，用于支持代码的条件编译和运行时操作。
+
+### 2、编译流程示例
 
 以下是一个典型的编译配置流程图：
 
@@ -65,7 +70,7 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 ./build.sh vendor/sim/boards/openvela/config/openvela -j8  
 ```
 
-#### 3、文件路径示例
+### 3、文件路径示例
 
 根据 openvela simulator 环境，各文件的典型路径如下：
 
@@ -79,21 +84,21 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 
 1. 禁用某个功能的 Kconfig 配置项。
 
-   在禁用（disable）某个 Kconfig 配置项之前，需要确保它未被其他配置项通过 `select` 关键字选择。如果存在依赖关系，需要先解除依赖。
+    在禁用（disable）某个 Kconfig 配置项之前，需要确保它未被其他配置项通过 `select` 关键字选择。如果存在依赖关系，需要先解除依赖。
 
 2. 打开可视化配置界面。
 
     使用 `menuconfig` 命令可打开可视化的配置界面，例如：
 
-      ```Bash
-      ./build.sh vendor/sim/boards/openvela/configs/openvela menuconfig  
-      ```
+    ```Bash
+    ./build.sh vendor/sim/boards/openvela/configs/openvela menuconfig  
+    ```
 
-   ![img](./figures/007.png)
+    ![img](./figures/007.png)
 
 3. 快速搜索配置项。
 
-   在 `menuconfig` 界面中，可以输入 `/` 键后跟配置关键字进行搜索。例如，搜索 `EXAMPLES_HELLO`：
+    在 `menuconfig` 界面中，可以输入 `/` 键后跟配置关键字进行搜索。例如，搜索 `EXAMPLES_HELLO`：
 
     > **说明**
     >
@@ -103,31 +108,33 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 
 4. 选择与导航配置项。
 
-   通过方向键上下移动，并按下回车键选择对应的选项。
-   ![img](./figures/009.png)
+    通过方向键上下移动，并按下回车键选择对应的选项。
+    ![img](./figures/009.png)
 
 5. 查看配置详情。
 
-   在选中某个配置项后，可以通过按 `Shift` + `?` 键查看该配置的详细说明和所在文件的位置。
-   ![img](./figures/010.png)
+    在选中某个配置项后，可以通过按 `Shift` + `?` 键查看该配置的详细说明和所在文件的位置。
+    ![img](./figures/010.png)
 
 6. 选择具体选项。
 
-   依据配置提示，例如红框中的选项编号（如“1”），可以进一步进入子选项界面。
-   ![img](./figures/011.png)
+    依据配置提示，例如红框中的选项编号（如“1”），可以进一步进入子选项界面。
+    ![img](./figures/011.png)
 
 7. 修改配置项的值。
 
-   在选中的配置项中，可以依据配置的类型输入值：
-   - 整型（int）：需要输入具体的整数值。
-   - 布尔型（bool）：通过按下 `y`（选择）或空格键来切换状态。
-     ![img](./figures/012.png)
+    在选中的配置项中，可以依据配置的类型输入值：
 
-   - 字符串型：直接输入字符串作为配置值。
+    - 整型（int）：需要输入具体的整数值。
+    - 布尔型（bool）：通过按下 `y`（选择）或空格键来切换状态。
+        ![img](./figures/012.png)
+
+    - 字符串型：直接输入字符串作为配置值。
 
 8. 保存或退出。
-   - 按 `ESC` 键退出配置界面，并在提示保存时按 `y` 以保存修改。
-   - 如果需要强制退出，可以通过 `Ctrl` + `C` 实现，但强制退出可能丢失未保存的更改。
+
+    - 按 `ESC` 键退出配置界面，并在提示保存时按 `y` 以保存修改。
+    - 如果需要强制退出，可以通过 `Ctrl` + `C` 实现，但强制退出可能丢失未保存的更改。
 
 ## 五、相关文档
 

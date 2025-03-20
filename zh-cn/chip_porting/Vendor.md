@@ -116,21 +116,21 @@ djz:vendor_name$ tree -l
 
 - `configs` 存放该板的所有配置文件。默认包含 `nsh`（NuttShell CLI）的配置，提供基础操作系统功能。厂商可基于 `nsh` 配置点亮 `openvela`，并逐步添加更多功能。
 - `include` 包含与板相关的头文件：
-  - `board.h`：声明适用于该板的宏和函数，厂商可根据需求修改。
-  - `nsh_romfsimg.h`：提供系统文件的 ROM 文件系统镜像（romfs bin），无需厂商修改。
+    - `board.h`：声明适用于该板的宏和函数，厂商可根据需求修改。
+    - `nsh_romfsimg.h`：提供系统文件的 ROM 文件系统镜像（romfs bin），无需厂商修改。
 - `Kconfig` 定义与板相关的配置项，包括功能开关和外设选择，厂商需要根据实际需求调整。
 - `scripts` 包含与构建流程相关的脚本和配置文件：
-  - `ld.script`：板的链接脚本。
-  - `Make.defs`：定义编译流程和文件规则，需厂商根据要求修改。
+    - `ld.script`：板的链接脚本。
+    - `Make.defs`：定义编译流程和文件规则，需厂商根据要求修改。
 - `src` 包括板级启动和初始化相关的源代码和配置文件。
-  - `etc`：
-    - 保存操作系统和应用的启动脚本：
-      - `rc.sysinit`：核心应用启动和文件系统挂载。
-      - `rcS`：应用程序启动脚本。
-    - 系统账户文件：
-      - `group` 和 `passwd`：默认提供示例文件，实际使用时厂商需重新定义。
-  - **`vendor_name`**`_*.c` 文件： 包括必要的板级启动代码，如外设初始化文件（`vendor_name_appinit.c`、`vendor_name_boot.c` 等），用于初始化外设和板级配置，厂商可根据需求扩展这些文件。
-  - `Makefile`：用于构建编译的源文件以及加入 `etc` 目录的目标文件。
+    - `etc`：
+        - 保存操作系统和应用的启动脚本：
+            - `rc.sysinit`：核心应用启动和文件系统挂载。
+            - `rcS`：应用程序启动脚本。
+        - 系统账户文件：
+            - `group` 和 `passwd`：默认提供示例文件，实际使用时厂商需重新定义。
+    - **`vendor_name`**`_*.c` 文件： 包括必要的板级启动代码，如外设初始化文件（`vendor_name_appinit.c`、`vendor_name_boot.c` 等），用于初始化外设和板级配置，厂商可根据需求扩展这些文件。
+    - `Makefile`：用于构建编译的源文件以及加入 `etc` 目录的目标文件。
 
 ### 2. `chips` 目录
 
@@ -139,11 +139,11 @@ djz:vendor_name$ tree -l
 #### `chips/`**`chip_name`** 子目录说明
 
 - `include` 芯片相关的头文件：
-  - `chip.h`：存放芯片通用的宏定义和函数声明。
-  - `irq.h`：中断相关内容。
+    - `chip.h`：存放芯片通用的宏定义和函数声明。
+    - `irq.h`：中断相关内容。
 - `Kconfig` 定义与芯片相关的配置项，包括芯片型号、功能选择和模块配置。
 - `Make.defs` 定义芯片代码的构建流程，列出参与编译的 C 文件。
 - **`vendor_name`**`_*.c` 文件： 包含芯片启动所需的默认实现代码，例如：
-  - UART 驱动（`vendor_name_lowputc.c`）。
-  - 中断处理（`vendor_name_irq.c` 和 `vendor_name_irq.h`）。
-  - 系统启动代码（`vendor_name_start.c` 和 `vendor_name_timeisr.c`）。 厂商可根据芯片和硬件需求补充其他模块代码。
+    - UART 驱动（`vendor_name_lowputc.c`）。
+    - 中断处理（`vendor_name_irq.c` 和 `vendor_name_irq.h`）。
+    - 系统启动代码（`vendor_name_start.c` 和 `vendor_name_timeisr.c`）。 厂商可根据芯片和硬件需求补充其他模块代码。

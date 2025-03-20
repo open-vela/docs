@@ -28,8 +28,8 @@ enable-ims [slot_id][action]
 
 - slot_id：设置要监听的卡槽，目前仅支持 `0`。
 - action：
-  - `0`：关闭 IMS 能力。
-  - `1`：开启 IMS 能力。
+    - `0`：关闭 IMS 能力。
+    - `1`：开启 IMS 能力。
 
 #### 示例
 
@@ -91,9 +91,9 @@ set-ims-cap [slot_id][cap-value]
 
 - slot_id：设置要监听的卡槽，目前仅支持 `0`。
 - cap-value：IMS 支持的功能类型：
-  - `1`：语音（voice）。
-  - `4`：短信（SMS）。
-  - `5`：语音和短信（voice & SMS）。
+    - `1`：语音（voice）。
+    - `4`：短信（SMS）。
+    - `5`：语音和短信（voice & SMS）。
 
 #### 示例
 
@@ -165,9 +165,9 @@ get-ims-registration [slot_id][action]
 
 - slot_id：设置要监听的卡槽，目前仅支持 `0`。
 - action：
-  - `0`：表示查询 IMS 信息（IMS info）。
-  - `1`：表示查询 IMS 注册状态（IMS state）。
-  - `2`：表示查询 VoLTE 状态（VoLTE state）。
+    - `0`：表示查询 IMS 信息（IMS info）。
+    - `1`：表示查询 IMS 注册状态（IMS state）。
+    - `2`：表示查询 VoLTE 状态（VoLTE state）。
 
 #### 示例
 

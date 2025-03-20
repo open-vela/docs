@@ -22,19 +22,19 @@ openvela 已集成图形库 NxWM，但由于其功能相对简单，无法满足
 在驱动层面，相应地分为以下两种驱动类型：
 
 - Framebuffer Driver
-  - 针对 Image Transfer (Video Mode) 传输模式的屏幕。
-  - 常见应用场景包括：
-    - TTL RGB
-    - MIPI-DSI
+    - 针对 Image Transfer (Video Mode) 传输模式的屏幕。
+    - 常见应用场景包括：
+        - TTL RGB
+        - MIPI-DSI
 - LCD Driver
-  - 针对 Universal Mode 传输模式的屏幕。
-  - 常见应用场景包括：
-    - SPI (QSPI)
-    - I2C
+    - 针对 Universal Mode 传输模式的屏幕。
+    - 常见应用场景包括：
+        - SPI (QSPI)
+        - I2C
 
 ## 二、相关文档
 
 关于 Graphics Driver 的适配方法，请参见：
 
-- [Framebuffer_Driver](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/graphics/Framebuffer_Driver.md)
-- [LCD_Driver](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/graphics/LCD_Driver.md)
+- [Framebuffer_Driver](./Framebuffer_Driver.md)
+- [LCD_Driver](./LCD_Driver.md)

@@ -31,12 +31,14 @@ void board_lcd_uninitialize(void);
 1. `board_lcd_initialize`
 
     用于初始化 LCD 芯片，包括 SPI 初始化、LCD 寄存器配置等硬件相关操作。
+
 2. `board_lcd_uninitialize`
 
     用于销毁 LCD 相关资源，例如关闭电源、释放内存等。
+
 3. `board_lcd_getdev`
 
-   获取 LCD 设备实例，并实现 `struct lcd_dev_s` 定义的一系列方法。该函数是 LCD 驱动的核心，开发者需要实现 `struct lcd_dev_s` 中定义的所有方法。
+    获取 LCD 设备实例，并实现 `struct lcd_dev_s` 定义的一系列方法。该函数是 LCD 驱动的核心，开发者需要实现 `struct lcd_dev_s` 中定义的所有方法。
 
 ### 2、`struct lcd_dev_s` 结构
 
@@ -123,11 +125,11 @@ struct lcd_dev_s
 #### 代码说明
 
 1. `board_lcd_initialize`
-   - 用于初始化 LCD 硬件，例如 SPI 接口、LCD 控制器寄存器等。
-   - 如果初始化失败，会返回负值并记录错误日志。
+    - 用于初始化 LCD 硬件，例如 SPI 接口、LCD 控制器寄存器等。
+    - 如果初始化失败，会返回负值并记录错误日志。
 2. `lcddev_register`
-   - 注册 LCD 设备实例，通常用于将 LCD 设备挂载到 `/dev/lcd0`。
-   - 如果注册失败，会返回负值并记录错误日志。
+    - 注册 LCD 设备实例，通常用于将 LCD 设备挂载到 `/dev/lcd0`。
+    - 如果注册失败，会返回负值并记录错误日志。
 
 ### 3、`struct lcd_planeinfo_s` 结构
 
@@ -166,21 +168,21 @@ struct lcd_planeinfo_s
 ##### 数据传输接口
 
 1. `putrun`
-   - 向某一行写入指定数量（`npixels`）的像素数据。
+    - 向某一行写入指定数量（`npixels`）的像素数据。
 2. `putarea`
-   - 向指定的矩形区域写入像素数据。
+    - 向指定的矩形区域写入像素数据。
 3. `getrun`
-   - 从某一行读取指定数量（`npixels`）的像素数据。
+    - 从某一行读取指定数量（`npixels`）的像素数据。
 4. `getarea`
-   - 从指定的矩形区域读取像素数据。
+    - 从指定的矩形区域读取像素数据。
 
 ##### Plane 颜色特性
 
 1. `buffer`
-   - 功能：工作区缓冲区，每个 LCD 设备一个，多个图层（layer）共享一个缓冲区。
-   - 要求：缓冲区至少能够存储一行的数据（`bpp * xres / 8`），并与像素格式对齐。
+    - 功能：工作区缓冲区，每个 LCD 设备一个，多个图层（layer）共享一个缓冲区。
+    - 要求：缓冲区至少能够存储一行的数据（`bpp * xres / 8`），并与像素格式对齐。
 2. `bpp`
-   - 功能：表示每个像素占用的位数（bits per pixel）。
+    - 功能：表示每个像素占用的位数（bits per pixel）。
 
 ## 四、LCD Framebuffer 模式
 
@@ -190,7 +192,7 @@ LCD Framebuffer 是 openvela 对 LCD 驱动程序（LCD driver）的一层 Frame
 
 ### 1、LCD Framebuffer 模式的核心接口
 
-根据 [Framebuffer Driver](Framebuffer_Driver.md) 的描述，LCD Framebuffer 驱动实现了以下三个核心接口：
+根据 [Framebuffer Driver](./Framebuffer_Driver.md) 的描述，LCD Framebuffer 驱动实现了以下三个核心接口：
 
 - `up_fbinitialize`：初始化 Framebuffer 和 LCD 驱动。
 - `up_fbgetvplane`：获取 Video Plane 信息。

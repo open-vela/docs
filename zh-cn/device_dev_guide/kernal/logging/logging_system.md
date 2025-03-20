@@ -10,9 +10,7 @@ void syslog(int priority, const char *format, ...);
 
 ### 2、注意事项
 
-- 内核中禁止直接调用 `syslog` 输出日志。
-
-    在内核中，请使用 `include/debug.h` 中定义的日志宏，或者根据需求自定义类似的宏以确保日志的统一性和规范性。
+内核中禁止直接调用 `syslog` 输出日志。在内核中，请使用 `include/debug.h` 中定义的日志宏，或者根据需求自定义类似的宏以确保日志的统一性和规范性。
 
 ### 3、功能概述
 
@@ -26,10 +24,10 @@ void syslog(int priority, const char *format, ...);
 2. 根据指定的格式对日志进行包装，并将其发送至 `lib_vsprintf`。
 3. `lib_vsprintf` 将数据发送到对应的 `stream`（数据流）。
 4. `syslog stream` 支持多种 `channel`，例如：
-   - `default_channel`
-   - `ramlog_channel`
-   - `rpmsg_channel`
-   - `dev_channel`
+    - `default_channel`
+    - `ramlog_channel`
+    - `rpmsg_channel`
+    - `dev_channel`
 
 5. 各个 `channel` 使用对应的驱动程序，将日志输出到目标设备或介质（如 `uart`、`ram`、`file` 等）。
 
@@ -242,8 +240,8 @@ int printf( const char * format, ... );
 
     在多核环境中，非主核调用 `printf` 时，会通过 `uart_rpmsg` IPC 将打印内容发送到主核的 `cu` 程序进行读取。如果 `cu` 程序未切换到对应核（例如使用 `cu -l /dev/ttyRBT`），将无法读取 `uart_rpmsg` IPC 缓冲区中的内容。导致如下后果：
 
-  - IPC 缓冲区无法及时归还，导致缓冲区耗尽。
-  - 频繁的日志打印可能阻塞其他 IPC 功能，从而影响系统中其他组件的正常运行。
+    - IPC 缓冲区无法及时归还，导致缓冲区耗尽。
+    - 频繁的日志打印可能阻塞其他 IPC 功能，从而影响系统中其他组件的正常运行。
 
 - 解决方案：
 
@@ -253,8 +251,8 @@ int printf( const char * format, ... );
 
 - `printf` 适用于与用户交互的命令行工具。
 - 如下场景禁止使用：
-  - 内核模块。
-  - 后台长期运行的程序或服务。
+    - 内核模块。
+    - 后台长期运行的程序或服务。
 
 ### 3、使用限制
 
@@ -301,8 +299,8 @@ int printf( const char * format, ... );
 
 3. 保证打印过程不被中断。
 
-   - 芯片驱动需实现 `up_nputs` 函数。
-   - 串口驱动需支持 DMA 发送。
+    - 芯片驱动需实现 `up_nputs` 函数。
+    - 串口驱动需支持 DMA 发送。
 
 ### 2、ramlog 冷启动乱码问题
 
@@ -314,19 +312,17 @@ int printf( const char * format, ... );
 
 1. 冷启动时初始化缓冲区。
 
-   - 在 `ramlog` 的缓冲区（ringbuffer）中预留最后 4 字节，用于存储标定值。
-   - 启动时，检查预留字节是否包含标定值：
-     - 如果不是标定值：说明是冷启动，此时缓冲区为随机值，需使用 `memset` 初始化为 `0`，并写入标定值。
-     - 如果是标定值：说明是 warm reset，无需初始化缓冲区。
+    - 在 `ramlog` 的缓冲区（ringbuffer）中预留最后 4 字节，用于存储标定值。
+    - 启动时，检查预留字节是否包含标定值：
+        - 如果不是标定值：说明是冷启动，此时缓冲区为随机值，需使用 `memset` 初始化为 `0`，并写入标定值。
+        - 如果是标定值：说明是 warm reset，无需初始化缓冲区。
 
 2. warm reset 快速获取指针。
 
-   - 在 `ramlog` 的缓冲区中保存 `head` 和 `tail` 指针。
-   - 重启后：
-     - 若为 warm reset：直接使用当前的 `head` 和 `tail` 值。
-     - 若为冷启动：将 `head` 和 `tail` 指针初始化为 `0`。
-
-
+    - 在 `ramlog` 的缓冲区中保存 `head` 和 `tail` 指针。
+    - 重启后：
+        - 若为 warm reset：直接使用当前的 `head` 和 `tail` 值。
+        - 若为冷启动：将 `head` 和 `tail` 指针初始化为 `0`。
 
 ### 3、Android 兼容性
 

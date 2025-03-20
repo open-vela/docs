@@ -10,7 +10,7 @@
 
 ### 前提条件
 
-在 NSH 中打开 `bttool`。有关 `bttool` 的详细命令说明，请参见 [bttool 命令说明](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/connection/bluetooth/functionality_test/bttool_cmd.md)。
+在 NSH 中打开 `bttool`。有关 `bttool` 的详细命令说明，请参见 [bttool 命令说明](../bttool_cmd.md)。
 
 ```Bash
 ap> bttool

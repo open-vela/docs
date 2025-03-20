@@ -69,24 +69,24 @@ nxplayer> close
 
 1. 安装依赖。 在主机上安装必要的依赖库：
 
-     ```Bash
-      sudo apt install libmad0-dev:i386
-      ```
+    ```Bash
+    sudo apt install libmad0-dev:i386
+    ```
 
 2. 运行 `nxplayer`。 播放 MP3 文件的具体命令如下：
 
-     ```Bash
-      nxplayer
-      nxplayer> device pcm1p
-      nxplayer> play /data/audio.mp3
-      ```
+    ```Bash
+    nxplayer
+    nxplayer> device pcm1p
+    nxplayer> play /data/audio.mp3
+    ```
 
 3. 停止播放。 播放结束后，使用以下命令停止播放并关闭设备：
 
-     ```Bash
-      nxplayer> stop
-      nxplayer> close
-      ```
+    ```Bash
+    nxplayer> stop
+    nxplayer> close
+    ```
 
 ## 二、nxrecorder 使用指南
 
@@ -146,24 +146,24 @@ nxrecorder> close
 
 1. 安装依赖。 在主机上安装必要的依赖库：
 
-      ```Bash
-      sudo apt-get install libmp3lame-dev:i386
-      ```
+    ```Bash
+    sudo apt-get install libmp3lame-dev:i386
+    ```
 
 2. 运行 nxrecorder。 录制 MP3 文件的具体命令如下：
 
-      ```Bash
-      nxrecorder
-      nxrecorder> device pcm1c
-      nxrecorder> record /stream/100.mp3 2 16 44100
-      ```
+    ```Bash
+    nxrecorder
+    nxrecorder> device pcm1c
+    nxrecorder> record /stream/100.mp3 2 16 44100
+    ```
 
 3. 结束录制。 录制结束后，使用以下命令停止录制并关闭设备：
 
-      ```Bash
-      nxrecorder> stop
-      nxrecorder> close
-      ```
+    ```Bash
+    nxrecorder> stop
+    nxrecorder> close
+    ```
 
 ## 三、nxlooper 使用指南
 
@@ -212,9 +212,9 @@ nxlooper> loopback 2 16 48000
 ```
 
 - 参数说明：
-  - `channels`：设置声道数为 2。
-  - `bpsamp`：设置采样精度为 16 位。
-  - `samprate`：设置采样率为 48000 Hz。
+    - `channels`：设置声道数为 2。
+    - `bpsamp`：设置采样精度为 16 位。
+    - `samprate`：设置采样率为 48000 Hz。
 
 测试结束后，可通过以下命令停止回环并关闭设备：
 
@@ -236,10 +236,10 @@ nxlooper> loopback 2 16 44100 8
 ```
 
 - 参数说明：
-  - `channels`：设置声道数为 2。
-  - `bpsamp`：设置采样精度为 16 位。
-  - `samprate`：设置采样率为 44100 Hz。
-  - `format`：设置格式为 `8`，表示 MP3 格式。
+    - `channels`：设置声道数为 2。
+    - `bpsamp`：设置采样精度为 16 位。
+    - `samprate`：设置采样率为 44100 Hz。
+    - `format`：设置格式为 `8`，表示 MP3 格式。
 
 `format` 参数的值定义在 `nuttx/include/nuttx/audio/audio.h` 文件中。以下是部分格式的定义：
 

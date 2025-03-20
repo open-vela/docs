@@ -16,55 +16,55 @@
 
 1. 初始化中断系统，包括禁用所有中断、配置向量表位置、设置默认优先级以及启用中断。
 
-     ```C
-      void up_irqinitialize(void)
-      {
-          // Disable all interrupts
-          // Set the NVIC vector location
-          // Set all interrupts (and exceptions) to the default priority
-          // Attach the SVCall and Hard Fault exception handlers
-          // enable interrupts
-      }
-      ```
+    ```C
+    void up_irqinitialize(void)
+    {
+    // Disable all interrupts
+    // Set the NVIC vector location
+    // Set all interrupts (and exceptions) to the default priority
+    // Attach the SVCall and Hard Fault exception handlers
+    // enable interrupts
+    }
+    ```
 
 2. 启用指定中断。
 
-     ```C
-      void up_enable_irq(int irq)
-      {
-         //enable interrupt with irq
-      }
+    ```C
+    void up_enable_irq(int irq)
+    {
+    //enable interrupt with irq
+    }
       ```
 
 3. 禁用指定的中断号。
 
-      ```C
-      void up_disable_irq(int irq)
-      {
-         //disable interrupt with irq
-      }
-      ```
+    ```C
+    void up_disable_irq(int irq)
+    {
+    //disable interrupt with irq
+    }
+    ```
 
 4. 设置中断优先级。 如果启用了 `CONFIG_ARCH_IRQPRIO` 配置，则需要实现以下函数：
 
-     ```C
-      #ifdef CONFIG_ARCH_IRQPRIO
-      int up_prioritize_irq(int irq, int priority)
-      {
-        // set irq priority
-      }
-      #endif
-      ```
+    ```C
+    #ifdef CONFIG_ARCH_IRQPRIO
+    int up_prioritize_irq(int irq, int priority)
+    {
+    // set irq priority
+    }
+    #endif
+    ```
 
 5. 管理中断状态。
 
-   - 判断 `flags` 当前是否是关中断状态。
+    - 判断 `flags` 当前是否是关中断状态。
 
         ```C
         #define up_irq_is_disabled(flags)
         ```
 
-   - 保存当前中断状态并关闭中断。
+    - 保存当前中断状态并关闭中断。
 
         ```C
         // 关中断
@@ -73,7 +73,7 @@
         }
         ```
 
-   - 恢复指定中断状态。
+    - 恢复指定中断状态。
 
         ```C
         // 恢复flags表示的中断状态
@@ -82,7 +82,7 @@
         }
         ```
 
-   - 开启所有中断。
+    - 开启所有中断。
 
         ```C
         // 开启所有中断
@@ -91,7 +91,7 @@
         }
         ```
 
-   - 获取当前中断状态。
+    - 获取当前中断状态。
 
         ```C
         // 获取当前中断状态
@@ -102,21 +102,21 @@
 
 6. 处理核间中断：
 
-     ```C
-      // 发起核间中断
-      void up_trigger_irq(int irq, cpu_set_t cpuset)
-      ```
+    ```C
+    // 发起核间中断
+    void up_trigger_irq(int irq, cpu_set_t cpuset)
+    ```
 
 7. 设置中断的安全属性。
 
-   - 设置指定中断的安全属性。
+    - 设置指定中断的安全属性。
 
         ```C
         // 设置中断安全属性
         void up_secure_irq(int irq, bool secure)
         ```
 
-   - 改变所有中断的安全属性。
+    - 改变所有中断的安全属性。
 
         ```C
         // 改变所有中断安全属性
@@ -131,43 +131,43 @@
 
 1. 第一个中断向量号。
 
-     ```C
-      #define NVIC_IRQ_FIRST  (16)   /* Vector number of the first interrupt */
-      ```
+    ```C
+    #define NVIC_IRQ_FIRST  (16)   /* Vector number of the first interrupt */
+    ```
 
 2. 中断数量。
 
-     ```C
-      #define NR_IRQS (64)
-      ```
+    ```C
+    #define NR_IRQS (64)
+    ```
 
 3. NVIC 优先级级别。
 
-   - 最低优先级
+    - 最低优先级
 
         ```C
         #define NVIC_SYSH_PRIORITY_MIN  0xff /* All bits set in minimum priority */
         ```
 
-   - 默认优先级
+    - 默认优先级
 
         ```C
         #define NVIC_SYSH_PRIORITY_DEFAULT  0x40 /* Midpoint is the default */
         ```
 
-   - 最高优先级
+    - 最高优先级
 
         ```C
         #define NVIC_SYSH_PRIORITY_MAX   0x00 /* Zero is maximum priority */
         ```
 
-   - 优先级步长
+    - 优先级步长
 
         ```C
         #define NVIC_SYSH_PRIORITY_STEP 0x40 /* Three bits priority used, bits[7-6] as group */
         ```
 
-   - 子优先级步长
+    - 子优先级步长
 
         ```C
         #define NVIC_SYSH_PRIORITY_SUBSTEP  0x20 /* Three bits priority used, bit[5] as sub */
@@ -185,21 +185,21 @@ int irq_attach(int irq, xcpt_t isr, FAR void *arg)
 
 1. 工作机制。
 
-   - 当中断触发时，`isr` 在中断上下文中被调用。
-   - 这种方式的优点是效率高，因为中断处理直接在中断上下文中完成。
-   - `isr` 执行期间会屏蔽所有中断应，对实时性要求较高的系统不太合适。
-   - `isr`中不能调用会导致阻塞的 API（例如 `sleep`、`wait` 等）。
+    - 当中断触发时，`isr` 在中断上下文中被调用。
+    - 这种方式的优点是效率高，因为中断处理直接在中断上下文中完成。
+    - `isr` 执行期间会屏蔽所有中断应，对实时性要求较高的系统不太合适。
+    - `isr`中不能调用会导致阻塞的 API（例如 `sleep`、`wait` 等）。
 
 2. 解除绑定。
 
-     ```C
-      irq_detach(irq)
-      ```
+    ```C
+    irq_detach(irq)
+    ```
 
 3. 优缺点。
 
-   - 优点：处理效率高。
-   - 缺点：中断处理期间屏蔽所有中断，影响系统实时性。
+    - 优点：处理效率高。
+    - 缺点：中断处理期间屏蔽所有中断，影响系统实时性。
 
 ### 2、使用`irq_attach_thread`
 
@@ -209,21 +209,21 @@ int irq_attach_thread(int irq, xcpt_t isr, xcpt_t isrthread, FAR void *arg, int 
 
 1. 工作机制。
 
-   - 用户需提供 1 个或者 2 个处理函数：
-      - `isr` 在中断上下文中被调用，通常用于屏蔽当前中断并快速唤醒 `isrthread`。
-      - `isrthread` 在线程上下文中被调用，用于处理剩余中断任务。
-   - 如果 `isr` 为 `NULL`，会直接调用 `isrthread`。
+    - 用户需提供 1 个或者 2 个处理函数：
+        - `isr` 在中断上下文中被调用，通常用于屏蔽当前中断并快速唤醒 `isrthread`。
+        - `isrthread` 在线程上下文中被调用，用于处理剩余中断任务。
+    - 如果 `isr` 为 `NULL`，会直接调用 `isrthread`。
 
 2. 优势。
 
-   - `isr` 的执行时间被尽可能缩短，从而提升系统实时性。
-   - `isrthread` 作为线程运行，支持优先级调度，可以被其他高优先级任务抢占。
+    - `isr` 的执行时间被尽可能缩短，从而提升系统实时性。
+    - `isrthread` 作为线程运行，支持优先级调度，可以被其他高优先级任务抢占。
 
 3. 劣势。
 
-   - 消耗更多内存（独立线程栈和中断线程结构体）。
-   - 增加一次上下文切换，降低效率。
-   - 中断处理完成时间会有一定延迟（约 5 微秒）。
+    - 消耗更多内存（独立线程栈和中断线程结构体）。
+    - 增加一次上下文切换，降低效率。
+    - 中断处理完成时间会有一定延迟（约 5 微秒）。
 
 4. 解除绑定。
 
@@ -238,19 +238,21 @@ int irq_attach_wqueue(int irq, xcpt_t isr, xcpt_t isrwork, FAR void *arg, int pr
 ```
 
 1. 工作机制。
-   - 用户需提供 1 个或 2 个处理函数：
-      - `isr` 在中断上下文中被调用。
-      - `isrwork` 在工作队列上下文中被调用。
-   - 与 `irq_attach_thread` 的区别在于，`isrwork` 在工作队列中被执行，而不是独立线程中。
+
+    - 用户需提供 1 个或 2 个处理函数：
+        - `isr` 在中断上下文中被调用。
+        - `isrwork` 在工作队列上下文中被调用。
+    - 与 `irq_attach_thread` 的区别在于，`isrwork` 在工作队列中被执行，而不是独立线程中。
 
 2. 优势。
-   - 多个优先级相同的中断可以复用同一个工作队列，从而节省内存。
-   - 高优先级的工作队列可以抢占低优先级队列。
-   - 如果中断数量较多，比 `irq_attach_thread` 更节省内存。
+
+    - 多个优先级相同的中断可以复用同一个工作队列，从而节省内存。
+    - 高优先级的工作队列可以抢占低优先级队列。
+    - 如果中断数量较多，比 `irq_attach_thread` 更节省内存。
 
 3. 劣势。
-   - 如果只有一个中断，工作队列的创建会带来额外开销。
-   - 在多核系统中，控制线程属性和数量的灵活性较差。
+    - 如果只有一个中断，工作队列的创建会带来额外开销。
+    - 在多核系统中，控制线程属性和数量的灵活性较差。
 
 4. 解除绑定。
 

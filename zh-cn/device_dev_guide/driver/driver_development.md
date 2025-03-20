@@ -167,18 +167,18 @@ int register_driver(FAR const char *path, FAR const struct file_operations *fops
 
 1. 创建或查找 `inode`。
 
-   - 根据传入的 `path` 参数（通常对应设备文件路径，例如 `/dev/xxxx`），检查是否存在对应的 `inode`。
-   - 如果不存在，则为该路径创建一个新的 `inode`。
+    - 根据传入的 `path` 参数（通常对应设备文件路径，例如 `/dev/xxxx`），检查是否存在对应的 `inode`。
+    - 如果不存在，则为该路径创建一个新的 `inode`。
 
 2. 更新 `inode` 的驱动信息。
 
-   - 将实际驱动实现的 `struct file_operations`（即 `fops`）更新到 `inode` 中。
-   - 如果启用了权限配置（`CONFIG_FILE_MODE`），还会设置 `inode` 的权限信息。
+    - 将实际驱动实现的 `struct file_operations`（即 `fops`）更新到 `inode` 中。
+    - 如果启用了权限配置（`CONFIG_FILE_MODE`），还会设置 `inode` 的权限信息。
 
 3. 设置私有数据。
 
-- 将 `priv` 数据存储到 `inode` 的私有字段中。
-- 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
+    - 将 `priv` 数据存储到 `inode` 的私有字段中。
+    - 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
 
 ## 二 驱动内部结构
 
@@ -194,14 +194,14 @@ openvela 支持多种设备驱动，主要分为以下三种类型：
 
 1. Upper Half
 
-   - 驱动通过 `register_driver` 或 `register_blockdriver` 将自身注册到 openvela 系统中。
-   - 提供高层次的系统调用接口（如 `read`、`write`、`close` 等）。
-   - 通过回调函数与 Lower Half 交互。
+    - 驱动通过 `register_driver` 或 `register_blockdriver` 将自身注册到 openvela 系统中。
+    - 提供高层次的系统调用接口（如 `read`、`write`、`close` 等）。
+    - 通过回调函数与 Lower Half 交互。
 
 2. Lower Half
 
-   - 负责实现与硬件设备和架构的交互。
-   - 涉及总线、外设等底层硬件的具体操作。
+    - 负责实现与硬件设备和架构的交互。
+    - 涉及总线、外设等底层硬件的具体操作。
 
 ### 2、驱动模型的特点
 
@@ -257,14 +257,14 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 1. 上半部分（Upper Half）
 
-   - 提供应用程序级的通用接口，主要实现 `file_operations` 中的函数集。
-   - 针对 ADC 驱动，`drivers/analog/adc.c` 文件描述了 Upper Half 的操作逻辑。
-   - Upper Half 的实现是通用的，适用于所有 ADC 设备，无需针对具体硬件进行修改。
+    - 提供应用程序级的通用接口，主要实现 `file_operations` 中的函数集。
+    - 针对 ADC 驱动，`drivers/analog/adc.c` 文件描述了 Upper Half 的操作逻辑。
+    - Upper Half 的实现是通用的，适用于所有 ADC 设备，无需针对具体硬件进行修改。
 
 2. 下半部分（Lower Half）
 
-- 基于特定平台的硬件驱动程序，负责实现硬件级的控制，例如寄存器操作。
-- 针对特定硬件的实现，例如 `arch/arm/src/lpc43xx/lpc43_adc.c` 文件，描述了 LPC43xx 平台的 ADC 硬件驱动。
+    - 基于特定平台的硬件驱动程序，负责实现硬件级的控制，例如寄存器操作。
+    - 针对特定硬件的实现，例如 `arch/arm/src/lpc43xx/lpc43_adc.c` 文件，描述了 LPC43xx 平台的 ADC 硬件驱动。
 
 ### 2、驱动框架
 
@@ -274,18 +274,18 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 1. 芯片相关（Lower Half）
 
-   - 负责硬件的实际操作，例如寄存器读写和中断处理。
-   - 在中断处理函数中，会回调 Upper half 的接口，例如通过消息队列通知上层应用数据已准备好。
+    - 负责硬件的实际操作，例如寄存器读写和中断处理。
+    - 在中断处理函数中，会回调 Upper half 的接口，例如通过消息队列通知上层应用数据已准备好。
 
 2. 通用框架（Upper Half）
 
-   - 提供系统调用接口，例如 `open`、`read` 等。
-   - 在实现 `file_operations` 函数集时，会调用 Lower half 的接口完成具体操作。
+    - 提供系统调用接口，例如 `open`、`read` 等。
+    - 在实现 `file_operations` 函数集时，会调用 Lower half 的接口完成具体操作。
 
 3. 板级部分
 
-   - 负责将 Upper half 和 Lower half 绑定在一起，建立连接并注册到文件系统中。
-   - 该部分的接口通常在系统启动（boot）阶段被调用。
+    - 负责将 Upper half 和 Lower half 绑定在一起，建立连接并注册到文件系统中。
+    - 该部分的接口通常在系统启动（boot）阶段被调用。
 
 ### 3、其他驱动的实现
 
@@ -301,4 +301,3 @@ openvela 中的其他驱动实现机制与 ADC 驱动类似，均采用分层设
 - 模块化：上下半部分职责分离，降低耦合性，便于代码维护和扩展。
 
 通过这种分层设计，openvela 的驱动开发既能满足硬件适配的需求，又能保持代码的通用性和可维护性。
-

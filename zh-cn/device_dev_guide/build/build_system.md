@@ -15,14 +15,14 @@
 
 1. 板级构建宏定义与构建选项文件：
 
-   - 文件位置：`nuttx/Make.defs`。
-   - 来源：从模板文件 `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs` 拷贝而来。
+    - 文件位置：`nuttx/Make.defs`。
+    - 来源：从模板文件 `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs` 拷贝而来。
 
 2. 条件编译配置文件：
 
-   - 文件位置：根目录的 `configs/defconfig`。
-   - 功能：被拷贝为 `.config` 文件，作为 openvela 的基础配置文件，支持高度裁剪和模块化配置。
-   - 实现方式：通过各模块目录中的 `kernel Kconfig` 实现模块化配置。
+    - 文件位置：根目录的 `configs/defconfig`。
+    - 功能：被拷贝为 `.config` 文件，作为 openvela 的基础配置文件，支持高度裁剪和模块化配置。
+    - 实现方式：通过各模块目录中的 `kernel Kconfig` 实现模块化配置。
 
 ### 2、编译流程关键点
 
@@ -39,13 +39,13 @@
 
 3. 文件生成与调用：
 
-   1. 文件生成
-      - 在 `nuttx/` 和 `apps/` 的各级子目录中，`Makefile`、`Make.defs` 和 `Make.dep` 文件会在 `Makefile` 执行的各阶段中被调用或生成。
-      - `Make.dep`：由工具 `tools/mkdep` 在编译过程中生成，其内部使用 `gcc -M` 命令生成符合 `Makefile` 构建目标格式的依赖语句。
+    1. 文件生成
+        - 在 `nuttx/` 和 `apps/` 的各级子目录中，`Makefile`、`Make.defs` 和 `Make.dep` 文件会在 `Makefile` 执行的各阶段中被调用或生成。
+        - `Make.dep`：由工具 `tools/mkdep` 在编译过程中生成，其内部使用 `gcc -M` 命令生成符合 `Makefile` 构建目标格式的依赖语句。
 
-   2. 文件调用
+    2. 文件调用
 
-      - 各级子目录的 `Makefile` 文件会在文件头部 `include` 板级构建宏配置文件 `nuttx/Make.defs`。
+        - 各级子目录的 `Makefile` 文件会在文件头部 `include` 板级构建宏配置文件 `nuttx/Make.defs`。
 
 通过这种组织方式，openvela 实现了灵活的编译流程，支持多平台构建和高度模块化配置。
 
@@ -281,18 +281,18 @@ $(BIN): $(foreach SDIR, $(CONFIGURED_APPS), $(SDIR)_all)
 
 1. 遍历应用程序目录：
 
-   - 使用 `foreach` 遍历所有配置的应用程序目录（`CONFIGURED_APPS`）。
-   - 每个应用程序目录会被单独处理，确保模块化构建。
+    - 使用 `foreach` 遍历所有配置的应用程序目录（`CONFIGURED_APPS`）。
+    - 每个应用程序目录会被单独处理，确保模块化构建。
 
 2. 独立编译：
 
-   - 在每个应用程序目录中执行 `archive` 目标，生成对应的目标文件。
-   - 每个应用程序的目标文件会被单独编译，便于后续的统一打包。
+    - 在每个应用程序目录中执行 `archive` 目标，生成对应的目标文件。
+    - 每个应用程序的目标文件会被单独编译，便于后续的统一打包。
 
 3. 统一打包：
 
-   - 将所有应用程序的目标文件链接为一个静态库文件（`libapps.a`）。
-   - 统一的静态库文件便于后续的链接和管理。
+    - 将所有应用程序的目标文件链接为一个静态库文件（`libapps.a`）。
+    - 统一的静态库文件便于后续的链接和管理。
 
 #### 应用程序目录的编译规则
 
@@ -317,16 +317,16 @@ archive:
 
 1. 目标文件生成：
 
-   - 各种语言的源文件（如 C、C++、Rust、Zig）会被分别编译为目标文件（`OBJS`）。
-   - 目标文件的生成规则由构建系统自动处理。
+    - 各种语言的源文件（如 C、C++、Rust、Zig）会被分别编译为目标文件（`OBJS`）。
+    - 目标文件的生成规则由构建系统自动处理。
 
 2. 静态库打包：
 
-   - `archive` 目标调用了 `ARCHIVE_ADD` 宏，将目标文件添加到静态库中。
+    - `archive` 目标调用了 `ARCHIVE_ADD` 宏，将目标文件添加到静态库中。
 
 3. 宏定义：
 
-   - `ARCHIVE_ADD` 宏定义在 `Config.mk` 文件中，具体实现如下：
+    - `ARCHIVE_ADD` 宏定义在 `Config.mk` 文件中，具体实现如下：
 
         ```Makefile
         ## Config.mk 文件  

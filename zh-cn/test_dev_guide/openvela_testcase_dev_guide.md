@@ -4,7 +4,7 @@
 
 openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开发者可根据需求开发相关测试用例，在开发阶段提前发现缺陷，提高代码质量。本文介绍如何使用该框架开发测试用例。
 
-## 1、代码目录
+## 二、代码目录
 
 ```Bash
 ├─tests
@@ -16,9 +16,9 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 │    └── testsuites                                   #cmocka 测试工具集
 ```
 
-## 2、开发测试用例
+## 三、开发测试用例
 
-### 2.1 新建用例目录
+### 1、新建用例目录
 
 将所有 cmocka 编写的测试用例放在`tests`目录下。当需要使用 cmocka 编写新的测试用例时，操作步骤如下：
 
@@ -97,7 +97,7 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
    endif
    ```
 
-### 2.2 编写测试用例
+### 2、编写测试用例
 
 在 src 文件夹下新建测试用例文件，建议一个文件只包含一条测试用例。目录结构如下：
 
@@ -118,8 +118,8 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 
 - 编写 src 目录下测试用例文件。
 
-  - 测试用例文件命名：以关键字 **“test_”**  开头，包含 feature name，例如`te``st_mytest_example_01.c`。
-  - 测试函数命名：以关键字 **“test_”**  开头，例如`test_mytest_example_01(FAR void **state)`。
+    - 测试用例文件命名：以关键字 **“test_”**  开头，包含 feature name，例如`te``st_mytest_example_01.c`。
+    - 测试函数命名：以关键字 **“test_”**  开头，例如`test_mytest_example_01(FAR void **state)`。
 
   完整样例如下：
 
@@ -154,9 +154,9 @@ openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开�
 
 - 编写 include 目录下头文件。
 
-  - 头文件命名：建议包含 feature 和 test 关键字，例如`mytest.h`。
-  - 测试函数定义，例如`void test_mytest_example_01(FAR void **state)`。
-  - 定义测试用例集的宏，将所有需要测试的 case 添加进来。
+    - 头文件命名：建议包含 feature 和 test 关键字，例如`mytest.h`。
+    - 测试函数定义，例如`void test_mytest_example_01(FAR void **state)`。
+    - 定义测试用例集的宏，将所有需要测试的 case 添加进来。
 
 完整样例如下：
 
@@ -200,7 +200,7 @@ void test_mytest_example_02(FAR void **state);
 void test_mytest_example_03(FAR void **state);
 ```
 
-### 2.3 编写测试入口文件
+### 3、编写测试入口文件
 
 为了更好的将各模块测试用例和测试用例入口解耦，保证各模块的修改不会引起整个测试集不可用，将测试入口文件独立出来，放在该模块测试用例根目录下，完整目录结构如下所示：
 
@@ -254,7 +254,7 @@ int main(int argc, char* argv[])
 }
 ```
 
-### 2.4 定义 setup 和 teardown 函数
+### 4、定义 setup 和 teardown 函数
 
 针对某一类 case，他们有相同的 `setup` 和`teardown`，即测试环境初始化和测试结束后销毁（例如释放内存，网络重置等）。可以将 `setup` 和 `teardown` 抽离出来，放到公共目录 `util` 下，目录结构如下：
 
@@ -313,7 +313,7 @@ void test_mytest_example_02(FAR void **state)
 }
 ```
 
-### 2.5 使用 state 指针
+### 5、使用 state 指针
 
 在 setup 函数中创建的变量可由 state 指针传递给测试用例。state 指针实现如下：
 
@@ -350,7 +350,7 @@ void test_mytest_example_03(FAR void **state)
 }
 ```
 
-### 2.6 断言
+### 6、断言
 
 cmocka 提供了一组用于测试逻辑条件的断言，其使用方法和标准 C 中的 assert 相同，实现如下：
 
@@ -369,33 +369,33 @@ void test_mytest_example_01(FAR void **state)
 }
 ```
 
-## 二 执行测试用例
+## 四 执行测试用例
 
 ### 1、编译测试用例
 
 1. 使用 menuconfig 打开 `TESTING_CMOCKA` 开关。 
 
-   注意：`TESTING_CMOCKA`依赖 `LIBC_REGEX`，而 `LIBC_REGEX` 依赖`ALLOW_MIT_COMPONENTS`，如果这两个config没有打开，需要先将其打开 。
+    注意：`TESTING_CMOCKA`依赖 `LIBC_REGEX`，而 `LIBC_REGEX` 依赖`ALLOW_MIT_COMPONENTS`，如果这两个config没有打开，需要先将其打开 。
 
-   ```Bash
-   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
-   ```
+    ```Bash
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
+    ```
 
-   <img src="./pictures/1.1.1.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/1.1.1.png" alt="img" style="zoom:150%;" />
 
 2. 使用 menuconfig 打开模块定义的测试用例开关（CONFIG_MYTEST_TEST）。
 
-   <img src="./figures/1.2.1.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/1.2.1.png" alt="img" style="zoom:150%;" />
 
 3. 进行编译，执行如下命令：
 
-   ```Bash
-   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -e -Werror -j20
-   ```
+    ```Bash
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -e -Werror -j20
+    ```
 
 ### 2、执行测试用例
 
- 编译完成后进入到 nsh，执行如下命令：
+编译完成后进入到 nsh，执行如下命令：
 
 ```Bash
 ./emulator.sh vela
@@ -403,13 +403,13 @@ void test_mytest_example_01(FAR void **state)
 
 <img src="./figures/2.1.png" alt="img" style="zoom:150%;" />
 
--  输入对应 PROGNAME 进行测试，这种方式会按顺序将 group 中的测试用例全部跑一遍，如果需要某个测试用里的执行结果则必须等待一段时间。
+- 输入对应 PROGNAME 进行测试，这种方式会按顺序将 group 中的测试用例全部跑一遍，如果需要某个测试用里的执行结果则必须等待一段时间。
 
-  <img src="./figures/2.2.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/2.2.png" alt="img" style="zoom:150%;" />
 
 - openvela 中实现了 cmocka 的命令行工具，用于灵活的执行测试用例，下面展示了使用其打印用例、执行指定用例的方式。
 
-  - 打印所有用例，执行如下命令：
+    - 打印所有用例，执行如下命令：
 
     ```Bash
     cmocka -l
@@ -417,7 +417,7 @@ void test_mytest_example_01(FAR void **state)
 
     <img src="./figures/2.3.png" alt="img" style="zoom:150%;" />
 
-  - 执行 TestNuttxMm01 用例，-t 参数会匹配相应的用例名称。
+    - 执行 TestNuttxMm01 用例，-t 参数会匹配相应的用例名称。
 
     ```Bash
     cmocka -t TestNuttxMm01

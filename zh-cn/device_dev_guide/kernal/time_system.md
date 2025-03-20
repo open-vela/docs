@@ -15,25 +15,25 @@
 
 - 定义：日历时间是一种相对时间，用秒数表示从某个标准时间点到当前时刻的时间间隔。
 - 特点
-  - 统一性：无论在哪个时区，同一时刻的日历时间相对于同一标准时间点始终一致。
-  - 标准时间点：通常以 UTC 时间 1970-01-01 00:00:00 为基准时间点（即 Unix 时间纪元）。
-  - 表示方式：以秒数形式表示，常用于计算机系统中作为时间戳。
+    - 统一性：无论在哪个时区，同一时刻的日历时间相对于同一标准时间点始终一致。
+    - 标准时间点：通常以 UTC 时间 1970-01-01 00:00:00 为基准时间点（即 Unix 时间纪元）。
+    - 表示方式：以秒数形式表示，常用于计算机系统中作为时间戳。
 
 ## 三、`localtime` 在 openvela 中的实现说明
 
 ### 两种实现方式
 
 - 打开 `CONFIG_LIBC_LOCALTIME`：
-  - `localtime` 的实现依赖 `zoneinfo`，可以根据时区正确转换时间。
-  - 优点：支持时区转换，功能更完善。
-  - 缺点：会增加代码体积， **增加约 6.4KB**。
+    - `localtime` 的实现依赖 `zoneinfo`，可以根据时区正确转换时间。
+    - 优点：支持时区转换，功能更完善。
+    - 缺点：会增加代码体积， **增加约 6.4KB**。
 
-    ![img](./figures/001.png)
+        ![img](./figures/001.png)
 
 - 未打开 `CONFIG_LIBC_LOCALTIME`：
-  - `localtime` 和 `gmtime` 的效果相同，直接返回 UTC 时间，不进行时区转换。
-  - 优点：节省空间，无额外开销。
-  - 缺点：不支持时区转换。
+    - `localtime` 和 `gmtime` 的效果相同，直接返回 UTC 时间，不进行时区转换。
+    - 优点：节省空间，无额外开销。
+    - 缺点：不支持时区转换。
 
 ## 四、设置时区
 
@@ -41,8 +41,8 @@
 
 - 从环境变量 `TZ` 获取时区信息，初始化以下内容：
 
-  - `timezone` ：当前时区相对于 UTC 的偏移（以秒为单位）。
-  - `daylight` ：是否启用夏令时（非零表示启用）。
+    - `timezone` ：当前时区相对于 UTC 的偏移（以秒为单位）。
+    - `daylight` ：是否启用夏令时（非零表示启用）。
 
 ### 1、TZ 环境变量格式
 
@@ -60,13 +60,13 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
     表示时区缩写，由三个或三个以上的字符组成。例如：
 
-   - CST：中国标准时间。
-   - EST：东部标准时间。
+    - CST：中国标准时间。
+    - EST：东部标准时间。
 
 2. **offset**
 
-   - 当前时区与 UTC 的偏移量。
-   - 格式为 `±hh:mm:ss`，例如 `+8:00:00` 表示东八区（UTC+8）。
+    - 当前时区与 UTC 的偏移量。
+    - 格式为 `±hh:mm:ss`，例如 `+8:00:00` 表示东八区（UTC+8）。
 
 3. **dst**（可选）
 
@@ -74,19 +74,19 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 4. **offset**（可选）
 
-   - 夏令时相对于 UTC 的偏移量。
-   - 如果省略，默认比标准时间提前 1 小时。
+    - 夏令时相对于 UTC 的偏移量。
+    - 如果省略，默认比标准时间提前 1 小时。
 
 5. **start[/time]，end[/time]**（可选）
 
     表示夏令时开始和结束规则：
 
-   - 格式为 `M<month>.<week>.<day>`：
+    - 格式为 `M<month>.<week>.<day>`：
 
-     - `M10.1.0`：10 月的第一周的星期天。
-     - `M3.3.0`：3 月的第三周的星期天。
+        - `M10.1.0`：10 月的第一周的星期天。
+        - `M3.3.0`：3 月的第三周的星期天。
 
-   - `/time` 表示具体时间（可选）。
+    - `/time` 表示具体时间（可选）。
 
 #### 文件路径格式
 
@@ -94,9 +94,9 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 1. 路径格式。
 
-   - `Asia/Shanghai`：相对路径，表示系统时区目录（由 `CONFIG_LIBC_TZDIR` 指定）下的文件。
-   - `/Asia/Shanghai`：绝对路径，表示直接指定时区文件的完整路径。
-   - `:Asia/Shanghai`：同时支持绝对路径和系统时区目录下的相对路径。
+    - `Asia/Shanghai`：相对路径，表示系统时区目录（由 `CONFIG_LIBC_TZDIR` 指定）下的文件。
+    - `/Asia/Shanghai`：绝对路径，表示直接指定时区文件的完整路径。
+    - `:Asia/Shanghai`：同时支持绝对路径和系统时区目录下的相对路径。
 
 2. 解析规则。
    找到时区文件后，会根据 `tzfile` 格式解析文件内容，加载对应的时区信息。
@@ -107,11 +107,11 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 1. `tzfile` 格式
 
-   - `zoneinfo` 使用 `tzfile` 格式存储时区信息，具体格式请参考 [tzfile文档](https://man7.org/linux/man-pages/man5/tzfile.5.html)。
+    - `zoneinfo` 使用 `tzfile` 格式存储时区信息，具体格式请参考 [tzfile文档](https://man7.org/linux/man-pages/man5/tzfile.5.html)。
 
 2. 数据库下载。
 
-    从[时区数据库](https://www.iana.org/time-zones)下载最新的时区数据。
+    从 [时区数据库](https://www.iana.org/time-zones) 下载最新的时区数据。
 
 3. 生成 `tzbin`目录。
 
@@ -121,8 +121,8 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 4. 生成 `romfs` 文件。
 
-   - 使用 Linux 工具 `genromfs` 将 `tzbin` 目录打包为 `romfs` 格式的镜像文件。
-   - 该镜像文件可挂载到设备上，供程序使用。
+    - 使用 Linux 工具 `genromfs` 将 `tzbin` 目录打包为 `romfs` 格式的镜像文件。
+    - 该镜像文件可挂载到设备上，供程序使用。
 
 #### 在模拟器和板子上的挂载方式
 
@@ -140,10 +140,10 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 2. 挂载 `hostfs` 文件系统。
 
-   - 在当前路径下存放 `romfs.img` 文件，然后挂载：
+    - 在当前路径下存放 `romfs.img` 文件，然后挂载：
 
-   ```Bash
-   mount -t hostfs fs=. /data
+    ```Bash
+    mount -t hostfs fs=. /data
     ```
 
 3. 将 `romfs.img` 写入 RAM 磁盘。
@@ -162,33 +162,33 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 1. 找到文件分区起始地址。
 
-   - 使用下载工具，将 `romfs` 镜像文件烧录到对应的物理分区地址。
+    - 使用下载工具，将 `romfs` 镜像文件烧录到对应的物理分区地址。
 
 2. 挂载分区。
 
-   - 挂载后即可使用时区文件。
+    - 挂载后即可使用时区文件。
 
 #### `zoneinfo` 制作工具
 
 1. 自动生成。
 
-   - 在 `libs/libc/zoneinfo/` 目录下的 `Makefile` 可自动下载时区数据库，并将其打包为 `romfs` 镜像文件，对应 `config` 如下：
+    - 在 `libs/libc/zoneinfo/` 目录下的 `Makefile` 可自动下载时区数据库，并将其打包为 `romfs` 镜像文件，对应 `config` 如下：
 
         ![img](./figures/003.png)
 
-   - 运行 `Makefile` 后，生成 `romfs_zoneinfo.img` 文件。
+    - 运行 `Makefile` 后，生成 `romfs_zoneinfo.img` 文件。
 
-       ![img](./figures/004.png)
+        ![img](./figures/004.png)
 
 2. 挂载生成的镜像文件。
 
-   - 在模拟器中挂载：
+    在模拟器中挂载：
 
-        ```Bash
-        mkrd -m 10 -s 512 800  
-        dd if=data/romfs_zoneinfo.img of=/dev/ram10  
-        mount -t romfs /dev/ram10 zoneinfo
-        ```
+    ```Bash
+    mkrd -m 10 -s 512 800  
+    dd if=data/romfs_zoneinfo.img of=/dev/ram10  
+    mount -t romfs /dev/ram10 zoneinfo
+    ```
 
 #### 指定时区文件位置
 
@@ -260,7 +260,7 @@ timedatectl set-timezone Asia/Tokyo
 **特殊情况：**
 
 - 如果多核需要访问 `zoneinfo` 文件：
-  - 当资源存储在 eMMC 中，其他核需要通过 `rpmsgfs` 才能访问 `tzfile` 信息。
+    - 当资源存储在 eMMC 中，其他核需要通过 `rpmsgfs` 才能访问 `tzfile` 信息。
 
 ## 六、时间类型
 
@@ -338,16 +338,16 @@ timedatectl set-timezone Asia/Tokyo
 
 - 描述：获取指定时钟的当前时间。
 - 参数：
-  - `clockid`： 要获取时间的时钟。常见值：`CLOCK_REALTIME`、`CLOCK_MONOTONIC`。
-  - `tp`： 指向 `struct timespec` 的指针，用于存储获取的时间。
-  - 返回值：成功返回 `0`，失败返回 `-1`。
-  - 示例：
+    - `clockid`： 要获取时间的时钟。常见值：`CLOCK_REALTIME`、`CLOCK_MONOTONIC`。
+    - `tp`： 指向 `struct timespec` 的指针，用于存储获取的时间。
+    - 返回值：成功返回 `0`，失败返回 `-1`。
+    - 示例：
 
-    ```C
-    struct timespec ts;  
-    clock_gettime(CLOCK_REALTIME, &ts);  
-    printf("Seconds: %ld, Nanoseconds: %ld\n", ts.tv_sec, ts.tv_nsec);
-    ```
+        ```C
+        struct timespec ts;  
+        clock_gettime(CLOCK_REALTIME, &ts);  
+        printf("Seconds: %ld, Nanoseconds: %ld\n", ts.tv_sec, ts.tv_nsec);
+        ```
 
 `int clock_settime(clockid_t clock_id, FAR const struct timespec *tp)`
 
@@ -406,8 +406,8 @@ timedatectl set-timezone Asia/Tokyo
 - 描述：返回当前时间，包含自 `1970-01-01 00:00:00` 起的秒数和微秒数。
 
 - 参数
-  - `tv`：指向 `struct timeval` 的指针，用于存储秒数和微秒数。
-  - `tz`：时区信息，通常传入 `NULL`。
+    - `tv`：指向 `struct timeval` 的指针，用于存储秒数和微秒数。
+    - `tz`：时区信息，通常传入 `NULL`。
 
 - 示例：
 

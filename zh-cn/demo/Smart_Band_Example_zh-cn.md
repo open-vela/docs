@@ -9,15 +9,15 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
 ## 前提条件
 
-1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
-
+2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
 1. 切换到 openvela 仓库的根目录，执行如下命令来配置手环 Bandx。
-    >    模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译模拟器的代码。
+
+    > 模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译模拟器的代码。
 
     ```cpp
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
@@ -29,7 +29,7 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
     执行后出现如下界面：
 
-    ![](images/001.png)
+    ![img](images/001.png)
 
 2. 按下 `/` 键逐个搜索修改如下配置项：
 
@@ -38,25 +38,26 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
     LVX_USE_DEMO_BANDX = y
     BANDX_BASE_PATH = "/data"
     ```
+
     > 以LV_USE_FRAGMENT为例进行操作，其余配置方式相同。
 
     1. 输入待搜索的配置。
 
-        ![](images/002.png)
+        ![img](images/002.png)
 
     2. 按下`Enter`进入到配置页面。
 
-        ![](images/003.png)
+        ![img](images/003.png)
 
     3. 按下`Enter`键打开该配置，`[ ]` 中出现 `*` 表示该配置被打开。
 
-        ![](images/004.png)
+        ![img](images/004.png)
 
     4. 按下 `/` 键可以继续搜索剩下的配置，并按上述步骤修改其余配置。
 
     5. 按下字母`Q`键，弹出如下退出保存界面。
 
-        ![](images/005.png)
+        ![img](images/005.png)
 
     6. 按下字母`Y`键保存配置，并退出修改配置页面。
 
@@ -111,13 +112,13 @@ Bandx 中使用的字体和图像资源位于 `apps/packages/demos/bandx/resourc
     bandx &
     ```
 
-    ![](images/006.png)
+    ![img](images/006.png)
 
 2. 要访问 Launcher 界面，`从右向左`快速滑动。单击不同的图标导航到子页面，如下图所示的 Heart Rate 页面。要退出页面，`从左向右`快速滑动。
 
     > 说明：music页面只是UI展示，没有接入音频。
 
-    ![](images/007.png)
+    ![img](images/007.png)
 
 3. 打开 settings 中的 `Auto-show`，将会自动播放整个应用；关闭 `Auto-show`，自动播放就结束。
 
@@ -128,12 +129,15 @@ Bandx 中使用的字体和图像资源位于 `apps/packages/demos/bandx/resourc
 ![img](images/026.png)
 
 ## 常见问题
+
 ### 1. adb 命令找不到
 
 #### 原因
+
 未安装 `adb` 工具。
 
 #### 解决方案
+
 安装 `adb`，执行以下命令：
 
 ``` Bash
@@ -143,7 +147,9 @@ sudo apt install android-tools-adb
 ### 2. 字体显示为乱码
 
 #### 原因
+
 未正确加载字体资源。
 
 #### 解决方案
-请按[步骤三](#步骤三-启动模拟器并推送资源)进行资源推送。
+
+请按 [步骤三](#步骤三-启动模拟器并推送资源) 进行资源推送。

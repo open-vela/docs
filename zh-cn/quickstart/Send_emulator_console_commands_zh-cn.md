@@ -96,184 +96,181 @@
 
 ### 1、常规命令
 
-* `avd {stop|start|status|name}`
+- `avd {stop|start|status|name}`
 
-  查询、控制和管理虚拟设备，具体说明如下：
+    查询、控制和管理虚拟设备，具体说明如下：
 
-  * stop：停止设备的执行。
+    - stop：停止设备的执行。
+    - start：开始设备的执行。
+    - status：查询虚拟设备状态，可以是 running 或 stopped。
+    - name：查询虚拟设备名称。
 
-  * start：开始设备的执行。
+- `kill`
 
-  * status：查询虚拟设备状态，可以是 running 或 stopped。
+    终止虚拟设备。
 
-  * name：查询虚拟设备名称。
+- `ping`
 
-* `kill`
+    检查虚拟设备是否正在运行。
 
-  终止虚拟设备。
+- rotate
 
-* `ping`
-
-  检查虚拟设备是否正在运行。
-
-* rotate
-
-  以 45 度的增量逆时针旋转 AVD。
+    以 45 度的增量逆时针旋转 AVD。
 
 ### 2、端口重定向
 
-* `redir list`
+- `redir list`
 
-  列出当前端口重定向。
+    列出当前端口重定向。
 
-* `redir add protocol:host-port:guest-port`
+- `redir add protocol:host-port:guest-port`
 
-  添加新的端口重定向，具体说明如下：
+    添加新的端口重定向，具体说明如下：
 
-  * `protocol`：必须是 tcp 或 udp。
+    - `protocol`：必须是 tcp 或 udp。
 
-  * `host-port`：要在主机上打开的端口号。
+    - `host-port`：要在主机上打开的端口号。
 
-  * `guest-port`：要在模拟器上将数据传输到的端口号。
+    - `guest-port`：要在模拟器上将数据传输到的端口号。
 
-* `redir del protocol:host-port`
+- `redir del protocol:host-port`
 
-  删除端口重定向。
+    删除端口重定向。
 
-  * `protocol`：必须是 tcp 或 udp。
+    - `protocol`：必须是 tcp 或 udp。
 
-  * `host-port`：要在主机上打开的端口号。
+    - `host-port`：要在主机上打开的端口号。
 
 ### 3、地理位置
 
 通过向模拟器发送 GPS 定位，设置向模拟器内运行的应用报告的地理位置。
 
-* `geo fix longitude latitude [altitude] [satellites] [velocity]`
+- `geo fix longitude latitude [altitude] [satellites] [velocity]`
 
-  向模拟器发送简单的 GPS 定位。 以十进制度为单位指定 `longitude` 和 `latitude`。使用 1 到 12 之间的数字指定用于确定位置的 `satellites` 数量，并以米为单位指定 `altitude`，以节为单位指定 `velocity`。
+    向模拟器发送简单的 GPS 定位。 以十进制度为单位指定 `longitude` 和 `latitude`。使用 1 到 12 之间的数字指定用于确定位置的 `satellites` 数量，并以米为单位指定 `altitude`，以节为单位指定 `velocity`。
 
-* `geo nmea sentence`
+- `geo nmea sentence`
 
-  向模拟设备发送 `NMEA 0183` 语句，就像是从模拟的 GPS 调制解调器发送的一样。让 sentence 以 “$GP” 开头。 目前仅支持“$GPGGA” 和 “$GPRCM” 语句。以下示例是一个 GPGGA（全球定位系统定位数据）语句，它描述了 GPS 接收器接收的时间、位置和定位数据：
+    向模拟设备发送 `NMEA 0183` 语句，就像是从模拟的 GPS 调制解调器发送的一样。让 sentence 以 “$GP” 开头。 目前仅支持“$GPGGA” 和 “$GPRCM” 语句。以下示例是一个 GPGGA（全球定位系统定位数据）语句，它描述了 GPS 接收器接收的时间、位置和定位数据：
   
-  ```bash
-  geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
-  ```
+    ```bash
+    geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
+    ```
 
 ### 4、虚假硬件事件
 
-* `event types`
+- `event types`
 
-  列出所有虚假事件类型。对于包含代码的事件，代码数列在右侧的圆括号中。
+    列出所有虚假事件类型。对于包含代码的事件，代码数列在右侧的圆括号中。
 
-  ```bash
-  event types
-  event <type> can be an integer or one of the following aliases:
-      EV_SYN
-      EV_KEY    (405 code aliases)
-      EV_REL    (2 code aliases)
-      EV_ABS    (27 code aliases)
-      EV_MSC
-      EV_SW     (4 code aliases)
-      EV_LED
-      EV_SND
-      EV_REP
-      EV_FF
-      EV_PWR
-      EV_FF_STATUS
-      EV_MAX
-  OK
-  ```
+    ```bash
+    event types
+    event <type> can be an integer or one of the following aliases:
+        EV_SYN
+        EV_KEY    (405 code aliases)
+        EV_REL    (2 code aliases)
+        EV_ABS    (27 code aliases)
+        EV_MSC
+        EV_SW     (4 code aliases)
+        EV_LED
+        EV_SND
+        EV_REP
+        EV_FF
+        EV_PWR
+        EV_FF_STATUS
+        EV_MAX
+    OK
+    ```
 
-* `event send types [types ...]`
+- `event send types [types ...]`
 
-  发送一个或多个虚假事件类型。
+    发送一个或多个虚假事件类型。
 
-* `event codes type`
+- `event codes type`
 
-  列出指定虚假事件类型的事件代码。
+    列出指定虚假事件类型的事件代码。
 
-* `event send type[:code]:[value] [...]`
+- `event send type[:code]:[value] [...]`
 
-  发送一个或多个虚假事件以及可选的代码和代码值。
+    发送一个或多个虚假事件以及可选的代码和代码值。
 
-  如需了解到底要发送哪个事件，可以在手动按模拟器上按钮的同时使用 adb 命令。
+    如需了解到底要发送哪个事件，可以在手动按模拟器上按钮的同时使用 adb 命令。
 
-* `event text message`
+- `event text message`
 
-  发送用于模拟按键的字符串。该消息必须是 UTF-8 字符串。 Unicode 消息会根据当前设备键盘进行反向映射，不受支持的字符会被静默舍弃。
+    发送用于模拟按键的字符串。该消息必须是 UTF-8 字符串。 Unicode 消息会根据当前设备键盘进行反向映射，不受支持的字符会被静默舍弃。
 
 ### 5、电源状态控制
 
-* `power display`
+- `power display`
 
-  显示电池和充电器状态。
+    显示电池和充电器状态。
 
-* `power ac {on|off}`
+- `power ac {on|off}`
 
-  将交流电充电状态设为 on 或 off。
+    将交流电充电状态设为 on 或 off。
 
-* `power status {unknown|charging|discharging|not-charging|full}`
+- `power status {unknown|charging|discharging|not-charging|full}`
 
-  按照说明更改电池状态。
+    按照说明更改电池状态。
 
-* `power present {true|false}`
+- `power present {true|false}`
 
-  设置电池存在状态。
+    设置电池存在状态。
 
-* `power health {unknown|good|overheat|dead|overvoltage|failure}`
+- `power health {unknown|good|overheat|dead|overvoltage|failure}`
 
-  设置电池运行状况。
+    设置电池运行状况。
 
-* `power capacity percent`
+- `power capacity percent`
 
-  将电池剩余电量状态设为 0 到 100 之间的百分比。
+    将电池剩余电量状态设为 0 到 100 之间的百分比。
 
 ### 6、在模拟器上管理传感器
 
 这些命令与 AVD 中可用的传感器有关。除了使用 `sensor` 命令之外，还可以在模拟器的 `Virtual sensors` 屏幕上的 `Accelerometer` 和 `Additional sensors` 标签页中查看和调整相关设置。
 
-* `sensor status`
+- `sensor status`
 
-  列出所有传感器及其状态。下面是 sensor status 命令的输出示例：
+    列出所有传感器及其状态。下面是 sensor status 命令的输出示例：
 
-  ```bash
-  sensor status
-  acceleration: enabled.
-  gyroscope: enabled.
-  magnetic-field: enabled.
-  orientation: enabled.
-  temperature: enabled.
-  proximity: enabled.
-  light: enabled.
-  pressure: enabled.
-  humidity: enabled.
-  magnetic-field-uncalibrated: enabled.
-  gyroscope-uncalibrated: enabled.
-  hinge-angle0: disabled.
-  hinge-angle1: disabled.
-  hinge-angle2: disabled.
-  heart-rate: disabled.
-  rgbc-light: disabled.
-  wrist-tilt: disabled.
-  acceleration-uncalibrated: enabled.
-  ```
+    ```bash
+    sensor status
+    acceleration: enabled.
+    gyroscope: enabled.
+    magnetic-field: enabled.
+    orientation: enabled.
+    temperature: enabled.
+    proximity: enabled.
+    light: enabled.
+    pressure: enabled.
+    humidity: enabled.
+    magnetic-field-uncalibrated: enabled.
+    gyroscope-uncalibrated: enabled.
+    hinge-angle0: disabled.
+    hinge-angle1: disabled.
+    hinge-angle2: disabled.
+    heart-rate: disabled.
+    rgbc-light: disabled.
+    wrist-tilt: disabled.
+    acceleration-uncalibrated: enabled.
+    ```
 
-* `sensor get sensor-name`
+- `sensor get sensor-name`
 
-  获取 `sensor-name` 的设置。以下示例会获取加速度传感器的值：
+    获取 `sensor-name` 的设置。以下示例会获取加速度传感器的值：
 
-  ```bash
-  sensor get acceleration
-  acceleration = 2.23517e-07:9.77631:0.812348
-  ```
+    ```bash
+    sensor get acceleration
+    acceleration = 2.23517e-07:9.77631:0.812348
+    ```
 
-  以英文冒号 (:) 分隔的 `acceleration` 值是指虚拟传感器的 x、y 和 z 坐标。
+    以英文冒号 (:) 分隔的 `acceleration` 值是指虚拟传感器的 x、y 和 z 坐标。
 
-* `sensor set sensor-name value-x:value-y:value-z`
+- `sensor set sensor-name value-x:value-y:value-z`
 
-  设置 sensor-name 的值。以下示例将加速度传感器设为以英文冒号分隔的 x、y 和 z 值。
-  
-  ```bash
-  sensor set acceleration 2.23517e-07:9.77631:0.812348
-  ```
+    设置 sensor-name 的值。以下示例将加速度传感器设为以英文冒号分隔的 x、y 和 z 值。
+
+    ```bash
+    sensor set acceleration 2.23517e-07:9.77631:0.812348
+    ```

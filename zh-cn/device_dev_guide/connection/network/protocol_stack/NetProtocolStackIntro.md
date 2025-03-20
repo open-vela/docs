@@ -87,16 +87,16 @@ openvela 网络协议栈同时支持 IPv4 和 IPv6 协议，并提供以下扩�
 openvela 网络协议栈支持在 IPv4 和 IPv6 上运行 TCP 协议，并提供以下功能：
 
 - 标准 socket 接口支持：
-  - 提供 `bind`、`listen`、`connect`、`accept`、`send`、`recv`、`shutdown`、`poll` 等标准 POSIX Socket 接口。
+    - 提供 `bind`、`listen`、`connect`、`accept`、`send`、`recv`、`shutdown`、`poll` 等标准 POSIX Socket 接口。
 - TCP 特性支持：
-  - Backlog：支持连接队列的管理。
-  - Keepalive：支持 TCP 保活机制。
-  - SACK / Delayed ACK：支持选择性确认（SACK）和延迟确认（Delayed ACK）。
-  - Send / Recv Buffer：支持发送和接收缓冲区管理。
-  - Fast Retransmit：支持快速重传机制。
-  - Zero Window Probe：支持零窗口探测功能。
-  - 拥塞控制算法：支持 New Reno 拥塞控制算法。
-  - RTT 估算：支持往返时间（RTT）估算功能。
+    - Backlog：支持连接队列的管理。
+    - Keepalive：支持 TCP 保活机制。
+    - SACK / Delayed ACK：支持选择性确认（SACK）和延迟确认（Delayed ACK）。
+    - Send / Recv Buffer：支持发送和接收缓冲区管理。
+    - Fast Retransmit：支持快速重传机制。
+    - Zero Window Probe：支持零窗口探测功能。
+    - 拥塞控制算法：支持 New Reno 拥塞控制算法。
+    - RTT 估算：支持往返时间（RTT）估算功能。
 
 ### 3、UDP / ICMP / ICMPv6 能力
 
@@ -105,19 +105,19 @@ openvela 网络协议栈支持 UDP、ICMP 和 ICMPv6 协议，具体功能如下
 #### UDP 能力
 
 - 标准 Socket 接口支持：
-  - 提供 `bind`、`listen`、`connect`、`send`、`recv`、`poll` 等标准 POSIX Socket 接口。
+    - 提供 `bind`、`listen`、`connect`、`send`、`recv`、`poll` 等标准 POSIX Socket 接口。
 - UDP 特性支持：
-  - Recv Buffer：支持接收缓冲区管理。
-  - Multicast & Broadcast：支持组播和广播功能。
-  - Bind to Device：支持绑定到特定设备的功能。
+    - Recv Buffer：支持接收缓冲区管理。
+    - Multicast & Broadcast：支持组播和广播功能。
+    - Bind to Device：支持绑定到特定设备的功能。
 
 #### ICMP / ICMPv6 能力
 
 - ICMP 报文支持：
-  - 在适当时机发送 ICMP 和 ICMPv6 报文，例如：
-    - 对 ECHO 请求（如 ping）进行响应。
-    - 对 TTL（生存时间）过期的报文进行回复。
-    - 对不可达的地址或端口发送错误报文。
+    - 在适当时机发送 ICMP 和 ICMPv6 报文，例如：
+        - 对 ECHO 请求（如 ping）进行响应。
+        - 对 TTL（生存时间）过期的报文进行回复。
+        - 对不可达的地址或端口发送错误报文。
 
 ## 三、协议栈进阶能力
 
@@ -132,48 +132,48 @@ Rpmsg Usrsock 是 openvela 实现的一种代理机制，用于将用户态的�
 #### 工作原理
 
 - Usrsock Client 侧：
-  - 用户态程序的所有套接字操作（如 `send`、`recv` 等）都会通过 RPMsg 等代理方式转发到 Server 侧。
+    - 用户态程序的所有套接字操作（如 `send`、`recv` 等）都会通过 RPMsg 等代理方式转发到 Server 侧。
 - Usrsock Server 侧：
-  - 负责实际处理套接字操作。
-  - 将 Client 侧传递的套接字参数应用到 Server 侧的网络协议栈中，完成操作。
+    - 负责实际处理套接字操作。
+    - 将 Client 侧传递的套接字参数应用到 Server 侧的网络协议栈中，完成操作。
 
 #### 应用场景
 
 - 多核 openvela 产品：
-  - 在多核设备中，通过 RPMsg 实现 Usrsock，仅在一个 openvela 实例上运行网络协议栈，其他核通过代理访问网络功能。
+    - 在多核设备中，通过 RPMsg 实现 Usrsock，仅在一个 openvela 实例上运行网络协议栈，其他核通过代理访问网络功能。
 - 模拟器上网：
-  - 在模拟器环境中，通过直接系统调用实现 Usrsock，相当于 openvela 内部的应用程序调用宿主 Linux 的套接字接口。
+    - 在模拟器环境中，通过直接系统调用实现 Usrsock，相当于 openvela 内部的应用程序调用宿主 Linux 的套接字接口。
 
 ### 2、路由与转发能力
 
 当设备具有多张网卡时，openvela 网络协议栈提供了强大的路由和转发功能，支持复杂的网络拓扑和高效的报文处理。
 
 - 基础转发能力：
-  - 当设备收到目标地址非本机的 IP 报文时，可在网卡间转发报文。
-  - 转发时会将报文的 TTL（生存时间）减 1，并从其他网卡发出。
+    - 当设备收到目标地址非本机的 IP 报文时，可在网卡间转发报文。
+    - 转发时会将报文的 TTL（生存时间）减 1，并从其他网卡发出。
 - 路由表及最长前缀匹配：
-  - 支持基于路由表的转发，采用最长前缀匹配算法选择最佳路由。
+    - 支持基于路由表的转发，采用最长前缀匹配算法选择最佳路由。
 - 错误处理与 ICMP 报文：
-  - 遇到错误时发送 ICMP 和 ICMPv6 报文，例如：
-    - TTL 过期：当报文的 TTL 减为 0 时发送错误报文。
-    - 地址不可达：当目标地址不可达时发送错误报文。
+    - 遇到错误时发送 ICMP 和 ICMPv6 报文，例如：
+        - TTL 过期：当报文的 TTL 减为 0 时发送错误报文。
+        - 地址不可达：当目标地址不可达时发送错误报文。
 - IPv4/IPv6 NAT 支持：
-  - 提供类似 Linux iptables 的 NAT（网络地址转换）功能，支持 IPv4 和 IPv6。
+    - 提供类似 Linux iptables 的 NAT（网络地址转换）功能，支持 IPv4 和 IPv6。
 
 ### 3、其他高级能力
 
 openvela 网络协议栈还支持以下高级功能，满足高性能和复杂网络需求：
 
 - 零拷贝（Zero-Copy）：
-  - 支持定长缓冲区的零拷贝（IOB Offloading）。
-  - 即将支持变长缓冲区的零拷贝功能，进一步提升性能。
+    - 支持定长缓冲区的零拷贝（IOB Offloading）。
+    - 即将支持变长缓冲区的零拷贝功能，进一步提升性能。
 - GRO/GSO：
-  - GRO（Generic Receive Offload）：减少接收端的协议栈处理开销。
-  - GSO（Generic Segmentation Offload）：减少发送端的分段处理开销。
+    - GRO（Generic Receive Offload）：减少接收端的协议栈处理开销。
+    - GSO（Generic Segmentation Offload）：减少发送端的分段处理开销。
 - 防火墙：
-  - 提供基础防火墙功能，用于过滤和管理网络流量。
+    - 提供基础防火墙功能，用于过滤和管理网络流量。
 - VLAN 支持：
-  - 支持虚拟局域网（VLAN）功能，适用于复杂网络拓扑。
+    - 支持虚拟局域网（VLAN）功能，适用于复杂网络拓扑。
 
 ## 四、驱动接口
 

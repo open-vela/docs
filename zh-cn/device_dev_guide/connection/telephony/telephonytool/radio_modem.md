@@ -65,80 +65,80 @@ listen-modem [slot_id] [event_id]
 
 1. 通用事件 (Generic Indication Message)
 
-   - `MSG_RADIO_STATE_CHANGE_IND` = 0
-   - `MSG_PHONE_STATE_CHANGE_IND`
-   - `MSG_OEM_HOOK_RAW_IND`
-   - `MSG_MODEM_RESTART_IND`
-   - `MSG_DEVICE_INFO_CHANGE_IND`
-   - `MSG_AIRPLANE_MODE_CHANGE_IND`
+    - `MSG_RADIO_STATE_CHANGE_IND` = 0
+    - `MSG_PHONE_STATE_CHANGE_IND`
+    - `MSG_OEM_HOOK_RAW_IND`
+    - `MSG_MODEM_RESTART_IND`
+    - `MSG_DEVICE_INFO_CHANGE_IND`
+    - `MSG_AIRPLANE_MODE_CHANGE_IND`
 
 2. 呼叫事件 (Call Indication Message)
 
-   - `MSG_CALL_STATE_CHANGE_IND`：呼叫状态变化通知
-   - `MSG_CALL_RING_BACK_TONE_IND`：回铃音通知
-   - `MSG_ECC_LIST_CHANGE_IND`：紧急呼叫列表变化通知
-   - `MSG_DEFAULT_VOICECALL_SLOT_CHANGE_IND`：默认语音呼叫 slot 变化通知
+    - `MSG_CALL_STATE_CHANGE_IND`：呼叫状态变化通知
+    - `MSG_CALL_RING_BACK_TONE_IND`：回铃音通知
+    - `MSG_ECC_LIST_CHANGE_IND`：紧急呼叫列表变化通知
+    - `MSG_DEFAULT_VOICECALL_SLOT_CHANGE_IND`：默认语音呼叫 slot 变化通知
 
 3. 网络事件 (Network Indication Message)
 
-   - `MSG_NETWORK_STATE_CHANGE_IND`
-   - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`
-   - `MSG_CELLINFO_CHANGE_IND`
-   - `MSG_SIGNAL_STRENGTH_CHANGE_IND`
-   - `MSG_NITZ_STATE_CHANGE_IND`
+    - `MSG_NETWORK_STATE_CHANGE_IND`
+    - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`
+    - `MSG_CELLINFO_CHANGE_IND`
+    - `MSG_SIGNAL_STRENGTH_CHANGE_IND`
+    - `MSG_NITZ_STATE_CHANGE_IND`
 
 4. 数据事件 (Data Indication Message)
 
-   - `MSG_DATA_ENABLED_CHANGE_IND`
-   - `MSG_DATA_REGISTRATION_STATE_CHANGE_IND`
-   - `MSG_DATA_NETWORK_TYPE_CHANGE_IND`
-   - `MSG_DATA_CONNECTION_STATE_CHANGE_IND`
-   - `MSG_DEFAULT_DATA_SLOT_CHANGE_IND`
+    - `MSG_DATA_ENABLED_CHANGE_IND`
+    - `MSG_DATA_REGISTRATION_STATE_CHANGE_IND`
+    - `MSG_DATA_NETWORK_TYPE_CHANGE_IND`
+    - `MSG_DATA_CONNECTION_STATE_CHANGE_IND`
+    - `MSG_DEFAULT_DATA_SLOT_CHANGE_IND`
 
 5. SIM 卡事件 (SIM Indication Message)
 
-   - `MSG_SIM_STATE_CHANGE_IND`
-   - `MSG_SIM_UICC_APP_ENABLED_CHANGE_IND`
-   - `MSG_SIM_ICCID_CHANGE_IND`
+    - `MSG_SIM_STATE_CHANGE_IND`
+    - `MSG_SIM_UICC_APP_ENABLED_CHANGE_IND`
+    - `MSG_SIM_ICCID_CHANGE_IND`
 
 6. STK 事件 (STK Indication Message)
 
-   - `MSG_STK_AGENT_DISPLAY_TEXT_IND`
-   - `MSG_STK_AGENT_REQUEST_DIGIT_IND`
-   - `MSG_STK_AGENT_REQUEST_KEY_IND`
-   - `MSG_STK_AGENT_REQUEST_CONFIRMATION_IND`
-   - `MSG_STK_AGENT_REQUEST_INPUT_IND`
-   - `MSG_STK_AGENT_REQUEST_DIGITS_IND`
-   - `MSG_STK_AGENT_PLAY_TONE_IND`
-   - `MSG_STK_AGENT_LOOP_TONE_IND`
-   - `MSG_STK_AGENT_REQUEST_SELECTION_IND`
-   - `MSG_STK_AGENT_REQUEST_QUICK_DIGIT_IND`
-   - `MSG_STK_AGENT_CONFIRM_CALL_SETUP_IND`
-   - `MSG_STK_AGENT_DISPLAY_ACTION_INFORMATION_IND`
-   - `MSG_STK_AGENT_CONFIRM_LAUNCH_BROWSER_IND`
-   - `MSG_STK_AGENT_DISPLAY_ACTION_IND`
-   - `MSG_STK_AGENT_CONFIRM_OPEN_CHANNEL_IND`
-   - `MSG_STK_AGENT_RELEASE_IND`
-   - `MSG_STK_AGENT_CANCEL_IND`
+    - `MSG_STK_AGENT_DISPLAY_TEXT_IND`
+    - `MSG_STK_AGENT_REQUEST_DIGIT_IND`
+    - `MSG_STK_AGENT_REQUEST_KEY_IND`
+    - `MSG_STK_AGENT_REQUEST_CONFIRMATION_IND`
+    - `MSG_STK_AGENT_REQUEST_INPUT_IND`
+    - `MSG_STK_AGENT_REQUEST_DIGITS_IND`
+    - `MSG_STK_AGENT_PLAY_TONE_IND`
+    - `MSG_STK_AGENT_LOOP_TONE_IND`
+    - `MSG_STK_AGENT_REQUEST_SELECTION_IND`
+    - `MSG_STK_AGENT_REQUEST_QUICK_DIGIT_IND`
+    - `MSG_STK_AGENT_CONFIRM_CALL_SETUP_IND`
+    - `MSG_STK_AGENT_DISPLAY_ACTION_INFORMATION_IND`
+    - `MSG_STK_AGENT_CONFIRM_LAUNCH_BROWSER_IND`
+    - `MSG_STK_AGENT_DISPLAY_ACTION_IND`
+    - `MSG_STK_AGENT_CONFIRM_OPEN_CHANNEL_IND`
+    - `MSG_STK_AGENT_RELEASE_IND`
+    - `MSG_STK_AGENT_CANCEL_IND`
 
 7. 短信事件 (SMS Indication Message)
 
-   - `MSG_INCOMING_MESSAGE_IND`
-   - `MSG_IMMEDIATE_MESSAGE_IND`
-   - `MSG_STATUS_REPORT_MESSAGE_IND`
-   - `MSG_DEFAULT_SMS_SLOT_CHANGED_IND`
+    - `MSG_INCOMING_MESSAGE_IND`
+    - `MSG_IMMEDIATE_MESSAGE_IND`
+    - `MSG_STATUS_REPORT_MESSAGE_IND`
+    - `MSG_DEFAULT_SMS_SLOT_CHANGED_IND`
 
 8. CBS 事件 (CBS Indication Message)
 
-   - `MSG_INCOMING_CBS_IND`
-   - `MSG_EMERGENCY_CBS_IND`
+    - `MSG_INCOMING_CBS_IND`
+    - `MSG_EMERGENCY_CBS_IND`
 
 9. SS 事件 (SS Indication Message)
 
-   - `MSG_CALL_BARRING_PROPERTY_CHANGE_IND`
-   - `MSG_USSD_NOTIFICATION_RECEIVED_IND`
-   - `MSG_USSD_REQUEST_RECEIVED_IND`
-   - `MSG_USSD_PROPERTY_CHANGE_IND`
+    - `MSG_CALL_BARRING_PROPERTY_CHANGE_IND`
+    - `MSG_USSD_NOTIFICATION_RECEIVED_IND`
+    - `MSG_USSD_REQUEST_RECEIVED_IND`
+    - `MSG_USSD_PROPERTY_CHANGE_IND`
 
 10. IMS 事件 (IMS Indication Message)
 
@@ -215,10 +215,10 @@ get-radio-cap [feature_type]
 ```
 
 - feature_type：指定要查询的功能类型。
-  - `0`：语音（voice）
-  - `1`：数据（data）
-  - `2`：短信（sms）
-  - `3`：IMS（IP Multimedia Subsystem）
+    - `0`：语音（voice）
+    - `1`：数据（data）
+    - `2`：短信（sms）
+    - `3`：IMS（IP Multimedia Subsystem）
 
 #### 示例
 
@@ -253,8 +253,8 @@ set-radio-power [slot_id][state]
 
 - slot_id：指定要设置的 slot，目前仅支持 `0`。
 - state：无线电电源状态：
-  - `0`：关闭无线电（radio off）
-  - `1`：开启无线电（radio on）
+    - `0`：关闭无线电（radio off）
+    - `1`：开启无线电（radio on）
 
 #### 示例
 
@@ -318,12 +318,12 @@ set-rat-mode [slot_id] [mode]
 
 - slot_id：指定要设置的 slot，目前仅支持 `0`。
 - mode：目标网络模式，支持以下值：
-  - `0`：UMTS
-  - `1`：GSM only
-  - `2`：WCDMA only
-  - `9`：LTE/GSM/WCDMA
-  - `11`：LTE only
-  - `12`：LTE/WCDMA
+    - `0`：UMTS
+    - `1`：GSM only
+    - `2`：WCDMA only
+    - `9`：LTE/GSM/WCDMA
+    - `11`：LTE only
+    - `12`：LTE/WCDMA
 
 #### 示例
 
@@ -475,8 +475,8 @@ send-modem-power[slot_id] [on]
 
 - slot_id：指定要操作的 slot，目前仅支持 `0`。
 - on：设置 Modem 的目标状态：
-  - `0`：关闭 Modem
-  - `1`：开启 Modem
+    - `0`：关闭 Modem
+    - `1`：开启 Modem
 
 #### 示例
 
@@ -637,8 +637,8 @@ enable-modem[slot_id] [state]
 
 - slot_id：指定要操作的 slot，目前仅支持 `0`。
 - state：设置 Modem 的目标状态：
-  - `0`：关闭 Modem
-  - `1`：开启 Modem
+    - `0`：关闭 Modem
+    - `1`：开启 Modem
 
 #### 示例
 
@@ -796,8 +796,8 @@ send-screen-state [slot_id][][screen_state]
 
 - slot_id：指定要操作的 slot，目前仅支持 `0`。
 - screen_state：屏幕状态：
-  - `0`：屏幕关闭状态
-  - `1`：屏幕开启状态
+    - `0`：屏幕关闭状态
+    - `1`：屏幕开启状态
 
 #### 示例
 

@@ -11,11 +11,11 @@ openvela 主要遵循 Apache License 2.0 授權，具體請查看 LICENSE 文件
 為了參與社區貢獻，您需要簽署相應的「貢獻者授權協議」（Contributor License Agreement, CLA）。以下是針對不同平台的步驟說明：
 
 - **Gitee 平台**:
-  - 請前往 [Gitee CLA 簽署頁面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成簽署。
-  - 您可以通過 [我的 CLA 狀態](https://gitee.com/profile/clas) 查看簽署狀態。
+    - 請前往 [Gitee CLA 簽署頁面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成簽署。
+    - 您可以通過 [我的 CLA 狀態](https://gitee.com/profile/clas) 查看簽署狀態。
 
 - **GitHub 平台**:
-  - 提交新的 Pull Request (PR) 後，系統會提示您完成 CLA 的簽署。請根據提示操作以完成簽署流程。
+    - 提交新的 Pull Request (PR) 後，系統會提示您完成 CLA 的簽署。請根據提示操作以完成簽署流程。
 
 ## 錯誤報告
 

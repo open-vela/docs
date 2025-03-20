@@ -28,11 +28,11 @@ listen-network [slot_id][event_id]
 
 - slot_id：设置要监听的卡槽，目前仅支持 `0`。
 - event_id：事件 ID，支持以下事件类型：
-  - `MSG_NETWORK_STATE_CHANGE_IND`：网络状态变化指示。
-  - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`：语音注册状态变化指示。
-  - `MSG_CELLINFO_CHANGE_IND`：小区信息变化指示。
-  - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：信号强度变化指示。
-  - `MSG_NITZ_STATE_CHANGE_IND`：NITZ（Network Identity and Time Zone）状态变化指示。
+    - `MSG_NETWORK_STATE_CHANGE_IND`：网络状态变化指示。
+    - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`：语音注册状态变化指示。
+    - `MSG_CELLINFO_CHANGE_IND`：小区信息变化指示。
+    - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：信号强度变化指示。
+    - `MSG_NITZ_STATE_CHANGE_IND`：NITZ（Network Identity and Time Zone）状态变化指示。
 
 #### 示例
 
@@ -171,7 +171,7 @@ telephonytool> get-signalstrength 0
 [   53.030000] [35] [ DEBUG] [ap] telephonytool_cmd_query_signalstrength, slotId : 0 rssi :2147483647 rsrp :-68 rsrq :2147483647 rssnr :2147483647 cqi : 2147483647 level :4
 ```
 
-## 6、get-display-name
+### 6、get-display-name
 
 #### 命令说明
 
@@ -259,7 +259,7 @@ get-voice-nwtype 0
 [  117.115200] [35] [ DEBUG] [ap] telephonytool_cmd_get_voice_networktype, slotId : 0 value :0
 ```
 
-## 9、get-voice-registered
+### 9、get-voice-registered
 
 #### 命令说明
 

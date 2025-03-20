@@ -230,8 +230,8 @@ int irq_attach_thread(int irq, xcpt_t isr, xcpt_t isrthread, FAR void *arg, int 
 #### 工作机制
 
 - 用户需提供 1 个或者 2 个处理函数：
-  - `isr` 在中断上下文中被调用，通常用于屏蔽当前中断并快速唤醒 `isrthread`。
-  - `isrthread` 在线程上下文中被调用，用于处理剩余中断任务。
+    - `isr` 在中断上下文中被调用，通常用于屏蔽当前中断并快速唤醒 `isrthread`。
+    - `isrthread` 在线程上下文中被调用，用于处理剩余中断任务。
 - 如果 `isr` 为 `NULL`，会直接调用 `isrthread`。
 
 #### 优势
@@ -262,8 +262,8 @@ int irq_attach_wqueue(int irq, xcpt_t isr, xcpt_t isrwork, FAR void *arg, int pr
 #### 工作机制
 
 - 用户需提供 1 个或 2 个处理函数：
-  - `isr` 在中断上下文中被调用。
-  - `isrwork` 在工作队列上下文中被调用。
+    - `isr` 在中断上下文中被调用。
+    - `isrwork` 在工作队列上下文中被调用。
 - 与 `irq_attach_thread` 的区别在于，`isrwork` 在工作队列中被执行，而不是独立线程中。
 
 #### 优势

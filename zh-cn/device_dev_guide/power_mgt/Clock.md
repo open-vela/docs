@@ -188,7 +188,9 @@ FAR struct clk_s *clk_register_fixed_factor(FAR const char *name,
 1. 根据目标输出频率 (`fout`) 反推父时钟频率 (`fp`)：
 
     `fp = fout * div / mult`
+
 2. 对父时钟频率 (`fp`) 进行四舍五入，得到最接近的父时钟频率 (`fpbest`)。
+
 3. 根据最优父时钟频率 (`fpbest`) 计算最优输出频率 (`foutbest`)：
 
     `foutbest = fpbest * mult / div`

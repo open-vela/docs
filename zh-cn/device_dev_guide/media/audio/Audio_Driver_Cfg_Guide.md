@@ -13,22 +13,22 @@
 ### Audio Support
 
 - 功能：启用音频设备驱动。
-  - 除特定模组品类外，其余品类均需启用此选项。
+    - 除特定模组品类外，其余品类均需启用此选项。
 
 ### Support audio composition
 
 - 功能：支持组合节点。
-  - 组合节点详细说明请参见 [Audio Driver 原理说明]()。
+    - 组合节点详细说明请参见 [Audio Driver 原理说明]()。
 
 ### Support multiple sessions
 
 - 功能：支持多会话，
-  - 默认情况下，此选项通常为 **disable**。
+    - 默认情况下，此选项通常为 **disable**。
 
 ### Audio Buffer Configuration
 
 - 功能：配置音频缓冲区（Buffer）。
-  - 缓冲区用于应用程序与音频驱动之间的数据流转。
+    - 缓冲区用于应用程序与音频驱动之间的数据流转。
 
 ### Support Audio Buffers with greater than 65K samples
 
@@ -36,11 +36,11 @@
 
 - 功能：支持大于 65K 样本的缓冲区。
 
-  - 默认情况下，缓冲区大小通过 `uint16_t` 定义，最大支持 32K 样本。启用此选项后，缓冲区大小通过 `uint32_t` 定义，最大支持 65K 样本。
+    - 默认情况下，缓冲区大小通过 `uint16_t` 定义，最大支持 32K 样本。启用此选项后，缓冲区大小通过 `uint32_t` 定义，最大支持 65K 样本。
 
-  代码示例：
+    代码示例：
 
-   ```C
+    ```C
     #ifdef CONFIG_AUDIO_LARGE_BUFFERS
     typedef uint32_t apb_samp_t;
     #else
@@ -51,12 +51,12 @@
 ### Number of buffers for audio processing
 
 - 功能：设置音频处理的缓冲区数量。
-  - 默认值为 2。
+    - 默认值为 2。
 
 ### Size of each audio buffer for audio processing
 
 - 功能：设置每个缓冲区的大小。
-  - 默认值为 8192。
+    - 默认值为 8192。
 
 ### Support for Driver specified buffer sizes
 
@@ -67,9 +67,9 @@
 ![img](./figures/003.png)
 
 - 功能：配置音频设备支持的格式。
-  - 支持的格式包括：
-    - PCM Audio：支持 PCM 格式。
-    - MPEG 3 Layer 1：支持音频压缩设备，可根据设备能力选择其他格式。
+    - 支持的格式包括：
+        - PCM Audio：支持 PCM 格式。
+        - MPEG 3 Layer 1：支持音频压缩设备，可根据设备能力选择其他格式。
 
 ### Exclude Specific Audio Features
 
@@ -78,7 +78,7 @@
 ### Use custom device path
 
 - 功能：自定义音频设备节点的注册路径。
-  - 默认注册路径为 `/dev/audio`。
+    - 默认注册路径为 `/dev/audio`。
 
 ## 三、示例配置
 

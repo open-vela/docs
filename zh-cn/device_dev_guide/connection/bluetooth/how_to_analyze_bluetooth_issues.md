@@ -17,14 +17,19 @@
     - [问题：耳机断开后回连手表失败](#问题耳机断开后回连手表失败)
 - [音频传输问题](#音频传输问题)
   - [分析方法](#分析方法-1)
+    - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
     - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
     - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
     - [方法：观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+    - [方法：观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+    - [方法：观察A2DP SRC是否停止音频流传输](#方法观察a2dp-src是否停止音频流传输)
+    - [方法：观察AVDTP signaling连接是否断开](#方法观察avdtp-signaling连接是否断开)
 - [音乐播放控制问题](#音乐播放控制问题)
   - [分析方法](#分析方法-2)
     - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
     - [方法：观察设备是否支持AVRCP](#方法观察设备是否支持avrcp)
     - [方法：观察是否发送了播放、暂停请求](#方法观察是否发送了播放暂停请求)
+    - [方法：观察播放状态变化是否由蓝牙引起](#方法观察播放状态变化是否由蓝牙引起)
     - [方法：观察是否使用了绝对音量](#方法观察是否使用了绝对音量)
     - [方法：观察音乐源设备（手机）是否设置了绝对音量](#方法观察音乐源设备手机是否设置了绝对音量)
     - [方法：观察本地设备是否设置了绝对音量](#方法观察本地设备是否设置了绝对音量)
@@ -34,6 +39,7 @@
     - [方法：观察音量变化由AVRCP或是HFP控制](#方法观察音量变化由avrcp或是hfp控制)
   - [典型问题](#典型问题-1)
     - [问题: 不能控制播放、暂停](#问题-不能控制播放暂停)
+    - [问题：意外的播放、暂停](#问题意外的播放暂停)
     - [问题: 不能受音乐源设备（手机）控制调节音量](#问题-不能受音乐源设备手机控制调节音量)
     - [问题: 音量异常变化](#问题-音量异常变化)
 - [通话问题](#通话问题)
@@ -323,7 +329,9 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Disc
 
 ## 分析方法
 
-<a id="方法：观察是否打开了蓝牙和之间的transport"></a>
+<a id="方法：观察是否打开了蓝牙和Media之间的transport"></a>
+
+### 方法：观察是否打开了蓝牙和Media之间的transport
 
 通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否打开。
 
@@ -426,6 +434,100 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 ```
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_CONFIG_DONE
 ```
+
+<a id="方法：观察A2DP SRC是否开始播放音乐"></a>
+
+### 方法：观察A2DP SRC是否开始播放音乐
+
+通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否开始播放音乐。
+
+#### 1 通过syslog观察A2DP SRC是否开始播放音乐
+
+在A2DP SRC端，Vela蓝牙服务开始播放音乐的流程由来自Media的命令触发，典型log如下：
+
+```
+[a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_START
+```
+
+当蓝牙服务收到开始播放音乐的命令时，会开始AVDTP Stream Start流程，并在流程成功结束后进入Started状态，典型log如下：
+
+```
+[a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=STREAM_START_REQ
+[a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=STREAM_STARTED_EVT
+[a2dp_stm]: Exit  State=Opened, Peer=[11:22:33:44:55:66]
+[a2dp_stm]: Enter State=Started, Peer=[11:22:33:44:55:66]
+```
+
+#### 2 通过air log观察A2DP SRC是否开始播放音乐
+
+在音频流开始传输之前，A2DP SRC会发起Stream Start流程。在音频流传输过程中，A2DP SRC会向SNK发送media packets，典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="50%">
+
+<a id="方法：观察A2DP SRC是否停止传输音频包"></a>
+
+### 方法：观察A2DP SRC是否停止音频流传输
+
+通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否停止音频流传输。
+
+#### 1 通过syslog观察A2DP SRC是否停止音频流传输
+
+当Vela设备为A2DP SRC时，蓝牙服务有两个途径终止传输音频数据。
+* 当收到Media发送的STOP命令时。
+* 当连续2秒不能从Media获取音频数据时。
+
+蓝牙服务收到Media发送的STOP命令时，典型log如下：
+
+```
+[a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_STOP
+```
+
+蓝牙2秒从media读不到数据，syslog中会打印如下log，且持续时间约2秒：
+
+```
+[src_sbc]: a2dp_sbc_send_frames, underflow :6
+```
+
+蓝牙服务发起Stream Suspend流程的典型log如下：
+
+```
+[a2dp_stm]: ProcessEvent, State=Started, Peer=[11:22:33:44:55:66], Event=STREAM_SUSPEND_REQ
+[a2dp_stm]: ProcessEvent, State=Started, Peer=[11:22:33:44:55:66], Event=STREAM_SUSPENDED_EVT
+[a2dp_stm]: Exit  State=Started, Peer=[11:22:33:44:55:66]
+[a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
+```
+
+#### 1 通过snoop log观察A2DP SRC是否停止传输音频包
+
+典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_suspend.png" alt="sniffer:AVDTP media suspend" width="50%">
+
+### 方法：观察AVDTP signaling连接是否断开
+
+AVDTP signaling断开的原因有：应用告诉蓝牙断开A2DP连接，蓝牙协议栈主动断开连接，对端设备请求断开连接。通常，可以通过syslog，snoop log，或者air log观察是否断开了AVDTP signaling连接。
+
+#### 1 通过syslog观察是否断开了AVDTP signaling连接
+
+只有应用告诉蓝牙断开AVDTP signaling连接时，a2dp状态机会收到DISCONNECT_REQ，典型log如下：
+
+```
+[a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=DISCONNECT_REQ
+```
+
+断开连接完成时的典型log如下：
+
+```
+[a2dp_stm]: ProcessEvent, State=Closing, Peer=[11:22:33:44:55:66], Event=DISCONNECTED_EVT
+[a2dp_stm]: Exit  State=Closing, Peer=[11:22:33:44:55:66]
+[a2dp_stm]: Enter State=Idle, Peer=[11:22:33:44:55:66]
+```
+
+#### 2 通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因
+
+snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，对端设备请求断开连接。本地设备的snoop log中，本地设备主动断开连接的典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="50%">
 
 # 音乐播放控制问题
 
@@ -531,6 +633,12 @@ AVRCP是蓝牙音视频遥控协议，包含Controller（CT）和Target（TG）�
 典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_passthrough_pause_play.png" alt="snoop:AVRCP播放暂停请求" width="50%">
+
+<a id="方法：观察播放状态变化是否由蓝牙引起"></a>
+
+### 方法：观察播放状态变化是否由蓝牙引起
+
+通常，当蓝牙音乐播放器的播放状态异常变化时，可以在相同场景中尝试断开蓝牙连接，观察是否仍然引起了播放状态变化。若仍可见播放状态变化，通常该变化与蓝牙连接无关。
 
 <a id="方法：观察是否使用了绝对音量"></a>
 
@@ -678,6 +786,22 @@ HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
   * 若本地设备未能发送播放、暂停请求，建议在App侧观察是否调用了Media Session相关接口。
 
   * 若本地设备发送了播放、暂停请求，建议观察手机侧行为异常的原因。
+
+### 问题：意外的播放、暂停
+
+当音乐播放器意外的播放、暂停时，通常有以下方法可以逐步缩小范围并定位问题。
+
+* [观察播放状态变化是否由蓝牙引起](#方法：观察播放状态变化是否由蓝牙引起)
+
+  * 若播放状态变化并非由蓝牙连接引起，建议在音乐播放器所在设备（通常是手机）处观察原因。若该设备为Vela设备，建议在Vela App侧观察播放状态变化的原因。
+
+  * 若音量变化可能由蓝牙连接引起，建议[观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)
+
+* [观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)
+
+  * 若CT设备未能发送播放、暂停请求，建议在TG设备App侧观察播放状态变化的原因。
+
+  * 若CT设备发送了播放、暂停请求，建议在CT设备App侧观察播放状态变化的原因。
 
 ### 问题: 不能受音乐源设备（手机）控制调节音量
 
