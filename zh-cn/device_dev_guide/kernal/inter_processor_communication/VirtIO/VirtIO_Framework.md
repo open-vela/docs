@@ -28,12 +28,13 @@ openvela 基于 OpenAMP 实现了完整的 VirtIO 框架。该框架在上层支
 1. Driver 注册。
 
     在 openvela 初始化时，调用 `virtio_register_drivers()` 将所有已支持的 VirtIO Drivers 注册到 VirtIO 总线中。
-2. Device 注册。
 
-    由传输层发起注册流程：
-        - MMIO 传输层调用 `virtio_register_mmio_device()`。
-        - REMOTEPROC 传输层调用 `rptun_register_device()`。
-        - PCI 传输层调用 `virtio_pci_probe()`。 传输层完成初始化后，调用 `virtio_register_device()` 将 VirtIO Device 注册到 VirtIO 总线中。
+2. Device 注册。由传输层发起注册流程：
+
+    - MMIO 传输层调用 `virtio_register_mmio_device()`。
+    - REMOTEPROC 传输层调用 `rptun_register_device()`。
+    - PCI 传输层调用 `virtio_pci_probe()`。 传输层完成初始化后，调用 `virtio_register_device()` 将 VirtIO Device 注册到 VirtIO 总线中。
+
 3. Driver 和 Device 匹配。
 
     在设备注册到总线时，系统会尝试匹配 Driver 和 Device。如果匹配成功，执行 Driver 实现的 `probe` 函数。在 `probe` 函数中，驱动会对 VirtIO Device 进行初始化、配置、特性协商（feature negotiation）等操作。根据设备的复杂度和类型，可能还需要初始化私有结构或执行额外操作。
