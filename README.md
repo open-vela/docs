@@ -14,9 +14,9 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## Technical advantages
 
-- **Highly Scalable**: openvela has been designed to be modular and scalable, allowing it to easily adapt to a wide range of IoT applications. It can fit in a small BLE module with 32KB RAM, and scale up to a powerful smart display device with 512MB RAM, highly scalable!
+- **Highly Scalable**: openvela has been designed to be modular and scalable, allowing it to easily adapt to a wide range of IoT applications. It can fit in a small BLE module with 8KB RAM, and scale up to a powerful smart display device with 512MB RAM, highly scalable!
 
-- **One-Stop Solution**: Over the years, openvela has evolved into a powerful platform with comprehensive feature sets, making it a one-stop solution for various IoT applications. We consistently incorporate new functionalities to meet emerging needs. By leveraging openvela, manufacturers can significantly reduce their R&D costs and accelerate their product development cycles. 
+- **One-Stop Solution**: Over the years, openvela has evolved into a powerful platform with comprehensive feature sets, making it a one-stop solution for various IoT applications. We consistently incorporate new functionalities to meet emerging needs. By leveraging openvela, manufacturers can significantly reduce their R&D costs and accelerate their product development cycles.
 
 - **Mature Heterogeneous Computing Support**: openvela offers top-of-the-line support for heterogeneous multi-core systems, featuring a seamless IPC mechanism between various processing units such as MCU, MPU, DSP, GPU, and NPU. Additionally, openvela provides an advanced RPC framework between openvela, Linux, and Android systems to enable hybrid OS leveraging strength from three systems.
 
