@@ -1,364 +1,371 @@
-# 中断系统适配指南
+# Interrupt System Adaptation Guide  
 
-## 一、实现芯片中断调试
+## 1. Implementing Chip Interrupt Debugging  
 
-在调试芯片中断子系统（`bringup`）时，厂商需要实现一系列与架构相关的函数（`arch` 函数），以完成以下任务：
+When debugging the chip interrupt subsystem (`bringup`), vendors need to implement a series of architecture-related functions (`arch` functions) to accomplish the following tasks:  
 
-- 初始化中断
-- 启用和禁用中断
-- 设置中断优先级
+- Initialize interrupts  
+- Enable and disable interrupts  
+- Set interrupt priority  
 
-以下内容提供了具体的要求和实现示例。
+The following information provides specific requirements and implementation examples.  
 
-### 1、需要实现的中断相关函数
+### 1.1 Required Interrupt-Related Functions  
 
-以下是厂商（ Vendor）需要实现的中断相关函数及其功能说明。
+The following are the interrupt-related functions that vendors need to implement, along with their descriptions.  
 
-1. 初始化中断系统，包括禁用所有中断、配置向量表位置、设置默认优先级以及启用中断。
+1. **Initialize the interrupt system**, including disabling all interrupts, configuring the vector table position, setting default priorities, and enabling interrupts.  
 
-     ```C
-      void up_irqinitialize(void)
-      {
-          // Disable all interrupts
-          // Set the NVIC vector location
-          // Set all interrupts (and exceptions) to the default priority
-          // Attach the SVCall and Hard Fault exception handlers
-          // enable interrupts
-      }
-      ```
+    ```C  
+    void up_irqinitialize(void)  
+    {  
+      // Disable all interrupts  
+      // Set the NVIC vector location  
+      // Set all interrupts (and exceptions) to the default priority  
+      // Attach the SVCall and Hard Fault exception handlers  
+      // Enable interrupts  
+    }  
+    ```  
 
-2. 启用指定中断。
+2. **Enable a specific interrupt**:  
 
-     ```C
-      void up_enable_irq(int irq)
-      {
-         //enable interrupt with irq
-      }
-      ```
+    ```C  
+    void up_enable_irq(int irq)  
+    {  
+      // Enable interrupt with irq  
+    }  
+    ```
 
-3. 禁用指定的中断号。
+3. **Disable a specific interrupt**:  
 
-      ```C
-      void up_disable_irq(int irq)
-      {
-         //disable interrupt with irq
-      }
-      ```
+    ```C  
+    void up_disable_irq(int irq)  
+    {  
+      // Disable interrupt with irq  
+    }  
+    ```  
 
-4. 设置中断优先级。 如果启用了 `CONFIG_ARCH_IRQPRIO` 配置，则需要实现以下函数：
+4. **Set interrupt priority**: If the `CONFIG_ARCH_IRQPRIO` configuration is enabled, the following function must be implemented:  
 
-     ```C
-      #ifdef CONFIG_ARCH_IRQPRIO
-      int up_prioritize_irq(int irq, int priority)
-      {
-        // set irq priority
-      }
-      #endif
-      ```
+    ```C  
+    #ifdef CONFIG_ARCH_IRQPRIO  
+    int up_prioritize_irq(int irq, int priority)  
+    {  
+      // Set IRQ priority  
+    }  
+    #endif  
+    ```
 
-5. 管理中断状态。
+5. **Manage interrupt states**:  
 
-   - 判断 `flags` 当前是否是关中断状态。
+    - Check if `flags` indicate that interrupts are currently disabled:  
 
-        ```C
-        #define up_irq_is_disabled(flags)
-        ```
+        ```C  
+        #define up_irq_is_disabled(flags)  
+        ```  
 
-   - 保存当前中断状态并关闭中断。
+    - Save the current interrupt state and disable interrupts:  
 
-        ```C
-        // 关中断
-        irqstate_t up_irq_save(void)
-        {
-        }
-        ```
+        ```C  
+        irqstate_t up_irq_save(void)  
+        {  
+          // Save current interrupt state and disable interrupts  
+        }  
+        ```  
 
-   - 恢复指定中断状态。
+    - Restore the specified interrupt state:  
 
-        ```C
-        // 恢复flags表示的中断状态
-        void up_irq_restore(irqstate_t flags)
-        {
-        }
-        ```
+        ```C  
+        void up_irq_restore(irqstate_t flags)  
+        {  
+          // Restore the interrupt state indicated by flags  
+        }  
+        ```  
 
-   - 开启所有中断。
+    - Enable all interrupts:  
 
-        ```C
-        // 开启所有中断
-        irqstate_t up_irq_enable(void)
-        {
-        }
-        ```
+        ```C  
+        irqstate_t up_irq_enable(void)  
+        {  
+          // Enable all interrupts  
+        }  
+        ```  
 
-   - 获取当前中断状态。
+    - Get the current interrupt state:  
 
-        ```C
-        // 获取当前中断状态
-        irqstate_t irqstate(void)
-        {
-        }
-        ```
+        ```C  
+        irqstate_t irqstate(void)  
+        {  
+          // Get the current interrupt state  
+        }  
+        ```  
 
-6. 处理核间中断：
+6. **Handle inter-core interrupts**:  
 
-     ```C
-      // 发起核间中断
-      void up_trigger_irq(int irq, cpu_set_t cpuset)
-      ```
+    ```C  
+    // Trigger an inter-core interrupt  
+    void up_trigger_irq(int irq, cpu_set_t cpuset)  
+    ```  
 
-7. 设置中断的安全属性。
+7. **Set the secure attributes of interrupts**:  
 
-   - 设置指定中断的安全属性。
+    - Set the secure attributes for a specific interrupt:  
 
-        ```C
-        // 设置中断安全属性
-        void up_secure_irq(int irq, bool secure)
-        ```
+        ```C  
+        void up_secure_irq(int irq, bool secure)  
+        ```  
 
-   - 改变所有中断的安全属性。
+    - Modify the secure attributes for all interrupts:  
 
-        ```C
-        // 改变所有中断安全属性
-        void up_secure_irq_all(bool secure)
-        ```
+        ```C  
+        void up_secure_irq_all(bool secure)  
+        ```  
 
-### 2、需要定义的中断相关宏
+### 1.2 Required Interrupt-Related Macros  
 
-除上面的函数实现，厂商还需定义一系列中断相关的宏，用于描述 NVIC（Nested vectored interrupt controller） 的配置，这些宏需定义在`chips/chip_name/include/irq.h` 文件中。可参考 [RTL8720C 示例。](https://github.com/open-vela/nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h)
+Alongside the above function implementations, vendors need to define a series of interrupt-related macros, which describe the configuration of the NVIC (Nested Vectored Interrupt Controller). These macros should be defined in the `chips/chip_name/include/irq.h` file. Refer to the [RTL8720C example](https://github.com/open-vela/nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h) for guidance.  
 
-以下是必须实现的宏及其功能说明：
+The required macros and their descriptions are as follows:  
 
-1. 第一个中断向量号。
+1. **First interrupt vector number**:  
 
-     ```C
-      #define NVIC_IRQ_FIRST  (16)   /* Vector number of the first interrupt */
-      ```
+    ```C  
+    #define NVIC_IRQ_FIRST  (16)   /* Vector number of the first interrupt */  
+    ```  
 
-2. 中断数量。
+2. **Number of interrupts**:  
 
-     ```C
-      #define NR_IRQS (64)
-      ```
+    ```C  
+    #define NR_IRQS (64)  
+    ```
 
-3. NVIC 优先级级别。
+3. **NVIC priority levels**:  
 
-   - 最低优先级
+    - **Minimum priority**:  
 
-        ```C
-        #define NVIC_SYSH_PRIORITY_MIN  0xff /* All bits set in minimum priority */
-        ```
+        ```C  
+        #define NVIC_SYSH_PRIORITY_MIN  0xff /* All bits set in minimum priority */  
+        ```  
 
-   - 默认优先级
+    - **Default priority**:  
 
-        ```C
-        #define NVIC_SYSH_PRIORITY_DEFAULT  0x40 /* Midpoint is the default */
-        ```
+        ```C  
+        #define NVIC_SYSH_PRIORITY_DEFAULT  0x40 /* Midpoint is the default */  
+        ```  
 
-   - 最高优先级
+    - **Maximum priority**:  
 
-        ```C
-        #define NVIC_SYSH_PRIORITY_MAX   0x00 /* Zero is maximum priority */
-        ```
+        ```C  
+        #define NVIC_SYSH_PRIORITY_MAX   0x00 /* Zero is maximum priority */  
+        ```  
 
-   - 优先级步长
+    - **Priority step size**:  
 
-        ```C
-        #define NVIC_SYSH_PRIORITY_STEP 0x40 /* Three bits priority used, bits[7-6] as group */
-        ```
+        ```C  
+        #define NVIC_SYSH_PRIORITY_STEP 0x40 /* Three bits priority used, bits[7-6] as group */  
+        ```  
 
-   - 子优先级步长
+    - **Sub-priority step size**:  
 
-        ```C
-        #define NVIC_SYSH_PRIORITY_SUBSTEP  0x20 /* Three bits priority used, bit[5] as sub */
-        ```
+        ```C  
+        #define NVIC_SYSH_PRIORITY_SUBSTEP  0x20 /* Three bits priority used, bit[5] as sub */  
+        ```  
 
-## 二、中断绑定处理函数
+---
 
-在中断处理过程中，可以通过以下三种方式绑定处理函数。每种方式适用于不同场景，具有各自的优缺点。
+## 2. Binding Interrupt Handlers  
 
-### 1、使用`irq_attach`
+During interrupt processing, handlers can be bound using the following three methods. Each method is suitable for different scenarios and has its own advantages and disadvantages.  
+
+### 1. Using `irq_attach`  
 
 ```C
 int irq_attach(int irq, xcpt_t isr, FAR void *arg)
 ```
 
-1. 工作机制。
+1. **Mechanism**:  
 
-   - 当中断触发时，`isr` 在中断上下文中被调用。
-   - 这种方式的优点是效率高，因为中断处理直接在中断上下文中完成。
-   - `isr` 执行期间会屏蔽所有中断应，对实时性要求较高的系统不太合适。
-   - `isr`中不能调用会导致阻塞的 API（例如 `sleep`、`wait` 等）。
+    - When the interrupt is triggered, `isr` is called in the interrupt context.  
+    - The advantage of this method is high efficiency since the interrupt handling is completed directly in the interrupt context.  
+    - During the execution of `isr`, all interrupts are masked, making it less suitable for systems with high real-time requirements.  
+    - Blocking APIs (e.g., `sleep`, `wait`) cannot be called within `isr`.  
 
-2. 解除绑定。
+2. **Unbinding**:  
 
-     ```C
-      irq_detach(irq)
-      ```
+    ```C  
+    irq_detach(irq)  
+    ```  
 
-3. 优缺点。
+3. **Advantages and Disadvantages**:  
 
-   - 优点：处理效率高。
-   - 缺点：中断处理期间屏蔽所有中断，影响系统实时性。
+    - **Advantages**: High processing efficiency.  
+    - **Disadvantages**: Interrupts are masked during processing, which affects the real-time performance of the system.  
 
-### 2、使用`irq_attach_thread`
+### 2. Using `irq_attach_thread`  
 
 ```C
 int irq_attach_thread(int irq, xcpt_t isr, xcpt_t isrthread, FAR void *arg, int priority, int stack_size)
 ```
 
-1. 工作机制。
+1. **Mechanism**:  
 
-   - 用户需提供 1 个或者 2 个处理函数：
-      - `isr` 在中断上下文中被调用，通常用于屏蔽当前中断并快速唤醒 `isrthread`。
-      - `isrthread` 在线程上下文中被调用，用于处理剩余中断任务。
-   - 如果 `isr` 为 `NULL`，会直接调用 `isrthread`。
+    - Users need to provide one or two handler functions:  
+        - `isr` is called in the interrupt context, typically to mask the current interrupt and quickly wake up `isrthread`.  
+        - `isrthread` is called in the thread context to handle the remaining interrupt tasks.  
+    - If `isr` is `NULL`, `isrthread` is invoked directly.  
 
-2. 优势。
+2. **Advantages**:  
 
-   - `isr` 的执行时间被尽可能缩短，从而提升系统实时性。
-   - `isrthread` 作为线程运行，支持优先级调度，可以被其他高优先级任务抢占。
+    - The execution time of `isr` is minimized, improving the system's real-time performance.  
+    - `isrthread` runs as a thread, supports priority scheduling, and can be preempted by other higher-priority tasks.  
 
-3. 劣势。
+3. **Disadvantages**:  
 
-   - 消耗更多内存（独立线程栈和中断线程结构体）。
-   - 增加一次上下文切换，降低效率。
-   - 中断处理完成时间会有一定延迟（约 5 微秒）。
+    - Consumes more memory (independent thread stacks and interrupt thread structures).  
+    - Introduces an additional context switch, reducing execution efficiency.  
+    - There may be a delay (approximately 5 microseconds) in completing interrupt handling.  
 
-4. 解除绑定。
+4. **Unbinding**:  
 
-    ```C
-    irq_detach_thread(irq)
-    ```
+    ```C  
+    irq_detach_thread(irq)  
+    ```  
 
-### 3、使用`irq_attach_wqueue`
+### 3. Using `irq_attach_wqueue`  
 
 ```C
 int irq_attach_wqueue(int irq, xcpt_t isr, xcpt_t isrwork, FAR void *arg, int priority)
 ```
 
-1. 工作机制。
-   - 用户需提供 1 个或 2 个处理函数：
-      - `isr` 在中断上下文中被调用。
-      - `isrwork` 在工作队列上下文中被调用。
-   - 与 `irq_attach_thread` 的区别在于，`isrwork` 在工作队列中被执行，而不是独立线程中。
+1. **Mechanism**:  
 
-2. 优势。
-   - 多个优先级相同的中断可以复用同一个工作队列，从而节省内存。
-   - 高优先级的工作队列可以抢占低优先级队列。
-   - 如果中断数量较多，比 `irq_attach_thread` 更节省内存。
+    - Users need to provide one or two handler functions:  
+        - `isr` is called in the interrupt context.  
+        - `isrwork` is called in the work queue context.  
+    - The key difference from `irq_attach_thread` is that `isrwork` is executed in the work queue instead of an independent thread.  
 
-3. 劣势。
-   - 如果只有一个中断，工作队列的创建会带来额外开销。
-   - 在多核系统中，控制线程属性和数量的灵活性较差。
+2. **Advantages**:  
 
-4. 解除绑定。
+    - Interrupts with the same priority can share the same work queue, saving memory.  
+    - High-priority work queues can preempt lower-priority queues.  
+    - This method is more memory-efficient than `irq_attach_thread` when dealing with many interrupts.  
 
-    ```C
-    irq_detach_wqueue(irq)
-    ```
+3. **Disadvantages**:  
 
-### 总结对比
+    - If there is only one interrupt, creating a work queue introduces additional overhead.  
+    - In multi-core systems, there is limited flexibility in controlling thread attributes and the number of threads.  
 
-| 绑定方式          | 优点                             | 缺点                                               | 使用场景                             |
-| :---------------- | :------------------------------- | :------------------------------------------------- | :----------------------------------- |
-| irq_attach        | 效率高，直接在中断上下文中处理。 | 中断期间屏蔽所有中断，不适合实时性要求高的系统。   | 处理逻辑简单、实时性要求不高的场景。 |
-| irq_attach_thread | 提升实时性，支持优先级调度。     | 消耗更多内存，增加上下文切换，处理完成有一定延迟。 | 实时性要求高的场景。                 |
-| irq_attach_wqueue | 节省内存，支持工作队列复用。     | 单一中断场景效率低，多核场景灵活性不足。           | 中断数量多、内存资源有限的场景。     |
+4. **Unbinding**:  
 
-## 三、中断线程/工作队列的实现示例
+    ```C  
+    irq_detach_wqueue(irq)  
+    ```  
 
-以下是绑定中断并实现中断线程或工作队列的示例代码。
+### Summary Comparison  
 
-### 1、绑定中断
+| Binding Method    | Advantages                       | Disadvantages                                      | Use Cases                           |  
+| :---------------- | :------------------------------- | :------------------------------------------------ | :----------------------------------- |  
+| irq_attach        | High efficiency, direct handling in the interrupt context. | Interrupts are masked during handling, unsuitable for systems with high real-time requirements. | Scenarios with simple processing and low real-time requirements. |  
+| irq_attach_thread | Improves real-time performance, supports priority scheduling. | Consumes more memory, introduces context switches, and has some delay in processing completion. | Scenarios with high real-time requirements. |  
+| irq_attach_wqueue | Saves memory, supports work queue reuse. | Low efficiency for single-interrupt scenarios, limited flexibility in multi-core systems. | Scenarios with many interrupts and limited memory resources. |  
 
-使用 `irq_attach_work` 函数绑定中断处理程序：
+## 3. Implementation Example of Interrupt Thread/Work Queue  
+
+Below is an example of binding interrupts and implementing interrupt threads or work queues.
+
+### 1. Binding Interrupts  
+
+Use the `irq_attach_work` function to bind an interrupt handler:  
 
 ```C
 irq_attach_work(IRQ, isrhandle, isrwork, arg, 253)
 ```
 
-- `isrhandle`：中断处理函数，在中断上下文中执行。
-- `isrwork`：中断线程或工作队列处理函数，在线程上下文中执行。
-- `arg`：传递给处理函数的参数。
-- `253`：优先级设置。
+- `isrhandle`: The interrupt handler function, executed in the interrupt context.  
+- `isrwork`: The interrupt thread or work queue handler function, executed in the thread context.  
+- `arg`: The parameter passed to the handler functions.  
+- `253`: The priority setting.  
 
-### 2、中断处理函数示例
+### 2. Example of Interrupt Handler  
 
-在 `isrhandle` 中返回 `IRQ_WAKE_THREAD`，以唤醒中断线程或工作队列。如果返回 `OK`，则不会唤醒中断线程。示例代码如下：
+In `isrhandle`, return `IRQ_WAKE_THREAD` to wake up the interrupt thread or work queue. If `OK` is returned, the interrupt thread will not be woken up. Example code is as follows:  
 
-```C
+```C  
 static int isrhandle(int irq, void *regs, void *arg)  
 {  
-    up_disabled_irq(irq); // 屏蔽中断，确保退出后中断不会再次触发  
-    return IRQ_WAKE_THREAD; // 唤醒中断线程或工作队列  
+    up_disabled_irq(irq); // Mask the interrupt to ensure it does not trigger again after exit  
+    return IRQ_WAKE_THREAD; // Wake up the interrupt thread or work queue  
 }
 ```
 
-### 3、中断线程/工作队列处理函数示例
+### 3. Example of Interrupt Thread/Work Queue Handler  
 
-`isrwork` 用于处理中断任务，并在完成后清除中断状态。示例代码如下：
+`isrwork` is used to handle interrupt tasks and clear the interrupt state after completion. Example code is as follows:  
 
-```C
-static int isrwork(int irq, void *regs, void *arg)
-{
-  // 执行中断处理逻辑
-  // 清除中断的pending位
-  up_enabled_irq(irq); // 重新使能中断。
-  return OK;
+```C  
+static int isrwork(int irq, void *regs, void *arg)  
+{  
+  // Execute the interrupt handling logic  
+  // Clear the pending bit of the interrupt  
+  up_enabled_irq(irq); // Re-enable the interrupt  
+  return OK;  
 }
 ```
 
-### 4、特殊情况：One-shot 中断
+### 4. Special Case: One-shot Interrupt  
 
-对于一些 one-shot 中断，可以将 `isrhandle` 设置为 `NULL`，直接使用 `isrwork` 处理中断任务。
+For certain one-shot interrupts, `isrhandle` can be set to `NULL`, and `isrwork` can be used directly to handle interrupt tasks.  
 
-## 四、中断结构体优化
+## 4. Interrupt Structure Optimization  
 
-在中断使用时，系统通常会定义一个全局中断结构体数组：
+When using interrupts, the system typically defines a global interrupt structure array: 
 
 ```C
 struct irq_info_s g_irqvector[NR_IRQS];
 ```
 
-其中，`NR_IRQS` 表示系统支持的最大中断号，通常大于 200。然而，实际使用的中断数量通常只有十几个，并且这些中断号是离散分布的。这种设计会导致以下问题：
+Here, `NR_IRQS` represents the maximum number of interrupts supported by the system, which is typically greater than 200. However, in practice, only a few interrupts are used, and these interrupt numbers are sparsely distributed. This design results in the following issues:  
 
-- 内存浪费：即使只使用少量中断，也需要为所有可能的中断号分配内存，存储 `NR_IRQS` 个结构体。
-- 低效资源利用：大部分中断号对应的结构体未被使用，造成资源浪费。
+- **Memory Waste**: Even if only a small number of interrupts are used, memory must still be allocated for all possible interrupt numbers, requiring storage for `NR_IRQS` structures.  
+- **Inefficient Resource Utilization**: The majority of interrupt numbers’ corresponding structures remain unused, leading to resource waste.  
 
 ### 1、优化策略与实现原理
 
 为了解决上述问题，可以通过如下动态映射的方式优化中断结构体的存储。
 
-#### 映射关系数组
+### 1. Optimization Strategy and Implementation Principle  
 
-定义一个映射关系数组，用于动态建立中断号与中断结构体的映射：
+To address the issues above, the storage of interrupt structures can be optimized using the following dynamic mapping method.  
+
+#### Mapping Relationship Array  
+
+Define a mapping relationship array to dynamically establish the mapping between interrupt numbers and interrupt structures:  
 
 ```C
 irq_mapped_t g_irqmap[NR_IRQS]
 ```
 
-- 该数组仅占用 `NR_IRQS` 字节的额外内存。
-- 在中断使用时，动态建立映射关系。
+- This array only requires `NR_IRQS` bytes of additional memory.  
+- The mapping relationship is dynamically established during interrupt usage.  
 
-#### 精简中断结构体数组
+#### Simplified Interrupt Structure Array  
 
-将 `g_irqvector` 定义为：
+Define `g_irqvector` as:  
 
 ```C
 struct irq_info_s g_irqvector[CONFIG_ARCH_NUSER_INTERRUPTS];
 ```
 
-- `CONFIG_ARCH_NUSER_INTERRUPTS` 表示系统中可能使用的最大中断数量加 1 。
-- 通过限制数组大小，仅为实际可能使用的中断分配内存。
+- `CONFIG_ARCH_NUSER_INTERRUPTS` represents the maximum number of interrupts that may be used in the system plus 1.  
+- By limiting the size of the array, memory is allocated only for interrupts that are actually likely to be used.  
 
-#### 中断使用统计
+#### Interrupt Usage Statistics  
 
-使用 `g_irqmap_count` 统计当前已使用的中断数量，便于监控和调试。
+Use `g_irqmap_count` to keep track of the number of interrupts currently in use, facilitating monitoring and debugging.  
 
-### 2、配置示例
+## 2. Configuration Example  
 
-通过以下宏配置启用优化：
+Enable the optimization with the following macros:
 
 ```Makefile
 CONFIG_ARCH_MINIMAL_VECTORTABLE_DYNAMINC=y
@@ -366,16 +373,16 @@ CONFIG_ARCH_MINIMAL_VECTORTABLE=y
 CONFIG_ARCH_NUSER_INTERRUPTS=24
 ```
 
-- `CONFIG_ARCH_MINIMAL_VECTORTABLE_DYNAMIC`：启用动态映射功能。
-- `CONFIG_ARCH_MINIMAL_VECTORTABLE`：启用精简中断向量表。
-- `CONFIG_ARCH_NUSER_INTERRUPTS`：设置最大可能使用的中断数量。
+- `CONFIG_ARCH_MINIMAL_VECTORTABLE_DYNAMIC`: Enables the dynamic mapping functionality.  
+- `CONFIG_ARCH_MINIMAL_VECTORTABLE`: Enables the minimal interrupt vector table.  
+- `CONFIG_ARCH_NUSER_INTERRUPTS`: Sets the maximum number of interrupts that may be used.  
 
-### 3、优化效果
+### 3. Optimization Effects  
 
-- 内存节省：仅为实际使用的中断分配存储空间，避免为未使用的中断号浪费内存。
-- 灵活性提升：通过动态映射关系，支持离散分布的中断号。
-- 可扩展性：通过配置宏灵活调整中断数量限制。
+- **Memory Saving**: Allocates memory only for interrupts in use, avoiding waste for unused interrupt numbers.  
+- **Flexibility Improvement**: Supports sparsely distributed interrupt numbers through dynamic mapping.  
+- **Scalability**: Flexibly adjusts the interrupt limit via configuration macros.  
 
-## 五、相关仓
+## 5. Related Repository
 
 - [nuttx](https://github.com/open-vela/nuttx)
