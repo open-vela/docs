@@ -86,7 +86,7 @@
 
 - OpenAMP（Open Asymmetric Multi-Processing）
   
-  开放的异构多核处理库，实现了 Remoteproc 和基于 VirtIO 的 RPmsg。
+  开放的异构多核处理库，实现了 Remoteproc 和基于 VirtIO 的 RPMsg。
 
 - OPTEE（Open Portable Trusted Execution Environment）
   
@@ -112,7 +112,7 @@
   
   随机存取存储器。
 
-- RPMSG（Remote Processor Message）
+- RPMsg（Remote Processor Message）
 
   一种用于和远端处理器进行通信的消息机制。
 
