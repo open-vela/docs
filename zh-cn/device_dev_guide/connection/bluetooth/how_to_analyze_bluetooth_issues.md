@@ -62,9 +62,13 @@
     - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
     - [方法：观察是否向Media设置了SCO音频参数](#方法观察是否向media设置了sco音频参数)
     - [方法：观察AG端是否收到了HF端的Answer请求](#方法观察ag端是否收到了hf端的answer请求)
+    - [方法：观察HF端是否收到了AG端的来电通知](#方法观察hf端是否收到了ag端的来电通知)
+    - [方法：观察HF端是否通知了应用AG端有来电](#方法观察hf端是否通知了应用ag端有来电)
   - [典型问题](#典型问题-3)
     - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
     - [问题：HF端接通电话，HF端无声](#问题hf端接通电话hf端无声)
+    - [问题：作为AG端，不能受HF端控制接听电话](#问题作为ag端不能受hf端控制接听电话)
+    - [问题：作为HF端，AG端来电，HF端无来电显示](#问题作为hf端ag端来电hf端无来电显示)
 - [数据传输问题](#数据传输问题)
   - [分析方法](#分析方法-4)
     - [方法：观察client设备是否发起过Exchange\_MTU规程](#方法观察client设备是否发起过exchange_mtu规程)
@@ -1213,11 +1217,43 @@ AG和HF都需要在SCO建立完成之后向Media设置了SCO音频参数，典�
 
 HF端发起Answer请求，需要向AG端发送ATA命令，通常，可以通过syslog，snoop log，或者air log观察AG是否收到了HF的Answer请求。
 
-#### 1 通过syslog观察AG是否收到了HF的Anser请求
+#### 1 通过syslog观察AG是否收到了HF的Answer请求
 
 ```
 [hfp_ag]: ag_service_notify_call_answered
 ```
+
+#### 2 通过snoop log观察AG是否收到了HF的Answer请求
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_ata.png" alt="snoop:HFP-HF-ATA" width="50%">
+
+<a id="方法：观察HF端是否收到了AG端的来电通知"></a>
+
+### 方法：观察HF端是否收到了AG端的来电通知
+
+AG端收到来电时，需要向HF端发送+CIEV和RING指令，AG端还需要在+CLCC中描述来电详细信息，通常，可以通过syslog，snoop log，或者air log观察HF端是否收到了AG端的来电通知。
+
+#### 1 通过syslog观察HF端是否收到了AG端的来电通知
+
+```
+[hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_CALLSETUP
+[hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_RING_INDICATION
+[hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_CURRENT_CALLS
+```
+
+<a id="方法：观察HF端是否通知了应用AG端有来电"></a>
+
+### 方法：观察HF端是否通知了应用AG端有来电
+
+HF端收到AG端的来电通知后，需要将电话状态通知给应用，通常，可以通过syslog观察HF端是否通知了应用AG端有来电。
+
+#### 1 通过syslog观察HF端是否通知了应用AG端有来电
+
+```
+[hfp_hf]: hf_service_notify_callsetup
+[hfp_hf]: hf_service_notify_call_state_changed
+```
+
 ## 典型问题
 
 <a id="问题：AG端接通电话，HF端通话无声"></a>
@@ -1248,8 +1284,35 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 ### 问题：HF端接通电话，HF端无声
 
 * [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
-  * 若AG端未到了HF端的Answer请求，则检查syslog，snoop或空口log分析原因。
+  * 若AG端未收到HF端的Answer请求，则检查syslog，snoop或空口log分析原因。
   * 若AG端收到了HF端的Answer请求，则参考[问题: AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
+
+<a id="问题：作为AG端，不能受HF端控制接听电话"></a>
+
+### 问题：作为AG端，不能受HF端控制接听电话
+
+* [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
+  * 若AG端未收到Answer请求，则检查对端设备分析原因。
+  * 若AG端收到了HF端的Answer请求，则需要Telephony模块协助分析。
+  * 若AG端syslog没收到HF端的Answer请求，但snoop log收到了HF端的Answer请求，则需要打开协议栈log，根据协议栈代码分析Answer失败的原因。
+
+<a id="问题：作为HF端，AG端来电，HF端无来电显示"></a>
+
+### 问题：作为HF端，AG端来电，HF端无来电显示
+
+* [观察是否建立了HFP连接](#方法：观察是否建立了HFP连接)
+
+  * 若双方设备中，至少一方发起了连接，但连接失败，建议对比典型log，分析连接失败的原因。
+
+  * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持HFP](#方法：观察设备是否支持HFP)。
+
+* [观察HF端是否收到了AG端的来电通知](#方法：观察HF端是否收到了AG端的来电通知)
+  * 如果HF端未收到AG端的来电通知，则检查syslog，snoop或空口log分析原因。
+  * 如果HF端收到了AG端的来电通知，建议[观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)。
+
+* [观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)
+  * 如果HF端未上报电话状态，则检查syslog，snoop或空口log分析原因。
+  * 如果HF端上报了电话状态，则需要Telephony模块协助分析。
 
 # 数据传输问题
 
