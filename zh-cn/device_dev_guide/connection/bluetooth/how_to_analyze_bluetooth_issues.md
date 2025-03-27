@@ -12,9 +12,11 @@
     - [方法：观察是否对方配对信息无效（Linkey Missing）](#方法观察是否对方配对信息无效linkey-missing)
     - [方法：观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
     - [方法：观察对方是否发起回连操作](#方法观察对方是否发起回连操作)
+    - [方法：观察是否成功开启扫描](#方法观察是否成功开启扫描)
   - [典型问题](#典型问题)
     - [问题：经典蓝牙设备主动绑定对方设备失败](#问题经典蓝牙设备主动绑定对方设备失败)
     - [问题：耳机断开后回连手表失败](#问题耳机断开后回连手表失败)
+    - [问题：低功耗蓝牙扫描不到对端设备](#问题低功耗蓝牙扫描不到对端设备)
 - [音频传输问题](#音频传输问题)
   - [分析方法](#分析方法-1)
     - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
@@ -283,6 +285,25 @@
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="50%">
 
+### 方法：观察是否成功开启扫描
+
+#### 1 观察蓝牙syslog，看设备是否成功开启扫描
+
+status为0表示成功开启扫描，status为1表示关闭扫描。
+
+```
+bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
+[   24.055800] [20] [ DEBUG] [446][scanner]: scan_on_state_changed, state:0
+```
+
+#### 2 观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常
+
+如下，HCI log看设备成功发起扫描，最终返回status正常。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci:设备发起scan操作" width="50%">
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="50%">
+
 <a id="发现连接配对典型问题"></a>
 
 ## 典型问题
@@ -331,6 +352,13 @@
   * 若耳机未主动发起回连请求， 则需要耳机端进一步分析。
   * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，手表端进一步分析。
 
+### 问题：低功耗蓝牙扫描不到对端设备
+
+低功耗蓝牙的扫描过程，通常是由central设备开始扫描行为，接收对端发起的广播。可通过下面方法，进一步定位原因。
+
+* [观察是否成功开启扫描](#方法观察是否成功开启扫描)
+  * 若是成功开启，需要保证设置的扫描间隔和扫描窗口是否合适，并且确保此时没有音频业务或其他高吞吐业务占用带宽资源。
+  * 否则，建议上传syslog、协议栈log和带广播设备广播包的snoop log进一步分析确认。
 
 # 音频传输问题
 
