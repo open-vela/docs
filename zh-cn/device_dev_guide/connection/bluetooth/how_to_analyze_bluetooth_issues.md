@@ -61,6 +61,11 @@
     - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
     - [问题：HF端接通电话，HF端无声](#问题hf端接通电话hf端无声)
 - [数据传输问题](#数据传输问题)
+  - [分析方法](#分析方法-4)
+    - [方法：观察client设备是否发起过Exchange\_MTU规程](#方法观察client设备是否发起过exchange_mtu规程)
+    - [方法：观察当前空口环境是否复杂](#方法观察当前空口环境是否复杂)
+  - [典型问题](#典型问题-4)
+    - [问题：GATT传输数据吞吐率过低](#问题gatt传输数据吞吐率过低)
 
 ---
 
@@ -1130,3 +1135,57 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
   * 若AG端收到了HF端的Answer请求，则参考[问题: AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
 
 # 数据传输问题
+
+本章介绍数据传输（GATT、 SPP）高吞吐传输过程中相关问题常用的分析、定位方法。
+GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。通常，主动发起连接的设备为client，被动接收连接的设备为server。设备可以同时充当client和server。GATT主要应用的高吞吐场景为，IOS OTA数据传输。
+
+## 分析方法
+
+<a id="方法：观察client设备是否发起过Exchange_MTU规程"></a>
+
+### 方法：观察client设备是否发起过Exchange_MTU规程
+
+#### 1 通过syslog观察client设备是否发起过Exchange_MTU规程
+
+在连接建立完成后，client端一般会主动发起exchange_mtu规程，典型syslog如下：
+```
+[bttool] gatts_mtu_changed_callback, addr:AA:AA:AA:AA:AA:AA, mtu:514
+```
+MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
+```
+[bttool] gatts_mtu_changed_callback, addr:AA:AA:AA:AA:AA:AA, mtu:20
+```
+
+#### 2 通过snoop log观察client设备是否发起过Exchange_MTU规程
+
+典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/gatt/exchange_mtu.png" alt="snoop:GATT_exchange_mtu" width="50%">
+
+<a id="#方法：观察当前空口环境是否复杂"></a>
+
+### 方法：观察当前空口环境是否复杂
+
+蓝牙使用的2.4GHz ISM频段（2400-2483.5MHz）是免许可的公共频段，广泛用于Wi-Fi、微波炉、ZigBee、无线摄像头等设备。这些设备同时工作时会产生同频干扰，将会破坏数据包的完整性或者丢包现象，最终表现为空口环境中的高重传率。
+
+#### 1 通过snoop log观察当前空口环境是否复杂
+
+可以从图中的粉色柱体看到整个传输过程中的重传率，如下代表信道质量尚可
+
+<img src="img/how_to_analyze_bluetooth_issues/gatt/channel_quality.png" alt="snoop:信道传输质量" width="50%">
+
+## 典型问题
+
+<a id="问题：GATT传输数据吞吐率过低"></a>
+
+### 问题：GATT传输数据吞吐率过低
+
+GATT传输数据吞吐率过低的问题可能有多种原因导致，可考虑的定位方法包括：
+
+* [观察client设备是否发起过Exchange_MTU规程](方法：观察client设备是否发起过Exchange_MTU规程)
+
+  * 若双方设备未协商过MTU，则控制client端主动发起exchange MTU流程。
+
+* [观察当前空口环境是否复杂](#方法：观察当前空口环境是否复杂)
+
+  * 若当前空口环境恶劣导致重传率过高，考虑更换环境进行测试验证。
