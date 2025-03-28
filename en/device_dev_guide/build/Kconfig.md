@@ -2,31 +2,31 @@
 
 ## I. Overview
 
-`Kconfig` provides a mechanism for project configuration at compile time, supporting various types of configuration options, such as integers, strings, and booleans. Through the `Kconfig` files, developers can define the dependencies between options, configure default values, and specify the manner in which they are combined.For detailed information about the `Kconfig` language, refer to the [Kconfig documentation](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt)。
+`Kconfig` provides a mechanism for project configuration at compile time, supporting various types of configuration options, such as integers, strings, and booleans. Through the `Kconfig` files, developers can define the dependencies between options, configure default values, and define their combination rules.For detailed information about the `Kconfig` language, refer to the [Kconfig documentation](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt).
 
 Similar to most large operating systems, openvela utilizes Kconfig to manage project configurations. Developers can perform configuration tasks through the visual interface provided by menuconfig, enabling the efficient building and tailoring of the openvela system.
 
 ## II. Usage Examples
 
-In project configuration, if a specific configuration item needs to be set, you can follow these steps to check and configure it:
+To modify configuration parameters during project setup, perform the following verification and configuration procedure:
 
 1. Review the configuration item status. You can examine the `.config` file to determine whether the configuration has been set and if its value meets the expected criteria. If it does, you may use it as is; otherwise, it is recommended to adjust the setting using the `menuconfig` tool.
 
 2. Example: Configuring the KVDB storage path. Take the database storage path configuration for `KVDB`, `CONFIG_KVDB_PERSIST_PATH`, as an example:
 
     - By default, configuration options use their default values and will not appear in the `defconfig` file.
-    - "In the `.config` file, you can observe that its default value is set to `"/data/persist.db"`. If a different value is desired, you may locate and adjust the corresponding configuration option through `menuconfig`."
+    - "In the `.config` file you can observe that its default value is set to `"/data/persist.db"`. If a different value is desired, you may locate and adjust the corresponding configuration option through `menuconfig`."
         ![img](./figures/002.png)
 
-3. Example: Enabling FTL_WRITEBUFFER Configuration.To activate this feature, perform the following steps:
+3. Example: Enable the `FTL_WRITEBUFFER` configuration. If you need to enable the `FTL_WRITEBUFFER` configuration, follow these steps:
 
-    1. Verify the configuration's presence in the `.config` file. If the entry is absent, use the `menuconfig` interface to enable it. Avoid direct modification of `defconfig` to forcibly set `CONFIG_FTL_WRITEBUFFER=y`, as this option requires dependent configurations to be properly resolved.
+    1. Verify the configuration's presence in `.config`. If absent, enable via `menuconfig` instead of forcibly adding `CONFIG_FTL_WRITEBUFFER=y` to `defconfig`  
 
         ![img](./figures/004.png)
 
-    2. The `CONFIG_FTL_WRITEBUFFER` option has a hard dependency on `CONFIG_FTL_WRITEBUFFER` . Manual insertion of `CONFIG_FTL_WRITEBUFFER=y` into defconfig will not persist unless all prerequisite configurations – including CONFIG_DRVR_WRITEBUFFER – are explicitly enabled through proper dependency resolution channels.
+    2. `CONFIG_FTL_WRITEBUFFER` depends on `CONFIG_DRVR_WRITEBUFFER`. If `CONFIG_DRVR_WRITEBUFFER` is not enabled simultaneously, manually modifying the `defconfig` file will not take effect.
 
-    3. The `menuconfig` interface automatically resolves dependency chains and properly persists configuration changes to the `defconfig` file. The validated configuration output appears as follows:
+    3. The `menuconfig` interface automatically resolves dependency chains and persists validated changes to `defconfig`:
 
         ```Plain
         CONFIG_FTL_WRITEBUFFER=y  
@@ -45,7 +45,7 @@ During the initial build, openvela locates the corresponding project's defconfig
 
 1. `defconfig`
 
-    - The minimal set of system configurations is used to specify the default basic configuration options. The system generates the complete `.config` configuration file based on this file and the dependencies among configuration options.
+    - The minimal set of system configurations defines the default basic configuration options. The system generates the complete `.config` configuration file based on this file and the dependencies among configuration options.
     - All configuration options in the `defconfig` file are arranged in alphabetical order. It is recommended to add or remove configuration options using the `menuconfig` tool. Direct modifications to the `defconfig` file may result in redundant configurations or ordering inconsistencies.
   
 2. `.config`
@@ -63,7 +63,7 @@ The following diagram illustrates a typical build configuration workflow:
 
 ![img](./figures/006.svg)
 
-Use the following commands to complete the build process:
+Execute build commands:
 
 ```Bash
 ./build.sh vendor/sim/boards/openvela/config/openvela menuconfig  
@@ -126,7 +126,7 @@ The following diagram illustrates a typical build configuration workflow:
     Within the selected configuration option, you can input values based on the configuration type.
 
     - int: A specific integer value must be entered.  
-    - bool: Toggle the state by pressing `y` (to select) or the space key.
+    - bool: Toggle the state by pressing `y` (enable) or the space key.
         ![img](./figures/012.png)
 
     - String type: Enter the string directly as the configuration value.
