@@ -1,141 +1,145 @@
-# Kconfig User Guide  
+# Kconfig User Guide
 
-## 1. Overview  
+## I. Overview
 
-`Kconfig` provides a mechanism for configuring projects during the build process and supports various types of configuration options, such as integers, strings, and Boolean values. Using `Kconfig` files, developers can define dependencies among options, default values, and how options are combined. For detailed information about the `Kconfig` language, see [Kconfig Documentation](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt).  
+`Kconfig` provides a mechanism for project configuration at compile time, supporting various types of configuration options, such as integers, strings, and booleans. Through the `Kconfig` files, developers can define the dependencies between options, configure default values, and specify the manner in which they are combined.For detailed information about the `Kconfig` language, refer to the [Kconfig documentation](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt)。
 
-Similar to most large operating systems, openvela uses `Kconfig` to manage project configurations. Developers can use the visual interface provided by `menuconfig` to configure, build, and tailor the openvela system with ease.  
+Similar to most large operating systems, openvela utilizes Kconfig to manage project configurations. Developers can perform configuration tasks through the visual interface provided by menuconfig, enabling the efficient building and tailoring of the openvela system.
 
-## 2. Usage Examples  
+## II. Usage Examples
 
-In project configuration, if you need to set a specific configuration option, follow these steps to check and configure it:  
+In project configuration, if a specific configuration item needs to be set, you can follow these steps to check and configure it:
 
-1. **Check the configuration status.**  
-   You can check the `.config` file to see if the configuration has already been set and whether its value meets expectations. If it does, you can use it directly. Otherwise, it is recommended to modify it using the `menuconfig` tool.  
+1. Review the configuration item status. You can examine the `.config` file to determine whether the configuration has been set and if its value meets the expected criteria. If it does, you may use it as is; otherwise, it is recommended to adjust the setting using the `menuconfig` tool.
 
-2. **Example: Configure the KVDB storage path.**  
-   Take the configuration of the database storage path `CONFIG_KVDB_PERSIST_PATH` for `KVDB` as an example:  
+2. Example: Configuring the KVDB storage path. Take the database storage path configuration for `KVDB`, `CONFIG_KVDB_PERSIST_PATH`, as an example:
 
-   - By default, the configuration option uses its default value, so it does not appear in the `defconfig` file.  
-   - In the `.config` file, you can see its default value is `"/data/persist.db"`. If you need a different value, you can find and set the corresponding option using `menuconfig`.  
-     ![img](./figures/002.png)  
+    - By default, configuration options use their default values and will not appear in the `defconfig` file.
+    - "In the `.config` file, you can observe that its default value is set to `"/data/persist.db"`. If a different value is desired, you may locate and adjust the corresponding configuration option through `menuconfig`."
+        ![img](./figures/002.png)
 
-3. **Example: Enable the `FTL_WRITEBUFFER` configuration.**  
-   To enable the `FTL_WRITEBUFFER` configuration, follow these steps:  
+3. Example: Enabling FTL_WRITEBUFFER Configuration.To activate this feature, perform the following steps:
 
-   1. Check the `.config` file to confirm whether the configuration exists. If it does not, it is recommended to enable it using `menuconfig`. **Do not** manually add `CONFIG_FTL_WRITEBUFFER=y` directly to the `defconfig` file, as this configuration depends on other options.  
+    1. Verify the configuration's presence in the `.config` file. If the entry is absent, use the `menuconfig` interface to enable it. Avoid direct modification of `defconfig` to forcibly set `CONFIG_FTL_WRITEBUFFER=y`, as this option requires dependent configurations to be properly resolved.
 
-      ![img](./figures/004.png)  
+        ![img](./figures/004.png)
 
-   2. `CONFIG_FTL_WRITEBUFFER` depends on `CONFIG_DRVR_WRITEBUFFER`. If `CONFIG_DRVR_WRITEBUFFER` is not enabled simultaneously, manually modifying the `defconfig` file will not take effect.  
+    2. The `CONFIG_FTL_WRITEBUFFER` option has a hard dependency on `CONFIG_FTL_WRITEBUFFER` . Manual insertion of `CONFIG_FTL_WRITEBUFFER=y` into defconfig will not persist unless all prerequisite configurations – including CONFIG_DRVR_WRITEBUFFER – are explicitly enabled through proper dependency resolution channels.
 
-   3. Use `menuconfig` to automatically handle all dependencies and update the `defconfig` file. The updated configuration will appear as follows:  
+    3. The `menuconfig` interface automatically resolves dependency chains and properly persists configuration changes to the `defconfig` file. The validated configuration output appears as follows:
 
-      ```Plain  
-      CONFIG_FTL_WRITEBUFFER=y  
-      CONFIG_DRVR_WRITEBUFFER=y  
-      ```  
+        ```Plain
+        CONFIG_FTL_WRITEBUFFER=y  
+        CONFIG_DRVR_WRITEBUFFER=y  
+        ```
 
-> **Note**  
-> Using the `menuconfig` tool ensures that all configuration dependencies are complete and correct.  
+> **Note**
+>
+> Using the `menuconfig` tool ensures that all configuration dependencies are complete and correct.
 
-## 3. File Functions  
+## III. Purpose of Each File
 
-When openvela is built for the first time, it uses the specified `arch` and `board` parameters to locate the corresponding project’s `defconfig` as the system's initial configuration. Based on this file, the system expands and combines configurations to eventually generate the complete `.config` file. The generated `.config` file is then copied to `config.h`, providing support for conditional compilation and runtime usage in the code.  
+During the initial build, openvela locates the corresponding project's defconfig by using the specified `arch` and `board` parameters, which serves as the system's initial configuration. Based on this file, openvela expands and combines configurations to ultimately generate a complete `.config` file. The generated `.config` file is then copied to `config.h` to facilitate conditional compilation in the code and support runtime usage.
 
-#### 1、Detailed Description of Each File  
+### 1. Detailed Description of Each File
 
-1. **`defconfig`**  
-   - This file contains the minimal set of system configurations, used to specify the default basic settings. The system uses this file along with the dependencies between configuration options to generate the complete `.config` file.  
-   - All options in the `defconfig` file are arranged in alphabetical order. It is recommended to use the `menuconfig` tool to add or delete configuration options. Directly editing the `defconfig` file may lead to redundant configurations or an inconsistent option order.  
+1. `defconfig`
 
-2. **`.config`**  
-   - The `.config` file is a complete configuration file generated from the `defconfig` file, containing all expanded and combined configuration options.  
-   - `menuconfig` reads the local `.config` file and allows users to modify settings as needed. Once the configuration is adjusted, the tool automatically synchronizes the changes in `.config` back to the `defconfig` file.  
+    - The minimal set of system configurations is used to specify the default basic configuration options. The system generates the complete `.config` configuration file based on this file and the dependencies among configuration options.
+    - All configuration options in the `defconfig` file are arranged in alphabetical order. It is recommended to add or remove configuration options using the `menuconfig` tool. Direct modifications to the `defconfig` file may result in redundant configurations or ordering inconsistencies.
+  
+2. `.config`
 
-3. **`config.h`**  
-   - The `config.h` file is generated from the `.config` file and contains all configuration details. This file provides support for conditional compilation and runtime behavior in the code.  
+    - The `.config` file is the complete configuration generated from the `defconfig` file, incorporating all extended and combined configuration options.
+    - The `menuconfig` interface reads the local `.config` file for user-customized configuration adjustments and automatically propagates validated changes back to the `defconfig` file upon completion.
 
-#### 2、Compilation Process Example  
+3. config.h
 
-The following is a typical compilation configuration process diagram:  
+    - The `config.h` file is generated from the `.config` file, containing all configuration information to support conditional compilation and runtime operations in the code.
 
-![img](./figures/006.svg)  
+### 2. Build Process Example
 
-Use the following commands to complete the compilation process:  
+The following diagram illustrates a typical build configuration workflow:
 
-```bash  
+![img](./figures/006.svg)
+
+Use the following commands to complete the build process:
+
+```Bash
 ./build.sh vendor/sim/boards/openvela/config/openvela menuconfig  
 ./build.sh vendor/sim/boards/openvela/config/openvela -j8  
 ```
 
-#### 3、File Path Examples  
+### 3. File Path Examples
 
-In the openvela simulator environment, the typical paths for each file are as follows:  
+Based on the openvela simulator environment, the typical file paths are as follows:
 
-- **`defconfig` file path**: `vendor/sim/boards/openvela/configs/openvela/defconfig`  
-- **`.config` file path**: `nuttx/.config`  
-- **`config.h` file path**: `nuttx/include/config.h`  
+- `defconfig` file path：`vendor/sim/boards/openvela/configs/openvela/defconfig`
+- `.config` file path：`nuttx/.config`
+- `config.h` file path：`nuttx/include/config.h`
 
-## 4. Usage Methods  
+## IV. Usage Instructions
 
-Below are some useful configuration and operation tips when using openvela:  
+The following diagram illustrates a typical build configuration workflow:
 
-1. **Disabling a Kconfig feature**  
+1. Disable a feature in Kconfig configuration.
 
-   Before disabling (disable) a Kconfig configuration feature, ensure it is not indirectly selected by other configuration options using the `select` keyword. If there is a dependency, the dependency needs to be resolved first.  
+    Before disabling a Kconfig configuration option, make sure it is not selected by any other configuration options via the `select` keyword. If there are dependencies, those dependencies must be resolved first.
 
-2. **Opening the visual configuration interface**  
+2. Open the visual configuration interface.
 
-   Open the visual configuration using the `menuconfig` tool as follows:  
+    Use the `menuconfig` command to open the visual configuration interface, for example:
 
-   ```bash  
-   ./build.sh vendor/sim/boards/openvela/configs/openvela menuconfig  
-   ```
+    ```Bash
+    ./build.sh vendor/sim/boards/openvela/configs/openvela menuconfig  
+    ```
 
-   ![img](./figures/007.png)
+    ![img](./figures/007.png)
 
-3. **Quickly search for configuration items**  
+3. Use the `menuconfig` command to open the visual configuration interface, for example:
 
-   In the `menuconfig` interface, press the `/` key followed by the configuration keyword to search. For example, searching for `EXAMPLES_HELLO`:  
+    In the `menuconfig` interface, you can enter `/` followed by a configuration keyword to search. For example, to search for `EXAMPLES_HELLO`:
 
-   > **Note**  
-   > If the search result shows `depends on`, press `?` to continue exploring the dependencies and enable them as required.  
+    > **Note**
+    >
+    > If the search results contain `depends on` dependencies, type `?` to continue searching for dependent configurations and enable them.
 
-   ![img](./figures/008.png)  
+    ![img](./figures/008.png)
 
-4. **Navigate and select configuration items**  
+4. Select and navigate configuration options.
 
-   Use the arrow keys to move up and down, and press the `Enter` key to select the corresponding option.  
-   ![img](./figures/009.png)  
+    Use the arrow keys to navigate up and down, and press Enter to select the corresponding option.
+    ![img](./figures/009.png)
 
-5. **View configuration details**  
+5. View configuration details.
 
-   After selecting a configuration item, press `Shift` + `?` to view a detailed description of the configuration and its location in the file.  
-   ![img](./figures/010.png)  
+    After selecting a configuration item, press `Shift` + `?` to display its detailed documentation and file location information.
+    ![img](./figures/010.png)
 
-6. **Select specific options**  
+6. Select specific options
 
-   Based on the configuration prompt, such as selecting the option number highlighted in red (e.g., “1”), navigate further into the sub-option menu.  
-   ![img](./figures/011.png)  
+    Follow configuration prompts, such as the option number in brackets (e.g., '1'), to navigate to sub-option interfaces.
+    ![img](./figures/011.png)
 
-7. **Modify configuration values**  
+7. Modify configuration values
 
-   For a selected configuration item, set its value based on its type:  
-   - **Integer (int):** Input a specific integer value.  
-   - **Boolean (bool):** Toggle the state by pressing `y` (to enable) or using the spacebar.  
-     ![img](./figures/012.png)  
-   - **String:** Directly type in a string as the configuration value.  
+    Within the selected configuration option, you can input values based on the configuration type.
 
-8. **Save changes or exit**  
+    - int: A specific integer value must be entered.  
+    - bool: Toggle the state by pressing `y` (to select) or the space key.
+        ![img](./figures/012.png)
 
-   - Press the `ESC` key to exit the configuration interface, and press `y` to save modifications when prompted.  
-   - To force an exit, use `Ctrl` + `C`. However, unsaved changes may be lost.  
+    - String type: Enter the string directly as the configuration value.
 
-## 5. Related Documentation  
+8. Save changes or exit
+
+    - Press the `ESC` key to exit the configuration interface and press `y` when prompted to save changes.  
+    - To force exit, use `Ctrl` + `C`, but this may result in loss of unsaved changes.
+
+## V. Related Documents
 
 The following links provide additional details about using Kconfig:  
 
-- [Zephyr Project - Kconfig Tips](https://docs.zephyrproject.org/latest/build/kconfig/tips.html)  
-- [Zephyr Project - Kconfig Extensions](https://docs.zephyrproject.org/latest/build/kconfig/extensions.html)  
-- [Kernel Documentation - Kconfig Language](https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html)  
+- [Zephyr Project - Kconfig Tips](https://docs.zephyrproject.org/latest/build/kconfig/tips.html)
+- [Zephyr Project - Kconfig Extensions](https://docs.zephyrproject.org/latest/build/kconfig/extensions.html)
+- [Kernel Documentation - Kconfig Language](https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html)
