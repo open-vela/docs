@@ -293,7 +293,7 @@ struct vring {
 
 #### 4.5 Virtqueue
 
-Virtqueue 是 VirtIO 的核心组件之一，负责管理数据的传输队列。它通过与 vring 结构的结合，实现 Driver 和 Device 之间的高效通信。以下是 Virtqueue 的定义和关键字段说明。
+Virtqueue 是 VirtIO 的核心组件之一，负责管理数据的传输队列。它通过与 Vring 结构的结合，实现 Driver 和 Device 之间的高效通信。以下是 Virtqueue 的定义和关键字段说明。
 
 ##### 数据结构定义
 
