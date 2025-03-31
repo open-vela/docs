@@ -27,7 +27,7 @@
 
 ### 1、**Media Daemon**
 
-Media Daemon 是 Media Server的核心，负责创建和管理Media的各个模块，如 Media Focus、Media Graph、Media Session、Media Policy等。Medid Daemon 的核心原理是使用**poll** 函数, 监听RPC socket fd,和音视频设备驱动注册的 message queue fd,处理 RPC 命令并触发 FFmpeg 工作。
+Media Daemon 是 Media Server的核心，负责创建和管理Media的各个模块，如 Media Focus、Media Graph、Media Session、Media Policy等。Medid Daemon 的核心原理是使用 **poll** 函数, 监听RPC socket fd,和音视频设备驱动注册的 message queue fd,处理 RPC 命令并触发 FFmpeg 工作。
 
 ![Media Daemon架构图](../images/server/Media_Daemon_zh-cn.jpg)
 

@@ -67,12 +67,12 @@
 >
 > 中断相关内容介绍请参见 [Interrupt](https://en.wikipedia.org/wiki/Interrupt)。
 
-MCU 和屏幕的简化版硬件连接如下图：
+微控制单元（Microcontroller Unit，MCU）和屏幕的简化版硬件连接如下图：
 
 ![img](./figures/006.svg)
 
-- TE (Tearing Effect)：用于接收屏幕发送过来的同步信号，屏幕硬件会在每次即将显示新的帧之前，改变这个引脚的电平，MCU 通过 GPIO 中断接收和处理 TE 事件。
-- MIPI：用于传输命令和数据的接口，LCD 控制器和 LCD 之间沟通的桥梁，CPU 通过操作 LCD 控制器来控制屏幕显示的内容，LCD 控制器也会在每次传输完毕后，通过中断来通知 CPU buffer 已经发送完成。
+- TE（Tearing Effect）：用于接收屏幕发送过来的同步信号，屏幕硬件会在每次即将显示新的帧之前，改变这个引脚的电平，MCU 通过 GPIO 中断接收和处理 TE 事件。
+- MIPI（Mobile Industry Processor Interface）：用于传输命令和数据的接口，LCD 控制器和 LCD 之间沟通的桥梁，CPU 通过操作 LCD 控制器来控制屏幕显示的内容，LCD 控制器也会在每次传输完毕后，通过中断来通知 CPU buffer 已经发送完成。
 
 LCD 驱动程序需要提供两个中断服务函数，用于接收和处理 LCD 发送过来的事件。
 
