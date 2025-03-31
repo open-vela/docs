@@ -13,11 +13,13 @@ openvela 基于 OpenAMP 实现了完整的 VirtIO 框架。该框架在上层支
 1. 驱动层：
 
     驱动层负责将 VirtIO 与 openvela 驱动框架对接。驱动层通过调用 VirtIO 提供的统一接口，完成设备的初始化和数据交互。
+
 2. VirtIO 层：
 
     VirtIO 层为驱动提供统一的接口，支持 Driver 和 Device 的注册、卸载以及匹配机制。
 
 3. 传输层：
+
     传输层提供对不同传输方式的支持，包括 MMIO、RemoteProc 和 PCI 等。
 
 ![img](./figures/011.svg)
