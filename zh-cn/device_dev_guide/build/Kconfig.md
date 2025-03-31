@@ -66,15 +66,15 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 使用如下命令完成编译过程：
 
 ```Bash
-./build.sh vendor/sim/boards/openvela/config/openvela menuconfig  
-./build.sh vendor/sim/boards/openvela/config/openvela -j8  
+./build.sh vendor/sim/boards/vela/config/vela menuconfig
+./build.sh vendor/sim/boards/vela/config/vela -j8
 ```
 
 ### 3、文件路径示例
 
 根据 openvela simulator 环境，各文件的典型路径如下：
 
-- `defconfig` 文件路径：`vendor/sim/boards/openvela/configs/openvela/defconfig`
+- `defconfig` 文件路径：`vendor/sim/boards/vela/configs/vela/defconfig`
 - `.config` 文件路径：`nuttx/.config`
 - `config.h` 文件路径：`nuttx/include/config.h`
 
@@ -91,7 +91,7 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
     使用 `menuconfig` 命令可打开可视化的配置界面，例如：
 
     ```Bash
-    ./build.sh vendor/sim/boards/openvela/configs/openvela menuconfig  
+    ./build.sh vendor/sim/boards/vela/configs/vela menuconfig
     ```
 
     ![img](./figures/007.png)
@@ -127,6 +127,7 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 
     - 整型（int）：需要输入具体的整数值。
     - 布尔型（bool）：通过按下 `y`（选择）或空格键来切换状态。
+
         ![img](./figures/012.png)
 
     - 字符串型：直接输入字符串作为配置值。
