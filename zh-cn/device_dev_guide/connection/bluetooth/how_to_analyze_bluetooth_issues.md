@@ -3,8 +3,15 @@
 <!-- omit from toc -->
 # 目录
 
-- [发现、连接、配对问题](#发现连接配对问题)
+- [蓝牙启动问题](#蓝牙启动问题)
   - [分析方法](#分析方法)
+    - [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
+    - [方法：观察syslog确定蓝牙服务是否启动](#方法观察syslog确定蓝牙服务是否启动)
+    - [方法：观察蓝牙驱动节点是否成功创建](#方法观察蓝牙驱动节点是否成功创建)
+  - [典型问题](#典型问题)
+    - [问题：创建蓝牙instance失败](#问题创建蓝牙instance失败)
+- [发现、连接、配对问题](#发现连接配对问题)
+  - [分析方法](#分析方法-1)
     - [方法：观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)
     - [方法：观察是否ACL连接超时断开（Connection Timeout）](#方法观察是否acl连接超时断开connection-timeout)
     - [方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功但是未有profile连接acl主动断开)
@@ -12,13 +19,19 @@
     - [方法：观察是否对方配对信息无效（Linkey Missing）](#方法观察是否对方配对信息无效linkey-missing)
     - [方法：观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
     - [方法：观察对方是否发起回连操作](#方法观察对方是否发起回连操作)
+    - [方法：观察本地是否收到ACL连接请求](#方法观察本地是否收到acl连接请求)
+    - [方法：观察本端是否同意ACL连接请求](#方法观察本端是否同意acl连接请求)
     - [方法：观察是否成功开启扫描](#方法观察是否成功开启扫描)
-  - [典型问题](#典型问题)
+    - [方法：确认对端设备存在对应SPP服务](#方法确认对端设备存在对应spp服务)
+    - [方法：确认SPP连接状态与断连发起方](#方法确认spp连接状态与断连发起方)
+  - [典型问题](#典型问题-1)
     - [问题：经典蓝牙设备主动绑定对方设备失败](#问题经典蓝牙设备主动绑定对方设备失败)
     - [问题：耳机断开后回连手表失败](#问题耳机断开后回连手表失败)
+    - [问题：经典蓝牙设备未被对端设备成功连接](#问题经典蓝牙设备未被对端设备成功连接)
     - [问题：低功耗蓝牙扫描不到对端设备](#问题低功耗蓝牙扫描不到对端设备)
+    - [问题：SPP主动连接失败](#问题spp主动连接失败)
 - [音频传输问题](#音频传输问题)
-  - [分析方法](#分析方法-1)
+  - [分析方法](#分析方法-2)
     - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
     - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
     - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
@@ -29,13 +42,13 @@
     - [方法：观察air log中的音频包序列号是否连续](#方法观察air-log中的音频包序列号是否连续)
     - [方法：观察air log中1秒内发送的音频数据样本点数量](#方法观察air-log中1秒内发送的音频数据样本点数量)
     - [方法：观察air log中音频数据是否存在重传](#方法观察air-log中音频数据是否存在重传)
-  - [典型问题](#典型问题-1)
+  - [典型问题](#典型问题-2)
     - [问题: 连接两对耳机时，出现断连和无声的问题](#问题-连接两对耳机时出现断连和无声的问题)
     - [问题: 连接耳机播放音乐，耳机无声](#问题-连接耳机播放音乐耳机无声)
     - [问题: 连接耳机播放音频文件，音频文件开头缺失](#问题-连接耳机播放音频文件音频文件开头缺失)
     - [问题: 语音播报，结尾处有pop音](#问题-语音播报结尾处有pop音)
 - [音乐播放控制问题](#音乐播放控制问题)
-  - [分析方法](#分析方法-2)
+  - [分析方法](#分析方法-3)
     - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
     - [方法：观察设备是否支持AVRCP](#方法观察设备是否支持avrcp)
     - [方法：观察是否发送了播放、暂停请求](#方法观察是否发送了播放暂停请求)
@@ -49,14 +62,14 @@
     - [方法：观察是否打开了AVRCP配置](#方法观察是否打开了avrcp配置)
     - [方法：观察音量变化是否由蓝牙引起](#方法观察音量变化是否由蓝牙引起)
     - [方法：观察音量变化由AVRCP或是HFP控制](#方法观察音量变化由avrcp或是hfp控制)
-  - [典型问题](#典型问题-2)
+  - [典型问题](#典型问题-3)
     - [问题：不能控制播放、暂停](#问题不能控制播放暂停)
     - [问题：不能受控播放、暂停](#问题不能受控播放暂停)
     - [问题：意外的播放、暂停](#问题意外的播放暂停)
     - [问题：不能受音乐源设备（手机）控制调节音量](#问题不能受音乐源设备手机控制调节音量)
     - [问题：音量异常变化](#问题音量异常变化)
 - [通话问题](#通话问题)
-  - [分析方法](#分析方法-3)
+  - [分析方法](#分析方法-4)
     - [方法：观察是否建立了HFP连接](#方法观察是否建立了hfp连接)
     - [方法：观察设备是否支持HFP](#方法观察设备是否支持hfp)
     - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
@@ -64,19 +77,108 @@
     - [方法：观察AG端是否收到了HF端的Answer请求](#方法观察ag端是否收到了hf端的answer请求)
     - [方法：观察HF端是否收到了AG端的来电通知](#方法观察hf端是否收到了ag端的来电通知)
     - [方法：观察HF端是否通知了应用AG端有来电](#方法观察hf端是否通知了应用ag端有来电)
-  - [典型问题](#典型问题-3)
+  - [典型问题](#典型问题-4)
     - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
     - [问题：HF端接通电话，HF端无声](#问题hf端接通电话hf端无声)
     - [问题：作为AG端，不能受HF端控制接听电话](#问题作为ag端不能受hf端控制接听电话)
     - [问题：作为HF端，AG端来电，HF端无来电显示](#问题作为hf端ag端来电hf端无来电显示)
 - [数据传输问题](#数据传输问题)
-  - [分析方法](#分析方法-4)
+  - [分析方法](#分析方法-5)
     - [方法：观察client设备是否发起过Exchange\_MTU规程](#方法观察client设备是否发起过exchange_mtu规程)
     - [方法：观察当前空口环境是否复杂](#方法观察当前空口环境是否复杂)
-  - [典型问题](#典型问题-4)
+  - [典型问题](#典型问题-5)
     - [问题：GATT传输数据吞吐率过低](#问题gatt传输数据吞吐率过低)
 
 ---
+
+# 蓝牙启动问题
+
+<a id="蓝牙启动问题分析方法"></a>
+
+## 分析方法
+
+<a id="方法：观察蓝牙服务线程是否存在"></a>
+
+### 方法：观察蓝牙服务线程是否存在
+
+利用`ps`命令，观察蓝牙服务线程是否存在，正常输出信息可以观察到名为`bluetoothd`的线程。
+
+```text
+  PID GROUP PRI POLICY   TYPE    NPX STATE    EVENT     SIGMASK             STACK    USED FILLED COMMAND
+    0     0   0 FIFO     Kthread   - Ready              0000000000000000  0001968 0000824  41.8%  Idle_Task
+    1     0 192 RR       Kthread   - Waiting  Semaphore 0000000000000000  0003968 0000480  12.0%  hpwork 0x4020f954 0x4020f978
+    2     0 100 RR       Kthread   - Waiting  Semaphore 0000000000000000  0003968 0000752  18.9%  lpwork 0x4020f91c 0x4020f940
+    4     0 100 RR       Kthread   - Ready              0000000000000000  0003968 0000496  12.5%  goldfish_gpu_fb_thread 0x4024c930
+    5     0 100 RR       Kthread   - Waiting  Semaphore 0000000000000000  0003968 0000864  21.7%  goldfish_gnss_thread 0x406d4b30
+    6     0 100 RR       Kthread   - Waiting  Semaphore 0000000000000000  0003968 0000904  22.7%  goldfish_sensor_thread 0x402e20a0
+    7     7 100 RR       Task      - Running            0000000000000000  0003992 0002048  51.3%  nsh_main
+    9     9 100 RR       Task      - Waiting  Semaphore 0000000000000000  0004000 0003096  77.4%  kvdbd
+   10    10 100 RR       Task      - Waiting  Semaphore 0000000000000000  0004000 0002192  54.8%  adbd
+   11    11 103 RR       Task      - Waiting  Semaphore 0000000000000000  0008088 0003340  41.2%  bluetoothd
+   12    12 100 RR       Task      - Waiting  Semaphore 0000000000020000  0004000 0001232  30.8%  telnetd
+   13    11 110 FIFO     pthread   - Waiting  Semaphore 0000000000000000  0004016 0000600  14.9%  sysworkq 0x71ffa5 0x40700350
+```
+
+<a id="方法：观察蓝牙服务syslog，蓝牙服务框架是否启动"></a>
+
+### 方法：观察syslog确定蓝牙服务是否启动
+
+观察蓝牙服务syslog，检查蓝牙服务是否启动，标准启动流程log如下:
+
+```text
+[    0.054300] [11] [  INFO] [ap] bluetoothd main 34
+[    0.074000] [11] [  INFO] [ap] /data/misc/bt folder create: 0
+[    0.084300] [11] [ ALERT] [ap] Framework log level: 7, Stack:0, mask:00000000, Snoop: 0
+[    0.084800] [11] [ DEBUG] [ap] [195][storage]: bt_storage_init successed
+[    0.085100] [11] [ DEBUG] [ap] [129][service_manager]: A2DP-Sink service register success
+[    0.085300] [11] [ DEBUG] [ap] [129][service_manager]: AVRCP-CT service register success
+[    0.085800] [11] [ DEBUG] [ap] [201][adapter-stm]: Enter, PrevState=(null) ---> NewState=Off
+[    0.087400] [11] [  INFO] [ap] [32][stack_manager]: Stack Info: Zblue Ver:5.4 Sal:2
+[    0.088100] [11] [  INFO] [ap] <inf> [h4_init] <406>: Bluetooth H4 driver
+[    0.088600] [11] [ DEBUG] [ap] [45][stack_manager]: stack_manager_init done
+[    0.088700] [11] [ DEBUG] [ap] [257][bt_service]: bt_service_init done
+[    0.089100] [11] [ DEBUG] [ap] [260][service_loop]: service loop running now !!!
+[    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
+[    0.090100] [11] [ DEBUG] [ap] [81][service_loop]: set_ready
+```
+<a id="方法：观察蓝牙驱动节点是否成功创建">
+
+### 方法：观察蓝牙驱动节点是否成功创建
+
+利用`ls /dev`命令，观察蓝牙驱动节点是否成功创建，正常输出信息可以观察到名为`ttyHCI0`的蓝牙驱动节点。
+
+```text
+openvela-ap> ls /dev
+/dev:
+ audio/
+ binder
+ ......
+ ttyHCI0
+ ......
+ uorb/
+ ......
+ ```
+
+<a id="方法：蓝牙启动典型问题">
+
+## 典型问题
+
+### 问题：创建蓝牙instance失败
+
+当蓝牙应用报`create instance error`错误时，可以采用如下方法排查：
+
+* [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
+  * 如果蓝牙服务线程存在，应当提供完整的系统启动syslog向Vela BT团队寻求支持。
+  * 否则，按照如下方法进一步排查。
+
+* [方法：观察蓝牙服务syslog，蓝牙服务框架是否启动](#方法观察蓝牙服务syslog蓝牙服务框架是否启动)
+  * 如果未找到蓝牙服务启动log，应当确认当前系统defconfig是否配置`CONFIG_BLUETOOTH_SERVER`等配置以及Rcs中配置`bluetoothd &`。
+  * 如果发现启动过程中发现创建目录失败`folder create fail`，请寻求系统技术支持。
+  * 如果发现启动过程存在H4驱动异常，请按如下方法检查是否存在驱动节点。
+
+* [方法：观察蓝牙驱动节点是否成功创建](#方法观察蓝牙驱动节点是否成功创建)
+  * 如果驱动节点不存在，请查看《如何添加蓝牙驱动》能否解决问题。
+  * 否则，请提供完整的系统启动syslog向Vela BT团队寻求支持。
 
 # 发现、连接、配对问题
 
@@ -292,6 +394,48 @@
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="50%">
 
+<a id="方法观察本地是否收到ACL连接请求"></a>
+
+### 方法：观察本地是否收到ACL连接请求
+
+#### 1 观察syslog，本端蓝牙应用是否接收到ACL连接请求
+
+蓝牙服务与蓝牙应用均能够接收到ACL连接请求，log如下。
+
+```text
+[15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
+[15] [cp] [688][adapter-svc]: ACL Connect Request from :XX:XX:XX:XX:2E:43
+[19] [cp] [BT] gap_connection_state_changed_callback: --->Device [XX:XX:XX:XX:2E:43][BREDR] State: CONNECTING
+```
+
+当应用无法收到ACL连接请求时，无法做出ACL连接回复，可以观察到如下ACL连接失败的log，输出Error Code 16，即Connection Accept Timeout Exceeded。
+
+```text
+[19] [cp] [109][bluelet]: sal_status_translate maybe hcierror code: 16
+[14] [cp] [723][adapter-svc]: ACL connection state changed, addr:A4:E2:87:D7:2E:18, link:1, state:CONNECTION_STATE_DISCONNECTED, status:47, reason:0
+```
+
+<a id="方法观察本地是否同意ACL连接请求"></a>
+
+### 方法：观察本端是否同意ACL连接请求
+
+#### 1 观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求
+
+如果应用未能同意ACL连接请求，可以观察到如下ACL连接失败的log如下，输出ACL status 55，表示本端拒绝了ACL连接请求。
+
+```text
+[15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
+[15] [cp] [688][adapter-svc]: ACL Connect Request from :XX:XX:XX:XX:2E:43
+......
+[15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_DISCONNECTED, status:55, reason:0
+```
+
+#### 2 观察对端设备snoop log，确认本端是否同意ACL连接请求
+
+可以看到如下log，ACL连接被拒绝，显示Connection Rejected Due To Limited Resources。
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="50%">
+
 ### 方法：观察是否成功开启扫描
 
 #### 1 观察蓝牙syslog，看设备是否成功开启扫描
@@ -310,6 +454,50 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 <img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci:设备发起scan操作" width="50%">
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="50%">
+
+<a id="方法：确认对端设备存在对应SPP服务"></a>
+
+### 方法：确认对端设备存在对应SPP服务
+
+#### 1 观察对端设备snoop log，确认对端设备是否存在对应的SPP服务
+
+spp client发起spp连接，需要获取到对端设备的spp服务信息。可以通过对端设备的snoop log确认是否存在想要的SPP服务。
+
+查询特定服务失败snoop log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/sdp/snoop_discover_not_exist_service.png" alt="snoop:查询特定服务失败" width="50%">
+
+<a id="方法：确认SPP连接状态与断连发起方"></a>
+
+### 方法：确认SPP连接状态与断连发起方
+
+#### 1 观察syslog，确认断连发起方
+
+主动断开SPP连接与被动断开SPP连接会呈现不同的SPP连接状态转换log。
+
+主动断开SPP连接,连接状态会从已连接（2）跳转到断连中（3）后，再跳转到断连（4）状态，典型log如下：
+
+```text
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 1
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 2
+......
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 3
+......
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 0
+```
+
+被动断开SPP连接，连接状态会从已连接（2）直接跳转到断连（0）状态，典型log如下：
+
+```text
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 1
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 2
+......
+[15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 0
+```
+
+#### 2 观察snoop log，确认断连发起方
+
+#### 3 观察air log，确认断连发起方
 
 <a id="发现连接配对典型问题"></a>
 
@@ -359,6 +547,25 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
   * 若耳机未主动发起回连请求， 则需要耳机端进一步分析。
   * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，手表端进一步分析。
 
+<a id="问题-经典蓝牙设备未被对端设备成功连接"></a>
+
+### 问题：经典蓝牙设备未被对端设备成功连接
+
+对端设备主动连接失败，可通过下面方法，进一步定位原因。
+
+* [观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
+  * 若是设备未打开可连接模式，建议查看蓝牙应用设置的Scan Mode。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察本地是否成功收到ACL连接请求](#方法观察是否本地是否收到ACL连接请求)
+  * 若是蓝牙服务未输出连接请求信息，则需要确认蓝牙设备处于蓝牙通信范围。
+  * 进一步地，可以抓取Air log确认射频以及链路问题，寻求Controller供应商支持。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [观察本地是否同意ACL连接请求](#方法观察本地是否同意ACL连接请求)
+  * 若是蓝牙应用未同意连接请求，请确认应用端拒绝连接行为逻辑是否符合预期。
+  * 否则，建议上传蓝牙服务log、协议栈log，进一步分析。
+
 ### 问题：低功耗蓝牙扫描不到对端设备
 
 低功耗蓝牙的扫描过程，通常是由central设备开始扫描行为，接收对端发起的广播。可通过下面方法，进一步定位原因。
@@ -366,6 +573,18 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 * [观察是否成功开启扫描](#方法观察是否成功开启扫描)
   * 若是成功开启，需要保证设置的扫描间隔和扫描窗口是否合适，并且确保此时没有音频业务或其他高吞吐业务占用带宽资源。
   * 否则，建议上传syslog、协议栈log和带广播设备广播包的snoop log进一步分析确认。
+
+### 问题：SPP主动连接失败
+
+SPP主动连接失败问题，首先需要按照《发现、连接、配对问题》章节的分析方法，确认ACL连接是否正常建立。在确认ACL连接正常建立后，可以按照下面方法进一步分析。
+
+* [确认对端设备存在对应SPP服务](#方法：确认对端设备存在对应SPP服务)
+  * 若对端未注册对应的SPP服务，需要对对端设备进一步分析。
+  * 否则，建议按照如下步骤进一步分析。
+
+* [确认SPP连接状态与断连发起方](#方法：确认SPP连接状态与断连发起方)
+  * 若是之前的SPP连接尚未断开，则需要确认SPP连接双方是否有发起断连操作。
+  * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，进一步分析。
 
 # 音频传输问题
 
