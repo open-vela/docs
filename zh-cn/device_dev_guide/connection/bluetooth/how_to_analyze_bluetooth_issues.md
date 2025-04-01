@@ -11,6 +11,20 @@
   - [典型问题](#典型问题)
     - [问题：创建蓝牙instance失败](#问题创建蓝牙instance失败)
 - [发现、连接、配对问题](#发现连接配对问题)
+  - [问题1：CTKD BLE LTK 生成 BR LinkKey 失败](#问题1：ctkd-ble-ltk-生成-br-linkkey失败)
+    - [步骤1：打开协议栈 Debug 功能](#步骤1：打开协议栈-debug功能)
+    - [步骤2：复现问题](#步骤2：复现问题)
+    - [步骤3：日志解读](#步骤3：日志解读)
+  - [问题2：其他 BLE 配对相关问题分析](#问题2：其他-ble-配对相关问题分析)
+    - [BLE 配对状态机与流程图](#ble-配对状态机与流程图)
+    - [vela 设备使用 RPA 地址进行配对](#vela-设备使用-rpa地址进行配对)
+      - [Case 1：设备通过 RPA 地址广播建立连接](#case-1：设备通过-rpa地址广播建立连接)
+      - [Case 2：确认 BLE 配对完成](#case-2：确认-ble-配对完成)
+      - [Case 3：确认 IRK 交换成功](#case-3：确认-irk-交换成功)
+      - [Case 4：确认通过 Identity 地址建立 BR/EDR 连接](#case-4：确认通过-identity地址建立-br/edr连接)
+      - [Case 5：断连/重启后回连情况](#case-5：断连重启后回连情况)
+    - [vela 设备使用 Public 地址配对情况](#vela-设备使用-public地址配对情况)
+  - [发现、连接问题分析方法](#发现、连接问题分析方法)
   - [分析方法](#分析方法-1)
     - [方法：观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)
     - [方法：观察是否ACL连接超时断开（Connection Timeout）](#方法观察是否acl连接超时断开connection-timeout)
@@ -189,9 +203,137 @@ openvela-ap> ls /dev
 
 # 发现、连接、配对问题
 
+本节介绍 BLE 发现、连接、配对绑定过程中可能遇到的问题分析方法。
+
 <a id="发现连接配对分析方法"></a>
 
-## 分析方法
+## 问题1：CTKD BLE LTK 生成 BR LinkKey 失败
+
+**说明：**
+
+* vela CTKD 流程在 Host 端完成，抓取 OTA/HCI 日志可以确认 BLE 配对过程是否正常。
+* CTKD 问题深入分析需配合 vela 协议栈日志进行。
+
+### 步骤1：打开协议栈 Debug 功能
+
+```c
+log enable stack
+logmask 1 2 7
+```
+
+具体的 mask 掩码定义，请参考《bttool 使用说明文档》-《log 子命令》。
+
+> 若需打开除掩码 1 和 2 外其他的协议栈 debug 日志功能，请联系 vela 蓝牙开发人员开启对应宏配置并重新编译协议栈静态库。
+
+### 步骤2：复现问题
+
+按照具体场景进行问题复现，并记录相关日志。
+
+### 步骤3：日志解读
+
+* 在日志中全局搜索关键字 `SMP` 或 `CTKD`。
+* 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能被关闭，原因是未启用 LESC 功能。
+* 若日志显示 `[BR2LE OFF] [Disabled]`，表示 LinkKey 到 LTK 方向的 CTKD 功能被 APP 禁用。
+
+- 在抓取的日志中全局搜索关键字 `SMP` 或 `CTKD`。
+- 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能已被关闭，原因是未启用 LESC 功能；
+- 若日志显示 `[BR2LE OFF] [Disabled]`，表示 LinkKey 到 LTK 方向的 CTKD 功能已被 APP 禁用。
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="50%">
+
+**如何确认当前 LinkKey 是否由 CTKD 生成？**
+
+如下日志示例中，`state:2` 和 `ctkd:1` 表示设备已绑定，且使用 CTKD 生成了 LinkKey：
+
+```
+[ap] [bt] bind_manager_bond_state_change_handler: [D4:68:AA:16:xx:xx] state:2 ctkd:1
+[ap] [bt] bind_manager_send_event: ----> State[START] Event[12:EVENT_BT_CTKD_BONDED_SUCCESS]
+```
+
+---
+
+## 问题2：其他 BLE 配对相关问题分析
+
+通过抓取空口日志观察 BLE 配对流程是否符合预期。
+
+### BLE 配对状态机与流程图
+
+- BLE 配对状态机：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_state_machine.png" alt="BLE配对状态机" width="50%">
+
+- BLE 配对流程图：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE配对流程图" width="50%">
+
+### vela 设备使用 RPA 地址进行配对
+
+#### Case 1：设备通过 RPA 地址广播建立连接
+
+- Ellisys 空口日志中过滤仅保留手表与 iPhone 手机的 RPA 地址：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_1.png" alt="设备RPA地址连接" width="50%">
+
+- 手表通过 RPA 地址发送 Connectable 广播：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_2.png" alt="Connectable广播" width="50%">
+
+- iPhone 手机发送 Scan Request，手表回复 Scan Response 后，手机发送 Connection Indication Packet 完成连接：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE连接建立" width="50%">
+
+#### Case 2：确认 BLE 配对完成
+
+- SMP 配对过程顺利完成，双方均支持 LESC，IdKey 分发正常，LinkKey 标志为 1：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP配对完成" width="50%">
+
+#### Case 3：确认 IRK 交换成功
+
+- IRK 成功交换后，存入 Resolving List：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK交换成功" width="50%">
+
+#### Case 4：确认通过 Identity 地址建立 BR/EDR 连接
+
+- Controller 主动向 Host 请求 LinkKey，并校验通过，无需再次进行 BR/EDR 配对：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_6.png" alt="BR/EDR连接成功" width="50%">
+
+- 从空口日志进一步确认 LinkKey 校验成功：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey校验成功" width="50%">
+
+#### Case 5：断连/重启后回连情况
+
+设备信息参考：
+
+| 设备名称                | 地址                           | 模式       | 描述                 |
+| ----------------------- | ------------------------------ | ---------- | -------------------- |
+| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable) | Low Energy | REDMI Watch 5 eSIM   |
+| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45              | Dual Mode  | REDMI Watch 5 eSIM   |
+| xxx的 iPhone         | B4:19:74:13:CE:4A              | Dual Mode  | xxx的 iPhone      |
+| xxx的 iPhone         | 6B:FC:EE:54:F0:9E (Resolvable) | Dual Mode  | xxx的 iPhone      |
+
+- 设备重启后，Resolving List 需要更新到 Controller，重新建立连接：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="设备重启后回连成功" width="50%">
+
+- 正常断连回连情况：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="正常断连回连成功" width="50%">
+
+### vela 设备使用 Public 地址配对情况
+
+- 使用 Public 地址配对时，不生成或分发 IRK，无 IdKey 位：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_10.png" alt="Public地址配对" width="50%">
+
+- BR/EDR LinkKey 正常生成：
+
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_11.png" alt="BR/EDR LinkKey正常生成" width="50%">
+
+## 发现、连接问题分析方法
 
 <a id="方法：观察是否对方设备未打开可连接模式"></a>
 
