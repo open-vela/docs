@@ -50,11 +50,20 @@
     - [方法：观察音频包序列号是否连续](#方法观察音频包序列号是否连续)
     - [方法：观察air log中1秒内发送的音频数据样本点数量](#方法观察air-log中1秒内发送的音频数据样本点数量)
     - [方法：观察air log中音频数据是否存在重传](#方法观察air-log中音频数据是否存在重传)
+    - [方法：观察syslog判段A2DP-SNK音乐卡顿原因](#方法观察syslog判段a2dp-snk音乐卡顿原因)
+    - [方法：观察A2DP-SNK卡顿是否来源于基带芯片](#方法观察a2dp-snk卡顿是否来源于基带芯片)
+    - [方法：观察A2DP-SNK卡顿是否来源于mips不足](#方法观察a2dp-snk卡顿是否来源于mips不足)
+    - [方法：观察bluetoothd自身是否被阻塞](#方法观察bluetoothd自身是否被阻塞)
   - [典型问题](#典型问题-2)
     - [问题：连接耳机播放音乐，耳机无声](#问题连接耳机播放音乐耳机无声)
     - [问题：连接耳机播放音频文件，音频文件开头缺失](#问题连接耳机播放音频文件音频文件开头缺失)
     - [问题：语音播报，结尾处有pop音](#问题语音播报结尾处有pop音)
     - [问题：连接两对耳机时，出现断连和无声的问题](#问题连接两对耳机时出现断连和无声的问题)
+    - [问题: 连接耳机播放音乐，耳机无声](#问题-连接耳机播放音乐耳机无声)
+    - [问题: 连接耳机播放音频文件，音频文件开头缺失](#问题-连接耳机播放音频文件音频文件开头缺失)
+    - [问题: 语音播报，结尾处有pop音](#问题-语音播报结尾处有pop音)
+    - [问题: 连接手机播放音乐卡顿](#问题-连接手机播放音乐卡顿)
+    - [问题: 连接手机播放音乐无声](#问题-连接手机播放音乐无声)
 - [音乐播放控制问题](#音乐播放控制问题)
   - [分析方法](#分析方法-2)
     - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
@@ -1138,6 +1147,75 @@ air log中基带包有两个参数可以用来判断包是否存在重传，分�
 
 上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变；第二次的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。
 
+<a id="方法：通过syslog判段A2DP-SNK音乐卡顿原因"></a>
+
+### 方法：观察syslog判段A2DP-SNK音乐卡顿原因
+A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以根据以下log进行分析：
+```
+[a2dp_snk_stream]: a2dp_sink_audio_handle_timer underflow, miss ticks: x
+
+[a2dp_snk_stream]: ===a2dp cpu busy time:y, buff_cnt:z===
+[a2dp_snk_stream]: ipc blocking, block ticks: w
+```
+
+其中，“underflow, miss ticks: x”表示bluetooth侧的数据buffer在x个ticks（20ms）中为空； “===a2dp cpu busy time: y, buff_cnt: z===”表示发送数据的事件已经 y us未执行，并且当前buffer中数据的个数为z；“ipc blocking, block ticks: w”表示与Media的ipc中阻塞了w个数据包。由于音频链路上有缓存数据的buffer，所以出现以上打印并不一定意味着会出现卡顿，通常x、y、w要大于一定值，才会实际表现出卡顿，具体值取决于Media侧buffer设置的大小。
+
+**注意，该方法仅能进行问题的初步定位**。
+
+#### 1 观察A2DP-SNK音乐卡顿是否可能由基带芯片引起
+
+若未出现“===a2dp cpu busy time: y, buff_cnt: z===”，但存在"underflow, miss ticks: x"，卡顿很有可能是因则优先怀疑音乐卡顿来自于基带芯片。
+
+#### 2 观察A2DP-SNK音乐卡顿是否可能由mips不足引起
+
+若“===a2dp cpu busy time: y, buff_cnt: z===”与“===a2dp cpu busy time: y, buff_cnt: z===”交替出现，应优先怀疑卡顿由mips不足造成。
+
+#### 3 观察A2DP-SNK音乐卡顿是否可能由Bluetooth service
+
+在syslog上，因为Bluetooth service产生的卡顿通常表现的类似于mips不足。
+
+#### 4 观察A2DP-SNK音乐卡顿是否可能由Media service
+
+若出现“ipc blocking, block ticks: w”，说明发送给Media的音频数据没有被及时消费，导致在ipc通道前堆集了w个数据包，在这种情况下应优先考虑Media侧出现问题。
+
+<a id="方法：观察A2DP-SNK卡顿是否来源于基带芯片"></a>
+
+### 方法：观察A2DP-SNK卡顿是否来源于基带芯片
+
+#### 1 通过snoop log观察卡顿是否来源于基带芯片
+
+典型log如下：\
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_audio_data.png" alt="snoop:AVDTP数据" width="50%">
+
+其中，在时间段能收到AVDTP数据的time stamp应大致符合以下关系，（end_time(s) - start_time(s)) * samplerate <= end_time_stamp - start_time_stamp。
+
+#### 2 通过syslog观察卡顿是否来源于基带芯片
+
+在基带芯片驱动处添加syslog可以直接判断音乐卡顿是否来源于基带芯片。\
+**该syslog需要能确认基带芯片是否及时上报数据**，若未及时上报数据，则可以怀疑音乐卡顿来自于基带芯片。\
+由于不同项目使用的基带芯片不同，所以对应的syslog如何添加/开启应该联系负责基带芯片驱动的工程师。
+
+<a id="方法：观察A2DP-SNK卡顿是否来源于mips不足"></a>
+
+### 方法：观察A2DP-SNK卡顿是否来源于mips不足
+
+bluetoothd的优先级在整个系统中往往不是最高，所以如果出现系统mips不足，则有可能出现bluetoothd没有被及时调度去向media发送数据，从而导致Media侧未能及时接收到数据。
+
+#### 1 通过ps命令观察cpu负载情况
+
+对于可持续的长时间卡顿问题，可以直接通过ps命令观察cpu负载情况。若idle task的cpu占用率已经很低/为零，说明存在mips不足的问题，则应先解决系统mips不足的问题。
+
+#### 2 通过工具命令观察cpu负载情况
+
+对于偶现/不可持续的卡顿问题，可以通过抓取发生时间点的trace来分析是否存在短时间内的cpu占用率过高的问题。
+
+<a id="方法：观察bluetoothd自身是否被阻塞"></a>
+
+### 方法：观察bluetoothd自身是否被阻塞
+#### 1 通过debug log判断bluetoothd是否被阻塞
+
+需要对整个蓝牙模块进行打点，可以通过脚本对蓝牙模块的所有函数添加打点log，在复现时间点根据打点log和代码流程观察是否有阻塞现象。
+
 ## 典型问题
 
 ### 问题：连接耳机播放音乐，耳机无声
@@ -1209,6 +1287,77 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
   * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
 
   * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+
+### 问题: 连接耳机播放音乐，耳机无声
+
+* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+
+  * 若AVDTP signaling连接未建立，建议对比典型log，观察建立signaling连接中是否出现异常。
+
+  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+
+* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+
+  * 若两个设备之间的AVDTP media连接未建立，建议对比典型log，观察建立media连接中是否出现异常。
+
+  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
+
+  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+  * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
+
+  * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+
+### 问题: 连接耳机播放音频文件，音频文件开头缺失
+
+* [观察sequence number是否连续](#方法观察air-log中的音频包序列号是否连续)
+
+  * 若air log中出问题的音频流中存在音频包序列号不连续，建议Vela蓝牙测观察音频流中音频包的序列号不连续的原因。
+
+  * 若音频包序列号连续，建议Vela Media测观察发送的音频包是否完整。
+
+### 问题: 语音播报，结尾处有pop音
+
+### 问题: 连接手机播放音乐卡顿
+
+对于该问题需要进行以下分析：
+
+  [观察air log中音频数据是否存在重传](#方法：方法观察air-log中音频数据是否存在重传)\
+  [通过syslog判段A2DP-SNK音乐卡顿原因](#方法：通过syslog判段A2DP-SNK音乐卡顿原因)
+
+根据推测原因应进行以下分析：
+* 若发现重传现象比较严重
+
+* [观察A2DP-SNK卡顿是否来源于基带芯片](#方法：观察A2DP-SNK卡顿是否来源于基带芯片)
+
+  * 若观察到snoop log中，AVDTP数据包数量不符合预期，需要进一步确认驱动处的数据包情况
+
+    * 若观察到驱动处数据包数量异常，则需要进一步确认问题发生在基带芯片、空口处或者驱动处
+
+* [观察A2DP-SNK卡顿是否来源于mips不足](#方法：观察A2DP-SNK卡顿是否来源于mips不足)
+
+  * 若观察到idle task的cpu占用率过小，需要对系统的mips进行合理分配
+  * 若通过trace观察到某一高优先级线程长时间占据cpu，则应该优化该线程的执行逻辑，避免高优先级线程执行计算密集型任务
+
+* [观察bluetoothd自身是否被阻塞](#方法：观察bluetoothd自身是否被阻塞)
+
+  * 若阻塞由于外部调用产生，则需要考虑该阻塞是否符合预期
+
+    * 若不符合预期，则应优化该外部调用
+    * 若符合预期，则需要异步执行该阻塞动作
+
+  * 若阻塞由于bluetoothd内部产生，则需要对内部动作进行优化
+
+* 对于Media service未及时消费音频数据的问题，需要联系Media service的开发人员确认。
+
+### 问题: 连接手机播放音乐无声
+
 
 # 音乐播放控制问题
 
