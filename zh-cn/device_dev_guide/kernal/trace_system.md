@@ -11,14 +11,14 @@ Trace 是一种用于跟踪和记录系统活动的工具，能够详细捕获�
 
 Trace 以微秒为单位记录事件，并按时间顺序排列，提供精确的系统运行日志。
 
-### 1 核心原理
+### 1、核心原理
 
 Trace 系统通过在系统运行的关键点插桩来收集事件数据。例如：
 
 - 在任务启动时调用 `sched_note_start`。
 - 在中断函数中调用 `sched_note_irqhandle`。
 
-### 2 支持的事件类型
+### 2、支持的事件类型
 
 Trace 工具支持以下事件的跟踪和记录：
 
@@ -33,7 +33,7 @@ Trace 工具支持以下事件的跟踪和记录：
 
 在系统编译时，可以通过 `/drivers/note/Kconfig` 配置需要记录或跟踪的 `Kernel Events` 和可选的 `Channel`。
 
-### 1 配置 Kernel Events
+### 1、配置 Kernel Events
 
 以下是可选择配置的 `Kernel Events`，用于记录和跟踪系统中的关键事件：
 
@@ -57,7 +57,7 @@ SCHED_INSTRUMENTATION_SPINLOCKS
 SCHED_INSTRUMENTATION_SYSCALL
 ```
 
-### 2 使用 API 添加自定义 Trace 的配置
+### 2、使用 API 添加自定义 Trace 的配置
 
 如果仅使用 API 添加自定义 Trace，请启用以下配置项：
 
@@ -155,36 +155,36 @@ CONFIG_DRIVERS_NOTERAM_SECTION=".bss.xxx"
 
 系统打点工具通过 `perf_gettime` API 获取时钟源，可配置为以下三种时钟源，推荐使用第一种方案：
 
-- 方案一：使用硬件 PMU 作为时钟源。
+### 方案一 （推荐）使用硬件 PMU 作为时钟源
 
-    硬件 PMU 提供高精度（纳秒级）的时间精度，并支持处理时间回滚问题。
+硬件 PMU 提供高精度（纳秒级）的时间精度，并支持处理时间回滚问题。
 
-    ```Bash
-    # 使能硬件 PMU 时钟源
-    CONFIG_ARCH_PERF_EVENTS=y
-    # 处理 perf 时钟溢出，关闭后时间可能发生回滚
-    CONFIG_PERF_OVERFLOW_CORRECTION=y
-    ```
+```Bash
+# 使能硬件 PMU 时钟源
+CONFIG_ARCH_PERF_EVENTS=y
+# 处理 perf 时钟溢出，关闭后时间可能发生回滚
+CONFIG_PERF_OVERFLOW_CORRECTION=y
+```
 
-- 方案二：使用硬件定时器作为时钟源。
+### 方案二 使用硬件定时器作为时钟源
 
-    使用硬件定时器作为时钟源，时钟精度和 `oneshot timer` 一致，并支持处理时间回滚问题。
+使用硬件定时器作为时钟源，时钟精度和 `oneshot timer` 一致，并支持处理时间回滚问题。
 
-    ```Bash
-    # 关闭硬件 PMU 时钟源，使用定时器作为 perf 时钟源
-    CONFIG_ARCH_PERF_EVENTS=n
-    ```
+```Bash
+# 关闭硬件 PMU 时钟源，使用定时器作为 perf 时钟源
+CONFIG_ARCH_PERF_EVENTS=n
+```
 
-- 方案三：使用系统滴答时钟作为时钟源。
+### 方案三 使用系统滴答时钟作为时钟源
 
-    关闭下面配置，将默认使用系统 systick 作为时钟源， 时钟精度与 `CONFIG_USEC_PER_TICK` 配置一致，默认 10ms 。
+关闭下面配置，将默认使用系统 systick 作为时钟源， 时钟精度与 `CONFIG_USEC_PER_TICK` 配置一致，默认 10ms 。
 
-    ```Bash
-    # 所有配置均关闭后，自动使用系统时间作为时钟源
-    CONFIG_ALARM_ARCH=n
-    CONFIG_TIMER_ARCH=n
-    CONFIG_ARCH_PERF_EVENTS=n
-    ```
+```Bash
+# 所有配置均关闭后，自动使用系统时间作为时钟源
+CONFIG_ALARM_ARCH=n
+CONFIG_TIMER_ARCH=n
+CONFIG_ARCH_PERF_EVENTS=n
+```
 
 ## 四、Trace 系统原理
 
@@ -195,7 +195,7 @@ Trace 系统的核心原理是在系统运行的关键点进行插桩，以收�
 
 ![img](./figures/005.png)
 
-### 数据收集与分发
+### 1、数据收集与分发
 
 Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不同的 Channel。每个 Channel 可输出到不同的后端。目前支持的后端包括：
 
@@ -207,7 +207,7 @@ Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不
 
 ## 五、API 使用说明
 
-### 1 内核打点函数/宏
+### 1、内核打点函数/宏
 
 以下 API 用于在内核代码中添加固定插桩代码。
 
@@ -283,7 +283,7 @@ Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不
     void sched_note_syscall_leave(int nr, uintptr_t result);  
     ```
 
-### 2 自定义打点 API
+### 2、自定义打点 API
 
 `sched_note` 的扩展部分可用于在应用代码中添加打点功能。通过配置宏 `CONFIG_SCHED_INSTRUMENTATION_DUMP` 可启用该功能。
 
@@ -386,7 +386,7 @@ enum note_tag_e
 
 - `Event`：支持自定义事件 ID，可结合上述枚举值使用，以便更精确地标识和分类事件。
 
-### 3 自定义 Trace Buffer
+### 3、自定义 Trace Buffer
 
 如果内核模块需要自定义一个 buffer 来存放私有事件，可通过以下方法注册一个 `noteram` 驱动，并指定需要关注的事件类型。
 
@@ -449,7 +449,7 @@ void note_rpmsg_initialize(void)
 }
 ```
 
-### 4 使用示例
+### 4、使用示例
 
 #### 功能说明
 
@@ -528,11 +528,11 @@ int main(int argc, FAR char *argv[])
 
 ## 六、ATRACE 使用
 
-### 1 功能概述
+### 1、功能概述
 
 ATRACE 是一种用于性能分析和调试的工具，提供了一系列宏，用于记录不同类型的事件和上下文信息。例如，ATRACE 可以用于跟踪函数执行时间、异步事件、瞬时事件以及整数计数器的变化。
 
-### 2 ATRACE 宏说明
+### 2、ATRACE 宏说明
 
 以下是 ATRACE 提供的主要宏及其功能描述：
 
@@ -644,7 +644,7 @@ private:
 };
 ```
 
-### 3 ATrace TAG
+### 3、ATrace TAG
 
 ```C
 #define ATRACE_TAG_NEVER            0       // This tag is never enabled.
@@ -679,7 +679,7 @@ private:
 #define ATRACE_TAG_LAST             ATRACE_TAG_THERMAL
 ```
 
-### 4 使用示例
+### 4、使用示例
 
 1. 在代码中插桩。
 
@@ -749,7 +749,7 @@ private:
 
 ## 七、函数自动插桩
 
-#### 原理介绍
+#### 1、原理介绍
 
 通过 `__cyg_profile_func_enter` 和 `__cyg_profile_func_exit` 函数，自动记录函数的开始和结束信息。结合编译选项，用户可以为指定模块启用自动插桩功能，同时排除特定文件或函数。以下是插桩函数的实现代码：
 
@@ -775,7 +775,7 @@ __cyg_profile_func_exit(void *this_fn, void *call_site)
 }
 ```
 
-#### 使用方法
+#### 2、使用方法
 
 1. 启用功能选项。 在 `menuconfig` 中启用以下配置项：
 

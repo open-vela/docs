@@ -12,7 +12,7 @@
 
 - Bssid（Basic Service Set Identifier）
   
-    通常指无线接入点（AP，Access Point）的MAC地址。
+    通常指无线接入点（AP，Access Point）的 MAC 地址。
 
 ## C
 

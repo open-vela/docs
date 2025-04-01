@@ -167,10 +167,6 @@ CONFIG_SYSLOG_TIMESTAMP_FORMATTED=y      # 格式化时间戳输出
 
 ##### 颜色打印
 
-> 注意
->
-> 请不要在自定义日志（LOG）中直接添加颜色字符。
-
 ```Makefile
 CONFIG_SYSLOG_COLOR_OUTPUT=y
 ```
