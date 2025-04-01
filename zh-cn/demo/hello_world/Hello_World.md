@@ -1,4 +1,4 @@
-# 添加 Hello World 示例
+# 添加 Hello World
 
 ## 一、概述
 

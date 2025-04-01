@@ -1,4 +1,4 @@
-# 手环 Bandx Demo
+# 手环 Bandx
 
 \[ [English](../../en/demo/Smart_Band_Example.md) | 简体中文 \]
 
@@ -152,4 +152,4 @@ sudo apt install android-tools-adb
 
 #### 解决方案
 
-请按 [步骤三](#步骤三-启动模拟器并推送资源) 进行资源推送。
+请按[步骤三](#步骤三-启动模拟器并推送资源)进行资源推送。

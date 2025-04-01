@@ -13,12 +13,12 @@
 
 除了核心编译文件外，编译 openvela 时还需要以下关键文件和配置：
 
-1. 板级构建宏定义与构建选项文件：
+1. 板级构建宏定义与构建选项文件。
 
     - 文件位置：`nuttx/Make.defs`。
     - 来源：从模板文件 `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs` 拷贝而来。
 
-2. 条件编译配置文件：
+2. 条件编译配置文件。
 
     - 文件位置：根目录的 `configs/defconfig`。
     - 功能：被拷贝为 `.config` 文件，作为 openvela 的基础配置文件，支持高度裁剪和模块化配置。
@@ -26,20 +26,21 @@
 
 ### 2、编译流程关键点
 
-1. 配置编译主机：
+1. 配置编译主机。
 
     使用 `nuttx/tools/configure.sh` 脚本选择编译主机的配置。
 
-2. 关键文件包含：
+2. 关键文件包含。
 
     在 `Make.defs` 文件中，包含以下两个关键文件，这些文件会被传递给各阶段的 Makefile：
 
     - `nuttx/.config`：构建配置文件。
     - `nuttx/tools/Config.mk`：通用宏定义文件。
 
-3. 文件生成与调用：
+3. 文件生成与调用。
 
     1. 文件生成
+
         - 在 `nuttx/` 和 `apps/` 的各级子目录中，`Makefile`、`Make.defs` 和 `Make.dep` 文件会在 `Makefile` 执行的各阶段中被调用或生成。
         - `Make.dep`：由工具 `tools/mkdep` 在编译过程中生成，其内部使用 `gcc -M` 命令生成符合 `Makefile` 构建目标格式的依赖语句。
 

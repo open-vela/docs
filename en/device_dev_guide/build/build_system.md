@@ -1,6 +1,6 @@
 # Build System  
 
-## 1. Overview  
+## I. Overview  
 
 In the current version, **openvela** uses `Makefile` to organize the build process. The main entry point for the build process is located in the `nuttx/Makefile` file. Depending on the host platform, different core build files are executed:  
 
@@ -13,11 +13,11 @@ The `nuttx/tools/` directory contains the necessary scripts and C programs requi
 
 In addition to the core build files, the following key files and configurations are required to build **openvela**:  
 
-1. **Board-level macros and build options file:**  
+1. **Board-level macros and build options file.**  
    - **Location:** `nuttx/Make.defs`.  
    - **Source:** Copied from the template file located at `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs`.  
 
-2. **Conditional build configuration file:**  
+2. **Conditional build configuration file.**  
    - **Location:** `configs/defconfig` in the root directory.  
    - **Function:**  
      - Copied as `.config` and serves as the base configuration file for **openvela**, supporting highly customizable and modular configurations.  
@@ -26,10 +26,10 @@ In addition to the core build files, the following key files and configurations 
 
 ### 2. Key Points in the Build Process  
 
-1. **Configuring the Host Build Environment:**  
+1. **Configuring the Host Build Environment.**  
    Use the `nuttx/tools/configure.sh` script to select the appropriate configuration for the build host.  
 
-2. **Key File Inclusions:**  
+2. **Key File Inclusions.**  
    In the `Make.defs` file, the following two critical files are included and passed to different stages of the `Makefile` process:  
 
    - `nuttx/.config`: The build configuration file.  
@@ -37,16 +37,16 @@ In addition to the core build files, the following key files and configurations 
 
 3. **File Generation and Invocation:**  
 
-   1. **File Generation:**  
+   1. **File Generation.**  
       - At various stages of the `Makefile` execution, the `Makefile`, `Make.defs`, and `Make.dep` files in the `nuttx/` and `apps/` directories and their subdirectories are either generated or invoked.  
       - **`Make.dep`:** Generated using the `tools/mkdep` tool during the build process. Internally, it utilizes the `gcc -M` command to create dependency statements in a format compliant with `Makefile` build targets.  
 
-   2. **File Invocation:**  
+   2. **File Invocation.**  
       - `Makefile` files in subdirectories include the board-level macros configuration file `nuttx/Make.defs` at the top.  
 
 By organizing the build system in this way, **openvela** achieves a flexible build process that supports multi-platform builds and highly modular configurations.  
 
-## 2. Build Dependency Tree  
+## II. Build Dependency Tree  
 
 The following section summarizes the build target dependency tree based on the **FlatMode sim:nsh** board configuration.  
 
@@ -398,7 +398,7 @@ endif
                 sort > $(TOPDIR)/System.map
 ```
 
-### Key Points:  
+### Key Points
 
 - Intermediate File Generation: Produces the `nuttx.rel` file as an intermediate result of the link process.  
 - Symbol Table Processing: Uses `OBJCOPY` and `sed` to modify the symbol table, ensuring symbol names conform to requirements.  
@@ -474,7 +474,7 @@ endif
         $(call POSTBUILD, $(TOPDIR))
 ```
 
-### Key Points:
+### Key Points
 
 - Multi-format support: Generate `.hex`, `.srec`, `.bin`, and `uImage` files based on configuration options.  
 - U-Boot image generation: Use the `mkimage` tool to create the `uImage` file, with support for automatically copying it to the TFTP directory.  

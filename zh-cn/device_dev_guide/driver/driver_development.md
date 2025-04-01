@@ -18,7 +18,7 @@ openvela 的驱动框架相对简单，并未提供像 Linux 系统中那样复�
 
 在 openvela 中，应用层通过系统调用访问驱动，其调用流程如下：
 
-**系统调用 -> VFS（Virtual File System）-> 驱动**。
+系统调用 -> VFS（Virtual File System）-> 驱动。
 
 为了理解驱动如何注册到文件系统中，需要先了解相关的数据结构。这些数据结构的定义位于 `include/nuttx/fs/fs.h` 文件中。
 
@@ -180,7 +180,7 @@ int register_driver(FAR const char *path, FAR const struct file_operations *fops
     - 将 `priv` 数据存储到 `inode` 的私有字段中。
     - 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
 
-## 二 驱动内部结构
+## 二、驱动内部结构
 
 ### 1、驱动类型与层次结构
 
