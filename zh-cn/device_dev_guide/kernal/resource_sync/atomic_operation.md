@@ -133,7 +133,7 @@ bool atomic_compare_exchange_strong(atomic_type *object, int *expected, int desi
 以下是位操作相关的原子操作接口及其功能说明：
 
 ```C
-//按位亦或操作，将指定值与原子变量的值进行按位异或运算，并返回执行xor操作前的旧值
+//按位异或操作，将指定值与原子变量的值进行按位异或运算，并返回执行xor操作前的旧值
 atomic_type atomic_fetch_xor(atomic_type *object, atomic_type desired);
 
 //按位或操作，将指定值与原子变量进行按位或运算，并返回执行or操作前的旧值
