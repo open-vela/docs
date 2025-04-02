@@ -1,0 +1,9 @@
+{
+"editor.tabSize": 4,
+"editor.detectIndentation": false,
+"editor.defaultFormatter": "yzhang.markdown-all-in-one",
+"notebook.defaultFormatter": "yzhang.markdown-all-in-one",
+"[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+}
+}

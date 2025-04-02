@@ -4,7 +4,7 @@
 
 <h1 align="center">openvela</h1>
 
-\[ [English](README.md) | 简体中文 \]
+\[ [English](README.md) | 简体中文 | [繁體中文](README_zh-tw.md) \]
 
 ## openvela 简介
 
@@ -14,7 +14,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## openvela 技术优势
 
-- **高度可扩展**：openvela 的设计注重模块化与可扩展性，使其能够灵活适应多样的物联网应用场景。小到仅配备 32K RAM 的微型 BLE 模组，大到拥有 256M RAM 的智能有屏音箱，openvela 都能提供高度可扩展的支持。
+- **高度可扩展**：openvela 的设计注重模块化与可扩展性，使其能够灵活适应多样的物联网应用场景。小到仅配备 8KB RAM 的微型 BLE 模组，大到拥有 512MB RAM 的智能有屏音箱，openvela 都能提供高度可扩展的支持。
 
 - **一站式解决方案**：随着时间的推移，openvela 不断沉淀了各类 AIoT 应用的共性需求，成为一个功能完备的软件平台，为各类物联网解决方案提供了全面的支持。厂商采用 openvela，可以显著降低研发成本并加速产品的上市时间。
 
@@ -34,26 +34,39 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 
 如果您想要体验 openvela，我们提供一个功能完备的模拟器，无需硬件平台即可使用。有关详细信息，请参阅如下指南。
 
-1. [准备开发环境](./Getting_Started/Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 源码](./Getting_Started/Download_Vela_sources_zh-cn.md)
-3. [编译 openvela 源码](./Getting_Started/Build_Vela_from_sources_zh-cn.md)
-4. [在 openvela Emulator 上运行编译产物](./Getting_Started/Run_Vela_on_Vela_Emulator_zh-cn.md)
+1. [准备开发环境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
+2. [下载 openvela 源码](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
+3. [编译 openvela 源码](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
+4. [在 openvela Emulator 上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+
+## 子仓库列表
+
+| 子仓库链接                                                   | 描述                                                         |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| [frameworks](../../../../open-vela/frameworks) | openvela 服务框架：主要包含蓝牙、电话、图形、多媒体、应用框架、安全、系统服务框架（KVDB、OTA、healthd、binder、charger 等）。|
+| [vendor](../../../../open-vela/vendor) | 芯片原厂的驱动和框架。 |
+| [nuttx](../../../../open-vela/nuttx) | 基于开源实时操作系统 NuttX 打造的内核，提供基础的内核功能，包括任务调度、跨进程通信、文件系统、TCP/IP 协议栈、设备驱动和电源管理等，同时对上提供标准的 POSIX 接口。如果您想要对 NuttX 操作系统有更深入了解，可以在 [Apache NuttX](https://nuttx.apache.org/) 官网查看更多信息。 |
+| [apps](../../../../open-vela/apps) | `apps` 是开源实时操作系统（NuttX）的应用程序库，包含了一系列为 NuttX RTOS 设计的应用程序和实用工具。这些应用程序和工具包括 shell 命令行工具、文件系统工具、网络工具等，它们可以帮助开发者更方便地开发和调试基于 NuttX RTOS 的嵌入式系统。 |
+| [external](../../../../open-vela/external) | openvela 引入的三方库。 |
+| [tests](../../../../open-vela/tests) | 该仓库包含接口测试，具体包括多媒体、文件系统、内存管理和 socket 通信等核心 API 的测试。 |
+| [docs](../../../../open-vela/docs) | openvela 对应的开发者文档。 |
 
 ## 示例
 
-* [音乐播放器示例](./Examples/Music_Player_Example_zh-cn.md)
-* [智能手环示例](./Examples/Smart_Band_Example_zh-cn.md)
-* [自行车码表示例](./Examples/X_Track_zh-cn.md)
+- [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
+- [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
+- [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)
 
-## 代码贡献
+## 参与贡献
 
-参与贡献：[代码贡献指南](CONTRIBUTING_zh-cn.md)。
+- [代码贡献指南](./CONTRIBUTING_zh-cn.md)
+- [文档贡献指南](./zh-cn/contribute/process/doc_dev_process.md)
 
 ## 许可协议
 
 这个代码库中的代码使用 Apache 2.0 许可证。你可以在[这里](https://www.apache.org/licenses/LICENSE-2.0.txt)找到更多关于 Apache 2.0 许可证的信息。
 
-openvela引用三方开源软件及许可证说明，参考[第三方开源软件说明](Third_Party_and_Open_Source_Components_zh-cn.md)。
+openvela 引用三方开源软件及许可证说明，参考[第三方开源软件说明](Third_Party_and_Open_Source_Components_zh-cn.md)。
 
 ## 联系方式
 
