@@ -67,4 +67,4 @@ sudo pip3 install kconfiglib pyelftools cxxfilt
 
 ## 八、后续步骤
 
-请参阅 [下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。
+请参阅[下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。
