@@ -164,7 +164,66 @@
 ```
 <a id="方法：观察蓝牙驱动节点是否成功创建">
 
+通过 `ps` 命令查看进程列表，确认是否存在 `bluetoothd` 进程。
+
+- **若不存在**：跳转到 **“2. bluetoothd 不存在时的分析方法”**。
+- **若存在**：跳转到 **“3. bluetoothd 存在时的分析方法”**。
+
+##### 2. `bluetoothd` 不存在时的分析方法：
+
+**关键日志检查：**
+
+  **可能原因：**
+
+  - **Framework 初始化失败**：
+
+    ```c
+    [service_manager]: A2DP-Src service register success
+    [storage]: bt_storage_init successed
+    [audio_transport]: audio_transport_open path{4}[sco_ctrl] success
+    ```
+
+    检查日志中上述模块是否出现异常。
+  - **协议栈初始化失败**：
+
+    ```c
+    [stack_manager]: stack_manager_init done
+    ```
+
+    确认协议栈是否成功初始化。
+  - **HCI 驱动读取通道建立失败**：
+
+    ```c
+    [bluelet]: hci_add_recv
+    ```
+
+    检查 `hci` 驱动读取通道是否建立成功。
+  - **libuv Service Loop 异常**：
+
+    ```c
+    [bt_service]: bt_service_init done
+    [service_loop]: service loop running now !!!
+    ```
+
+    确认 `service_loop` 是否初始化成功。
+
+##### 3. `bluetoothd` 存在时的分析方法：
+
+**可能原因：**
+
+- **Socket 建立失败**：
+对于跨核应用（APP 与 `bluetoothd` 不在同一个核），优先排查 **Rpmsg 通道问题**，可参考系统文档：《Rpmsg HCI》、《Rpmsg Socket》。
+- **App 未配置 Loop 环境**：
+  确保 App 使用 `uv_loop` 或 `thread while (1)` 类型循环。参考《如何开发一个蓝牙应用》。
+
 ### 方法：观察蓝牙驱动节点是否成功创建
+
+  ```c
+  [72][h4]: bt_sal_hci_transport_init: g_tlfd = 16
+  ```
+
+  - 若 `fd = -1`：蓝牙驱动打开失败，需参考《蓝牙驱动打开失败问题分析》章节。
+  - 若 `fd > 0`：驱动成功，但 `bluetoothd` 初始化失败，需进一步分析原因：
 
 利用`ls /dev`命令，观察蓝牙驱动节点是否成功创建，正常输出信息可以观察到名为`ttyHCI0`的蓝牙驱动节点。
 
@@ -186,7 +245,80 @@ openvela-ap> ls /dev
 
 ### 问题：创建蓝牙instance失败
 
-当蓝牙应用报`create instance error`错误时，可以采用如下方法排查：
+##### 特殊场景：APP create_instance 时蓝牙 `bluetoothd` 未初始化完成
+
+**问题表现：**
+APP 在 `bluetoothd` 初始化超时（默认1秒）后创建实例失败。
+
+**定位方法：**
+通过打点蓝牙初始化流程，定位超时位置。
+
+**示例日志：**
+
+```c
+[03-10 20:23:11.549][03/09 17:29:15] [15] [cp] [270][BT]: [VelaBT], bt_log_server_init 270
+[03-10 20:23:15.852][03/09 17:29:19] [19] [cp] [BT] bts_adapter_init: create bt instance failed
+[03-10 20:23:17.027][03/09 17:29:20] [15] [cp] [278][BT]: [VelaBT], bt_log_server_init 278
+```
+
+**解决建议：**
+检查 `bluetoothd` 初始化期间的系统日志，确认超时原因（内部延迟或外部事件干扰）。
+
+##### 初步判断蓝牙适配器状态：
+
+**关键日志：**
+
+```c
+[ap] on_adapter_state_changed_cb: state = 1. ...
+[ap] on_adapter_state_changed_cb: state = 2...
+```
+
+| 状态值 | 释义                 |
+| ------ | -------------------- |
+| `0`  | 蓝牙关闭             |
+| `1`  | 正在启用 BLE 功能    |
+| `2`  | BLE 功能已启用       |
+| `3`  | 正在启用 BR/EDR 功能 |
+| `4`  | BR/EDR 功能已启用    |
+| `5`  | 正在关闭 BR/EDR 功能 |
+| `6`  | 正在关闭 BLE 功能    |
+
+**获取状态的替代方法：**
+使用 `bttool` 的 `state` 子命令主动查询适配器状态。
+
+##### 2. 确认状态机异常后的处理：
+
+- **尝试重启或重新 enable**：
+  执行 `bttool disable` 后再 `enable`，观察问题是否重现。
+- **若问题依旧：**
+  打开协议栈日志进行分析：
+  ```c
+  bttool> log enable stack
+  bttool> log mask 1 2
+  bttool> q
+  ```
+
+##### 3. 特殊场景：蓝牙驱动异常导致 enable 失败：
+
+**需抓取以下信息：**
+
+- **蓝牙状态机值**：确认当前处于哪个状态（如 `state=1` 或 `state=3`）。
+- **底层蓝牙驱动日志**：确认驱动层是否正常。
+- **协议栈日志**：按上述步骤开启并提供关键时间点日志。
+
+**示例日志：**
+
+```c
+[48] [ap] on_adapter_state_changed_cb: state = 1.
+[48] [ap] on_adapter_state_changed_cb: state = 2.
+[48] [ap] on_adapter_state_changed_cb: state = 3.
+[48] [ap] on_adapter_state_changed_cb: state = 4.
+```
+
+**注意事项：**
+若问题仍无法解决，需将协议栈日志和关键时间点信息提交给 Vela 蓝牙团队。
+
+**归纳总结：**
 
 * [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
   * 如果蓝牙服务线程存在，应当提供完整的系统启动syslog向Vela BT团队寻求支持。
