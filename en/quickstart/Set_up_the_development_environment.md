@@ -12,7 +12,11 @@ The development workstation should meet the following hardware requirements:
 
 ## Operating system requirements
 
-You need to run a 64-bit Linux distribution on the development workstation.
+**The development workstation must run a 64-bit Ubuntu 22.04 Linux distribution.**  
+
+> **Note**  
+>
+> **WSL** and **Docker** environments are not supported.  
 
 ## Install required software packages
 
