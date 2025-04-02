@@ -11,21 +11,15 @@
   - [典型问题](#典型问题)
     - [问题：创建蓝牙instance失败](#问题创建蓝牙instance失败)
 - [发现、连接、配对问题](#发现连接配对问题)
-  - [问题1：CTKD BLE LTK 生成 BR LinkKey 失败](#问题1：ctkd-ble-ltk-生成-br-linkkey失败)
-    - [步骤1：打开协议栈 Debug 功能](#步骤1：打开协议栈-debug功能)
-    - [步骤2：复现问题](#步骤2：复现问题)
-    - [步骤3：日志解读](#步骤3：日志解读)
-  - [问题2：其他 BLE 配对相关问题分析](#问题2：其他-ble-配对相关问题分析)
+  - [问题1：CTKD BLE LTK 生成 BR LinkKey 失败](#问题1ctkd-ble-ltk-生成-br-linkkey-失败)
+    - [步骤1：打开协议栈 Debug 功能](#步骤1打开协议栈-debug-功能)
+    - [步骤2：复现问题](#步骤2复现问题)
+    - [步骤3：日志解读](#步骤3日志解读)
+  - [问题2：其他 BLE 配对相关问题分析](#问题2其他-ble-配对相关问题分析)
     - [BLE 配对状态机与流程图](#ble-配对状态机与流程图)
-    - [vela 设备使用 RPA 地址进行配对](#vela-设备使用-rpa地址进行配对)
-      - [Case 1：设备通过 RPA 地址广播建立连接](#case-1：设备通过-rpa地址广播建立连接)
-      - [Case 2：确认 BLE 配对完成](#case-2：确认-ble-配对完成)
-      - [Case 3：确认 IRK 交换成功](#case-3：确认-irk-交换成功)
-      - [Case 4：确认通过 Identity 地址建立 BR/EDR 连接](#case-4：确认通过-identity地址建立-br/edr连接)
-      - [Case 5：断连/重启后回连情况](#case-5：断连重启后回连情况)
-    - [vela 设备使用 Public 地址配对情况](#vela-设备使用-public地址配对情况)
-  - [发现、连接问题分析方法](#发现、连接问题分析方法)
-  - [分析方法](#分析方法-1)
+    - [vela 设备使用 RPA 地址进行配对](#vela-设备使用-rpa-地址进行配对)
+    - [vela 设备使用 Public 地址配对情况](#vela-设备使用-public-地址配对情况)
+  - [发现、连接问题分析方法](#发现连接问题分析方法)
     - [方法：观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)
     - [方法：观察是否ACL连接超时断开（Connection Timeout）](#方法观察是否acl连接超时断开connection-timeout)
     - [方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功但是未有profile连接acl主动断开)
@@ -45,24 +39,24 @@
     - [问题：低功耗蓝牙扫描不到对端设备](#问题低功耗蓝牙扫描不到对端设备)
     - [问题：SPP主动连接失败](#问题spp主动连接失败)
 - [音频传输问题](#音频传输问题)
-  - [分析方法](#分析方法-2)
-    - [方法：观察是否打开了蓝牙和Media之间的transport](#方法观察是否打开了蓝牙和media之间的transport)
+  - [分析方法](#分析方法-1)
+    - [方法：观察蓝牙和Media之间的transport是否正确建立](#方法观察蓝牙和media之间的transport是否正确建立)
     - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
     - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
     - [方法：观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
     - [方法：观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
     - [方法：观察A2DP SRC是否停止音频流传输](#方法观察a2dp-src是否停止音频流传输)
     - [方法：观察AVDTP signaling连接是否断开](#方法观察avdtp-signaling连接是否断开)
-    - [方法：观察air log中的音频包序列号是否连续](#方法观察air-log中的音频包序列号是否连续)
+    - [方法：观察音频包序列号是否连续](#方法观察音频包序列号是否连续)
     - [方法：观察air log中1秒内发送的音频数据样本点数量](#方法观察air-log中1秒内发送的音频数据样本点数量)
     - [方法：观察air log中音频数据是否存在重传](#方法观察air-log中音频数据是否存在重传)
   - [典型问题](#典型问题-2)
-    - [问题: 连接两对耳机时，出现断连和无声的问题](#问题-连接两对耳机时出现断连和无声的问题)
-    - [问题: 连接耳机播放音乐，耳机无声](#问题-连接耳机播放音乐耳机无声)
-    - [问题: 连接耳机播放音频文件，音频文件开头缺失](#问题-连接耳机播放音频文件音频文件开头缺失)
-    - [问题: 语音播报，结尾处有pop音](#问题-语音播报结尾处有pop音)
+    - [问题：连接耳机播放音乐，耳机无声](#问题连接耳机播放音乐耳机无声)
+    - [问题：连接耳机播放音频文件，音频文件开头缺失](#问题连接耳机播放音频文件音频文件开头缺失)
+    - [问题：语音播报，结尾处有pop音](#问题语音播报结尾处有pop音)
+    - [问题：连接两对耳机时，出现断连和无声的问题](#问题连接两对耳机时出现断连和无声的问题)
 - [音乐播放控制问题](#音乐播放控制问题)
-  - [分析方法](#分析方法-3)
+  - [分析方法](#分析方法-2)
     - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
     - [方法：观察设备是否支持AVRCP](#方法观察设备是否支持avrcp)
     - [方法：观察是否发送了播放、暂停请求](#方法观察是否发送了播放暂停请求)
@@ -83,7 +77,7 @@
     - [问题：不能受音乐源设备（手机）控制调节音量](#问题不能受音乐源设备手机控制调节音量)
     - [问题：音量异常变化](#问题音量异常变化)
 - [通话问题](#通话问题)
-  - [分析方法](#分析方法-4)
+  - [分析方法](#分析方法-3)
     - [方法：观察是否建立了HFP连接](#方法观察是否建立了hfp连接)
     - [方法：观察设备是否支持HFP](#方法观察设备是否支持hfp)
     - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
@@ -97,7 +91,7 @@
     - [问题：作为AG端，不能受HF端控制接听电话](#问题作为ag端不能受hf端控制接听电话)
     - [问题：作为HF端，AG端来电，HF端无来电显示](#问题作为hf端ag端来电hf端无来电显示)
 - [数据传输问题](#数据传输问题)
-  - [分析方法](#分析方法-5)
+  - [分析方法](#分析方法-4)
     - [方法：观察client设备是否发起过Exchange\_MTU规程](#方法观察client设备是否发起过exchange_mtu规程)
     - [方法：观察当前空口环境是否复杂](#方法观察当前空口环境是否复杂)
   - [典型问题](#典型问题-5)
@@ -107,7 +101,7 @@
     - [方法：观察HID通道连接是否成功](#方法观察hid通道连接是否成功)
     - [方法：观察HID通道手表还是手机断开HID通道](#方法观察hid通道手表还是手机断开hid通道)
     - [方法：手机蓝牙设备绑定数量是否超过7个](#方法手机蓝牙设备绑定数量是否超过7个)
-  - [典型问题](#典型问题-5)
+  - [典型问题](#典型问题-6)
     - [问题：手表无法控制手机拍照](#问题手表无法控制手机拍照)
 
 ---
@@ -870,28 +864,27 @@ SPP主动连接失败问题，首先需要按照《发现、连接、配对问�
 # 音频传输问题
 
 本章介绍Advanced Audio Distribution Profile（A2DP）和Audio/Video Distribution Transport Protocol（AVDTP）相关问题常用的分析、定位方法。AVDTP负责控制音频/视频的传输过程，而A2DP定义了音频数据的编码和传输规范，通过这两个协议配合工作，可以实现在蓝牙设备之间高质量的音频传输。
-A2DP是蓝牙音频分发配置协议，包含Sink（SNK）和Source（SRC）两个角色。通常，SRC是音频源，SNK是音频接收方。Vela蓝牙服务框架中，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为A2DP-SNK，蓝牙音乐源设备（例如手机/手表）可以为A2DP-SRC。
-AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Discovery过程、Get All Capabilities/Get Capabilities过程、Stream Configuration过程、Get All Capabilities/Get Capabilities过程、Stream Configuration过程、Stream Establishment、 Stream Start等AVDTP信令过程。AVDTP信令过程的发起方称为Initiator（INT），信令过程的接收方称为Acceptor (ACP)。
-蓝牙设备传输音频时需要建立两条AVDTP连接。首先建立AVDTP signaling连接，用于编解码参数的协商和media连接的控制，协商完成（AVDTP open）后，再建立AVDTP media连接，用于传输音频数据。
-蓝牙和Media之间有两条transport channel，分别为control channel和data channel，其中，control channel用于传输控制信息，data channel用于传输音频数据。
+A2DP是蓝牙音频分发配置协议，包含Source（SRC）和Sink（SNK）两个角色。通常，SRC是音频源，SNK是音频接收方。Vela蓝牙服务框架中，蓝牙音乐源设备（例如手机/手表）可以为A2DP-SRC，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为A2DP-SNK。
+AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP) Discovery过程、Get Capabilities/Get All Capabilities过程、Stream Configuration过程、Stream Configuration过程、Stream Establishment、Stream Start、以及Stream Suspend等AVDTP信令过程。AVDTP信令过程的发起方称为Initiator（INT），信令过程的接收方称为Acceptor (ACP)。当两个蓝牙设备间传输音频时，需要预先建立两条AVDTP连接。首先建立的称为AVDTP signaling连接，用于编解码参数的协商和media连接的控制；协商完成后，再次建立一条AVDTP连接，称为AVDTP media连接，用于传输音频数据。
+在Vela蓝牙协议栈之上，Vela蓝牙子系统还提供了A2DP服务层，A2DP服务于多媒体子系统中的Media服务之间存在多个传输通路，称为transport channels。这些transport channel可以分为两类：用于传输控制信令的control channel，以及用于传输音频数据的data channel。
 
 ## 分析方法
 
-<a id="方法：观察是否打开了蓝牙和Media之间的transport"></a>
+<a id="方法：观察蓝牙和Media之间的transport是否正确建立"></a>
 
-### 方法：观察是否打开了蓝牙和Media之间的transport
+### 方法：观察蓝牙和Media之间的transport是否正确建立
 
-通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否打开。
+在蓝牙子系统初始化时，A2DP服务会创建socket server，随后，Media服务作为socket client与蓝牙建立连接，从而允许控制信令和音频数据在两个子系统之间传输。通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否正确建立。
 
-典型的log如下：
+典型log如下：
 
-* A2DP SRC的transport成功打开
+* A2DP SRC与Media之间正确建立transport channel
 ```
 [a2dp_control]: a2dp_ctrl_cb, path:[a2dp_source_ctrl], event:TRANSPORT_OPEN_EVT
 [a2dp_control]: a2dp_data_cb, path:[a2dp_source_data], event:TRANSPORT_OPEN_EVT
 ```
 
-* A2DP SNK的transport成功打开
+* A2DP SNK与Media之间正确建立transport channel
 ```
 [a2dp_control]: a2dp_ctrl_cb, path:[a2dp_sink_ctrl], event:TRANSPORT_OPEN_EVT
 [a2dp_control]: a2dp_data_cb, path:[a2dp_sink_data], event:TRANSPORT_OPEN_EVT
@@ -901,51 +894,53 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point Disc
 
 ### 方法：观察是否建立了AVDTP signaling连接
 
-通常，可以通过snoop log或者air log观察是否建立了AVDTP signaling连接。
+AVDTP signaling连接是两个蓝牙设备建立音频连接的必要步骤。通常，可以通过snoop log或者air log观察是否建立了AVDTP signaling连接。
 
 #### 1 通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因
 
-AVDTP signaling连接成功的典型log如下，其中两个设备间建立的第一条AVDTP连接为AVDTP signaling连接。
+AVDTP signaling连接成功的典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_signaling_establishment.png" alt="snoop:AVDTP signaling连接" width="50%">
+
+其中：AVDTP连接是一种L2CAP连接，L2CAP连接的种类由PSM标识。两个设备间建立的第一条AVDTP连接自动成为AVDTP signaling连接。
 
 <a id="方法：观察是否建立了AVDTP media连接"></a>
 
 ### 方法：观察是否建立了AVDTP media连接
 
-建立AVDTP media连接之前，可能会进行Discovery、Get（ALL）Capabilities、set/get Configuration、Stream Establishment等过程，其中，Set Configuration和Stream Establishment过程是必须的。通常，可以通过syslog、snoop log或者air log观察是否建立了AVDTP media连接
+建立AVDTP media连接之前，可能会进行Discovery、Get (ALL) Capabilities、Set/Get Configuration、Stream Establishment等过程，其中，Set Configuration和Stream Establishment过程是必要过程。通常，可以通过syslog、snoop log或者air log观察是否建立了AVDTP media连接。
 
 #### 1 通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因
 
-下面log中，Command是AVDTP Int，回复Accept的是AVDTP Acp。
+以下几个示例展示了两个设备建立AVDTP media连接的过程。
 
 ##### 1.1 AVDTP Discovery
 
-可选的，在建立AVDTP media连接之前，可以发起AVDTP Discovery过程，用于发现对方设备可用的Stream End Point(SEP)。通常，发起AVDTP signaling连接的设备会发起这一过程。典型log如下：
+可选的，在建立AVDTP media连接之前，可以发起AVDTP Discovery过程，用于发现对端设备可用的Stream End Point(SEP)。通常，发起AVDTP signaling连接的设备会发起这一过程。典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_discovery.png" alt="snoop:AVDTP discovery" width="50%">
 
-log有显示Acp的序号从1到6,说明对方设备的SEP一共有6个。
+Log显示ACP的序号从1到6，表明该设备的拥有的SEP至少有6个。
 
 ##### 1.2 AVDTP Get Capabilities
 
-可选的，在建立AVDTP media连接之前，可以通过Get Capabilities或者Get All Capabilities获取对方SEP的具体信息。通常，发起AVDTP signaling连接的设备会发起这一流程。典型log如下：
+可选的，在建立AVDTP media连接之前，可以通过Get Capabilities或者Get All Capabilities获取对端设备SEP的具体信息。通常，发起AVDTP signaling连接的设备会发起这一流程。典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_get_capabilities.png" alt="snoop:AVDTP get capabilities" width="50%">
 
-log显示本地设备获取对方设备的1号SEP的Capabilities。
+Log展示了获取编号为1的SEP的具体信息的过程，其中，编码格式为SBC，采样率为44.1kHz。
 
 ##### 1.3 AVDTP Set Configuration
 
-在建立AVDTP media连接之前，需要通过Set Configuration过程选定双方的SEP，以及编解码参数。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+在建立AVDTP media连接之前，需要通过Set Configuration过程指定双方的SEP，以及编解码参数。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_set_configuration.png" alt="snoop:AVDTP set configuration" width="50%">
 
-log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
+Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建立连接。
 
 ##### 1.4 AVDTP Stream Establishment
 
-在建立AVDTP media连接之前，需要通过Open打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+在建立AVDTP media连接之前，需要通过Open流程打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="50%">
 
@@ -955,7 +950,7 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_media_establishment.png" alt="snoop:AVDTP media连接" width="50%">
 
-通常，AVDTP Open过程后面的L2CAP（PSM=AVDTP）是AVDTP media连接。
+通常，AVDTP Open完成后，随之建立的L2CAP（PSM=AVDTP）是AVDTP media连接。
 
 #### 2 通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因
 
@@ -1057,11 +1052,11 @@ log中显示使用本地的1号SEP和对方设备的1号SEP进行音频传输。
 
 ### 方法：观察AVDTP signaling连接是否断开
 
-AVDTP signaling断开的原因有：应用告诉蓝牙断开A2DP连接，蓝牙协议栈主动断开连接，对端设备请求断开连接。通常，可以通过syslog，snoop log，或者air log观察是否断开了AVDTP signaling连接。
+AVDTP signaling断开的原因包括以下几种：应用请求Vela蓝牙子系统断开A2DP连接，蓝牙协议栈主动断开连接，已经对端设备请求断开连接。通常，可以通过syslog，snoop log，或者air log观察是否断开了AVDTP signaling连接。
 
 #### 1 通过syslog观察是否断开了AVDTP signaling连接
 
-只有应用告诉蓝牙断开AVDTP signaling连接时，a2dp状态机会收到DISCONNECT_REQ，典型log如下：
+当应用请求断开A2DP连接时，A2DP状态机会收到DISCONNECT_REQ，并随后断开AVDTP signaling连接，典型log如下：
 
 ```
 [a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=DISCONNECT_REQ
@@ -1077,17 +1072,17 @@ AVDTP signaling断开的原因有：应用告诉蓝牙断开A2DP连接，蓝牙�
 
 #### 2 通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因
 
-snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，对端设备请求断开连接。本地设备的snoop log中，本地设备主动断开连接的典型log如下：
+snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，以及对端设备请求断开连接。典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="50%">
 
-<a id="方法：观察air log中的音频包序列号是否连续"></a>
+<a id="方法：观察音频包序列号是否连续"></a>
 
-### 方法：观察air log中的音频包序列号是否连续
+### 方法：观察音频包序列号是否连续
 
-AVDTP Media Packet的包头中有一个字段，名字叫做Sequence Number。
-
+AVDTP Media Packet的包头中有一个字段，称为Sequence Number。该字段是音频包的序列号，会随着每一个AVDTP Media Packet发送而递增。
 每一次Stream Start过程开始后，Sequence Number都从0开始，每发送一个AVDTP Media Packet，Sequence Number加1。
+当该序列号中断或跳跃时，通常表示音频数据缺失。
 
 典型log如下：
 
@@ -1097,49 +1092,85 @@ AVDTP Media Packet的包头中有一个字段，名字叫做Sequence Number。
 
 ### 方法：观察air log中1秒内发送的音频数据样本点数量
 
-AVDTP Media Packet的包头中有一个字段，名字叫做Time Stamp，该字段是音频包的采样时刻。
+AVDTP Media Packet的包头中有一个字段，称为Time Stamp。该字段表示了音频包的采样时刻，即该音频数据包中第一个样本点的编号。
 
 在air log中，截取1秒内的音频包，开始和结束音频包之间的Time Stamp差是该时间段内传输的音频数据样本点数量。
 
-通常，1秒内音频数据的样本点应当等于或近似等于采样率，典型log如下：
+通常，约1秒时间段内音频数据的样本点应当等于或近似等于采样率，典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_normal.png" alt="sniffer:normal AVDTP media packet sequence number" width="50%">
 
-上述log中，实际传输的样本点数量为：5949440 - 5904896 = 44546，与预期接近。
+上述log中，实际传输的样本点数量为：5949440 - 5904896 = 44546。由于当前设置的采样率为44.1kHz，实际传输的样本点数量与预期接近。
 
-1秒内音频数据的样本点数量远大于采样率时，air log中会看到密集的包，典型log如下：
+1秒内音频数据的样本点数量远大于采样率时，通常air log中会看到比正常情形更加密集的包，典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_abnormal.png" alt="sniffer:abnormal AVDTP media packet sequence number" width="50%">
 
-上述log中，实际传输的样本点数量为：7395456 - 7270656 = 124800，远超预期。
+上述log中，约1秒时间段内实际传输的样本点数量为：7395456 - 7270656 = 124800，远超预期。
 
 <a id="方法：观察air log中音频数据是否存在重传"></a>
 
 ### 方法：观察air log中音频数据是否存在重传
 
-air log中基带包有两个参数可以用来判断包是否存在重传，分别是SEQN和ARQC。正常情况下，SEQN的值在0和1之间交替变化，对端设备回复的ARQN是ACK。若出现重传，基带包中的SEQN值维持不变。
+air log中基带包有两个参数可以用来判断包是否存在重传，分别是SEQN和ARQN。正常情况下，SEQN的值在0和1之间交替变化，对端设备回复的ARQN是ACK。若出现重传，基带包中的SEQN值与上一包相同。
 
 空口出现重传的原因有两种：
 
 * 设备发送的包没收到对端的回复
 
-* 设备发送的包收到了对端的回复，但回复的ARQN是NAK
+* 设备发送的包收到了对端的回复，但回复的ARQN值为NAK
 
 设备发送的包没收到对端的回复，典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_no_response.png" alt="sniffer:packet with no response" width="50%">
 
-上述log中，设备发了3次2-DH5包，前两次的包没收到对端设备的回复，SEQN值维持不变，第三次的包收到了对端设备的回复，且回复的ARQN是ACK，SEQN发生了变化，重传结束。
+上述log中，设备发了3次2-DH5包，前两次发送的包没有收到对端设备的回复，因此再次重传，SEQN值维持不变；第三次发送的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。再次发送新数据时，可以观察到SEQN发生了变化。
 
 设备发送的包收到了对端的回复，但回复的ARQN是NAK，典型log如下：
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_NAK_response.png" alt="sniffer:packet with NAK response" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_nak_response.png" alt="sniffer:packet with NAK response" width="50%">
 
-上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变，第二次的包收到了对端设备的回复，且回复的ARQN是ACK，由于对端回复的包也是重传的包，SEQN维持不变，重传结束。
+上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变；第二次的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。
 
 ## 典型问题
 
-### 问题: 连接两对耳机时，出现断连和无声的问题
+### 问题：连接耳机播放音乐，耳机无声
+
+* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+
+  * 若两个设备未能正确建立AVDTP signaling连接，建议对比典型log，观察AVDTP signaling连接建立过程中是否出现异常。
+
+  * 若两个设备间正确建立了AVDTP signaling连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+
+* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+
+  * 若两个设备未能正确建立AVDTP media连接，建议对比典型log，观察AVDTP media连接建立过程中是否出现异常。
+
+  * 若两个设备之间正确建立了AVDTP media连接，建议[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+
+  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
+
+  * 若Vela Media成功设置codec，建议[观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+
+  * 若本地设备为A2DP SRC，且Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
+
+  * 若本地设备为A2DP SRC，且Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+
+### 问题：连接耳机播放音频文件，音频文件开头缺失
+
+* [观察音频包序列号是否连续](#方法观察音频包序列号是否连续)
+
+  * 若air log中出问题的音频流中存在音频包序列号不连续，建议在Vela蓝牙侧观察音频流中音频包的序列号不连续的原因。
+
+  * 若音频包序列号连续，建议Vela Media侧观察发送的音频包是否完整。
+
+### 问题：语音播报，结尾处有pop音
+
+### 问题：连接两对耳机时，出现断连和无声的问题
 
 Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连接连接一对耳机。当手表需要连接另一对耳机时，需要先断开前一对耳机。针对多设备切换导致的无声问题，可以按以下顺序排查：
 
@@ -1172,42 +1203,6 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
   * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
 
   * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
-
-### 问题: 连接耳机播放音乐，耳机无声
-
-* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
-
-  * 若AVDTP signaling连接未建立，建议对比典型log，观察建立signaling连接中是否出现异常。
-
-  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
-
-* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
-
-  * 若两个设备之间的AVDTP media连接未建立，建议对比典型log，观察建立media连接中是否出现异常。
-
-  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
-
-* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
-
-  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
-
-  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
-
-* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
-
-  * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
-
-  * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
-
-### 问题: 连接耳机播放音频文件，音频文件开头缺失
-
-* [观察sequence number是否连续](#方法观察air-log中的音频包序列号是否连续)
-
-  * 若air log中出问题的音频流中存在音频包序列号不连续，建议Vela蓝牙测观察音频流中音频包的序列号不连续的原因。
-
-  * 若音频包序列号连续，建议Vela Media测观察发送的音频包是否完整。
-
-### 问题: 语音播报，结尾处有pop音
 
 # 音乐播放控制问题
 
@@ -1785,7 +1780,7 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 
 * [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
   * 若AG端未收到HF端的Answer请求，则检查syslog，snoop或空口log分析原因。
-  * 若AG端收到了HF端的Answer请求，则参考[问题: AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
+  * 若AG端收到了HF端的Answer请求，则参考[问题：AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
 
 <a id="问题：作为AG端，不能受HF端控制接听电话"></a>
 
