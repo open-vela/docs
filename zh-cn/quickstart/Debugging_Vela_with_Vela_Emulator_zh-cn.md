@@ -15,7 +15,7 @@ openvela Emulator 支持通过 GDB 远程连接工具（gdbstub）使用 GDB。�
 
 通过传递 `-s` 和 `-S` 选项启动 openvela Emulator 来使用 GDB。 `-s` 选项将使 openvela Emulator 在 TCP 端口 1234 上侦听来自 GDB 的传入连接，而 `-S` 将使 openvela Emulator 从 GDB 获取通知前，不会启动 guest 虚拟机。
 
-要启用与 GDB 服务器的连接，您需要将 `-qemu -S -s` 参数传递给 `emulator.sh`。
+要启用与 GDB Server 的连接，您需要将 `-qemu -S -s` 参数传递给 `emulator.sh`。
 
 ```bash
 ./emulator.sh vela -qemu -S -s
