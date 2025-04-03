@@ -9,11 +9,14 @@ Framebuffer（帧缓存/显存）是一个用于存储一帧 LCD 图像数据的
 以 480x320 的屏幕为例，在不同像素模式下，Framebuffer 的大小如下：
 
 1. ARGB888 (32bpp)：
-   1. 计算公式：`480 x 320 x 4 (bytes)`
-   2. 大小：614,400 字节
+
+   - 计算公式：`480 x 320 x 4 (bytes)`
+   - 大小：614,400 字节
+
 2. RGB565 (16bpp)：
-   1. 计算公式：`480 x 320 x 2 (bytes)`
-   2. 大小：307,200 字节
+
+   - 计算公式：`480 x 320 x 2 (bytes)`
+   - 大小：307,200 字节
 
 ## 二、Framebuffer的显示原理
 
@@ -106,7 +109,7 @@ errout_with_fb:
 3. `void up_fbuninitialize(int display)`
     - 执行与 `up_fbinitialize` 相反的操作，用于释放资源。通常可以实现为空，不执行任何操作。
 
-### `3、struct fb_vtable_s` 结构
+### 3、`struct fb_vtable_s` 结构
 
 `fb_vtable_s` 是 Framebuffer 的核心结构，定义了与视频硬件交互的接口。以下是其主要功能模块：
 
@@ -147,7 +150,7 @@ errout_with_fb:
         - `getpower`：获取面板的电源状态。
         - `setpower`：启用或禁用面板电源。
 
-#### 3.1 示例代码
+#### 示例代码
 
 以下是 `struct fb_vtable_s` 的部分定义示例：
 
@@ -257,7 +260,6 @@ struct fb_vtable_s
 
   int (*blend)(FAR struct fb_vtable_s *vtable,
                FAR const struct fb_overlayblend_s *blend);
-# endif
 #endif
 
   /* Pan display for multiple buffers. */

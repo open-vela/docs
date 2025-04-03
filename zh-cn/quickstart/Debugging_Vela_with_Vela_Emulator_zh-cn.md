@@ -15,7 +15,7 @@ openvela Emulator 支持通过 GDB 远程连接工具（gdbstub）使用 GDB。�
 
 通过传递 `-s` 和 `-S` 选项启动 openvela Emulator 来使用 GDB。 `-s` 选项将使 openvela Emulator 在 TCP 端口 1234 上侦听来自 GDB 的传入连接，而 `-S` 将使 openvela Emulator 从 GDB 获取通知前，不会启动 guest 虚拟机。
 
-要启用与 GDB 服务器的连接，您需要将 `-qemu -S -s` 参数传递给 `emulator.sh`。
+要启用与 GDB Server 的连接，您需要将 `-qemu -S -s` 参数传递给 `emulator.sh`。
 
 ```bash
 ./emulator.sh vela -qemu -S -s
@@ -200,36 +200,33 @@ d <breakpoint-number>
 
 ## 三、使用 Clion (远程调试)
 
-1. 下载并且安装 [Clion (建议使用较新版本)](https://www.jetbrains.com/clion/)
+1. 下载并且安装 [Clion (建议使用较新版本)](https://www.jetbrains.com/clion/)。
 
-2. 打开 SSH Configurations 菜单
+2. 打开 SSH Configurations 菜单。
 
-    可以在 Welcome 页面 `Customize | All Settings` 打开菜单
-    (如果已经打开工程 可以点击 `File | Close Project` 返回 Welcome 页面)
+    可以在 Welcome 页面 `Customize | All Settings` 打开菜单，如果已经打开工程 可以点击 `File | Close Project` 返回 Welcome 页面。
 
-    点击 `+` 符号 填写好相应信息后测试连接成功后保存 例如
+    点击 `+` 符号，填写好相应信息后测试连接成功后保存，例如：
 
     ![003.png](images/003.png)
 
-3. 配置并选择远程工程
+3. 配置并选择远程工程。
 
-    在 Welcome 页面 选择 `Remote Development | SSH | New Project`
-    再选择刚才创建的 SSH 连接 点击右下角 `Check Connection and Continute`
-    选择一个 IDE 版本 然后项目路径选择克隆下来的 vela 工程路径根目录后点击 Start IDE and Connect 例如
+    在 Welcome 页面选择 `Remote Development | SSH | New Project`，选择刚才创建的 SSH 连接，点击右下角 `Check Connection and Continute`，选择一个 IDE 版本，然后项目路径选择克隆下来的 vela 工程路径根目录后点击 `Start IDE and Connect`。例如：
 
     ![004.png](images/004.png)
 
-    等待下载完成后点击确定 Authenticate
+    等待下载完成后点击确定 `Authenticate`：
 
     ![005.png](images/005.png)
 
-4. 创建调试配置
+4. 创建调试配置。
 
-    点击 `Add Configuration | Remote GDB Server` 并且配置实例如下
+    点击 `Add Configuration | Remote GDB Server` 并且配置实例如下：
 
     ![006.png](images/006.png)
 
-    Target 创建样例如下
+    Target 创建样例如下：
 
     ![007.png](images/007.png)
 
@@ -239,12 +236,14 @@ d <breakpoint-number>
     ./emulator.sh vela -qemu -S -s
     ```
 
-6. 开始调试会话
+6. 开始调试会话。
 
-    点击 debug 按钮即可进行调试
+    点击 debug 按钮即可进行调试：
 
     ![008.png](images/008.png)
 
-    (如果弹出认证对话框 输入密码或者选择配置的 ssh key 即可)
+    如果弹出认证对话框 输入密码或者选择配置的 ssh key 即可：
+
     ![009.png](images/009.png)
+
     ![010.png](images/010.png)

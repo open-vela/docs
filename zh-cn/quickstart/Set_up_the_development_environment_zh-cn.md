@@ -12,7 +12,11 @@
 
 ## 二、操作系统需求
 
-开发工作站需运行 64 位 Linux 发行版。
+**开发工作站需运行 64 位的 Ubuntu 22.04 Linux 发行版。**
+
+> 说明
+>
+> **WSL** 和 **Docker** 环境均不支持。
 
 ## 三、安装必备的软件包
 
@@ -63,4 +67,4 @@ sudo pip3 install kconfiglib pyelftools cxxfilt
 
 ## 八、后续步骤
 
-请参阅 [下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。
+请参阅[下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。

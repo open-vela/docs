@@ -2,7 +2,7 @@
 
 ## 一、概述
 
-openvela 基于开源操作系统 NuttX 构建，进一步提供多种复杂的系统级服务。为了使 openvela 更加完善和功能全面，需要引入完整的开发框架或功能模块。一个完整的开发框架通常包含以下两部分：
+openvela 基于开源操作系统 NuttX 构建，进一步提供多种系统级服务。为了使 openvela 更加完善和功能全面，需要引入完整的开发框架或功能模块。一个完整的开发框架通常包含以下两部分：
 
 - 系统应用：内部开发的系统应用，通常存放于 `framework/` 等文件夹中。
 - 第三方系统库：引入第三方库并完成适配，通常存放于 `external/` 等文件夹中。
@@ -26,7 +26,7 @@ openvela 基于开源操作系统 NuttX 构建，进一步提供多种复杂的�
 
 ### 1、主体框架
 
-Hello 示例应用程序需要包含以下核心文件：
+Hello World 示例应用程序需要包含以下核心文件：
 
 - `hello_main.c`：定义应用程序的主要逻辑。
 - `Kconfig`：定义条件编译宏，用于功能裁剪。
@@ -246,7 +246,7 @@ endif
 
 ```Bash
 # 清理工程  
-./build.sh vendor/sim/boards/vela/configs/vela distclean -j8/
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  distclean -j8
 ```
 
 ### 2、配置 Menuconfig
@@ -255,21 +255,21 @@ endif
 
 ```Bash
 # 启动 menuconfig  
-./build.sh vendor/sim/boards/vela/configs/vela menuconfig -j8
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  menuconfig -j8
 ```
 
-- 进入 `menuconfig` 后，启用 `hello_main`。
+进入 `menuconfig` 后，启用 `hello_main`。
 
-    ![img](./figures/001.png)
+![img](./figures/001.png)
 
 ### 3、编译和运行
 
 ```Bash
 # Build: 
-./build.sh vendor/sim/boards/vela/configs/vela -j8
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  -j8
 
 # Run:
-./nuttx/nuttx
+./emulator.sh vela
 ```
 
 运行后，在串口中输入程序名称（*Program name*），程序名称已在文件 `Kconfig` 中定义。例如：`hello`，如下图所示：
@@ -297,8 +297,8 @@ CONFIG_NSH_INITSCRIPT="init.d/rcS"
 启动脚本的默认位置如下：
 
 ```Bash
-board/arch/board/board/src/etc/init.d/rc.sysinit   # 系统初始化脚本 
-board/arch/board/board/src/etc/init.d/rc           # 用户脚本  
+vendor/openvela/boards/vela/src/etc/init.d/rc.sysinit   # 系统初始化脚本 
+vendor/openvela/boards/vela/src/etc/init.d/rcS           # 用户脚本  
 ```
 
 ### 3、脚本文件示例

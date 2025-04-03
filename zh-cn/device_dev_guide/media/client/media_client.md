@@ -63,8 +63,9 @@ Client 端的 Media Policy 提供了设置和获取各种 Media Policy 参数的
 - 同步接口：
     - **media_policy.c** 提供管理 Policy 的同步接口，客户端可方便设置和获取各种媒体相关参数。
     - 支持管理静音模式、订阅 Policy 变化、控制音频设备使用接口以及设置音量等。
+
 - 异步接口：
-    - **media_uv_policy.c** 提供 Client 以异步方式设置和获取各种Policy相关参数的接口。
+    - **media_uv_policy.c** 提供 Client 以异步方式设置和获取各种 Policy 相关参数的接口。
     - 支持获取音频模式、设备使用状态等。
 
 ### 4、**Media Session**

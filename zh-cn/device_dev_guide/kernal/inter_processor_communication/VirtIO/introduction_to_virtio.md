@@ -14,19 +14,25 @@ VirtIO 于 2008 年提出，当时 Linux 系统中针对不同虚拟化平台（
 为实现上述目标，VirtIO 提出了以下两种核心机制：
 
 1. 特性扩展机制。
-   - 提供适用于所有驱动的 feature 扩展机制，便于扩展 VirtIO driver 的功能。
-   - 支持 feature 的协商，确保向前和向后兼容性。
+
+    - 提供适用于所有驱动的 feature 扩展机制，便于扩展 VirtIO driver 的功能。
+    - 支持 feature 的协商，确保向前和向后兼容性。
+
 2. Buffer 传输机制（vring/virtqueue）。
-   - 适用于所有驱动，设计简单，支持零拷贝和无锁操作。
+
+    - 适用于所有驱动，设计简单，支持零拷贝和无锁操作。
 
 ### 3、本文结构
 
 本文档将分为以下两部分对 VirtIO 进行详细介绍：
 
 1. 第一部分：
-   - 介绍 Virtqueue 的数据结构、两端的数据发送流程，以及为性能优化设计的高级特性。
+
+    - 介绍 Virtqueue 的数据结构、两端的数据发送流程，以及为性能优化设计的高级特性。
+
 2. 第二部分：
-   - 说明 VirtIO Device 的基础概念。
+
+    - 说明 VirtIO Device 的基础概念。
 
 本文档所有代码基于 OpenAMP 实现进行说明。其他操作系统（如 FreeBSD 和 Linux）的实现可能略有差异，但整体思路类似。
 
@@ -177,16 +183,16 @@ struct virtq_avail {
 
 4. used_event：
 
-   - 当启用 VIRTIO_F_EVENT_IDX 特性时，`flags` 中的 VIRTQ_AVAIL_F_NO_INTERRUPT 无效。
-   - Device 的通知行为由 `avail.used_event` 决定：
+    - 当启用 VIRTIO_F_EVENT_IDX 特性时，`flags` 中的 VIRTQ_AVAIL_F_NO_INTERRUPT 无效。
+    - Device 的通知行为由 `avail.used_event` 决定：
 
-      - 当 Device 写入 used ring 时，如果 `used_ring.idx == used_event`，则发送通知；否则不发送。
+        - 当 Device 写入 used ring 时，如果 `used_ring.idx == used_event`，则发送通知；否则不发送。
 
-   - 该机制用于控制 Device 通知的节奏，减少不必要的中断。
+    - 该机制用于控制 Device 通知的节奏，减少不必要的中断。
 
 ##### Available Ring 示例
 
-![img](./figures/003.svg)
+![img](./figures/004.svg)
 
 #### 4.3 Used Ring
 
@@ -293,7 +299,7 @@ struct vring {
 
 #### 4.5 Virtqueue
 
-Virtqueue 是 VirtIO 的核心组件之一，负责管理数据的传输队列。它通过与 vring 结构的结合，实现 Driver 和 Device 之间的高效通信。以下是 Virtqueue 的定义和关键字段说明。
+Virtqueue 是 VirtIO 的核心组件之一，负责管理数据的传输队列。它通过与 Vring 结构的结合，实现 Driver 和 Device 之间的高效通信。以下是 Virtqueue 的定义和关键字段说明。
 
 ##### 数据结构定义
 

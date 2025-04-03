@@ -1,4 +1,4 @@
-# 手环 Bandx Demo
+# 手环 Bandx
 
 \[ [English](../../en/demo/Smart_Band_Example.md) | 简体中文 \]
 
@@ -9,9 +9,9 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
 ## 前提条件
 
-1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
@@ -152,4 +152,4 @@ sudo apt install android-tools-adb
 
 #### 解决方案
 
-请按 [步骤三](#步骤三-启动模拟器并推送资源) 进行资源推送。
+请按[步骤三](#步骤三-启动模拟器并推送资源)进行资源推送。

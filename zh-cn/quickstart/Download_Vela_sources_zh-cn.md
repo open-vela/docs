@@ -13,7 +13,7 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
     cd vela-opensource
     ```
 
-2. 初始化用于操作源码的工作目录:
+2. 初始化用于操作源码的工作目录：
 
     - Github（需注册公钥，请参考 [Github文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)）：
 
