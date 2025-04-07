@@ -66,15 +66,15 @@ The following diagram illustrates a typical build configuration workflow:
 Execute build commands:
 
 ```Bash
-./build.sh vendor/sim/boards/openvela/config/openvela menuconfig  
-./build.sh vendor/sim/boards/openvela/config/openvela -j8  
+./build.sh vendor/sim/boards/vela/config/vela menuconfig
+./build.sh vendor/sim/boards/vela/config/vela -j8
 ```
 
 ### 3. File Path Examples
 
 Based on the openvela simulator environment, the typical file paths are as follows:
 
-- `defconfig` file path：`vendor/sim/boards/openvela/configs/openvela/defconfig`
+- `defconfig` file path：`vendor/sim/boards/vela/configs/vela/defconfig`
 - `.config` file path：`nuttx/.config`
 - `config.h` file path：`nuttx/include/config.h`
 
