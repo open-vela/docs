@@ -295,7 +295,7 @@ Key Points:
    - Link all object files from the applications into a single static library file (`libapps.a`).  
    - The unified static library file facilitates subsequent linking and management.  
 
-##### Makefile 示例
+##### Makefile Example
 
 #### Compilation Rules for Application Directories  
 
