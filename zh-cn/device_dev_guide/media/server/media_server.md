@@ -44,7 +44,7 @@ Media Daemon 的主要工作在一个循环中进行，大体步骤如下：
 Media Focus 模块是 Media Server 的一个重要组成部分，目的是给多个音频流混合一起播放场景提供播放策略，协助实现同一时间内只有一个音频作为主音频内容被放送，其他音频变为次要音频或暂停输出的使用场景。Media Focus 的机制为合作抢占型，不使用 Media Focus 应用依旧可以播放音乐，但无法接入到音频焦点管理体系，此时出现的非策略性声音混合可能会对用户使用体验造成影响。
 
 - 默认声音事件类型交互的配置文件位于 `/etc/media`。
-- 声音事件类型的输入以 `media wrapper` 中的不同 `MEDIA_SCENARIO_XXX` 宏为准。目前包含11种类型的声音事件。
+- 声音事件类型的输入以 `media wrapper` 中的不同 `MEDIA_SCENARIO_XXX` 宏为准。目前包含 11 种类型的声音事件。
 - 支持应用发起**焦点请求**、**放弃焦点请求**、**焦点改变通知**等功能。
 
 ### 3、Media Garph
@@ -53,7 +53,7 @@ Media Graph 的原理是将音视频相关的 `filter` 的 `inputs`，`outputs` 
 
 - 加载 `graph` 配置文件创建和配置 Media Graph 及相应的 `filter`。
 - 提供一系列函数处理 `filter` 的命令和事件，包括**打开**、**关闭**、**播放**、**暂停**、**停止**、**设置事件回调**、**处理命令队列**等操作。
-- 封装 Media Player 和 Media Recoder 的操作接口，调用 ffempeg 库，实现播放和录制功能。
+- 封装 Media Player 和 Media Recoder 的操作接口，调用 FFmpeg 库，实现播放和录制功能。
 
 ### 4、Media Policy
 
