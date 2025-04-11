@@ -1,4 +1,4 @@
-# Framebuffer Driver
+# Framebuffer 驱动
 
 ## 一、什么是 Framebuffer
 

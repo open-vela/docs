@@ -1,4 +1,4 @@
-# Mediatool 工具使用指南
+# Mediatool 使用指南
 
 [[English](./mediatool.md) | 简体中文]
 

@@ -1,4 +1,4 @@
-# **Media Client**
+# 客户端
 
 [[English](./README.md)|简体中文]
 
