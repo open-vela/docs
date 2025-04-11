@@ -4,7 +4,7 @@
 
 ## Introduction
 
-This article describes how to run the music player demo on openvela Emulator.
+This article describes how to run the music player demo on Emulator.
 
 ## Prerequisites
 
