@@ -18,11 +18,17 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ![img](images/001.png)
 
-- **内核层**：提供最基本的任务调度、跨进程间通信、文件系统等基础 OS 功能，同时也提供简洁高效的设备驱动、轻量级的 TCP/IP 协议栈和电源管理等组件，也包括同构多核和异构多核的支持。
-- **服务框架层**：
-  - 为扩展系统服务而提供的通用服务框架，包括连接子系统、图形子系统、多媒体子系统、安全子系统和 XPC 跨核通信等。
+- **内核层**
+
+    提供基础的操作系统（OS）功能，包括任务调度、跨进程间通信（IPC）、文件系统管理。此外，还提供设备驱动、轻量级 TCP/IP 协议栈和电源管理等精简高效的组件。同时，内核层支持同构多核和异构多核架构，以提升系统在不同架构下的性能支持能力。
+
+- **服务框架层**
+
+    通用的服务框架，专为扩展系统服务设计，包含连接子系统、图形子系统、多媒体子系统、安全子系统和 XPC 跨核通信能力等。该层提供灵活的服务扩展支持，是系统功能扩展的重要基础。
+
 - **维测工具：**
-  - 常用工具和维测框架，除了常见的 Logger 和 Debugger 工具，还提供 Emulator 工具来帮助开发者提升调试效率，使用 Emulator，开发者可以利用 PC 端丰富的调试工具和调试信息，降低嵌入式系统开发和调试的难度。
+
+    常用工具和维测框架，除了常见的 Logger 和 Debugger 工具外，还包含 Emulator 这一强大的高仿真设备模拟器工具。Emulator 支持全面功能仿真，涵盖 Wi-Fi、网络、Bluetooth、音视频播放、Camera、Security、GPS、Sensor 、 Telephony 等多种能力，同时支持 CPU 指令集仿真。目前模拟器已支持多种产品形态，包括智慧面板、手表手环、有屏音箱等。通过 Emulator，开发者可以使用 PC 端丰富的调试工具和信息，无需真实设备即可进行原生应用和快应用的开发调试，降低开发和调试难度。
 
 ## 技术优势
 
@@ -50,6 +56,12 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 2. [下载 openvela 源码](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
 3. [编译 openvela 源码](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
 4. [在模拟器上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+
+## 支持的开发板
+
+| 序号 | 厂商名称   | 开发板型号                                                   | 芯片型号                                                     | 购买                                                         | 开发板问题咨询   |
+| :--- | :--------- | :----------------------------------------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- | :--------------- |
+| 1    | 意法半导体 | [STM32H750B-DK](https://www.st.com.cn/zh/evaluation-tools/stm32h750b-dk.html#documentation) | [STM32H750XBH6](https://www.st.com.cn/zh/microcontrollers-microprocessors/stm32h750xb.html#documentation) | [购买链接](https://shop314814286.taobao.com/?weexShopTab=allitemsbar&weexShopSubTab=allitems&shopFrameworkType=native&sourceType=other&suid=74be4e31-a352-413d-bf81-72909dd711a5&shareUniqueId=31021130754&ut_sk=1.ZUQzpvSPtZsDAM22wgMusrSy_21646297_1743386335140.Copy.shop&un=0ebec934d3cc95cdbbeeeafdb2768e28&share_crt_v=1&un_site=0&spm=a2159r.13376460.0.0&sp_tk=bVZWMmV3bFZkbFI%3D&cpp=1&shareurl=true&short_name=h.6etlMBbY1ZEjXgI&bxsign=scdnpFVDezWrEooi2xHR3oT8fAOZA8b4hwRYH5nD-IkJzr_e6YrW1NWxn3VpZEVnrZ-9OpQT-aJKRxCaAu6Jbcs_PY7aOntLtLTTy6VNNJRR26yZttuARyPNJT51Pyeq_Ei&app=chrome) | mcu.china@st.com |
 
 ## 子仓库列表
 
