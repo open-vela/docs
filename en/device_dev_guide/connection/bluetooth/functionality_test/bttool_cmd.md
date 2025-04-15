@@ -1,37 +1,37 @@
-# bttool 命令说明
+# bttool Command Description
 
-## 一、简介
+## I. Introduction
 
-在 openvela的 `NSH` 命令行中执行，用于进入蓝牙命令工具的 Console。在 Console 中，可以执行 `bttool` 工具内集成的特有的子命令。
+Executed in the OpenVela NSH command line to enter the Bluetooth command tool console. Within this console, you can execute `bttool`’s built‑in sub-commands.
 
-## 二、语法
+## II. Syntax
 
-| **语法元素**         | **说明**                       | **示例**                                                     |
-| :----------------------- | :----------------------------- | :----------------------------------------------------------- |
-| 不含方括号或大括号的文本 | 必须按所显示键入的项。         | `cd` <br> 命令中的 `cd` 部分就是必须原样键入的。                  |
-| <尖括号内的文本>         | 必须为其提供值的占位符。       | `mkdir <directory_name>` <br>命令中的 `<directory_name>` 需要被替换成实际的目录名。 |
-| [方括号内的文本]         | 可选项。                       | `ls [-l]` <br> 命令中的 `[-l]` 是一个可选项，表示是否以长列表格式显示文件。 |
-| {花括号内的文本}         | 一组必需的项， 必须选择一个。  | `git reset { --soft \| --mixed \| --hard }` <br> 必须选择这三个选项中的一个，例如 `git reset --soft`。 |
-| 竖线 \|                  | 互斥项的分隔符，必须选择一个。 | `git reset { --soft \| --mixed \| --hard }` <br> `--soft`, `--mixed`, `--hard`只能选其中一个。 |
-| 省略号 …                 | 可重复使用多次的项。           | `cp <file1> <file2> … <destination>` <br> 省略号表示可以复制多个文件到目的地。 |
+| **Syntax Element**           | **Description**                                      | **Example**                                                                 |
+| :--------------------------- | :--------------------------------------------------- | :-------------------------------------------------------------------------- |
+| Text without brackets/braces | Items that must be typed exactly as shown.          | `cd` <br> The `cd` portion of the command must be typed verbatim.           |
+| <Text in angle brackets>     | Placeholders requiring value substitution.          | `mkdir <directory_name>` <br> Replace `<directory_name>` with an actual. |
+| [Text in square brackets]    | Optional items.                                      | `ls [-l]` <br> `[-l]` is optional to display files in long list format.     |
+| {Text in curly braces}       | Required group - exactly one item must be selected.  | `git reset { --soft \| --mixed \| --hard }` <br> Select one option, e.g., `git reset --soft`. |
+| Vertical bar \|              | Separator for mutually exclusive items.             | `git reset { --soft \| --mixed \| --hard }` <br> Choose only one of the options. |
+| Ellipsis …                   | Items that can be repeated multiple times.          | `cp <file1> <file2> … <destination>` <br> Copy multiple files to destination. |
 
-## 三、示例
+## III. Example
 
-本示例介绍在 `NSH` 命令行打开 `bttool`。
+This example demonstrates launching `bttool` from the `NSH` command-line.
 
-### 前提条件
+### Prerequisites
 
-已进入 `NSH` 操作界面。
+Have accessed the `NSH` interface.
 
-### 命令输入
+### Command Input
 
 ```Bash
 ap> bttool
 ```
 
-### 输出信息
+### Output Information
 
-终端显示 `bttool>` 提示符，进入 bttool Console。
+The prompt changes to `bttool>`, indicating you have entered the bttool console.
 
 ```Bash
 [    8.232900] [51] [ DEBUG] [ap] thread_schedule_loop:0xf0b10580, async:0xf1b0c740

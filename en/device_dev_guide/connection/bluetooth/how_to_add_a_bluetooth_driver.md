@@ -1,116 +1,116 @@
-# 如何添加一个蓝牙驱动
+# How to Add a Bluetooth Driver
 
-## 一、实现驱动
+## I. Implementing the Driver
 
-### 概述
+### Overview
 
-开发者或芯片厂商可以实现一个 `struct bt_driver_s` 类型的变量，并为其初始化以下成员函数：
+Developers or chip vendors can implement a variable of type `struct bt_driver_s` and initialize the following member functions：
 
 - CODE int (*open)(FAR struct bt_driver_s *btdev);
 - CODE int (*send)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len);
 - CODE int (*ioctl)(FAR struct bt_driver_s *btdev, int cmd, unsigned long arg);
 - CODE void (*close)(FAR struct bt_driver_s *btdev);
 
-上述成员函数的实现依赖于 `HCI（Host Controller Interface）` 的实际工作方式，也就是 `Host` 和 `Controller` 之间的物理总线。
+The implementation of these member functions depends on the actual operation of the `HCI (Host Controller Interface)`, that is, the physical bus between the Host and the Controller.
 
-### 示例
+### Example
 
-> **说明**
->
-> - 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
-> - 但在实际接入或使用时，建议在 [vendor](https://github.com/open-vela/vendor_template/tree/dev/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
+> **Note**  
+>  
+> - To quickly validate custom callbacks and driver registration in a QEMU environment, this example implements the `struct bt_driver_s` member functions directly within the [drivers_initialize](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) function and completes driver registration.  
+> - In a real integration or production scenario, it is recommended to create a separate source file under the [vendor](https://github.com/open-vela/vendor_template/tree/dev/boards/chip_name/board_name/src) directory for maintainability and version control.
 
-1. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
+1. In [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c), add the `bt_driver.h` header include:
 
     ```C
-    #include <nuttx/wireless/bluetooth/bt_driver.h> /* 添加bt_driver.h头文件引用 */
+    #include <nuttx/wireless/bluetooth/bt_driver.h> /* Add bt_driver.h header include */
     ```
 
-2. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中完成成员函数的实现编写。
+2. In [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c), implement the member functions.
 
-    > **说明**
-    >
-    > 在 openvela 中，`struct bt_driver_s` 的 `receive` 成员函数已经在 [uart_bth4.c](https://github.com/open-vela/nuttx/blob/dev/drivers/serial/uart_bth4.c) 文件中提供了默认实现。因此，开发者或厂商无需重新定义或实现此方法。
+    > **Note**  
+    >  
+    > In OpenVela, the `receive` member function of `struct bt_driver_s` already has a default implementation in [uart_bth4.c](https://github.com/open-vela/nuttx/blob/dev/drivers/serial/uart_bth4.c). Therefore, developers or vendors do not need to redefine or implement this method.
 
     ```C
-    /* 以下为示例实现，仅做示范。
-    * 在实际项目中，你可以在这些函数中添加真正的业务逻辑。
-    */
+    /* The following are sample implementations for demonstration only.
+     * In a real project, you can add actual business logic in these functions.
+     */
 
-    /* 1. 打开 HCI 传输 */
+    /* 1. Open HCI transport */
     static int sample_open(struct bt_driver_s *btdev)
     {
-    printf("sample_open called.\n");
-    /* 你可以在这里做一些初始化操作 */
-    return 0;
+      printf("sample_open called.\n");
+      /* You can perform initialization here */
+      return 0;
     }
 
-    /* 2. 发送数据到 HCI */
+    /* 2. Send data to HCI */
     static int sample_send(struct bt_driver_s *btdev,
-                        enum bt_buf_type_e type,
-                        void *data, size_t len)
+                           enum bt_buf_type_e type,
+                           void *data, size_t len)
     {
-    printf("sample_send called. type=%d, data=%p, len=%zu\n",
-            type, data, len);
-    /* 这里可以实现将数据发送到底层的逻辑 */
-    return 0;
+      printf("sample_send called. type=%d, data=%p, len=%zu\n",
+             type, data, len);
+      /* Implement the logic to send data to the lower layer here */
+      return 0;
     }
 
-    /* 3. 关闭 HCI 传输 */
+    /* 3. Close HCI transport */
     static void sample_close(struct bt_driver_s *btdev)
     {
-    printf("sample_close called.\n");
-    /* 在此进行资源释放或其他关闭操作 */
+      printf("sample_close called.\n");
+      /* Perform resource release or other cleanup here */
     }
 
-    /* 4. receive成员函数在驱动注册时由openvela指定 */
+    /* 4. The receive member function is assigned by OpenVela at registration time */
     ```
 
-3. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中，完成 `struct bt_driver_s` 结构体的定义。
+3. In [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c), define the `struct bt_driver_s` structure.
 
-    以下代码展示了一个完整的 `struct bt_driver_s` 结构体初始化示例，其中函数指针被赋值为上面定义的示例函数：
+    The following code shows a complete example of initializing a `struct bt_driver_s` instance, where the function pointers are assigned to the sample functions defined above:
 
     ```C
-    /* 初始化一个 bt_driver_s 实例，并将函数指针赋值为上面定义的示例函数 */
+    /* Initialize a bt_driver_s instance and assign the function pointers to the sample functions */
     struct bt_driver_s sample_driver =
     {
-        .head_reserve = 1,   /* 设置头部预留大小，默认为 1 */
-        .open         = sample_open,     /* 指向示例中的 sample_open 函数 */
-        .send         = sample_send,     /* 指向示例中的 sample_send 函数 */
-        .close        = sample_close,    /* 指向示例中的 sample_close 函数 */
-        /* 注意：厂商及开发者请不要自行赋值 .receive 成员函数 */
+        .head_reserve = 1,   /* Set header reserve size, default is 1 */
+        .open         = sample_open,     /* Points to sample_open */
+        .send         = sample_send,     /* Points to sample_send */
+        .close        = sample_close,    /* Points to sample_close */
+        /* Note: Vendors and developers should not assign the '.receive' member themselves */
     };
     ```
 
-## 二、注册驱动
+## II. Registering the Driver
 
-### 概述
+### Overview
 
-实现上述结构体类型的变量后，需要通过如下 API 注册该驱动实例，使用其中一个 API 即可。
+After implementing the above structure, register the driver instance using one of the following APIs:
 
 - `bt_driver_register()`
 
-    > **说明**
-    >
-    > 注册后缀 `id` 值为 0
+    > **Note**  
+    >  
+    > Registers with default id value 0
 
 - `bt_driver_register_with_id(FAR struct bt_driver_s *driver, int id)`
 
-    > **说明**
-    >
-    > 注册指定 id 编号
+    > **Note**  
+    >  
+    > Registers with the specified id
 
-`int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h)。调用关系如下图所示：
+The type definition `int bt_driver_register(FAR struct bt_driver_s *drv)` can be found in the header [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h). The call flow is shown below:
 
 ![img](img/bt_driver.png)
 
-> **说明**
->
-> 对于 receive() 成员函数，厂商或开发者无需定义，BTH4 驱动会为其初始化。
+> **Note**  
+>  
+> Vendors or developers do not need to define the `receive()` member function; the BTH4 driver will initialize it.
 
-### 示例
+### Example
 
-完成上述实现驱动示例代码编写后，需要在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件内的 `drivers_initialize()` 函数末尾，调用驱动注册 API 完成驱动的注册操作：
+After completing the driver implementation example above, call the driver registration API at the end of the `drivers_initialize()` function in [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) to complete the driver registration:
 
 ```C
 void drivers_initialize(void)
@@ -120,39 +120,39 @@ void drivers_initialize(void)
   /* Register devices */
   syslog_initialize();
 
-  /* 中间所有代码请保持一致，不要改动它们 */
+  /* Keep all existing code unchanged */
 
-  /* 默认情况下，bt_driver_register(&sample_driver) 会注册 /dev/ttyHCI0 设备节点 */
-  /* 由于 /dev/ttyHCI0 已被 openvelaQEMU 注册，所以我们使用以下 API 注册其他设备节点 */
+  /* By default, bt_driver_register(&sample_driver) registers the /dev/ttyHCI0 device node */
+  /* Since /dev/ttyHCI0 is already registered by OpenVela QEMU, we use the following API to register another node */
 
-  /* 使用 bt_driver_register_with_id(&sample_driver, 2) 注册 /dev/ttyHCI2 节点 */
+  /* Use bt_driver_register_with_id(&sample_driver, 2) to register /dev/ttyHCI2 */
   bt_driver_register_with_id(&sample_driver, 2);
 
   drivers_trace_end();
 }
 ```
 
-### 验证
+### Validation
 
-1. 完成注册代码编写后，在终端输入如下命令开始编译代码：
+1. After writing the registration code, build the firmware:
 
     ```Bash
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
     ```
 
-2. 编译结束后，在终端输入如下命令运行程序：
+2. After the build completes, run the emulator:
 
     ```Bash
     ./emulator.sh vela -no-window -qemu
     ```
 
-3. 查看编写的驱动示例是否成功注册到了 openvela 中，执行如下命令：
+3. Verify that the sample driver has been registered in OpenVela by listing `/dev`:
 
     ```Bash
     ls /dev
     ```
 
-    效果如下图所示：
+    You should see:
 
     ```C
     openvela-ap> ls /dev
@@ -173,7 +173,7 @@ void drivers_initialize(void)
     rtc0
     telnet
     ttyGNSS0
-    ttyHCI2    /* 可以看到，ttyHCI2设备节点成功注册 */
+    ttyHCI2    /* You can see that the ttyHCI2 device node was successfully registered */
     ttyS1
     ttyV0
     uorb/
@@ -184,17 +184,16 @@ void drivers_initialize(void)
     zero
     ```
 
-4. 验证驱动成员函数，执行如下命令：
+4. Validate the driver callbacks by writing to the device:
 
-    > **说明**
-    >
-    > 由于蓝牙驱动所注册文件节点对应的 `file_operations write` 函数，会校验数据是否符合 BTH4 格式，检验成功后，才会再将数据传入实现的 `sample_send` 函数。
+    > **Note**  
+    >  
+    > The `file_operations.write` function for the registered device node checks that data conforms to the BTH4 format. If validation succeeds, it calls the implemented `sample_send` function.
 
     ```C
     openvela-ap> echo "Hello openvelabluetooth" > /dev/ttyHCI2
-    /* echo指令会将数据发送到设备节点的send函数中 */
+    /* The echo command sends data to the node’s write callback */
 
-
-    sample_open called.  /* 终端打印open成员函数实现对应log */
-    sample_close called. /* 终端打印close成员函数实现对应log */
+    sample_open called.  /* The terminal prints the open callback log */
+    sample_close called. /* The terminal prints the close callback log */
     ```

@@ -1,76 +1,77 @@
-# 蓝牙适配器 state 子命令
+# Bluetooth Adapter "state" Sub-command
 
-## 一、简介
+## I. Introduction
 
-`state` 命令用于获取蓝牙适配器（Adapter）的当前状态。通过该命令，用户可以查看适配器的运行状态，例如是否已启用 BLE（低功耗蓝牙）或 BR/EDR（基本速率/增强数据速率）功能。
+The `state` command is used to retrieve the current status of the Bluetooth adapter. With this command, users can check whether features such as BLE (Low Energy) or BR/EDR (Basic Rate/Enhanced Data Rate) are enabled.
 
-## 二、示例
+## II. Examples
 
-### 示例 1：查看蓝牙适配器状态
+### Example 1: Check Bluetooth Adapter Status
 
-#### 前提条件
+#### Prerequisites
 
-确保已打开 `bttool` 工具， 有关 `bttool` 的详细命令说明，请参见 [bttool 命令说明](../bttool_cmd.md)。
+Ensure that the `bttool` utility is open. For detailed command descriptions, see [bttool Command Description](../bttool_cmd.md).
 
 ```Bash
 ap> bttool
 ```
 
-#### 命令输入
+#### Command Input
 
 ```Bash
 bttool> state
 ```
 
-#### 输出信息
+#### Output
 
-执行成功后，预期输出如下：
+Upon success, the output will display: 
 
 ```Bash
-Adapter State: <状态值>  
+Adapter State: <state value>
 ```
 
-#### 适配器状态
+#### Adapter States
 
-以下是适配器状态值及其对应的含义：
+| State Value | Description                       |
+| :---------- | :-------------------------------- |
+| 0           | Bluetooth is off.                 |
+| 1           | Enabling BLE functionality.       |
+| 2           | BLE functionality enabled.        |
+| 3           | Enabling BR/EDR functionality.    |
+| 4           | BR/EDR functionality enabled.     |
+| 5           | Disabling BR/EDR functionality.   |
+| 6           | Disabling BLE functionality.      |
 
-| 状态值 | 释义                   |
-| :----- | :--------------------- |
-| 0      | 蓝牙关闭。             |
-| 1      | 正在启用 BLE 功能。    |
-| 2      | BLE 功能已启用。       |
-| 3      | 正在启用 BR/EDR 功能。 |
-| 4      | BR/EDR 功能已启用。    |
-| 5      | 关闭 BR/EDR 功能。     |
-| 6      | 关闭 BLE 功能。        |
-
-#### 示例输出
+#### Sample Output
 
 ```Bash
 [bttool] Adapter State: 0
 ```
 
-### 示例 2：查看蓝牙适配器成功启动后的状态
+---
 
-#### 前提条件
+### Example 2: Check Status After Successful Adapter Startup
 
-在执行此操作之前，需通过 `enable` 命令启动蓝牙适配器。
+#### Prerequisites
+
+Before performing this, start the Bluetooth adapter using the `enable` command.
 
 ```Plain
 ap> bttool
 bttool> enable
 ```
 
-#### 命令输入
+#### Command Input
 
 ```Bash
 bttool> state
 ```
 
-#### 输出信息
+#### Output Information
 
-执行成功后，预期输出如下：
+Upon success, the output will display:
 
 ```Bash
 [bttool] Adapter State: 4
 ```
+ 
