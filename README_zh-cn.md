@@ -28,8 +28,9 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 - **维测工具：**
 
-    - 常用工具和维测框架，除了常见的 Logger 和 Debugger 工具外，还包含 Emulator 这一强大的高仿真设备模拟器工具。Emulator 支持全面功能仿真，涵盖 Wi-Fi、网络、Bluetooth、音视频播放、Camera、Security、GPS、Sensor、Telephony 等多种能力，同时支持 CPU 指令集仿真。
-    - 目前模拟器已支持多种产品形态，包括智慧面板、手表手环、有屏音箱等。通过 Emulator 开发者可以使用 PC 端丰富的调试工具和信息，无需真实设备即可进行应用开发调试，降低开发和调试难度。
+    常用工具和维测框架，除了常见的 Logger 和 Debugger 工具外，还包含 Emulator 这一强大的高仿真设备模拟器工具。Emulator 支持全面功能仿真，涵盖 Wi-Fi、网络、Bluetooth、音视频播放、Camera、Security、GPS、Sensor、Telephony 等多种能力，同时支持 CPU 指令集仿真。
+
+    目前模拟器已支持多种产品形态，包括智慧面板、手表手环、有屏音箱等。通过 Emulator 开发者可以使用 PC 端丰富的调试工具和信息，无需真实设备即可进行应用开发调试，降低开发和调试难度。
 
 ## 技术优势
 
@@ -47,7 +48,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 硬件支持
 
-openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。
+openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。关于开发板的适配案例，请参见[案例文档](./zh-cn/dev_board/Development_Board.md)。
 
 ## 快速入门
 
@@ -75,10 +76,6 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 - [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
 - [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
 - [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)
-
-## 支持的开发板
-
-开发板相关信息请参见[支持的开发板](./zh-cn/dev_board/Development_Board.md)。
 
 ## 参与贡献
 
