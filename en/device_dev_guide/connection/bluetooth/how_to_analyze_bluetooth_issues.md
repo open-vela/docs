@@ -1,122 +1,123 @@
-<!-- title: 如何分析蓝牙问题 -->
+<!-- title: How to Analyze Bluetooth Issues -->
 
 <!-- omit from toc -->
-# 目录
+# Table of Contents
 
-- [蓝牙启动问题](#蓝牙启动问题)
-  - [分析方法](#分析方法)
-    - [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
-    - [方法：观察syslog确定蓝牙服务是否启动](#方法观察syslog确定蓝牙服务是否启动)
-    - [方法：观察蓝牙驱动节点是否成功创建](#方法观察蓝牙驱动节点是否成功创建)
-  - [典型问题](#典型问题)
-    - [问题：创建蓝牙instance失败](#问题创建蓝牙instance失败)
-- [发现、连接、配对问题](#发现连接配对问题)
-  - [问题1：CTKD BLE LTK 生成 BR LinkKey 失败](#问题1ctkd-ble-ltk-生成-br-linkkey-失败)
-    - [步骤1：打开协议栈 Debug 功能](#步骤1打开协议栈-debug-功能)
-    - [步骤2：复现问题](#步骤2复现问题)
-    - [步骤3：日志解读](#步骤3日志解读)
-  - [问题2：其他 BLE 配对相关问题分析](#问题2其他-ble-配对相关问题分析)
-    - [BLE 配对状态机与流程图](#ble-配对状态机与流程图)
-    - [vela 设备使用 RPA 地址进行配对](#vela-设备使用-rpa-地址进行配对)
-    - [vela 设备使用 Public 地址配对情况](#vela-设备使用-public-地址配对情况)
-  - [发现、连接问题分析方法](#发现连接问题分析方法)
-    - [方法：观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)
-    - [方法：观察是否ACL连接超时断开（Connection Timeout）](#方法观察是否acl连接超时断开connection-timeout)
-    - [方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功但是未有profile连接acl主动断开)
-    - [方法：观察是否本地配对信息无效（Linkey Missing）](#方法观察是否本地配对信息无效linkey-missing)
-    - [方法：观察是否对方配对信息无效（Linkey Missing）](#方法观察是否对方配对信息无效linkey-missing)
-    - [方法：观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
-    - [方法：观察对方是否发起回连操作](#方法观察对方是否发起回连操作)
-    - [方法：观察本地是否收到ACL连接请求](#方法观察本地是否收到acl连接请求)
-    - [方法：观察本端是否同意ACL连接请求](#方法观察本端是否同意acl连接请求)
-    - [方法：观察是否成功开启扫描](#方法观察是否成功开启扫描)
-    - [方法：确认对端设备存在对应SPP服务](#方法确认对端设备存在对应spp服务)
-    - [方法：确认SPP连接状态与断连发起方](#方法确认spp连接状态与断连发起方)
-  - [典型问题](#典型问题-1)
-    - [问题：经典蓝牙设备主动绑定对方设备失败](#问题经典蓝牙设备主动绑定对方设备失败)
-    - [问题：耳机断开后回连手表失败](#问题耳机断开后回连手表失败)
-    - [问题：经典蓝牙设备未被对端设备成功连接](#问题经典蓝牙设备未被对端设备成功连接)
-    - [问题：低功耗蓝牙扫描不到对端设备](#问题低功耗蓝牙扫描不到对端设备)
-    - [问题：SPP主动连接失败](#问题spp主动连接失败)
-- [音频传输问题](#音频传输问题)
-  - [分析方法](#分析方法-1)
-    - [方法：观察蓝牙和Media之间的transport是否正确建立](#方法观察蓝牙和media之间的transport是否正确建立)
-    - [方法：观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
-    - [方法：观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
-    - [方法：观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
-    - [方法：观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
-    - [方法：观察A2DP SRC是否停止音频流传输](#方法观察a2dp-src是否停止音频流传输)
-    - [方法：观察AVDTP signaling连接是否断开](#方法观察avdtp-signaling连接是否断开)
-    - [方法：观察音频包序列号是否连续](#方法观察音频包序列号是否连续)
-    - [方法：观察air log中1秒内发送的音频数据样本点数量](#方法观察air-log中1秒内发送的音频数据样本点数量)
-    - [方法：观察air log中音频数据是否存在重传](#方法观察air-log中音频数据是否存在重传)
-  - [典型问题](#典型问题-2)
-    - [问题：连接耳机播放音乐，耳机无声](#问题连接耳机播放音乐耳机无声)
-    - [问题：连接耳机播放音频文件，音频文件开头缺失](#问题连接耳机播放音频文件音频文件开头缺失)
-    - [问题：语音播报，结尾处有pop音](#问题语音播报结尾处有pop音)
-    - [问题：连接两对耳机时，出现断连和无声的问题](#问题连接两对耳机时出现断连和无声的问题)
-- [音乐播放控制问题](#音乐播放控制问题)
-  - [分析方法](#分析方法-2)
-    - [方法：观察是否建立了AVRCP连接](#方法观察是否建立了avrcp连接)
-    - [方法：观察设备是否支持AVRCP](#方法观察设备是否支持avrcp)
-    - [方法：观察是否发送了播放、暂停请求](#方法观察是否发送了播放暂停请求)
-    - [方法：观察是否注册了Notification](#方法观察是否注册了notification)
-    - [方法：观察是否正确反馈播放状态](#方法观察是否正确反馈播放状态)
-    - [方法：观察播放状态变化是否由蓝牙引起](#方法观察播放状态变化是否由蓝牙引起)
-    - [方法：观察是否使用了绝对音量](#方法观察是否使用了绝对音量)
-    - [方法：观察音乐源设备（手机）是否设置了绝对音量](#方法观察音乐源设备手机是否设置了绝对音量)
-    - [方法：观察本地设备是否设置了绝对音量](#方法观察本地设备是否设置了绝对音量)
-    - [方法：观察音乐源设备（手机）是否改变了音频幅值](#方法观察音乐源设备手机是否改变了音频幅值)
-    - [方法：观察是否打开了AVRCP配置](#方法观察是否打开了avrcp配置)
-    - [方法：观察音量变化是否由蓝牙引起](#方法观察音量变化是否由蓝牙引起)
-    - [方法：观察音量变化由AVRCP或是HFP控制](#方法观察音量变化由avrcp或是hfp控制)
-  - [典型问题](#典型问题-3)
-    - [问题：不能控制播放、暂停](#问题不能控制播放暂停)
-    - [问题：不能受控播放、暂停](#问题不能受控播放暂停)
-    - [问题：意外的播放、暂停](#问题意外的播放暂停)
-    - [问题：不能受音乐源设备（手机）控制调节音量](#问题不能受音乐源设备手机控制调节音量)
-    - [问题：音量异常变化](#问题音量异常变化)
-- [通话问题](#通话问题)
-  - [分析方法](#分析方法-3)
-    - [方法：观察是否建立了HFP连接](#方法观察是否建立了hfp连接)
-    - [方法：观察设备是否支持HFP](#方法观察设备是否支持hfp)
-    - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
-    - [方法：观察是否向Media设置了SCO音频参数](#方法观察是否向media设置了sco音频参数)
-    - [方法：观察AG端是否收到了HF端的Answer请求](#方法观察ag端是否收到了hf端的answer请求)
-    - [方法：观察HF端是否收到了AG端的来电通知](#方法观察hf端是否收到了ag端的来电通知)
-    - [方法：观察HF端是否通知了应用AG端有来电](#方法观察hf端是否通知了应用ag端有来电)
-  - [典型问题](#典型问题-4)
-    - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
-    - [问题：HF端接通电话，HF端无声](#问题hf端接通电话hf端无声)
-    - [问题：作为AG端，不能受HF端控制接听电话](#问题作为ag端不能受hf端控制接听电话)
-    - [问题：作为HF端，AG端来电，HF端无来电显示](#问题作为hf端ag端来电hf端无来电显示)
-- [数据传输问题](#数据传输问题)
-  - [分析方法](#分析方法-4)
-    - [方法：观察client设备是否发起过Exchange\_MTU规程](#方法观察client设备是否发起过exchange_mtu规程)
-    - [方法：观察当前空口环境是否复杂](#方法观察当前空口环境是否复杂)
-  - [典型问题](#典型问题-5)
-    - [问题：GATT传输数据吞吐率过低](#问题gatt传输数据吞吐率过低)
-- [控制拍照问题](#控制拍照问题)
-  - [分析方法](#分析方法-5)
-    - [方法：观察HID通道连接是否成功](#方法观察hid通道连接是否成功)
-    - [方法：观察HID通道手表还是手机断开HID通道](#方法观察hid通道手表还是手机断开hid通道)
-    - [方法：手机蓝牙设备绑定数量是否超过7个](#方法手机蓝牙设备绑定数量是否超过7个)
-  - [典型问题](#典型问题-6)
-    - [问题：手表无法控制手机拍照](#问题手表无法控制手机拍照)
+
+- [Bluetooth Startup Issues](#bluetooth-startup-issues)
+  - [Analysis Methods](#analysis-methods)
+    - [Method: Check if the Bluetooth Service Thread Exists](#method-check-if-the-bluetooth-service-thread-exists)
+    - [Method: Check syslog to Determine if the Bluetooth Service is Running](#method-check-syslog-to-determine-if-the-bluetooth-service-is-running)
+    - [Method: Check if the Bluetooth Driver Node is Successfully Created](#method-check-if-the-bluetooth-driver-node-is-successfully-created)
+  - [Typical Issues](#typical-issues)
+    - [Issue: Failure to Create Bluetooth Instance](#issue-failure-to-create-bluetooth-instance)
+- [Discovery, Connection, and Pairing Issues](#discovery-connection-and-pairing-issues)
+  - [Issue 1: CTKD BLE LTK Generating BR LinkKey Failure](#issue-1-ctkd-ble-ltk-generating-br-linkkey-failure)
+    - [Step 1: Enable Protocol Stack Debug Function](#step-1-enable-protocol-stack-debug-function)
+    - [Step 2: Reproduce the Issue](#step-2-reproduce-the-issue)
+    - [Step 3: Log Interpretation](#step-3-log-interpretation)
+  - [Issue 2: Analysis of Other BLE Pairing-Related Issues](#issue-2-analysis-of-other-ble-pairing-related-issues)
+    - [BLE Pairing State Machine and Flowchart](#ble-pairing-state-machine-and-flowchart)
+    - [Vela Device Pairing Using RPA Address](#vela-device-pairing-using-rpa-address)
+    - [Vela Device Pairing Using Public Address](#vela-device-pairing-using-public-address)
+  - [Discovery and Connection Issue Analysis Methods](#discovery-and-connection-issue-analysis-methods)
+    - [Method: Check if the Remote Device Has Not Enabled Connectable Mode](#method-check-if-the-remote-device-has-not-enabled-connectable-mode)
+    - [Method: Check if ACL Connection Times Out and Disconnects (Connection Timeout)](#method-check-if-acl-connection-times-out-and-disconnects)
+    - [Method: Check if Binding Was Successful but No Profile Connection Exists, Leading to ACL Disconnection](#method-check-if-binding-was-successful-but-no-profile-connection-exists-leading-to-acl-disconnection)
+    - [Method: Check if Local Pairing Information Is Invalid (Linkey Missing)](#method-check-if-local-pairing-information-is-invalid)
+    - [Method: Check if Remote Pairing Information Is Invalid (Linkey Missing)](#method-check-if-remote-pairing-information-is-invalid)
+    - [Method: Check if Local Device Is in Connectable Mode](#method-check-if-local-device-is-in-connectable-mode)
+    - [Method: Check if the Remote Device Initiates a Reconnection](#method-check-if-the-remote-device-initiates-a-reconnection)
+    - [Method: Check if the Local Device Receives an ACL Connection Request](#method-check-if-the-local-device-receives-an-acl-connection-request)
+    - [Method: Check if the Local Device Accepts the ACL Connection Request](#method-check-if-the-local-device-accepts-the-acl-connection-request)
+    - [Method: Check if Scanning Was Successfully Initiated](#method-check-if-scanning-was-successfully-initiated)
+    - [Method: Confirm the Remote Device Has the Corresponding SPP Service](#method-confirm-the-remote-device-has-the-corresponding-spp-service)
+    - [Method: Confirm SPP Connection Status and Disconnection Initiator](#method-confirm-spp-connection-status-and-disconnection-initiator)
+  - [Typical Issues](#typical-issues-1)
+    - [Issue: Classic Bluetooth Device Fails to Bind to Remote Device](#issue-classic-bluetooth-device-fails-to-bind-to-remote-device)
+    - [Issue: Headphones Fail to Reconnect to Watch After Disconnection](#issue-headphones-fail-to-reconnect-to-watch-after-disconnection)
+    - [Issue: Classic Bluetooth Device Is Not Successfully Connected by Remote Device](#issue-classic-bluetooth-device-is-not-successfully-connected-by-remote-device)
+    - [Issue: Low-Power Bluetooth Fails to Scan Remote Device](#issue-low-power-bluetooth-fails-to-scan-remote-device)
+    - [Issue: SPP Active Connection Failure](#issue-spp-active-connection-failure)
+- [Audio Transmission Issues](#audio-transmission-issues)
+  - [Analysis Methods](#analysis-methods-1)
+    - [Method: Check if the Transport Between Bluetooth and Media is Correctly Established](#method-check-if-the-transport-between-bluetooth-and-media-is-correctly-established)
+    - [Method: Check if the AVDTP Signaling Connection is Established](#method-check-if-the-avdtp-signaling-connection-is-established)
+    - [Method: Check if the AVDTP Media Connection is Established](#method-check-if-the-avdtp-media-connection-is-established)
+    - [Method: Check if Media Has Successfully Configured the Codec](#method-check-if-media-has-successfully-configured-the-codec)
+    - [Method: Check if A2DP SRC Has Started Playing Music](#method-check-if-a2dp-src-has-started-playing-music)
+    - [Method: Check if A2DP SRC Has Stopped Transmitting Audio Packets](#method-check-if-a2dp-src-has-stopped-transmitting-audio-packets)
+    - [Method: Check if the AVDTP Signaling Connection is Disconnected](#method-check-if-the-avdtp-signaling-connection-is-disconnected)
+    - [Method: Check if the Audio Packet Sequence Number is Continuous](#method-check-if-the-audio-packet-sequence-number-is-continuous)
+    - [Method: Check the Number of Audio Data Sample Points Sent in 1 Second in the Air Log](#method-check-the-number-of-audio-data-sample-points-sent-in-1-second-in-the-air-log)
+    - [Method: Check for Audio Data Retransmission in the Air Log](#method-check-for-audio-data-retransmission-in-the-air-log)
+  - [Typical Issues](#typical-issues-2)
+    - [Issue: Headphones Connected but No Sound](#issue-headphones-connected-but-no-sound)
+    - [Issue: Audio File Playback with Missing Header When Headphones are Connected](#issue-audio-file-playback-with-missing-header-when-headphones-are-connected)
+    - [Issue: Pop Sound at the End of Voice Announcements](#issue-pop-sound-at-the-end-of-voice-announcements)
+    - [Issue: Disconnection and No Sound When Connecting Two Pairs of Headphones](#issue-disconnection-and-no-sound-when-connecting-two-pairs-of-headphones)
+- [Music Playback Control Issues](#music-playback-control-issues)
+  - [Analysis Methods](#analysis-methods-2)
+    - [Method: Check if the AVRCP Connection is Established](#method-check-if-the-avrcp-connection-is-established)
+    - [Method: Check if the Device Supports AVRCP](#method-check-if-the-device-supports-avrcp)
+    - [Method: Check if Play or Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent)
+    - [Method: Check if Notification is Registered](#method-check-if-notification-is-registered)
+    - [Method: Check if Playback Status is Correctly Reported](#method-check-if-playback-status-is-correctly-reported)
+    - [Method: Check if Playback Status Changes are Caused by Bluetooth](#method-check-if-playback-status-changes-are-caused-by-bluetooth)
+    - [Method: Check if Absolute Volume is Used](#method-check-if-absolute-volume-is-used)
+    - [Method: Check if the Music Source Device (Phone) has Set Absolute Volume](#method-check-if-the-music-source-device-phone-has-set-absolute-volume)
+    - [Method: Check if the Local Device has Set Absolute Volume](#method-check-if-the-local-device-has-set-absolute-volume)
+    - [Method: Check if the Music Source Device (Phone) has Changed the Audio Amplitude](#method-check-if-the-music-source-device-phone-has-changed-the-audio-amplitude)
+    - [Method: Check if AVRCP Configuration is Enabled](#method-check-if-avrcp-configuration-is-enabled)
+    - [Method: Check if Volume Changes are Caused by Bluetooth](#method-check-if-volume-changes-are-caused-by-bluetooth)
+    - [Method: Check if Volume Changes are Controlled by AVRCP or HFP](#method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp)
+  - [Typical Issues](#typical-issues-3)
+    - [Issue: Unable to Control Play/Pause](#issue-unable-to-control-play-pause)
+    - [Issue: Unable to Be Controlled for Play/Pause](#issue-unable-to-be-controlled-for-play-pause)
+    - [Issue: Unexpected Play/Pause](#issue-unexpected-play-pause)
+    - [Issue: Unable to Adjust Volume via Music Source Device (Phone)](#issue-unable-to-adjust-volume-via-music-source-device-phone)
+    - [Issue: Abnormal Volume Changes](#issue-abnormal-volume-changes)
+- [Call Issues](#call-issues)
+  - [Analysis Methods](#analysis-methods-3)
+    - [Method: Check if the HFP Connection is Established](#method-check-if-the-hfp-connection-is-established)
+    - [Method: Check if the Device Supports HFP](#method-check-if-the-device-supports-hfp)
+    - [Method: Check if the SCO Connection is Established](#method-check-if-the-sco-connection-is-established)
+    - [Method: Check if SCO Audio Parameters are Set for Media](#method-check-if-sco-audio-parameters-are-set-for-media)
+    - [Method: Check if the AG Received the HF's Answer Request](#method-check-if-the-ag-received-the-hf-s-answer-request)
+    - [Method: Check if the HF Received the AG's Incoming Call Notification](#method-check-if-the-hf-received-the-ag-s-incoming-call-notification)
+    - [Method: Check if the HF Notified the Application of an Incoming Call from the AG](#method-check-if-the-hf-notified-the-application-of-an-incoming-call-from-the-ag)
+  - [Typical Issues](#typical-issues-4)
+    - [Issue: AG Answers Call, but HF Has No Voice](#issue-ag-answers-call-but-hf-has-no-voice)
+    - [Issue: HF Answers Call, but HF Has No Voice](#issue-hf-answers-call-but-hf-has-no-voice)
+    - [Issue: As AG, Cannot Answer Calls Controlled by HF](#issue-as-ag-cannot-answer-calls-controlled-by-hf)
+    - [Issue: As HF, AG Incoming Call, but HF Has No Incoming Call Display](#issue-as-hf-ag-incoming-call-but-hf-has-no-incoming-call-display)
+- [Data Transmission Issues](#data-transmission-issues)
+  - [Analysis Methods](#analysis-methods-4)
+    - [Method: Check if the Client Device Initiated the Exchange_MTU Procedure](#method-check-if-client-initiated-exchange-mtu)
+    - [Method: Check if the Current Air Interface Environment is Complex](#method-check-if-air-interface-is-complex)
+  - [Typical Issues](#typical-issues-5)
+    - [Issue: Low GATT Data Throughput](#issue-low-gatt-data-throughput)
+- [Camera Control Issues](#camera-control-issues)
+  - [Analysis Methods](#analysis-methods-5)
+    - [Method: Check if the HID Channel Connection is Successful](#method-check-if-hid-channel-connection-is-successful)
+    - [Method: Check if the HID Channel is Disconnected by the Watch or Phone](#method-check-if-hid-channel-is-disconnected-by-watch-or-phone)
+    - [Method: Check if the Number of Paired Bluetooth Devices on the Phone Exceeds 7](#method-check-if-number-of-paired-bluetooth-devices-exceeds-7)
+  - [Typical Issues](#typical-issues-6)
+    - [Issue: Watch Cannot Control Phone Camera](#issue-watch-cannot-control-phone-camera)
 
 ---
 
-# 蓝牙启动问题
+# Bluetooth Startup Issues
 
-<a id="蓝牙启动问题分析方法"></a>
+<a id="bluetooth-startup-issue-analysis-methods"></a>
 
-## 分析方法
+## Analysis Methods
 
-<a id="方法：观察蓝牙服务线程是否存在"></a>
+<a id="method-check-if-the-bluetooth-service-thread-exists"></a>
 
-### 方法：观察蓝牙服务线程是否存在
+### Method: Check if the Bluetooth Service Thread Exists
 
-利用`ps`命令，观察蓝牙服务线程是否存在，正常输出信息可以观察到名为`bluetoothd`的线程。
+Use the `ps` command to check if the Bluetooth service thread exists. Normal output information will show a thread named `bluetoothd`.
 
 ```text
   PID GROUP PRI POLICY   TYPE    NPX STATE    EVENT     SIGMASK             STACK    USED FILLED COMMAND
@@ -126,7 +127,7 @@
     4     0 100 RR       Kthread   - Ready              0000000000000000  0003968 0000496  12.5%  goldfish_gpu_fb_thread 0x4024c930
     5     0 100 RR       Kthread   - Waiting  Semaphore 0000000000000000  0003968 0000864  21.7%  goldfish_gnss_thread 0x406d4b30
     6     0 100 RR       Kthread   - Waiting  Semaphore 0000000000000000  0003968 0000904  22.7%  goldfish_sensor_thread 0x402e20a0
-    7     7 100 RR       Task      - Running            0000000000000000  0003992 0002048  51.3%  nsh_main
+    7     7 100 RR       Task      - Running            0000000000000000   0003992 0002048  51.3%  nsh_main
     9     9 100 RR       Task      - Waiting  Semaphore 0000000000000000  0004000 0003096  77.4%  kvdbd
    10    10 100 RR       Task      - Waiting  Semaphore 0000000000000000  0004000 0002192  54.8%  adbd
    11    11 103 RR       Task      - Waiting  Semaphore 0000000000000000  0008088 0003340  41.2%  bluetoothd
@@ -134,11 +135,11 @@
    13    11 110 FIFO     pthread   - Waiting  Semaphore 0000000000000000  0004016 0000600  14.9%  sysworkq 0x71ffa5 0x40700350
 ```
 
-<a id="方法：观察蓝牙服务syslog，蓝牙服务框架是否启动"></a>
+<a id="method-check-syslog-to-determine-if-the-bluetooth-service-is-running"></a>
 
-### 方法：观察syslog确定蓝牙服务是否启动
+### Method: Check syslog to Determine if the Bluetooth Service is Running
 
-观察蓝牙服务syslog，检查蓝牙服务是否启动，标准启动流程log如下:
+Check the Bluetooth service syslog to verify if the Bluetooth service has started. The standard startup log is as follows:
 
 ```text
 [    0.054300] [11] [  INFO] [ap] bluetoothd main 34
@@ -156,20 +157,22 @@
 [    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
 [    0.090100] [11] [ DEBUG] [ap] [81][service_loop]: set_ready
 ```
-<a id="方法：观察蓝牙驱动节点是否成功创建">
+<a id="method-check-if-the-bluetooth-driver-node-is-successfully-created"></a>
 
-通过 `ps` 命令查看进程列表，确认是否存在 `bluetoothd` 进程。
+### Method: Check if the Bluetooth Driver Node is Successfully Created
 
-- **若不存在**：跳转到 **“2. bluetoothd 不存在时的分析方法”**。
-- **若存在**：跳转到 **“3. bluetoothd 存在时的分析方法”**。
+Use the `ps` command to view the process list and confirm whether the `bluetoothd` process exists.
 
-##### 2. `bluetoothd` 不存在时的分析方法：
+- **If it does not exist**: Proceed to **"Analysis Method When `bluetoothd` Does Not Exist"**.
+- **If it exists**: Proceed to **"Analysis Method When `bluetoothd` Exists"**.
 
-**关键日志检查：**
+##### 2. Analysis Method When `bluetoothd` Does Not Exist:
 
-  **可能原因：**
+**Key Log Check:**
 
-  - **Framework 初始化失败**：
+  **Possible Causes:**
+
+  - **Framework Initialization Failure**:
 
     ```c
     [service_manager]: A2DP-Src service register success
@@ -177,77 +180,75 @@
     [audio_transport]: audio_transport_open path{4}[sco_ctrl] success
     ```
 
-    检查日志中上述模块是否出现异常。
-  - **协议栈初始化失败**：
+    Check the logs for abnormalities in the above modules.
+  - **Stack Initialization Failure**:
 
     ```c
     [stack_manager]: stack_manager_init done
     ```
 
-    确认协议栈是否成功初始化。
-  - **HCI 驱动读取通道建立失败**：
+    Confirm whether the stack has been successfully initialized.
+  - **HCI Driver Read Channel Establishment Failure**:
 
     ```c
     [bluelet]: hci_add_recv
     ```
 
-    检查 `hci` 驱动读取通道是否建立成功。
-  - **libuv Service Loop 异常**：
+    Check whether the HCI driver read channel has been successfully established.
+  - **libuv Service Loop Exception**:
 
     ```c
     [bt_service]: bt_service_init done
     [service_loop]: service loop running now !!!
     ```
 
-    确认 `service_loop` 是否初始化成功。
+    Confirm whether the `service_loop` has been successfully initialized.
 
-##### 3. `bluetoothd` 存在时的分析方法：
+##### 3. Analysis Method When `bluetoothd` Exists:
 
-**可能原因：**
+**Possible Causes:**
 
-- **Socket 建立失败**：
-对于跨核应用（APP 与 `bluetoothd` 不在同一个核），优先排查 **Rpmsg 通道问题**，可参考系统文档：《Rpmsg HCI》、《Rpmsg Socket》。
-- **App 未配置 Loop 环境**：
-  确保 App 使用 `uv_loop` 或 `thread while (1)` 类型循环。参考《如何开发一个蓝牙应用》。
+  - **Socket Establishment Failure**: For cross-core applications (APP and `bluetoothd` are not on the same core), prioritize checking **Rpmsg channel issues**, refer to system documentation: *Rpmsg HCI* and *Rpmsg Socket*.
+  - **APP Not Configured with Loop Environment**: Ensure the APP uses `uv_loop` or `thread while (1)` type loop. Refer to *How to Develop a Bluetooth Application*.
 
-### 方法：观察蓝牙驱动节点是否成功创建
+### Method: Check if the Bluetooth Driver Node is Successfully Created
 
   ```c
   [72][h4]: bt_sal_hci_transport_init: g_tlfd = 16
   ```
 
-  - 若 `fd = -1`：蓝牙驱动打开失败，需参考《蓝牙驱动打开失败问题分析》章节。
-  - 若 `fd > 0`：驱动成功，但 `bluetoothd` 初始化失败，需进一步分析原因：
+  - If `fd = -1`: Bluetooth driver failed to open, refer to the *Bluetooth Driver Open Failure Analysis* chapter.
+  - If `fd > 0`: Driver is successful, but `bluetoothd` initialization failed, further analysis is needed:
 
-利用`ls /dev`命令，观察蓝牙驱动节点是否成功创建，正常输出信息可以观察到名为`ttyHCI0`的蓝牙驱动节点。
+Use the `ls /dev` command to check if the Bluetooth driver node has been successfully created. Normal output information will show a Bluetooth driver node named `ttyHCI0`.
 
 ```text
 openvela-ap> ls /dev
 /dev:
  audio/
  binder
- ......
+ ...... 
  ttyHCI0
- ......
+ ...... 
  uorb/
- ......
+ ...... 
  ```
 
-<a id="方法：蓝牙启动典型问题">
+<a id="method-typical-issues-for-bluetooth-startup"></a>
 
-## 典型问题
+## Typical Issues
 
-### 问题：创建蓝牙instance失败
+### Issue: Failure to Create Bluetooth Instance
 
-##### 特殊场景：APP create_instance 时蓝牙 `bluetoothd` 未初始化完成
+##### Special Scenario: APP Creates Instance When `bluetoothd` Is Not Initialized
 
-**问题表现：**
-APP 在 `bluetoothd` 初始化超时（默认1秒）后创建实例失败。
+**Issue Manifestation:**
+The APP fails to create an instance after `bluetoothd` initialization times out (default 1 second).
 
-**定位方法：**
-通过打点蓝牙初始化流程，定位超时位置。
+**Localization Method:**
+Trace the Bluetooth initialization process to locate the timeout position.
 
-**示例日志：**
+**Sample Log:**
 
 ```c
 [03-10 20:23:11.549][03/09 17:29:15] [15] [cp] [270][BT]: [VelaBT], bt_log_server_init 270
@@ -255,52 +256,52 @@ APP 在 `bluetoothd` 初始化超时（默认1秒）后创建实例失败。
 [03-10 20:23:17.027][03/09 17:29:20] [15] [cp] [278][BT]: [VelaBT], bt_log_server_init 278
 ```
 
-**解决建议：**
-检查 `bluetoothd` 初始化期间的系统日志，确认超时原因（内部延迟或外部事件干扰）。
+**Resolution Recommendation:**
+Check the system logs during `bluetoothd` initialization to identify the timeout cause (internal delay or external event interference).
 
-##### 初步判断蓝牙适配器状态：
+##### Initial Judgment of Bluetooth Adapter State:
 
-**关键日志：**
+**Key Logs:**
 
 ```c
 [ap] on_adapter_state_changed_cb: state = 1. ...
 [ap] on_adapter_state_changed_cb: state = 2...
 ```
 
-| 状态值 | 释义                 |
+| State Value | Meaning                 |
 | ------ | -------------------- |
-| `0`  | 蓝牙关闭             |
-| `1`  | 正在启用 BLE 功能    |
-| `2`  | BLE 功能已启用       |
-| `3`  | 正在启用 BR/EDR 功能 |
-| `4`  | BR/EDR 功能已启用    |
-| `5`  | 正在关闭 BR/EDR 功能 |
-| `6`  | 正在关闭 BLE 功能    |
+| `0`  | Bluetooth is Off             |
+| `1`  | Enabling BLE Function    |
+| `2`  | BLE Function Enabled       |
+| `3`  | Enabling BR/EDR Function |
+| `4`  | BR/EDR Function Enabled    |
+| `5`  | Disabling BR/EDR Function |
+| `6`  | Disabling BLE Function    |
 
-**获取状态的替代方法：**
-使用 `bttool` 的 `state` 子命令主动查询适配器状态。
+**Alternative Method to Obtain State:**
+Use the `state` subcommand of `bttool` to actively query the adapter state.
 
-##### 2. 确认状态机异常后的处理：
+##### 2. Handling After Confirming State Machine Abnormality:
 
-- **尝试重启或重新 enable**：
-  执行 `bttool disable` 后再 `enable`，观察问题是否重现。
-- **若问题依旧：**
-  打开协议栈日志进行分析：
+- **Attempt to Restart or Re-enable**:
+  Execute `bttool disable` followed by `enable`, and observe if the issue reproduces.
+- **If the Issue Persists**:
+  Enable stack logs for analysis:
   ```c
   bttool> log enable stack
   bttool> log mask 1 2
   bttool> q
   ```
 
-##### 3. 特殊场景：蓝牙驱动异常导致 enable 失败：
+##### 3. Special Scenario: Bluetooth Driver Abnormality Causes Enable Failure:
 
-**需抓取以下信息：**
+**Information to Capture:**
 
-- **蓝牙状态机值**：确认当前处于哪个状态（如 `state=1` 或 `state=3`）。
-- **底层蓝牙驱动日志**：确认驱动层是否正常。
-- **协议栈日志**：按上述步骤开启并提供关键时间点日志。
+- **Bluetooth State Machine Value**: Confirm the current state (e.g., `state=1` or `state=3`).
+- **Lower-Level Bluetooth Driver Logs**: Confirm if the driver layer is functioning normally.
+- **Stack Logs**: Follow the steps above to enable and provide key timeline logs.
 
-**示例日志：**
+**Sample Logs:**
 
 ```c
 [48] [ap] on_adapter_state_changed_cb: state = 1.
@@ -309,177 +310,181 @@ APP 在 `bluetoothd` 初始化超时（默认1秒）后创建实例失败。
 [48] [ap] on_adapter_state_changed_cb: state = 4.
 ```
 
-**注意事项：**
-若问题仍无法解决，需将协议栈日志和关键时间点信息提交给 Vela 蓝牙团队。
+**Notes:**
+If the issue remains unresolved, submit the stack logs and key timeline information to the Vela Bluetooth team.
 
-**归纳总结：**
+**Summary:**
 
-* [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
-  * 如果蓝牙服务线程存在，应当提供完整的系统启动syslog向Vela BT团队寻求支持。
-  * 否则，按照如下方法进一步排查。
+* [Method: Check if the Bluetooth Service Thread Exists](#method-check-if-the-bluetooth-service-thread-exists)
+  * If the Bluetooth service thread exists, provide the complete system startup syslog to the Vela BT team for support.
+  * Otherwise, proceed with further troubleshooting as follows.
 
-* [方法：观察蓝牙服务syslog，蓝牙服务框架是否启动](#方法观察蓝牙服务syslog蓝牙服务框架是否启动)
-  * 如果未找到蓝牙服务启动log，应当确认当前系统defconfig是否配置`CONFIG_BLUETOOTH_SERVER`等配置以及Rcs中配置`bluetoothd &`。
-  * 如果发现启动过程中发现创建目录失败`folder create fail`，请寻求系统技术支持。
-  * 如果发现启动过程存在H4驱动异常，请按如下方法检查是否存在驱动节点。
+* [Method: Check syslog to Determine if the Bluetooth Service Framework is Running](#method-check-syslog-to-determine-if-the-bluetooth-service-is-running)
+  * If the Bluetooth service startup log is not found, confirm whether the current system defconfig is configured with `CONFIG_BLUETOOTH_SERVER` and whether `bluetoothd &` is configured in Rcs.
+  * If the startup process encounters a folder creation failure `folder create fail`, seek system technical support.
+  * If the startup process encounters H4 driver abnormalities, check whether the driver node exists as follows.
 
-* [方法：观察蓝牙驱动节点是否成功创建](#方法观察蓝牙驱动节点是否成功创建)
-  * 如果驱动节点不存在，请查看《如何添加蓝牙驱动》能否解决问题。
-  * 否则，请提供完整的系统启动syslog向Vela BT团队寻求支持。
+* [Method: Check if the Bluetooth Driver Node is Successfully Created](#method-check-if-the-bluetooth-driver-node-is-successfully-created)
+  * If the driver node does not exist, refer to *How to Add a Bluetooth Driver* to resolve the issue.
+  * Otherwise, provide the complete system startup syslog to the Vela BT team for support.
 
-# 发现、连接、配对问题
+# Discovery, Connection, and Pairing Issues
 
-本节介绍 BLE 发现、连接、配对绑定过程中可能遇到的问题分析方法。
+This section introduces methods for analyzing issues that may arise during BLE discovery, connection, and pairing processes.
 
-<a id="发现连接配对分析方法"></a>
+<a id="discovery-connection-and-pairing-analysis-methods"></a>
 
-## 问题1：CTKD BLE LTK 生成 BR LinkKey 失败
+## Issue 1: CTKD BLE LTK Generating BR LinkKey Failure
 
-**说明：**
+**Note:**
 
-* vela CTKD 流程在 Host 端完成，抓取 OTA/HCI 日志可以确认 BLE 配对过程是否正常。
-* CTKD 问题深入分析需配合 vela 协议栈日志进行。
+* The vela CTKD process is completed on the Host side, and capturing OTA/HCI logs can confirm whether the BLE pairing process is normal.
+* In-depth analysis of CTKD issues requires coordination with vela stack logs.
 
-### 步骤1：打开协议栈 Debug 功能
+### Step 1: Enable Protocol Stack Debug Function
 
 ```c
 log enable stack
 logmask 1 2 7
 ```
 
-具体的 mask 掩码定义，请参考《bttool 使用说明文档》-《log 子命令》。
+For specific mask definitions, refer to the *bttool Usage Documentation* - *log Subcommand*.
 
-> 若需打开除掩码 1 和 2 外其他的协议栈 debug 日志功能，请联系 vela 蓝牙开发人员开启对应宏配置并重新编译协议栈静态库。
+> If you need to enable other protocol stack debug logs in addition to masks 1 and 2, please contact vela Bluetooth developers to enable the corresponding macro configurations and recompile the protocol stack static library.
 
-### 步骤2：复现问题
+### Step 2: Reproduce the Issue
 
-按照具体场景进行问题复现，并记录相关日志。
+Reproduce the issue according to the specific scenario and record relevant logs.
 
-### 步骤3：日志解读
+### Step 3: Log Interpretation
 
-* 在日志中全局搜索关键字 `SMP` 或 `CTKD`。
-* 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能被关闭，原因是未启用 LESC 功能。
-* 若日志显示 `[BR2LE OFF] [Disabled]`，表示 LinkKey 到 LTK 方向的 CTKD 功能被 APP 禁用。
+* Perform a global search for keywords `SMP` or `CTKD` in the logs.
+* If the log shows `CTKD LE2BR OFF [LESC disabled]`, it means the CTKD function from BLE to BR direction is disabled because LESC is not enabled.
+* If the log shows `[BR2LE OFF] [Disabled]`, it indicates that the CTKD function from LinkKey to LTK direction is disabled by the APP.
 
-- 在抓取的日志中全局搜索关键字 `SMP` 或 `CTKD`。
-- 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能已被关闭，原因是未启用 LESC 功能；
-- 若日志显示 `[BR2LE OFF] [Disabled]`，表示 LinkKey 到 LTK 方向的 CTKD 功能已被 APP 禁用。
+- Perform a global search for keywords `SMP` or `CTKD` in the captured logs.
+- If the log shows `CTKD LE2BR OFF [LESC disabled]`, it means the CTKD function from BLE to BR direction has been disabled, the reason being that the LESC feature is not enabled;
+- If the log shows `[BR2LE OFF] [Disabled]`, it indicates that the CTKD function from LinkKey to LTK direction has been disabled by the APP.
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD Failure" width="50%">
 
-**如何确认当前 LinkKey 是否由 CTKD 生成？**
+**How to Confirm Whether the Current LinkKey Was Generated by CTKD?**
 
-如下日志示例中，`state:2` 和 `ctkd:1` 表示设备已绑定，且使用 CTKD 生成了 LinkKey：
+In the following log example, `state:2` and `ctkd:1` indicate that the device has been bonded and that CTKD was used to generate the LinkKey:
 
-```
+```text
 [ap] [bt] bind_manager_bond_state_change_handler: [D4:68:AA:16:xx:xx] state:2 ctkd:1
 [ap] [bt] bind_manager_send_event: ----> State[START] Event[12:EVENT_BT_CTKD_BONDED_SUCCESS]
 ```
 
 ---
 
-## 问题2：其他 BLE 配对相关问题分析
+## Issue 2: Analysis of Other BLE Pairing-Related Issues
 
-通过抓取空口日志观察 BLE 配对流程是否符合预期。
+Observe the BLE pairing process through air interface logs to see if it meets expectations.
 
-### BLE 配对状态机与流程图
+### BLE Pairing State Machine and Flowchart
 
-- BLE 配对状态机：
+- BLE Pairing State Machine:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_state_machine.png" alt="BLE配对状态机" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_state_machine.png" alt="BLE Pairing State Machine" width="50%">
 
-- BLE 配对流程图：
+- BLE Pairing Flowchart:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE配对流程图" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE Pairing Flowchart" width="50%">
 
-### vela 设备使用 RPA 地址进行配对
+### Vela Device Using RPA Address for Pairing
 
-#### Case 1：设备通过 RPA 地址广播建立连接
+#### Case 1: Device Establishes Connection via RPA Address Broadcast
 
-- Ellisys 空口日志中过滤仅保留手表与 iPhone 手机的 RPA 地址：
+- Filter only the RPA addresses of the watch and iPhone in the Ellisys air interface logs:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_1.png" alt="设备RPA地址连接" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_1.png" alt="Device RPA Address Connection" width="50%">
 
-- 手表通过 RPA 地址发送 Connectable 广播：
+- The watch sends a Connectable broadcast via RPA address:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_2.png" alt="Connectable广播" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_2.png" alt="Connectable Broadcast" width="50%">
 
-- iPhone 手机发送 Scan Request，手表回复 Scan Response 后，手机发送 Connection Indication Packet 完成连接：
+- The iPhone sends a Scan Request, the watch replies with a Scan Response, and then the iPhone sends a Connection Indication Packet to complete the connection:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE连接建立" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE Connection Establishment" width="50%">
 
-#### Case 2：确认 BLE 配对完成
+#### Case 2: Confirm BLE Pairing Completion
 
-- SMP 配对过程顺利完成，双方均支持 LESC，IdKey 分发正常，LinkKey 标志为 1：
+- The SMP pairing process is successfully completed, both parties support LESC, the IdKey is distributed normally, and the LinkKey flag is set to 1:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP配对完成" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP Pairing Completion" width="50%">
 
-#### Case 3：确认 IRK 交换成功
+#### Case 3: Confirm Successful IRK Exchange
 
-- IRK 成功交换后，存入 Resolving List：
+- After the IRK is successfully exchanged, it is stored in the Resolving List:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK交换成功" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK Exchange Success" width="50%">
 
-#### Case 4：确认通过 Identity 地址建立 BR/EDR 连接
+#### Case 4: Confirm Establishing a BR/EDR Connection via Identity Address
 
-- Controller 主动向 Host 请求 LinkKey，并校验通过，无需再次进行 BR/EDR 配对：
+- The Controller actively requests the LinkKey from the Host, and after verification, no BR/EDR pairing is required again:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_6.png" alt="BR/EDR连接成功" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_6.png" alt="BR/EDR Connection Success" width="50%">
 
-- 从空口日志进一步确认 LinkKey 校验成功：
+- Further confirm the success of the LinkKey verification from the air interface logs:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey校验成功" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey Verification Success" width="50%">
 
-#### Case 5：断连/重启后回连情况
+#### Case 5: Reconnection After Disconnection/Reboot
 
-设备信息参考：
+Device information reference:
 
-| 设备名称                | 地址                           | 模式       | 描述                 |
+| Device Name                | Address                           | Mode       | Description                 |
 | ----------------------- | ------------------------------ | ---------- | -------------------- |
 | REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable) | Low Energy | REDMI Watch 5 eSIM   |
 | REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45              | Dual Mode  | REDMI Watch 5 eSIM   |
-| xxx的 iPhone         | B4:19:74:13:CE:4A              | Dual Mode  | xxx的 iPhone      |
-| xxx的 iPhone         | 6B:FC:EE:54:F0:9E (Resolvable) | Dual Mode  | xxx的 iPhone      |
+| xxx's iPhone         | B4:19:74:13:CE:4A              | Dual Mode  | xxx's iPhone      |
+| xxx's iPhone         | 6B:FC:EE:54:F0:9E (Resolvable) | Dual Mode  | xxx's iPhone      |
 
-- 设备重启后，Resolving List 需要更新到 Controller，重新建立连接：
+- After device reboot, the Resolving List needs to be updated to the Controller to re-establish the connection:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="设备重启后回连成功" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="Reconnection After Device Reboot" width="50%">
 
-- 正常断连回连情况：
+- Normal disconnection and reconnection scenario:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="正常断连回连成功" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="Normal Disconnection and Reconnection Success" width="50%">
 
-### vela 设备使用 Public 地址配对情况
+### Vela Device Using Public Address for Pairing
 
-- 使用 Public 地址配对时，不生成或分发 IRK，无 IdKey 位：
+- When pairing with a Public address, no IRK is generated or distributed, and there is no IdKey bit:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_10.png" alt="Public地址配对" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_10.png" alt="Public Address Pairing" width="50%">
 
-- BR/EDR LinkKey 正常生成：
+- BR/EDR LinkKey is normally generated:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_11.png" alt="BR/EDR LinkKey正常生成" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_11.png" alt="BR/EDR LinkKey Normal Generation" width="50%">
 
-## 发现、连接问题分析方法
+## Discovery and Connection Issue Analysis Methods
 
-<a id="方法：观察是否对方设备未打开可连接模式"></a>
+<a id="method-check-if-the-remote-device-has-not-enabled-connectable-mode"></a>
 
-### 方法：观察是否对方设备未打开可连接模式
-通常，可以通过第三方设备、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否打开可连接模式。
+### Method: Check if the Remote Device Has Not Enabled Connectable Mode
 
-#### 1 通过第三方设备观察是否连接成功
-使用第三个设备，在蓝牙设置界面主动发起绑定过程，观察能否和对方设备绑定成功，排除对方设备未打开可连接模式
+Typically, you can observe whether the remote device is in connectable mode through third-party devices, air interface logs, protocol stack syslog, snoop logs, etc.
 
-#### 2 通过airlog观察是否Page成功
-观察空口log，检查是否对方不响应Page过程的ID包，其中，spec标准流程如下:
+#### 1. Check Connection Success via Third-Party Device
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="50%">
+Use a third-party device to initiate the bonding process in the Bluetooth settings interface and observe whether it can successfully bond with the remote device, thereby eliminating the possibility that the remote device is not in connectable mode.
 
-依据spec流程链路层page ID包发出去后，对方设备是否回复ID。如下空口log看Page过程的ID包，对方未响应，因此对方未打开可连接模式。
+#### 2. Check Page Success via Air Interface Logs
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="50%">
+Observe the air interface logs to check if the remote device responds to the Page process ID packet. The standard spec process is as follows:
 
-#### 3 通过协议栈syslog观察是否Page成功
-观察协议栈syslog，检查若是出现PageTimeout，对应错误码04。
+<img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec: Check Page Success via Air Interface Logs" width="50%">
+
+According to the spec process, after the link layer Page ID packet is sent, if the remote device does not respond with an ID, it indicates that the remote device is not in connectable mode, as shown in the following air interface log:
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer: Check Page Success via Air Interface Logs" width="50%">
+
+#### 3. Check Page Success via Protocol Stack Syslog
+
+Observe the protocol stack syslog to check for PageTimeout errors, corresponding to error code 04.
 
 ```text
 [08/09 19:26:38.620200] [28] [ap] ---->[HCI][CMDN][P:1,$:1][-Create_Connection][status:PAGE TIMEOUT | 04]
@@ -487,76 +492,81 @@ logmask 1 2 7
 [08/09 19:26:38.622400] [28] [ap] GAP_IND_CONNECTION_EVENT: <addr: 28:02:2e:82:b9:22.0><type: 2><status: 0><error: 4>
 ```
 
-#### 4 通过HCI log可观察是否Page成功
-如下，观察HCI log看Create Connection对应的HCI Connection Complete事件为Page timeout，则表示对方未打开可连接模式。
+#### 4. Check Page Success via HCI Logs
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="50%">
+As shown below, observe the HCI logs to see if the Create Connection corresponding HCI Connection Complete event indicates a Page timeout, which means the remote device is not in connectable mode.
 
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop: Check Page Success via HCI Logs" width="50%">
 
-<a id="方法观察是否ACL连接超时断开"></a>
+<a id="method-check-if-acl-connection-times-out-and-disconnects"></a>
 
-### 方法：观察是否ACL连接超时断开（Connection Timeout）
+### Method: Check if ACL Connection Times Out and Disconnects (Connection Timeout)
 
-通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否异常超时断开连接。
+Typically, you can observe whether the remote device abnormally times out and disconnects through Bluetooth service logs, air interface protocol flows, protocol stack syslog flows, snoop logs, etc.
 
-#### 1 通过蓝牙服务log可观察是否超时断开
-如下，可通过btservice的log事件CONNECTION_STATE_DISCONNECTED，08错误表示连接超时断开错误码。
+#### 1. Check Timeout Disconnection via Bluetooth Service Logs
+
+As shown below, you can observe the log event CONNECTION_STATE_DISCONNECTED from btservice, where error code 08 indicates a connection timeout disconnection error.
 
 ```text
 [2024-12-31 20:04:31] [06/04 03:10:58.173500] [26] [ap] [660][adapter-svc]: ACL connection state changed, addr:28:02:2E:82:B9:22, link:0, state:CONNECTION_STATE_DISCONNECTED, status:0, reason:8
 ```
 
-#### 2 观察空口log，是否超时断开ACL连接
+#### 2. Check ACL Connection Timeout Disconnection via Air Interface Logs
 
-如下，可以通过空口log看，连接数据包在retry多次，直到最终超时断开。
+As shown below, you can observe from the air interface logs that the connection packets are retried multiple times until eventually timing out and disconnecting.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer: Check ACL Connection Timeout Disconnection via Air Interface Logs" width="50%">
 
+#### 3. Check Timeout Disconnection via Snoop Logs
 
-#### 3 观察snoop log，是否超时断开
-如下，观察snoop log蓝牙断开连接事件HCI Disconnect Complete事件，对应reason为connection timeout。
+As shown below, observe the snoop logs for the Bluetooth disconnection event HCI Disconnect Complete, corresponding to reason connection timeout.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop: Check Timeout Disconnection via Snoop Logs" width="50%">
 
+<a id="method-check-if-binding-was-successful-but-no-profile-connection-exists-leading-to-acl-disconnection"></a>
 
-<a id="方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开"></a>
+### Method: Check if Binding Was Successful but No Profile Connection Exists, Leading to ACL Disconnection
 
-### 方法：观察是否已经绑定成功，但是未有Profile连接，ACL主动断开
+Typically, you can observe whether there is a Profile connection between both parties through Bluetooth service logs, air interface protocol flows, protocol stack syslog flows, snoop logs, etc., which may cause the connection to disconnect.
 
-通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察双方是否有Profile连接，导致连接断开。
+#### 1. Check for Profile Connection in Bluetooth Service Logs
 
-#### 1 观察蓝牙服务log，是否有Profile连接
-观察本地btservice log，设备绑定成功后，没有A2DP、SPP等Profile连接，ACL连接成功一段事件后，出现ACL连接断开事件
-如下，从btservice log看acl建立连接成功，SDP完成后，未连接其他Profile连接，最终断开错误码reason:19，表示对方主动断开。
+Observe the local btservice logs; after successful device binding, if there is no A2DP, SPP, etc., Profile connection, the ACL connection will disconnect after a period of time. As shown below, from the btservice logs, the ACL connection is established successfully, and after SDP completion, there is no other Profile connection, and the disconnection error code reason:19 indicates that the remote party actively disconnected.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service: Check for Profile Connection in Bluetooth Service Logs" width="50%">
 
-#### 2 观察HCI log，是否有Profile连接
-如下，从HCI log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备断开Remote User Terminated Connection（图上是对方主动断开，也很有可能本地协议栈主动断开）。
+#### 2. Check for Profile Connection in HCI Logs
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="50%">
+As shown below, from the HCI logs, after the ACL connection is successful, the SDP service discovery is completed, and no other Profile is connected, and the device eventually disconnects with Remote User Terminated Connection (the figure shows the remote party actively disconnecting, but it is also possible that the local stack actively disconnected).
 
-#### 3 观察空口log，是否有Profile连接
-如下，从空口log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备Detach断开（图上是对方主动断开，也很有可能本地协议栈主动断开）。
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop: Check for Profile Connection in HCI Logs" width="50%">
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="50%">
+#### 3. Check for Profile Connection in Air Interface Logs
 
-<a id="方法观察是否本地配对信息无效"></a>
+As shown below, from the air interface logs, after the ACL connection is successful, the SDP service discovery is completed, and no other Profile is connected, and the device eventually detaches (the figure shows the remote party actively disconnecting, but it is also possible that the local stack actively disconnected).
 
-### 方法：观察是否本地配对信息无效（Linkey Missing）
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer: Check for Profile Connection in Air Interface Logs" width="50%">
 
-#### 1 观察HCI log，手表本地配对信息无效，手机保存上次配对信息
-如下，HCI log看本地linkkey未空，发起配对时Host端回复Negative Reply，然后重启发起配对，最终在Simple Pairing Complete阶段提示Authentication Fail，断开连接。
+<a id="method-check-if-local-pairing-information-is-invalid"></a>
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="50%">
+### Method: Check if Local Pairing Information Is Invalid (Linkey Missing)
 
-#### 2 观察空口log，手表本地配对信息无效，手机保存上次配对信息
-如下，从空口log看，手表本地配对信息无效，手机保存上次配对信息,提示DH Key Check失败。
+#### 1. Check HCI Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="50%">
+As shown below, the HCI logs show that the local linkkey is empty. When initiating pairing, the Host responds with a Negative Reply, then restarts the pairing process, and ultimately, during the Simple Pairing Complete phase, it indicates Authentication Fail and disconnects.
 
-#### 3 观察协议栈log，手表本地配对信息无效，手机保存上次配对信息
-如下，观察协议栈log，手表本地配对信息无效，手机保存上次配对信息,从协议栈的HCI log Authentication_Complete时收到PIN OR KEY MISSING，最终配对失败。
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop: Check HCI Logs for Local Pairing Information on the Watch Being Invalid, but the Phone Retains Previous Pairing Information" width="50%">
+
+#### 2. Check Air Interface Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information
+
+As shown below, from the air interface logs, the local pairing information on the watch is invalid, but the phone retains previous pairing information, prompting DH Key Check failure.
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer: Check Air Interface Logs for Local Pairing Information on the Watch Being Invalid, but the Phone Retains Previous Pairing Information" width="50%">
+
+#### 3. Check Protocol Stack Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information
+
+As shown below, observe the protocol stack logs. The local pairing information on the watch is invalid, but the phone retains previous pairing information. From the HCI logs of the protocol stack, during Authentication_Complete, it receives PIN OR KEY MISSING, ultimately resulting in pairing failure.
 
 ```text
 [ 1103.523193] [13] [cp]    ->[L2CAP,PSM:3][Out][Request:][RequestNum:0]
@@ -609,48 +619,51 @@ logmask 1 2 7
 [ 1104.626586] [13] [cp]    ->[reason:REMOTE USER TERMINATED CONNECTION | 13]
 ```
 
-<a id="方法观察是否对方配对信息无效"></a>
+<a id="method-check-if-remote-pairing-information-is-invalid"></a>
 
-### 方法：观察是否对方配对信息无效（Linkey Missing）
+### Method: Check if Remote Pairing Information Is Invalid (Linkey Missing)
 
-#### 1 观察HCI log，手机配对信息无效，本地配对信息有效
-如下，snoop  log看本地发起绑定过程，上报hci Authentication completed事件，对应的原因是PIN Or Key Missing。
+#### 1. Check HCI Logs: Phone Pairing Information is Invalid, but Local Pairing Information is Valid
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="50%">
+As shown below, the snoop logs show that during the local bonding process, the hci Authentication completed event is reported with the corresponding reason being PIN Or Key Missing.
 
-#### 2 观察空口log，手机配对信息无效，本地配对信息有效
-如下, air log看本地发起绑定，在LMP Authentication过程，提示LMP Not Accepted，原因是PIN Or Key Missing。
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop: Check HCI Logs for Phone Pairing Information Being Invalid, but Local Pairing Information Being Valid" width="50%">
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="50%">
+#### 2. Check Air Interface Logs: Phone Pairing Information is Invalid, but Local Pairing Information is Valid
 
-<a id="观察本地是否打开可连接模式"></a>
+As shown below, from the air logs, during the LMP Authentication process, it prompts LMP Not Accepted, with the reason being PIN Or Key Missing.
 
-### 方法：观察本地是否打开可连接模式
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer: Check Air Interface Logs for Phone Pairing Information Being Invalid, but Local Pairing Information Being Valid" width="50%">
 
-#### 1 观察手表进入蓝牙耳机可连接模式
-如下，进入蓝牙耳机搜索连接页面，让手表进入可连接模式。
+<a id="method-check-if-local-device-is-in-connectable-mode"></a>
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="50%">
+### Method: Check if Local Device is in Connectable Mode
 
+#### 1. Check Watch Entering Bluetooth Headset Connectable Mode
 
-#### 2 观察miwear syslog，手表进入可连接模式
-如下，观察miwear syslog，确认手表scan mode会进入CONNECTABLE模式。
+As shown below, enter the Bluetooth headset search and connection page to put the watch into connectable mode.
+
+<img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch: Watch Entering Bluetooth Headset Search and Connection Page" width="50%">
+
+#### 2. Check miwear syslog: Watch Entering Connectable Mode
+
+As shown below, observe the miwear syslog to confirm that the watch's scan mode enters CONNECTABLE mode.
 
 ```text
 [42] [ap] [bt] bind_manager_set_visibility: scan mode: [CONNECTABLE DISCOVERABLE]
 ```
 
-#### 3 观察snoop log、 airlog等，手表进入可连接模式
+#### 3. Check snoop logs, air logs, etc., to confirm the watch enters connectable mode
 
-通过，如上[观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)，确认手表scan mode会进入CONNECTABLE模式。
+Refer to the above [Check if the Remote Device Has Not Enabled Connectable Mode](#method-check-if-the-remote-device-has-not-enabled-connectable-mode) to confirm that the watch's scan mode enters CONNECTABLE mode.
 
-<a id="方法观察对方是否发起回连操作"></a>
+<a id="method-check-if-remote-device-initiates-reconnection"></a>
 
-### 方法：观察对方是否发起回连操作
+### Method: Check if Remote Device Initiates Reconnection
 
-#### 1 观察蓝牙服务syslog，耳机端发起回连操作
+#### 1. Check Bluetooth Service syslog: Headset Initiates Reconnection
 
-如下，通过蓝牙服务syslog，观察对方是否发起回连接请求。
+As shown below, through the Bluetooth service syslog, observe whether the remote device initiates a reconnection request.
 
 ```text
 [27] [ap] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
@@ -658,24 +671,25 @@ logmask 1 2 7
 [27] [ap] [688][adapter-svc]: ACL Connect Request from :XX:XX:XX:XX:2E:43
 ```
 
-#### 2 观察snoop log，耳机端发起回连操作
+#### 2. Check snoop logs: Headset Initiates Reconnection
 
-如下，snoop log看耳机端发起回连操作，最终连接成功。
+As shown below, the snoop logs show the headset initiating a reconnection, which is ultimately successful.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop: Check snoop logs for Headset Initiating Reconnection" width="50%">
 
-#### 3 观察空口log，耳机端发起回连操作
-如下，空口log看手机发起回连操作，最终连接成功。
+#### 3. Check air interface logs: Headset Initiates Reconnection
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="50%">
+As shown below, the air interface logs show the phone initiating a reconnection, which is ultimately successful.
 
-<a id="方法观察本地是否收到ACL连接请求"></a>
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer: Check air interface logs for Phone Initiating Reconnection" width="50%">
 
-### 方法：观察本地是否收到ACL连接请求
+<a id="method-check-if-local-device-receives-acl-connection-request"></a>
 
-#### 1 观察syslog，本端蓝牙应用是否接收到ACL连接请求
+### Method: Check if Local Device Receives ACL Connection Request
 
-蓝牙服务与蓝牙应用均能够接收到ACL连接请求，log如下。
+#### 1. Check syslog: Whether the Local Bluetooth Application Receives an ACL Connection Request
+
+Both the Bluetooth service and the Bluetooth application can receive ACL connection requests, with logs as follows.
 
 ```text
 [15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
@@ -683,20 +697,20 @@ logmask 1 2 7
 [19] [cp] [BT] gap_connection_state_changed_callback: --->Device [XX:XX:XX:XX:2E:43][BREDR] State: CONNECTING
 ```
 
-当应用无法收到ACL连接请求时，无法做出ACL连接回复，可以观察到如下ACL连接失败的log，输出Error Code 16，即Connection Accept Timeout Exceeded。
+When the application does not receive an ACL connection request, it cannot respond, and the following ACL connection failure logs can be observed, with Error Code 16, indicating Connection Accept Timeout Exceeded.
 
 ```text
 [19] [cp] [109][bluelet]: sal_status_translate maybe hcierror code: 16
 [14] [cp] [723][adapter-svc]: ACL connection state changed, addr:A4:E2:87:D7:2E:18, link:1, state:CONNECTION_STATE_DISCONNECTED, status:47, reason:0
 ```
 
-<a id="方法观察本地是否同意ACL连接请求"></a>
+<a id="method-check-if-local-device-accepts-acl-connection-request"></a>
 
-### 方法：观察本端是否同意ACL连接请求
+### Method: Check if Local Device Accepts ACL Connection Request
 
-#### 1 观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求
+#### 1. Check Bluetooth Service syslog: Whether the Local Bluetooth Application Accepts the ACL Connection Request
 
-如果应用未能同意ACL连接请求，可以观察到如下ACL连接失败的log如下，输出ACL status 55，表示本端拒绝了ACL连接请求。
+If the application does not accept the ACL connection request, the following ACL connection failure logs can be observed, with ACL status 55, indicating that the local end rejected the ACL connection request.
 
 ```text
 [15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_CONNECTING, status:0, reason:0
@@ -705,52 +719,52 @@ logmask 1 2 7
 [15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_DISCONNECTED, status:55, reason:0
 ```
 
-#### 2 观察对端设备snoop log，确认本端是否同意ACL连接请求
+#### 2. Check Remote Device snoop logs: Confirm Whether the Local Device Accepts the ACL Connection Request
 
-可以看到如下log，ACL连接被拒绝，显示Connection Rejected Due To Limited Resources。
+The following logs can be seen, indicating that the ACL connection was rejected, with the message Connection Rejected Due To Limited Resources.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connect_request_reject.png" alt="snoop: Check snoop logs for ACL Connection Request Rejection" width="50%">
 
-### 方法：观察是否成功开启扫描
+### Method: Check if Scanning Was Successfully Initiated
 
-#### 1 观察蓝牙syslog，看设备是否成功开启扫描
+#### 1. Check Bluetooth syslog: Whether the Device Successfully Initiated Scanning
 
-status为0表示成功开启扫描，status为1表示关闭扫描。
+A status of 0 indicates successful initiation of scanning, while a status of 1 indicates scanning was turned off.
 
-```
+```text
 bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 [   24.055800] [20] [ DEBUG] [446][scanner]: scan_on_state_changed, state:0
 ```
 
-#### 2 观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常
+#### 2. Check HCI Logs: Whether the HCI CMD Was Successfully Sent and Whether the HCI EVT Returned a Normal Status
 
-如下，HCI log看设备成功发起扫描，最终返回status正常。
+As shown below, the HCI logs indicate that the device successfully initiated scanning, with the final status returned as normal.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci:设备发起scan操作" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci: Device Initiates Scan Operation" width="50%">
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci: Controller Replies with Successful Event" width="50%">
 
-<a id="方法：确认对端设备存在对应SPP服务"></a>
+<a id="method-confirm-remote-device-has-corresponding-spp-service"></a>
 
-### 方法：确认对端设备存在对应SPP服务
+### Method: Confirm the Remote Device Has the Corresponding SPP Service
 
-#### 1 观察对端设备snoop log，确认对端设备是否存在对应的SPP服务
+#### 1. Check Remote Device snoop logs: Confirm Whether the Remote Device Has the Corresponding SPP Service
 
-spp client发起spp连接，需要获取到对端设备的spp服务信息。可以通过对端设备的snoop log确认是否存在想要的SPP服务。
+When the SPP client initiates an SPP connection, it needs to obtain the SPP service information of the remote device. You can confirm whether the desired SPP service exists through the snoop logs of the remote device.
 
-查询特定服务失败snoop log如下：
+Sample logs for failed service query:
 
-<img src="img/how_to_analyze_bluetooth_issues/sdp/snoop_discover_not_exist_service.png" alt="snoop:查询特定服务失败" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/sdp/snoop_discover_not_exist_service.png" alt="snoop: Failed Service Query" width="50%">
 
-<a id="方法：确认SPP连接状态与断连发起方"></a>
+<a id="method-confirm-spp-connection-status-and-disconnection-initiator"></a>
 
-### 方法：确认SPP连接状态与断连发起方
+### Method: Confirm SPP Connection Status and Disconnection Initiator
 
-#### 1 观察syslog，确认断连发起方
+#### 1. Check syslog: Confirm the Initiator of Disconnection
 
-主动断开SPP连接与被动断开SPP连接会呈现不同的SPP连接状态转换log。
+The log transitions for actively disconnecting an SPP connection differ from those for passively disconnecting.
 
-主动断开SPP连接,连接状态会从已连接（2）跳转到断连中（3）后，再跳转到断连（4）状态，典型log如下：
+When actively disconnecting an SPP connection, the connection status transitions from connected (2) to disconnecting (3) and then to disconnected (4). Typical logs are as follows:
 
 ```text
 [15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 1
@@ -761,7 +775,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 [15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 0
 ```
 
-被动断开SPP连接，连接状态会从已连接（2）直接跳转到断连（0）状态，典型log如下：
+When passively disconnecting an SPP connection, the connection status transitions directly from connected (2) to disconnected (0). Typical logs are as follows:
 
 ```text
 [15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 1
@@ -770,1112 +784,1123 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 [15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 0
 ```
 
-#### 2 观察snoop log，确认断连发起方
+#### 2. Check snoop logs to confirm the initiator of disconnection
 
-#### 3 观察air log，确认断连发起方
+#### 3. Check air logs to confirm the initiator of disconnection
 
-<a id="发现连接配对典型问题"></a>
+<a id="discovery-connection-pairing-typical-issues"></a>
 
-## 典型问题
+## Typical Issues
 
-<a id="问题-经典蓝牙设备主动绑定对方设备失败"></a>
+<a id="issue-classic-bluetooth-device-fails-to-bind-to-remote-device"></a>
 
-### 问题：经典蓝牙设备主动绑定对方设备失败
+### Issue: Classic Bluetooth Device Fails to Bind to Remote Device
 
-设备主动绑定失败，可通过下面方法，进一步定位原因。
+If the device fails to bind actively, further root cause analysis can be conducted using the following methods.
 
-* [观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)
-  * 若是对方设备未打开可连接模式，建议观察手机端未打开可连接模式原因。
-  * 否则，建议按照如下步骤进一步分析。
+* [Check if the Remote Device Has Not Enabled Connectable Mode](#method-check-if-the-remote-device-has-not-enabled-connectable-mode)
+  * If the remote device has not enabled connectable mode, it is recommended to investigate why the phone is not in connectable mode.
+  * Otherwise, proceed with further analysis as follows.
 
-* [观察是否对方设备未打开可连接模式(Page Timeout)](#方法观察是否对方设备未打开可连接模式)
-  * 若是对方设备未打开可连接模式，建议观察手机端未打开可连接模式原因。
-  * 否则，建议按照如下步骤进一步分析。
+* [Check if the Remote Device Has Not Enabled Connectable Mode (Page Timeout)](#method-check-if-the-remote-device-has-not-enabled-connectable-mode)
+  * If the remote device has not enabled connectable mode, it is recommended to investigate why the phone is not in connectable mode.
+  * Otherwise, proceed with further analysis as follows.
 
-* [观察是否ACL连接超时断开(Connection Timeout)](#方法观察是否ACL连接超时断开)
-  * 若是在通信距离有效方位内，出现链路层连接超时，请补充空口log及HCI log，一般需要芯片厂商进一步确认蓝牙Controller行为。
-  * 否则，建议按照如下步骤进一步分析。
+* [Check if ACL Connection Times Out and Disconnects (Connection Timeout)](#method-check-if-acl-connection-times-out-and-disconnects)
+  * If a link layer connection timeout occurs within the effective communication range, please provide air interface logs and HCI logs. Generally, further confirmation of the Bluetooth Controller behavior is required from the chip vendor.
+  * Otherwise, proceed with further analysis as follows.
 
-* [观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开)
-  * 若ACL连接成功后，未连接A2DP、HID等Profile，设备会断开，符合预期。
-  * 否则，建议按照如下步骤进一步分析。
+* [Check if Binding Was Successful but No Profile Connection Exists, Leading to ACL Disconnection](#method-check-if-binding-was-successful-but-no-profile-connection-exists-leading-to-acl-disconnection)
+  * If the ACL connection is successful but no A2DP, HID, etc., Profile is connected, the device will disconnect as expected.
+  * Otherwise, proceed with further analysis as follows.
 
-* [观察是否本地配对信息无效(Linkey Missing)](#方法观察是否本地配对信息无效)
-  * 若本地Linkey无效或者丢失（离线取消配对），对方绑定信息有效，手表主动发起配对可能失败，符合预期。
-  * 否则，建议按照如下步骤进一步分析。
+* [Check if Local Pairing Information Is Invalid (Linkey Missing)](#method-check-if-local-pairing-information-is-invalid)
+  * If the local Linkey is invalid or lost (offline unpairing), and the remote binding information is valid, the watch may fail to initiate pairing, which is expected.
+  * Otherwise, proceed with further analysis as follows.
 
-* [观察是否对方配对信息无效(Linkey Missing)](#方法观察是否对方配对信息无效)
-  * 若对方Linkey无效或者丢失（离线取消配对），本地绑定信息有效，手表主动发起配对可能失败，符合预期。
-  * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，再进一步分析。
+* [Check if Remote Pairing Information Is Invalid (Linkey Missing)](#method-check-if-remote-pairing-information-is-invalid)
+  * If the remote Linkey is invalid or lost (offline unpairing), and the local binding information is valid, the watch may fail to initiate pairing, which is expected.
+  * Otherwise, it is recommended to upload Bluetooth service logs, protocol stack logs, air interface logs, and phone snoop logs for further analysis.
 
-<a id="问题-耳机断开后回连手表失败"></a>
+<a id="issue-headphones-fail-to-reconnect-to-watch-after-disconnection"></a>
 
-### 问题：耳机断开后回连手表失败
+### Issue: Headphones Fail to Reconnect to Watch After Disconnection
 
-耳机回连手表行为，是由耳机端发起，同时需要手表打开可发现连接模式。可通过下面方法，进一步定位原因。
+The behavior of headphones reconnecting to the watch is initiated by the headphones and requires the watch to be in discoverable and connectable mode. Further root cause analysis can be conducted using the following methods.
 
-* [观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
-  * 若是手表设备未打开可连接模式，建议手表停留在耳机连接设置页面，保证手表进入可发现连接模式。
-  * 否则，建议按照如下步骤进一步分析。
+* [Check if Local Device Is in Connectable Mode](#method-check-if-local-device-is-in-connectable-mode)
+  * If the watch device is not in connectable mode, it is recommended to keep the watch on the headphone connection settings page to ensure it enters discoverable and connectable mode.
+  * Otherwise, proceed with further analysis as follows.
+
+* [Check if Remote Device Initiates Reconnection](#method-check-if-remote-device-initiates-reconnection)
+  * If the headphones do not actively initiate a reconnection request, further analysis is needed on the headphone side.
+  * Otherwise, upload Bluetooth service logs, protocol stack logs, air interface logs, and phone snoop logs for further analysis on the watch side.
+
+<a id="issue-classic-bluetooth-device-is-not-successfully-connected-by-remote-device"></a>
+
+### Issue: Classic Bluetooth Device Is Not Successfully Connected by Remote Device
+
+If the remote device fails to connect actively, further root cause analysis can be conducted using the following methods.
+
+* [Check if Local Device Is in Connectable Mode](#method-check-if-local-device-is-in-connectable-mode)
+  * If the device is not in connectable mode, check the Bluetooth application's scan mode settings.
+  * Otherwise, proceed with further analysis as follows.
+
+* [Check if Local Device Successfully Receives ACL Connection Request](#method-check-if-local-device-receives-acl-connection-request)
+  * If the Bluetooth service does not output connection request information, confirm whether the Bluetooth device is within Bluetooth communication range.
+  * Furthermore, air interface logs can be captured to confirm RF and link issues, and support can be sought from the Controller vendor.
+  * Otherwise, proceed with further analysis as follows.
+
+* [Check if Local Device Accepts ACL Connection Request](#method-check-if-local-device-accepts-acl-connection-request)
+  * If the Bluetooth application does not accept the connection request, confirm whether the application's logic for rejecting connections is as expected.
+  * Otherwise, upload Bluetooth service logs and protocol stack logs for further analysis.
+
+### Issue: Low-Power Bluetooth Fails to Scan Remote Device
+
+The scanning process for low-power Bluetooth is typically initiated by the central device, which receives broadcasts from the remote device. Further root cause analysis can be conducted using the following methods.
+
+* [Check if Scanning Was Successfully Initiated](#method-check-if-scanning-was-successfully-initiated)
+  * If scanning was successful, ensure that the scan interval and scan window are appropriate, and confirm that there is no audio business or other high-throughput business occupying bandwidth resources at this time.
+  * Otherwise, upload syslog, protocol stack logs, and snoop logs with the broadcast packets of the broadcasting device for further analysis and confirmation.
   
-* [观察对方是否发起回连操作](#方法观察对方是否发起回连操作)
-  * 若耳机未主动发起回连请求， 则需要耳机端进一步分析。
-  * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，手表端进一步分析。
+# Issue: SPP Active Connection Failure
 
-<a id="问题-经典蓝牙设备未被对端设备成功连接"></a>
+For SPP active connection failures, first follow the analysis methods in the "Discovery, Connection, and Pairing Issues" chapter to confirm whether the ACL connection is established properly. After confirming the normal establishment of the ACL connection, further analysis can be conducted using the following methods.
 
-### 问题：经典蓝牙设备未被对端设备成功连接
+* [Confirm the Remote Device Has the Corresponding SPP Service](#method-confirm-the-remote-device-has-the-corresponding-spp-service)
+  * If the remote device has not registered the corresponding SPP service, further analysis of the remote device is required.
+  * Otherwise, proceed with the following steps for further analysis.
 
-对端设备主动连接失败，可通过下面方法，进一步定位原因。
+* [Confirm SPP Connection Status and Disconnection Initiator](#method-confirm-spp-connection-status-and-disconnection-initiator)
+  * If the previous SPP connection has not been disconnected, confirm whether either side of the SPP connection has initiated a disconnection.
+  * Otherwise, upload Bluetooth service logs, protocol stack logs, air interface logs, and phone snoop logs for further analysis.
 
-* [观察本地是否打开可连接模式](#方法观察本地是否打开可连接模式)
-  * 若是设备未打开可连接模式，建议查看蓝牙应用设置的Scan Mode。
-  * 否则，建议按照如下步骤进一步分析。
+# Audio Transmission Issues
 
-* [观察本地是否成功收到ACL连接请求](#方法观察是否本地是否收到ACL连接请求)
-  * 若是蓝牙服务未输出连接请求信息，则需要确认蓝牙设备处于蓝牙通信范围。
-  * 进一步地，可以抓取Air log确认射频以及链路问题，寻求Controller供应商支持。
-  * 否则，建议按照如下步骤进一步分析。
+This chapter introduces common analysis and troubleshooting methods for issues related to the Advanced Audio Distribution Profile (A2DP) and Audio/Video Distribution Transport Protocol (AVDTP). AVDTP controls the audio/video transmission process, while A2DP defines the encoding and transmission specifications for audio data. By working together, these protocols enable high-quality audio transmission between Bluetooth devices.
+A2DP is a Bluetooth audio distribution configuration protocol, featuring two roles: Source (SRC) and Sink (SNK). Typically, SRC is the audio source, and SNK is the audio receiver. In the Vela Bluetooth service framework, Bluetooth music source devices (e.g., phones/watches) can act as A2DP-SRC, while Bluetooth music output devices (e.g., speakers/headphones/car systems) can act as A2DP-SNK.
+AVDTP is a Bluetooth audio transport control protocol. It defines processes such as Stream End Point (SEP) Discovery, Get Capabilities/Get All Capabilities, Stream Configuration, Stream Establishment, Stream Start, and Stream Suspend. The initiator of AVDTP signaling is called Initiator (INT), and the receiver is called Acceptor (ACP). When transmitting audio between two Bluetooth devices, two AVDTP connections need to be established in advance. The first is the AVDTP signaling connection, used for codec parameter negotiation and media connection control. After negotiation, a second AVDTP connection is established, known as the AVDTP media connection, for transmitting audio data.
+Above the Vela Bluetooth stack, the Vela Bluetooth subsystem also provides an A2DP service layer. There are multiple transport channels between A2DP services and the Media services in the multimedia subsystem. These transport channels can be divided into two categories: control channels for transmitting control signaling and data channels for transmitting audio data.
 
-* [观察本地是否同意ACL连接请求](#方法观察本地是否同意ACL连接请求)
-  * 若是蓝牙应用未同意连接请求，请确认应用端拒绝连接行为逻辑是否符合预期。
-  * 否则，建议上传蓝牙服务log、协议栈log，进一步分析。
+## Analysis Methods
 
-### 问题：低功耗蓝牙扫描不到对端设备
+<a id="method-check-if-the-transport-between-bluetooth-and-media-is-correctly-established"></a>
 
-低功耗蓝牙的扫描过程，通常是由central设备开始扫描行为，接收对端发起的广播。可通过下面方法，进一步定位原因。
+### Method: Check if the Transport Between Bluetooth and Media is Correctly Established
 
-* [观察是否成功开启扫描](#方法观察是否成功开启扫描)
-  * 若是成功开启，需要保证设置的扫描间隔和扫描窗口是否合适，并且确保此时没有音频业务或其他高吞吐业务占用带宽资源。
-  * 否则，建议上传syslog、协议栈log和带广播设备广播包的snoop log进一步分析确认。
+During the initialization of the Bluetooth subsystem, the A2DP service creates a socket server. Subsequently, the Media service acts as a socket client to establish a connection with Bluetooth, allowing control signaling and audio data to be transmitted between the two subsystems. Typically, the correct establishment of control channels and data channels between Bluetooth and Media can be observed through syslog.
 
-### 问题：SPP主动连接失败
+Typical logs are as follows:
 
-SPP主动连接失败问题，首先需要按照《发现、连接、配对问题》章节的分析方法，确认ACL连接是否正常建立。在确认ACL连接正常建立后，可以按照下面方法进一步分析。
-
-* [确认对端设备存在对应SPP服务](#方法：确认对端设备存在对应SPP服务)
-  * 若对端未注册对应的SPP服务，需要对对端设备进一步分析。
-  * 否则，建议按照如下步骤进一步分析。
-
-* [确认SPP连接状态与断连发起方](#方法：确认SPP连接状态与断连发起方)
-  * 若是之前的SPP连接尚未断开，则需要确认SPP连接双方是否有发起断连操作。
-  * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，进一步分析。
-
-# 音频传输问题
-
-本章介绍Advanced Audio Distribution Profile（A2DP）和Audio/Video Distribution Transport Protocol（AVDTP）相关问题常用的分析、定位方法。AVDTP负责控制音频/视频的传输过程，而A2DP定义了音频数据的编码和传输规范，通过这两个协议配合工作，可以实现在蓝牙设备之间高质量的音频传输。
-A2DP是蓝牙音频分发配置协议，包含Source（SRC）和Sink（SNK）两个角色。通常，SRC是音频源，SNK是音频接收方。Vela蓝牙服务框架中，蓝牙音乐源设备（例如手机/手表）可以为A2DP-SRC，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为A2DP-SNK。
-AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP) Discovery过程、Get Capabilities/Get All Capabilities过程、Stream Configuration过程、Stream Configuration过程、Stream Establishment、Stream Start、以及Stream Suspend等AVDTP信令过程。AVDTP信令过程的发起方称为Initiator（INT），信令过程的接收方称为Acceptor (ACP)。当两个蓝牙设备间传输音频时，需要预先建立两条AVDTP连接。首先建立的称为AVDTP signaling连接，用于编解码参数的协商和media连接的控制；协商完成后，再次建立一条AVDTP连接，称为AVDTP media连接，用于传输音频数据。
-在Vela蓝牙协议栈之上，Vela蓝牙子系统还提供了A2DP服务层，A2DP服务于多媒体子系统中的Media服务之间存在多个传输通路，称为transport channels。这些transport channel可以分为两类：用于传输控制信令的control channel，以及用于传输音频数据的data channel。
-
-## 分析方法
-
-<a id="方法：观察蓝牙和Media之间的transport是否正确建立"></a>
-
-### 方法：观察蓝牙和Media之间的transport是否正确建立
-
-在蓝牙子系统初始化时，A2DP服务会创建socket server，随后，Media服务作为socket client与蓝牙建立连接，从而允许控制信令和音频数据在两个子系统之间传输。通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否正确建立。
-
-典型log如下：
-
-* A2DP SRC与Media之间正确建立transport channel
-```
+* Correct establishment of a transport channel between A2DP SRC and Media
+```text
 [a2dp_control]: a2dp_ctrl_cb, path:[a2dp_source_ctrl], event:TRANSPORT_OPEN_EVT
 [a2dp_control]: a2dp_data_cb, path:[a2dp_source_data], event:TRANSPORT_OPEN_EVT
 ```
 
-* A2DP SNK与Media之间正确建立transport channel
-```
+* Correct establishment of a transport channel between A2DP SNK and Media
+```text
 [a2dp_control]: a2dp_ctrl_cb, path:[a2dp_sink_ctrl], event:TRANSPORT_OPEN_EVT
 [a2dp_control]: a2dp_data_cb, path:[a2dp_sink_data], event:TRANSPORT_OPEN_EVT
 ```
 
-<a id="方法：观察是否建立了AVDTP signaling连接"></a>
+<a id="method-check-if-the-avdtp-signaling-connection-is-established"></a>
 
-### 方法：观察是否建立了AVDTP signaling连接
+### Method: Check if the AVDTP Signaling Connection is Established
 
-AVDTP signaling连接是两个蓝牙设备建立音频连接的必要步骤。通常，可以通过snoop log或者air log观察是否建立了AVDTP signaling连接。
+Establishing an AVDTP signaling connection is a necessary step for audio connections between two Bluetooth devices. Typically, whether an AVDTP signaling connection has been established can be observed through snoop logs or air interface logs.
 
-#### 1 通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因
+#### 1. Check if the AVDTP Signaling Connection is Established via Snoop Logs, and Observe Possible Failure Reasons
 
-AVDTP signaling连接成功的典型log如下：
+Typical logs for a successful AVDTP signaling connection are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_signaling_establishment.png" alt="snoop:AVDTP signaling连接" width="50%">
+![snoop: AVDTP Signaling Connection](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_signaling_establishment.png)
 
-其中：AVDTP连接是一种L2CAP连接，L2CAP连接的种类由PSM标识。两个设备间建立的第一条AVDTP连接自动成为AVDTP signaling连接。
+AVDTP connections are a type of L2CAP connection, identified by the PSM. The first AVDTP connection established between two devices automatically becomes the AVDTP signaling connection.
 
-<a id="方法：观察是否建立了AVDTP media连接"></a>
+<a id="method-check-if-the-avdtp-media-connection-is-established"></a>
 
-### 方法：观察是否建立了AVDTP media连接
+### Method: Check if the AVDTP Media Connection is Established
 
-建立AVDTP media连接之前，可能会进行Discovery、Get (ALL) Capabilities、Set/Get Configuration、Stream Establishment等过程，其中，Set Configuration和Stream Establishment过程是必要过程。通常，可以通过syslog、snoop log或者air log观察是否建立了AVDTP media连接。
+Before establishing an AVDTP media connection, processes such as Discovery, Get (ALL) Capabilities, Set/Get Configuration, and Stream Establishment may occur. Among these, the Set Configuration and Stream Establishment processes are essential. Typically, whether an AVDTP media connection has been established can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因
+#### 1. Check if the AVDTP Media Connection is Established via Snoop Logs, and Observe Possible Failure Reasons
 
-以下几个示例展示了两个设备建立AVDTP media连接的过程。
+The following examples illustrate the process of two devices establishing an AVDTP media connection.
 
 ##### 1.1 AVDTP Discovery
 
-可选的，在建立AVDTP media连接之前，可以发起AVDTP Discovery过程，用于发现对端设备可用的Stream End Point(SEP)。通常，发起AVDTP signaling连接的设备会发起这一过程。典型log如下：
+Optionally, before establishing an AVDTP media connection, an AVDTP Discovery process can be initiated to discover available Stream End Points (SEPs) on the remote device. Typically, the device initiating the AVDTP signaling connection will initiate this process. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_discovery.png" alt="snoop:AVDTP discovery" width="50%">
+![snoop: AVDTP Discovery](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_discovery.png)
 
-Log显示ACP的序号从1到6，表明该设备的拥有的SEP至少有6个。
+The logs show that the ACP's sequence number ranges from 1 to 6, indicating that the device has at least 6 SEPs.
 
 ##### 1.2 AVDTP Get Capabilities
 
-可选的，在建立AVDTP media连接之前，可以通过Get Capabilities或者Get All Capabilities获取对端设备SEP的具体信息。通常，发起AVDTP signaling连接的设备会发起这一流程。典型log如下：
+Optionally, before establishing an AVDTP media connection, Get Capabilities or Get All Capabilities can be used to obtain specific information about the remote device's SEP. Typically, the device initiating the AVDTP signaling connection will initiate this process. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_get_capabilities.png" alt="snoop:AVDTP get capabilities" width="50%">
+![snoop: AVDTP Get Capabilities](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_get_capabilities.png)
 
-Log展示了获取编号为1的SEP的具体信息的过程，其中，编码格式为SBC，采样率为44.1kHz。
+The logs show the process of obtaining specific information about SEP number 1, where the encoding format is SBC, and the sampling rate is 44.1kHz.
 
 ##### 1.3 AVDTP Set Configuration
 
-在建立AVDTP media连接之前，需要通过Set Configuration过程指定双方的SEP，以及编解码参数。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+Before establishing an AVDTP media connection, the Set Configuration process must be used to specify the SEPs and codec parameters for both parties. Typically, the device initiating the AVDTP signaling connection should initiate this process. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_set_configuration.png" alt="snoop:AVDTP set configuration" width="50%">
+![snoop: AVDTP Set Configuration](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_set_configuration.png)
 
-Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建立连接。
+The logs show that the initiating party requests to establish a connection using SEP number 1 and the remote device's SEP number 1.
 
 ##### 1.4 AVDTP Stream Establishment
 
-在建立AVDTP media连接之前，需要通过Open流程打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+Before establishing an AVDTP media connection, the Open process must be initiated to open the SEPs on both parties. Typically, the device initiating the AVDTP signaling connection should initiate this process. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="50%">
+![snoop: AVDTP Stream Establishment](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png)
 
-##### 1.5 AVDTP media连接成功
+##### 1.5 AVDTP Media Connection Success
 
-完成Set Configuration和Stream Establish流程后，需要建立第二条AVDTP连接，也就是AVDTP media连接。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
+After completing the Set Configuration and Stream Establishment processes, a second AVDTP connection, known as the AVDTP media connection, needs to be established. Typically, the device initiating the AVDTP signaling connection should initiate this process. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_media_establishment.png" alt="snoop:AVDTP media连接" width="50%">
+![snoop: AVDTP Media Connection](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_media_establishment.png)
 
-通常，AVDTP Open完成后，随之建立的L2CAP（PSM=AVDTP）是AVDTP media连接。
+Typically, after the AVDTP Open is completed, the subsequently established L2CAP (PSM=AVDTP) is the AVDTP media connection.
 
-#### 2 通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因
+#### 2. Check if the AVDTP Media Connection is Established via Syslog, and Observe Possible Failure Reasons
 
-典型log如下：
+Typical logs are as follows:
 
-* 本地设备被连接
-```
+* Local device is connected
+```text
 [a2dp_stm]: ProcessEvent, State=Idle, Peer=[11:22:33:44:55:66], Event=CONNECTED_EVT
 [a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
 ```
 
-* 本地设备主动连接对端设备
-```
+* Local device actively connects to the remote device
+```text
 [a2dp_stm]: ProcessEvent, State=Opening, Peer=[11:22:33:44:55:66], Event=CONNECTED_EVT
 [a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
 ```
 
-<a id="方法：观察Media是否成功设置了codec"></a>
+<a id="method-check-if-media-has-successfully-configured-the-codec"></a>
 
-### 方法：观察Media是否成功设置了codec
+### Method: Check if Media Has Successfully Configured the Codec
 
-传输或播放音乐前，需要在Media子系统设置编解码参数。可以通过syslog观察Media是否成功设置了编解码参数。
+Before transmitting or playing music, codec parameters need to be set in the Media subsystem. Whether Media has successfully configured the codec can be observed through syslog.
 
-典型log如下：
-
-```
+Typical logs are as follows:
+```text
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_CONFIG_DONE
 ```
 
-<a id="方法：观察A2DP SRC是否开始播放音乐"></a>
+<a id="method-check-if-a2dp-src-has-started-playing-music"></a>
 
-### 方法：观察A2DP SRC是否开始播放音乐
+### Method: Check if A2DP SRC Has Started Playing Music
 
-通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否开始播放音乐。
+Typically, whether the A2DP SRC has started playing music can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察A2DP SRC是否开始播放音乐
+#### 1. Check if A2DP SRC Has Started Playing Music via Syslog
 
-在A2DP SRC端，Vela蓝牙服务开始播放音乐的流程由来自Media的命令触发，典型log如下：
-
-```
+On the A2DP SRC side, the process of the Vela Bluetooth service starting to play music is triggered by a command from Media. Typical logs are as follows:
+```text
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_START
 ```
 
-当蓝牙服务收到开始播放音乐的命令时，会开始AVDTP Stream Start流程，并在流程成功结束后进入Started状态，典型log如下：
-
-```
+When the Bluetooth service receives the command to start playing music, it initiates the AVDTP Stream Start process and enters the Started state after the process is successfully completed. Typical logs are as follows:
+```text
 [a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=STREAM_START_REQ
 [a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=STREAM_STARTED_EVT
-[a2dp_stm]: Exit  State=Opened, Peer=[11:22:33:44:55:66]
+[a2dp_stm]: Exit State=Opened, Peer=[11:22:33:44:55:66]
 [a2dp_stm]: Enter State=Started, Peer=[11:22:33:44:55:66]
 ```
 
-#### 2 通过air log观察A2DP SRC是否开始播放音乐
+#### 2. Check if A2DP SRC Has Started Playing Music via Air Logs
 
-在音频流开始传输之前，A2DP SRC会发起Stream Start流程。在音频流传输过程中，A2DP SRC会向SNK发送media packets，典型log如下：
+Before the audio stream begins transmission, the A2DP SRC initiates the Stream Start process. During the audio stream transmission, the A2DP SRC sends media packets to the SNK. Typical logs are as follows:
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="50%">
 
-<a id="方法：观察A2DP SRC是否停止传输音频包"></a>
+<a id="method-check-if-a2dp-src-has-stopped-transmitting-audio-packets"></a>
 
-### 方法：观察A2DP SRC是否停止音频流传输
+### Method: Check if A2DP SRC Has Stopped Transmitting Audio Packets
 
-通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否停止音频流传输。
+Typically, whether the A2DP SRC has stopped transmitting audio packets can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察A2DP SRC是否停止音频流传输
+#### 1. Check if A2DP SRC Has Stopped Transmitting Audio Packets via Syslog
 
-当Vela设备为A2DP SRC时，蓝牙服务有两个途径终止传输音频数据。
+When the Vela device is the A2DP SRC, the Bluetooth service has two ways to terminate the transmission of audio data.
 
-* 当收到Media发送的STOP命令时。
+* When receiving a STOP command from Media.
 
-* 当连续2秒不能从Media获取音频数据时。
+* When it fails to obtain audio data from Media for two consecutive seconds.
 
-蓝牙服务收到Media发送的STOP命令时，典型log如下：
-
-```
+When the Bluetooth service receives a STOP command from Media, typical logs are as follows:
+```text
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_STOP
 ```
 
-蓝牙2秒从media读不到数据，syslog中会打印如下log，且持续时间约2秒：
-
-```
+When the Bluetooth service fails to read data from Media for two seconds, the following log is printed in syslog, and this condition lasts for approximately two seconds:
+```text
 [src_sbc]: a2dp_sbc_send_frames, underflow :6
 ```
 
-蓝牙服务发起Stream Suspend流程的典型log如下：
-
-```
+Typical logs for the Bluetooth service initiating the Stream Suspend process are as follows:
+```text
 [a2dp_stm]: ProcessEvent, State=Started, Peer=[11:22:33:44:55:66], Event=STREAM_SUSPEND_REQ
 [a2dp_stm]: ProcessEvent, State=Started, Peer=[11:22:33:44:55:66], Event=STREAM_SUSPENDED_EVT
-[a2dp_stm]: Exit  State=Started, Peer=[11:22:33:44:55:66]
+[a2dp_stm]: Exit State=Started, Peer=[11:22:33:44:55:66]
 [a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
 ```
 
-#### 1 通过snoop log观察A2DP SRC是否停止传输音频包
+#### 1. Check if A2DP SRC Has Stopped Transmitting Audio Packets via Snoop Logs
 
-典型log如下：
+Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_suspend.png" alt="sniffer:AVDTP media suspend" width="50%">
+![sniffer: AVDTP Media Suspend](img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_suspend.png)
 
-### 方法：观察AVDTP signaling连接是否断开
+### Method: Check if the AVDTP Signaling Connection is Disconnected
 
-AVDTP signaling断开的原因包括以下几种：应用请求Vela蓝牙子系统断开A2DP连接，蓝牙协议栈主动断开连接，已经对端设备请求断开连接。通常，可以通过syslog，snoop log，或者air log观察是否断开了AVDTP signaling连接。
+Reasons for the disconnection of the AVDTP signaling connection include the following: the application requests the Vela Bluetooth subsystem to disconnect the A2DP connection, the Bluetooth stack actively disconnects, or the remote device requests a disconnection. Typically, whether the AVDTP signaling connection is disconnected can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察是否断开了AVDTP signaling连接
+#### 1. Check if the AVDTP Signaling Connection is Disconnected via Syslog
 
-当应用请求断开A2DP连接时，A2DP状态机会收到DISCONNECT_REQ，并随后断开AVDTP signaling连接，典型log如下：
-
-```
+When the application requests to disconnect the A2DP connection, the A2DP state machine receives DISCONNECT_REQ and subsequently disconnects the AVDTP signaling connection. Typical logs are as follows:
+```text
 [a2dp_stm]: ProcessEvent, State=Opened, Peer=[11:22:33:44:55:66], Event=DISCONNECT_REQ
 ```
 
-断开连接完成时的典型log如下：
-
-```
+Typical logs when the disconnection is completed are as follows:
+```text
 [a2dp_stm]: ProcessEvent, State=Closing, Peer=[11:22:33:44:55:66], Event=DISCONNECTED_EVT
-[a2dp_stm]: Exit  State=Closing, Peer=[11:22:33:44:55:66]
+[a2dp_stm]: Exit State=Closing, Peer=[11:22:33:44:55:66]
 [a2dp_stm]: Enter State=Idle, Peer=[11:22:33:44:55:66]
 ```
 
-#### 2 通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因
+#### 2. Check if the AVDTP Signaling Connection is Disconnected via Snoop Logs, and Observe Possible Failure Reasons
 
-snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，以及对端设备请求断开连接。典型log如下：
+In snoop logs, there are two reasons for the disconnection of the AVDTP signaling connection: the local device actively disconnects, or the remote device requests a disconnection. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="50%">
+![snoop: AVDTP Media Release](img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png)
 
-<a id="方法：观察音频包序列号是否连续"></a>
+<a id="method-check-if-the-audio-packet-sequence-number-is-continuous"></a>
 
-### 方法：观察音频包序列号是否连续
+### Method: Check if the Audio Packet Sequence Number is Continuous
 
-AVDTP Media Packet的包头中有一个字段，称为Sequence Number。该字段是音频包的序列号，会随着每一个AVDTP Media Packet发送而递增。
-每一次Stream Start过程开始后，Sequence Number都从0开始，每发送一个AVDTP Media Packet，Sequence Number加1。
-当该序列号中断或跳跃时，通常表示音频数据缺失。
+The AVDTP Media Packet header contains a field called Sequence Number. This field is the sequence number of the audio packet and increments with each AVDTP Media Packet sent. After each Stream Start process begins, the Sequence Number starts from 0 and increments by 1 with each AVDTP Media Packet sent. When this sequence number is interrupted or jumps, it usually indicates missing audio data.
 
-典型log如下：
+Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_sequence_number.png" alt="sniffer:AVDTP media packet sequence number" width="50%">
+![sniffer: AVDTP Media Packet Sequence Number](img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_sequence_number.png)
 
-<a id="方法：观察air log中1秒内发送的音频数据样本点数量"></a>
+<a id="method-check-the-number-of-audio-data-sample-points-sent-in-1-second-in-the-air-log"></a>
 
-### 方法：观察air log中1秒内发送的音频数据样本点数量
+### Method: Check the Number of Audio Data Sample Points Sent in 1 Second in the Air Log
 
-AVDTP Media Packet的包头中有一个字段，称为Time Stamp。该字段表示了音频包的采样时刻，即该音频数据包中第一个样本点的编号。
+The AVDTP Media Packet header contains a field called Time Stamp. This field indicates the sampling time of the audio packet, i.e., the number of the first sample point in the audio data packet.
 
-在air log中，截取1秒内的音频包，开始和结束音频包之间的Time Stamp差是该时间段内传输的音频数据样本点数量。
+In the air log, capture audio packets within 1 second. The difference in Time Stamp between the starting and ending audio packets is the number of audio data sample points transmitted during that time.
 
-通常，约1秒时间段内音频数据的样本点应当等于或近似等于采样率，典型log如下：
+Typically, the number of audio data sample points transmitted within a 1-second time window should equal or be close to the sampling rate. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_normal.png" alt="sniffer:normal AVDTP media packet sequence number" width="50%">
+![sniffer: Normal AVDTP Media Packet Sequence Number](img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_normal.png)
 
-上述log中，实际传输的样本点数量为：5949440 - 5904896 = 44546。由于当前设置的采样率为44.1kHz，实际传输的样本点数量与预期接近。
+In the above logs, the actual number of sample points transmitted is: 5949440 - 5904896 = 44546. Since the current sampling rate is set to 44.1kHz, the actual number of sample points transmitted is close to the expected value.
 
-1秒内音频数据的样本点数量远大于采样率时，通常air log中会看到比正常情形更加密集的包，典型log如下：
+When the number of audio data sample points transmitted within 1 second is much higher than the sampling rate, the air log typically shows packets that are more densely packed than normal. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_abnormal.png" alt="sniffer:abnormal AVDTP media packet sequence number" width="50%">
+![sniffer: Abnormal AVDTP Media Packet Sequence Number](img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_abnormal.png)
 
-上述log中，约1秒时间段内实际传输的样本点数量为：7395456 - 7270656 = 124800，远超预期。
+In the above logs, the actual number of sample points transmitted within approximately 1 second is: 7395456 - 7270656 = 124800, which far exceeds expectations.
 
-<a id="方法：观察air log中音频数据是否存在重传"></a>
+<a id="method-check-for-audio-data-retransmission-in-the-air-log"></a>
 
-### 方法：观察air log中音频数据是否存在重传
+### Method: Check for Audio Data Retransmission in the Air Log
 
-air log中基带包有两个参数可以用来判断包是否存在重传，分别是SEQN和ARQN。正常情况下，SEQN的值在0和1之间交替变化，对端设备回复的ARQN是ACK。若出现重传，基带包中的SEQN值与上一包相同。
+There are two parameters in the air log that can be used to determine whether a packet has been retransmitted: SEQN and ARQN. Under normal circumstances, the value of SEQN alternates between 0 and 1. The remote device replies with ARQN as ACK. If retransmission occurs, the value of SEQN in the baseband packet remains the same as the previous packet.
 
-空口出现重传的原因有两种：
+There are two reasons for retransmission over the air interface:
 
-* 设备发送的包没收到对端的回复
+* The device did not receive a reply from the remote device for the sent packet.
 
-* 设备发送的包收到了对端的回复，但回复的ARQN值为NAK
+* The device received a reply from the remote device, but the ARQN value was NAK.
 
-设备发送的包没收到对端的回复，典型log如下：
+When the device sends a packet but does not receive a reply from the remote device, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_no_response.png" alt="sniffer:packet with no response" width="50%">
+![sniffer: Packet with No Response](img/how_to_analyze_bluetooth_issues/a2dp/sniffer_no_response.png)
 
-上述log中，设备发了3次2-DH5包，前两次发送的包没有收到对端设备的回复，因此再次重传，SEQN值维持不变；第三次发送的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。再次发送新数据时，可以观察到SEQN发生了变化。
+In the above logs, the device sent three 2-DH5 packets. The first two transmissions did not receive a reply from the remote device, hence the retransmission with the SEQN value remaining unchanged. The third transmission received a reply from the remote device, and the ARQN was ACK, ending the retransmission. Upon sending new data, a change in SEQN can be observed.
 
-设备发送的包收到了对端的回复，但回复的ARQN是NAK，典型log如下：
+When the device sends a packet and receives a reply from the remote device, but the ARQN is NAK, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_nak_response.png" alt="sniffer:packet with NAK response" width="50%">
+![sniffer: Packet with NAK Response](img/how_to_analyze_bluetooth_issues/a2dp/sniffer_nak_response.png)
 
-上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变；第二次的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。
+In the above logs, the device sent two 2-DH5 packets. The first transmission received a reply from the remote device, but the ARQN was NAK, with the SEQN value remaining unchanged. The second transmission received a reply from the remote device, and the ARQN was ACK, ending the retransmission.
 
-## 典型问题
+## Typical Issues
 
-### 问题：连接耳机播放音乐，耳机无声
+### Issue: Headphones Connected but No Sound
 
-* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+* [Check if the AVDTP Signaling Connection is Established](#method-check-if-the-avdtp-signaling-connection-is-established)
 
-  * 若两个设备未能正确建立AVDTP signaling连接，建议对比典型log，观察AVDTP signaling连接建立过程中是否出现异常。
+  * If the two devices fail to establish the AVDTP signaling connection correctly, compare it with typical logs to identify any abnormalities during the establishment process.
 
-  * 若两个设备间正确建立了AVDTP signaling连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+  * If the two devices establish the AVDTP signaling connection correctly, proceed to [Check if the AVDTP Media Connection is Established](#method-check-if-the-avdtp-media-connection-is-established).
 
-* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+* [Check if the AVDTP Media Connection is Established](#method-check-if-the-avdtp-media-connection-is-established)
 
-  * 若两个设备未能正确建立AVDTP media连接，建议对比典型log，观察AVDTP media连接建立过程中是否出现异常。
+  * If the two devices fail to establish the AVDTP media connection correctly, compare it with typical logs to identify any abnormalities during the establishment process.
 
-  * 若两个设备之间正确建立了AVDTP media连接，建议[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+  * If the two devices establish the AVDTP media connection correctly, proceed to [Check if Media Has Successfully Configured the Codec](#method-check-if-media-has-successfully-configured-the-codec).
 
-* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+* [Check if Media Has Successfully Configured the Codec](#method-check-if-media-has-successfully-configured-the-codec)
 
-  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
+  * If Vela Media fails to configure the codec, investigate the reason within the Vela Media module.
 
-  * 若Vela Media成功设置codec，建议[观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+  * If Vela Media successfully configures the codec, proceed to [Check if A2DP SRC Has Started Playing Music](#method-check-if-a2dp-src-has-started-playing-music).
 
-* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+* [Check if Music Playback Has Started](#method-check-if-a2dp-src-has-started-playing-music)
 
-  * 若本地设备为A2DP SRC，且Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
+  * If the local device is the A2DP SRC and Vela Media fails to send the music playback command, investigate the reason within the Vela Media module.
 
-  * 若本地设备为A2DP SRC，且Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+  * If the local device is the A2DP SRC and Vela Media sends the music playback command but the headphones have no sound, compare it with typical logs to identify any abnormalities in the playback process.
 
-### 问题：连接耳机播放音频文件，音频文件开头缺失
+### Issue: Audio File Playback with Missing Header When Headphones are Connected
 
-* [观察音频包序列号是否连续](#方法观察音频包序列号是否连续)
+* [Check if the Audio Packet Sequence Number is Continuous](#method-check-if-the-audio-packet-sequence-number-is-continuous)
 
-  * 若air log中出问题的音频流中存在音频包序列号不连续，建议在Vela蓝牙侧观察音频流中音频包的序列号不连续的原因。
+  * If the air log shows non-continuous sequence numbers in the problematic audio stream, investigate the reason for the non-continuous sequence numbers in the audio stream on the Vela Bluetooth side.
 
-  * 若音频包序列号连续，建议Vela Media侧观察发送的音频包是否完整。
+  * If the audio packet sequence numbers are continuous, check whether the audio packets sent from the Vela Media side are complete.
 
-### 问题：语音播报，结尾处有pop音
+### Issue: Pop Sound at the End of Voice Announcements
 
-### 问题：连接两对耳机时，出现断连和无声的问题
+### Issue: Disconnection and No Sound When Connecting Two Pairs of Headphones
 
-Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连接连接一对耳机。当手表需要连接另一对耳机时，需要先断开前一对耳机。针对多设备切换导致的无声问题，可以按以下顺序排查：
+Vela A2DP SRC currently does not support multi-device connections. A typical example is a watch connecting to a pair of headphones. When the watch needs to connect to another pair of headphones, it must first disconnect from the previous pair. For silent issues caused by multi-device switching, troubleshooting can be performed in the following order:
 
-* [观察是否断开了第一耳机](#方法观察avdtp-signaling连接是否断开)
+* [Check if the First Pair of Headphones is Disconnected](#method-check-if-the-avdtp-signaling-connection-is-disconnected)
 
-  * 若应用未能发送第一耳机断开请求，建议在App侧观察未能发送的原因。
+  * If the application fails to send a disconnection request for the first pair of headphones, investigate the reason on the App side.
 
-  * 若应用发送了第一耳机断开请求，但未能断开，建议对比典型log，观察断开流程中是否出现异常。
+  * If the application sends a disconnection request for the first pair of headphones but it fails to disconnect, compare it with typical logs to identify any abnormalities in the disconnection process.
 
-  * 若应用在连接第二耳机前，正确断开了第一耳机，建议[观察是否连接了第二耳机](#方法观察是否建立了avdtp-media连接)
+  * If the application correctly disconnects the first pair of headphones before connecting to the second pair, proceed to [Check if the Second Pair of Headphones is Connected](#method-check-if-the-avdtp-media-connection-is-established).
 
-* [观察是否连接了第二耳机](#方法观察是否建立了avdtp-media连接)
+* [Check if the Second Pair of Headphones is Connected](#method-check-if-the-avdtp-media-connection-is-established)
 
-  * 若应用未能发送第二耳机连接请求，建议在App侧观察未能发送的原因。
+  * If the application fails to send a connection request for the second pair of headphones, investigate the reason on the App side.
 
-  * 若应用发送了第二耳机连接请求，但未能建立AVDTP signaling连接，建议对比典型log，观察建立signaling连接中是否出现异常。
+  * If the application sends a connection request for the second pair of headphones but fails to establish the AVDTP signaling connection, compare it with typical logs to identify any abnormalities in the signaling connection establishment process.
 
-  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议对比典型log，观察建立media连接中是否出现异常。
+  * If the AVDTP signaling connection between the two devices is successfully established but the AVDTP media connection fails to establish, compare it with typical logs to identify any abnormalities in the media connection establishment process.
 
-  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+  * If the AVDTP media connection between the two devices is successfully established, proceed to [Check if Media Has Successfully Configured the Codec](#method-check-if-media-has-successfully-configured-the-codec).
 
-* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+* [Check if Media Has Successfully Configured the Codec](#method-check-if-media-has-successfully-configured-the-codec)
 
-  * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
+  * If Vela Media fails to configure the codec, investigate the reason within the Vela Media module.
 
-  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+  * If Vela Media successfully configures the codec, proceed to [Check if Music Playback Has Started](#method-check-if-a2dp-src-has-started-playing-music).
 
-* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+* [Check if Music Playback Has Started](#method-check-if-a2dp-src-has-started-playing-music)
 
-  * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
+  * If Vela Media fails to send the music playback command, investigate the reason within the Vela Media module.
 
-  * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
+  * If Vela Media sends the music playback command but the headphones have no sound, compare it with typical logs to identify any abnormalities in the playback process.
 
-# 音乐播放控制问题
+# Music Playback Control Issues
 
-本章介绍Audio/Vedio Remote Control Profile（AVRCP）相关问题常用的分析、定位方法。
-AVRCP是蓝牙音视频遥控协议，包含Controller（CT）和Target（TG）两个角色。通常，CT是控制方，TG是受控方。Vela蓝牙服务框架中，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为AVRCP-CT，蓝牙音乐源设备（例如手机/手表/手环）可以为AVRCP-TG。
+This chapter introduces common analysis and troubleshooting methods for issues related to the Audio/Video Remote Control Profile (AVRCP). AVRCP is a Bluetooth audio/video remote control protocol featuring two roles: Controller (CT) and Target (TG). Typically, CT is the controller, and TG is the controlled device. In the Vela Bluetooth service framework, Bluetooth music output devices (e.g., speakers/headphones/car systems) can act as AVRCP-CT, while Bluetooth music source devices (e.g., phones/watches/fitness bands) can act as AVRCP-TG.
 
-## 分析方法
+## Analysis Methods
 
-<a id="方法：观察是否建立了AVRCP连接"></a>
+<a id="method-check-if-the-avrcp-connection-is-established"></a>
 
-### 方法：观察是否建立了AVRCP连接
+### Method: Check if the AVRCP Connection is Established
 
-通常，可以通过syslog，snoop log，或者air log观察是否建立了AVRCP连接。
+Typically, whether an AVRCP connection has been established can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察是否建立了AVRCP连接
+#### 1. Check if the AVRCP Connection is Established via Syslog
 
-典型log如下：
+Typical logs are as follows:
 
-* AVRCP CT 连接对端设备（AVRCP TG）成功
-```
+* Successful connection of AVRCP CT to the remote device (AVRCP TG)
+```text
 [avrcp_controller]: avrc ct connnection --> device:[AA:AA:AA:AA:AA:AA], state: 2
 ```
-* AVRCP TG 连接对端设备（AVRCP CT）成功
-```
+
+* Successful connection of AVRCP TG to the remote device (AVRCP CT)
+```text
 [avrcp_target]: avrc tg connnection --> device:[AA:AA:AA:AA:AA:AA], state: 2
 ```
 
-#### 2 通过snoop log观察是否建立了AVRCP连接，以及观察可能的失败原因
+#### 2. Check if the AVRCP Connection is Established via Snoop Logs, and Observe Possible Failure Reasons
 
-典型log如下：
+Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_avctp_establishment.png" alt="snoop:AVRCP连接" width="50%">
+![snoop: AVRCP Connection](img/how_to_analyze_bluetooth_issues/avrcp/snoop_avctp_establishment.png)
 
-#### 3 通过air log观察是否建立了AVRCP连接，以及观察可能的失败原因
+#### 3. Check if the AVRCP Connection is Established via Air Logs, and Observe Possible Failure Reasons
 
-典型log如下：
+Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avctp_establishment.png" alt="sniffer:AVRCP连接" width="50%">
+![sniffer: AVRCP Connection](img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avctp_establishment.png)
 
-<a id="方法：观察设备是否支持AVRCP"></a>
+<a id="method-check-if-the-device-supports-avrcp"></a>
 
-### 方法：观察设备是否支持AVRCP
+### Method: Check if the Device Supports AVRCP
 
-当两个设备均未能发起AVRCP连接时，建议观察双方设备是否支持AVRCP。通常，可以通过syslog，snoop log，或者air log观察设备是否支持AVRCP。
+When neither device initiates an AVRCP connection, it is recommended to check whether both devices support AVRCP. Typically, whether a device supports AVRCP can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察本地设备是否打开了AVRCP服务
+#### 1. Check if the Local Device has Enabled AVRCP Services via Syslog
 
-典型log如下：
+Typical logs are as follows:
 
-* AVRCP CT 服务注册成功
-```
+* Successful registration of AVRCP CT service
+```text
 [service_manager]: AVRCP-CT service register success
 ```
-* AVRCP CT 服务开启成功
-```
+
+* Successful startup of AVRCP CT service
+```text
 [service_manager]: service_on_startup {AVRCP-CT} start ret:1
 ```
-* AVRCP TG 服务注册成功
-```
+
+* Successful registration of AVRCP TG service
+```text
 [service_manager]: AVRCP-TG service register success
 ```
-* AVRCP TG 服务开启成功
-```
+
+* Successful startup of AVRCP TG service
+```text
 [service_manager]: service_on_startup {AVRCP-TG} start ret:1
 ```
 
-#### 2 通过snoop log或air log观察双方设备是否支持AVRCP
+#### 2. Check if Both Devices Support AVRCP via Snoop Logs or Air Logs
 
-典型log如下：
+Typical logs are as follows:
 
-* SDP中，声明支持AVRCP-CT角色
+* SDP declares support for AVRCP-CT role
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_avrc_controller.png" alt="snoop:AVRCP-CT服务" width="50%">
+![snoop: AVRCP-CT Service](img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_avrc_controller.png)
 
-* SDP中，声明支持AVRCP-TG角色
+* SDP declares support for AVRCP-TG role
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_avrc_target.png" alt="snoop:AVRCP-TG服务" width="50%">
+![snoop: AVRCP-TG Service](img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_avrc_target.png)
 
-<a id="方法：观察是否发送了播放、暂停请求"></a>
+<a id="method-check-if-play-or-pause-requests-are-sent"></a>
 
-### 方法：观察是否发送了播放、暂停请求
+### Method: Check if Play or Pause Requests are Sent
 
-通过syslog，snoop log，或者air log可以观察是否发送了播放、暂停请求。
+Whether play or pause requests are sent can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察是否发送了播放、暂停请求
+#### 1. Check if Play or Pause Requests are Sent via Syslog
 
-典型log如下：
-* 本地设备发送了播放、暂停请求
-```
+Typical logs are as follows:
+
+* The local device sends play or pause requests
+```text
 [avrcp_controller]: avrcp_ct_on_play
 [avrcp_controller]: avrcp_ct_on_pause
 ```
-* 对端设备按下播放键、抬起播放键、按下暂停键、抬起暂停键
-```
+
+* The remote device presses or releases the play button, or presses or releases the pause button
+```text
 [avrcp_target]: passthrough cmd: 40, state: 0
 [avrcp_target]: passthrough cmd: 40, state: 1
 [avrcp_target]: passthrough cmd: 42, state: 0
 [avrcp_target]: passthrough cmd: 42, state: 1
 ```
 
-#### 2 通过snoop log或air log观察是否发送了播放、暂停请求
+#### 2. Check if Play or Pause Requests are Sent via Snoop Logs or Air Logs
 
-典型log如下：
+Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_passthrough_pause_play.png" alt="snoop:AVRCP播放暂停请求" width="50%">
+![snoop: AVRCP Play/Pause Requests](img/how_to_analyze_bluetooth_issues/avrcp/snoop_passthrough_pause_play.png)
 
-<a id="方法：观察是否注册了Notification"></a>
+<a id="method-check-if-notification-is-registered"></a>
 
-### 方法：观察是否注册了Notification
+### Method: Check if Notification is Registered
 
-通过syslog，snoop log，或者air log可以观察是否注册了Notification。
+Whether notification is registered can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察是否注册了Notification
+#### 1. Check if Notification is Registered via Syslog
 
-典型log如下：
-* 本地设备注册了notification，观察对端设备播放状态
-```
+Typical logs are as follows:
+
+* The local device registers notification to observe the playback status of the remote device
+```text
 [avrcp_controller]: capability support event: 1
 ```
-* 对端设备注册了Notification，观察本地设备播放状态
-```
+
+* The remote device registers notification to observe the playback status of the local device
+```text
 [avrcp_target]: register notification event: 1
 ```
-相似的，不同event数值代表不同的notification事件，syslog内容解析方法相同。
 
-#### 2 通过snoop log或air log观察是否注册了Notification
+Similarly, different event numbers represent different notification events, and the syslog content can be interpreted in the same way.
 
-以播放状态Notification为例，典型log如下：
+#### 2. Check if Notification is Registered via Snoop Logs or Air Logs
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avrcp_register_notification_playback_status.png" alt="sniffer:AVRCP注册播放状态变化" width="50%">
+Taking playback status notification as an example, typical logs are as follows:
 
-<a id="方法：观察是否正确反馈播放状态"></a>
+![sniffer: AVRCP Playback Status Notification Registration](img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avrcp_register_notification_playback_status.png)
 
-### 方法：观察是否正确反馈播放状态
+<a id="method-check-if-playback-status-is-correctly-reported"></a>
 
-在CT向TG注册播放状态变化后，TG可以向CT反馈播放状态变化。通过syslog，snoop log，或者air log可以观察TG是否正确向CT反馈播放状态变化。
+### Method: Check if Playback Status is Correctly Reported
 
-#### 1 通过syslog观察是否正确反馈播放状态
+After the CT registers for playback status changes with the TG, the TG can feedback playback status changes to the CT. Whether the TG correctly reports playback status changes to the CT can be observed through syslog, snoop logs, or air interface logs.
 
-典型log如下：
-* 本地设备向对端设备反馈播放状态变化
-```
+#### 1. Check if Playback Status is Correctly Reported via Syslog
+
+Typical logs are as follows:
+
+* The local device reports playback status changes to the remote device
+```text
 [avrcp_target]: send playstatus notification --> STOPPED
 ```
-* 对端设备向本地设备反馈播放状态变化
-```
+
+* The remote device reports playback status changes to the local device
+```text
 [avrcp_controller]: register_notification evt: 1
 [avrcp_controller]: playback status changed: PAUSED, get status now...
 ```
 
-#### 2 通过snoop log或air log观察是否注册了Notification
+#### 2. Check if Notification is Registered via Snoop Logs or Air Logs
 
-以播放状态Notification为例，典型log如下：
+Taking playback status notification as an example, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avrcp_register_notification_playback_status.png" alt="sniffer:AVRCP注册播放状态变化" width="50%">
+![sniffer: AVRCP Playback Status Notification Registration](img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avrcp_register_notification_playback_status.png)
 
-<a id="方法：观察播放状态变化是否由蓝牙引起"></a>
+<a id="method-check-if-playback-status-changes-are-caused-by-bluetooth"></a>
 
-### 方法：观察播放状态变化是否由蓝牙引起
+### Method: Check if Playback Status Changes are Caused by Bluetooth
 
-通常，当蓝牙音乐播放器的播放状态异常变化时，可以在相同场景中尝试断开蓝牙连接，观察是否仍然引起了播放状态变化。若仍可见播放状态变化，通常该变化与蓝牙连接无关。
+Typically, when the playback status of the Bluetooth music player changes abnormally, the same scenario can be tested by disconnecting the Bluetooth connection to see if the playback status still changes. If it does, the change is usually unrelated to the Bluetooth connection.
 
-<a id="方法：观察是否使用了绝对音量"></a>
+<a id="method-check-if-absolute-volume-is-used"></a>
 
-### 方法：观察是否使用了绝对音量
+### Method: Check if Absolute Volume is Used
 
-AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功能。
+The prerequisite for AVRCP-CT and AVRCP-TG to use absolute volume is that both parties support the absolute volume feature.
 
-#### 1 通过syslog观察是否支持绝对音量
+#### 1. Check if Absolute Volume is Supported via Syslog
 
-对端设备请求注册volume changed notification（EventID = 0x0D），表明双方均支持绝对音量
-```
+The remote device requests to register for volume changed notification (EventID = 0x0D), indicating that both parties support absolute volume:
+```text
 [avrcp_controller]: register notification event: 13
 ```
 
-#### 2 通过snoop log观察是否支持绝对音量
+#### 2. Check if Absolute Volume is Supported via Snoop Logs
 
-绝对音量功能中，音乐源设备（手机）需要在SDP声明支持AVRCP-CT角色，音乐播放设备（耳机）需要在SDP声明支持AVRCP-TG角色。典型log如下：
+For absolute volume functionality, the music source device (phone) needs to declare support for the AVRCP-CT role in SDP, and the music playback device (headphones) needs to declare support for the AVRCP-TG role in SDP. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_absolute_volume_supported.png" alt="snoop:AVRCP绝对音量" width="50%">
+![snoop: AVRCP Absolute Volume Support](img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_absolute_volume_supported.png)
 
-此外，音乐源设备（手机）向音乐播放设备（耳机）注册音量变化事件，表明双方均支持绝对音量。典型log如下：
+Additionally, the music source device (phone) registers for volume change events with the music playback device (headphones), indicating that both parties support absolute volume. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_register_notification_volume_changed.png" alt="snoop:AVRCP注册音量变化" width="50%">
+![snoop: AVRCP Volume Change Registration](img/how_to_analyze_bluetooth_issues/avrcp/snoop_register_notification_volume_changed.png)
 
-<a id="方法：观察手机是否设置了绝对音量"></a>
+<a id="method-check-if-the-phone-has-set-absolute-volume"></a>
 
-### 方法：观察音乐源设备（手机）是否设置了绝对音量
+### Method: Check if the Music Source Device (Phone) has Set Absolute Volume
 
-当双方均支持绝对音量时，音乐源设备（手机）需要发送set absolute volume改变音乐播放设备（耳机）的音量。可以通过snoop log，或air log观察手机是否设置了绝对音量。
+When both parties support absolute volume, the music source device (phone) needs to send set absolute volume to change the volume of the music playback device (headphones). Whether the phone has set the absolute volume can be observed through snoop logs or air logs.
 
-#### 1 通过snoop log或air log观察手机是否设置了绝对音量
+#### 1. Check if the Phone has Set Absolute Volume via Snoop Logs or Air Logs
 
-典型log如下：
+Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_set_absolute_volume.png" alt="snoop:AVRCP设置绝对音量" width="50%">
+![snoop: AVRCP Set Absolute Volume](img/how_to_analyze_bluetooth_issues/avrcp/snoop_set_absolute_volume.png)
 
-<a id="方法：观察本地设备是否设置了绝对音量"></a>
+<a id="method-check-if-the-local-device-has-set-absolute-volume"></a>
 
-### 方法：观察本地设备是否设置了绝对音量
+### Method: Check if the Local Device has Set Absolute Volume
 
-若音乐源设备（手机）正确设置了绝对音量，本地却未能生效，需要观察本地音量未能生效的原因。通过syslog可以观察本地设备是否成功设置了绝对音量。
+If the music source device (phone) correctly sets the absolute volume but it does not take effect locally, the reason for the failure needs to be investigated. Whether the local device has successfully set the absolute volume can be observed through syslog.
 
-#### 1 通过syslog观察本地设备是否设置了绝对音量
+#### 1. Check if the Local Device has Set Absolute Volume via Syslog
 
-典型log如下：
-
-```
+Typical logs are as follows:
+```text
 [avrcp_controller]: set absolute volume rsp: status: 0, volume: 50
 ```
 
-<a id="方法：观察手机是否改变了音频幅值"></a>
+<a id="method-check-if-the-phone-has-changed-the-audio-amplitude"></a>
 
-### 方法：观察音乐源设备（手机）是否改变了音频幅值
+### Method: Check if the Music Source Device (Phone) has Changed the Audio Amplitude
 
-#### 1 通过音频源文件观察音乐源设备（手机）是否改变了音频幅值
+#### 1. Check if the Music Source Device (Phone) has Changed the Audio Amplitude via the Audio Source File
 
-通常可以通过air log导出音频，解析音乐文件，观察幅值变化。典型的蓝牙音频文件如下：
+Typically, audio can be exported from air logs, and the amplitude of the music file can be analyzed to observe amplitude changes. A typical Bluetooth audio file is as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/pcm_volume_changed.png" alt="pcm:通过幅值判断音量" width="50%">
+![pcm: Determine Volume via Amplitude](img/how_to_analyze_bluetooth_issues/avrcp/pcm_volume_changed.png)
 
-#### 2 通过air log观察音乐源设备（手机）是否改变了音频幅值
+#### 2. Check if the Music Source Device (Phone) has Changed the Audio Amplitude via Air Logs
 
-对于SBC和AAC编码的音频，可以使用以下方式粗略的分辨音量大小，但不准确。更多的时候，可以用来判断是否静音。
+For SBC and AAC encoded audio, the volume can be roughly determined in the following ways, though not accurately. More often, this method can be used to determine if the audio is muted.
 
-对于SBC编码的音频，可以通过Media Payload中的Scale Factor判断音量。典型log如下：
+For SBC encoded audio, the volume can be determined by the Scale Factor in the Media Payload. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_sbc_scale_factor.png" alt="sniffer:通过Scale Factor判断SBC音量" width="50%">
+![sniffer: Determine SBC Volume via Scale Factor](img/how_to_analyze_bluetooth_issues/avrcp/sniffer_sbc_scale_factor.png)
 
-对于AAC编码的音频，可以通过编码帧长度判断音量。典型log如下：
+For AAC encoded audio, the volume can be determined by the encoded frame length. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_aac_payload_length.png" alt="sniffer:通过Payload Length判断AAC音量" width="50%">
+![sniffer: Determine AAC Volume via Payload Length](img/how_to_analyze_bluetooth_issues/avrcp/sniffer_aac_payload_length.png)
 
-<a id="方法：观察是否打开了AVRCP配置"></a>
+<a id="method-check-if-avrcp-configuration-is-enabled"></a>
 
-### 方法：观察是否打开了AVRCP配置
+### Method: Check if AVRCP Configuration is Enabled
 
-通常可以通过.config文件观察是否打开了AVRCP配置。在编译产物中，.config文件位于蓝牙服务所在核路径下，例如：
-```
+Typically, whether AVRCP configuration is enabled can be checked in the .config file. In the compilation output, the .config file is located in the path of the Bluetooth service core, for example:
+```text
 image/sim-vela/vela/.config
 image/qemu-vela/goldfish-armeabi-v7a-ap/.config
 ```
-AVRCP相关配置如下：
-
-```
+AVRCP related configurations are as follows:
+```text
 CONFIG_BLUETOOTH_AVRCP_TARGET=y
 CONFIG_BLUETOOTH_AVRCP_CONTROL=y
 ```
 
-<a id="方法：观察音量变化是否由蓝牙引起"></a>
+<a id="method-check-if-volume-changes-are-caused-by-bluetooth"></a>
 
-### 方法：观察音量变化是否由蓝牙引起
+### Method: Check if Volume Changes are Caused by Bluetooth
 
-通常，当蓝牙设备音量异常变化时，可以在相同场景中尝试断开蓝牙连接，观察是否仍然引起了音量变化。若仍可见音量变化，通常该音量变化与蓝牙连接无关。
+Typically, when the volume of a Bluetooth device changes abnormally, the same scenario can be tested by disconnecting the Bluetooth connection to see if the volume still changes. If it does, the volume change is usually unrelated to the Bluetooth connection.
 
-<a id="方法：观察音量变化由AVRCP或是HFP控制"></a>
+<a id="method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp"></a>
 
-### 方法：观察音量变化由AVRCP或是HFP控制
+### Method: Check if Volume Changes are Controlled by AVRCP or HFP
 
-在蓝牙规范中，AVRCP和HFP均可以控制音量。通常可以通过snoop log确定音量控制的途径。
+In Bluetooth specifications, both AVRCP and HFP can control the volume. Typically, the path of volume control can be determined through snoop logs.
 
-#### 1 通过snoop log观察音量变化由AVRCP或是HFP控制
+#### 1. Check if Volume Changes are Controlled by AVRCP or HFP via Snoop Logs
 
-在蓝牙通话中，音量变化通常由HFP协议控制。在其他场景，音量变化通常由AVRCP协议控制。
+During Bluetooth calls, volume changes are typically controlled by the HFP protocol. In other scenarios, volume changes are typically controlled by the AVRCP protocol.
 
-当双方设备支持AVRCP绝对音量控制时，AVRCP TG（手机）设备可以主动设置绝对音量，典型log如下：
+When both devices support AVRCP absolute volume control, the AVRCP TG (phone) device can actively set the absolute volume, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_set_absolute_volume.png" alt="snoop:AVRCP TG改变绝对音量" width="50%">
+![snoop: AVRCP TG Changes Absolute Volume](img/how_to_analyze_bluetooth_issues/avrcp/snoop_set_absolute_volume.png)
 
-当双方设备支持AVRCP绝对音量控制时，AVRCP CT（耳机）设备可以主动反馈绝对音量变化，典型log如下：
+When both devices support AVRCP absolute volume control, the AVRCP CT (headphones) device can actively feedback absolute volume changes, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_absolute_volume_changed.png" alt="snoop:AVRCP CT改变绝对音量" width="50%">
+![snoop: AVRCP CT Changes Absolute Volume](img/how_to_analyze_bluetooth_issues/avrcp/snoop_absolute_volume_changed.png)
 
-HFP AG（手机）设备可以主动设置通话音量，典型log如下：
+The HFP AG (phone) device can actively set the call volume, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_set_volume.png" alt="snoop:HFP AG改变音量" width="50%">
+![snoop: HFP AG Changes Volume](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_set_volume.png)
 
-HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
+The HFP HF (headphones) device can actively set the call volume, typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_set_volume.png" alt="snoop:HFP HF改变音量" width="50%">
+![snoop: HFP HF Changes Volume](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_set_volume.png)
 
-## 典型问题
+## Typical Issues
 
-### 问题：不能控制播放、暂停
+<a id="issue-unable-to-control-play-pause"></a>
 
-本地设备不能控制对端设备上的播放器进行播放、暂停，可能有多种原因导致，可考虑的定位方法包括：
+### Issue: Unable to Control Play/Pause
 
-* [观察是否建立了AVRCP连接](#方法：观察是否建立了AVRCP连接)
+If the local device cannot control the playback on the remote device, there may be several reasons. Consider the following troubleshooting methods:
 
-  * 若双方设备中，至少一方发起了连接，但连接失败，建议对比典型log，分析连接失败的原因。
+* [Check if the AVRCP Connection is Established](#method-check-if-the-avrcp-connection-is-established)
 
-  * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持AVRCP](#方法：观察设备是否支持AVRCP)。
+  * If at least one of the devices initiates a connection but it fails, compare it with typical logs to analyze the reason for the connection failure.
 
-  * 若AVRCP连接成功，建议[观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)。
+  * If neither device initiates the above connection, proceed to [Check if Both Devices Support AVRCP](#method-check-if-the-device-supports-avrcp).
 
-* [观察设备是否支持AVRCP](#方法：观察设备是否支持AVRCP)
+  * If the AVRCP connection is successful, proceed to [Check if Play/Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent).
 
-  * 若音乐源设备（A2DP-SRC）不支持AVRCP-TG，或音乐播放设备（A2DP-SNK）不支持AVRCP-CT，则建议[观察是否打开了相应配置](#方法：观察是否打开了AVRCP配置)。
-    
-  * 若音乐源设备（A2DP-SRC）未能正确的注册或开启AVRCP-TG服务，或者音乐播放设备（A2DP-SNK）未能正确的注册或开启AVRCP-CT服务，则建议根据syslog观察失败原因。
-    
-  * 若音乐源设备（A2DP-SRC）支持AVRCP-TG，且音乐播放设备（A2DP-SNK）支持AVRCP-CT，则双方应当至少有一方主动发起连接。若双方均未发起连接，则建议首先观察音乐播放设备（A2DP-SNK）为什么没有发起AVRCP连接。
+* [Check if Both Devices Support AVRCP](#method-check-if-the-device-supports-avrcp)
 
-* [观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)
+  * If the music source device (A2DP-SRC) does not support AVRCP-TG or the music playback device (A2DP-SNK) does not support AVRCP-CT, proceed to [Check if the Corresponding Configuration is Enabled](#method-check-if-avrcp-configuration-is-enabled).
 
-  * 若本地设备未能发送播放、暂停请求，建议在App侧观察是否调用了Media Session相关接口。
+  * If the music source device (A2DP-SRC) fails to properly register or start the AVRCP-TG service, or the music playback device (A2DP-SNK) fails to properly register or start the AVRCP-CT service, investigate the reason based on syslog.
 
-  * 若本地设备发送了播放、暂停请求，建议观察手机侧行为异常的原因。
+  * If the music source device (A2DP-SRC) supports AVRCP-TG and the music playback device (A2DP-SNK) supports AVRCP-CT, both parties should initiate a connection. If neither initiates a connection, first investigate why the music playback device (A2DP-SNK) does not initiate an AVRCP connection.
 
-### 问题：不能受控播放、暂停
+* [Check if Play/Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent)
 
-本地设备不能被对端设备控制播放、暂停，可能有多种原因导致，可考虑的定位方法包括：
+  * If the local device fails to send play/pause requests, investigate on the App side whether the Media Session related interfaces are called.
 
-* [观察是否建立了AVRCP连接](#方法：观察是否建立了AVRCP连接)
+  * If the local device sends play/pause requests, investigate the reason for the abnormal behavior on the phone side.
 
-  * 若双方设备中，至少一方发起了连接，但连接失败，建议对比典型log，分析连接失败的原因。
+<a id="issue-unable-to-be-controlled-for-play-pause"></a>
 
-  * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持AVRCP](#方法：观察设备是否支持AVRCP)。
+### Issue: Unable to Be Controlled for Play/Pause
 
-  * 若AVRCP连接成功，建议[观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)。
-  
-* [观察设备是否支持AVRCP](#方法：观察设备是否支持AVRCP)
+If the local device cannot be controlled for playback by the remote device, there may be several reasons. Consider the following troubleshooting methods:
 
-  * 若音乐源设备（A2DP-SRC）不支持AVRCP-TG，或音乐播放设备（A2DP-SNK）不支持AVRCP-CT，则建议[观察是否打开了相应配置](#方法：观察是否打开了AVRCP配置)。
-    
-  * 若音乐源设备（A2DP-SRC）未能正确的注册或开启AVRCP-TG服务，或者音乐播放设备（A2DP-SNK）未能正确的注册或开启AVRCP-CT服务，则建议根据syslog观察失败原因。
-    
-  * 若音乐源设备（A2DP-SRC）支持AVRCP-TG，且音乐播放设备（A2DP-SNK）支持AVRCP-CT，则双方应当至少有一方主动发起连接。若双方均未发起连接，则建议首先观察音乐播放设备（A2DP-SNK）为什么没有发起AVRCP连接。
+* [Check if the AVRCP Connection is Established](#method-check-if-the-avrcp-connection-is-established)
 
-* [观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)
+  * If at least one of the devices initiates a connection but it fails, compare it with typical logs to analyze the reason for the connection failure.
 
-  * 若对端设备未能发送播放、暂停请求，建议[观察是否注册了Notification](#方法：观察是否注册了Notification)。
+  * If neither device initiates the above connection, proceed to [Check if Both Devices Support AVRCP](#method-check-if-the-device-supports-avrcp).
 
-  * 若对端设备发送了错误的播放、暂停请求，例如：应当请求播放，却发送了暂停，建议[观察是否正确反馈播放状态](#方法：观察是否正确反馈播放状态)。
+  * If the AVRCP connection is successful, proceed to [Check if Play/Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent).
 
-  * 若对端设备正确发送了播放、暂停请求，本地设备正确接收，建议在Vela Media或App侧观察未能正确执行的原因。
+* [Check if Both Devices Support AVRCP](#method-check-if-the-device-supports-avrcp)
 
-* [观察是否注册了Notification](#方法：观察是否注册了Notification)
+  * If the music source device (A2DP-SRC) does not support AVRCP-TG or the music playback device (A2DP-SNK) does not support AVRCP-CT, proceed to [Check if the Corresponding Configuration is Enabled](#method-check-if-avrcp-configuration-is-enabled).
 
-  * 若对端设备未能注册Notification，建议对比典型log，分析对端设备行为异常的原因。
+  * If the music source device (A2DP-SRC) fails to properly register or start the AVRCP-TG service, or the music playback device (A2DP-SNK) fails to properly register or start the AVRCP-CT service, investigate the reason based on syslog.
 
-* [观察是否正确反馈播放状态](#方法：观察是否正确反馈播放状态)
+  * If the music source device (A2DP-SRC) supports AVRCP-TG and the music playback device (A2DP-SNK) supports AVRCP-CT, both parties should initiate a connection. If neither initiates a connection, first investigate why the music playback device (A2DP-SNK) does not initiate an AVRCP connection.
 
-  * 若本地设备未能正确反馈播放状态，建议在Vela Media或App侧观察未能正确反馈的原因。
+* [Check if Play/Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent)
 
-### 问题：意外的播放、暂停
+  * If the remote device fails to send play/pause requests, proceed to [Check if Notification is Registered](#method-check-if-notification-is-registered).
 
-当音乐播放器意外的播放、暂停时，通常有以下方法可以逐步缩小范围并定位问题。
+  * If the remote device sends incorrect play/pause requests (e.g., it should request play but sends pause instead), proceed to [Check if Playback Status is Correctly Reported](#method-check-if-playback-status-is-correctly-reported).
 
-* [观察播放状态变化是否由蓝牙引起](#方法：观察播放状态变化是否由蓝牙引起)
+  * If the remote device correctly sends play/pause requests and the local device correctly receives them, investigate the reason for the failure to execute correctly on the Vela Media or App side.
 
-  * 若播放状态变化并非由蓝牙连接引起，建议在音乐播放器所在设备（通常是手机）处观察原因。若该设备为Vela设备，建议在Vela App侧观察播放状态变化的原因。
+* [Check if Notification is Registered](#method-check-if-notification-is-registered)
 
-  * 若音量变化可能由蓝牙连接引起，建议[观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)
+  * If the remote device fails to register for notification, compare it with typical logs to analyze the reason for the abnormal behavior of the remote device.
 
-* [观察是否发送了播放、暂停请求](#方法：观察是否发送了播放、暂停请求)
+* [Check if Playback Status is Correctly Reported](#method-check-if-playback-status-is-correctly-reported)
 
-  * 若CT设备未能发送播放、暂停请求，建议在TG设备App侧观察播放状态变化的原因。
+  * If the local device fails to correctly report playback status, investigate the reason on the Vela Media or App side.
 
-  * 若CT设备发送了播放、暂停请求，建议在CT设备App侧观察播放状态变化的原因。
+<a id="Issue: Unexpected Play/Pause"></a>
 
-### 问题：不能受音乐源设备（手机）控制调节音量
+### Issue: Unexpected Play/Pause
 
-AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要判断当前产品使用了哪一种调节方式。可考虑的定位方法包括：
+When the music player unexpectedly plays or pauses, the following methods can be used to narrow down the scope and troubleshoot the issue:
 
-* [观察是否使用了绝对音量](#方法：观察是否使用了绝对音量)
+* [Check if Playback Status Changes are Caused by Bluetooth](#method-check-if-playback-status-changes-are-caused-by-bluetooth)
 
-  * 若双方设备均支持绝对音量，则建议[观察音乐源设备是否设置了绝对音量](#方法：观察手机是否设置了绝对音量)。
+  * If the playback status change is not caused by the Bluetooth connection, investigate the reason on the device where the music player is located (typically the phone). If the device is a Vela device, investigate the reason on the Vela App side.
 
-  * 双方设备未使用绝对音量，则音乐播放设备（耳机）不参与音量调节，由音乐源设备（手机）自行修改音频幅值。建议[观察音乐源设备是否改变了音频幅值](#方法：观察手机是否改变了音频幅值)。
+  * If the volume change may be caused by the Bluetooth connection, proceed to [Check if Play/Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent).
 
-* [观察手机是否设置了绝对音量](#方法：观察手机是否设置了绝对音量)
+* [Check if Play/Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent)
 
-  * 若音乐源设备（手机）未能设置绝对音量，建议观察手机侧行为异常的原因。
+  * If the CT device fails to send play/pause requests, investigate the reason on the TG device's App side.
 
-  * 若音乐源设备（手机）设置了绝对音量，但本地未能生效，建议[观察本地设备是否设置了绝对音量](#方法：观察本地设备是否设置了绝对音量)
+  * If the CT device sends play/pause requests, investigate the reason on the CT device's App side.
 
-* [观察本地设备是否设置了绝对音量](#方法：观察本地设备是否设置了绝对音量)
+<a id="issue-unable-to-adjust-volume-via-music-source-device-phone"></a>
 
-  * 若本地设备设置了绝对音量，但观察不到本地音量变化，建议在Vela Media侧观察音量未能生效的原因。
+### Issue: Unable to Adjust Volume via Music Source Device (Phone)
 
-  * 若本地设备未能正确设置绝对音量，建议根据syslog判断未能设置音量的原因。
+When encountering unexpected volume changes in Bluetooth devices, the following methods can be used to narrow down the scope and troubleshoot the issue:
 
-* [观察手机是否改变了音频幅值](#方法：观察手机是否改变了音频幅值)
+* [Check if Volume Changes are Caused by Bluetooth](#method-check-if-volume-changes-are-caused-by-bluetooth)
 
-  * 若使用相对音量时，手机未能正确改变音频幅值，建议观察手机侧行为异常的原因。
+  * If the volume change is not caused by the Bluetooth connection, investigate the reason on the device where the volume change occurs. If the device is a Vela device, investigate the reason on the Vela Media side.
 
-  * 若使用相对音量时，手机正确改变了音频幅值，建议Vela Media侧观察音量变化未能体现的原因。
+  * If the volume change may be caused by the Bluetooth connection, proceed to [Check if Volume Changes are Controlled by AVRCP or HFP](#method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp).
 
-### 问题：音量异常变化
+* [Check if Volume Changes are Controlled by AVRCP or HFP](#method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp)
 
-当遇到蓝牙设备音量异常变化时，通常有以下方法可以逐步缩小范围并定位问题。
+  * If the volume change is controlled by AVRCP, investigate the reason for the change initiated by the controlling party (CT or TG). If the device is a Vela device, investigate the reason on the Vela App or Media side.
 
-* [观察音量变化是否由蓝牙引起](#方法：观察音量变化是否由蓝牙引起)
+  * If the volume change is controlled by HFP, investigate the reason for the change initiated by the controlling party (AG or HF). If the device is a Vela device, investigate the reason on the Vela App side.
 
-  * 若音量变化并非由蓝牙连接引起，建议在产生音量变化的设备处观察原因。若该设备为Vela设备，建议在Vela Media侧观察音量变化的原因。
+<a id="issue-abnormal-volume-changes"></a>
 
-  * 若音量变化可能由蓝牙连接引起，建议[观察音量变化由AVRCP或是HFP控制](#方法：观察音量变化由AVRCP或是HFP控制)
+### Issue: Abnormal Volume Changes
 
-* [观察音量变化由AVRCP或是HFP控制](#方法：观察音量变化由AVRCP或是HFP控制)
+When encountering abnormal volume changes in Bluetooth devices, the following methods can be used to narrow down the scope and troubleshoot the issue:
 
-  * 若音量改变由AVRCP控制，建议观察控制发起方（CT或TG）发起该改变的原因。若该设备为Vela设备，建议在Vela App或Media侧观察音量改变的原因。
+* [Check if Volume Changes are Caused by Bluetooth](#method-check-if-volume-changes-are-caused-by-bluetooth)
 
-  * 若音量改变由HFP控制，建议观察控制发起方（AG或HF）发起该改变的原因。若该设备为Vela设备，建议在Vela App侧观察音量改变的原因。
+  * If the volume change is not caused by the Bluetooth connection, investigate the reason on the device where the volume change occurs. If the device is a Vela device, investigate the reason on the Vela Media side.
 
-# 通话问题
-本章介绍Hands-Free Profile（HFP）相关问题常用的分析、定位方法。
-HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF）两个角色。通常，AG是音频网关，负责音频设备输入输出，典型设备为手机，HF作为音频网关的远程音频输入/输出设备，典型设备为耳机。
+  * If the volume change may be caused by the Bluetooth connection, proceed to [Check if Volume Changes are Controlled by AVRCP or HFP](#method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp).
 
-## 分析方法
+* [Check if Volume Changes are Controlled by AVRCP or HFP](#method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp)
 
-<a id="方法：观察是否建立了HFP连接"></a>
+  * If the volume change is controlled by AVRCP, investigate the reason for the change initiated by the controlling party (CT or TG). If the device is a Vela device, investigate the reason on the Vela App or Media side.
 
-### 方法：观察是否建立了HFP连接
+  * If the volume change is controlled by HFP, investigate the reason for the change initiated by the controlling party (AG or HF). If the device is a Vela device, investigate the reason on the Vela App side.
 
-通常，可以通过syslog，snoop log，或者air log观察是否建立了HFP连接。
+# Call Issues
 
-#### 1 通过syslog观察是否建立了HFP连接
+This chapter introduces common analysis and troubleshooting methods for issues related to the Hands-Free Profile (HFP). HFP is a Bluetooth calling protocol featuring two roles: Audio Gateway (AG) and Hands-Free unit (HF). Typically, AG is the audio gateway responsible for audio input and output, usually a phone, while HF is the remote audio input/output device of the audio gateway, typically headphones.
 
-典型log如下：
+## Analysis Methods
 
-* HFP HF 连接对端设备（HFP AG）成功
-```
+<a id="method-check-if-the-hfp-connection-is-established"></a>
+
+### Method: Check if the HFP Connection is Established
+
+Typically, whether an HFP connection has been established can be observed through syslog, snoop logs, or air interface logs.
+
+#### 1. Check if the HFP Connection is Established via Syslog
+
+Typical logs are as follows:
+
+* Successful connection of HFP HF to the remote device (HFP AG)
+```text
 [hf_stm]: Enter State=Connected, Peer=[AA:AA:AA:AA:AA:AA]
 ```
-* HFP AG 连接对端设备（HFP HF）成功
-```
+
+* Successful connection of HFP AG to the remote device (HFP HF)
+```text
 [ag_stm]: Enter State=Connected, Peer=[AA:AA:AA:AA:AA:AA]
 ```
-#### 2 通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因
 
-典型log如下：
+#### 2. Check if the HFP Connection is Established via Snoop Logs, and Observe Possible Failure Reasons
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc.png" alt="snoop:HFP连接" width="50%">
+Typical logs are as follows:
 
-CMER命令的交互标志着SLC建立完成，可参考下图spec中SLC建立流程，其中实线为必须操作，其余为可选操作。
+![snoop: HFP Connection](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc.png)
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc_core.png" alt="snoop:HFP连接规范" width="50%">
+The interaction of CMER commands marks the completion of SLC establishment. Refer to the SLC establishment process in the spec, where solid lines represent mandatory operations, and others are optional.
 
-<a id="方法：观察设备是否支持HFP"></a>
+![snoop: HFP Connection Specification](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc_core.png)
 
-### 方法：观察设备是否支持HFP
+<a id="method-check-if-the-device-supports-hfp"></a>
 
-当两个设备均未能发起HFP连接时，建议观察双方设备是否支持HFP。通常，可以通过syslog，snoop log，或者air log观察设备是否支持HFP。
+### Method: Check if the Device Supports HFP
 
-#### 1 通过syslog观察设备是否支持HFP
+When neither device initiates an HFP connection, it is recommended to check whether both devices support HFP. Typically, whether a device supports HFP can be observed through syslog, snoop logs, or air interface logs.
 
-典型log如下：
+#### 1. Check if the Device Supports HFP via Syslog
 
-* HFP HF 服务注册成功
-```
+Typical logs are as follows:
+
+* Successful registration of HFP HF service
+```text
 [service_manager]: HFP-HF service register success
 ```
-* HFP HF 服务开启成功
-```
+
+* Successful startup of HFP HF service
+```text
 [service_manager]: service_on_startup {HFP-HF} start ret:1
 ```
-* HFP AG 服务注册成功
-```
+
+* Successful registration of HFP AG service
+```text
 [service_manager]: HFP-AG service register success
 ```
-* HFP AG 服务开启成功
-```
+
+* Successful startup of HFP AG service
+```text
 [service_manager]: service_on_startup {HFP-AG} start ret:1
 ```
 
-#### 2 通过snoop log或air log观察双方设备是否支持HFP
+#### 2. Check if Both Devices Support HFP via Snoop Logs or Air Logs
 
-典型log如下：
+Typical logs are as follows:
 
-* SDP中，声明支持HFP-HF角色
+* SDP declares support for HFP-HF role
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_sdp.png" alt="snoop:HFP-AG服务" width="50%">
+![snoop: HFP-AG Service](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_sdp.png)
 
-* SDP中，声明支持HFP-AG角色
+* SDP declares support for HFP-AG role
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_sdp.png" alt="snoop:HFP-HF服务" width="50%">
+![snoop: HFP-HF Service](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_sdp.png)
 
-<a id="方法：观察是否建立了SCO连接"></a>
+<a id="method-check-if-the-sco-connection-is-established"></a>
 
-### 方法：观察是否建立了SCO连接
+### Method: Check if the SCO Connection is Established
 
-两台设备之间传输通话语音需要建立SCO连接。通常，可以通过syslog，snoop log，或者air log观察SCO是否建立成功。
+Establishing a SCO connection is required for transmitting voice during a call between two devices. Typically, whether the SCO connection is successfully established can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察是否建立了SCO连接
-* HFP HF SCO建立完成并通知Media
-```
+#### 1. Check if the SCO Connection is Established via Syslog
+
+* HFP HF SCO establishment complete and notification to Media
+```text
 [hf_stm]: Enter State=AudioOn, Peer=[AA:AA:AA:AA:AA:AA]
 ```
-* HFP AG SCO建立完成并通知Media
-```
+
+* HFP AG SCO establishment complete and notification to Media
+```text
 [ag_stm]: Enter State=AudioOn, Peer=[AA:AA:AA:AA:AA:AA]
 ```
-<a id="方法：观察是否向Media设置了SCO音频参数"></a>
 
-### 方法：观察是否向Media设置了SCO音频参数
+<a id="method-check-if-sco-audio-parameters-are-set-for-media"></a>
 
-AG和HF都需要在SCO建立完成之后向Media设置了SCO音频参数，典型log如下：
-```
+### Method: Check if SCO Audio Parameters are Set for Media
+
+Both AG and HF need to set SCO audio parameters for Media after the SCO connection is established. Typical logs are as follows:
+```text
 [Media_proxy_once:430] policy:audio:0x20556fd4 HFPSampleRate set_int 16000 _ ret:0 resp:0
 [Media_proxy_once:430] policy:audio:0x20556fec AvailableDevices include sco apply ret:0 resp:0
 ```
 
-<a id="方法：观察AG端是否收到了HF端的Answer请求"></a>
+<a id="method-check-if-ag-received-hf-answer-request"></a>
 
-### 方法：观察AG端是否收到了HF端的Answer请求
+### Check if the AG Received the HF's Answer Request
 
-HF端发起Answer请求，需要向AG端发送ATA命令，通常，可以通过syslog，snoop log，或者air log观察AG是否收到了HF的Answer请求。
+After the HF initiates an Answer request, it needs to send an ATA command to the AG. Typically, whether the AG received the HF's Answer request can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察AG是否收到了HF的Answer请求
+#### 1. Check if AG Received HF Answer Request via Syslog
 
-```
+```text
 [hfp_ag]: ag_service_notify_call_answered
 ```
 
-#### 2 通过snoop log观察AG是否收到了HF的Answer请求
+#### 2. Check if AG Received HF Answer Request via Snoop Logs
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_ata.png" alt="snoop:HFP-HF-ATA" width="50%">
+![snoop: HFP-HF-ATA](img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_ata.png)
 
-<a id="方法：观察HF端是否收到了AG端的来电通知"></a>
+<a id="method-check-if-the-hf-received-the-ag-s-incoming-call-notification"></a>
 
-### 方法：观察HF端是否收到了AG端的来电通知
+### Method: Check if the HF Received the AG's Incoming Call Notification
 
-AG端收到来电时，需要向HF端发送+CIEV和RING指令，AG端还需要在+CLCC中描述来电详细信息，通常，可以通过syslog，snoop log，或者air log观察HF端是否收到了AG端的来电通知。
+When the AG receives an incoming call, it needs to send +CIEV and RING commands to the HF. The AG also needs to describe the incoming call details in +CLCC. Typically, whether the HF received the AG's incoming call notification can be observed through syslog, snoop logs, or air interface logs.
 
-#### 1 通过syslog观察HF端是否收到了AG端的来电通知
+#### 1. Check if HF Received AG Incoming Call Notification via Syslog
 
-```
+```text
 [hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_CALLSETUP
 [hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_RING_INDICATION
 [hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_CURRENT_CALLS
 ```
 
-<a id="方法：观察HF端是否通知了应用AG端有来电"></a>
+<a id="method-check-if-hf-notified-the-application-of-an-incoming-call-from-ag"></a>
 
-### 方法：观察HF端是否通知了应用AG端有来电
+### Method: Check if the HF Notified the Application of an Incoming Call from the AG
 
-HF端收到AG端的来电通知后，需要将电话状态通知给应用，通常，可以通过syslog观察HF端是否通知了应用AG端有来电。
+After the HF receives the AG's incoming call notification, it needs to notify the application of the call status. Typically, whether the HF notified the application of the AG's incoming call can be observed through syslog.
 
-#### 1 通过syslog观察HF端是否通知了应用AG端有来电
+#### 1. Check if HF Notified the Application of the AG's Incoming Call via Syslog
 
-```
+```text
 [hfp_hf]: hf_service_notify_callsetup
 [hfp_hf]: hf_service_notify_call_state_changed
 ```
 
-## 典型问题
+# Typical Issues
 
-<a id="问题：AG端接通电话，HF端通话无声"></a>
+### Issue: AG Answers Call, but HF Has No Voice
 
-### 问题：AG端接通电话，HF端通话无声
+The issue of the AG answering a call but the HF having no voice can be caused by multiple reasons. Consider the following troubleshooting methods:
 
-AG端接通电话，HF端通话无声的问题可能有多种原因导致，可考虑的定位方法包括：
+* [Check if the HFP Connection is Established](#method-check-if-the-hfp-connection-is-established)
 
-* [观察是否建立了HFP连接](#方法：观察是否建立了HFP连接)
+  * If at least one of the devices initiates a connection but it fails, compare it with typical logs to analyze the reason for the connection failure.
 
-  * 若双方设备中，至少一方发起了连接，但连接失败，建议对比典型log，分析连接失败的原因。
+  * If neither device initiates the above connection, proceed to [Check if Both Devices Support HFP](#method-check-if-the-device-supports-hfp).
 
-  * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持HFP](#方法：观察设备是否支持HFP)。
+* [Check if Both Devices Have Established an SCO Connection](#method-check-if-the-sco-connection-is-established)
 
-* [观察双方设备是否建立了SCO连接](#方法：观察是否建立了SCO连接)
+  * If the HFP connection is successful, observe whether both devices have established an SCO connection. Typically, the AG device should initiate the SCO connection, and on the AG side, the App usually initiates the SCO connection. (In some scenarios, the stack initiates it on its own, which requires source code analysis.)
 
-  * 若HFP连接成功，建议观察双方设备是否建立了SCO连接，通常，应当由AG设备发起SCO连接，在AG侧，通常由App发起SCO连接。（部分场景协议栈自己发起，需结合源码分析）。
-  * 若双方均未能发起SCO连接，建议检查AG侧App为什么没有发起SCO连接。
-  * 若发起SCO连接，但是连接失败，建议对比典型log，分析失败原因。
-  * 若SCO建立成功，建议[观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)。
-* [观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)
-  * 若蓝牙成功设置了SCO音频参数，则蓝牙侧完成了音频传输的必要流程，建议Vela Media侧观察无声的原因。
-  * 若未设置SCO音频参数，则检查是蓝牙未发送给Meida，还是发了但是卡在了和Media的跨进程通信。
+  * If neither party initiates the SCO connection, check why the AG-side App did not initiate the SCO connection.
 
+  * If the SCO connection is initiated but fails, compare it with typical logs to analyze the reason for the failure.
 
-<a id="问题：HF端接通电话，HF端无声"></a>
+  * If the SCO connection is successfully established, proceed to [Check if SCO Audio Parameters are Set for Media](#method-check-if-sco-audio-parameters-are-set-for-media).
 
-### 问题：HF端接通电话，HF端无声
+* [Check if SCO Audio Parameters are Set for Media](#method-check-if-sco-audio-parameters-are-set-for-media)
 
-* [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
-  * 若AG端未收到HF端的Answer请求，则检查syslog，snoop或空口log分析原因。
-  * 若AG端收到了HF端的Answer请求，则参考[问题：AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
+  * If the Bluetooth successfully sets the SCO audio parameters, the necessary process for audio transmission on the Bluetooth side is complete. Investigate the reason for no sound on the Vela Media side.
 
-<a id="问题：作为AG端，不能受HF端控制接听电话"></a>
+  * If the SCO audio parameters are not set, check whether the Bluetooth did not send them to Media or whether they were sent but got stuck in the inter-process communication with Media.
 
-### 问题：作为AG端，不能受HF端控制接听电话
+### Issue: HF Answers Call, but HF Has No Voice
 
-* [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
-  * 若AG端未收到Answer请求，则检查对端设备分析原因。
-  * 若AG端收到了HF端的Answer请求，则需要Telephony模块协助分析。
-  * 若AG端syslog没收到HF端的Answer请求，但snoop log收到了HF端的Answer请求，则需要打开协议栈log，根据协议栈代码分析Answer失败的原因。
+* [Check if the AG Received the HF's Answer Request](#method-check-if-ag-received-hf-answer-request)
 
-<a id="问题：作为HF端，AG端来电，HF端无来电显示"></a>
+  * If the AG did not receive the HF's Answer request, analyze the reason by checking syslog, snoop, or air interface logs.
 
-### 问题：作为HF端，AG端来电，HF端无来电显示
+  * If the AG received the HF's Answer request, refer to [Issue: AG Answers Call, but HF Has No Voice](#issue-ag-answers-call-but-hf-has-no-voice) to analyze the reason for no sound on the HF side.
 
-* [观察是否建立了HFP连接](#方法：观察是否建立了HFP连接)
+### Issue: As AG, Cannot Answer Calls Controlled by HF
 
-  * 若双方设备中，至少一方发起了连接，但连接失败，建议对比典型log，分析连接失败的原因。
+* [Check if the AG Received the HF's Answer Request](#method-check-if-ag-received-hf-answer-request)
 
-  * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持HFP](#方法：观察设备是否支持HFP)。
+  * If the AG did not receive the Answer request, analyze the reason by checking the remote device.
 
-* [观察HF端是否收到了AG端的来电通知](#方法：观察HF端是否收到了AG端的来电通知)
-  * 如果HF端未收到AG端的来电通知，则检查syslog，snoop或空口log分析原因。
-  * 如果HF端收到了AG端的来电通知，建议[观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)。
+  * If the AG received the HF's Answer request, the Telephony module needs to assist in the analysis.
 
-* [观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)
-  * 如果HF端未上报电话状态，则检查syslog，snoop或空口log分析原因。
-  * 如果HF端上报了电话状态，则需要Telephony模块协助分析。
+  * If the AG's syslog did not receive the HF's Answer request, but the snoop log did, open the stack log and analyze the reason for the Answer failure based on the stack code.
 
-# 数据传输问题
+### Issue: As HF, AG Incoming Call, but HF Has No Incoming Call Display
 
-本章介绍数据传输（GATT、 SPP）高吞吐传输过程中相关问题常用的分析、定位方法。
-GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。通常，主动发起连接的设备为client，被动接收连接的设备为server。设备可以同时充当client和server。GATT主要应用的高吞吐场景为，IOS OTA数据传输。
+* [Check if the HFP Connection is Established](#method-check-if-the-hfp-connection-is-established)
 
-## 分析方法
+  * If at least one of the devices initiates a connection but it fails, compare it with typical logs to analyze the reason for the connection failure.
 
-<a id="方法：观察client设备是否发起过Exchange_MTU规程"></a>
+  * If neither device initiates the above connection, proceed to [Check if Both Devices Support HFP](#method-check-if-the-device-supports-hfp).
 
-### 方法：观察client设备是否发起过Exchange_MTU规程
+* [Check if the HF Received the AG's Incoming Call Notification](#method-check-if-hf-received-ag-incoming-call-notification)
 
-#### 1 通过syslog观察client设备是否发起过Exchange_MTU规程
+  * If the HF did not receive the AG's incoming call notification, analyze the reason by checking syslog, snoop, or air interface logs.
 
-在连接建立完成后，client端一般会主动发起exchange_mtu规程，典型syslog如下：
-```
+  * If the HF received the AG's incoming call notification, proceed to [Check if the HF Notified the Application of an Incoming Call from the AG](#method-check-if-hf-notified-the-application-of-an-incoming-call-from-ag).
+
+* [Check if the HF Notified the Application of an Incoming Call from the AG](#method-check-if-hf-notified-the-application-of-an-incoming-call-from-ag)
+
+  * If the HF did not report the call status, analyze the reason by checking syslog, snoop, or air interface logs.
+
+  * If the HF reported the call status, the Telephony module needs to assist in the analysis.
+
+# Data Transmission Issues
+
+This chapter introduces common analysis and troubleshooting methods for issues related to high-throughput data transmission (GATT, SPP).
+
+GATT is the Generic Attribute Profile for Bluetooth Low Energy, featuring two roles: client and server. Typically, the device that initiates the connection is the client, and the device that passively accepts the connection is the server. A device can act as both a client and a server. GATT is mainly applied in high-throughput scenarios such as iOS OTA data transmission.
+
+## Analysis Methods
+
+<a id="method-check-if-client-initiated-exchange-mtu"></a>
+
+### Method: Check if the Client Device Initiated the Exchange_MTU Procedure
+
+#### 1. Check if the Client Device Initiated the Exchange_MTU Procedure via Syslog
+
+After the connection is established, the client usually initiates the exchange_mtu procedure. Typical syslog is as follows:
+```text
 [bttool] gatts_mtu_changed_callback, addr:AA:AA:AA:AA:AA:AA, mtu:514
 ```
-MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
-```
+If the MTU is 20, it indicates that the client did not initiate the exchange_mtu procedure, as shown in the syslog:
+```text
 [bttool] gatts_mtu_changed_callback, addr:AA:AA:AA:AA:AA:AA, mtu:20
 ```
 
-#### 2 通过snoop log观察client设备是否发起过Exchange_MTU规程
+#### 2. Check if the Client Device Initiated the Exchange_MTU Procedure via Snoop Log
 
-典型log如下：
+Typical log is as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/gatt/exchange_mtu.png" alt="snoop:GATT_exchange_mtu" width="50%">
+![snoop: GATT Exchange MTU](img/how_to_analyze_bluetooth_issues/gatt/exchange_mtu.png)
 
-<a id="#方法：观察当前空口环境是否复杂"></a>
+<a id="method-check-if-air-interface-is-complex"></a>
 
-### 方法：观察当前空口环境是否复杂
+### Method: Check if the Current Air Interface Environment is Complex
 
-蓝牙使用的2.4GHz ISM频段（2400-2483.5MHz）是免许可的公共频段，广泛用于Wi-Fi、微波炉、ZigBee、无线摄像头等设备。这些设备同时工作时会产生同频干扰，将会破坏数据包的完整性或者丢包现象，最终表现为空口环境中的高重传率。
+The 2.4GHz ISM band used by Bluetooth (2400-2483.5MHz) is an unlicensed public band widely used by devices such as Wi-Fi, microwave ovens, ZigBee, and wireless cameras. Simultaneous operation of these devices can cause co-channel interference, leading to packet corruption or loss, ultimately resulting in a high retransmission rate in the air interface environment.
 
-#### 1 通过snoop log观察当前空口环境是否复杂
+#### 1. Check if the Current Air Interface Environment is Complex via Snoop Log
 
-可以从图中的粉色柱体看到整个传输过程中的重传率，如下代表信道质量尚可
+The pink bars in the figure show the retransmission rate throughout the transmission process. The following indicates acceptable channel quality:
 
-<img src="img/how_to_analyze_bluetooth_issues/gatt/channel_quality.png" alt="snoop:信道传输质量" width="50%">
+![snoop: Channel Transmission Quality](img/how_to_analyze_bluetooth_issues/gatt/channel_quality.png)
 
-## 典型问题
+## Typical Issues
 
-<a id="问题：GATT传输数据吞吐率过低"></a>
+<a id="Issue: Low GATT Data Throughput"></a>
 
-### 问题：GATT传输数据吞吐率过低
+### Issue: Low GATT Data Throughput
 
-GATT传输数据吞吐率过低的问题可能有多种原因导致，可考虑的定位方法包括：
+Low GATT data throughput can be caused by multiple reasons. Consider the following troubleshooting methods:
 
-* [观察client设备是否发起过Exchange_MTU规程](方法：观察client设备是否发起过Exchange_MTU规程)
+* [Check if the Client Device Initiated the Exchange_MTU Procedure](#method-check-if-client-initiated-exchange-mtu)
 
-  * 若双方设备未协商过MTU，则控制client端主动发起exchange MTU流程。
+  * If both devices have not negotiated the MTU, ensure the client initiates the exchange MTU process.
 
-* [观察当前空口环境是否复杂](#方法：观察当前空口环境是否复杂)
+* [Check if the Current Air Interface Environment is Complex](#method-check-if-air-interface-is-complex)
 
-  * 若当前空口环境恶劣导致重传率过高，考虑更换环境进行测试验证。
+  * If the current air interface environment is poor, leading to a high retransmission rate, consider changing the environment for testing.
 
-# 控制拍照问题
+# Camera Control Issues
 
-## 分析方法
+## Analysis Methods
 
-<a id="方法：观察HID通道连接是否成功"></a>
+<a id="method-check-if-hid-channel-connection-is-successful"></a>
 
-### 方法：观察HID通道连接是否成功
+### Method: Check if the HID Channel Connection is Successful
 
-#### 1. 通过syslog观察HID通道连接是否成功
+#### 1. Check if the HID Channel Connection is Successful via Syslog
 
-如下是典型syslog，通过state字段可以看到HID通道连接成功，其中state字段为1表示连接中，2表示连接成功
+The following is a typical syslog, where the state field indicates a successful HID channel connection. A state value of 1 indicates connecting, and 2 indicates a successful connection.
 
 ```text
 [bttool> hidd connect a4:cc:b3:xx:xx:xx
@@ -1884,54 +1909,52 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br, state:2
 ```
 
-#### 2. 通过Airlog或者Snoop log观察HID Control L2CAP Channel是否连接成功
+#### 2. Check if the HID Control L2CAP Channel is Connected via Airlog or Snoop Log
 
-如下是典型snoop log，通过蓝色柱体可以看到HID 控制L2CAP Channel连接成功，L2CAP Connection Request和L2CAP Connection Response 对应Channels的连接事件：
+The following is a typical snoop log, where the blue bars indicate a successful connection of the HID Control L2CAP Channel. The L2CAP Connection Request and L2CAP Connection Response correspond to the connection events of the Channels:
 
-<img src="img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_control_connection.png" alt="snoop:HID L2CAP 控制Channel连接成功" width="50%">
+![snoop: HID L2CAP Control Channel Connection Success](img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_control_connection.png)
 
+#### 3. Check if the HID Interrupt L2CAP Channel is Connected via Airlog or Snoop Log
 
-#### 3. 通过Airlog或者Snoop log观察HID Interrupt L2CAP Channel是否连接成功
+The following is a typical snoop log, where the blue bars indicate a successful connection of the HID Interrupt L2CAP Channel. The L2CAP Connection Request and L2CAP Connection Response correspond to the connection events of the Channels:
 
-如下是典型snoop log，通过蓝色柱体可以看到HID 中断L2CAP Channel连接成功，L2CAP Connection Request和L2CAP Connection Response 对应Channels的连接事件：
+<a id="method-check-if-hid-channel-is-disconnected-by-watch-or-phone"></a>
 
-<a id="方法：观察HID通道手表还是手机断开HID通道"></a>
+### Method: Check if the HID Channel is Disconnected by the Watch or Phone
 
-### 方法：观察HID通道手表还是手机断开HID通道
+#### 1. Check if the Remote Party Disconnected the HID Control or Interrupt L2CAP Channel via Airlog or Snoop Log
 
-#### 1. 通过通过Airlog或者Snoop log观察是否对方断开HID Control或者Interrupt L2CAP Channel
+The following is a typical snoop log, where the blue bars indicate a disconnection of the HID L2CAP Channel. The L2CAP Disconnection Request and L2CAP Disconnection Response correspond to the disconnection events of the Channels:
 
-如下是典型snoop log，通过蓝色柱体可以看到HID L2CAP Channel连接断开，L2CAP Disconnection Request和L2CAP Disconnection Response 对应Channels的断开事件：
+![snoop: HID L2CAP Channel Disconnection](img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_disconnection.png)
 
-<img src="img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_disconnection.png" alt="snoop:HID L2CAP Channel连接断开" width="50%">
+It can be seen that the HID L2CAP Channel connection is disconnected, with the phone side actively initiating the disconnection of the L2CAP channel.
 
-可以看到，HID L2CAP Channel连接断开，手机端主动发起断开L2CAP通道。
+<a id="method-check-if-number-of-paired-bluetooth-devices-exceeds-7"></a>
 
-<a id="方法：手机蓝牙设备绑定数量是否超过7个"></a>
+### Method: Check if the Number of Paired Bluetooth Devices on the Phone Exceeds 7
 
-### 方法：手机蓝牙设备绑定数量是否超过7个
+Go to Settings -> Bluetooth -> Paired Bluetooth Devices and check if the number of paired Bluetooth devices on the phone exceeds 7. If so, unpair some Bluetooth devices on the phone.
 
-进入设置->蓝牙->手机蓝牙设备，查看手机蓝牙设备绑定数量是否超过7个。若是，则需要解绑手机蓝牙设备。
+## Typical Issues
 
-## 典型问题
+### Issue: Watch Cannot Control Phone Camera
 
-<a id="问题：手表无法控制手机拍照"></a>
+Typically, the following methods can be used to observe whether there is an ACL connection or HID L2CAP connection between both parties, which may prevent the watch from controlling the phone camera:
 
-### 问题：手表无法控制手机拍照
+* [Check if the HID Channel Connection is Successful](#method-check-if-hid-channel-connection-is-successful)
 
-通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察双方是否有ACL连接、 HID L2CAP连接等，导致无法控制手机拍照。
+  * If the HID L2CAP channel is not connected, open the stack syslog to further confirm whether the watch initiated the HID control channel establishment process.
+  * If the HID L2CAP channel is connected, further confirm whether the phone side actively disconnected.
 
-* [观察HID通道连接是否成功](#方法：观察HID通道连接是否成功)
+* [Check if the HID Channel is Disconnected by the Watch or Phone](#method-check-if-hid-channel-is-disconnected-by-watch-or-phone)
 
-  * 若是HID L2CAP通道没有连接成功，则打开协议栈syslog，进一步确认手表是否发起HID控制通道建立过程。
-  * 若是HID L2CAP通道连接成功，则进一步确认是否是手机端主动断开连接。
+  * If the watch side disconnected, open the stack syslog for further investigation.
+  * If the phone side disconnected, check if the number of paired Bluetooth devices on the phone exceeds 7.
 
-* [观察HID通道手表还是手机断开HID通道](#方法：观察HID通道手表还是手机断开HID通道)
+* [Check if the Number of Paired Bluetooth Devices on the Phone Exceeds 7](#method-check-if-number-of-paired-bluetooth-devices-exceeds-7)
 
-  * 若是手表端断开连接，则打开协议栈syslog进一步排查。
-  * 若是手机端断开连接，则进一步手机蓝牙设备绑定数量是否超过7个。
-
-* [手机蓝牙设备绑定数量是否超过7个](#方法：手机蓝牙设备绑定数量是否超过7个)
-
-  * 若是手机蓝牙设备绑定数量超过7个，则需要解绑手机蓝牙设备。
-  * 否则，则检查手机端是否支持HID，让手机同学进一步分析。
+  * If the number of paired Bluetooth devices on the phone exceeds 7, unpair some Bluetooth devices on the phone.
+  * Otherwise, check if the phone supports HID and have the phone team further analyze the issue.
+  
