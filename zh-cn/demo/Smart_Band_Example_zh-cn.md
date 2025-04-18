@@ -1,17 +1,17 @@
-# 手环 Bandx Demo
+# 手环 Bandx
 
 \[ [English](../../en/demo/Smart_Band_Example.md) | 简体中文 \]
 
 ## 简介
 Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、心率、秒表、睡眠、运动、设置、手电筒，分辨率为 194*368。可以在 `apps/packages/demos/bandx/` 目录中了解有关 bandx 的更多详细信息。
 
-本文介绍如何在 openvela Emulator 上运行该示例。
+本文介绍如何在模拟器上运行该示例。
 
 ## 前提条件
 
-1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
@@ -152,4 +152,4 @@ sudo apt install android-tools-adb
 
 #### 解决方案
 
-请按 [步骤三](#步骤三-启动模拟器并推送资源) 进行资源推送。
+请按[步骤三](#步骤三-启动模拟器并推送资源)进行资源推送。

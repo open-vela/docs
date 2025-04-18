@@ -6,7 +6,7 @@
 
 在安装完 openvela 所需软件包及下载完 openvela 源码后，您可以将 openvela 源码编译成可以在开发板上运行的二进制文件。
 
-### 1、初始化配置
+### 初始化配置
 
 第一步是基于已存在的配置为目标开发板初始化 openvela 配置。
 
@@ -16,4 +16,4 @@
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
 ```
 
-下一步若选取 openvela Emulator 运行 openvela，参阅 [使用 openvela Emulator 运行 openvela](./Run_Vela_on_Vela_Emulator_zh-cn.md)。
+下一步若选取模拟器运行 openvela，请参阅[在模拟器上运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。

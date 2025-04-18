@@ -1,4 +1,4 @@
-# 使用 ifconfig 命令配置网卡
+# ifconfig
 
 ## 一、概述
 

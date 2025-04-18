@@ -56,28 +56,28 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 参数说明
 
-1. **std**
+1. std
 
     表示时区缩写，由三个或三个以上的字符组成。例如：
 
     - CST：中国标准时间。
     - EST：东部标准时间。
 
-2. **offset**
+2. offset
 
     - 当前时区与 UTC 的偏移量。
     - 格式为 `±hh:mm:ss`，例如 `+8:00:00` 表示东八区（UTC+8）。
 
-3. **dst**（可选）
+3. dst（可选）
 
     表示夏令时时区缩写。
 
-4. **offset**（可选）
+4. offset（可选）
 
     - 夏令时相对于 UTC 的偏移量。
     - 如果省略，默认比标准时间提前 1 小时。
 
-5. **start[/time]，end[/time]**（可选）
+5. start[/time]，end[/time]（可选）
 
     表示夏令时开始和结束规则：
 
@@ -98,8 +98,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
     - `/Asia/Shanghai`：绝对路径，表示直接指定时区文件的完整路径。
     - `:Asia/Shanghai`：同时支持绝对路径和系统时区目录下的相对路径。
 
-2. 解析规则。
-   找到时区文件后，会根据 `tzfile` 格式解析文件内容，加载对应的时区信息。
+2. 解析规则：找到时区文件后，会根据 `tzfile` 格式解析文件内容，加载对应的时区信息。
 
 ### 2、`zoneinfo` 制作与挂载说明
 
@@ -107,7 +106,7 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 1. `tzfile` 格式
 
-    - `zoneinfo` 使用 `tzfile` 格式存储时区信息，具体格式请参考 [tzfile文档](https://man7.org/linux/man-pages/man5/tzfile.5.html)。
+    `zoneinfo` 使用 `tzfile` 格式存储时区信息，具体格式请参考 [tzfile文档](https://man7.org/linux/man-pages/man5/tzfile.5.html)。
 
 2. 数据库下载。
 
@@ -359,71 +358,72 @@ timedatectl set-timezone Asia/Tokyo
 
 ### 2、时间转换 API
 
-`time_t timegm(FAR struct tm *tmp)`
+1. `time_t timegm(FAR struct tm *tmp)`
 
-- 描述：将 `struct tm` 转换为从 `1970-01-01 00:00:00` 至今的秒数（UTC 时间）。
+    描述：将 `struct tm` 转换为从 `1970-01-01 00:00:00` 至今的秒数（UTC 时间）。
 
-`FAR struct tm *gmtime(FAR const time_t *timep)`
+2. `FAR struct tm *gmtime(FAR const time_t *timep)`
 
-- 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用 UTC 时间表示。
-- 说明：`gmtime_r` 是线程安全版本。
+    - 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用 UTC 时间表示。
 
-`time_t mktime(FAR struct tm *tp)`
+    - 说明：`gmtime_r` 是线程安全版本。
 
-描述：将 `struct tm` 转换为依据本地时区的秒数。
+3. `time_t mktime(FAR struct tm *tp)`
 
-`FAR struct tm *localtime(FAR const time_t *timep)`
+    描述：将 `struct tm` 转换为依据本地时区的秒数。
 
-- 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用本地时区表示。
-- 说明：`localtime_r` 是线程安全版本。
+4. `FAR struct tm *localtime(FAR const time_t *timep)`
 
-`FAR char *asctime(FAR const struct tm *tp)`
+    - 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用本地时区表示。
+    - 说明：`localtime_r` 是线程安全版本。
 
-- 描述：将日期和时间格式化为字符串并返回。
-- 说明：`asctime_r` 是线程安全版本。
+5. `FAR char *asctime(FAR const struct tm *tp)`
 
-`size_t strftime(FAR char *s, size_t max, FAR const char *format, FAR const struct tm *tm)`
+    - 描述：将日期和时间格式化为字符串并返回。
+    - 说明：`asctime_r` 是线程安全版本。
 
-- 描述：将 `struct tm` 中的数据按照 `format` 的格式填充到字符串 `s` 中，长度最长为 `max`。
+6. `size_t strftime(FAR char *s, size_t max, FAR const char *format, FAR const struct tm *tm)`
 
-`FAR char *strptime(FAR const char *s, FAR const char *format, FAR struct tm *tm)`
+    描述：将 `struct tm` 中的数据按照 `format` 的格式填充到字符串 `s` 中，长度最长为 `max`。
 
-- 描述：将字符串 `s` 按照 `format` 的格式解析，并初始化 `struct tm` 结构体。
+7. `FAR char *strptime(FAR const char *s, FAR const char *format, FAR struct tm *tm)`
 
-`FAR char *ctime(FAR const time_t *timep)`
+    描述：将字符串 `s` 按照 `format` 的格式解析，并初始化 `struct tm` 结构体。
 
-- 描述：返回一个表示当地时间（`localtime`）的字符串。
-- 说明：`ctime_r` 是线程安全版本。
+8. `FAR char *ctime(FAR const time_t *timep)`
 
-`double difftime(time_t time2, time_t time1)`
+    - 描述：返回一个表示当地时间（`localtime`）的字符串。
+    - 说明：`ctime_r` 是线程安全版本。
 
-- 描述：返回两次时间的差值，单位为秒。
+9. `double difftime(time_t time2, time_t time1)`
+
+    描述：返回两次时间的差值，单位为秒。
 
 ### 3、高精度时间 API
 
-`int gettimeofday(FAR struct timeval *tv, FAR struct timezone *tz)`
+1. `int gettimeofday(FAR struct timeval *tv, FAR struct timezone *tz)`
 
-- 描述：返回当前时间，包含自 `1970-01-01 00:00:00` 起的秒数和微秒数。
+    - 描述：返回当前时间，包含自 `1970-01-01 00:00:00` 起的秒数和微秒数。
 
-- 参数
-    - `tv`：指向 `struct timeval` 的指针，用于存储秒数和微秒数。
-    - `tz`：时区信息，通常传入 `NULL`。
+    - 参数
+        - `tv`：指向 `struct timeval` 的指针，用于存储秒数和微秒数。
+        - `tz`：时区信息，通常传入 `NULL`。
 
-- 示例：
+    - 示例：
 
-    ```C
-    struct timeval tv;  
-    gettimeofday(&tv, NULL);  
-    printf("Seconds: %ld, Microseconds: %ld\n", tv.tv_sec, tv.tv_usec);
-    ```
+        ```C
+        struct timeval tv;  
+        gettimeofday(&tv, NULL);  
+        printf("Seconds: %ld, Microseconds: %ld\n", tv.tv_sec, tv.tv_usec);
+        ```
 
-`int settimeofday(FAR const struct timeval *tv, FAR struct timezone *tz)`
+2. `int settimeofday(FAR const struct timeval *tv, FAR struct timezone *tz)`
 
-- 描述：设置系统时间（UTC）。
+    描述：设置系统时间（UTC）。
 
-`int clock_systime_timespec(FAR struct timespec *ts)`
+3. `int clock_systime_timespec(FAR struct timespec *ts)`
 
-- 描述：获取系统的运行时间（内核版 API）。
+    描述：获取系统的运行时间（内核版 API）。
 
 ## 八、命令说明
 
@@ -448,7 +448,7 @@ ap> date -s "May 11 11:11:21 2022"
 
 ### 4、查看本地时间
 
-（默认显示 localtime，无时区时显示 UTC）
+默认显示 localtime，无时区时显示 UTC。
 
 ```Bash
 ap> date

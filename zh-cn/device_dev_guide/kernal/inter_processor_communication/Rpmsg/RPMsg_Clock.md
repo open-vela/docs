@@ -1,4 +1,4 @@
-# RPMsg Clock 配置与使用指南
+# RPMsg Clock 使用指南
 
 ## 一、简介
 
@@ -6,10 +6,10 @@ RPMsg Clock（Remote Processor Messaging Clock）是一种基于 RPMsg 框架（
 
 ## 二、配置
 
-在使用 RPMsg Clk 时，需要确保以下配置已启用：
+在使用 RPMsg Clock 时，需要确保以下配置已启用：
 
 ```Makefile
-/* server端和clent端均需要使能如下配置 */
+/* server端和client端均需要使能如下配置 */
 CONFIG_CLK_RPMSG=y
 ```
 
@@ -66,11 +66,11 @@ const struct clk_ops_s g_clk_rpmsg_ops =
 操作流程
 
 - Client 端请求转发： `g_clk_rpmsg_ops` 中的函数实现会将请求转发给 Server 端。转发的目标由时钟源名称中的 `cpuname` 字符串确定。
-- Server 端处理请求： Server 端 完成实际的函数调用，并将结果返回给 Client 端。
+- Server 端处理请求： Server 端完成实际的函数调用，并将结果返回给 Client 端。
 
 ### 2、启用时钟的处理流程
 
-例如 `clk_rpmsg_enable` 函数会向 Server 端 发送 `CLK_RPMSG_ENABLE` 请求。以下是 `clk_rpmsg_enable` 函数的实现，它负责将启用时钟的请求从 Client 端 转发到 Server 端：
+例如 `clk_rpmsg_enable` 函数会向 Server 端发送 `CLK_RPMSG_ENABLE` 请求。以下是 `clk_rpmsg_enable` 函数的实现，它负责将启用时钟的请求从 Client 端转发到 Server 端：
 
 ```C
 static int clk_rpmsg_enable(FAR struct clk_s *clk)
@@ -105,10 +105,10 @@ static int clk_rpmsg_enable(FAR struct clk_s *clk)
 }
 ```
 
-**处理逻辑说明**
+#### 处理逻辑说明
 
 1. 获取通信端点：
-    - 函数通过 `clk_rpmsg_get_ept` 获取与目标 Server 端 的通信端点。如果通信端点不存在，则返回错误代码 `-ENODEV`。
+    - 函数通过 `clk_rpmsg_get_ept` 获取与目标 Server 端的通信端点。如果通信端点不存在，则返回错误代码 `-ENODEV`。
 2. 构造消息：
     - 函数通过 `rpmsg_get_tx_payload_buffer` 分配消息缓冲区，并将时钟名称复制到消息中。
 3. 发送请求并接收响应：
@@ -116,7 +116,7 @@ static int clk_rpmsg_enable(FAR struct clk_s *clk)
 
 ### 3、Server 端的请求处理
 
-当 Server 端 接收到 `CLK_RPMSG_ENABLE` 请求时，会调用对应的处理函数 `clk_rpmsg_enable_handler`。
+当 Server 端接收到 `CLK_RPMSG_ENABLE` 请求时，会调用对应的处理函数 `clk_rpmsg_enable_handler`。
 
 以下是消息处理函数的注册表：
 
@@ -161,7 +161,7 @@ static int clk_rpmsg_enable_handler(FAR struct rpmsg_endpoint *ept,
 }
 ```
 
-处理逻辑说明：
+#### 处理逻辑说明：
 
 1. 获取时钟实例：
     - 函数通过 `clk_rpmsg_get_clk` 获取指定名称的时钟实例。

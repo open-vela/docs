@@ -1,16 +1,16 @@
-# 音乐播放器 Demo
+# 音乐播放器
 
 \[ [English](./../../en/demo/Music_Player_Example.md) | 简体中文 \]
 
 ## 简介
 
-本文介绍如何在 openvela Emulator 中运行音乐播放器Demo。
+本文介绍如何在模拟器中运行音乐播放器 Demo。
 
 ## 前提条件
 
-1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
@@ -79,7 +79,7 @@
 
 ## 步骤三 启动模拟器并推送资源
 
-音乐播放器运行中会使用到的字体和图片资源位于`apps/packages/demos/music_player/res`中。要将这些资源推送到模拟器挂载的相应文件路径，可以按照以下步骤操作。
+音乐播放器运行中会使用到的字体和图片资源位于 `apps/packages/demos/music_player/res` 中。要将这些资源推送到模拟器挂载的相应文件路径，可以按照以下步骤操作。
 
 1. 切换到 openvela 仓库的根目录，启动模拟器：
 
@@ -179,4 +179,4 @@ music_player &
 
 2. 退出模拟器。
 
-3. 重新执行 [步骤三](#步骤三-启动模拟器并推送资源) 和 [步骤四](#步骤四-启动音乐播放器)。
+3. 重新执行[步骤三](#步骤三-启动模拟器并推送资源)和[步骤四](#步骤四-启动音乐播放器)。

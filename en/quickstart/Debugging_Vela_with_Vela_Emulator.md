@@ -1,4 +1,4 @@
-# Debugging with openvela Emulator
+# Debugging with Emulator
 
 \[ English | [简体中文](./../../zh-cn/quickstart/Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
 
@@ -11,9 +11,9 @@ sudo apt update
 sudo apt install gdb-multiarch
 ```
 
-openvela Emulator supports working with GDB via its remote connection tool (gdbstub).You can debug openvela code as if the debugging is done on real hardware with low-level tools such as JTAG.You can stop and start the virtual machine, check the status of registers and memory, and set breakpoints and watchpoints.
+Emulator supports working with GDB via its remote connection tool (gdbstub).You can debug openvela code as if the debugging is done on real hardware with low-level tools such as JTAG.You can stop and start the virtual machine, check the status of registers and memory, and set breakpoints and watchpoints.
 
-In order to use GDB, launch openvela Emulator with the “-s” and ”-S” options. The “-s” option lets openvela Emulator listen for an incoming connection from GDB on TCP port 1234, whereas the “-S” lets openvela Emulator not start the guest virtual machine until there is notification from GDB.
+In order to use GDB, launch Emulator with the “-s” and ”-S” options. The “-s” option lets Emulator listen for an incoming connection from GDB on TCP port 1234, whereas the “-S” lets Emulator not start the guest virtual machine until there is notification from GDB.
 
 To enable the connection to the GDB server, you need to send the “-qemu -S –s” parameter to “emulator.sh”.
 
@@ -46,7 +46,7 @@ Type "apropos word" to search for commands related to "word"...
 Reading symbols from nuttx/nuttx...
 ```
 
-You need to create a remote connection, so that the host’s GDB will be connected to the GDB Server of openvela Emulator.
+You need to create a remote connection, so that the host’s GDB will be connected to the GDB Server of Emulator.
 
 Once connected, debugging can be done in a simulated environment, just like how other applications are debugged.
 
@@ -188,7 +188,7 @@ Exit GDB:
 
    If you go back to the File Explorer view (Ctrl+Shift+E), you will see that Visual Studio Code has created a “.vscode” folder and added the “launch.json” file to the workspace.
 
-5. Launch openvela Emulator with the “-s” and “-S” options to use GDB.
+5. Launch Emulator with the “-s” and “-S” options to use GDB.
 
     ```bash
     ./emulator.sh vela -qemu -S -s
@@ -230,7 +230,7 @@ Exit GDB:
    Target can be created with default(just a target)
    ![007.png](images/007.png)
 
-5. Launch openvela Emulator with the `-s` and `-S` options to use gdb.
+5. Launch Emulator with the `-s` and `-S` options to use gdb.
 
     ```
     ./emulator.sh vela -qemu -S -s

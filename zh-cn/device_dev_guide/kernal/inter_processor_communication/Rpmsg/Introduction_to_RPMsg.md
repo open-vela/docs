@@ -10,7 +10,7 @@ openvela 基于 OpenAMP 实现了自己的 RPMsg 框架，但由于原有的 Ope
 
 ## 二、框架
 
-### 1、Rpmsg 架构图
+### 1、RPMsg 架构图
 
 ![img](./figures/011.svg)
 

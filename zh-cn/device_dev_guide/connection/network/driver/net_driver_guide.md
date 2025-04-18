@@ -249,7 +249,6 @@ bool netpkt_is_fragmented(FAR netpkt_t *pkt);
 
     - 网络数据包的收发处理
     - 中断的下半部处理
-    - 参考文档：[工作队列]()
 
 - `ninfo`，`nwarn`，`nerr`： 用于打印不同等级的日志（Log），便于调试网络模块。 打开网络模块的日志功能需要启用以下配置选项：
 
@@ -596,13 +595,7 @@ Where:
 - [iperf2](../network_tools/iperf2.md)
 - [iperf3](../network_tools/iperf3.md)
 
-### 3、wapi
-
-有关 wapi 的详细使用说明，请参考以下文档：
-
-- [wapi 无线配置]()
-
-### 4、tcpdump
+### 3、tcpdump
 
 有关 tcpdump 的详细使用说明，请参考以下文档：
 

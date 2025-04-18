@@ -1,4 +1,4 @@
-# 自行车码表示例
+# 自行车码表
 
 \[ [English](../../en/demo/X_Track.md) | 简体中文 \]
 
@@ -10,13 +10,13 @@
 
 代码目录位于：`apps/packages/demos/x_track`
 
-本文介绍如何在 openvela Emulator 上运行该示例。
+本文介绍如何在模拟器上运行该示例。
 
 ## 前提条件
 
-1. 搭建开发环境，请参见 [环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
+1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
 
-2. 下载源码，请参见 [下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
 
 ## 步骤一 配置项目
 
@@ -157,7 +157,7 @@ sudo apt install android-tools-adb
 
 #### 解决方案
 
-请按 [步骤三](#步骤三-启动模拟器并推送资源) 进行资源推送。
+请按[步骤三](#步骤三-启动模拟器并推送资源)进行资源推送。
 
 ### 3. 为什么没有地图显示功能
 

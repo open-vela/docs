@@ -1,4 +1,4 @@
-# IMS 操作命令
+# ims 命令
 
 ## 一、简介
 
@@ -14,7 +14,7 @@ ap> telephonytool
 
 ## 三、命令
 
-### 1、enable-ims命令
+### 1、enable-ims
 
 #### 命令说明
 

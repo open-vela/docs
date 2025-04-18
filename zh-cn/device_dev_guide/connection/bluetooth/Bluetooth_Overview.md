@@ -81,7 +81,7 @@ openvela 蓝牙目前还能够支持多种开源、闭源协议栈，如Zephyr�
 
 ### 1、蓝牙应用开发
 
-对于第三方应用开发者，可以使用 openvela  快应用 QuickApp Feature ，它是基于 QuickJS 引擎使用 C++ 实现的一系列 API 接口，为三方应用提供系统访问能力，更多详情请参见 [蓝牙接口](https://doc.quickapp.cn/features/system/bluetooth.html)。
+对于第三方应用开发者，可以使用 openvela 快应用 QuickApp Feature ，它是基于 QuickJS 引擎使用 C++ 实现的一系列 API 接口，为三方应用提供系统访问能力，更多详情请参见[蓝牙接口](https://doc.quickapp.cn/features/system/bluetooth.html)。
 
 另外，蓝牙 Framework 还提供了 NDK 接口来使用蓝牙系统的所有能力。可以参阅目录 framework/include 中的头文件获取更多信息。
 

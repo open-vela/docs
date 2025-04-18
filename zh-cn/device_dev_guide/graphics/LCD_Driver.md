@@ -1,4 +1,4 @@
-# LCD Driver
+# LCD 驱动
 
 ## 一、概述
 
@@ -104,22 +104,21 @@ struct lcd_dev_s
 
 ```C
 #ifdef CONFIG_LCD
-
-  ret = board_lcd_initialize();
-  if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: board_lcd_initialize() failed: %d\n", ret);
-    }
-
-#  ifdef CONFIG_LCD_DEV
-
-  ret = lcddev_register(0);
-  if (ret < 0)
-    {
-      syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);
-    }
-
-#  endif
+ // Initialize the LCD board
+ ret = board_lcd_initialize();
+ if (ret < 0)
+ {
+ syslog(LOG_ERR, "ERROR: board_lcd_initialize() failed: %d\n", ret);
+ }
+#ifdef CONFIG_LCD_DEV  
+    // Register the LCD device  
+    ret = lcddev_register(0);  
+    if (ret < 0)  
+    {  
+        syslog(LOG_ERR, "ERROR: lcddev_register() failed: %d\n", ret);  
+    }  
+#endif /* CONFIG_LCD_DEV */  
+#endif /* CONFIG_LCD */
 ```
 
 #### 代码说明
@@ -140,25 +139,25 @@ struct lcd_dev_s
 ```C
 struct lcd_planeinfo_s
 {
-  /* LCD Data Transfer ******************************************************/
-  //对某一行写入npixels个数据
+  /* LCD Data Transfer */
+  /* 对某一行写入npixels个数据 */
   int (*putrun)(fb_coord_t row, fb_coord_t col, FAR const uint8_t *buffer,
                 size_t npixels);
-  //更新矩形区域
+  /* 更新矩形区域 */
   int (*putarea)(fb_coord_t row_start, fb_coord_t row_end,
                  fb_coord_t col_start, fb_coord_t col_end,
                  FAR const uint8_t *buffer);
-  //读取某一行npixels个数据
+  /* 读取某一行npixels个数据 */
   int (*getrun)(fb_coord_t row, fb_coord_t col, FAR uint8_t *buffer,
                 size_t npixels);
-  //读取一个矩形区域的数据
+  /* 读取一个矩形区域的数据 */
   int (*getarea)(fb_coord_t row_start, fb_coord_t row_end,
                  fb_coord_t col_start, fb_coord_t col_end,
                  FAR uint8_t *buffer);
-  /* Plane color characteristics ********************************************
-  //工作区，每个lcd 设备一个，多个layer共享一个buffer。至少存储一行的数据(bpp * xres/8)，要和像素格式对齐
+  /* Plane color characteristics */
+  /* 工作区，每个lcd 设备一个，多个layer共享一个buffer。至少存储一行的数据(bpp * xres/8)，要和像素格式对齐 */
   uint8_t *buffer;
-  //一个像素占用的位数
+  /* 一个像素占用的位数 */
   uint8_t  bpp;
 };
 ```
