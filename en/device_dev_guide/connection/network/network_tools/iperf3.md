@@ -191,7 +191,7 @@ Run the following command to set up a regular socket server:
 
 
     ```Bash
-    # 监听IPv4
+    # listening IPv4
     iperf3 -s -4 -i 1 -B 127.0.0.1 -p 5201
     ```
 
