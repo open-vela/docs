@@ -1,4 +1,4 @@
-# RPMsg Clock 使用指南
+# RPMsg Clock 配置与使用指南
 
 ## 一、简介
 
@@ -6,10 +6,10 @@ RPMsg Clock（Remote Processor Messaging Clock）是一种基于 RPMsg 框架（
 
 ## 二、配置
 
-在使用 RPMsg Clock 时，需要确保以下配置已启用：
+在使用 RPMsg Clk 时，需要确保以下配置已启用：
 
 ```Makefile
-/* server端和client端均需要使能如下配置 */
+/* server端和clent端均需要使能如下配置 */
 CONFIG_CLK_RPMSG=y
 ```
 

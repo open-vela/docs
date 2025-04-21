@@ -16,4 +16,4 @@
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
 ```
 
-下一步若选取模拟器运行 openvela，请参阅[在模拟器上运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。
+下一步若选取 openvela Emulator 运行 openvela，请参阅[在 openvela Emulator 运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。

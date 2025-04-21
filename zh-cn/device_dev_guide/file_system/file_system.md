@@ -613,7 +613,6 @@ int nx_mount(FAR const char *source, FAR const char *target,
     目的：确定挂载点在文件系统中的位置，确保后续可以将文件系统挂载到指定路径。
 
     > 注意
-    >
     > - 挂载点必须是有效的目录节点，不能是特殊节点（如设备节点）。
     > - 如果 `inode_reserve()` 失败，可能是因为路径无效、节点已存在或内存不足。
 
@@ -640,6 +639,5 @@ int nx_mount(FAR const char *source, FAR const char *target,
     目的：完成挂载点的最终设置，使文件系统成功挂载到指定路径。
 
     > 说明
-    >
     > - 挂载完成后，用户可以通过挂载点访问文件系统中的文件和目录。
     > - 当打开挂载点 `mountpt_inode` 时，系统会根据 `i_private` 字段取出对应的文件系统信息。

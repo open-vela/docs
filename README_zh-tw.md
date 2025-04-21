@@ -37,7 +37,7 @@ openvela 支援許多不同的架構（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 1. [準備開發環境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
 2. [下载 openvela 原始碼](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
 3. [編譯 openvela 原始碼](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
-4. [在模擬器上執行並編譯程式](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+4. [在 openvela Emulator 上執行並編譯程式](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
 
 ## 子倉庫清單
 

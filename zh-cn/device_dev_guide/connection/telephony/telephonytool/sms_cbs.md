@@ -1,8 +1,8 @@
-# sms/cbs 命令
+# sms/cbs 操作命令
 
 ## 一、简介
 
-在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console，执行所有与 SMS（Short Message Service，短消息服务）和 CBS（Cell Broadcast Service，小区广播服务）相关的操作。
+在 openvela 的 NSH 命令行中，可以通过进入 `telephonytool` 命令工具的 Console，执行所有与 SMS（Short Message Service，短消息服务）和 CBS（Cell Broadcast Service，小区广播服务）相关的操作。
 
 ## 二、前提条件
 

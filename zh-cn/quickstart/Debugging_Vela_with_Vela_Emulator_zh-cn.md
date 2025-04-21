@@ -1,4 +1,4 @@
-# 使用模拟器调试
+# 使用 openvela Emulator 调试
 
 \[ [English](./../../en/quickstart/Debugging_Vela_with_Vela_Emulator.md) | 简体中文 \]
 
@@ -11,9 +11,9 @@ sudo apt update
 sudo apt install gdb-multiarch
 ```
 
-模拟器支持通过 GDB 远程连接工具（gdbstub）使用 GDB。可以像在真实硬件上使用 JTAG 等低级调试工具一样，调试 openvela 代码。可以停止和启动虚拟机，检查寄存器和内存等状态，并设置断点和观察点。
+openvela Emulator 支持通过 GDB 远程连接工具（gdbstub）使用 GDB。可以像在真实硬件上使用 JTAG 等低级调试工具一样，调试 openvela 代码。可以停止和启动虚拟机，检查寄存器和内存等状态，并设置断点和观察点。
 
-通过传递 `-s` 和 `-S` 选项启动模拟器来使用 GDB。 `-s` 选项将使模拟器在 TCP 端口 1234 上侦听来自 GDB 的传入连接，而 `-S` 将使模拟器从 GDB 获取通知前，不会启动 guest 虚拟机。
+通过传递 `-s` 和 `-S` 选项启动 openvela Emulator 来使用 GDB。 `-s` 选项将使 openvela Emulator 在 TCP 端口 1234 上侦听来自 GDB 的传入连接，而 `-S` 将使 openvela Emulator 从 GDB 获取通知前，不会启动 guest 虚拟机。
 
 要启用与 GDB Server 的连接，您需要将 `-qemu -S -s` 参数传递给 `emulator.sh`。
 
@@ -46,7 +46,7 @@ Type "apropos word" to search for commands related to "word"...
 Reading symbols from nuttx/nuttx...
 ```
 
-需要创建一个远程连接，用与主机 GDB 连接到模拟器的 GDB Server。
+需要创建一个远程连接，用与主机 GDB 连接到 openvela Emulator 的 GDB Server。
 
 连接后，可以在模拟环境中像调试其他应用程序一样进行调试。
 
@@ -188,7 +188,7 @@ d <breakpoint-number>
 
     返回文件资源管理器视图 (Ctrl+Shift+E)，可以看到 Visual Studio Code 已经创建一个“.vscode”文件夹并将“launch.json”文件添加到工作区。
 
-5. 通过传递 `-s` 和 `-S` 选项启动模拟器来使用 GDB。
+5. 通过传递 `-s` 和 `-S` 选项启动 openvela Emulator 来使用 GDB。
 
     ```bash
     ./emulator.sh vela -qemu -S -s
@@ -230,7 +230,7 @@ d <breakpoint-number>
 
     ![007.png](images/007.png)
 
-5. 通过传递 `-s` 和 `-S` 选项启动模拟器来使用 GDB。
+5. 通过传递 `-s` 和 `-S` 选项启动 openvela Emulator 来使用 GDB。
 
     ```
     ./emulator.sh vela -qemu -S -s

@@ -453,12 +453,8 @@ void note_rpmsg_initialize(void)
 
 #### 功能说明
 
-- 内核调度 `Hook` 函数。
-  
-    内核调度的 `Hook` 函数已在代码中默认添加完成，使用时无需额外添加。只需在 `menuconfig` 中修改相关配置即可启用。
-- 应用打点。
-
-    应用打点是 `sched_note` 的扩展部分，可用于应用代码中的打点功能。通过宏 `CONFIG_SCHED_INSTRUMENTATION_DUMP` 进行配置（该功能主要参考 ATRACE 的应用打点实现）。
+- 内核调度 `Hook` 函数。 内核调度的 `Hook` 函数已在代码中默认添加完成，使用时无需额外添加。只需在 `menuconfig` 中修改相关配置即可启用。
+- 应用打点 应用打点是 `sched_note` 的扩展部分，可用于应用代码中的打点功能。通过宏 `CONFIG_SCHED_INSTRUMENTATION_DUMP` 进行配置（该功能主要参考 ATRACE 的应用打点实现）。
 
 #### 示例代码
 

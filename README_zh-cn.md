@@ -6,33 +6,13 @@
 
 \[ [English](README.md) | 简体中文 | [繁體中文](README_zh-tw.md) \]
 
-# openvela 开源项目
-
 ## openvela 简介
 
 openvela 操作系统专为 AIoT 领域量身定制，以轻量化、标准兼容、安全性和高度可扩展性为核心特点。openvela 以其卓越的技术优势，已成为众多物联网设备和 AI 硬件的技术首选，涵盖了智能手表、运动手环、智能音箱、耳机、智能家居设备以及机器人等多个领域。
 
 Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星座的名字。我们选择这个名字的意义是希望与开发者一道携手，共同踏上星辰大海的征途。
 
-## 技术架构
-
-![img](images/001.png)
-
-- **内核层**
-
-    提供基础的操作系统（OS）功能，包括任务调度、跨进程间通信（IPC）、文件系统管理。此外，还提供设备驱动、轻量级 TCP/IP 协议栈和电源管理等精简高效的组件。同时，内核层支持同构多核和异构多核架构，以提升系统在不同架构下的性能支持能力。
-
-- **服务框架层**
-
-    通用的服务框架，专为扩展系统服务设计，包含连接子系统、图形子系统、多媒体子系统、安全子系统和 XPC 跨核通信能力等。该层提供灵活的服务扩展支持，是系统功能扩展的重要基础。
-
-- **维测工具：**
-
-    常用工具和维测框架，除了常见的 Logger 和 Debugger 工具外，还包含 Emulator 这一强大的高仿真设备模拟器工具。Emulator 支持全面功能仿真，涵盖 Wi-Fi、网络、Bluetooth、音视频播放、Camera、Security、GPS、Sensor、Telephony 等多种能力，同时支持 CPU 指令集仿真。
-
-    目前模拟器已支持多种产品形态，包括智慧面板、手表、手环和智能有屏音箱等。通过 Emulator 开发者可以使用 PC 端丰富的调试工具和信息，无需真实设备即可进行应用开发调试，降低开发和调试难度。
-
-## 技术优势
+## openvela 技术优势
 
 - **高度可扩展**：openvela 的设计注重模块化与可扩展性，使其能够灵活适应多样的物联网应用场景。小到仅配备 8KB RAM 的微型 BLE 模组，大到拥有 512MB RAM 的智能有屏音箱，openvela 都能提供高度可扩展的支持。
 
@@ -48,7 +28,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 硬件支持
 
-openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。关于开发板的适配案例，请参见[案例文档](./zh-cn/dev_board/Development_Board.md)。
+openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。
 
 ## 快速入门
 
@@ -57,7 +37,7 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 1. [准备开发环境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
 2. [下载 openvela 源码](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
 3. [编译 openvela 源码](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
-4. [在模拟器上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+4. [在 openvela Emulator 上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
 
 ## 子仓库列表
 
