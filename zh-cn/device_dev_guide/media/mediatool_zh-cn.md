@@ -1,4 +1,4 @@
-# Mediatool 工具使用指南
+# Mediatool 使用指南
 
 [[English](./mediatool.md) | 简体中文]
 
@@ -125,7 +125,7 @@ CONFIG_LIB_PFW=y
 - 设置音量大小：
 
     ```shell
-    volume 0 50                       //设置音量为50%
+    volume 0 50                        # 设置音量为50%
     ```
 
 ### 5、调试指令

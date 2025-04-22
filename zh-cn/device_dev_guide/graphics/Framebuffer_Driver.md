@@ -1,4 +1,4 @@
-# Framebuffer Driver
+# Framebuffer 驱动
 
 ## 一、什么是 Framebuffer
 
@@ -10,13 +10,13 @@ Framebuffer（帧缓存/显存）是一个用于存储一帧 LCD 图像数据的
 
 1. ARGB888 (32bpp)：
 
-   - 计算公式：`480 x 320 x 4 (bytes)`
-   - 大小：614,400 字节
+    - 计算公式：`480 x 320 x 4 (bytes)`
+    - 大小：614,400 字节
 
 2. RGB565 (16bpp)：
 
-   - 计算公式：`480 x 320 x 2 (bytes)`
-   - 大小：307,200 字节
+    - 计算公式：`480 x 320 x 2 (bytes)`
+    - 大小：307,200 字节
 
 ## 二、Framebuffer的显示原理
 

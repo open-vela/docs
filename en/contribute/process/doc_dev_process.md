@@ -10,8 +10,8 @@
 
 If you are responsible for developing a particular feature, you need to collaborate with the documentation team to ensure that the corresponding documentation for the feature is completed before the version is released. Otherwise, features without accompanying documentation might be removed during release.
 
-1. Contact the [documentation team's technical writer](doc_reviewer.md) to discuss documentation design.  
-2. Refer to the [documentation templates](../template) to write the accompanying documentation.
+1. Contact the [documentation team's technical writer](./doc_reviewer.md) to discuss documentation design.  
+2. Refer to the [documentation templates](https://github.com/open-vela/docs/tree/dev/zh-cn/contribute/template) to write the accompanying documentation.
 3. Draft detailed documentation for the feature, submit a PR, and include links to the relevant requirement `Issue` in the PR description.  
 
 ### 2. Submit PR for Review

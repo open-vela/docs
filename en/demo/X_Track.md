@@ -10,7 +10,7 @@ It’s a bike computer with features like speed display, distance statistics and
 
 The code directory is located at: “apps/packages/demos/x_track”
 
-This article describes how to run the example on openvela Emulator.
+This article describes how to run the example on Emulator.
 
 ## Prerequisites
 

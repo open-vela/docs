@@ -37,7 +37,7 @@ If you want to experience openvela, we provide a fully functional emulator that 
 1. [Set up the development environment](./en/quickstart/Set_up_the_development_environment.md)
 2. [Download openvela source code](./en/quickstart/Download_Vela_sources.md)
 3. [Compile openvela source code](./en/quickstart/Build_Vela_from_sources.md)
-4. [Run build artifacts on openvela Emulator](./en/quickstart/Run_Vela_on_Vela_Emulator.md)
+4. [Run build artifacts on Emulator](./en/quickstart/Run_Vela_on_Vela_Emulator.md)
 
 ## Sub-repository List  
 

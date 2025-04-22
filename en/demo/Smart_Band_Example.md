@@ -6,7 +6,7 @@
 
 Bandx is a smart band demo that incorporates watch dial, launcher, music, heart rate, stopwatch, sleep, sports, settings and flashlight, with a resolution of 194 x 368 pixels.Details about bandx are available in the “apps/packages/demos/bandx/” directory.
 
-This article describes how to run this example on openvela Emulator.
+This article describes how to run this example on Emulator.
 
 ## Prerequisites
 

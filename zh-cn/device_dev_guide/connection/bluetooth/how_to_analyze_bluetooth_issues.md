@@ -82,8 +82,8 @@
     - [方法：观察设备是否支持HFP](#方法观察设备是否支持hfp)
     - [方法：观察是否建立了SCO连接](#方法观察是否建立了sco连接)
     - [方法：观察是否向Media设置了SCO音频参数](#方法观察是否向media设置了sco音频参数)
-    - [方法：观察AG端是否收到了HF端的Answer请求](#方法观察ag端是否收到了hf端的answer请求)
-    - [方法：观察HF端是否收到了AG端的来电通知](#方法观察hf端是否收到了ag端的来电通知)
+    - [方法：观察HF是否向AG发送了Answer请求](#方法观察hf是否向ag发送了answer请求)
+    - [方法：观察AG是否向HF发送了来电信息](#方法观察ag是否向hf发送了来电信息)
     - [方法：观察HF端是否通知了应用AG端有来电](#方法观察hf端是否通知了应用ag端有来电)
   - [典型问题](#典型问题-4)
     - [问题：AG端接通电话，HF端通话无声](#问题ag端接通电话hf端通话无声)
@@ -864,9 +864,15 @@ SPP主动连接失败问题，首先需要按照《发现、连接、配对问�
 # 音频传输问题
 
 本章介绍Advanced Audio Distribution Profile（A2DP）和Audio/Video Distribution Transport Protocol（AVDTP）相关问题常用的分析、定位方法。AVDTP负责控制音频/视频的传输过程，而A2DP定义了音频数据的编码和传输规范，通过这两个协议配合工作，可以实现在蓝牙设备之间高质量的音频传输。
+
 A2DP是蓝牙音频分发配置协议，包含Source（SRC）和Sink（SNK）两个角色。通常，SRC是音频源，SNK是音频接收方。Vela蓝牙服务框架中，蓝牙音乐源设备（例如手机/手表）可以为A2DP-SRC，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为A2DP-SNK。
-AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP) Discovery过程、Get Capabilities/Get All Capabilities过程、Stream Configuration过程、Stream Configuration过程、Stream Establishment、Stream Start、以及Stream Suspend等AVDTP信令过程。AVDTP信令过程的发起方称为Initiator（INT），信令过程的接收方称为Acceptor (ACP)。当两个蓝牙设备间传输音频时，需要预先建立两条AVDTP连接。首先建立的称为AVDTP signaling连接，用于编解码参数的协商和media连接的控制；协商完成后，再次建立一条AVDTP连接，称为AVDTP media连接，用于传输音频数据。
-在Vela蓝牙协议栈之上，Vela蓝牙子系统还提供了A2DP服务层，A2DP服务于多媒体子系统中的Media服务之间存在多个传输通路，称为transport channels。这些transport channel可以分为两类：用于传输控制信令的control channel，以及用于传输音频数据的data channel。
+AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP) Discovery过程、Get Capabilities/Get All Capabilities过程、Stream Configuration过程、Stream Configuration过程、Stream Establishment、Stream Start、以及Stream Suspend等AVDTP信令过程。AVDTP信令过程的发起方称为Initiator（INT），信令过程的接收方称为Acceptor (ACP)。当两个蓝牙设备间传输音频时，需要预先建立两条AVDTP连接。首先建立的称为AVDTP signaling连接，用于编解码参数的协商和media连接的控制；协商完成后，再次建立一条AVDTP连接，称为AVDTP media连接，用于传输音频数据。A2DP和AVDTP协议栈的层级结构如下图所示
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/diagram_a2dp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="25%">
+
+在Vela蓝牙协议栈之上，Vela蓝牙子系统还提供了A2DP服务层，A2DP服务于多媒体子系统中的Media服务之间存在多个传输通路，称为transport channels。这些transport channel可以分为两类：用于传输控制信令的control channel，以及用于传输音频数据的data channel，如下图所示
+
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/diagram_a2dp_transports.png" alt="diagram:A2DP数据通路" width="25%">
 
 ## 分析方法
 
@@ -942,7 +948,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 在建立AVDTP media连接之前，需要通过Open流程打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="25%">
 
 ##### 1.5 AVDTP media连接成功
 
@@ -1122,13 +1128,13 @@ air log中基带包有两个参数可以用来判断包是否存在重传，分�
 
 设备发送的包没收到对端的回复，典型log如下：
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_no_response.png" alt="sniffer:packet with no response" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_acl_no_response.png" alt="sniffer:packet with no response" width="50%">
 
 上述log中，设备发了3次2-DH5包，前两次发送的包没有收到对端设备的回复，因此再次重传，SEQN值维持不变；第三次发送的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。再次发送新数据时，可以观察到SEQN发生了变化。
 
 设备发送的包收到了对端的回复，但回复的ARQN是NAK，典型log如下：
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_nak_response.png" alt="sniffer:packet with NAK response" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_acl_nak_response.png" alt="sniffer:packet with NAK response" width="50%">
 
 上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变；第二次的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。
 
@@ -1207,7 +1213,13 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 # 音乐播放控制问题
 
 本章介绍Audio/Vedio Remote Control Profile（AVRCP）相关问题常用的分析、定位方法。
+
 AVRCP是蓝牙音视频遥控协议，包含Controller（CT）和Target（TG）两个角色。通常，CT是控制方，TG是受控方。Vela蓝牙服务框架中，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为AVRCP-CT，蓝牙音乐源设备（例如手机/手表/手环）可以为AVRCP-TG。
+AVCTP是蓝牙音视频控制信令传输协议，协议主要由AV/C数字接口指令集发展而来，规定了控制信令的传输格式。AVRCP和AVCTP协议栈的层级结构如下图所示
+
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/diagram_avrcp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="25%">
+
+Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系统通过Media Session与各应用交互音视频控制信息，包括播放器的播放状态、播放进度等；Vela蓝牙子系统通过Media Framework和多媒体子系统交互媒体音量等信息；Vela蓝牙子系统通过蓝牙服务框架与前端应用交互歌曲名称等信息。
 
 ## 分析方法
 
@@ -1610,7 +1622,10 @@ AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要
 
 # 通话问题
 本章介绍Hands-Free Profile（HFP）相关问题常用的分析、定位方法。
-HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF）两个角色。通常，AG是音频网关，负责音频设备输入输出，典型设备为手机，HF作为音频网关的远程音频输入/输出设备，典型设备为耳机。
+
+HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF）两个角色。通常，AG是音频网关，负责音频设备输入输出，典型设备为手机，HF作为音频网关的远程音频输入/输出设备，典型设备为耳机。HFP协议栈的层级结构如下图所示
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/diagram_hfp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="25%">
 
 ## 分析方法
 
@@ -1618,7 +1633,7 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 
 ### 方法：观察是否建立了HFP连接
 
-通常，可以通过syslog，snoop log，或者air log观察是否建立了HFP连接。
+在HFP协议中，两个蓝牙设备间的连接包含多个层面。一般来说，Service Level Connection（SLC）的建立标志着HFP连接已经完成。通常，可以通过syslog，snoop log，或者air log观察是否建立了HFP连接。
 
 #### 1 通过syslog观察是否建立了HFP连接
 
@@ -1634,13 +1649,13 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 ```
 #### 2 通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因
 
-典型log如下：
-
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc.png" alt="snoop:HFP连接" width="50%">
-
-CMER命令的交互标志着SLC建立完成，可参考下图spec中SLC建立流程，其中实线为必须操作，其余为可选操作。
+在建立SLC连接的过程中，AG和HF设备需要在RFCOMM信道上交互多组AT命令，具体流程可参考下图。其中，实线箭头指代的命令为流程，虚线箭头指代的命令为可选流程。Standard Event Reporting Activation（AT+CMER）是必要流程中的最后一组命令，通常标志着SLC建立完成。
 
 <img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc_core.png" alt="snoop:HFP连接规范" width="50%">
+
+两个蓝牙设备建立HFP连接的典型log如下：
+
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc.png" alt="snoop:HFP连接" width="50%">
 
 <a id="方法：观察设备是否支持HFP"></a>
 
@@ -1688,11 +1703,12 @@ CMER命令的交互标志着SLC建立完成，可参考下图spec中SLC建立流
 两台设备之间传输通话语音需要建立SCO连接。通常，可以通过syslog，snoop log，或者air log观察SCO是否建立成功。
 
 #### 1 通过syslog观察是否建立了SCO连接
-* HFP HF SCO建立完成并通知Media
+
+* 本地设备为HF，成功建立了SCO连接
 ```
 [hf_stm]: Enter State=AudioOn, Peer=[AA:AA:AA:AA:AA:AA]
 ```
-* HFP AG SCO建立完成并通知Media
+* 本地设备为AG，成功建立了SCO连接
 ```
 [ag_stm]: Enter State=AudioOn, Peer=[AA:AA:AA:AA:AA:AA]
 ```
@@ -1700,35 +1716,51 @@ CMER命令的交互标志着SLC建立完成，可参考下图spec中SLC建立流
 
 ### 方法：观察是否向Media设置了SCO音频参数
 
-AG和HF都需要在SCO建立完成之后向Media设置了SCO音频参数，典型log如下：
+AG和HF都需要在SCO建立完成之后向Media设置SCO音频参数，包含Codec采样率和设备结点可用的信息，典型log如下：
 ```
 [Media_proxy_once:430] policy:audio:0x20556fd4 HFPSampleRate set_int 16000 _ ret:0 resp:0
 [Media_proxy_once:430] policy:audio:0x20556fec AvailableDevices include sco apply ret:0 resp:0
 ```
 
-<a id="方法：观察AG端是否收到了HF端的Answer请求"></a>
+<a id="方法：观察HF是否向AG发送了Answer请求"></a>
 
-### 方法：观察AG端是否收到了HF端的Answer请求
+### 方法：观察HF是否向AG发送了Answer请求
 
-HF端发起Answer请求，需要向AG端发送ATA命令，通常，可以通过syslog，snoop log，或者air log观察AG是否收到了HF的Answer请求。
+当HF请求AG接听来电时，HF端需要发起Answer请求。具体的，HF会向AG发送ATA命令。通常，可以通过syslog，snoop log，或者air log观察AG是否收到了HF的Answer请求。
 
-#### 1 通过syslog观察AG是否收到了HF的Answer请求
+#### 1 通过syslog观察HF是否向AG发送了Answer请求
+
+在AG端，Vela蓝牙服务有两个途径处理来自HF端的ATA命令，包括：
+
+* 通过Bluetooth Framework向上层应用发送callback，典型log包括：
 
 ```
 [hfp_ag]: ag_service_notify_call_answered
 ```
 
-#### 2 通过snoop log观察AG是否收到了HF的Answer请求
+* 通过Telephony模块直接接听电话
 
-<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_ata.png" alt="snoop:HFP-HF-ATA" width="50%">
+```
+> RIL_REQUEST_ANSWER
+```
 
-<a id="方法：观察HF端是否收到了AG端的来电通知"></a>
+在HF端，Vela蓝牙服务可以根据应用请求发送ATA命令，典型log包括：
 
-### 方法：观察HF端是否收到了AG端的来电通知
+```
+[hf_stm]: Accept incoming call
+```
 
-AG端收到来电时，需要向HF端发送+CIEV和RING指令，AG端还需要在+CLCC中描述来电详细信息，通常，可以通过syslog，snoop log，或者air log观察HF端是否收到了AG端的来电通知。
+#### 2 通过snoop log观察HF是否向AG发送了Answer请求
 
-#### 1 通过syslog观察HF端是否收到了AG端的来电通知
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ata.png" alt="snoop:HFP-ATA" width="25%">
+
+<a id="方法：观察AG是否向HF发送了来电信息"></a>
+
+### 方法：观察AG是否向HF发送了来电信息
+
+AG端收到来电时，需要向HF端发送+CIEV和RING指令，AG端还需要在+CLCC中描述来电详细信息，通常，可以通过syslog，snoop log，或者air log观察AG是否向HF发送了来电信息。
+
+#### 1 通过syslog观察AG是否向HF发送了来电信息
 
 ```
 [hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_CALLSETUP
@@ -1765,31 +1797,56 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 
 * [观察双方设备是否建立了SCO连接](#方法：观察是否建立了SCO连接)
 
-  * 若HFP连接成功，建议观察双方设备是否建立了SCO连接，通常，应当由AG设备发起SCO连接，在AG侧，通常由App发起SCO连接。（部分场景协议栈自己发起，需结合源码分析）。
-  * 若双方均未能发起SCO连接，建议检查AG侧App为什么没有发起SCO连接。
+  * 若HFP连接成功，建议观察双方设备是否建立了SCO连接，通常，应当由AG设备发起SCO连接，在AG侧，通常由App发起SCO连接。
+
+  * 若双方均未能发起SCO连接，建议在AG端App侧检查未能发起SCO连接的原因。
+
   * 若发起SCO连接，但是连接失败，建议对比典型log，分析失败原因。
+
   * 若SCO建立成功，建议[观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)。
+
 * [观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)
-  * 若蓝牙成功设置了SCO音频参数，则蓝牙侧完成了音频传输的必要流程，建议Vela Media侧观察无声的原因。
-  * 若未设置SCO音频参数，则检查是蓝牙未发送给Meida，还是发了但是卡在了和Media的跨进程通信。
+
+  * 若蓝牙成功设置了SCO音频参数，则蓝牙侧完成了音频传输的必要流程，建议在Vela Media侧观察无声的原因。
+
+  * 若未设置SCO音频参数，建议检查蓝牙和Media子系统之间的通信是否出现了异常。
 
 
 <a id="问题：HF端接通电话，HF端无声"></a>
 
 ### 问题：HF端接通电话，HF端无声
 
-* [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
-  * 若AG端未收到HF端的Answer请求，则检查syslog，snoop或空口log分析原因。
-  * 若AG端收到了HF端的Answer请求，则参考[问题：AG端接通电话，HF端通话无声](#问题：AG端接通电话，HF端通话无声)，分析HF端无声原因。
+* [观察HF是否向AG发送了Answer](#方法：观察HF是否向AG发送了Answer请求)
+
+  * 若AG端未收到HF端的Answer请求，建议对比典型log，观察HF未能发送ATA命令，或者AG未能处理ATA命令的原因。
+
+  * 若AG端收到了HF端的Answer请求，建议[观察双方设备是否支持HFP](#方法：观察设备是否支持HFP)。
+
+* [观察双方设备是否建立了SCO连接](#方法：观察是否建立了SCO连接)
+
+  * 若HFP连接成功，建议观察双方设备是否建立了SCO连接，通常，应当由AG设备发起SCO连接，在AG侧，通常由App发起SCO连接。
+
+  * 若双方均未能发起SCO连接，建议在AG端App侧检查未能发起SCO连接的原因。
+
+  * 若发起SCO连接，但是连接失败，建议对比典型log，分析失败原因。
+
+  * 若SCO建立成功，建议[观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)。
+
+* [观察是否向Media设置了SCO音频参数](#方法：观察是否向Media设置了SCO音频参数)
+
+  * 若蓝牙成功设置了SCO音频参数，则蓝牙侧完成了音频传输的必要流程，建议在Vela Media侧观察无声的原因。
+
+  * 若未设置SCO音频参数，建议检查蓝牙和Media子系统之间的通信是否出现了异常。
 
 <a id="问题：作为AG端，不能受HF端控制接听电话"></a>
 
 ### 问题：作为AG端，不能受HF端控制接听电话
 
-* [观察AG端是否收到了HF端的Answer请求](#方法：观察AG端是否收到了HF端的Answer请求)
-  * 若AG端未收到Answer请求，则检查对端设备分析原因。
-  * 若AG端收到了HF端的Answer请求，则需要Telephony模块协助分析。
-  * 若AG端syslog没收到HF端的Answer请求，但snoop log收到了HF端的Answer请求，则需要打开协议栈log，根据协议栈代码分析Answer失败的原因。
+* [观察HF是否向AG发送了Answer请求](#方法：观察HF是否向AG发送了Answer请求)
+
+  * 若AG端未收到Answer请求，建议对比典型log，观察HF未能发送ATA命令的原因。
+
+  * 若AG端收到了HF端的Answer请求，建议在Vela Telephony侧观察未能接听电话的原因。
 
 <a id="问题：作为HF端，AG端来电，HF端无来电显示"></a>
 
@@ -1801,13 +1858,17 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 
   * 若双方设备均未能发起上述连接，建议[观察双方设备是否支持HFP](#方法：观察设备是否支持HFP)。
 
-* [观察HF端是否收到了AG端的来电通知](#方法：观察HF端是否收到了AG端的来电通知)
-  * 如果HF端未收到AG端的来电通知，则检查syslog，snoop或空口log分析原因。
-  * 如果HF端收到了AG端的来电通知，建议[观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)。
+* [观察AG是否向HF发送了来电信息](#方法：观察AG是否向HF发送了来电信息)
+
+  * 若HF端未收到AG端的来电通知，建议对比典型log，观察AG未能发送来电信息的原因。
+
+  * 若HF端收到了AG端的来电通知，建议[观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)。
 
 * [观察HF端是否通知了应用AG端有来电](#方法：观察HF端是否通知了应用AG端有来电)
-  * 如果HF端未上报电话状态，则检查syslog，snoop或空口log分析原因。
-  * 如果HF端上报了电话状态，则需要Telephony模块协助分析。
+
+  * 若HF端未上报电话状态，建议对比典型log，观察callback失败的原因。
+
+  * 若HF端上报了电话状态，建议在App侧观察未能正确处理来电的原因。
 
 # 数据传输问题
 
