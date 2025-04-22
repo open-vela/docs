@@ -1,8 +1,8 @@
-# radio/modem 命令
+# Radio/Modem 操作命令
 
 ## 一、简介
 
-在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console，来执行所有与调制解调器（modem）和无线电（radio）管理相关的操作。
+`telephonytool` 是一个在 openvela 的 NSH 命令行中执行的工具，用于进入 Telephony 命令工具的控制台（Console）。通过该工具，可以执行所有与调制解调器（modem）和无线电（radio）管理相关的操作。
 
 ## 二、前提条件
 

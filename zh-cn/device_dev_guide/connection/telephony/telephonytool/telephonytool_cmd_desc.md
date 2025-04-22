@@ -1,4 +1,4 @@
-# telephonytool 命令
+# telephonytool 命令说明
 
 ## 一、简介
 

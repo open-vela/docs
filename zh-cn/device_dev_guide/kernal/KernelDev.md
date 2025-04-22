@@ -26,7 +26,7 @@ openvela 支持多种处理器架构，涵盖了主流嵌入式设备的硬件�
 
 ### 1、硬件平台支持
 
-openvela 可运行在多种嵌入式设备上，例如：
+Openvela 可运行在多种嵌入式设备上，例如：
 
 - Espressif
 - Allwinner

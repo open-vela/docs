@@ -10,7 +10,7 @@
 
 代码目录位于：`apps/packages/demos/x_track`
 
-本文介绍如何在模拟器上运行该示例。
+本文介绍如何在 openvela Emulator 上运行该示例。
 
 ## 前提条件
 
