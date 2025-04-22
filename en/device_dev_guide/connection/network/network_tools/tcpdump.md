@@ -17,7 +17,7 @@ Before using the`tcpdump `tool, the following configuration items need to be ena
 CONFIG_NET_PKT=y
 CONFIG_SYSTEM_TCPDUMP=y
 
-# Different file systems have different requirements for stacks, so we recommend that you set this parameter to 8192
+# 不同文件系统对Stack的需求有差异，建议配置为8192
 CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192 
 ```
 
@@ -30,14 +30,14 @@ CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192
 
 
 ```Bash
-Specify the name of the NIC to capture packets
+指定抓包的网卡名称
 -i interface
 --interface=interface
 
-The path to save the capture file
+保存抓包文件的路径
 -w file
 
-Sets the maximum save length for a single package. For example, for a packet that is 1KB long, you can save only the 100 bytes of the header.
+设置单个包的最大保存长度。例如：对于长度为 1KB 的数据包，可以仅保存头部的 100 字节。
 -s snaplen
 --snapshot-length=snaplen
 ```
@@ -56,7 +56,7 @@ Sets the maximum save length for a single package. For example, for a packet tha
 
 
         ```Bash
-        # Take the SIM as an example, mount the directory on the host to /data1
+        # 以SIM为例，挂载host上的目录到/data1
         mount -t hostfs -o fs=. /data1
         ```
 
@@ -73,7 +73,7 @@ Sets the maximum save length for a single package. For example, for a packet tha
 
 
      ```Bash
-    # Save the eth0 network packet to test.pcap
+           # 将eth0的网络包保存至test.pcap
            tcpdump -i eth0 -w /data1/test.pcap
       ```
 
@@ -84,7 +84,7 @@ Sets the maximum save length for a single package. For example, for a packet tha
 
 
         ```Bash
-        # Save eth0's network packet to test.pcap in the background
+        # 后台将eth0的网络包保存至test.pcap
         tcpdump -i eth0 -w /data1/test.pcap &
         ```
 
