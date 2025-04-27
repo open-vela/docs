@@ -33,7 +33,7 @@ _**【Writing Tips】**_
 _Refer to scenario-based writing, using the SCQA approach as follows:_
 
 - _S: situation – start with a familiar situation or fact._  
-- _C: complication – describe the mismatch between reality and expectations._  
+- _C: complication – describe the mismatch between reality and expectations.Highlight the mismatch between reality and expectations._  
 - _Q: question – How?_  
 - _A: answer – Our solution is..._
 
@@ -195,7 +195,7 @@ _Optional._
 
 _Optional._
 
-- _Describe key APIs involved in the development process. Use hyperlinks if possible._
+- _Describe key APIs involved in the development process. Use hyperlinks where possible._
 
 ### Development Steps
 
