@@ -54,7 +54,7 @@ openvela 已支持多种主流开发板，可参考 [Supported Platforms](https:
 1. 熟悉代码结构。 开发者需熟悉 [Vendor 代码仓](Vendor.md)的基本结构，`vendor` 目录支持通过 Git 仓库管理厂商定制化代码。目录命名通常以厂商名称命名，例如 [open-vela/vendor_template](../../../../open-vela/vendor_template) 为适配模板。
 2. 配置 Kconfig 文件。
 
-    - Kconfig：用于定义编译选项和模块依赖项。开发者需根据硬件模块和外设配置文件，确保所需功能已在 Kconfig 中启用。Kconfig 使用可参考[Kconfig 使用指南](../device_dev_guide/build/Kconfig.md)。
+    - Kconfig：用于定义编译选项和模块依赖项。开发者需根据硬件模块和外设配置文件，确保所需功能已在 Kconfig 中启用。Kconfig 使用可参考 [Kconfig 使用指南](../device_dev_guide/build/Kconfig.md)。
 
 3. 编写 Makefile。
 

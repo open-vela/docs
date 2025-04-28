@@ -35,7 +35,7 @@ openvela 和 Xiaomi Vela 基于同一套代码实现，openvela 是开源版本�
 
 推荐优先使用 `build.sh`，该脚本对编译流程进行了优化并简化了操作。
 
-### 2、 Unable to access 'https://gerrit.googlesource.com/git-repo/'
+### 2、Unable to access 'https://gerrit.googlesource.com/git-repo/'
 
 #### 问题描述
 
