@@ -5,8 +5,6 @@ on:
 
 jobs:
   stale:
-    runs-on: ubuntu-latest
-    steps:
-      uses: open-vela/public-actions/.github/workflows/stale.yml@trunk
-      secrets: inherit
+    uses: open-vela/public-actions/.github/workflows/stale.yml@trunk
+    secrets: inherit
 
