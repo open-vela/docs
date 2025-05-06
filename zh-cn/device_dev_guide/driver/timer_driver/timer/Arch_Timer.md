@@ -165,8 +165,8 @@ grep -rE "CONFIG_TIMER|CONFIG_TIMER_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH_H
 1. 分配并初始化 [struct timer_lowerhalf_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h#L227) 结构实例。
 2. 利用 [timer_register](https://github.com/open-vela/nuttx/blob/dev/drivers/timers/timer.c#L480) 函数将 `timer_lowerhalf_s` 实例注册为 Timer 驱动。
 
-   - 注册过程会生成 `/dev/timer` 设备节点。
-   - 同时将 `struct file_operations` 和 `g_timerops` 实例绑定到 `timer_lowerhalf_s` 实例。
+    - 注册过程会生成 `/dev/timer` 设备节点。
+    - 同时将 `struct file_operations` 和 `g_timerops` 实例绑定到 `timer_lowerhalf_s` 实例。
 
 在平台代码中，需要实现 `up_timer_initialize` 函数，用于调用 `up_timer_set_lowerhalf` 函数，将 `***_timer_initialize` 返回的实例绑定到系统中，作为系统定时器。
 
