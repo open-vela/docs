@@ -1,7 +1,7 @@
 # Add Hello World Example
 
 ## I Overview
-openVela is built based on the open-source operating system NuttX, which further provides a variety of complex system-level services. To make openVela more comprehensive and feature-rich, it is necessary to introduce a complete development framework or functional module. A complete development framework typically includes the following two components:
+openvela is built based on the open-source operating system NuttX, which further provides a variety of complex system-level services. To make openvela more comprehensive and feature-rich, it is necessary to introduce a complete development framework or functional module. A complete development framework typically includes the following two components:
 
 - System Applications: Internally developed system applications, usually stored in folders such as `framework/` and others.
 
@@ -21,7 +21,7 @@ The directory structure for new features and frameworks is shown in the figure b
 ```
 
 ## II Add Hello World Example
-This section describes how to add a `Hello World` example application in openVela, including the main framework, file contents, and related build configurations.
+This section describes how to add a `Hello World` example application in openvela, including the main framework, file contents, and related build configurations.
 
 ### 1. Main Framework
 The Hello World example application needs to include the following core files:
@@ -30,7 +30,7 @@ The Hello World example application needs to include the following core files:
 
 - `Kconfig`: Defines conditional compilation macros for feature trimming.
 
-- `CMakeLists.txt`: Organizes the build system for openVela using `CMake`.
+- `CMakeLists.txt`: Organizes the build system for openvela using `CMake`.
 
 - `Make.defs`: Indicates whether the current directory needs to be compiled and must be included by the parent directory.
 
@@ -159,7 +159,7 @@ nuttx/cmake/nuttx_add_application.cmake
 
 #### Makefile
 
-To add a new application in openVela, the core steps are to add the application’s entry source file to `MAINSRC` and to correctly define the following three essential parameters:
+To add a new application in openvela, the core steps are to add the application’s entry source file to `MAINSRC` and to correctly define the following three essential parameters:
 
 - `PROGNAME`: The name of the application, used when launching under `nsh`.
 
@@ -206,7 +206,7 @@ CSRCS += device_example.c
 # For C++ source files, similarly:
 # CXXSRCS += hello_main.cxx
 
-# Finally, pull in openVela’s standard application build rules
+# Finally, pull in openvela’s standard application build rules
 include $(APPDIR)/Application.mk
 ```
 
@@ -278,7 +278,7 @@ After booting, at the serial console prompt type the program name (as defined in
 
 
 ## 4. Application Auto-Start
-openVela’s startup scripts reside under `/etc`, which is packed into the image as a `romfs` and automatically mounted by `nshlib` at boot. The following explains how to enable auto-start for your application.
+openvela’s startup scripts reside under `/etc`, which is packed into the image as a `romfs` and automatically mounted by `nshlib` at boot. The following explains how to enable auto-start for your application.
 
 ### 1. Configuration Options
 In your top-level `Makefile`, ensure these options are set to support ROMFS and init scripts:
