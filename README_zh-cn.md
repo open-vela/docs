@@ -46,7 +46,8 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 硬件支持
 
-openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。关于开发板的适配案例，请参见[案例文档](./zh-cn/dev_board/Development_Board.md)。
+- openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。
+- 关于**开发板**的适配案例，请参见[案例文档](./zh-cn/dev_board/Development_Board.md)。
 
 ## 快速入门
 
@@ -69,7 +70,11 @@ openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、
 | [tests](../../../../open-vela/tests)           | 该仓库包含接口测试，具体包括多媒体、文件系统、内存管理和 socket 通信等核心 API 的测试。                                                                                                                                                                                         |
 | [docs](../../../../open-vela/docs)             | openvela 对应的开发者文档。                                                                                                                                                                                                                                                     |
 
-## 示例
+## 开发者文档
+
+- [文档中心](https://doc.openvela.com/document)
+
+## 示例教程
 
 - [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
 - [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
