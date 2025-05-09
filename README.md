@@ -28,7 +28,9 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## Supported platforms
 
-openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS, CEVA, etc.) and platforms. See the full list on the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page.
+- openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS, CEVA, etc.) and platforms.
+- Please refer to the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page for a complete list.
+- For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/STM32H750.md).
 
 ## Quick start
 
@@ -41,15 +43,15 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 ## Sub-repository List  
 
-| Sub-repository Link                                         | Description                                                  |  
-| :--------------------------------------------------------- | :--------------------------------------------------------- |  
-| [frameworks](../../../../open-vela/frameworks)            | openvela service framework: primarily includes Bluetooth, telephony, graphics, multimedia, application frameworks, security, and system service frameworks (KVDB, OTA, healthd, binder, charger, etc.). |  
-| [vendor](../../../../open-vela/vendor)                    | Drivers and frameworks provided by the original chip manufacturers.      |  
-| [nuttx](../../../../open-vela/nuttx)                      | A kernel built on the open-source real-time operating system NuttX, providing essential kernel functions, including task scheduling, inter-process communication, file systems, TCP/IP stack, device drivers, and power management, while offering a standard POSIX interface. For more information about the NuttX operating system, you can visit the [Apache NuttX](https://nuttx.apache.org/) official website. |
-| [apps](../../../../open-vela/apps)                        | `apps` is the application library for the open-source real-time operating system (NuttX), containing a series of applications and utilities designed for NuttX RTOS. These applications and tools include shell command-line tools, file system tools, network tools, etc., which can help developers develop and debug embedded systems based on NuttX RTOS more conveniently.   |  
-| [external](../../../../open-vela/external)                | Third-party libraries introduced by openvela.             |  
-| [tests](../../../../open-vela/tests)                      | This repository contains interface tests, specifically including core API tests for multimedia, file systems, memory management, and socket communication. |  
-| [docs](../../../../open-vela/docs)                        | Developer documentation for openvela.        |
+| Sub-repository Link                            | Description                                                                                                                                                                                                                                                                                                                                                                                                         |
+| :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [frameworks](../../../../open-vela/frameworks) | openvela service framework: primarily includes Bluetooth, telephony, graphics, multimedia, application frameworks, security, and system service frameworks (KVDB, OTA, healthd, binder, charger, etc.).                                                                                                                                                                                                             |
+| [vendor](../../../../open-vela/vendor)         | Drivers and frameworks provided by the original chip manufacturers.                                                                                                                                                                                                                                                                                                                                                 |
+| [nuttx](../../../../open-vela/nuttx)           | A kernel built on the open-source real-time operating system NuttX, providing essential kernel functions, including task scheduling, inter-process communication, file systems, TCP/IP stack, device drivers, and power management, while offering a standard POSIX interface. For more information about the NuttX operating system, you can visit the [Apache NuttX](https://nuttx.apache.org/) official website. |
+| [apps](../../../../open-vela/apps)             | `apps` is the application library for the open-source real-time operating system (NuttX), containing a series of applications and utilities designed for NuttX RTOS. These applications and tools include shell command-line tools, file system tools, network tools, etc., which can help developers develop and debug embedded systems based on NuttX RTOS more conveniently.                                     |
+| [external](../../../../open-vela/external)     | Third-party libraries introduced by openvela.                                                                                                                                                                                                                                                                                                                                                                       |
+| [tests](../../../../open-vela/tests)           | This repository contains interface tests, specifically including core API tests for multimedia, file systems, memory management, and socket communication.                                                                                                                                                                                                                                                          |
+| [docs](../../../../open-vela/docs)             | Developer documentation for openvela.                                                                                                                                                                                                                                                                                                                                                                               |
 
 ## Examples
 
