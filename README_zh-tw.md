@@ -53,6 +53,10 @@ Vela 這個名字源自於拉丁語【帆】，也是南方天空中形似船帆
 | [tests](../../../../open-vela/tests)           | 該倉庫包含接口測試，具體包括多媒體、文件系統、記憶體管理和 socket 通訊等核心 API 的測試。                                                                                                                                                                                    |
 | [docs](../../../../open-vela/docs)             | openvela 對應的開發者文件。                                                                                                                                                                                                                                                  |
 
+## 開發者文檔
+
+- [文檔中心](https://doc.openvela.com/document)
+
 ## 範例
 
 - [音樂播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)

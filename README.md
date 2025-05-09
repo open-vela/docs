@@ -53,7 +53,11 @@ If you want to experience openvela, we provide a fully functional emulator that 
 | [tests](../../../../open-vela/tests)           | This repository contains interface tests, specifically including core API tests for multimedia, file systems, memory management, and socket communication.                                                                                                                                                                                                                                                          |
 | [docs](../../../../open-vela/docs)             | Developer documentation for openvela.                                                                                                                                                                                                                                                                                                                                                                               |
 
-## Examples
+## Developer Documentation
+
+- [Documentation Center](https://doc.openvela.com/document)
+
+## Examples Tutorials
 
 - [Music player](./en/demo/Music_Player_Example.md)
 - [Smart band](./en/demo/Smart_Band_Example.md)
@@ -78,4 +82,3 @@ In order to better manage and respond to feedback and support requests, we recom
 - **Discussions**: If you have a broader topic or discussion, you can start a new discussion on the Discussions page.
 
 We appreciate every user's feedback and support. Communicating through the GitHub/Gitee platform is helpful for us to maintain and improve the project.
-
