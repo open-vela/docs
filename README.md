@@ -12,6 +12,20 @@ openvela is an operating system specifically crafted for the AIoT industry, with
 
 The name "Vela" is originated from the Latin term for "sail," which is also the name of the constellation resembling a sail in the southern sky. We aspire to partner with developers and set sail on a voyage through the AIoT landscape.
 
+## Technical Architecture
+
+- **Kernel Layer**
+
+    The kernel layer provides fundamental operating system functions, including task scheduling, inter-process communication (IPC), and file system management. It also supplies compact, efficient components such as device drivers, a lightweight TCP/IP protocol stack, and power management modules. This layer supports both homogeneous and heterogeneous multi-core architectures, enhancing performance support across diverse hardware platforms.
+
+- **Service Framework Layer**
+
+    The service framework layer is a general-purpose framework designed to extend system services. It includes connectivity subsystem, graphics subsystem, multimedia subsystem, security subsystem, and XPC cross-core communication capabilities. This layer provides flexible support for service expansion, serving as the essential foundation for system functional expansion.
+
+- **Maintenance and Testing Tools**
+
+    Maintenance and testing tools include common utilities and diagnostic frameworks. In addition to standard tools like Logger and Debugger, they feature the Emulator — a high-fidelity device simulator that supports full functional emulation, including CPU instruction-set simulation.  The Emulator currently supports multiple product form factors, including smart panels, smartwatches, smart bands, and smart screen speakers. By leveraging the Emulator’s PC-based debugging tools, developers can perform application development and testing without physical devices, significantly reducing both development and debugging efforts.
+
 ## Technical advantages
 
 - **Highly Scalable**: openvela has been designed to be modular and scalable, allowing it to easily adapt to a wide range of IoT applications. It can fit in a small BLE module with 32KB RAM, and scale up to a powerful smart display device with 512MB RAM, highly scalable!
