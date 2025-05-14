@@ -1,5 +1,7 @@
 # openvela 文档开发流程
 
+\[ [English](../../../en/contribute/process/doc_dev_process.md) | 简体中文 \]
+
 ## 流程图
 
 ![documentation_development_process](./images/doc_dev_process.svg)

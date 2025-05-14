@@ -1,5 +1,7 @@
 # 添加 Hello World 示例
 
+\[ [English](../../../en/demo/hello_world/Hello_World.md) | 简体中文 \]
+
 ## 一、概述
 
 openvela 基于开源操作系统 NuttX 构建，进一步提供多种系统级服务。为了使 openvela 更加完善和功能全面，需要引入完整的开发框架或功能模块。一个完整的开发框架通常包含以下两部分：

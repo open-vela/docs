@@ -1,5 +1,7 @@
 # xxx系统/模块
 
+\[ [English](../../../en/contribute/template/README-template.md) | 简体中文 \]
+
 > **注意：**
 >
 > _1、本模板提供推荐的README写作指导。_

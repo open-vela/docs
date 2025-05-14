@@ -1,5 +1,7 @@
 # xxx System/Module
 
+\[ English | [简体中文](../../../zh-cn/contribute/template/README-template.md) \]
+
 > **Note:**
 >
 > _1. This template provides recommended guidance for writing a README._

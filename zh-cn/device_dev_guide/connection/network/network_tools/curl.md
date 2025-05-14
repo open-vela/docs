@@ -1,5 +1,7 @@
 # curl 命令详解
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/curl.md) | 简体中文 \]
+
 ## 一、概述
 
 openvela 提供了内置的 `curl` 工具，这是一种基于命令行的文件传输工具。`curl` 支持通过 URL 语法进行文件的上传和下载，因此被称为综合传输工具。此外，`curl` 还包含了专为程序开发设计的库  `libcurl`，可用于构建基于 HTTP、FTP 等协议的应用程序。

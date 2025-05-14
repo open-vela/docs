@@ -1,5 +1,7 @@
 # Bluetooth Adapter "enable" Sub-command
 
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/enable.md) \]
+
 ## I. Introduction
 
 This document explains how to enable the Bluetooth adapter. Enabling the adapter is a prerequisite for executing other Bluetooth-related commands.

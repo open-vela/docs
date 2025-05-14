@@ -1,5 +1,7 @@
 # FAQ写作模板
 
+\[ [English](../../../en/contribute/template/faq_template.md) | 简体中文 \]
+
 __**FAQ = 问题现象 + 可能原因 + 处理措施**_
 
 _一般 FAQ 分为以下两类：_

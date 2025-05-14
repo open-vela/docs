@@ -1,5 +1,7 @@
 # disable 子命令
 
+\[ [English](../../../../../../en/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/disable.md) | 简体中文 \]
+
 ## 一、简介
 
 `disable` 命令用于关闭蓝牙适配器（Adapter）。如果当前有活跃的蓝牙连接，执行该命令会断开所有设备的蓝牙连接。蓝牙适配器关闭后，除以下命令外，其余 `bttool` 命令将无法使用：

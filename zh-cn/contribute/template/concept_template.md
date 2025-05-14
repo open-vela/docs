@@ -1,5 +1,7 @@
 # 所要解释的概念名称
 
+\[ [English](../../../en/contribute/template/concept_template.md) | 简体中文 \]
+
 > **注意：**
 >
 > _1、本模板提供推荐的概念类文档写作指导。_

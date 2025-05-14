@@ -1,5 +1,7 @@
 # Arch_Alarm 框架开发指南
 
+\[ [English](../../../../../en/device_dev_guide/driver/timer_driver/timer/Arch_Alarm.md) | 简体中文 \]
+
 ## 一、本文目标
 
 本文主要介绍基于 **oneshot** 驱动的 **arch_alarm** 驱动框架设计与实现，以及相关接口使用及实现说明。

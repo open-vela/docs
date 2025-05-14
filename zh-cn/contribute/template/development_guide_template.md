@@ -1,5 +1,7 @@
 # xxx子系统/模块开发指南
 
+\[ [English](../../../en/contribute/template/development_guide_template.md) | 简体中文 \]
+
 > **说明：**
 >
 > _1、本模板提供开发指南文档写作模板，需先完成需求场景分析，然后参照本模板进行写作。_

@@ -1,5 +1,7 @@
 # Build System  
 
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/build/build_system.md) \]
+
 ## I. Overview  
 
 In the current version, **openvela** uses `Makefile` to organize the build process. The main entry point for the build process is located in the `nuttx/Makefile` file. Depending on the host platform, different core build files are executed:  

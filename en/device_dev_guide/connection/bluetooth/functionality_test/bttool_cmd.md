@@ -1,5 +1,7 @@
 # bttool Command Description
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/bttool_cmd.md) \]
+
 ## I. Introduction
 
 Executed in the OpenVela NSH command line to enter the Bluetooth command tool console. Within this console, you can execute `bttool`’s built‑in sub-commands.

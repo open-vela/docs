@@ -1,5 +1,7 @@
 # iperf2
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/network_tools/iperf2.md) \]
+
 
 ##  I. Overview
 

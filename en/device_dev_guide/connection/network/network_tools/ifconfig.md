@@ -1,4 +1,7 @@
 # Configuring Network Interfaces Using the ifconfig Command
+
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/network_tools/ifconfig_cmd.md) \]
+
 ## I. Overview
 This command is primarily used for the following network interface configurations:
 

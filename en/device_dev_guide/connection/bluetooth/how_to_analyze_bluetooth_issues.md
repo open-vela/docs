@@ -3,6 +3,7 @@
 <!-- omit from toc -->
 # Table of Contents
 
+\[ English | [简体中文](../../../../zh-cn/device_dev_guide/connection/bluetooth/how_to_analyze_bluetooth_issues.md) \]
 
 - [Bluetooth Startup Issues](#bluetooth-startup-issues)
   - [Analysis Methods](#analysis-methods)

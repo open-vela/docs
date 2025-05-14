@@ -1,5 +1,7 @@
 # ifconfig
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/ifconfig.md) | 简体中文 \]
+
 ## 一、概述
 
 本命令主要用于对网卡进行如下配置：

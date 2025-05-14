@@ -1,5 +1,7 @@
 # state 子命令
 
+\[ [English](../../../../../../en/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/state.md) | 简体中文 \]
+
 ## 一、简介
 
 `state` 命令用于获取蓝牙适配器（Adapter）的当前状态。通过该命令，用户可以查看适配器的运行状态，例如是否已启用 BLE（低功耗蓝牙）或 BR/EDR（基本速率/增强数据速率）功能。

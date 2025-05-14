@@ -1,4 +1,7 @@
 # ftpd File Transfer Guide
+
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/network_tools/ftp.md) \]
+
 ## I. Overview
 The File Transfer Protocol (FTP) is a standard network protocol for transferring files between computers. It operates at Layer 7 (Application Layer) of the OSI model and Layer 4 of the TCP model, utilizing TCP (not UDP) for reliable connection-oriented data transmission.
 

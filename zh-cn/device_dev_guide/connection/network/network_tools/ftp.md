@@ -1,5 +1,7 @@
 # ftp
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/ftp.md) | 简体中文 \]
+
 ## 一、概述
 
 文件传输协议（File Transfer Protocol，FTP）是一种用于在网络上进行文件传输的标准协议。它工作在 OSI 模型的第七层（应用层）和 TCP 模型的第四层，使用 TCP 进行传输，而非 UDP。

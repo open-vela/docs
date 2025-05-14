@@ -1,5 +1,7 @@
 # tcpdump
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/network_tools/tcpdump.md) \]
+
 
 ## I. Overview
 

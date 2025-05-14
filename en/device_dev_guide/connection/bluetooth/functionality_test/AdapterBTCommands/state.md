@@ -1,5 +1,7 @@
 # Bluetooth Adapter "state" Sub-command
 
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/state.md) \]
+
 ## I. Introduction
 
 The `state` command is used to retrieve the current status of the Bluetooth adapter. With this command, users can check whether features such as BLE (Low Energy) or BR/EDR (Basic Rate/Enhanced Data Rate) are enabled.

@@ -1,5 +1,7 @@
 # xxx Subsystem/Module Development Guide
 
+\[ English | [简体中文](../../../zh-cn/contribute/template/development_guide_template.md) \]
+
 > **Note:**  
 >
 > _1. This template provides a writing framework for development guide documents. Requirement scenario analysis should be completed first, then use this template for writing._  

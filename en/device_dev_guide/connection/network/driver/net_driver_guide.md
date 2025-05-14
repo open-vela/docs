@@ -1,4 +1,7 @@
 # Network Driver Adaptation Guide
+
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/driver/net_driver_guide.md) \]
+
 ## I. Introduction to Network Driver
 OpenVela has a built-in lightweight **TCP/IP** **protocol stack** and provides a network driver framework. Through this framework, the built-in TCP/IP protocol stack can interact with chip drivers to implement network packet transmission and reception.
 

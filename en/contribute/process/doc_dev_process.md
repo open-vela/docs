@@ -1,5 +1,7 @@
 # openvela Documentation Development Process
 
+\[ English | [简体中文](../../../zh-cn/contribute/process/doc_dev_process.md) \]
+
 ## Flowchart
 
 ![documentation_development_process](./images/doc_dev_process.svg)

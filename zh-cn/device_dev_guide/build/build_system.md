@@ -1,5 +1,7 @@
 # 编译系统
 
+\[ [English](../../../en/device_dev_guide/build/build_system.md) | 简体中文 \]
+
 ## 一、概述
 
 在当前版本中，openvela 使用 Makefile 文件组织编译流程。编译的总入口位于 `nuttx/Makefile` 文件，根据编译主机平台的不同，分支执行核心编译文件：

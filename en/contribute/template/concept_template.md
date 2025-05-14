@@ -1,5 +1,7 @@
 # Name of the Concept to be Explained
 
+\[ English | [简体中文](../../../zh-cn/contribute/template/concept_template.md) \]
+
 > **Note:**
 >
 > _1. This template provides recommended writing guidelines for concept - related documents._

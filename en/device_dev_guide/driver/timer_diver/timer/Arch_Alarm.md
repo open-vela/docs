@@ -1,5 +1,7 @@
 # Arch_Alarm Framework Development Guide
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/timer_driver/timer/Arch_Alarm.md) \]
+
 ## I. Objective of This Document
 
 This document introduces the design and implementation of the **arch_alarm** driver framework based on the **oneshot** driver, along with interface usage and implementation details.

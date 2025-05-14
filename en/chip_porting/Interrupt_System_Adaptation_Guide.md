@@ -1,5 +1,7 @@
 # Interrupt System Adaptation Guide  
 
+\[ English | [简体中文](../../zh-cn/chip_porting/Interrupt_System_Adaptation_Guide.md) \]
+
 ## 1. Implementing Chip Interrupt Debugging  
 
 When debugging the chip interrupt subsystem (`bringup`), vendors need to implement a series of architecture-related functions (`arch` functions) to accomplish the following tasks:  

@@ -1,5 +1,7 @@
 # bttool 命令说明
 
+\[ [English](../../../../../en/device_dev_guide/connection/bluetooth/functionality_test/bttool_cmd.md) | 简体中文 \]
+
 ## 一、简介
 
 在 openvela的 `NSH` 命令行中执行，用于进入蓝牙命令工具的 Console。在 Console 中，可以执行 `bttool` 工具内集成的特有的子命令。

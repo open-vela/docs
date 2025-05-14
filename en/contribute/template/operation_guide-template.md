@@ -1,5 +1,7 @@
 # xxx Operation (Recommended Verb + Noun Form)
 
+\[ English | [简体中文](../../../zh-cn/contribute/template/operation_guide-template.md) \]
+
 > **Note:**  
 >
 > _1. This template provides recommended guidance for writing the operation guide document framework._  

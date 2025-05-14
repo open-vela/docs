@@ -1,5 +1,7 @@
 # 蓝牙概述
 
+\[ [English](../../../../en/device_dev_guide/connection/bluetooth/Bluetooth_Overview.md) | 简体中文 \]
+
 ## 一、简介
 
 openvela 蓝牙已经通过 Bluetooth 5.4 认证。目前支持的蓝牙能力包括：

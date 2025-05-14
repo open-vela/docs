@@ -1,5 +1,7 @@
 # 网络驱动适配指南
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/driver/net_driver_guide.md) | 简体中文 \]
+
 ## 一、网络驱动简介
 
 openvela 内置了一套轻量级的 **TCP/IP** **网络协议栈**，并提供了一套网络驱动框架。通过该框架，内置的 TCP/IP 协议栈可以与芯片驱动交互，实现网络数据包的收发。

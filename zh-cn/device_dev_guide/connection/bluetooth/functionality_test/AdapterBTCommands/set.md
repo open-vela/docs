@@ -1,5 +1,7 @@
 # set 子命令
 
+\[ [English](../../../../../../en/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/set.md) | 简体中文 \]
+
 ## 一、简介
 
 `set` 命令用于设置本地蓝牙适配器（Bluetooth Adapter）的属性。通过该命令，可以配置蓝牙设备的扫描模式、名称、设备类别等属性。

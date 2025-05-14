@@ -1,5 +1,7 @@
 # Introduction to the Network Protocol Stack
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/protocol_stack/NetProtocolStackIntro.md) \]
+
 ## I. Introduction
 
 ### 1. Functions of the OS Network Protocol Stack

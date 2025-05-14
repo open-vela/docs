@@ -1,5 +1,7 @@
 # get 子命令
 
+\[ [English](../../../../../../en/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/get.md) | 简体中文 \]
+
 ## 一、简介
 
 `get` 命令用于获取本地蓝牙适配器（Bluetooth Adapter）的属性信息。通过该命令，可以查询适配器的多种配置和状态。

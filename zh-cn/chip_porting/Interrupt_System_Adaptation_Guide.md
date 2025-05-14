@@ -1,5 +1,7 @@
 # 中断系统适配指南
 
+\[ [English](../../en/chip_porting/Interrupt_System_Adaptation_Guide.md) | 简体中文 \]
+
 ## 一、实现芯片中断调试
 
 在调试芯片中断子系统（`bringup`）时，厂商需要实现一系列与架构相关的函数（`arch` 函数），以完成以下任务：

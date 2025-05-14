@@ -1,5 +1,7 @@
 # Bluetooth Adapter "set" Sub-command
 
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/set.md) \]
+
 ## I. Introduction
 
 The `set` command is used to configure the properties of the local Bluetooth adapter. With this command, you can set attributes such as the adapter's scan mode, name, device class, and more.

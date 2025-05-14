@@ -3,6 +3,8 @@
 <!-- omit from toc -->
 # 目录
 
+\[ [English](../../../../en/device_dev_guide/connection/bluetooth/how_to_analyze_bluetooth_issues.md) | 简体中文 \]
+
 - [蓝牙启动问题](#蓝牙启动问题)
   - [分析方法](#分析方法)
     - [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)

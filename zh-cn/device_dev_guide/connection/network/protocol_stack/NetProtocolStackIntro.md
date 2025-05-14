@@ -1,5 +1,7 @@
 # 网络协议栈简介
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/protocol_stack/NetProtocolStackIntro.md) | 简体中文 \]
+
 ## 一、简介
 
 ### 1、OS 网络协议栈的功能

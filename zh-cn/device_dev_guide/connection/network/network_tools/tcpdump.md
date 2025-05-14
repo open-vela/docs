@@ -1,5 +1,7 @@
 # tcpdump
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/tcpdump.md) | 简体中文 \]
+
 ## 一、概述
 
 本文介绍了使用 `tcpdump` 工具抓取网络数据包的基本方法，包括抓包、退出、结果解读以及网卡驱动适配的相关说明。

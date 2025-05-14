@@ -1,5 +1,7 @@
 # enable 子命令
 
+\[ [English](../../../../../../en/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/enable.md) | 简体中文 \]
+
 ## 一、简介
 
 本文介绍如何启动蓝牙适配器（Adapter），这是执行其他蓝牙相关命令的前置条件。

@@ -1,5 +1,7 @@
 # iperf3
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/iperf3.md) | 简体中文 \]
+
 ## 一、概述
 
 openvela 提供了网络性能测试工具 iperf3，其功能与 iperf2 类似，支持以下特性：

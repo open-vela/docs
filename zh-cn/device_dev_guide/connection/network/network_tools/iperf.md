@@ -1,5 +1,7 @@
 # iperf
 
+\[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/iperf.md) | 简体中文 \]
+
 ## 一、概述
 
 openvela 自带的 iperf 是一款轻量级的网络性能测试工具，与 **iperf2** 兼容。它支持以下功能：

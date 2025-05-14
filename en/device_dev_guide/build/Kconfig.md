@@ -1,5 +1,7 @@
 # Kconfig User Guide
 
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/build/Kconfig.md) \]
+
 ## I. Overview
 
 `Kconfig` provides a mechanism for project configuration at compile time, supporting various types of configuration options, such as integers, strings, and booleans. Through the `Kconfig` files, developers can define the dependencies between options, configure default values, and define their combination rules.For detailed information about the `Kconfig` language, refer to the [Kconfig documentation](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt).

@@ -1,5 +1,7 @@
 # Bluetooth Adapter "disable" Sub-command
 
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/disable.md) \]
+
 ## I. Introduction
 
 The `disable` command is used to turn off the Bluetooth adapter. If active Bluetooth connections exist, executing this command will disconnect all devices. After disabling the adapter, only the following `bttool` commands remain available:  

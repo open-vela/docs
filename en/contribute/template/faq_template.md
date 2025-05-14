@@ -1,5 +1,7 @@
 # FAQ Writing Template
 
+\[ English | [简体中文](../../../zh-cn/contribute/template/faq_template.md) \]
+
 __**FAQ = Issue Phenomenon + Possible Causes + Solutions**__
 
 _In general, FAQs are divided into the following two categories:_

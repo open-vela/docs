@@ -1,5 +1,7 @@
 # Kconfig 使用指南
 
+\[ [English](../../../en/device_dev_guide/build/Kconfig.md) | 简体中文 \]
+
 ## 一、概述
 
 `Kconfig` 提供了一种支持编译时项目配置的机制，并包含多种类型的配置选项，例如整数、字符串和布尔值等。通过 `Kconfig` 文件，开发者可以定义选项之间的依赖关系、默认值及其组合方式等细节。有关 `Kconfig` 语言的具体信息，可以参考 [Kconfig 文档](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt)。

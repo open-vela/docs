@@ -1,5 +1,7 @@
 # Detailed Explanation of curl Command
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/network_tools/curl.md) \]
+
 ## I. Overview
 
 openvela provides a built-in curl tool, a command-line-based file transfer utility. curl supports file upload and download through URL syntax, making it a comprehensive transfer solution. Additionally, curl includes the libcurl library designed for software development, which enables building applications based on HTTP, FTP, and other protocols.

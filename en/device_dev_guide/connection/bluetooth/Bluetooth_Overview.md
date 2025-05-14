@@ -1,5 +1,7 @@
 # Bluetooth Overview
 
+\[ English | [简体中文](../../../../zh-cn/device_dev_guide/connection/bluetooth/Bluetooth_Overview.md) \]
+
 ## I. Introduction
 
 OpenVela Bluetooth is certified for Bluetooth 5.4. Supported Bluetooth capabilities include:

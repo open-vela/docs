@@ -1,5 +1,7 @@
 # 开发自测试框架使用指南
 
+\[ [English](../../en/test_dev_guide/openvela_testcase_dev_guide.md) | 简体中文 \]
+
 ## 一、简介
 
 openvela 为开发者提供了一套全面的开发自测试框架 cmocka，开发者可根据需求开发相关测试用例，在开发阶段提前发现缺陷，提高代码质量。本文介绍如何使用该框架开发测试用例。

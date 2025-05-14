@@ -1,5 +1,7 @@
 # Vendor Code Repository
 
+\[ English | [简体中文](../../zh-cn/chip_porting/Vendor.md) \]
+
 ## I. Overview
 
 To ensure the isolation and privacy security of vendor code, a dedicated directory named vendor is provided within the openvela codebase. This directory is intended to store the code for each vendor, with the directory name representing the vendor’s abbreviation as an identifier.

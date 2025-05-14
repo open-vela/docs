@@ -1,5 +1,7 @@
 # xxx操作（建议动词+名词形式）
 
+\[ [English](../../../en/contribute/template/operation_guide-template.md) | 简体中文 \]
+
 > **注意：**
 >
 > _1、本模板提供推荐的操作指南文档框架写作指导。_

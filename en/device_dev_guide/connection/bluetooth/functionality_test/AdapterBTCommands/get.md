@@ -1,5 +1,7 @@
 # Bluetooth Adapter "get" Sub-command
 
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/get.md) \]
+
 ## I. Introduction
 
 The `get` command retrieves properties of the local Bluetooth adapter. It allows querying multiple configurations and statuses of the adapter.  

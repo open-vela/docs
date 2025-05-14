@@ -1,5 +1,7 @@
 # How to Add a Bluetooth Driver
 
+\[ English | [简体中文](../../../../zh-cn/device_dev_guide/connection/bluetooth/how_to_add_a_bluetooth_driver.md) \]
+
 ## I. Implementing the Driver
 
 ### Overview

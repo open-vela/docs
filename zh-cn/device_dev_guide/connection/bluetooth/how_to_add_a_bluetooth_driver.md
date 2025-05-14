@@ -1,5 +1,7 @@
 # 如何添加一个蓝牙驱动
 
+\[ [English](../../../../en/device_dev_guide/connection/bluetooth/how_to_add_a_bluetooth_driver.md) | 简体中文 \]
+
 ## 一、实现驱动
 
 ### 概述
