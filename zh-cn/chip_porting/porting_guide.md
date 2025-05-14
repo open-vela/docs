@@ -293,7 +293,7 @@ void up_putc(int ch)
 
 #### 驱动模型区别与适用
 
-- arch_alarm 适用于硬件计数器超时后无需清空计数器的情况。该模型避免了重新启动计数器带来的累计误差。
+- arch_alarm 适用于硬件计数器超时后无需清空计数器的情况。该模型避免了重新启动计数器带来的累计误差，**优先推荐使用**，更多详情请参见 [Arch_Alarm 框架开发指南](../device_dev_guide/driver/timer_driver/timer/Arch_Alarm.md)。
 - arch_timer 通常适配于如系统滴答定时器（`systick`）等周期性定时器，硬件计数器在超时后需要清空并重新启动，更多详情请参见 [Arch Timer 驱动框架使用指南](../device_dev_guide/driver/timer_driver/timer/Arch_Timer.md)。
 
 #### arch_alarm 驱动适配流程
