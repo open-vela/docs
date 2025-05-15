@@ -1,4 +1,4 @@
-# 开发板适配案例
+# Development Board Application Cases
 
 \[ English | [简体中文](../../zh-cn/dev_board/Development_Board.md) \]
 
