@@ -1,5 +1,7 @@
 # New Platform Adaptation Guide
 
+\[ English | [简体中文](../../zh-cn/chip_porting/porting_guide.md) \]
+
 ## 1. Objectives of this article
 
 1. Understand the bringup process of openvela.
