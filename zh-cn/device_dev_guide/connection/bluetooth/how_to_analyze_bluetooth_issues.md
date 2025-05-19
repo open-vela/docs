@@ -7,9 +7,9 @@
 
 - [适配、启动问题](#适配启动问题)
   - [分析方法](#分析方法)
-    - [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
-    - [方法：观察syslog确定蓝牙服务是否启动](#方法观察syslog确定蓝牙服务是否启动)
-    - [方法：观察蓝牙驱动节点是否成功创建](#方法观察蓝牙驱动节点是否成功创建)
+    - [方法：观察蓝牙驱动是否注册成功](#方法观察蓝牙驱动是否注册成功)
+    - [方法：检查蓝牙服务是否启动](#方法检查蓝牙服务是否启动)
+    - [方法：检查蓝牙Enable是否成功](#方法检查蓝牙enable是否成功)
   - [典型问题](#典型问题)
     - [问题：创建蓝牙instance失败](#问题创建蓝牙instance失败)
 - [发现、连接、配对问题](#发现连接配对问题)
@@ -133,9 +133,94 @@
 
 ## 分析方法
 
-<a id="方法：观察蓝牙服务线程是否存在"></a>
+<a id="方法：观察蓝牙驱动是否注册成功"></a>
 
-### 方法：观察蓝牙服务线程是否存在
+### 方法：观察蓝牙驱动是否注册成功
+
+Vela支持丰富的设备驱动类型，包括BTH4，BTH5，BT Bridge等驱动协议，此外还支持片内蓝牙驱动，以及片外蓝牙驱动，可参考Vela蓝牙驱动文档。
+
+#### 1 观察设备节点是否存在
+
+通过`ls /dev/`命令，观察是否存在`ttyHCI0`设备节点，正常输出信息如下：
+
+```text
+openvela-ap> ls /dev
+/dev:
+ audio/
+ binder
+ ......
+ ttyHCI0
+ ......
+ uorb/
+ ......
+```
+
+#### 2 观察Vendor驱动注册成功
+
+可在Vendor主动注册函数添加debug log，观察Vendor驱动是否注册成功。
+
+<a id="方法：检查蓝牙服务是否启动"></a>
+
+### 方法：检查蓝牙服务是否启动
+
+当前Vela蓝牙服务支持两种运行模式：在应用程序进程中，也支持运行在后台。可依据使用场景来配置。若运行在后台模式运行，可通过如下步骤观察蓝牙服务是否存在。
+
+如下蓝牙bluetootd初始log，包括蓝牙log初始过程，Profile初始化过程，蓝牙驱动初始化过程，以及libuv loop初始化等过程。
+
+```text
+[    0.054300] [11] [  INFO] [ap] bluetoothd main 34
+[    0.074000] [11] [  INFO] [ap] /data/misc/bt folder create: 0
+[    0.084300] [11] [ ALERT] [ap] Framework log level: 7, Stack:0, mask:00000000, Snoop: 0
+[    0.084800] [11] [ DEBUG] [ap] [195][storage]: bt_storage_init successed
+[    0.085100] [11] [ DEBUG] [ap] [129][service_manager]: A2DP-Sink service register success
+[    0.085300] [11] [ DEBUG] [ap] [129][service_manager]: AVRCP-CT service register success
+[    0.085800] [11] [ DEBUG] [ap] [201][adapter-stm]: Enter, PrevState=(null) ---> NewState=Off
+[    0.087400] [11] [  INFO] [ap] [32][stack_manager]: Stack Info: Zblue Ver:5.4 Sal:2
+[    0.088100] [11] [  INFO] [ap] <inf> [h4_init] <406>: Bluetooth H4 driver
+[    0.088600] [11] [ DEBUG] [ap] [45][stack_manager]: stack_manager_init done
+[    0.088700] [11] [ DEBUG] [ap] [257][bt_service]: bt_service_init done
+[    0.089100] [11] [ DEBUG] [ap] [260][service_loop]: service loop running now !!!
+[    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
+[    0.090100] [11] [ DEBUG] [ap] [81][service_loop]: set_ready
+```
+
+#### 1. 确认是否启动bluetoothd
+若是通过启动脚本启动bluetoothd服务，请确rcS启动脚本是否配置：
+
+```text
+bluetoothd &
+```
+
+#### 2. 检查各阶段初始化是否成功
+
+按照如上初始化log，可观察到如下初始化过程：
+
+* 检查bt_storage_init是否成功
+  
+```text
+[    0.084800] [11] [ DEBUG] [ap] [195][storage]: bt_storage_init successed
+```
+若是失败，则检查uv db配置是否打开，请查阅系统相关文档或者联系系统团队解决。
+
+* 检查蓝牙目录是否创建成功
+  ```text
+  [    0.074000] [11] [  INFO] [ap] /data/misc/bt folder create: 0
+  ```
+若是失败，则检查目录是否存在，请查阅系统相关文档或者联系系统团队解决。
+
+* 检查协议栈是否初始化成功
+  ```text
+[    0.088600] [11] [ DEBUG] [ap] [45][stack_manager]: stack_manager_init done
+若是失败，则可能协议栈初始化失败，可联系Vela团队解决。
+  ```
+
+* 检查libuv loop是否启动成功
+  ```text
+  [    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
+```
+若是失败，则检查libuv loop是否启动成功，btservice模块开源，可在btservice添加debug信息，可进一步确认。
+
+#### 3 检查bluetoothd进程是否运行
 
 利用`ps`命令，观察蓝牙服务线程是否存在，正常输出信息可以观察到名为`bluetoothd`的线程。
 
@@ -155,135 +240,42 @@
    13    11 110 FIFO     pthread   - Waiting  Semaphore 0000000000000000  0004016 0000600  14.9%  sysworkq 0x71ffa5 0x40700350
 ```
 
-<a id="方法：观察syslog确定蓝牙服务是否启动"></a>
+<a id="方法：检查蓝牙Enable是否成功"></a>
 
-### 方法：观察syslog确定蓝牙服务是否启动
+### 方法：检查蓝牙Enable是否成功
 
-观察蓝牙服务syslog，检查蓝牙服务是否启动，标准启动流程log如下:
+蓝牙Enable包括蓝牙设备驱动打开，蓝牙各Profile初始化，蓝牙绑定信息恢复等过程。可通过如下步骤观察蓝牙Enable是否成功：
 
-```text
-[    0.054300] [11] [  INFO] [ap] bluetoothd main 34
-[    0.074000] [11] [  INFO] [ap] /data/misc/bt folder create: 0
-[    0.084300] [11] [ ALERT] [ap] Framework log level: 7, Stack:0, mask:00000000, Snoop: 0
-[    0.084800] [11] [ DEBUG] [ap] [195][storage]: bt_storage_init successed
-[    0.085100] [11] [ DEBUG] [ap] [129][service_manager]: A2DP-Sink service register success
-[    0.085300] [11] [ DEBUG] [ap] [129][service_manager]: AVRCP-CT service register success
-[    0.085800] [11] [ DEBUG] [ap] [201][adapter-stm]: Enter, PrevState=(null) ---> NewState=Off
-[    0.087400] [11] [  INFO] [ap] [32][stack_manager]: Stack Info: Zblue Ver:5.4 Sal:2
-[    0.088100] [11] [  INFO] [ap] <inf> [h4_init] <406>: Bluetooth H4 driver
-[    0.088600] [11] [ DEBUG] [ap] [45][stack_manager]: stack_manager_init done
-[    0.088700] [11] [ DEBUG] [ap] [257][bt_service]: bt_service_init done
-[    0.089100] [11] [ DEBUG] [ap] [260][service_loop]: service loop running now !!!
-[    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
-[    0.090100] [11] [ DEBUG] [ap] [81][service_loop]: set_ready
-```
-<a id="方法：观察蓝牙驱动节点是否成功创建">
-
-通过 `ps` 命令查看进程列表，确认是否存在 `bluetoothd` 进程。
-
-- **若不存在**：跳转到 **“2. bluetoothd 不存在时的分析方法”**。
-- **若存在**：跳转到 **“3. bluetoothd 存在时的分析方法”**。
-
-##### 2. `bluetoothd` 不存在时的分析方法：
-
-**关键日志检查：**
-
-  **可能原因：**
-
-  - **Framework 初始化失败**：
-
-    ```c
-    [service_manager]: A2DP-Src service register success
-    [storage]: bt_storage_init successed
-    [audio_transport]: audio_transport_open path{4}[sco_ctrl] success
-    ```
-
-    检查日志中上述模块是否出现异常。
-  - **协议栈初始化失败**：
-
-    ```c
-    [stack_manager]: stack_manager_init done
-    ```
-
-    确认协议栈是否成功初始化。
-  - **HCI 驱动读取通道建立失败**：
-
-    ```c
-    [bluelet]: hci_add_recv
-    ```
-
-    检查 `hci` 驱动读取通道是否建立成功。
-  - **libuv Service Loop 异常**：
-
-    ```c
-    [bt_service]: bt_service_init done
-    [service_loop]: service loop running now !!!
-    ```
-
-    确认 `service_loop` 是否初始化成功。
-
-##### 3. `bluetoothd` 存在时的分析方法：
-
-**可能原因：**
-
-- **Socket 建立失败**：
-对于跨核应用（APP 与 `bluetoothd` 不在同一个核），优先排查 **Rpmsg 通道问题**，可参考系统文档：《Rpmsg HCI》、《Rpmsg Socket》。
-- **App 未配置 Loop 环境**：
-  确保 App 使用 `uv_loop` 或 `thread while (1)` 类型循环。参考《如何开发一个蓝牙应用》。
-
-### 方法：观察蓝牙驱动节点是否成功创建
-
-  ```c
-  [72][h4]: bt_sal_hci_transport_init: g_tlfd = 16
-  ```
-
-  - 若 `fd = -1`：蓝牙驱动打开失败，需参考《蓝牙驱动打开失败问题分析》章节。
-  - 若 `fd > 0`：驱动成功，但 `bluetoothd` 初始化失败，需进一步分析原因：
-
-利用`ls /dev`命令，观察蓝牙驱动节点是否成功创建，正常输出信息可以观察到名为`ttyHCI0`的蓝牙驱动节点。
-
-```text
-openvela-ap> ls /dev
-/dev:
- audio/
- binder
- ......
- ttyHCI0
- ......
- uorb/
- ......
- ```
-
-<a id="方法：蓝牙启动典型问题">
-
-## 典型问题
-
-### 问题：创建蓝牙instance失败
-
-##### 特殊场景：APP create_instance 时蓝牙 `bluetoothd` 未初始化完成
-
-**问题表现：**
-APP 在 `bluetoothd` 初始化超时（默认1秒）后创建实例失败。
-
-**定位方法：**
-通过打点蓝牙初始化流程，定位超时位置。
-
-**示例日志：**
+#### 1 观察蓝牙驱动节点是否打开成功
 
 ```c
-[03-10 20:23:11.549][03/09 17:29:15] [15] [cp] [270][BT]: [VelaBT], bt_log_server_init 270
-[03-10 20:23:15.852][03/09 17:29:19] [19] [cp] [BT] bts_adapter_init: create bt instance failed
-[03-10 20:23:17.027][03/09 17:29:20] [15] [cp] [278][BT]: [VelaBT], bt_log_server_init 278
+int bt_sal_hci_transport_init(const bt_vhal_interface* vhal)
+{
+    g_hci_rxlen = 0;
+    g_vhal = vhal;
+    g_tlfd = open(CONFIG_BLUETOOTH_SERVICE_HCI_UART_NAME, O_RDWR | O_BINARY | O_CLOEXEC);
+    BT_LOGI("%s: g_tlfd = %d", __func__, g_tlfd);
+
+    if (g_vhal) {
+        g_vhal->open(g_tlfd);
+    }
+
+    return g_tlfd;
+}
 ```
 
-**解决建议：**
-检查 `bluetoothd` 初始化期间的系统日志，确认超时原因（内部延迟或外部事件干扰）。
+驱动设备节点打开成功log，如下：
 
-##### 初步判断蓝牙适配器状态：
+```text
+[72][h4]: bt_sal_hci_transport_init: g_tlfd = 16
+```
+若 fd = -1，蓝牙驱动打开失败， 确认[方法：观察蓝牙驱动是否注册成功](#方法观察蓝牙驱动是否注册成功-1)驱动已经注册，则进一步排查CONFIG_BLUETOOTH_SERVICE_HCI_UART_NAME配置是否正确。
 
-**关键日志：**
+#### 2 观察Enbale流程是否成功
 
-```c
+蓝牙启动状态机，可观察到蓝牙Enable过程，如下：
+
+```text
 [ap] on_adapter_state_changed_cb: state = 1. ...
 [ap] on_adapter_state_changed_cb: state = 2...
 ```
@@ -298,55 +290,58 @@ APP 在 `bluetoothd` 初始化超时（默认1秒）后创建实例失败。
 | `5`  | 正在关闭 BR/EDR 功能 |
 | `6`  | 正在关闭 BLE 功能    |
 
-**获取状态的替代方法：**
-使用 `bttool` 的 `state` 子命令主动查询适配器状态。
 
-##### 2. 确认状态机异常后的处理：
+<a id="适配启动典型问题"></a>
 
-- **尝试重启或重新 enable**：
-  执行 `bttool disable` 后再 `enable`，观察问题是否重现。
-- **若问题依旧：**
-  打开协议栈日志进行分析：
-  ```c
-  bttool> log enable stack
-  bttool> log mask 1 2
-  bttool> q
-  ```
+## 典型问题
 
-##### 3. 特殊场景：蓝牙驱动异常导致 enable 失败：
+### 问题：创建蓝牙instance失败
 
-**需抓取以下信息：**
+当应用程序调用bluetooth_create_instance接口时，蓝牙instance创建失败，如下：
 
-- **蓝牙状态机值**：确认当前处于哪个状态（如 `state=1` 或 `state=3`）。
-- **底层蓝牙驱动日志**：确认驱动层是否正常。
-- **协议栈日志**：按上述步骤开启并提供关键时间点日志。
-
-**示例日志：**
-
-```c
-[48] [ap] on_adapter_state_changed_cb: state = 1.
-[48] [ap] on_adapter_state_changed_cb: state = 2.
-[48] [ap] on_adapter_state_changed_cb: state = 3.
-[48] [ap] on_adapter_state_changed_cb: state = 4.
+```text
+[03-10 20:23:11.549][03/09 17:29:15] [15] [cp] [270][BT]: [VelaBT], bt_log_server_init 270
+[03-10 20:23:15.852][03/09 17:29:19] [19] [cp] [BT] bts_adapter_init: create bt instance failed
+[03-10 20:23:17.027][03/09 17:29:20] [15] [cp] [278][BT]: [VelaBT], bt_log_server_init 278
 ```
 
-**注意事项：**
-若问题仍无法解决，需将协议栈日志和关键时间点信息提交给 Vela 蓝牙团队。
+蓝牙启动过程包括：设备驱动注册、蓝牙驱动初始化、蓝牙Profile初始化、蓝牙驱动打开、蓝牙Enable等过程。
 
-**归纳总结：**
+第一步，按照[方法：观察蓝牙驱动是否注册成功](#方法观察蓝牙驱动是否注册成功)，检查蓝牙驱动是否注册成功。
 
-* [方法：观察蓝牙服务线程是否存在](#方法观察蓝牙服务线程是否存在)
-  * 如果蓝牙服务线程存在，应当提供完整的系统启动syslog向Vela BT团队寻求支持。
-  * 否则，按照如下方法进一步排查。
+第二步，按照[方法：检查蓝牙服务是否启动](#方法检查蓝牙服务是否启动)，检查蓝牙服务是否启动成功。
 
-* [方法：观察蓝牙服务syslog，蓝牙服务框架是否启动](#方法观察蓝牙服务syslog蓝牙服务框架是否启动)
-  * 如果未找到蓝牙服务启动log，应当确认当前系统defconfig是否配置`CONFIG_BLUETOOTH_SERVER`等配置以及Rcs中配置`bluetoothd &`。
-  * 如果发现启动过程中发现创建目录失败`folder create fail`，请寻求系统技术支持。
-  * 如果发现启动过程存在H4驱动异常，请按如下方法检查是否存在驱动节点。
+第三步，检查蓝牙instance是否创建成功。当bluetoothd进程启动阶段，蓝牙instance创建失败，则需要应用程序重试。保证蓝牙服务启动成功后，再创建蓝牙instance。
 
-* [方法：观察蓝牙驱动节点是否成功创建](#方法观察蓝牙驱动节点是否成功创建)
-  * 如果驱动节点不存在，请查看《如何添加蓝牙驱动》能否解决问题。
-  * 否则，请提供完整的系统启动syslog向Vela BT团队寻求支持。
+```c
+int bt_socket_client_init(bt_instance_t* ins, int family,
+    const char* name, const char* cpu, int port)
+{
+    uv_poll_t* poll;
+    int retry = CLIENT_MAX_RETRY; // 10
+
+    ......
+        do {
+        ins->peer_fd = bt_socket_client_connect(family, name, cpu, port);
+        if (ins->peer_fd <= 0 && !retry) {
+            /* connect fail, go out */
+            bt_socket_client_deinit(ins);
+            return BT_STATUS_PARM_INVALID;
+        } else if (ins->peer_fd <= 0) {
+            /* connect fail, retry after sleep 100ms */
+            usleep(CLIENT_DELAY_MS(retry) * 1000);
+            continue;
+        } else {
+            /* success, goto next step */
+            break;
+        }
+    } while (retry--);
+    ......
+}
+```
+
+第四步，按照[方法：检查蓝牙Enable是否成功](#方法检查蓝牙enable是否成功)，检查蓝牙使能是否成功。
+
 
 # 发现、连接、配对问题
 
