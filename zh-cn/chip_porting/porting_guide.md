@@ -500,7 +500,7 @@ vendor/vendor_name/
 - `board_app_initialize`：在 nsh 任务上下文执行，文件系统与核心服务初始化。
 - `board_app_finalinitialize`：在 nsh 任务上下文执行，应用相关初始化。
 
-详细流程请参见[启动流程](../device_dev_guide/kernal/boot_process.md)，厂商需要按照外设所初始化的时刻写到对应的函数中。
+详细流程请参见[启动流程](../device_dev_guide/kernel/boot_process.md)，厂商需要按照外设所初始化的时刻写到对应的函数中。
 
 #### 示例代码
 
