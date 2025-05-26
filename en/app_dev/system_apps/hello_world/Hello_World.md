@@ -1,6 +1,6 @@
 # Add Hello World Example
 
-\[ English | [简体中文](../../../zh-cn/demo/hello_world/Hello_World.md) \]
+\[ English | [简体中文](../../../../zh-cn/app_dev/system_apps/hello_world/Hello_World.md) \]
 
 ## I Overview
 openvela is built based on the open-source operating system NuttX, which further provides a variety of complex system-level services. To make openvela more comprehensive and feature-rich, it is necessary to introduce a complete development framework or functional module. A complete development framework typically includes the following two components:

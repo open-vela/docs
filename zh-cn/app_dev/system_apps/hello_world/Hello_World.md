@@ -1,6 +1,6 @@
 # 添加 Hello World 示例
 
-\[ [English](../../../en/demo/hello_world/Hello_World.md) | 简体中文 \]
+\[ [English](../../../../en/app_dev/system_apps/hello_world/Hello_World.md) | 简体中文 \]
 
 ## 一、概述
 
