@@ -51,4 +51,4 @@ repo sync -c -j$(nproc)
 
 ## 三、后续步骤
 
-请参阅 [编译 openvela 源码](./Build_Vela_from_sources_zh-cn.md)。
+请参阅[编译 openvela 源码](./Build_Vela_from_sources_zh-cn.md)。

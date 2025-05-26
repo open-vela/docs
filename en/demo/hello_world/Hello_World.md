@@ -5,7 +5,7 @@
 ## I Overview
 openvela is built based on the open-source operating system NuttX, which further provides a variety of complex system-level services. To make openvela more comprehensive and feature-rich, it is necessary to introduce a complete development framework or functional module. A complete development framework typically includes the following two components:
 
-- System Applications: Internally developed system applications, usually stored in folders such as `framework/` and others.
+- System Applications: Internally developed system applications, usually stored in folders such as `apps/` and others.
 
 - Third-Party System Libraries: Integration of third-party libraries and their adaptation, usually stored in folders such as `external/` and others.
 
