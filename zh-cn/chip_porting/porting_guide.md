@@ -1,5 +1,7 @@
 # 新平台适配指南
 
+\[ [English](../../en/chip_porting/porting_guide.md) | 简体中文 \]
+
 ## 一、本文目标
 
 1. 了解 openvela 启动（bringup）流程。
