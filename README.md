@@ -14,6 +14,8 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## Technical Architecture
 
+![img](images/002.png)
+
 - **Kernel Layer**
 
     The kernel layer provides fundamental operating system functions, including task scheduling, inter-process communication (IPC), and file system management. It also supplies compact, efficient components such as device drivers, a lightweight TCP/IP protocol stack, and power management modules. This layer supports both homogeneous and heterogeneous multi-core architectures, enhancing performance support across diverse hardware platforms.
