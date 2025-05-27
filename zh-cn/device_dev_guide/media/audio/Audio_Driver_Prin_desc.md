@@ -1,5 +1,7 @@
 # 音频驱动原理
 
+[ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Prin_desc.md) | 简体中文 \]
+
 ## 一、概述
 
 openvela 提供了一种抽象的音频设备节点接口，用于为应用程序实现音频播放和录音功能。应用程序可以通过标准的 `open`、`close` 和 `ioctl` 系统调用，与音频驱动程序进行交互。
