@@ -91,7 +91,7 @@ config EXAMPLES_HELLO
                 Enable the \"Hello, World!\" example
 
 if EXAMPLES_HELLO
-//The following directives < default "hello" > need to be run :
+# The following directives < default "hello" > need to be run :
 config EXAMPLES_HELLO_PROGNAME
         string "Program name"
         default "hello"
