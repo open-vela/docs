@@ -1,1 +1,1 @@
-# openvela Release Notes
+# Release Notes
