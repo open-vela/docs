@@ -103,7 +103,7 @@ packages/demos/music_player
 
 目标是制作一个这样的音乐播放器界面。
 
-![img](./images/028.png)
+![img](../../demo/images/028.png)
 
 音乐播放器的用户界面 (UI) 采用分组的方式组织为多个模块。以下是完整的 UI 结构层次：
 
@@ -289,7 +289,7 @@ struct resource_s {
 
 #### 主启动流程
 
-![img](images/027.png)
+![img](../../demo/images/027.png)
 
 函数 `app_create` 是音乐播放器应用的初始化入口，用于完成以下任务：
 
@@ -337,7 +337,7 @@ void app_create(void)
 
 #### 运行时状态机
 
-![img](images/028.jpeg)
+![img](../../demo/images/028.jpeg)
 
 `app_refresh_play_status` 是音乐播放器的运行时状态机核心函数。该函数的主要功能是根据播放状态（`PLAY_STATUS_STOP`、`PLAY_STATUS_PLAY` 和 `PLAY_STATUS_PAUSE`）更新 UI 和音频控制器的状态，从而完成播放、暂停和停止等功能的处理。以下是完整函数及其关键逻辑的逐步说明：
 
@@ -541,7 +541,7 @@ endif
 
     执行后出现如下界面：
 
-    ![img](images/020.png)
+    ![img](../../demo/images/020.png)
 
 2. 按下 `/` 键逐个搜索修改如下配置：
 
@@ -554,19 +554,19 @@ endif
 
     1. 输入待搜索的配置 `LVX_USE_DEMO_MUSIC_PLAYER`，支持模糊搜索，例如 `music_player`，找到对应的配置，按回车键进入该配置。
 
-        ![img](images/021.png)
+        ![img](../../demo/images/021.png)
 
     2. 按下空格键，`[ ]` 中出现 `*` 表示打开该配置。
 
-        ![img](images/022.png)
+        ![img](../../demo/images/022.png)
 
     3. 将 `LVX_MUSIC_PLAYER_DATA_ROOT` 设置为 `/data`，修改后按下回车键保存当前配置项。
 
-        ![img](images/023.png)
+        ![img](../../demo/images/023.png)
 
     4. 按下 `Q` 键，弹出如下退出保存界面。
 
-        ![img](images/024.png)
+        ![img](../../demo/images/024.png)
 
     5. 按下字母`Y` 键保存配置，退出修改配置页面。
 
