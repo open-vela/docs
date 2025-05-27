@@ -99,7 +99,7 @@ The font and image resources used in Bandx are located in ‘apps/packages/demos
     sudo apt install android-tools-adb
 
     # Push resources
-    adb push apps/packages/demos/bandx/resource/font/assets/* /data/font/
+    adb push apps/packages/demos/bandx/resource/font/assets /data/font/
     adb push apps/packages/demos/bandx/resource/image/assets /data/image/
     ```
 
