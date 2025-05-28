@@ -1,6 +1,6 @@
 # ADB 命令
 
-\[ [English](./../../en/quickstart/Android_Debug_Bridge_commands.md) | 简体中文 \]
+\[ [English](./../../../en/debugging_tools/emulator/Android_Debug_Bridge_commands.md) | 简体中文 \]
 
 ADB 是一个功能丰富的命令行工具，用于与设备进行通信。`adb` 通过访问设备的 Unix shell 来在设备上运行各种命令。作为一种客户端-服务器程序，包括以下三个组件：
 

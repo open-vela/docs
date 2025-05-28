@@ -1,6 +1,6 @@
 # Sending Emulator Console Commands
 
-\[ English | [简体中文](./../../zh-cn/quickstart/Send_emulator_console_commands_zh-cn.md) \]
+\[ English | [简体中文](./../../../zh-cn/debugging_tools/emulator/Send_emulator_console_commands_zh-cn.md) \]
 
 Each running virtual device provides a console that lets you query and control the emulated device environment.
 

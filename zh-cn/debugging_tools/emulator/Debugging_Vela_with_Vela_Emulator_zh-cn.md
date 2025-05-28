@@ -1,6 +1,6 @@
 # 使用模拟器调试
 
-\[ [English](./../../en/quickstart/Debugging_Vela_with_Vela_Emulator.md) | 简体中文 \]
+\[ [English](./../../../en/debugging_tools/emulator/Debugging_Vela_with_Vela_Emulator.md) | 简体中文 \]
 
 ## 一、使用 GDB Console
 
@@ -208,27 +208,27 @@ d <breakpoint-number>
 
     点击 `+` 符号，填写好相应信息后测试连接成功后保存，例如：
 
-    ![003.png](images/003.png)
+    ![003.png](figures/003.png)
 
 3. 配置并选择远程工程。
 
     在 Welcome 页面选择 `Remote Development | SSH | New Project`，选择刚才创建的 SSH 连接，点击右下角 `Check Connection and Continute`，选择一个 IDE 版本，然后项目路径选择克隆下来的 vela 工程路径根目录后点击 `Start IDE and Connect`。例如：
 
-    ![004.png](images/004.png)
+    ![004.png](figures/004.png)
 
     等待下载完成后点击确定 `Authenticate`：
 
-    ![005.png](images/005.png)
+    ![005.png](figures/005.png)
 
 4. 创建调试配置。
 
     点击 `Add Configuration | Remote GDB Server` 并且配置实例如下：
 
-    ![006.png](images/006.png)
+    ![006.png](figures/006.png)
 
     Target 创建样例如下：
 
-    ![007.png](images/007.png)
+    ![007.png](figures/007.png)
 
 5. 通过传递 `-s` 和 `-S` 选项启动模拟器来使用 GDB。
 
@@ -240,10 +240,10 @@ d <breakpoint-number>
 
     点击 debug 按钮即可进行调试：
 
-    ![008.png](images/008.png)
+    ![008.png](figures/008.png)
 
     如果弹出认证对话框 输入密码或者选择配置的 ssh key 即可：
 
-    ![009.png](images/009.png)
+    ![009.png](figures/009.png)
 
-    ![010.png](images/010.png)
+    ![010.png](figures/010.png)

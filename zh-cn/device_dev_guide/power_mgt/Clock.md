@@ -29,20 +29,20 @@ CONFIG_CLK_RPMSG=y //支持跨核控制
 
 时钟南向适配需要实现 `struct clk_ops_s` 接口，以支持以下特性：
 
-| **特性**       | **南向接口**          | **作用**                                                                 |  
-|----------------|-----------------------|--------------------------------------------------------------------------|  
-| **clk gate**   | `enable`             | 使能时钟。                                                              |  
-|                | `disable`            | 关闭时钟。                                                              |  
-|                | `is_enabled`         | 判断时钟是否使能。                                                      |  
-| **calc rate**  | `recalc_rate`        | 根据父时钟频率计算当前时钟频率。                                        |  
-|                | `round_rate`         | 根据目标频率，计算合适的频率和父时钟频率。                              |  
-|                | `determine_rate`     | 根据目标频率，计算最佳频率、最佳父时钟及其频率。                        |  
-| **multiplexer**| `set_parent`         | 设置对应的父时钟。                                                      |  
-|                | `get_parent`         | 获取当前父时钟。                                                        |  
-| **set rate**   | `set_rate`           | 根据父时钟频率，配置当前时钟频率。                                      |  
-|                | `set_rate_and_parent`| 根据父时钟频率配置当前时钟频率，并选择对应的父时钟。                    |  
-| **phase**      | `get_phase`          | 获取时钟相位。                                                          |  
-|                | `set_phase`          | 设置时钟相位。       |
+| **特性**        | **南向接口**          | **作用**                                             |
+| --------------- | --------------------- | ---------------------------------------------------- |
+| **clk gate**    | `enable`              | 使能时钟。                                           |
+|                 | `disable`             | 关闭时钟。                                           |
+|                 | `is_enabled`          | 判断时钟是否使能。                                   |
+| **calc rate**   | `recalc_rate`         | 根据父时钟频率计算当前时钟频率。                     |
+|                 | `round_rate`          | 根据目标频率，计算合适的频率和父时钟频率。           |
+|                 | `determine_rate`      | 根据目标频率，计算最佳频率、最佳父时钟及其频率。     |
+| **multiplexer** | `set_parent`          | 设置对应的父时钟。                                   |
+|                 | `get_parent`          | 获取当前父时钟。                                     |
+| **set rate**    | `set_rate`            | 根据父时钟频率，配置当前时钟频率。                   |
+|                 | `set_rate_and_parent` | 根据父时钟频率配置当前时钟频率，并选择对应的父时钟。 |
+| **phase**       | `get_phase`           | 获取时钟相位。                                       |
+|                 | `set_phase`           | 设置时钟相位。                                       |
 
 #### `struct clk_ops_s` 定义
 
@@ -100,16 +100,16 @@ FAR struct clk_s *clk_register(FAR const char *name,
 
 以下是时钟注册时的属性标志及其说明：
 
-| **flag**                  | **属性说明**                                                 |
-| :------------------------ | :----------------------------------------------------------- |
-| CLK_SET_RATE_GATE         | 调用 `clk_set_rate` 设置频率时，需要 gate 当前时钟。         |
-| CLK_SET_PARENT_GATE       | 调用 `clk_set_parent` 关联非当前父时钟时，需要 gate 当前时钟。 |
-| CLK_SET_RATE_PARENT       | 调用 `clk_set_rate` 设置频率时，可以变更父时钟及其频率。     |
-| CLK_SET_RATE_NO_REPARENT  | 设置频率时，不需要重新变更父时钟。                           |
-| CLK_GET_RATE_NOCACHE      | 调用 `clk_get_rate` 时根据父时钟频率重新计算频率，否则直接从内存结构获取。 |
-| CLK_NAME_IS_STATIC        | 调用 `clk_register` 时，时钟名称为静态内存。                 |
-| CLK_PARENT_NAME_IS_STATIC | 调用 `clk_register` 时，父时钟名称为静态内存。               |
-| CLK_IS_CRITICAL           | 时钟不允许被关闭。                                           |
+| **flag**                  | **属性说明**                                                                          |
+| :------------------------ | :------------------------------------------------------------------------------------ |
+| CLK_SET_RATE_GATE         | 调用 `clk_set_rate` 设置频率时，需要 gate 当前时钟。                                  |
+| CLK_SET_PARENT_GATE       | 调用 `clk_set_parent` 关联非当前父时钟时，需要 gate 当前时钟。                        |
+| CLK_SET_RATE_PARENT       | 调用 `clk_set_rate` 设置频率时，可以变更父时钟及其频率。                              |
+| CLK_SET_RATE_NO_REPARENT  | 设置频率时，不需要重新变更父时钟。                                                    |
+| CLK_GET_RATE_NOCACHE      | 调用 `clk_get_rate` 时根据父时钟频率重新计算频率，否则直接从内存结构获取。            |
+| CLK_NAME_IS_STATIC        | 调用 `clk_register` 时，时钟名称为静态内存。                                          |
+| CLK_PARENT_NAME_IS_STATIC | 调用 `clk_register` 时，父时钟名称为静态内存。                                        |
+| CLK_IS_CRITICAL           | 时钟不允许被关闭。                                                                    |
 | CLK_OPS_PARENT_ENABLE     | 调用 `clk_set_parent`、`clk_set_rate`、`clk_enable`、`clk_disable` 时需要使能父时钟。 |
 
 ### 3、中间框架层注册接口
@@ -128,7 +128,7 @@ FAR struct clk_s *clk_register_divider(FAR const char *name,
 
 ##### 参数说明
 
-| **参数**              | **说明**                                 |
+| **参数**          | **说明**                             |
 | ----------------- | ------------------------------------ |
 | name              | 时钟单元名称                         |
 | parent_name       | 父时钟单元名称                       |
@@ -144,17 +144,17 @@ FAR struct clk_s *clk_register_divider(FAR const char *name,
 
 以下是分频器的属性标志及其计算公式和作用：
 
-| **属性**                     | **计算公式及作用**                                                                                                                                       |  
-|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|  
-| **CLK_DIVIDER_ONE_BASED**    | `fout = (fin + val − 1) / val`<br>分频系数从 1 开始，没有该标志时，`val` 从寄存器读出后需加 1。                                                           |  
-| **CLK_DIVIDER_HIWORD_MASK**  | 高 16 位掩码，对低 16 位修改 `value` 时进行掩码操作，无需回读寄存器即可完成配置。                                                                        |  
-| **CLK_DIVIDER_ROUND_CLOSEST**| 在 `round_rate` 时，寻找最接近目标频率的分频值。                                                                                                         |  
-| **CLK_DIVIDER_READ_ONLY**    | 在 `round_rate` 时，不允许修改寄存器值。                                                                                                                 |  
-| **CLK_DIVIDER_MAX_HALF**     | 计算最大分频系数为掩码值的一半。                                                                                                                        |  
-| **CLK_DIVIDER_DIV_NEED_EVEN**| 分频系数需要为偶数。                                                                                                                                      |  
-| **CLK_DIVIDER_POWER_OF_TWO** | `fout = (fin + 2^n − 1) / 2^n`<br>分频系数为 2 的 n 次幂。                                                                                              |  
-| **CLK_DIVIDER_MINDIV_OFF**   | `flags` 中最小除法数的偏移量。                                                                                                                          |  
-| **CLK_DIVIDER_MINDIV_MSK**   | `flags` 中最小除法数的位掩码。|
+| **属性**                      | **计算公式及作用**                                                                              |
+| ----------------------------- | ----------------------------------------------------------------------------------------------- |
+| **CLK_DIVIDER_ONE_BASED**     | `fout = (fin + val − 1) / val`<br>分频系数从 1 开始，没有该标志时，`val` 从寄存器读出后需加 1。 |
+| **CLK_DIVIDER_HIWORD_MASK**   | 高 16 位掩码，对低 16 位修改 `value` 时进行掩码操作，无需回读寄存器即可完成配置。               |
+| **CLK_DIVIDER_ROUND_CLOSEST** | 在 `round_rate` 时，寻找最接近目标频率的分频值。                                                |
+| **CLK_DIVIDER_READ_ONLY**     | 在 `round_rate` 时，不允许修改寄存器值。                                                        |
+| **CLK_DIVIDER_MAX_HALF**      | 计算最大分频系数为掩码值的一半。                                                                |
+| **CLK_DIVIDER_DIV_NEED_EVEN** | 分频系数需要为偶数。                                                                            |
+| **CLK_DIVIDER_POWER_OF_TWO**  | `fout = (fin + 2^n − 1) / 2^n`<br>分频系数为 2 的 n 次幂。                                      |
+| **CLK_DIVIDER_MINDIV_OFF**    | `flags` 中最小除法数的偏移量。                                                                  |
+| **CLK_DIVIDER_MINDIV_MSK**    | `flags` 中最小除法数的位掩码。                                                                  |
 
 ##### `round_rate` 算法流程
 
@@ -240,13 +240,13 @@ FAR struct clk_s *clk_register_multiplier(FAR const char *name,
 
 以下是倍频器的属性标志及其计算公式和作用：
 
-| **属性**               | **计算公式及作用**                                           |
-| :--------------------- | :----------------------------------------------------------- |
+| **属性**               | **计算公式及作用**                                                                |
+| :--------------------- | :-------------------------------------------------------------------------------- |
 | CLK_MULT_ONE_BASED     | fout = fin * val <br> 倍频系数从 1 开始，没有该标志时，val 从寄存器读出后需加 1。 |
-| CLK_MULT_ALLOW_ZERO    | 允许倍频系数为 0。                                           |
-| CLK_MULT_HIWORD_MASK   | 高 16 位掩码，对低 16 位修改 value 时进行掩码操作，无需回读寄存器即可完成配置。 |
-| CLK_MULT_MAX_HALF      | 计算最大倍频系数为掩码值的一半。                             |
-| CLK_MULT_ROUND_CLOSEST | 在 round_rate 时，寻找最接近目标频率的倍频值。               |
+| CLK_MULT_ALLOW_ZERO    | 允许倍频系数为 0。                                                                |
+| CLK_MULT_HIWORD_MASK   | 高 16 位掩码，对低 16 位修改 value 时进行掩码操作，无需回读寄存器即可完成配置。   |
+| CLK_MULT_MAX_HALF      | 计算最大倍频系数为掩码值的一半。                                                  |
+| CLK_MULT_ROUND_CLOSEST | 在 round_rate 时，寻找最接近目标频率的倍频值。                                    |
 
 ##### `round_rate` 算法流程
 
@@ -275,11 +275,11 @@ FAR struct clk_s *clk_register_mux(FAR const char *name,
 
 ##### 多路选择器属性说明
 
-| 属性                  | 说明                                                         |
-| --------------------- | ------------------------------------------------------------ |
+| 属性                  | 说明                                                                            |
+| --------------------- | ------------------------------------------------------------------------------- |
 | CLK_MUX_HIWORD_MASK   | 高 16 位掩码，对低 16 位修改 value 时进行掩码操作，无需回读寄存器即可完成配置。 |
-| CLK_MUX_READ_ONLY     | 只支持获取父时钟频率，不支持修改。                           |
-| CLK_MUX_ROUND_CLOSEST | 在 determine_rate 时，寻找最接近目标频率的父时钟频率。       |
+| CLK_MUX_READ_ONLY     | 只支持获取父时钟频率，不支持修改。                                              |
+| CLK_MUX_ROUND_CLOSEST | 在 determine_rate 时，寻找最接近目标频率的父时钟频率。                          |
 
 ##### `determine_rate` 步骤
 
@@ -307,8 +307,8 @@ FAR struct clk_s *clk_register_phase(FAR const char *name,
 
 ##### 相位调节器属性说明
 
-| **属性**              | **说明**                                                     |
-| :-------------------- | :----------------------------------------------------------- |
+| **属性**              | **说明**                                                                          |
+| :-------------------- | :-------------------------------------------------------------------------------- |
 | CLK_PHASE_HIWORD_MASK | 高 16 位掩码，对低 16 位修改 `value` 时进行掩码操作，无需回读寄存器即可完成配置。 |
 
 #### 3.8 分数除法器
@@ -337,30 +337,30 @@ clk_register_fractional_divider(FAR const char *name,
 
 ##### 分数除法器属性及计算公式
 
-| **属性**               | **说明**                                                     |
-| :--------------------- | :----------------------------------------------------------- |
+| **属性**               | **说明**                                                               |
+| :--------------------- | :--------------------------------------------------------------------- |
 | CLK_FRAC_DIV_DOUBLE    | 不包含该标志：`fout = fin * m /n` <br>包含该标志：`fout = fin * m /2n` |
-| CLK_FRAC_MUL_NEED_EVEN | 在 `round_rate` 时，`m` 值需要是偶数。                       |
+| CLK_FRAC_MUL_NEED_EVEN | 在 `round_rate` 时，`m` 值需要是偶数。                                 |
 
 ### 4、API接口层
 
-| **API**                 | **功能**                                                     |
-| :---------------------- | :----------------------------------------------------------- |
-| clk_get                 | 从 `g_clk_root_list` 和 `g_clk_orphan_list` 中匹配指定名称的 `clk_s`。 |
-| clk_get_parent          | 获取 `clk_s` 当前关联的父时钟的 `clk_s`。                    |
-| clk_get_parent_by_index | 获取 `clk_s` 第 `index` 个父时钟对应的 `clk_s`。             |
+| **API**                 | **功能**                                                                                         |
+| :---------------------- | :----------------------------------------------------------------------------------------------- |
+| clk_get                 | 从 `g_clk_root_list` 和 `g_clk_orphan_list` 中匹配指定名称的 `clk_s`。                           |
+| clk_get_parent          | 获取 `clk_s` 当前关联的父时钟的 `clk_s`。                                                        |
+| clk_get_parent_by_index | 获取 `clk_s` 第 `index` 个父时钟对应的 `clk_s`。                                                 |
 | clk_set_parent          | 根据父时钟的名称是否与 `clk` 的父时钟名称匹配，来关联父时钟，并根据父时钟频率刷新 `clk` 的频率。 |
-| clk_enable              | 使能父时钟，启用 `clk_s`，并增加 `enable_count`。            |
-| clk_disable             | 减少 `enable_count`，禁用 `clk_s`，并禁用父时钟。            |
-| clk_is_enabled          | 判断 `clk_s` 是否已启用。                                    |
-| clk_round_rate          | 根据目标频率计算最合适的频率。                               |
-| clk_set_rate            | 设置 `clk` 的频率。                                          |
-| clk_set_rates           | 批量配置多个 `clk` 的频率。                                  |
-| clk_get_rate            | 获取 `clk` 当前的频率。                                      |
-| clk_set_phase           | 配置 `clk` 的相位。                                          |
-| clk_get_phase           | 获取 `clk` 的相位。                                          |
-| clk_disable_unused      | 关闭未启用的 `clk`。                                         |
-| clk_get_name            | 获取 `clk` 的名称。                                          |
+| clk_enable              | 使能父时钟，启用 `clk_s`，并增加 `enable_count`。                                                |
+| clk_disable             | 减少 `enable_count`，禁用 `clk_s`，并禁用父时钟。                                                |
+| clk_is_enabled          | 判断 `clk_s` 是否已启用。                                                                        |
+| clk_round_rate          | 根据目标频率计算最合适的频率。                                                                   |
+| clk_set_rate            | 设置 `clk` 的频率。                                                                              |
+| clk_set_rates           | 批量配置多个 `clk` 的频率。                                                                      |
+| clk_get_rate            | 获取 `clk` 当前的频率。                                                                          |
+| clk_set_phase           | 配置 `clk` 的相位。                                                                              |
+| clk_get_phase           | 获取 `clk` 的相位。                                                                              |
+| clk_disable_unused      | 关闭未启用的 `clk`。                                                                             |
+| clk_get_name            | 获取 `clk` 的名称。                                                                              |
 
 ## 三、调试PROCFS
 
