@@ -1,5 +1,5 @@
 # Backtrace User Guide
-\[ English | [简体中文](../../../../zh-cn\debugging_tools\memory_debugging\offline_debugging\backtrace.md) \]
+\[ English | [简体中文](../../../../zh-cn/debugging_tools/memory_debugging/offline_debugging/backtrace.md) \]
 
 ## I. Overview
 
