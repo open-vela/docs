@@ -1,5 +1,7 @@
 # 音频驱动测试
 
+[ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Testing_Guide.md) | 简体中文 \]
+
 ## 一、nxplayer 使用指南
 
 ### 1、简介

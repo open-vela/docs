@@ -1,5 +1,7 @@
 # 音频驱动配置
 
+\[ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Cfg_Guide.md) | 简体中文 \]
+
 ## 一、打开配置界面
 
 1. 打开 `menuconfig`。
