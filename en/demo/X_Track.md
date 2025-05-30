@@ -55,10 +55,10 @@ This article describes how to run the example on Emulator.
 
     ```Bash
     # Clean up build artifacts
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j$(nproc)
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j8
 
     # Start to build
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
     ```
 
 2. After successful compilation, the following files are generated in the "nuttx" directory.

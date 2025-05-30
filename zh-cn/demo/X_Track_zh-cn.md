@@ -55,10 +55,10 @@
 
     ```Bash
     # 清理构建产物
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j$(nproc)
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j8
 
     # 开始构建
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
     ```
 
 2. 编译成功后，在`nuttx`目录下会生成以下文件。

@@ -13,7 +13,7 @@
 通过将 `vendor/<vendor name>/boards/<board name>/configs/<board configuration>` 作为参数传递给 build.sh 选择配置。
 
 ```bash
-./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
 ```
 
 下一步若选取模拟器运行 openvela，请参阅[在模拟器上运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。

@@ -13,7 +13,7 @@ The first step is to initialize the openvela configuration for the target develo
 Select the configuration by passing “vendor/<vendor name>/boards/<board name>/configs/<board configuration>” as a parameter to build.sh
 
 ```
-./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j$(nproc)
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
 ```
 
 For the next step, if you choose Emulator to run openvela, refer to [Run openvela on Emulator](./Run_Vela_on_Vela_Emulator.md).
