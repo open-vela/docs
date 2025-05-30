@@ -4,7 +4,7 @@
 
 ## 一、 openvela 可以用什么语言开发应用
 
-Native 主要是 C/C++，快应用使用 javascript。
+Native 主要是 C/C++，快应用使用 JavaScript。
 
 ## 二、 Xiaomi Vela 和 openvela 的关系
 
