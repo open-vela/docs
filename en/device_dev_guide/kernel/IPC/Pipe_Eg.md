@@ -145,7 +145,7 @@ nt main() {
     }
 
     while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
-        /* 处理每一行输出 */
+        /* Processing each line of output */
         printf("%s", buffer);
     }
 
