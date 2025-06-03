@@ -161,3 +161,4 @@
 | wamr                  | Apache License 2.0                                           | No             | https://github.com/bytecodealliance/wasm-micro-runtime       |
 | libopencore-amr       | Apache License 2.0                                           | Yes            | https://github.com/BelledonneCommunications/opencore-amr/blob/master |
 | kconfig-frontends     | GPL-2.0                                                      | Yes            | https://bitbucket.org/nuttx/tools/src/master/kconfig-frontends/ |
+| FFmpeg                | LGPL v2.1+                                                   | Yes            | https://github.com/FFmpeg/FFmpeg.git                          |
