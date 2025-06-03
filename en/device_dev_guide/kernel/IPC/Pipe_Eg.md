@@ -1,6 +1,6 @@
 # Pipe
 
-\[ [English] | [简体中文](../../../../zh-cn/device_dev_guide/kernel/IPC/Pipe.md) \]
+\[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/IPC/Pipe.md) \]
 
 ## I. Introduction
 
