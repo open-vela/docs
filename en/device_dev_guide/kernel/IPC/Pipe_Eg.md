@@ -1,5 +1,7 @@
 # Pipe
 
+\[ [English](../../../../en/device_dev_guide/kernel/IPC/Pipe_Eg.md) | 简体中文 \]
+
 ## I. Introduction
 
 Pipes are widely used in systems for various purposes, including the following common types:
