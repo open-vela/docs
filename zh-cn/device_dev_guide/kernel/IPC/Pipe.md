@@ -1,5 +1,7 @@
 # Pipe
 
+\[ [English](../../../../en/device_dev_guide/kernel/IPC/Pipe_Eg.md) | 简体中文 \]
+
 ## 一、简介
 
 管道（Pipe）在系统中有多种用法，常见的包括以下几种：
