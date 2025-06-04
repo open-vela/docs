@@ -1,4 +1,4 @@
-# 术语
+# Terminology
 
 \[ English | [简体中文](../../zh-cn/overview/glossary.md) \]
 
