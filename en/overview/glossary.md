@@ -117,8 +117,6 @@
     SystemView is a real-time recording and visualization tool provided by Segger, designed to analyze and profile the behavior of embedded systems.
 
 - SMP（Symmetric Multiprocessing）
-  
-    Symmetric multiprocessing.
 
 ## T
 
