@@ -8,13 +8,15 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
 
 ## 一、签署贡献者许可协议 (CLA)
 
-为了参与社区贡献，您需要签署相应的“贡献者许可协议”（Contributor License Agreement, CLA）。以下是针对不同平台的具体步骤：
+为了参与社区贡献，首次提交代码时，需要签署相应的**贡献者许可协议（Contributor License Agreement, CLA）**。以下是针对不同平台的具体步骤：
 
 - **Gitee 平台**:
+
     - 请访问 [Gitee CLA 签署页面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成签署。
-    - 您可以通过 [我的 CLA 状态](https://gitee.com/profile/clas) 查看签署状态。
+    - 您可以通过 [我签署的 CLA](https://gitee.com/profile/clas) 查看签署状态。
 
 - **GitHub 平台**:
+
     - 在提交新的 Pull Request (PR) 后，系统会提示您完成 CLA 的签署。请根据提示操作以完成签署流程。
 
 ## 二、错误报告
@@ -27,7 +29,7 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
 
 请提交一个 Issue，描述您希望添加的功能、您需要它的原因以及预期的工作方式。
 
-## 四、贡献代码和文档
+## 四、提交代码
 
 如果您想给 openvela 增加新功能或者修复一些错误，先确认是否已有类似的问题。如果没有，请您新建一个问题，和大家讨论您的想法。
 
@@ -36,59 +38,117 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
 - **trunk**：**trunk** 分支不接受 pull request。
 - **dev**：从 **dev** 分支fork代码，并推送pull request。
 
-### 2、提交代码前提示
+### 2、提交代码前准备
 
 在新建 pull request 之前遵循这些提示将加快审核周期。
 
-- 添加适当的单元测试
-- 如果适用，添加集成测试
-- 不属于您更改范围的行不应被编辑（例如，不要格式化未更改的行，不要重新排序现有的导入）
-- 在任何新文件中添加适当的许可证标头
+- 添加适当的单元测试。
+- 如果适用，添加集成测试。
+- 不属于您更改范围的行不应被编辑（例如，不要格式化未更改的行，不要重新排序现有的导入）。
+- 在任何新文件中添加适当的许可证标头。
 
 ### 3、提交您的更改  
 
-1. 测试您的更改
+#### 3.1 测试您的更改
   
-   请运行测试套件以确保没有出现任何问题。  
+请运行测试套件以确保没有出现任何问题。  
 
-2. 签署贡献者许可协议
+#### 3.2 签署贡献者许可协议
 
-    请确保您已签署我们的贡献者许可协议（CLA）。我们不要求您转让版权，而是确保我们可以无限制地分发您的代码。所有贡献者只需签署一次 CLA，以向用户保证代码的来源和持续存在。  
+**首次提交需完成**：签署贡献者许可协议，请参考[签署贡献者许可协议 (CLA)](#一签署贡献者许可协议-cla)章节。
 
-3. **基于最新代码进行变基（Rebase）**
+#### 3.3 提交代码
 
-    使用主 openvela 存储库中的最新代码更新您的本地存储库。然后，将您的特性分支基于最新的主分支进行变基，以合并上游更改。如果在变基过程中遇到冲突，请按照提示解决冲突并完成变基。我们希望您的初始更改被压缩为单个提交。如果我们要求您进行额外更改，请将它们添加为单独的提交，以方便审查。作为合并前的最后一步，请您自己压缩所有提交，或者我们会为您完成。  
+![img](./images/003.jpeg)
 
-4. 提交拉取请求
-
-    将本地更改推送到您 fork 的存储库副本，并提交拉取请求。在拉取请求中，选择一个简明的标题来总结您的更改，并在正文中提供详细说明。请提及相关问题的编号，例如“关闭 #123”。
-
-### 4、冲突的处理方式
-
-当平台提示您的拉取请求无法合并时，请使用以下命令将您的拉取请求重新定位到最新的主分支之上：
-
-1. 重新定位到最新的主分支
-
-     ```Bash
-     git remote add upstream https://github.com/open-vela/[repository].git
-     git fetch upstream
-     git rebase upstream/dev
-     ```
-
-2. git 可能会在无法合并时显示一些冲突，比如 `conflict.cpp`，需要手动修改文件以解决冲突，解决后将其标记为已解决
+1. 检查当前状态。
 
     ```Bash
-    git add conflict.cpp
+    # 查看工作区状态
+    git status
     ```
 
-3. 你可以通过以下方式继续进行 **`rebase`**
+2. 暂存更改。
 
     ```Bash
+    # 添加特定文件到暂存区
+    git add path/to/changed/file.cpp
+    # 或添加所有更改
+    git add .
+    ```
+
+3. 提交更改。
+
+    ```Bash
+    # 创建提交
+    git commit -m "简明扼要的提交信息"
+    # 或使用详细提交信息
+    git commit
+    ```
+
+4. 配置上游仓库。
+
+    ```Bash
+    # 显示现有远程仓库地址
+    git remote -v
+
+    # 添加上游远程仓库引用（仅首次需要执行）
+    git remote add upstream https://github.com/open-vela/[repository].git
+
+    # 显示现有远程仓库地址（应包含origin和upstream）
+    git remote -v
+    ```
+
+5. 获取最新代码并变基。
+
+    ```Bash
+    # 获取上游仓库的最新代码
+    git fetch upstream
+
+    # 将当前分支变基到最新主分支
+    git rebase upstream/dev
+    ```
+
+6. 解决冲突（如有）。
+
+    ```Bash
+    # 检测冲突状态（推荐）  
+    git status                   
+    # 编辑冲突文件（如 conflict.cpp），可使用任何编辑器，如nano、vim、VSCode等
+    nano conflict.cpp            
+    # 标记为已解决  
+    git add conflict.cpp  
+    ```
+
+7. 完成变基。
+
+    ```Bash
+    # 解决所有冲突后继续变基操作
     git rebase --continue
+
+    # 确认变基完成状态
+    git status
     ```
 
-4. 推送到你的 fork，然后 pull request 将会更新
+8. 强制推送更新：
 
     ```Bash
-    git push --force
+    # 强制推送更新后的分支到您的远程仓库
+    git push --force origin dev
     ```
+
+#### 3.4 创建合入请求
+
+1. 访问 GitHub 上您的 fork 仓库。
+
+2. 单击 **New pull request** 按钮。
+
+3. 填写合入请求信息。
+
+4. 单击 **Create pull request** 创建合入请求。
+
+#### 3.5 合入请求后续工作
+
+- 保持关注合入请求的评审意见。
+- 及时响应评审者的反馈。
+- 如需修改，在同一分支上进行更改并推送。
