@@ -1,5 +1,7 @@
 # 术语
 
+\[ [English](./../../en/overview/glossary.md) | 简体中文 \]
+
 ## A
 
 - ADB（Android Debug Bridge）
