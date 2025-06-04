@@ -59,8 +59,6 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
 
 #### 3.3 提交代码
 
-![img](./images/003.jpeg)
-
 1. 检查当前状态。
 
     ```Bash
@@ -118,11 +116,7 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
     nano conflict.cpp            
     # 标记为已解决  
     git add conflict.cpp  
-    ```
 
-7. 完成变基。
-
-    ```Bash
     # 解决所有冲突后继续变基操作
     git rebase --continue
 
@@ -130,7 +124,7 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
     git status
     ```
 
-8. 强制推送更新：
+7. 强制推送更新：
 
     ```Bash
     # 强制推送更新后的分支到您的远程仓库
