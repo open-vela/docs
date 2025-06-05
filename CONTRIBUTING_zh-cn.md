@@ -137,9 +137,9 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
 
 2. 单击 **New pull request** 按钮。
 
-3. 填写合入请求信息。
+3. 单击 **Create pull request** 创建合入请求。
 
-4. 单击 **Create pull request** 创建合入请求。
+4. 填写合入请求信息。
 
 #### 3.5 合入请求后续工作
 
