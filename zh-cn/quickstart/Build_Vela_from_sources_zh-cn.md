@@ -2,7 +2,7 @@
 
 \[ [English](./../../en/quickstart/Build_Vela_from_sources.md) | 简体中文 \]
 
-## 一、使用 build.sh 构建 openvela
+## 使用 build.sh 构建 openvela
 
 在安装完 openvela 所需软件包及下载完 openvela 源码后，您可以将 openvela 源码编译成可以在开发板上运行的二进制文件。
 
@@ -16,4 +16,10 @@
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
 ```
 
-下一步若选取模拟器运行 openvela，请参阅[在模拟器上运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。
+## 常见问题
+
+- [快速入门](../faq/QuickStart_FAQ_zh-cn.md)
+
+## 后续步骤
+
+- 下一步若选取模拟器运行 openvela，请参阅[在模拟器上运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。

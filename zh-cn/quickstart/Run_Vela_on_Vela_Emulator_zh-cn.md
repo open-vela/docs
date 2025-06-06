@@ -2,7 +2,7 @@
 
 \[ [English](./../../en/quickstart/Run_Vela_on_Vela_Emulator.md) | 简体中文 \]
 
-## 一、模拟器概述
+## 概述
 
 模拟器可在计算机上模拟 openvela 设备，供开发者在各种设备上测试应用程序和驱动程序，而无需拥有实体设备。
 
@@ -39,7 +39,7 @@
 * Graphic
 * Sensors
 
-## 二、运行模拟器
+## 运行模拟器
 
 1. 切换到 openvela 仓库根目录下，通过传递 `vela` 选项至 emulator.sh 来启动一个模拟器实例。
 
@@ -60,13 +60,13 @@
 
     ![img](images/002.png)
 
-## 三、控制模拟器
+## 控制模拟器
 
 可以通过 ADB 或控制台对运行中的模拟器实例进行控制。
 
-* [ADB 命令](./Android_Debug_Bridge_commands_zh-cn.md)
-* [发送模拟器控制台命令](./Send_emulator_console_commands_zh-cn.md)
+* [ADB 命令](../debugging_tools/emulator/Android_Debug_Bridge_commands_zh-cn.md)
+* [发送模拟器控制台命令](../debugging_tools/emulator/Send_emulator_console_commands_zh-cn.md)
 
-## 四、使用模拟器调试
+## 使用模拟器调试
 
-* [使用模拟器调试](./Debugging_Vela_with_Vela_Emulator_zh-cn.md)
+* [使用模拟器调试](../debugging_tools/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md)

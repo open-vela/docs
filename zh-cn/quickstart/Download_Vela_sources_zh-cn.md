@@ -4,7 +4,7 @@
 
 openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](https://gitee.com/open-vela) 托管的 Git 仓库中。
 
-## 一、初始化 Repo 客户端
+## 步骤一 初始化 Repo 客户端
 
 1. 创建并导航到工作目录：
 
@@ -41,7 +41,7 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
         cd ../../
         ```
 
-## 二、下载源码
+## 步骤二 下载源码
 
 运行如下命令下载 openvela 源码树至工作目录：
 
@@ -49,6 +49,10 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
 repo sync -c -j$(nproc)
 ```
 
-## 三、后续步骤
+## 常见问题
 
-请参阅[编译 openvela 源码](./Build_Vela_from_sources_zh-cn.md)。
+- 如果在下载过程中遇到问题，请参考[快速入门常见问题](../faq/QuickStart_FAQ_zh-cn.md)。
+
+## 后续步骤
+
+完成源码下载后，请参见[编译 openvela 源码](./Build_Vela_from_sources_zh-cn.md)文档进行后续操作。
