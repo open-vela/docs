@@ -49,6 +49,10 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
 repo sync -c -j$(nproc)
 ```
 
+> 说明
+>
+> openvela 项目使用 **clang-format 14** 版本进行代码风格检查。
+
 ## 常见问题
 
 - 如果在下载过程中遇到问题，请参考[快速入门常见问题](../faq/QuickStart_FAQ_zh-cn.md)。
