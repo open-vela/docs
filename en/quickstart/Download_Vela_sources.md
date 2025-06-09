@@ -55,7 +55,7 @@ repo sync -c -j$(nproc)
 
 ## Common Issues
 
-- If you encounter problems during the download process, please refer to [Quick Start FAQ](../faq/QuickStart_FAQ.md).
+- [Quick Start FAQ](../faq/QuickStart_FAQ.md)
 
 ## Next steps
 

@@ -71,3 +71,7 @@ You can control a running instance of Emulator with ADB or the console.
 ## Debug with Emulator
 
 - [Debugging with Emulator](./Debugging_Vela_with_Vela_Emulator.md)
+
+## Common Issues
+
+- [Quick Start FAQ](../faq/QuickStart_FAQ.md)

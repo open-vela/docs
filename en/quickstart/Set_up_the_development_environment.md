@@ -65,6 +65,10 @@ sudo apt install python3 python3-pip python-is-python3
 sudo pip3 install kconfiglib pyelftools cxxfilt
 ```
 
+## Common Issues
+
+- [Quick Start FAQ](../faq/QuickStart_FAQ.md)
+
 ## Next steps
 
 Refer to [Download openvela code](./Download_Vela_sources.md).

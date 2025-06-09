@@ -16,4 +16,10 @@ Select the configuration by passing “vendor/<vendor name>/boards/<board name>/
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
 ```
 
+## Common Issues
+
+- [Quick Start FAQ](../faq/QuickStart_FAQ.md)
+
+## Next steps
+
 For the next step, if you choose Emulator to run openvela, refer to [Run openvela on Emulator](./Run_Vela_on_Vela_Emulator.md).
