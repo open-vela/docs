@@ -4,7 +4,7 @@
 
 The openvela source code is located in a Git repository hosted by [GitHub](https://github.com/open-Vela) or [Gitee](https://gitee.com/open-vela).
 
-## Initialize the Repo client
+## Step 1: Initialize the Repo client
 
 1. Create and navigate to a working directory:
 
@@ -41,13 +41,21 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
         cd ../../
         ```
 
-## Download source code
+## Step 2: Download the Source Code
 
 Run the following command to download the source code tree of openvela to your working directory:
 
 ```bash
 repo sync -c -j$(nproc)
 ```
+
+> Note
+>
+> The openvela project uses **clang-format 14** version for code style checking. For more details, please see the [Code Style Checking Guide](../contribute/code_style_check_guide.md).
+
+## Common Issues
+
+- If you encounter problems during the download process, please refer to [Quick Start FAQ](../faq/QuickStart_FAQ.md).
 
 ## Next steps
 

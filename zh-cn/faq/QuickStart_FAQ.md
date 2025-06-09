@@ -1,4 +1,4 @@
-# 一、快速入门常见问题
+# 快速入门常见问题
 
 ## 1、无法读取远程仓库
 
@@ -74,42 +74,40 @@ fatal: unable to access 'https://gerrit.googlesource.com/git-repo/': Failed to c
 
 ### 问题原因
 
-- SSH 协议在网络波动时稳定性不足。
+- **SSH** 协议在网络波动时稳定性不足。
 - 大文件传输超时。
 
 ### 解决方案
 
-1. 重试同步操作。 首次出现错误时直接重试，多次失败后请尝试如下方案。
+切换为 **HTTPS** 协议进行下载。
 
-2. 切换为 HTTPS 协议进行下载。
+- Github：
 
-    - Github：
+    ```Bash
+    repo init --partial-clone -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+    
+    
+    # Install Git LFS (Large File Storage) for managing large files
+    sudo apt install git-lfs
+    cd .repo/manifests 
+    git lfs install
+    git lfs --version
+    cd ../../
+    ```
 
-        ```Bash
-        repo init --partial-clone -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
-        
-        
-        # Install Git LFS (Large File Storage) for managing large files
-        sudo apt install git-lfs
-        cd .repo/manifests 
-        git lfs install
-        git lfs --version
-        cd ../../
-        ```
+- Gitee：
 
-    - Gitee：
-
-        ```Bash
-        repo init --partial-clone -u https://gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
-        
-        
-        # Install Git LFS (Large File Storage) for managing large files
-        sudo apt install git-lfs
-        cd .repo/manifests 
-        git lfs install
-        git lfs --version
-        cd ../../
-        ```
+    ```Bash
+    repo init --partial-clone -u https://gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+    
+    
+    # Install Git LFS (Large File Storage) for managing large files
+    sudo apt install git-lfs
+    cd .repo/manifests 
+    git lfs install
+    git lfs --version
+    cd ../../
+    ```
 
 ## 4、内存不足导致代码拉取失败
 
