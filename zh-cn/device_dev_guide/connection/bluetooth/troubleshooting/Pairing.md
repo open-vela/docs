@@ -1,11 +1,72 @@
-<!-- title: 如何分析蓝牙问题 -->
-
-<!-- omit from toc -->
 # 蓝牙配对问题
+
+- [蓝牙配对问题](#蓝牙配对问题)
+  - [一、观察是否对方设备未打开可连接模式](#一观察是否对方设备未打开可连接模式)
+    - [1、通过第三方设备观察是否连接成功](#1通过第三方设备观察是否连接成功)
+    - [2、通过airlog观察是否Page成功](#2通过airlog观察是否page成功)
+    - [3、通过协议栈syslog观察是否Page成功](#3通过协议栈syslog观察是否page成功)
+    - [4、通过HCI log可观察是否Page成功](#4通过hci-log可观察是否page成功)
+  - [二、观察是否ACL连接超时断开（Connection Timeout）](#二观察是否acl连接超时断开connection-timeout)
+    - [1、通过蓝牙服务log可观察是否超时断开](#1通过蓝牙服务log可观察是否超时断开)
+    - [2、观察空口log，是否超时断开ACL连接](#2观察空口log是否超时断开acl连接)
+    - [3、观察snoop log，是否超时断开](#3观察snoop-log是否超时断开)
+  - [三、观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#三观察是否已经绑定成功但是未有profile连接acl主动断开)
+    - [1、观察蓝牙服务log，是否有Profile连接](#1观察蓝牙服务log是否有profile连接)
+    - [2、观察HCI log，是否有Profile连接](#2观察hci-log是否有profile连接)
+    - [3、观察空口log，是否有Profile连接](#3观察空口log是否有profile连接)
+  - [四、观察是否本地配对信息无效（Linkey Missing）](#四观察是否本地配对信息无效linkey-missing)
+    - [1、观察HCI log，手表本地配对信息无效，手机保存上次配对信息](#1观察hci-log手表本地配对信息无效手机保存上次配对信息)
+    - [2、观察空口log，手表本地配对信息无效，手机保存上次配对信息](#2观察空口log手表本地配对信息无效手机保存上次配对信息)
+    - [3、观察协议栈log，手表本地配对信息无效，手机保存上次配对信息](#3观察协议栈log手表本地配对信息无效手机保存上次配对信息)
+  - [五、观察是否对方配对信息无效（Linkey Missing）](#五观察是否对方配对信息无效linkey-missing)
+    - [1、观察HCI log，手机配对信息无效，本地配对信息有效](#1观察hci-log手机配对信息无效本地配对信息有效)
+    - [2、观察空口log，手机配对信息无效，本地配对信息有效](#2观察空口log手机配对信息无效本地配对信息有效)
+  - [六、观察本地是否打开可连接模式](#六观察本地是否打开可连接模式)
+    - [1、观察手表进入蓝牙耳机可连接模式](#1观察手表进入蓝牙耳机可连接模式)
+    - [2、观察miwear syslog，手表进入可连接模式](#2观察miwear-syslog手表进入可连接模式)
+    - [3 观察snoop log、 airlog等，手表进入可连接模式](#3-观察snoop-log-airlog等手表进入可连接模式)
+  - [七、观察对方是否发起回连操作](#七观察对方是否发起回连操作)
+    - [1、观察蓝牙服务syslog，耳机端发起回连操作](#1观察蓝牙服务syslog耳机端发起回连操作)
+    - [2、观察snoop log，耳机端发起回连操作](#2观察snoop-log耳机端发起回连操作)
+    - [3、观察空口log，耳机端发起回连操作](#3观察空口log耳机端发起回连操作)
+  - [八、观察本地是否收到ACL连接请求](#八观察本地是否收到acl连接请求)
+    - [1、观察syslog，本端蓝牙应用是否接收到ACL连接请求](#1观察syslog本端蓝牙应用是否接收到acl连接请求)
+  - [九、观察本端是否同意ACL连接请求](#九观察本端是否同意acl连接请求)
+    - [1、观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求](#1观察蓝牙服务syslog本端蓝牙应用是否同意acl连接请求)
+    - [2、观察对端设备snoop log，确认本端是否同意ACL连接请求](#2观察对端设备snoop-log确认本端是否同意acl连接请求)
+  - [十、观察是否成功开启扫描](#十观察是否成功开启扫描)
+    - [1、观察蓝牙syslog，看设备是否成功开启扫描](#1观察蓝牙syslog看设备是否成功开启扫描)
+    - [2、观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常](#2观察hci-log看hci-cmd是否发送成功hci-evt是否返回status是否正常)
+  - [十一、确认对端设备存在对应SPP服务](#十一确认对端设备存在对应spp服务)
+    - [1、观察对端设备snoop log，确认对端设备是否存在对应的SPP服务](#1观察对端设备snoop-log确认对端设备是否存在对应的spp服务)
+  - [十二、确认SPP连接状态与断连发起方](#十二确认spp连接状态与断连发起方)
+    - [1、观察syslog，确认断连发起方](#1观察syslog确认断连发起方)
+    - [2、观察snoop log，确认断连发起方](#2观察snoop-log确认断连发起方)
+    - [3、观察air log，确认断连发起方](#3观察air-log确认断连发起方)
+  - [典型问题](#典型问题)
+    - [1、经典蓝牙设备主动绑定对方设备失败](#1经典蓝牙设备主动绑定对方设备失败)
+    - [2、耳机断开后回连手表失败](#2耳机断开后回连手表失败)
+    - [3、经典蓝牙设备未被对端设备成功连接](#3经典蓝牙设备未被对端设备成功连接)
+    - [4、低功耗蓝牙扫描不到对端设备](#4低功耗蓝牙扫描不到对端设备)
+    - [5、SPP主动连接失败](#5spp主动连接失败)
+    - [6、CTKD BLE LTK 生成 BR LinkKey 失败](#6ctkd-ble-ltk-生成-br-linkkey-失败)
+      - [6.1 打开协议栈 Debug 功能](#61-打开协议栈-debug-功能)
+      - [6.2 复现问题](#62-复现问题)
+      - [6.3 日志解读](#63-日志解读)
+      - [6.4 如何确认当前 LinkKey 是否由 CTKD 生成？](#64-如何确认当前-linkkey-是否由-ctkd-生成)
+    - [7、设备通过 RPA 地址广播未建立连接](#7设备通过-rpa-地址广播未建立连接)
+      - [7.1 BLE 配对状态机与流程图](#71-ble-配对状态机与流程图)
+      - [7.2 设备通过 RPA 地址广播建立连接过程](#72-设备通过-rpa-地址广播建立连接过程)
+      - [7.3 确认 BLE 配对完成](#73-确认-ble-配对完成)
+      - [7.4 确认 IRK 交换成功](#74-确认-irk-交换成功)
+      - [7.5 确认通过 Identity 地址建立 BR/EDR 连接](#75-确认通过-identity-地址建立-bredr-连接)
+      - [7.6 断连/重启后回连情况](#76-断连重启后回连情况)
+    - [8、设备使用 Public 地址未连接成功](#8设备使用-public-地址未连接成功)
+
 
 本节介绍 BLE 发现、连接、配对绑定过程中可能遇到的问题分析方法。
 
-<a id="方法：观察是否对方设备未打开可连接模式"></a>
+<a id="方法观察是否对方设备未打开可连接模式"></a>
 
 ## 一、观察是否对方设备未打开可连接模式
 通常，可以通过第三方设备、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否打开可连接模式。
@@ -16,11 +77,11 @@
 ### 2、通过airlog观察是否Page成功
 观察空口log，检查是否对方不响应Page过程的ID包，其中，spec标准流程如下:
 
-<img src="img/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="50%">
+<img src="img/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="75%">
 
 依据spec流程链路层page ID包发出去后，对方设备是否回复ID。如下空口log看Page过程的ID包，对方未响应，因此对方未打开可连接模式。
 
-<img src="img/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="50%">
+<img src="img/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="75%">
 
 ### 3、通过协议栈syslog观察是否Page成功
 观察协议栈syslog，检查若是出现PageTimeout，对应错误码04。
@@ -34,7 +95,7 @@
 ### 4、通过HCI log可观察是否Page成功
 如下，观察HCI log看Create Connection对应的HCI Connection Complete事件为Page timeout，则表示对方未打开可连接模式。
 
-<img src="img/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="50%">
+<img src="img/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="75%">
 
 
 <a id="方法观察是否ACL连接超时断开"></a>
@@ -54,13 +115,13 @@
 
 如下，可以通过空口log看，连接数据包在retry多次，直到最终超时断开。
 
-<img src="img/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="50%">
+<img src="img/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="75%">
 
 
 ### 3、观察snoop log，是否超时断开
 如下，观察snoop log蓝牙断开连接事件HCI Disconnect Complete事件，对应reason为connection timeout。
 
-<img src="img/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="50%">
+<img src="img/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="75%">
 
 
 <a id="方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开"></a>
@@ -73,17 +134,17 @@
 观察本地btservice log，设备绑定成功后，没有A2DP、SPP等Profile连接，ACL连接成功一段事件后，出现ACL连接断开事件
 如下，从btservice log看acl建立连接成功，SDP完成后，未连接其他Profile连接，最终断开错误码reason:19，表示对方主动断开。
 
-<img src="img/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="50%">
+<img src="img/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="75%">
 
 ### 2、观察HCI log，是否有Profile连接
 如下，从HCI log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备断开Remote User Terminated Connection（图上是对方主动断开，也很有可能本地协议栈主动断开）。
 
-<img src="img/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="50%">
+<img src="img/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="75%">
 
 ### 3、观察空口log，是否有Profile连接
 如下，从空口log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备Detach断开（图上是对方主动断开，也很有可能本地协议栈主动断开）。
 
-<img src="img/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="50%">
+<img src="img/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="75%">
 
 <a id="方法观察是否本地配对信息无效"></a>
 
@@ -92,12 +153,12 @@
 ### 1、观察HCI log，手表本地配对信息无效，手机保存上次配对信息
 如下，HCI log看本地linkkey未空，发起配对时Host端回复Negative Reply，然后重启发起配对，最终在Simple Pairing Complete阶段提示Authentication Fail，断开连接。
 
-<img src="img/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="50%">
+<img src="img/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
 
 ### 2、观察空口log，手表本地配对信息无效，手机保存上次配对信息
 如下，从空口log看，手表本地配对信息无效，手机保存上次配对信息,提示DH Key Check失败。
 
-<img src="img/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="50%">
+<img src="img/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
 
 ### 3、观察协议栈log，手表本地配对信息无效，手机保存上次配对信息
 如下，观察协议栈log，手表本地配对信息无效，手机保存上次配对信息,从协议栈的HCI log Authentication_Complete时收到PIN OR KEY MISSING，最终配对失败。
@@ -160,12 +221,12 @@
 ### 1、观察HCI log，手机配对信息无效，本地配对信息有效
 如下，snoop  log看本地发起绑定过程，上报hci Authentication completed事件，对应的原因是PIN Or Key Missing。
 
-<img src="img/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="50%">
+<img src="img/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="75%">
 
 ### 2、观察空口log，手机配对信息无效，本地配对信息有效
 如下, air log看本地发起绑定，在LMP Authentication过程，提示LMP Not Accepted，原因是PIN Or Key Missing。
 
-<img src="img/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="50%">
+<img src="img/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="75%">
 
 <a id="观察本地是否打开可连接模式"></a>
 
@@ -174,7 +235,7 @@
 ### 1、观察手表进入蓝牙耳机可连接模式
 如下，进入蓝牙耳机搜索连接页面，让手表进入可连接模式。
 
-<img src="img/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="50%">
+<img src="img/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="75%">
 
 
 ### 2、观察miwear syslog，手表进入可连接模式
@@ -206,16 +267,16 @@
 
 如下，snoop log看耳机端发起回连操作，最终连接成功。
 
-<img src="img/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="50%">
+<img src="img/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="75%">
 
 ### 3、观察空口log，耳机端发起回连操作
 如下，空口log看手机发起回连操作，最终连接成功。
 
-<img src="img/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="50%">
+<img src="img/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="75%">
 
 <a id="方法观察本地是否收到ACL连接请求"></a>
 
-## 七、观察本地是否收到ACL连接请求
+## 八、观察本地是否收到ACL连接请求
 
 ### 1、观察syslog，本端蓝牙应用是否接收到ACL连接请求
 
@@ -236,7 +297,7 @@
 
 <a id="方法观察本地是否同意ACL连接请求"></a>
 
-## 八、观察本端是否同意ACL连接请求
+## 九、观察本端是否同意ACL连接请求
 
 ### 1、观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求
 
@@ -253,9 +314,9 @@
 
 可以看到如下log，ACL连接被拒绝，显示Connection Rejected Due To Limited Resources。
 
-<img src="img/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="50%">
+<img src="img/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="75%">
 
-## 九、观察是否成功开启扫描
+## 十、观察是否成功开启扫描
 
 ### 1、观察蓝牙syslog，看设备是否成功开启扫描
 
@@ -270,13 +331,13 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 
 如下，HCI log看设备成功发起扫描，最终返回status正常。
 
-<img src="img/gap/scan_hci.png" alt="hci:设备发起scan操作" width="50%">
+<img src="img/gap/scan_hci.png" alt="hci:设备发起scan操作" width="75%">
 
-<img src="img/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="50%">
+<img src="img/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="75%">
 
 <a id="方法：确认对端设备存在对应SPP服务"></a>
 
-## 十、确认对端设备存在对应SPP服务
+## 十一、确认对端设备存在对应SPP服务
 
 ### 1、观察对端设备snoop log，确认对端设备是否存在对应的SPP服务
 
@@ -284,11 +345,11 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 查询特定服务失败snoop log如下：
 
-<img src="img/sdp/snoop_discover_not_exist_service.png" alt="snoop:查询特定服务失败" width="50%">
+<img src="img/sdp/snoop_discover_not_exist_service.png" alt="snoop:查询特定服务失败" width="75%">
 
 <a id="方法：确认SPP连接状态与断连发起方"></a>
 
-## 十一、确认SPP连接状态与断连发起方
+## 十二、确认SPP连接状态与断连发起方
 
 ### 1、观察syslog，确认断连发起方
 
@@ -434,7 +495,7 @@ logmask 1 2 7
 - 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能已被关闭，原因是未启用 LESC 功能；
 - 若日志显示 `[BR2LE OFF] [Disabled]`，表示 LinkKey 到 LTK 方向的 CTKD 功能已被 APP 禁用。
 
-<img src="img/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="50%">
+<img src="img/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="75%">
 
 #### 6.4 如何确认当前 LinkKey 是否由 CTKD 生成？
 
@@ -453,7 +514,7 @@ logmask 1 2 7
 
 - BLE 配对状态机：
 
-<img src="img/smp/le_pairing_state_machine.png" alt="BLE配对状态机" width="50%">
+<img src="img/smp/le_pairing_state_machine.png" alt="BLE配对状态机" width="75%">
 
 - BLE 配对流程图：
 
@@ -463,37 +524,37 @@ logmask 1 2 7
 
 - Ellisys 空口日志中过滤仅保留手表与 iPhone 手机的 RPA 地址：
 
-<img src="img/smp/le_pairing_1.png" alt="设备RPA地址连接" width="50%">
+<img src="img/smp/le_pairing_1.png" alt="设备RPA地址连接" width="75%">
 
 - 手表通过 RPA 地址发送 Connectable 广播：
 
-<img src="img/smp/le_pairing_2.png" alt="Connectable广播" width="50%">
+<img src="img/smp/le_pairing_2.png" alt="Connectable广播" width="75%">
 
 - iPhone 手机发送 Scan Request，手表回复 Scan Response 后，手机发送 Connection Indication Packet 完成连接：
 
-<img src="img/smp/le_pairing_3.png" alt="BLE连接建立" width="50%">
+<img src="img/smp/le_pairing_3.png" alt="BLE连接建立" width="75%">
 
 #### 7.3 确认 BLE 配对完成
 
 - SMP 配对过程顺利完成，双方均支持 LESC，IdKey 分发正常，LinkKey 标志为 1：
 
-<img src="img/smp/le_pairing_4.png" alt="SMP配对完成" width="50%">
+<img src="img/smp/le_pairing_4.png" alt="SMP配对完成" width="75%">
 
 #### 7.4 确认 IRK 交换成功
 
 - IRK 成功交换后，存入 Resolving List：
 
-<img src="img/smp/le_pairing_5.png" alt="IRK交换成功" width="50%">
+<img src="img/smp/le_pairing_5.png" alt="IRK交换成功" width="75%">
 
 #### 7.5 确认通过 Identity 地址建立 BR/EDR 连接
 
 - Controller 主动向 Host 请求 LinkKey，并校验通过，无需再次进行 BR/EDR 配对：
 
-<img src="img/smp/le_pairing_6.png" alt="BR/EDR连接成功" width="50%">
+<img src="img/smp/le_pairing_6.png" alt="BR/EDR连接成功" width="75%">
 
 - 从空口日志进一步确认 LinkKey 校验成功：
 
-<img src="img/smp/le_pairing_8.png" alt="LinkKey校验成功" width="50%">
+<img src="img/smp/le_pairing_8.png" alt="LinkKey校验成功" width="75%">
 
 #### 7.6 断连/重启后回连情况
 
@@ -508,18 +569,18 @@ logmask 1 2 7
 
 设备重启后，Resolving List 需要更新到 Controller，重新建立连接：
 
-<img src="img/smp/le_pairing_8.png" alt="设备重启后回连成功" width="50%">
+<img src="img/smp/le_pairing_8.png" alt="设备重启后回连成功" width="75%">
 
 正常断连回连情况：
 
-<img src="img/smp/le_pairing_9.png" alt="正常断连回连成功" width="50%">
+<img src="img/smp/le_pairing_9.png" alt="正常断连回连成功" width="75%">
 
 ### 8、设备使用 Public 地址未连接成功
 
 使用 Public 地址配对时，不生成或分发 IRK，无 IdKey 位：
 
-<img src="img/smp/le_pairing_10.png" alt="Public地址配对" width="50%">
+<img src="img/smp/le_pairing_10.png" alt="Public地址配对" width="75%">
 
 BR/EDR LinkKey 正常生成：
 
-<img src="img/smp/le_pairing_11.png" alt="BR/EDR LinkKey正常生成" width="50%">
+<img src="img/smp/le_pairing_11.png" alt="BR/EDR LinkKey正常生成" width="75%">

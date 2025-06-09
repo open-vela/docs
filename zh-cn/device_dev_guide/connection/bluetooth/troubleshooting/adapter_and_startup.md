@@ -53,6 +53,7 @@ openvela-ap> ls /dev
 ```
 
 ### 1、确认是否启动bluetoothd
+
 若是通过启动脚本启动bluetoothd服务，请确rcS启动脚本是否配置：
 
 ```text
@@ -65,28 +66,35 @@ bluetoothd &
 
 * 检查bt_storage_init是否成功
   
-```text
-[    0.084800] [11] [ DEBUG] [ap] [195][storage]: bt_storage_init successed
-```
-若是失败，则检查uv db配置是否打开，请查阅系统相关文档或者联系系统团队解决。
+    ```text
+    [    0.084800] [11] [ DEBUG] [ap] [195][storage]: bt_storage_init successed
+    ```
+
+    若是失败，则检查uv db配置是否打开，请查阅系统相关文档或者联系系统团队解决。
 
 * 检查蓝牙目录是否创建成功
-  ```text
-  [    0.074000] [11] [  INFO] [ap] /data/misc/bt folder create: 0
-  ```
-若是失败，则检查目录是否存在，请查阅系统相关文档或者联系系统团队解决。
+
+    ```text
+    [    0.074000] [11] [  INFO] [ap] /data/misc/bt folder create: 0
+    ```
+
+    若是失败，则检查目录是否存在，请查阅系统相关文档或者联系系统团队解决。
 
 * 检查协议栈是否初始化成功
-  ```text
-[    0.088600] [11] [ DEBUG] [ap] [45][stack_manager]: stack_manager_init done
-若是失败，则可能协议栈初始化失败，可联系Vela团队解决。
-  ```
+
+    ```text
+        [    0.088600] [11] [ DEBUG] [ap] [45][stack_manager]: stack_manager_init done
+    ```
+
+    若是失败，则可能协议栈初始化失败，可联系Vela团队解决。
 
 * 检查libuv loop是否启动成功
-  ```text
-  [    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
-```
-若是失败，则检查libuv loop是否启动成功，btservice模块开源，可在btservice添加debug信息，可进一步确认。
+
+    ```text
+    [    0.089300] [11] [ DEBUG] [ap] [134][service_loop]: service_schedule_loop:0x40288958, async:0x4024d1b4
+    ```
+
+    若是失败，则检查libuv loop是否启动成功，btservice模块开源，可在btservice添加debug信息，可进一步确认。
 
 ### 3、检查bluetoothd进程是否运行
 
