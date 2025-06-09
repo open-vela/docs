@@ -12,4 +12,4 @@ openvela and Xiaomi vela are based on the same code, and openvela is an open sou
 
 ## 3. Code Style Checking Tool Version Used in openvela
 
-The openvela project uses clang-format 14 version for code style checking.
+The openvela project uses **clang-format 14** version for code style checking.
