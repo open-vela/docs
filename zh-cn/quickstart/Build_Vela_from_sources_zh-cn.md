@@ -16,6 +16,10 @@
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
 ```
 
+## 常见问题
+
+- 如果在下载过程中遇到问题，请参考[快速入门常见问题](../faq/QuickStart_FAQ.md)。
+
 ## 后续步骤
 
 - 下一步若选取模拟器运行 openvela，请参阅[在模拟器上运行编译产物](./Run_Vela_on_Vela_Emulator_zh-cn.md)。

@@ -67,6 +67,10 @@ sudo apt install python3 python3-pip python-is-python3
 sudo pip3 install kconfiglib pyelftools cxxfilt
 ```
 
+## 常见问题
+
+- 如果在下载过程中遇到问题，请参考[快速入门常见问题](../faq/QuickStart_FAQ.md)。
+
 ## 后续步骤
 
 请参见[下载 openvela 源码](./Download_Vela_sources_zh-cn.md)。

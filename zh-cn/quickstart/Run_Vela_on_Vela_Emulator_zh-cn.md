@@ -70,3 +70,7 @@
 ## 使用模拟器调试
 
 * [使用模拟器调试](../debugging_tools/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md)
+
+## 常见问题
+
+- 如果在下载过程中遇到问题，请参考[快速入门常见问题](../faq/QuickStart_FAQ.md)。
