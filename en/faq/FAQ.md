@@ -9,3 +9,7 @@ Native programs mainly use C/C++. JavaScript is used for fast apps.
 ## 2. Relationship between Xiaomi Vela and openvela
 
 openvela and Xiaomi vela are based on the same code, and openvela is an open source version.
+
+## 3. Code Style Checking Tool Version Used in openvela
+
+The openvela project uses clang-format 14 version for code style checking.
