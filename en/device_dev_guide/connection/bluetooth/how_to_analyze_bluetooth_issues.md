@@ -10,8 +10,15 @@
     - [Method: Check if the Bluetooth Service Thread Exists](#method-check-if-the-bluetooth-service-thread-exists)
     - [Method: Check syslog to Determine if the Bluetooth Service is Running](#method-check-syslog-to-determine-if-the-bluetooth-service-is-running)
     - [Method: Check if the Bluetooth Driver Node is Successfully Created](#method-check-if-the-bluetooth-driver-node-is-successfully-created)
+        - [2. Analysis Method When `bluetoothd` Does Not Exist:](#2-analysis-method-when-bluetoothd-does-not-exist)
+        - [3. Analysis Method When `bluetoothd` Exists:](#3-analysis-method-when-bluetoothd-exists)
+    - [Method: Check if the Bluetooth Driver Node is Successfully Created](#method-check-if-the-bluetooth-driver-node-is-successfully-created-1)
   - [Typical Issues](#typical-issues)
     - [Issue: Failure to Create Bluetooth Instance](#issue-failure-to-create-bluetooth-instance)
+        - [Special Scenario: APP Creates Instance When `bluetoothd` Is Not Initialized](#special-scenario-app-creates-instance-when-bluetoothd-is-not-initialized)
+        - [Initial Judgment of Bluetooth Adapter State:](#initial-judgment-of-bluetooth-adapter-state)
+        - [2. Handling After Confirming State Machine Abnormality:](#2-handling-after-confirming-state-machine-abnormality)
+        - [3. Special Scenario: Bluetooth Driver Abnormality Causes Enable Failure:](#3-special-scenario-bluetooth-driver-abnormality-causes-enable-failure)
 - [Discovery, Connection, and Pairing Issues](#discovery-connection-and-pairing-issues)
   - [Issue 1: CTKD BLE LTK Generating BR LinkKey Failure](#issue-1-ctkd-ble-ltk-generating-br-linkkey-failure)
     - [Step 1: Enable Protocol Stack Debug Function](#step-1-enable-protocol-stack-debug-function)
@@ -19,36 +26,85 @@
     - [Step 3: Log Interpretation](#step-3-log-interpretation)
   - [Issue 2: Analysis of Other BLE Pairing-Related Issues](#issue-2-analysis-of-other-ble-pairing-related-issues)
     - [BLE Pairing State Machine and Flowchart](#ble-pairing-state-machine-and-flowchart)
-    - [Vela Device Pairing Using RPA Address](#vela-device-pairing-using-rpa-address)
-    - [Vela Device Pairing Using Public Address](#vela-device-pairing-using-public-address)
+    - [Vela Device Using RPA Address for Pairing](#vela-device-using-rpa-address-for-pairing)
+      - [Case 1: Device Establishes Connection via RPA Address Broadcast](#case-1-device-establishes-connection-via-rpa-address-broadcast)
+      - [Case 2: Confirm BLE Pairing Completion](#case-2-confirm-ble-pairing-completion)
+      - [Case 3: Confirm Successful IRK Exchange](#case-3-confirm-successful-irk-exchange)
+      - [Case 4: Confirm Establishing a BR/EDR Connection via Identity Address](#case-4-confirm-establishing-a-bredr-connection-via-identity-address)
+      - [Case 5: Reconnection After Disconnection/Reboot](#case-5-reconnection-after-disconnectionreboot)
+    - [Vela Device Using Public Address for Pairing](#vela-device-using-public-address-for-pairing)
   - [Discovery and Connection Issue Analysis Methods](#discovery-and-connection-issue-analysis-methods)
     - [Method: Check if the Remote Device Has Not Enabled Connectable Mode](#method-check-if-the-remote-device-has-not-enabled-connectable-mode)
-    - [Method: Check if ACL Connection Times Out and Disconnects (Connection Timeout)](#method-check-if-acl-connection-times-out-and-disconnects)
+      - [1. Check Connection Success via Third-Party Device](#1-check-connection-success-via-third-party-device)
+      - [2. Check Page Success via Air Interface Logs](#2-check-page-success-via-air-interface-logs)
+      - [3. Check Page Success via Protocol Stack Syslog](#3-check-page-success-via-protocol-stack-syslog)
+      - [4. Check Page Success via HCI Logs](#4-check-page-success-via-hci-logs)
+    - [Method: Check if ACL Connection Times Out and Disconnects (Connection Timeout)](#method-check-if-acl-connection-times-out-and-disconnects-connection-timeout)
+      - [1. Check Timeout Disconnection via Bluetooth Service Logs](#1-check-timeout-disconnection-via-bluetooth-service-logs)
+      - [2. Check ACL Connection Timeout Disconnection via Air Interface Logs](#2-check-acl-connection-timeout-disconnection-via-air-interface-logs)
+      - [3. Check Timeout Disconnection via Snoop Logs](#3-check-timeout-disconnection-via-snoop-logs)
     - [Method: Check if Binding Was Successful but No Profile Connection Exists, Leading to ACL Disconnection](#method-check-if-binding-was-successful-but-no-profile-connection-exists-leading-to-acl-disconnection)
-    - [Method: Check if Local Pairing Information Is Invalid (Linkey Missing)](#method-check-if-local-pairing-information-is-invalid)
-    - [Method: Check if Remote Pairing Information Is Invalid (Linkey Missing)](#method-check-if-remote-pairing-information-is-invalid)
-    - [Method: Check if Local Device Is in Connectable Mode](#method-check-if-local-device-is-in-connectable-mode)
-    - [Method: Check if the Remote Device Initiates a Reconnection](#method-check-if-the-remote-device-initiates-a-reconnection)
-    - [Method: Check if the Local Device Receives an ACL Connection Request](#method-check-if-the-local-device-receives-an-acl-connection-request)
-    - [Method: Check if the Local Device Accepts the ACL Connection Request](#method-check-if-the-local-device-accepts-the-acl-connection-request)
+      - [1. Check for Profile Connection in Bluetooth Service Logs](#1-check-for-profile-connection-in-bluetooth-service-logs)
+      - [2. Check for Profile Connection in HCI Logs](#2-check-for-profile-connection-in-hci-logs)
+      - [3. Check for Profile Connection in Air Interface Logs](#3-check-for-profile-connection-in-air-interface-logs)
+    - [Method: Check if Local Pairing Information Is Invalid (Linkey Missing)](#method-check-if-local-pairing-information-is-invalid-linkey-missing)
+      - [1. Check HCI Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information](#1-check-hci-logs-local-pairing-information-on-the-watch-is-invalid-but-the-phone-retains-previous-pairing-information)
+      - [2. Check Air Interface Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information](#2-check-air-interface-logs-local-pairing-information-on-the-watch-is-invalid-but-the-phone-retains-previous-pairing-information)
+      - [3. Check Protocol Stack Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information](#3-check-protocol-stack-logs-local-pairing-information-on-the-watch-is-invalid-but-the-phone-retains-previous-pairing-information)
+    - [Method: Check if Remote Pairing Information Is Invalid (Linkey Missing)](#method-check-if-remote-pairing-information-is-invalid-linkey-missing)
+      - [1. Check HCI Logs: Phone Pairing Information is Invalid, but Local Pairing Information is Valid](#1-check-hci-logs-phone-pairing-information-is-invalid-but-local-pairing-information-is-valid)
+      - [2. Check Air Interface Logs: Phone Pairing Information is Invalid, but Local Pairing Information is Valid](#2-check-air-interface-logs-phone-pairing-information-is-invalid-but-local-pairing-information-is-valid)
+    - [Method: Check if Local Device is in Connectable Mode](#method-check-if-local-device-is-in-connectable-mode)
+      - [1. Check Watch Entering Bluetooth Headset Connectable Mode](#1-check-watch-entering-bluetooth-headset-connectable-mode)
+      - [2. Check miwear syslog: Watch Entering Connectable Mode](#2-check-miwear-syslog-watch-entering-connectable-mode)
+      - [3. Check snoop logs, air logs, etc., to confirm the watch enters connectable mode](#3-check-snoop-logs-air-logs-etc-to-confirm-the-watch-enters-connectable-mode)
+    - [Method: Check if Remote Device Initiates Reconnection](#method-check-if-remote-device-initiates-reconnection)
+      - [1. Check Bluetooth Service syslog: Headset Initiates Reconnection](#1-check-bluetooth-service-syslog-headset-initiates-reconnection)
+      - [2. Check snoop logs: Headset Initiates Reconnection](#2-check-snoop-logs-headset-initiates-reconnection)
+      - [3. Check air interface logs: Headset Initiates Reconnection](#3-check-air-interface-logs-headset-initiates-reconnection)
+    - [Method: Check if Local Device Receives ACL Connection Request](#method-check-if-local-device-receives-acl-connection-request)
+      - [1. Check syslog: Whether the Local Bluetooth Application Receives an ACL Connection Request](#1-check-syslog-whether-the-local-bluetooth-application-receives-an-acl-connection-request)
+    - [Method: Check if Local Device Accepts ACL Connection Request](#method-check-if-local-device-accepts-acl-connection-request)
+      - [1. Check Bluetooth Service syslog: Whether the Local Bluetooth Application Accepts the ACL Connection Request](#1-check-bluetooth-service-syslog-whether-the-local-bluetooth-application-accepts-the-acl-connection-request)
+      - [2. Check Remote Device snoop logs: Confirm Whether the Local Device Accepts the ACL Connection Request](#2-check-remote-device-snoop-logs-confirm-whether-the-local-device-accepts-the-acl-connection-request)
     - [Method: Check if Scanning Was Successfully Initiated](#method-check-if-scanning-was-successfully-initiated)
+      - [1. Check Bluetooth syslog: Whether the Device Successfully Initiated Scanning](#1-check-bluetooth-syslog-whether-the-device-successfully-initiated-scanning)
+      - [2. Check HCI Logs: Whether the HCI CMD Was Successfully Sent and Whether the HCI EVT Returned a Normal Status](#2-check-hci-logs-whether-the-hci-cmd-was-successfully-sent-and-whether-the-hci-evt-returned-a-normal-status)
     - [Method: Confirm the Remote Device Has the Corresponding SPP Service](#method-confirm-the-remote-device-has-the-corresponding-spp-service)
+      - [1. Check Remote Device snoop logs: Confirm Whether the Remote Device Has the Corresponding SPP Service](#1-check-remote-device-snoop-logs-confirm-whether-the-remote-device-has-the-corresponding-spp-service)
     - [Method: Confirm SPP Connection Status and Disconnection Initiator](#method-confirm-spp-connection-status-and-disconnection-initiator)
+      - [1. Check syslog: Confirm the Initiator of Disconnection](#1-check-syslog-confirm-the-initiator-of-disconnection)
+      - [2. Check snoop logs to confirm the initiator of disconnection](#2-check-snoop-logs-to-confirm-the-initiator-of-disconnection)
+      - [3. Check air logs to confirm the initiator of disconnection](#3-check-air-logs-to-confirm-the-initiator-of-disconnection)
   - [Typical Issues](#typical-issues-1)
     - [Issue: Classic Bluetooth Device Fails to Bind to Remote Device](#issue-classic-bluetooth-device-fails-to-bind-to-remote-device)
     - [Issue: Headphones Fail to Reconnect to Watch After Disconnection](#issue-headphones-fail-to-reconnect-to-watch-after-disconnection)
     - [Issue: Classic Bluetooth Device Is Not Successfully Connected by Remote Device](#issue-classic-bluetooth-device-is-not-successfully-connected-by-remote-device)
     - [Issue: Low-Power Bluetooth Fails to Scan Remote Device](#issue-low-power-bluetooth-fails-to-scan-remote-device)
-    - [Issue: SPP Active Connection Failure](#issue-spp-active-connection-failure)
+- [Issue: SPP Active Connection Failure](#issue-spp-active-connection-failure)
 - [Audio Transmission Issues](#audio-transmission-issues)
   - [Analysis Methods](#analysis-methods-1)
     - [Method: Check if the Transport Between Bluetooth and Media is Correctly Established](#method-check-if-the-transport-between-bluetooth-and-media-is-correctly-established)
     - [Method: Check if the AVDTP Signaling Connection is Established](#method-check-if-the-avdtp-signaling-connection-is-established)
+      - [1. Check if the AVDTP Signaling Connection is Established via Snoop Logs, and Observe Possible Failure Reasons](#1-check-if-the-avdtp-signaling-connection-is-established-via-snoop-logs-and-observe-possible-failure-reasons)
     - [Method: Check if the AVDTP Media Connection is Established](#method-check-if-the-avdtp-media-connection-is-established)
+      - [1. Check if the AVDTP Media Connection is Established via Snoop Logs, and Observe Possible Failure Reasons](#1-check-if-the-avdtp-media-connection-is-established-via-snoop-logs-and-observe-possible-failure-reasons)
+        - [1.1 AVDTP Discovery](#11-avdtp-discovery)
+        - [1.2 AVDTP Get Capabilities](#12-avdtp-get-capabilities)
+        - [1.3 AVDTP Set Configuration](#13-avdtp-set-configuration)
+        - [1.4 AVDTP Stream Establishment](#14-avdtp-stream-establishment)
+        - [1.5 AVDTP Media Connection Success](#15-avdtp-media-connection-success)
+      - [2. Check if the AVDTP Media Connection is Established via Syslog, and Observe Possible Failure Reasons](#2-check-if-the-avdtp-media-connection-is-established-via-syslog-and-observe-possible-failure-reasons)
     - [Method: Check if Media Has Successfully Configured the Codec](#method-check-if-media-has-successfully-configured-the-codec)
     - [Method: Check if A2DP SRC Has Started Playing Music](#method-check-if-a2dp-src-has-started-playing-music)
+      - [1. Check if A2DP SRC Has Started Playing Music via Syslog](#1-check-if-a2dp-src-has-started-playing-music-via-syslog)
+      - [2. Check if A2DP SRC Has Started Playing Music via Air Logs](#2-check-if-a2dp-src-has-started-playing-music-via-air-logs)
     - [Method: Check if A2DP SRC Has Stopped Transmitting Audio Packets](#method-check-if-a2dp-src-has-stopped-transmitting-audio-packets)
+      - [1. Check if A2DP SRC Has Stopped Transmitting Audio Packets via Syslog](#1-check-if-a2dp-src-has-stopped-transmitting-audio-packets-via-syslog)
+      - [1. Check if A2DP SRC Has Stopped Transmitting Audio Packets via Snoop Logs](#1-check-if-a2dp-src-has-stopped-transmitting-audio-packets-via-snoop-logs)
     - [Method: Check if the AVDTP Signaling Connection is Disconnected](#method-check-if-the-avdtp-signaling-connection-is-disconnected)
+      - [1. Check if the AVDTP Signaling Connection is Disconnected via Syslog](#1-check-if-the-avdtp-signaling-connection-is-disconnected-via-syslog)
+      - [2. Check if the AVDTP Signaling Connection is Disconnected via Snoop Logs, and Observe Possible Failure Reasons](#2-check-if-the-avdtp-signaling-connection-is-disconnected-via-snoop-logs-and-observe-possible-failure-reasons)
     - [Method: Check if the Audio Packet Sequence Number is Continuous](#method-check-if-the-audio-packet-sequence-number-is-continuous)
     - [Method: Check the Number of Audio Data Sample Points Sent in 1 Second in the Air Log](#method-check-the-number-of-audio-data-sample-points-sent-in-1-second-in-the-air-log)
     - [Method: Check for Audio Data Retransmission in the Air Log](#method-check-for-audio-data-retransmission-in-the-air-log)
@@ -60,49 +116,83 @@
 - [Music Playback Control Issues](#music-playback-control-issues)
   - [Analysis Methods](#analysis-methods-2)
     - [Method: Check if the AVRCP Connection is Established](#method-check-if-the-avrcp-connection-is-established)
+      - [1. Check if the AVRCP Connection is Established via Syslog](#1-check-if-the-avrcp-connection-is-established-via-syslog)
+      - [2. Check if the AVRCP Connection is Established via Snoop Logs, and Observe Possible Failure Reasons](#2-check-if-the-avrcp-connection-is-established-via-snoop-logs-and-observe-possible-failure-reasons)
+      - [3. Check if the AVRCP Connection is Established via Air Logs, and Observe Possible Failure Reasons](#3-check-if-the-avrcp-connection-is-established-via-air-logs-and-observe-possible-failure-reasons)
     - [Method: Check if the Device Supports AVRCP](#method-check-if-the-device-supports-avrcp)
+      - [1. Check if the Local Device has Enabled AVRCP Services via Syslog](#1-check-if-the-local-device-has-enabled-avrcp-services-via-syslog)
+      - [2. Check if Both Devices Support AVRCP via Snoop Logs or Air Logs](#2-check-if-both-devices-support-avrcp-via-snoop-logs-or-air-logs)
     - [Method: Check if Play or Pause Requests are Sent](#method-check-if-play-or-pause-requests-are-sent)
+      - [1. Check if Play or Pause Requests are Sent via Syslog](#1-check-if-play-or-pause-requests-are-sent-via-syslog)
+      - [2. Check if Play or Pause Requests are Sent via Snoop Logs or Air Logs](#2-check-if-play-or-pause-requests-are-sent-via-snoop-logs-or-air-logs)
     - [Method: Check if Notification is Registered](#method-check-if-notification-is-registered)
+      - [1. Check if Notification is Registered via Syslog](#1-check-if-notification-is-registered-via-syslog)
+      - [2. Check if Notification is Registered via Snoop Logs or Air Logs](#2-check-if-notification-is-registered-via-snoop-logs-or-air-logs)
     - [Method: Check if Playback Status is Correctly Reported](#method-check-if-playback-status-is-correctly-reported)
+      - [1. Check if Playback Status is Correctly Reported via Syslog](#1-check-if-playback-status-is-correctly-reported-via-syslog)
+      - [2. Check if Notification is Registered via Snoop Logs or Air Logs](#2-check-if-notification-is-registered-via-snoop-logs-or-air-logs-1)
     - [Method: Check if Playback Status Changes are Caused by Bluetooth](#method-check-if-playback-status-changes-are-caused-by-bluetooth)
     - [Method: Check if Absolute Volume is Used](#method-check-if-absolute-volume-is-used)
+      - [1. Check if Absolute Volume is Supported via Syslog](#1-check-if-absolute-volume-is-supported-via-syslog)
+      - [2. Check if Absolute Volume is Supported via Snoop Logs](#2-check-if-absolute-volume-is-supported-via-snoop-logs)
     - [Method: Check if the Music Source Device (Phone) has Set Absolute Volume](#method-check-if-the-music-source-device-phone-has-set-absolute-volume)
+      - [1. Check if the Phone has Set Absolute Volume via Snoop Logs or Air Logs](#1-check-if-the-phone-has-set-absolute-volume-via-snoop-logs-or-air-logs)
     - [Method: Check if the Local Device has Set Absolute Volume](#method-check-if-the-local-device-has-set-absolute-volume)
+      - [1. Check if the Local Device has Set Absolute Volume via Syslog](#1-check-if-the-local-device-has-set-absolute-volume-via-syslog)
     - [Method: Check if the Music Source Device (Phone) has Changed the Audio Amplitude](#method-check-if-the-music-source-device-phone-has-changed-the-audio-amplitude)
+      - [1. Check if the Music Source Device (Phone) has Changed the Audio Amplitude via the Audio Source File](#1-check-if-the-music-source-device-phone-has-changed-the-audio-amplitude-via-the-audio-source-file)
+      - [2. Check if the Music Source Device (Phone) has Changed the Audio Amplitude via Air Logs](#2-check-if-the-music-source-device-phone-has-changed-the-audio-amplitude-via-air-logs)
     - [Method: Check if AVRCP Configuration is Enabled](#method-check-if-avrcp-configuration-is-enabled)
     - [Method: Check if Volume Changes are Caused by Bluetooth](#method-check-if-volume-changes-are-caused-by-bluetooth)
     - [Method: Check if Volume Changes are Controlled by AVRCP or HFP](#method-check-if-volume-changes-are-controlled-by-avrcp-or-hfp)
+      - [1. Check if Volume Changes are Controlled by AVRCP or HFP via Snoop Logs](#1-check-if-volume-changes-are-controlled-by-avrcp-or-hfp-via-snoop-logs)
   - [Typical Issues](#typical-issues-3)
-    - [Issue: Unable to Control Play/Pause](#issue-unable-to-control-play-pause)
-    - [Issue: Unable to Be Controlled for Play/Pause](#issue-unable-to-be-controlled-for-play-pause)
-    - [Issue: Unexpected Play/Pause](#issue-unexpected-play-pause)
+    - [Issue: Unable to Control Play/Pause](#issue-unable-to-control-playpause)
+    - [Issue: Unable to Be Controlled for Play/Pause](#issue-unable-to-be-controlled-for-playpause)
+    - [Issue: Unexpected Play/Pause](#issue-unexpected-playpause)
     - [Issue: Unable to Adjust Volume via Music Source Device (Phone)](#issue-unable-to-adjust-volume-via-music-source-device-phone)
     - [Issue: Abnormal Volume Changes](#issue-abnormal-volume-changes)
 - [Call Issues](#call-issues)
   - [Analysis Methods](#analysis-methods-3)
     - [Method: Check if the HFP Connection is Established](#method-check-if-the-hfp-connection-is-established)
+      - [1. Check if the HFP Connection is Established via Syslog](#1-check-if-the-hfp-connection-is-established-via-syslog)
+      - [2. Check if the HFP Connection is Established via Snoop Logs, and Observe Possible Failure Reasons](#2-check-if-the-hfp-connection-is-established-via-snoop-logs-and-observe-possible-failure-reasons)
     - [Method: Check if the Device Supports HFP](#method-check-if-the-device-supports-hfp)
+      - [1. Check if the Device Supports HFP via Syslog](#1-check-if-the-device-supports-hfp-via-syslog)
+      - [2. Check if Both Devices Support HFP via Snoop Logs or Air Logs](#2-check-if-both-devices-support-hfp-via-snoop-logs-or-air-logs)
     - [Method: Check if the SCO Connection is Established](#method-check-if-the-sco-connection-is-established)
+      - [1. Check if the SCO Connection is Established via Syslog](#1-check-if-the-sco-connection-is-established-via-syslog)
     - [Method: Check if SCO Audio Parameters are Set for Media](#method-check-if-sco-audio-parameters-are-set-for-media)
-    - [Method: Check if the AG Received the HF's Answer Request](#method-check-if-the-ag-received-the-hf-s-answer-request)
-    - [Method: Check if the HF Received the AG's Incoming Call Notification](#method-check-if-the-hf-received-the-ag-s-incoming-call-notification)
+    - [Check if the AG Received the HF's Answer Request](#check-if-the-ag-received-the-hfs-answer-request)
+      - [1. Check if AG Received HF Answer Request via Syslog](#1-check-if-ag-received-hf-answer-request-via-syslog)
+      - [2. Check if AG Received HF Answer Request via Snoop Logs](#2-check-if-ag-received-hf-answer-request-via-snoop-logs)
+    - [Method: Check if the HF Received the AG's Incoming Call Notification](#method-check-if-the-hf-received-the-ags-incoming-call-notification)
+      - [1. Check if HF Received AG Incoming Call Notification via Syslog](#1-check-if-hf-received-ag-incoming-call-notification-via-syslog)
     - [Method: Check if the HF Notified the Application of an Incoming Call from the AG](#method-check-if-the-hf-notified-the-application-of-an-incoming-call-from-the-ag)
-  - [Typical Issues](#typical-issues-4)
+      - [1. Check if HF Notified the Application of the AG's Incoming Call via Syslog](#1-check-if-hf-notified-the-application-of-the-ags-incoming-call-via-syslog)
+- [Typical Issues](#typical-issues-4)
     - [Issue: AG Answers Call, but HF Has No Voice](#issue-ag-answers-call-but-hf-has-no-voice)
     - [Issue: HF Answers Call, but HF Has No Voice](#issue-hf-answers-call-but-hf-has-no-voice)
     - [Issue: As AG, Cannot Answer Calls Controlled by HF](#issue-as-ag-cannot-answer-calls-controlled-by-hf)
     - [Issue: As HF, AG Incoming Call, but HF Has No Incoming Call Display](#issue-as-hf-ag-incoming-call-but-hf-has-no-incoming-call-display)
 - [Data Transmission Issues](#data-transmission-issues)
   - [Analysis Methods](#analysis-methods-4)
-    - [Method: Check if the Client Device Initiated the Exchange_MTU Procedure](#method-check-if-client-initiated-exchange-mtu)
-    - [Method: Check if the Current Air Interface Environment is Complex](#method-check-if-air-interface-is-complex)
+    - [Method: Check if the Client Device Initiated the Exchange\_MTU Procedure](#method-check-if-the-client-device-initiated-the-exchange_mtu-procedure)
+      - [1. Check if the Client Device Initiated the Exchange\_MTU Procedure via Syslog](#1-check-if-the-client-device-initiated-the-exchange_mtu-procedure-via-syslog)
+      - [2. Check if the Client Device Initiated the Exchange\_MTU Procedure via Snoop Log](#2-check-if-the-client-device-initiated-the-exchange_mtu-procedure-via-snoop-log)
+    - [Method: Check if the Current Air Interface Environment is Complex](#method-check-if-the-current-air-interface-environment-is-complex)
+      - [1. Check if the Current Air Interface Environment is Complex via Snoop Log](#1-check-if-the-current-air-interface-environment-is-complex-via-snoop-log)
   - [Typical Issues](#typical-issues-5)
     - [Issue: Low GATT Data Throughput](#issue-low-gatt-data-throughput)
 - [Camera Control Issues](#camera-control-issues)
   - [Analysis Methods](#analysis-methods-5)
-    - [Method: Check if the HID Channel Connection is Successful](#method-check-if-hid-channel-connection-is-successful)
-    - [Method: Check if the HID Channel is Disconnected by the Watch or Phone](#method-check-if-hid-channel-is-disconnected-by-watch-or-phone)
-    - [Method: Check if the Number of Paired Bluetooth Devices on the Phone Exceeds 7](#method-check-if-number-of-paired-bluetooth-devices-exceeds-7)
+    - [Method: Check if the HID Channel Connection is Successful](#method-check-if-the-hid-channel-connection-is-successful)
+      - [1. Check if the HID Channel Connection is Successful via Syslog](#1-check-if-the-hid-channel-connection-is-successful-via-syslog)
+      - [2. Check if the HID Control L2CAP Channel is Connected via Airlog or Snoop Log](#2-check-if-the-hid-control-l2cap-channel-is-connected-via-airlog-or-snoop-log)
+      - [3. Check if the HID Interrupt L2CAP Channel is Connected via Airlog or Snoop Log](#3-check-if-the-hid-interrupt-l2cap-channel-is-connected-via-airlog-or-snoop-log)
+    - [Method: Check if the HID Channel is Disconnected by the Watch or Phone](#method-check-if-the-hid-channel-is-disconnected-by-the-watch-or-phone)
+      - [1. Check if the Remote Party Disconnected the HID Control or Interrupt L2CAP Channel via Airlog or Snoop Log](#1-check-if-the-remote-party-disconnected-the-hid-control-or-interrupt-l2cap-channel-via-airlog-or-snoop-log)
+    - [Method: Check if the Number of Paired Bluetooth Devices on the Phone Exceeds 7](#method-check-if-the-number-of-paired-bluetooth-devices-on-the-phone-exceeds-7)
   - [Typical Issues](#typical-issues-6)
     - [Issue: Watch Cannot Control Phone Camera](#issue-watch-cannot-control-phone-camera)
 
@@ -269,15 +359,15 @@ Check the system logs during `bluetoothd` initialization to identify the timeout
 [ap] on_adapter_state_changed_cb: state = 2...
 ```
 
-| State Value | Meaning                 |
-| ------ | -------------------- |
-| `0`  | Bluetooth is Off             |
-| `1`  | Enabling BLE Function    |
-| `2`  | BLE Function Enabled       |
-| `3`  | Enabling BR/EDR Function |
-| `4`  | BR/EDR Function Enabled    |
-| `5`  | Disabling BR/EDR Function |
-| `6`  | Disabling BLE Function    |
+| State Value | Meaning                   |
+| ----------- | ------------------------- |
+| `0`         | Bluetooth is Off          |
+| `1`         | Enabling BLE Function     |
+| `2`         | BLE Function Enabled      |
+| `3`         | Enabling BR/EDR Function  |
+| `4`         | BR/EDR Function Enabled   |
+| `5`         | Disabling BR/EDR Function |
+| `6`         | Disabling BLE Function    |
 
 **Alternative Method to Obtain State:**
 Use the `state` subcommand of `bttool` to actively query the adapter state.
@@ -367,7 +457,7 @@ Reproduce the issue according to the specific scenario and record relevant logs.
 - If the log shows `CTKD LE2BR OFF [LESC disabled]`, it means the CTKD function from BLE to BR direction has been disabled, the reason being that the LESC feature is not enabled;
 - If the log shows `[BR2LE OFF] [Disabled]`, it indicates that the CTKD function from LinkKey to LTK direction has been disabled by the APP.
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD Failure" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD Failure" width="75%">
 
 **How to Confirm Whether the Current LinkKey Was Generated by CTKD?**
 
@@ -388,11 +478,11 @@ Observe the BLE pairing process through air interface logs to see if it meets ex
 
 - BLE Pairing State Machine:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_state_machine.png" alt="BLE Pairing State Machine" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_state_machine.png" alt="BLE Pairing State Machine" width="75%">
 
 - BLE Pairing Flowchart:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE Pairing Flowchart" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE Pairing Flowchart" width="75%">
 
 ### Vela Device Using RPA Address for Pairing
 
@@ -400,66 +490,66 @@ Observe the BLE pairing process through air interface logs to see if it meets ex
 
 - Filter only the RPA addresses of the watch and iPhone in the Ellisys air interface logs:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_1.png" alt="Device RPA Address Connection" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_1.png" alt="Device RPA Address Connection" width="75%">
 
 - The watch sends a Connectable broadcast via RPA address:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_2.png" alt="Connectable Broadcast" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_2.png" alt="Connectable Broadcast" width="75%">
 
 - The iPhone sends a Scan Request, the watch replies with a Scan Response, and then the iPhone sends a Connection Indication Packet to complete the connection:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE Connection Establishment" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE Connection Establishment" width="75%">
 
 #### Case 2: Confirm BLE Pairing Completion
 
 - The SMP pairing process is successfully completed, both parties support LESC, the IdKey is distributed normally, and the LinkKey flag is set to 1:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP Pairing Completion" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP Pairing Completion" width="75%">
 
 #### Case 3: Confirm Successful IRK Exchange
 
 - After the IRK is successfully exchanged, it is stored in the Resolving List:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK Exchange Success" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK Exchange Success" width="75%">
 
 #### Case 4: Confirm Establishing a BR/EDR Connection via Identity Address
 
 - The Controller actively requests the LinkKey from the Host, and after verification, no BR/EDR pairing is required again:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_6.png" alt="BR/EDR Connection Success" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_6.png" alt="BR/EDR Connection Success" width="75%">
 
 - Further confirm the success of the LinkKey verification from the air interface logs:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey Verification Success" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey Verification Success" width="75%">
 
 #### Case 5: Reconnection After Disconnection/Reboot
 
 Device information reference:
 
-| Device Name                | Address                           | Mode       | Description                 |
-| ----------------------- | ------------------------------ | ---------- | -------------------- |
-| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable) | Low Energy | REDMI Watch 5 eSIM   |
-| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45              | Dual Mode  | REDMI Watch 5 eSIM   |
-| xxx's iPhone         | B4:19:74:13:CE:4A              | Dual Mode  | xxx's iPhone      |
-| xxx's iPhone         | 6B:FC:EE:54:F0:9E (Resolvable) | Dual Mode  | xxx's iPhone      |
+| Device Name             | Address                        | Mode       | Description        |
+| ----------------------- | ------------------------------ | ---------- | ------------------ |
+| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable) | Low Energy | REDMI Watch 5 eSIM |
+| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45              | Dual Mode  | REDMI Watch 5 eSIM |
+| xxx's iPhone            | B4:19:74:13:CE:4A              | Dual Mode  | xxx's iPhone       |
+| xxx's iPhone            | 6B:FC:EE:54:F0:9E (Resolvable) | Dual Mode  | xxx's iPhone       |
 
 - After device reboot, the Resolving List needs to be updated to the Controller to re-establish the connection:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="Reconnection After Device Reboot" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="Reconnection After Device Reboot" width="75%">
 
 - Normal disconnection and reconnection scenario:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="Normal Disconnection and Reconnection Success" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="Normal Disconnection and Reconnection Success" width="75%">
 
 ### Vela Device Using Public Address for Pairing
 
 - When pairing with a Public address, no IRK is generated or distributed, and there is no IdKey bit:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_10.png" alt="Public Address Pairing" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_10.png" alt="Public Address Pairing" width="75%">
 
 - BR/EDR LinkKey is normally generated:
 
-<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_11.png" alt="BR/EDR LinkKey Normal Generation" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_11.png" alt="BR/EDR LinkKey Normal Generation" width="75%">
 
 ## Discovery and Connection Issue Analysis Methods
 
@@ -477,11 +567,11 @@ Use a third-party device to initiate the bonding process in the Bluetooth settin
 
 Observe the air interface logs to check if the remote device responds to the Page process ID packet. The standard spec process is as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec: Check Page Success via Air Interface Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec: Check Page Success via Air Interface Logs" width="75%">
 
 According to the spec process, after the link layer Page ID packet is sent, if the remote device does not respond with an ID, it indicates that the remote device is not in connectable mode, as shown in the following air interface log:
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer: Check Page Success via Air Interface Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer: Check Page Success via Air Interface Logs" width="75%">
 
 #### 3. Check Page Success via Protocol Stack Syslog
 
@@ -497,7 +587,7 @@ Observe the protocol stack syslog to check for PageTimeout errors, corresponding
 
 As shown below, observe the HCI logs to see if the Create Connection corresponding HCI Connection Complete event indicates a Page timeout, which means the remote device is not in connectable mode.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop: Check Page Success via HCI Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop: Check Page Success via HCI Logs" width="75%">
 
 <a id="method-check-if-acl-connection-times-out-and-disconnects"></a>
 
@@ -517,13 +607,13 @@ As shown below, you can observe the log event CONNECTION_STATE_DISCONNECTED from
 
 As shown below, you can observe from the air interface logs that the connection packets are retried multiple times until eventually timing out and disconnecting.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer: Check ACL Connection Timeout Disconnection via Air Interface Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer: Check ACL Connection Timeout Disconnection via Air Interface Logs" width="75%">
 
 #### 3. Check Timeout Disconnection via Snoop Logs
 
 As shown below, observe the snoop logs for the Bluetooth disconnection event HCI Disconnect Complete, corresponding to reason connection timeout.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop: Check Timeout Disconnection via Snoop Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop: Check Timeout Disconnection via Snoop Logs" width="75%">
 
 <a id="method-check-if-binding-was-successful-but-no-profile-connection-exists-leading-to-acl-disconnection"></a>
 
@@ -535,19 +625,19 @@ Typically, you can observe whether there is a Profile connection between both pa
 
 Observe the local btservice logs; after successful device binding, if there is no A2DP, SPP, etc., Profile connection, the ACL connection will disconnect after a period of time. As shown below, from the btservice logs, the ACL connection is established successfully, and after SDP completion, there is no other Profile connection, and the disconnection error code reason:19 indicates that the remote party actively disconnected.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service: Check for Profile Connection in Bluetooth Service Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service: Check for Profile Connection in Bluetooth Service Logs" width="75%">
 
 #### 2. Check for Profile Connection in HCI Logs
 
 As shown below, from the HCI logs, after the ACL connection is successful, the SDP service discovery is completed, and no other Profile is connected, and the device eventually disconnects with Remote User Terminated Connection (the figure shows the remote party actively disconnecting, but it is also possible that the local stack actively disconnected).
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop: Check for Profile Connection in HCI Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop: Check for Profile Connection in HCI Logs" width="75%">
 
 #### 3. Check for Profile Connection in Air Interface Logs
 
 As shown below, from the air interface logs, after the ACL connection is successful, the SDP service discovery is completed, and no other Profile is connected, and the device eventually detaches (the figure shows the remote party actively disconnecting, but it is also possible that the local stack actively disconnected).
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer: Check for Profile Connection in Air Interface Logs" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer: Check for Profile Connection in Air Interface Logs" width="75%">
 
 <a id="method-check-if-local-pairing-information-is-invalid"></a>
 
@@ -557,13 +647,13 @@ As shown below, from the air interface logs, after the ACL connection is success
 
 As shown below, the HCI logs show that the local linkkey is empty. When initiating pairing, the Host responds with a Negative Reply, then restarts the pairing process, and ultimately, during the Simple Pairing Complete phase, it indicates Authentication Fail and disconnects.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop: Check HCI Logs for Local Pairing Information on the Watch Being Invalid, but the Phone Retains Previous Pairing Information" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop: Check HCI Logs for Local Pairing Information on the Watch Being Invalid, but the Phone Retains Previous Pairing Information" width="75%">
 
 #### 2. Check Air Interface Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information
 
 As shown below, from the air interface logs, the local pairing information on the watch is invalid, but the phone retains previous pairing information, prompting DH Key Check failure.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer: Check Air Interface Logs for Local Pairing Information on the Watch Being Invalid, but the Phone Retains Previous Pairing Information" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer: Check Air Interface Logs for Local Pairing Information on the Watch Being Invalid, but the Phone Retains Previous Pairing Information" width="75%">
 
 #### 3. Check Protocol Stack Logs: Local Pairing Information on the Watch is Invalid, but the Phone Retains Previous Pairing Information
 
@@ -628,13 +718,13 @@ As shown below, observe the protocol stack logs. The local pairing information o
 
 As shown below, the snoop logs show that during the local bonding process, the hci Authentication completed event is reported with the corresponding reason being PIN Or Key Missing.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop: Check HCI Logs for Phone Pairing Information Being Invalid, but Local Pairing Information Being Valid" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop: Check HCI Logs for Phone Pairing Information Being Invalid, but Local Pairing Information Being Valid" width="75%">
 
 #### 2. Check Air Interface Logs: Phone Pairing Information is Invalid, but Local Pairing Information is Valid
 
 As shown below, from the air logs, during the LMP Authentication process, it prompts LMP Not Accepted, with the reason being PIN Or Key Missing.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer: Check Air Interface Logs for Phone Pairing Information Being Invalid, but Local Pairing Information Being Valid" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer: Check Air Interface Logs for Phone Pairing Information Being Invalid, but Local Pairing Information Being Valid" width="75%">
 
 <a id="method-check-if-local-device-is-in-connectable-mode"></a>
 
@@ -644,7 +734,7 @@ As shown below, from the air logs, during the LMP Authentication process, it pro
 
 As shown below, enter the Bluetooth headset search and connection page to put the watch into connectable mode.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch: Watch Entering Bluetooth Headset Search and Connection Page" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch: Watch Entering Bluetooth Headset Search and Connection Page" width="75%">
 
 #### 2. Check miwear syslog: Watch Entering Connectable Mode
 
@@ -676,13 +766,13 @@ As shown below, through the Bluetooth service syslog, observe whether the remote
 
 As shown below, the snoop logs show the headset initiating a reconnection, which is ultimately successful.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop: Check snoop logs for Headset Initiating Reconnection" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop: Check snoop logs for Headset Initiating Reconnection" width="75%">
 
 #### 3. Check air interface logs: Headset Initiates Reconnection
 
 As shown below, the air interface logs show the phone initiating a reconnection, which is ultimately successful.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer: Check air interface logs for Phone Initiating Reconnection" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer: Check air interface logs for Phone Initiating Reconnection" width="75%">
 
 <a id="method-check-if-local-device-receives-acl-connection-request"></a>
 
@@ -724,7 +814,7 @@ If the application does not accept the ACL connection request, the following ACL
 
 The following logs can be seen, indicating that the ACL connection was rejected, with the message Connection Rejected Due To Limited Resources.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connect_request_reject.png" alt="snoop: Check snoop logs for ACL Connection Request Rejection" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connect_request_reject.png" alt="snoop: Check snoop logs for ACL Connection Request Rejection" width="75%">
 
 ### Method: Check if Scanning Was Successfully Initiated
 
@@ -741,9 +831,9 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 
 As shown below, the HCI logs indicate that the device successfully initiated scanning, with the final status returned as normal.
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci: Device Initiates Scan Operation" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci: Device Initiates Scan Operation" width="75%">
 
-<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci: Controller Replies with Successful Event" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci: Controller Replies with Successful Event" width="75%">
 
 <a id="method-confirm-remote-device-has-corresponding-spp-service"></a>
 
@@ -755,7 +845,7 @@ When the SPP client initiates an SPP connection, it needs to obtain the SPP serv
 
 Sample logs for failed service query:
 
-<img src="img/how_to_analyze_bluetooth_issues/sdp/snoop_discover_not_exist_service.png" alt="snoop: Failed Service Query" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/sdp/snoop_discover_not_exist_service.png" alt="snoop: Failed Service Query" width="75%">
 
 <a id="method-confirm-spp-connection-status-and-disconnection-initiator"></a>
 
@@ -1019,7 +1109,7 @@ When the Bluetooth service receives the command to start playing music, it initi
 
 Before the audio stream begins transmission, the A2DP SRC initiates the Stream Start process. During the audio stream transmission, the A2DP SRC sends media packets to the SNK. Typical logs are as follows:
 
-<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="50%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="75%">
 
 <a id="method-check-if-a2dp-src-has-stopped-transmitting-audio-packets"></a>
 

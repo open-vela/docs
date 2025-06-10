@@ -462,11 +462,11 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 ### 2、通过airlog观察是否Page成功
 观察空口log，检查是否对方不响应Page过程的ID包，其中，spec标准流程如下:
 
-<img src="img/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="75%">
 
 依据spec流程链路层page ID包发出去后，对方设备是否回复ID。如下空口log看Page过程的ID包，对方未响应，因此对方未打开可连接模式。
 
-<img src="img/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="75%">
 
 ### 3、通过协议栈syslog观察是否Page成功
 观察协议栈syslog，检查若是出现PageTimeout，对应错误码04。
@@ -480,7 +480,7 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 ### 4、通过HCI log可观察是否Page成功
 如下，观察HCI log看Create Connection对应的HCI Connection Complete事件为Page timeout，则表示对方未打开可连接模式。
 
-<img src="img/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="75%">
 
 
 <a id="方法观察是否ACL连接超时断开"></a>
@@ -500,13 +500,13 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 如下，可以通过空口log看，连接数据包在retry多次，直到最终超时断开。
 
-<img src="img/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="75%">
 
 
 ### 3、观察snoop log，是否超时断开
 如下，观察snoop log蓝牙断开连接事件HCI Disconnect Complete事件，对应reason为connection timeout。
 
-<img src="img/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="75%">
 
 
 <a id="方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开"></a>
@@ -519,17 +519,17 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 观察本地btservice log，设备绑定成功后，没有A2DP、SPP等Profile连接，ACL连接成功一段事件后，出现ACL连接断开事件
 如下，从btservice log看acl建立连接成功，SDP完成后，未连接其他Profile连接，最终断开错误码reason:19，表示对方主动断开。
 
-<img src="img/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="75%">
 
 ### 2、观察HCI log，是否有Profile连接
 如下，从HCI log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备断开Remote User Terminated Connection（图上是对方主动断开，也很有可能本地协议栈主动断开）。
 
-<img src="img/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="75%">
 
 ### 3、观察空口log，是否有Profile连接
 如下，从空口log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备Detach断开（图上是对方主动断开，也很有可能本地协议栈主动断开）。
 
-<img src="img/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="75%">
 
 <a id="方法观察是否本地配对信息无效"></a>
 
@@ -538,12 +538,12 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 ### 1、观察HCI log，手表本地配对信息无效，手机保存上次配对信息
 如下，HCI log看本地linkkey未空，发起配对时Host端回复Negative Reply，然后重启发起配对，最终在Simple Pairing Complete阶段提示Authentication Fail，断开连接。
 
-<img src="img/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
 
 ### 2、观察空口log，手表本地配对信息无效，手机保存上次配对信息
 如下，从空口log看，手表本地配对信息无效，手机保存上次配对信息,提示DH Key Check失败。
 
-<img src="img/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
 
 ### 3、观察协议栈log，手表本地配对信息无效，手机保存上次配对信息
 如下，观察协议栈log，手表本地配对信息无效，手机保存上次配对信息,从协议栈的HCI log Authentication_Complete时收到PIN OR KEY MISSING，最终配对失败。
@@ -606,12 +606,12 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 ### 1、观察HCI log，手机配对信息无效，本地配对信息有效
 如下，snoop  log看本地发起绑定过程，上报hci Authentication completed事件，对应的原因是PIN Or Key Missing。
 
-<img src="img/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="75%">
 
 ### 2、观察空口log，手机配对信息无效，本地配对信息有效
 如下, air log看本地发起绑定，在LMP Authentication过程，提示LMP Not Accepted，原因是PIN Or Key Missing。
 
-<img src="img/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="75%">
 
 <a id="观察本地是否打开可连接模式"></a>
 
@@ -620,7 +620,7 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 ### 1、观察手表进入蓝牙耳机可连接模式
 如下，进入蓝牙耳机搜索连接页面，让手表进入可连接模式。
 
-<img src="img/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="75%">
 
 
 ### 2、观察miwear syslog，手表进入可连接模式
@@ -652,12 +652,12 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 如下，snoop log看耳机端发起回连操作，最终连接成功。
 
-<img src="img/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="75%">
 
 ### 3、观察空口log，耳机端发起回连操作
 如下，空口log看手机发起回连操作，最终连接成功。
 
-<img src="img/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="75%">
 
 <a id="方法观察本地是否收到ACL连接请求"></a>
 
@@ -699,7 +699,7 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 可以看到如下log，ACL连接被拒绝，显示Connection Rejected Due To Limited Resources。
 
-<img src="img/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="75%">
 
 <a id="观察是否成功开启扫描"></a>
 
@@ -718,9 +718,9 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 
 如下，HCI log看设备成功发起扫描，最终返回status正常。
 
-<img src="img/gap/scan_hci.png" alt="hci:设备发起scan操作" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci.png" alt="hci:设备发起scan操作" width="75%">
 
-<img src="img/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gap/scan_hci_evt.png" alt="hci:controller回复成功Event" width="75%">
 
 <a id="方法：确认对端设备存在对应SPP服务"></a>
 
@@ -732,7 +732,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 查询特定服务失败snoop log如下：
 
-<img src="img/sdp/snoop_discover_not_exist_service.png" alt="snoop:查询特定服务失败" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/sdp/snoop_discover_not_exist_service.png" alt="snoop:查询特定服务失败" width="75%">
 
 <a id="方法：确认SPP连接状态与断连发起方"></a>
 
@@ -882,7 +882,7 @@ logmask 1 2 7
 - 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能已被关闭，原因是未启用 LESC 功能；
 - 若日志显示 `[BR2LE OFF] [Disabled]`，表示 LinkKey 到 LTK 方向的 CTKD 功能已被 APP 禁用。
 
-<img src="img/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="75%">
 
 #### 6.4 如何确认当前 LinkKey 是否由 CTKD 生成？
 
@@ -901,76 +901,76 @@ logmask 1 2 7
 
 - BLE 配对状态机：
 
-<img src="img/smp/le_pairing_state_machine.png" alt="BLE配对状态机" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_state_machine.png" alt="BLE配对状态机" width="75%">
 
 - BLE 配对流程图：
 
-<img src="img/smp/BLE_Bond_flowchat.png" alt="BLE配对流程图" width="100%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE配对流程图" width="100%">
 
 #### 7.2 设备通过 RPA 地址广播建立连接过程
 
 - Ellisys 空口日志中过滤仅保留手表与 iPhone 手机的 RPA 地址：
 
-<img src="img/smp/le_pairing_1.png" alt="设备RPA地址连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_1.png" alt="设备RPA地址连接" width="75%">
 
 - 手表通过 RPA 地址发送 Connectable 广播：
 
-<img src="img/smp/le_pairing_2.png" alt="Connectable广播" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_2.png" alt="Connectable广播" width="75%">
 
 - iPhone 手机发送 Scan Request，手表回复 Scan Response 后，手机发送 Connection Indication Packet 完成连接：
 
-<img src="img/smp/le_pairing_3.png" alt="BLE连接建立" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE连接建立" width="75%">
 
 #### 7.3 确认 BLE 配对完成
 
 - SMP 配对过程顺利完成，双方均支持 LESC，IdKey 分发正常，LinkKey 标志为 1：
 
-<img src="img/smp/le_pairing_4.png" alt="SMP配对完成" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP配对完成" width="75%">
 
 #### 7.4 确认 IRK 交换成功
 
 - IRK 成功交换后，存入 Resolving List：
 
-<img src="img/smp/le_pairing_5.png" alt="IRK交换成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK交换成功" width="75%">
 
 #### 7.5 确认通过 Identity 地址建立 BR/EDR 连接
 
 - Controller 主动向 Host 请求 LinkKey，并校验通过，无需再次进行 BR/EDR 配对：
 
-<img src="img/smp/le_pairing_6.png" alt="BR/EDR连接成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_6.png" alt="BR/EDR连接成功" width="75%">
 
 - 从空口日志进一步确认 LinkKey 校验成功：
 
-<img src="img/smp/le_pairing_8.png" alt="LinkKey校验成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey校验成功" width="75%">
 
 #### 7.6 断连/重启后回连情况
 
 设备信息参考：
 
-| 设备名称                | 地址                                                 | 模式       | 描述               |
-| ----------------------- | ---------------------------------------------------- | ---------- | ------------------ |
-| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable)                       | Low Energy | REDMI Watch 5 eSIM |
-| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45                                    | Dual Mode  | REDMI Watch 5 eSIM |
-| xxx的 iPhone            | B4:19:74:13:CE:4A                                    | Dual Mode  | xxx的 iPhone       |
-| xxx的 iPhone            | 6B:FC:EE:54:F0- [适配启动](./adapter_and_startup.md) |
+| 设备名称                | 地址                                        | 模式       | 描述               |
+| ----------------------- | ------------------------------------------- | ---------- | ------------------ |
+| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable)              | Low Energy | REDMI Watch 5 eSIM |
+| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45                           | Dual Mode  | REDMI Watch 5 eSIM |
+| xxx的 iPhone            | B4:19:74:13:CE:4A                           | Dual Mode  | xxx的 iPhone       |
+| xxx的 iPhone            | 6B:FC:EE:54:F0- [适配启动](#适配和启动问题) |
 
 设备重启后，Resolving List 需要更新到 Controller，重新建立连接：
 
-<img src="img/smp/le_pairing_8.png" alt="设备重启后回连成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="设备重启后回连成功" width="75%">
 
 正常断连回连情况：
 
-<img src="img/smp/le_pairing_9.png" alt="正常断连回连成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="正常断连回连成功" width="75%">
 
 ### 8、设备使用 Public 地址未连接成功
 
 使用 Public 地址配对时，不生成或分发 IRK，无 IdKey 位：
 
-<img src="img/smp/le_pairing_10.png" alt="Public地址配对" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_10.png" alt="Public地址配对" width="75%">
 
 BR/EDR LinkKey 正常生成：
 
-<img src="img/smp/le_pairing_11.png" alt="BR/EDR LinkKey正常生成" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_11.png" alt="BR/EDR LinkKey正常生成" width="75%">
 
 # 音频传输问题
 
@@ -983,7 +983,7 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP)
 
 在Vela蓝牙协议栈之上，Vela蓝牙子系统还提供了A2DP服务层，A2DP服务于多媒体子系统中的Media服务之间存在多个传输通路，称为transport channels。这些transport channel可以分为两类：用于传输控制信令的control channel，以及用于传输音频数据的data channel，如下图所示
 
-<img src="img/a2dp/diagram_a2dp_transports.png" alt="diagram:A2DP数据通路" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/diagram_a2dp_transports.png" alt="diagram:A2DP数据通路" width="75%">
 
 <a id="方法：观察蓝牙和Media之间的transport是否正确建立"></a>
 
@@ -1015,7 +1015,7 @@ AVDTP signaling连接是两个蓝牙设备建立音频连接的必要步骤。�
 
 AVDTP signaling连接成功的典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_signaling_establishment.png" alt="snoop:AVDTP signaling连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_signaling_establishment.png" alt="snoop:AVDTP signaling连接" width="75%">
 
 其中：AVDTP连接是一种L2CAP连接，L2CAP连接的种类由PSM标识。两个设备间建立的第一条AVDTP连接自动成为AVDTP signaling连接。
 
@@ -1033,7 +1033,7 @@ AVDTP signaling连接成功的典型log如下：
 
 可选的，在建立AVDTP media连接之前，可以发起AVDTP Discovery过程，用于发现对端设备可用的Stream End Point(SEP)。通常，发起AVDTP signaling连接的设备会发起这一过程。典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_discovery.png" alt="snoop:AVDTP discovery" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_discovery.png" alt="snoop:AVDTP discovery" width="75%">
 
 Log显示ACP的序号从1到6，表明该设备的拥有的SEP至少有6个。
 
@@ -1041,7 +1041,7 @@ Log显示ACP的序号从1到6，表明该设备的拥有的SEP至少有6个。
 
 可选的，在建立AVDTP media连接之前，可以通过Get Capabilities或者Get All Capabilities获取对端设备SEP的具体信息。通常，发起AVDTP signaling连接的设备会发起这一流程。典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_get_capabilities.png" alt="snoop:AVDTP get capabilities" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_get_capabilities.png" alt="snoop:AVDTP get capabilities" width="75%">
 
 Log展示了获取编号为1的SEP的具体信息的过程，其中，编码格式为SBC，采样率为44.1kHz。
 
@@ -1049,7 +1049,7 @@ Log展示了获取编号为1的SEP的具体信息的过程，其中，编码格�
 
 在建立AVDTP media连接之前，需要通过Set Configuration过程指定双方的SEP，以及编解码参数。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_set_configuration.png" alt="snoop:AVDTP set configuration" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_set_configuration.png" alt="snoop:AVDTP set configuration" width="75%">
 
 Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建立连接。
 
@@ -1057,13 +1057,13 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 在建立AVDTP media连接之前，需要通过Open流程打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="75%">
 
 #### 1.5 AVDTP media连接成功
 
 完成Set Configuration和Stream Establish流程后，需要建立第二条AVDTP连接，也就是AVDTP media连接。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_media_establishment.png" alt="snoop:AVDTP media连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_media_establishment.png" alt="snoop:AVDTP media连接" width="75%">
 
 通常，AVDTP Open完成后，随之建立的L2CAP（PSM=AVDTP）是AVDTP media连接。
 
@@ -1122,7 +1122,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 在音频流开始传输之前，A2DP SRC会发起Stream Start流程。在音频流传输过程中，A2DP SRC会向SNK发送media packets，典型log如下：
 
-<img src="img/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="75%">
 
 <a id="观察a2dp-src是否停止传输音频包"></a>
 
@@ -1163,7 +1163,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 典型log如下：
 
-<img src="img/a2dp/sniffer_avdtp_stream_suspend.png" alt="sniffer:AVDTP media suspend" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_suspend.png" alt="sniffer:AVDTP media suspend" width="75%">
 
 ## 七、观察AVDTP signaling连接是否断开
 
@@ -1189,7 +1189,7 @@ AVDTP signaling断开的原因包括以下几种：应用请求Vela蓝牙子系�
 
 snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，以及对端设备请求断开连接。典型log如下：
 
-<img src="img/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="75%">
 
 <a id="观察音频包序列号是否连续"></a>
 
@@ -1201,7 +1201,7 @@ AVDTP Media Packet的包头中有一个字段，称为Sequence Number。该字�
 
 典型log如下：
 
-<img src="img/a2dp/sniffer_avdtp_media_packet_sequence_number.png" alt="sniffer:AVDTP media packet sequence number" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_sequence_number.png" alt="sniffer:AVDTP media packet sequence number" width="75%">
 
 <a id="观察air-log中1秒内发送的音频数据样本点数量"></a>
 
@@ -1213,13 +1213,13 @@ AVDTP Media Packet的包头中有一个字段，称为Time Stamp。该字段表�
 
 通常，约1秒时间段内音频数据的样本点应当等于或近似等于采样率，典型log如下：
 
-<img src="img/a2dp/sniffer_avdtp_media_packet_number_normal.png" alt="sniffer:normal AVDTP media packet sequence number" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_normal.png" alt="sniffer:normal AVDTP media packet sequence number" width="75%">
 
 上述log中，实际传输的样本点数量为：5949440 - 5904896 = 44546。由于当前设置的采样率为44.1kHz，实际传输的样本点数量与预期接近。
 
 1秒内音频数据的样本点数量远大于采样率时，通常air log中会看到比正常情形更加密集的包，典型log如下：
 
-<img src="img/a2dp/sniffer_avdtp_media_packet_number_abnormal.png" alt="sniffer:abnormal AVDTP media packet sequence number" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_media_packet_number_abnormal.png" alt="sniffer:abnormal AVDTP media packet sequence number" width="75%">
 
 上述log中，约1秒时间段内实际传输的样本点数量为：7395456 - 7270656 = 124800，远超预期。
 
@@ -1237,13 +1237,13 @@ air log中基带包有两个参数可以用来判断包是否存在重传，分�
 
 设备发送的包没收到对端的回复，典型log如下：
 
-<img src="img/a2dp/sniffer_acl_no_response.png" alt="sniffer:packet with no response" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_acl_no_response.png" alt="sniffer:packet with no response" width="75%">
 
 上述log中，设备发了3次2-DH5包，前两次发送的包没有收到对端设备的回复，因此再次重传，SEQN值维持不变；第三次发送的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。再次发送新数据时，可以观察到SEQN发生了变化。
 
 设备发送的包收到了对端的回复，但回复的ARQN是NAK，典型log如下：
 
-<img src="img/a2dp/sniffer_acl_nak_response.png" alt="sniffer:packet with NAK response" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_acl_nak_response.png" alt="sniffer:packet with NAK response" width="75%">
 
 上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变；第二次的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。
 
@@ -1285,7 +1285,7 @@ A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以�
 ### 1、通过snoop log观察卡顿是否来源于基带芯片
 
 典型log如下：\
-<img src="img/a2dp/snoop_avdtp_audio_data.png" alt="snoop:AVDTP数据" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_audio_data.png" alt="snoop:AVDTP数据" width="75%">
 
 其中，在时间段能收到AVDTP数据的time stamp应大致符合以下关系，（end_time(s) - start_time(s)) * samplerate <= end_time_stamp - start_time_stamp。
 
@@ -1466,7 +1466,7 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 AVRCP是蓝牙音视频遥控协议，包含Controller（CT）和Target（TG）两个角色。通常，CT是控制方，TG是受控方。Vela蓝牙服务框架中，蓝牙音乐输出设备（例如音箱/耳机/车机）可以为AVRCP-CT，蓝牙音乐源设备（例如手机/手表/手环）可以为AVRCP-TG。
 AVCTP是蓝牙音视频控制信令传输协议，协议主要由AV/C数字接口指令集发展而来，规定了控制信令的传输格式。AVRCP和AVCTP协议栈的层级结构如下图所示
 
-<img src="img/avrcp/diagram_avrcp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/diagram_avrcp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="75%">
 
 Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系统通过Media Session与各应用交互音视频控制信息，包括播放器的播放状态、播放进度等；Vela蓝牙子系统通过Media Framework和多媒体子系统交互媒体音量等信息；Vela蓝牙子系统通过蓝牙服务框架与前端应用交互歌曲名称等信息。
 
@@ -1494,13 +1494,13 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 典型log如下：
 
-<img src="img/avrcp/snoop_avctp_establishment.png" alt="snoop:AVRCP连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_avctp_establishment.png" alt="snoop:AVRCP连接" width="75%">
 
 ### 3、通过air log观察是否建立了AVRCP连接，以及观察可能的失败原因
 
 典型log如下：
 
-<img src="img/avrcp/sniffer_avctp_establishment.png" alt="sniffer:AVRCP连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avctp_establishment.png" alt="sniffer:AVRCP连接" width="75%">
 
 <a id="方法：观察设备是否支持AVRCP"></a>
 
@@ -1535,11 +1535,11 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 * SDP中，声明支持AVRCP-CT角色
 
-<img src="img/avrcp/snoop_sdp_avrc_controller.png" alt="snoop:AVRCP-CT服务" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_avrc_controller.png" alt="snoop:AVRCP-CT服务" width="75%">
 
 * SDP中，声明支持AVRCP-TG角色
 
-<img src="img/avrcp/snoop_sdp_avrc_target.png" alt="snoop:AVRCP-TG服务" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_avrc_target.png" alt="snoop:AVRCP-TG服务" width="75%">
 
 <a id="方法：观察是否发送了播放、暂停请求"></a>
 
@@ -1567,7 +1567,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 典型log如下：
 
-<img src="img/avrcp/snoop_passthrough_pause_play.png" alt="snoop:AVRCP播放暂停请求" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_passthrough_pause_play.png" alt="snoop:AVRCP播放暂停请求" width="75%">
 
 <a id="方法：观察是否注册了Notification"></a>
 
@@ -1592,7 +1592,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 以播放状态Notification为例，典型log如下：
 
-<img src="img/avrcp/sniffer_avrcp_register_notification_playback_status.png" alt="sniffer:AVRCP注册播放状态变化" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avrcp_register_notification_playback_status.png" alt="sniffer:AVRCP注册播放状态变化" width="75%">
 
 <a id="方法：观察是否正确反馈播放状态"></a>
 
@@ -1617,7 +1617,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 以播放状态Notification为例，典型log如下：
 
-<img src="img/avrcp/sniffer_avrcp_register_notification_playback_status.png" alt="sniffer:AVRCP注册播放状态变化" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_avrcp_register_notification_playback_status.png" alt="sniffer:AVRCP注册播放状态变化" width="75%">
 
 <a id="方法：观察播放状态变化是否由蓝牙引起"></a>
 
@@ -1642,11 +1642,11 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 绝对音量功能中，音乐源设备（手机）需要在SDP声明支持AVRCP-CT角色，音乐播放设备（耳机）需要在SDP声明支持AVRCP-TG角色。典型log如下：
 
-<img src="img/avrcp/snoop_sdp_absolute_volume_supported.png" alt="snoop:AVRCP绝对音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_sdp_absolute_volume_supported.png" alt="snoop:AVRCP绝对音量" width="75%">
 
 此外，音乐源设备（手机）向音乐播放设备（耳机）注册音量变化事件，表明双方均支持绝对音量。典型log如下：
 
-<img src="img/avrcp/snoop_register_notification_volume_changed.png" alt="snoop:AVRCP注册音量变化" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_register_notification_volume_changed.png" alt="snoop:AVRCP注册音量变化" width="75%">
 
 <a id="方法：观察手机是否设置了绝对音量"></a>
 
@@ -1658,7 +1658,7 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 典型log如下：
 
-<img src="img/avrcp/snoop_set_absolute_volume.png" alt="snoop:AVRCP设置绝对音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_set_absolute_volume.png" alt="snoop:AVRCP设置绝对音量" width="75%">
 
 <a id="方法：观察本地设备是否设置了绝对音量"></a>
 
@@ -1682,7 +1682,7 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 通常可以通过air log导出音频，解析音乐文件，观察幅值变化。典型的蓝牙音频文件如下：
 
-<img src="img/avrcp/pcm_volume_changed.png" alt="pcm:通过幅值判断音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/pcm_volume_changed.png" alt="pcm:通过幅值判断音量" width="75%">
 
 ### 2、通过air log观察音乐源设备（手机）是否改变了音频幅值
 
@@ -1690,11 +1690,11 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 对于SBC编码的音频，可以通过Media Payload中的Scale Factor判断音量。典型log如下：
 
-<img src="img/avrcp/sniffer_sbc_scale_factor.png" alt="sniffer:通过Scale Factor判断SBC音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_sbc_scale_factor.png" alt="sniffer:通过Scale Factor判断SBC音量" width="75%">
 
 对于AAC编码的音频，可以通过编码帧长度判断音量。典型log如下：
 
-<img src="img/avrcp/sniffer_aac_payload_length.png" alt="sniffer:通过Payload Length判断AAC音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/sniffer_aac_payload_length.png" alt="sniffer:通过Payload Length判断AAC音量" width="75%">
 
 <a id="方法：观察是否打开了AVRCP配置"></a>
 
@@ -1730,19 +1730,19 @@ CONFIG_BLUETOOTH_AVRCP_CONTROL=y
 
 当双方设备支持AVRCP绝对音量控制时，AVRCP TG（手机）设备可以主动设置绝对音量，典型log如下：
 
-<img src="img/avrcp/snoop_set_absolute_volume.png" alt="snoop:AVRCP TG改变绝对音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_set_absolute_volume.png" alt="snoop:AVRCP TG改变绝对音量" width="75%">
 
 当双方设备支持AVRCP绝对音量控制时，AVRCP CT（耳机）设备可以主动反馈绝对音量变化，典型log如下：
 
-<img src="img/avrcp/snoop_absolute_volume_changed.png" alt="snoop:AVRCP CT改变绝对音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_absolute_volume_changed.png" alt="snoop:AVRCP CT改变绝对音量" width="75%">
 
 HFP AG（手机）设备可以主动设置通话音量，典型log如下：
 
-<img src="img/hfp/snoop_hfp_ag_set_volume.png" alt="snoop:HFP AG改变音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_set_volume.png" alt="snoop:HFP AG改变音量" width="75%">
 
 HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
 
-<img src="img/hfp/snoop_hfp_hf_set_volume.png" alt="snoop:HFP HF改变音量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_set_volume.png" alt="snoop:HFP HF改变音量" width="75%">
 
 ## 典型问题
 
@@ -1874,7 +1874,7 @@ AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要
 
 HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF）两个角色。通常，AG是音频网关，负责音频设备输入输出，典型设备为手机，HF作为音频网关的远程音频输入/输出设备，典型设备为耳机。HFP协议栈的层级结构如下图所示
 
-<img src="img/hfp/diagram_hfp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/diagram_hfp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="75%">
 
 <a id="方法：观察是否建立了HFP连接"></a>
 
@@ -1899,11 +1899,11 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 
 在建立SLC连接的过程中，AG和HF设备需要在RFCOMM信道上交互多组AT命令，具体流程可参考下图。其中，实线箭头指代的命令为流程，虚线箭头指代的命令为可选流程。Standard Event Reporting Activation（AT+CMER）是必要流程中的最后一组命令，通常标志着SLC建立完成。
 
-<img src="img/hfp/snoop_hfp_slc_core.png" alt="snoop:HFP连接规范" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc_core.png" alt="snoop:HFP连接规范" width="75%">
 
 两个蓝牙设备建立HFP连接的典型log如下：
 
-<img src="img/hfp/snoop_hfp_slc.png" alt="snoop:HFP连接" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_slc.png" alt="snoop:HFP连接" width="75%">
 
 <a id="方法：观察设备是否支持HFP"></a>
 
@@ -1938,11 +1938,11 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 
 * SDP中，声明支持HFP-HF角色
 
-<img src="img/hfp/snoop_hfp_ag_sdp.png" alt="snoop:HFP-AG服务" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ag_sdp.png" alt="snoop:HFP-AG服务" width="75%">
 
 * SDP中，声明支持HFP-AG角色
 
-<img src="img/hfp/snoop_hfp_hf_sdp.png" alt="snoop:HFP-HF服务" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_hf_sdp.png" alt="snoop:HFP-HF服务" width="75%">
 
 <a id="方法：观察是否建立了SCO连接"></a>
 
@@ -2000,7 +2000,7 @@ AG和HF都需要在SCO建立完成之后向Media设置SCO音频参数，包含Co
 
 ### 2、通过snoop log观察HF是否向AG发送了Answer请求
 
-<img src="img/hfp/snoop_hfp_ata.png" alt="snoop:HFP-ATA" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ata.png" alt="snoop:HFP-ATA" width="75%">
 
 <a id="方法：观察AG是否向HF发送了来电信息"></a>
 
@@ -2127,13 +2127,13 @@ GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。�
 
 ## 一、分析GATT理论吞吐
 
-<img src="img/gatt/le_ll_packet.png" alt="spec:GATT-DATA-PACKET" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/le_ll_packet.png" alt="spec:GATT-DATA-PACKET" width="75%">
 
 链路层启用2M PHY及启用DLE，258 - 2 - 4 - 3 = 251Bytes，251 bytes / 1400μs = 179.3 kB/s
 
 <a id="观察le数据包格式"></a>
 
-<img src="img/gatt/le_tx_time_per_connect_interval.png" alt="sepc:GATT-TX-Event" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/le_tx_time_per_connect_interval.png" alt="sepc:GATT-TX-Event" width="75%">
 
 <a id="观察le数据连接间隔"></a>
 
@@ -2215,15 +2215,15 @@ bttool> [bttool] Device [xx:xx:xx:xx:xx:xx][BREDR] bond state: BONDED, is_ctkd: 
 
 ### 1、通过HCI log检查是否支持DLE
 
-<img src="img/gatt/snoop_le_dle_feature.png" alt="sepc:GATT-HCI-DLE" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/snoop_le_dle_feature.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
 如上图，在初始化阶段，读取本地Feature，是否支持DLE。若是支持，则可以观察在Notification阶段，发送251字节数据包长度。
 
 ### 2、通过Air log检查是否支持DLE
 
-<img src="img/gatt/sniffer_le_dle_feature.png" alt="sepc:GATT-HCI-DLE" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/sniffer_le_dle_feature.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
-<img src="img/gatt/sniffer_le_dle_data.png" alt="sepc:GATT-HCI-DLE" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/sniffer_le_dle_data.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
 如上图，在BLE连接阶段，可以在链路层请求查询对方Feature，Max 链路层TX和RX数据包是否支持251字节长度。若是支持，则可以观察在Notification阶段，发送251字节数据包长度。
 
@@ -2246,13 +2246,13 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 典型log如下：
 
-<img src="img/gatt/exchange_mtu.png" alt="snoop:GATT_exchange_mtu" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/exchange_mtu.png" alt="snoop:GATT_exchange_mtu" width="75%">
 
 <a id="分析每个连接间隔的最大event数量"></a>
 
 ## 五、分析每个连接间隔的最大Event数量
 
-<img src="img/gatt/sniffer_gatt_througth_15ms.png" alt="sepc:GATT-TX-Throughput" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/sniffer_gatt_througth_15ms.png" alt="sepc:GATT-TX-Throughput" width="75%">
 
 如上图，以连接间隔15ms为例，在一个连接间隔内可最大交互10个Event（15ms/1400us=10.2）
 
@@ -2266,7 +2266,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 可以从图中的粉色柱体看到整个传输过程中的重传率，如下代表信道质量尚可
 
-<img src="img/gatt/channel_quality.png" alt="snoop:信道传输质量" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/channel_quality.png" alt="snoop:信道传输质量" width="75%">
 
 <a id="使用gatt-over-br数据传输模式"></a>
 
@@ -2274,13 +2274,13 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 在经典蓝牙物理连接上传输GATT数据，利用经典蓝牙3M带宽。启动多时隙包3DH5，理论速率可提升到（1021-4-6）/ 0.625 * 6 = 269.6KB/s
 
-<img src="img/gatt/spec_edr_acl_packets_rate.png" alt="sepc:GATT-HCI-DLE" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/spec_edr_acl_packets_rate.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
 <a id="使用le-coc数据传输模式"></a>
 
 ## 八、使用LE COC数据传输模式
 
-<img src="img/gatt/le_coc_spp_coexist.png" alt="sepc:GATT-HCI-DLE" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/gatt/le_coc_spp_coexist.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
 from:Bluetooth_5.2_Feature_Overview
 
@@ -2335,7 +2335,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 
 如下是典型snoop log，通过蓝色柱体可以看到HID 控制L2CAP Channel连接成功，L2CAP Connection Request和L2CAP Connection Response 对应Channels的连接事件：
 
-<img src="img/hid/snoop_hidd_control_connection.png" alt="snoop:HID L2CAP 控制Channel连接成功" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_control_connection.png" alt="snoop:HID L2CAP 控制Channel连接成功" width="75%">
 
 ### 3、通过Airlog或者Snoop log观察HID Interrupt L2CAP Channel是否连接成功
 
@@ -2349,7 +2349,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 
 如下是典型snoop log，通过蓝色柱体可以看到HID L2CAP Channel连接断开，L2CAP Disconnection Request和L2CAP Disconnection Response 对应Channels的断开事件：
 
-<img src="img/hid/snoop_hidd_disconnection.png" alt="snoop:HID L2CAP Channel连接断开" width="75%">
+<img src="img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_disconnection.png" alt="snoop:HID L2CAP Channel连接断开" width="75%">
 
 可以看到，HID L2CAP Channel连接断开，手机端主动发起断开L2CAP通道。
 
