@@ -1,8 +1,54 @@
-<!-- title: 如何分析蓝牙问题 -->
-
-<!-- omit from toc -->
-
 # 音频传输问题
+
+- [音频传输问题](#音频传输问题)
+  - [一、观察蓝牙和Media之间的transport是否正确建立](#一观察蓝牙和media之间的transport是否正确建立)
+  - [二、观察是否建立了AVDTP signaling连接](#二观察是否建立了avdtp-signaling连接)
+    - [1、通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因](#1通过snoop-log观察是否建立了avdtp-signaling连接以及观察可能的失败原因)
+  - [三、观察是否建立了AVDTP media连接](#三观察是否建立了avdtp-media连接)
+    - [1、通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因](#1通过snoop-log观察是否建立了avdtp-media连接以及观察可能的失败原因)
+      - [1.1 AVDTP Discovery](#11-avdtp-discovery)
+      - [1.2 AVDTP Get Capabilities](#12-avdtp-get-capabilities)
+      - [1.3 AVDTP Set Configuration](#13-avdtp-set-configuration)
+      - [1.4 AVDTP Stream Establishment](#14-avdtp-stream-establishment)
+      - [1.5 AVDTP media连接成功](#15-avdtp-media连接成功)
+    - [2、通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因](#2通过syslog观察是否建立了avdtp-media连接以及观察可能的失败原因)
+  - [四、观察Media是否成功设置了codec](#四观察media是否成功设置了codec)
+  - [五、观察A2DP SRC是否开始播放音乐](#五观察a2dp-src是否开始播放音乐)
+    - [1、通过syslog观察A2DP SRC是否开始播放音乐](#1通过syslog观察a2dp-src是否开始播放音乐)
+    - [2、通过air log观察A2DP SRC是否开始播放音乐](#2通过air-log观察a2dp-src是否开始播放音乐)
+  - [六、观察A2DP SRC是否停止音频流传输](#六观察a2dp-src是否停止音频流传输)
+    - [1、通过syslog观察A2DP SRC是否停止音频流传输](#1通过syslog观察a2dp-src是否停止音频流传输)
+    - [2、通过snoop log观察A2DP SRC是否停止传输音频包](#2通过snoop-log观察a2dp-src是否停止传输音频包)
+  - [七、观察AVDTP signaling连接是否断开](#七观察avdtp-signaling连接是否断开)
+    - [1、通过syslog观察是否断开了AVDTP signaling连接](#1通过syslog观察是否断开了avdtp-signaling连接)
+    - [2、通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因](#2通过snoop-log观察是否断开了avdtp-signaling连接以及观察可能的失败原因)
+    - [八、观察音频包序列号是否连续](#八观察音频包序列号是否连续)
+  - [九、观察air log中1秒内发送的音频数据样本点数量](#九观察air-log中1秒内发送的音频数据样本点数量)
+  - [十、观察air log中音频数据是否存在重传](#十观察air-log中音频数据是否存在重传)
+    - [十一、观察syslog判段A2DP-SNK音乐卡顿原因](#十一观察syslog判段a2dp-snk音乐卡顿原因)
+    - [1、观察A2DP-SNK音乐卡顿是否可能由基带芯片引起](#1观察a2dp-snk音乐卡顿是否可能由基带芯片引起)
+    - [2、观察A2DP-SNK音乐卡顿是否可能由mips不足引起](#2观察a2dp-snk音乐卡顿是否可能由mips不足引起)
+    - [3、观察A2DP-SNK音乐卡顿是否可能由Bluetooth service](#3观察a2dp-snk音乐卡顿是否可能由bluetooth-service)
+    - [4、观察A2DP-SNK音乐卡顿是否可能由Media service](#4观察a2dp-snk音乐卡顿是否可能由media-service)
+  - [十二、观察A2DP-SNK卡顿是否来源于基带芯片](#十二观察a2dp-snk卡顿是否来源于基带芯片)
+    - [1、通过snoop log观察卡顿是否来源于基带芯片](#1通过snoop-log观察卡顿是否来源于基带芯片)
+    - [2、通过syslog观察卡顿是否来源于基带芯片](#2通过syslog观察卡顿是否来源于基带芯片)
+  - [十三、观察A2DP-SNK卡顿是否来源于mips不足](#十三观察a2dp-snk卡顿是否来源于mips不足)
+    - [1、通过ps命令观察cpu负载情况](#1通过ps命令观察cpu负载情况)
+    - [2、通过工具命令观察cpu负载情况](#2通过工具命令观察cpu负载情况)
+  - [十四、观察bluetoothd自身是否被阻塞](#十四观察bluetoothd自身是否被阻塞)
+    - [1、通过debug log判断bluetoothd是否被阻塞](#1通过debug-log判断bluetoothd是否被阻塞)
+  - [典型问题](#典型问题)
+    - [问题一：连接耳机播放音乐，耳机无声](#问题一连接耳机播放音乐耳机无声)
+    - [问题二：连接耳机播放音频文件，音频文件开头缺失](#问题二连接耳机播放音频文件音频文件开头缺失)
+    - [问题三：语音播报，结尾处有pop音](#问题三语音播报结尾处有pop音)
+    - [问题四：连接两对耳机时，出现断连和无声的问题](#问题四连接两对耳机时出现断连和无声的问题)
+    - [问题五: 连接耳机播放音乐，耳机无声](#问题五-连接耳机播放音乐耳机无声)
+    - [问题六: 连接耳机播放音频文件，音频文件开头缺失](#问题六-连接耳机播放音频文件音频文件开头缺失)
+    - [问题七: 语音播报，结尾处有pop音](#问题七-语音播报结尾处有pop音)
+    - [问题八: 连接手机播放音乐卡顿](#问题八-连接手机播放音乐卡顿)
+    - [问题九: 连接手机播放音乐无声](#问题九-连接手机播放音乐无声)
+
 
 本章介绍Advanced Audio Distribution Profile（A2DP）和Audio/Video Distribution Transport Protocol（AVDTP）相关问题常用的分析、定位方法。AVDTP负责控制音频/视频的传输过程，而A2DP定义了音频数据的编码和传输规范，通过这两个协议配合工作，可以实现在蓝牙设备之间高质量的音频传输。
 
@@ -35,7 +81,7 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP)
 [a2dp_control]: a2dp_data_cb, path:[a2dp_sink_data], event:TRANSPORT_OPEN_EVT
 ```
 
-<a id="方法：观察是否建立了AVDTP signaling连接"></a>
+<a id="观察是否建立了avdtp-signaling连接"></a>
 
 ## 二、观察是否建立了AVDTP signaling连接
 
@@ -49,7 +95,7 @@ AVDTP signaling连接成功的典型log如下：
 
 其中：AVDTP连接是一种L2CAP连接，L2CAP连接的种类由PSM标识。两个设备间建立的第一条AVDTP连接自动成为AVDTP signaling连接。
 
-<a id="方法：观察是否建立了AVDTP media连接"></a>
+<a id="观察是否建立了avdtp-media连接"></a>
 
 ## 三、观察是否建立了AVDTP media连接
 
@@ -113,7 +159,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 [a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
 ```
 
-<a id="方法：观察Media是否成功设置了codec"></a>
+<a id="观察Media是否成功设置了codec"></a>
 
 ## 四、观察Media是否成功设置了codec
 
@@ -125,7 +171,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 [a2dp_control]: a2dp_recv_ctrl_data: a2dp-ctrl-cmd : A2DP_CTRL_CMD_CONFIG_DONE
 ```
 
-<a id="方法：观察A2DP SRC是否开始播放音乐"></a>
+<a id="观察a2dp-src是否开始播放音乐"></a>
 
 ## 五、观察A2DP SRC是否开始播放音乐
 
@@ -154,7 +200,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 <img src="img/a2dp/sniffer_avdtp_stream_start.png" alt="sniffer:AVDTP media start" width="75%">
 
-<a id="方法：观察A2DP SRC是否停止传输音频包"></a>
+<a id="观察a2dp-src是否停止传输音频包"></a>
 
 ## 六、观察A2DP SRC是否停止音频流传输
 
@@ -221,7 +267,7 @@ snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动�
 
 <img src="img/a2dp/snoop_avdtp_stream_release.png" alt="snoop:AVDTP media release" width="75%">
 
-<a id="方法：观察音频包序列号是否连续"></a>
+<a id="观察音频包序列号是否连续"></a>
 
 ### 八、观察音频包序列号是否连续
 
@@ -233,7 +279,7 @@ AVDTP Media Packet的包头中有一个字段，称为Sequence Number。该字�
 
 <img src="img/a2dp/sniffer_avdtp_media_packet_sequence_number.png" alt="sniffer:AVDTP media packet sequence number" width="75%">
 
-<a id="方法：观察air log中1秒内发送的音频数据样本点数量"></a>
+<a id="观察air-log中1秒内发送的音频数据样本点数量"></a>
 
 ## 九、观察air log中1秒内发送的音频数据样本点数量
 
@@ -253,7 +299,7 @@ AVDTP Media Packet的包头中有一个字段，称为Time Stamp。该字段表�
 
 上述log中，约1秒时间段内实际传输的样本点数量为：7395456 - 7270656 = 124800，远超预期。
 
-<a id="方法：观察air log中音频数据是否存在重传"></a>
+<a id="观察air-log中音频数据是否存在重传"></a>
 
 ## 十、观察air log中音频数据是否存在重传
 
@@ -277,7 +323,7 @@ air log中基带包有两个参数可以用来判断包是否存在重传，分�
 
 上述log中，设备发了2次2-DH5包，第一次发送的包收到了对端设备的回复，但ARQN为NAK，SEQN值维持不变；第二次的包收到了对端设备的回复，且回复的ARQN是ACK，因此重传结束。
 
-<a id="方法：通过syslog判段A2DP-SNK音乐卡顿原因"></a>
+<a id="通过syslog判段a2dp-snk音乐卡顿原因"></a>
 
 ### 十一、观察syslog判段A2DP-SNK音乐卡顿原因
 A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以根据以下log进行分析：
@@ -308,7 +354,7 @@ A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以�
 
 若出现“ipc blocking, block ticks: w”，说明发送给Media的音频数据没有被及时消费，导致在ipc通道前堆集了w个数据包，在这种情况下应优先考虑Media侧出现问题。
 
-<a id="方法：观察A2DP-SNK卡顿是否来源于基带芯片"></a>
+<a id="观察a2dp-snk卡顿是否来源于基带芯片"></a>
 
 ## 十二、观察A2DP-SNK卡顿是否来源于基带芯片
 
@@ -325,7 +371,7 @@ A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以�
 **该syslog需要能确认基带芯片是否及时上报数据**，若未及时上报数据，则可以怀疑音乐卡顿来自于基带芯片。\
 由于不同项目使用的基带芯片不同，所以对应的syslog如何添加/开启应该联系负责基带芯片驱动的工程师。
 
-<a id="方法：观察A2DP-SNK卡顿是否来源于mips不足"></a>
+<a id="观察a2dp-snk卡顿是否来源于mips不足"></a>
 
 ## 十三、观察A2DP-SNK卡顿是否来源于mips不足
 
@@ -339,7 +385,7 @@ bluetoothd的优先级在整个系统中往往不是最高，所以如果出现�
 
 对于偶现/不可持续的卡顿问题，可以通过抓取发生时间点的trace来分析是否存在短时间内的cpu占用率过高的问题。
 
-<a id="方法：观察bluetoothd自身是否被阻塞"></a>
+<a id="观察bluetoothd自身是否被阻塞"></a>
 
 ## 十四、观察bluetoothd自身是否被阻塞
 
@@ -351,25 +397,25 @@ bluetoothd的优先级在整个系统中往往不是最高，所以如果出现�
 
 ### 问题一：连接耳机播放音乐，耳机无声
 
-* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+* [观察是否建立了AVDTP signaling连接](#观察是否建立了avdtp-signaling连接)
 
   * 若两个设备未能正确建立AVDTP signaling连接，建议对比典型log，观察AVDTP signaling连接建立过程中是否出现异常。
 
-  * 若两个设备间正确建立了AVDTP signaling连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+  * 若两个设备间正确建立了AVDTP signaling连接，建议[观察是否建立了AVDTP media连接](#观察是否建立了avdtp-media连接)
 
-* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+* [观察是否建立了AVDTP media连接](#观察是否建立了avdtp-media连接)
 
   * 若两个设备未能正确建立AVDTP media连接，建议对比典型log，观察AVDTP media连接建立过程中是否出现异常。
 
-  * 若两个设备之间正确建立了AVDTP media连接，建议[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+  * 若两个设备之间正确建立了AVDTP media连接，建议[观察Media是否成功设置了codec](#观察media是否成功设置了codec)
 
-* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+* [观察Media是否成功设置了codec](#观察media是否成功设置了codec)
 
   * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
 
-  * 若Vela Media成功设置codec，建议[观察A2DP SRC是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+  * 若Vela Media成功设置codec，建议[观察A2DP SRC是否开始播放音乐](#观察a2dp-src是否开始播放音乐)
 
-* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+* [观察是否开始播放音乐](#观察a2dp-src是否开始播放音乐)
 
   * 若本地设备为A2DP SRC，且Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
 
@@ -377,7 +423,7 @@ bluetoothd的优先级在整个系统中往往不是最高，所以如果出现�
 
 ### 问题二：连接耳机播放音频文件，音频文件开头缺失
 
-* [观察音频包序列号是否连续](#方法观察音频包序列号是否连续)
+* [观察音频包序列号是否连续](#观察音频包序列号是否连续)
 
   * 若air log中出问题的音频流中存在音频包序列号不连续，建议在Vela蓝牙侧观察音频流中音频包的序列号不连续的原因。
 
@@ -389,15 +435,15 @@ bluetoothd的优先级在整个系统中往往不是最高，所以如果出现�
 
 Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连接连接一对耳机。当手表需要连接另一对耳机时，需要先断开前一对耳机。针对多设备切换导致的无声问题，可以按以下顺序排查：
 
-* [观察是否断开了第一耳机](#方法观察avdtp-signaling连接是否断开)
+* [观察是否断开了第一耳机](#观察avdtp-signaling连接是否断开)
 
   * 若应用未能发送第一耳机断开请求，建议在App侧观察未能发送的原因。
 
   * 若应用发送了第一耳机断开请求，但未能断开，建议对比典型log，观察断开流程中是否出现异常。
 
-  * 若应用在连接第二耳机前，正确断开了第一耳机，建议[观察是否连接了第二耳机](#方法观察是否建立了avdtp-media连接)
+  * 若应用在连接第二耳机前，正确断开了第一耳机，建议[观察是否连接了第二耳机](#观察是否建立了avdtp-media连接)
 
-* [观察是否连接了第二耳机](#方法观察是否建立了avdtp-media连接)
+* [观察是否连接了第二耳机](#观察是否建立了avdtp-media连接)
 
   * 若应用未能发送第二耳机连接请求，建议在App侧观察未能发送的原因。
 
@@ -405,15 +451,15 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
   * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议对比典型log，观察建立media连接中是否出现异常。
 
-  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#观察media是否成功设置了codec)
 
-* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+* [观察Media是否成功设置了codec](#观察media是否成功设置了codec)
 
   * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
 
-  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#观察a2dp-src是否开始播放音乐)
 
-* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+* [观察是否开始播放音乐](#观察a2dp-src是否开始播放音乐)
 
   * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
 
@@ -421,25 +467,25 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
 ### 问题五: 连接耳机播放音乐，耳机无声
 
-* [观察是否建立了AVDTP signaling连接](#方法观察是否建立了avdtp-signaling连接)
+* [观察是否建立了AVDTP signaling连接](#观察是否建立了avdtp-signaling连接)
 
   * 若AVDTP signaling连接未建立，建议对比典型log，观察建立signaling连接中是否出现异常。
 
-  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议[观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+  * 若两个设备之间的AVDTP signaling连接建立成功，但未能建立AVDTP media连接，建议[观察是否建立了AVDTP media连接](#观察是否建立了avdtp-media连接)
 
-* [观察是否建立了AVDTP media连接](#方法观察是否建立了avdtp-media连接)
+* [观察是否建立了AVDTP media连接](#观察是否建立了avdtp-media连接)
 
   * 若两个设备之间的AVDTP media连接未建立，建议对比典型log，观察建立media连接中是否出现异常。
 
-  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+  * 若两个设备之间的AVDTP media连接建立成功，建议观察[观察Media是否成功设置了codec](#观察media是否成功设置了codec)
 
-* [观察Media是否成功设置了codec](#方法观察media是否成功设置了codec)
+* [观察Media是否成功设置了codec](#观察media是否成功设置了codec)
 
   * 若Vela Media未能成功设置codec，建议在Vela Media模块观察未能设置codec的原因。
 
-  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+  * 若Vela Media成功设置codec，建议观察[观察是否开始播放音乐](#观察a2dp-src是否开始播放音乐)
 
-* [观察是否开始播放音乐](#方法观察a2dp-src是否开始播放音乐)
+* [观察是否开始播放音乐](#观察a2dp-src是否开始播放音乐)
 
   * 若Vela Media未能发送音乐开始的命令，建议在Vela Media模块观察未能发送的原因。
 
@@ -447,7 +493,7 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
 ### 问题六: 连接耳机播放音频文件，音频文件开头缺失
 
-* [观察sequence number是否连续](#方法观察air-log中的音频包序列号是否连续)
+* [观察sequence number是否连续](#观察air-log中的音频包序列号是否连续)
 
   * 若air log中出问题的音频流中存在音频包序列号不连续，建议Vela蓝牙测观察音频流中音频包的序列号不连续的原因。
 
@@ -459,24 +505,24 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
 对于该问题需要进行以下分析：
 
-  [观察air log中音频数据是否存在重传](#方法：方法观察air-log中音频数据是否存在重传)\
-  [通过syslog判段A2DP-SNK音乐卡顿原因](#方法：通过syslog判段A2DP-SNK音乐卡顿原因)
+  [观察air log中音频数据是否存在重传](#观察air-log中音频数据是否存在重传)\
+  [通过syslog判段A2DP-SNK音乐卡顿原因](#通过syslog判段a2dp-snk音乐卡顿原因)
 
 根据推测原因应进行以下分析：
 * 若发现重传现象比较严重
 
-* [观察A2DP-SNK卡顿是否来源于基带芯片](#方法：观察A2DP-SNK卡顿是否来源于基带芯片)
+* [观察A2DP-SNK卡顿是否来源于基带芯片](#观察a2dp-snk卡顿是否来源于基带芯片)
 
   * 若观察到snoop log中，AVDTP数据包数量不符合预期，需要进一步确认驱动处的数据包情况
 
     * 若观察到驱动处数据包数量异常，则需要进一步确认问题发生在基带芯片、空口处或者驱动处
 
-* [观察A2DP-SNK卡顿是否来源于mips不足](#方法：观察A2DP-SNK卡顿是否来源于mips不足)
+* [观察A2DP-SNK卡顿是否来源于mips不足](#观察a2dp-snk卡顿是否来源于mips不足)
 
   * 若观察到idle task的cpu占用率过小，需要对系统的mips进行合理分配
   * 若通过trace观察到某一高优先级线程长时间占据cpu，则应该优化该线程的执行逻辑，避免高优先级线程执行计算密集型任务
 
-* [观察bluetoothd自身是否被阻塞](#方法：观察bluetoothd自身是否被阻塞)
+* [观察bluetoothd自身是否被阻塞](#观察bluetoothd自身是否被阻塞)
 
   * 若阻塞由于外部调用产生，则需要考虑该阻塞是否符合预期
 
