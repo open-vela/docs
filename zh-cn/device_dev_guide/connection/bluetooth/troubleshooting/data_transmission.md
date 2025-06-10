@@ -1,25 +1,43 @@
 # 数据传输问题
 
+- [数据传输问题](#数据传输问题)
+  - [一、分析GATT理论吞吐](#一分析gatt理论吞吐)
+  - [二、bttool测试GATT吞吐](#二bttool测试gatt吞吐)
+  - [三、检查是否打开DLE功能](#三检查是否打开dle功能)
+    - [1、通过HCI log检查是否支持DLE](#1通过hci-log检查是否支持dle)
+    - [2、通过Air log检查是否支持DLE](#2通过air-log检查是否支持dle)
+  - [四、观察client设备是否发起过Exchange\_MTU规程](#四观察client设备是否发起过exchange_mtu规程)
+    - [1、通过syslog观察client设备是否发起过Exchange\_MTU规程](#1通过syslog观察client设备是否发起过exchange_mtu规程)
+    - [2、通过snoop log观察client设备是否发起过Exchange\_MTU规程](#2通过snoop-log观察client设备是否发起过exchange_mtu规程)
+  - [五、分析每个连接间隔的最大Event数量](#五分析每个连接间隔的最大event数量)
+  - [六、观察当前空口环境是否复杂](#六观察当前空口环境是否复杂)
+    - [1、通过snoop log观察当前空口环境是否复杂](#1通过snoop-log观察当前空口环境是否复杂)
+  - [七、使用GATT OVER BR数据传输模式](#七使用gatt-over-br数据传输模式)
+  - [八、使用LE COC数据传输模式](#八使用le-coc数据传输模式)
+  - [典型问题](#典型问题)
+    - [问题一：GATT数据传输吞吐不达标](#问题一gatt数据传输吞吐不达标)
+
+
 本章介绍数据传输（GATT、 SPP）高吞吐传输过程中相关问题常用的分析、定位方法。
 GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。通常，主动发起连接的设备为client，被动接收连接的设备为server。设备可以同时充当client和server。GATT主要应用的高吞吐场景为，IOS OTA数据传输。
 
-<a id="方法：分析GATT理论吞吐"></a>
+<a id="分析gatt理论吞吐"></a>
 
 ## 一、分析GATT理论吞吐
 
-<img src="img/how_to_analyze_bluetooth_issues/gatt/le_ll_packet.png" alt="spec:GATT-DATA-PACKET" width="50%">
+<img src="img/gatt/le_ll_packet.png" alt="spec:GATT-DATA-PACKET" width="75%">
 
 链路层启用2M PHY及启用DLE，258 - 2 - 4 - 3 = 251Bytes，251 bytes / 1400μs = 179.3 kB/s
 
-<a id="方法：观察LE数据包格式"></a>
+<a id="观察le数据包格式"></a>
 
-<img src="img/how_to_analyze_bluetooth_issues/gatt/le_tx_time_per_connect_interval.png" alt="sepc:GATT-TX-Event" width="50%">
+<img src="img/gatt/le_tx_time_per_connect_interval.png" alt="sepc:GATT-TX-Event" width="75%">
 
-<a id="方法：观察LE数据连接间隔"></a>
+<a id="观察le数据连接间隔"></a>
 
 以7.5ms的连接连接为例，7.5ms/1.4ms = 5.35，（5 * 251B）/ 7.5ms = 167.3KB/s
 
-<a id="方法：bttool测试GATT吞吐"></a>
+<a id="bttool测试gatt吞吐"></a>
 
 ## 二、bttool测试GATT吞吐
 
@@ -87,7 +105,7 @@ bttool> [bttool] Device [xx:xx:xx:xx:xx:xx][BREDR] bond state: BONDED, is_ctkd: 
   
 连接间隔和MTU直接影响throughput测试结果，可根据测试要求调整相应配置。
 
-<a id="方法：检查是否打开DLE功能"></a>
+<a id="检查是否打开dle功能"></a>
 
 ## 三、检查是否打开DLE功能
 
@@ -107,7 +125,7 @@ bttool> [bttool] Device [xx:xx:xx:xx:xx:xx][BREDR] bond state: BONDED, is_ctkd: 
 
 如上图，在BLE连接阶段，可以在链路层请求查询对方Feature，Max 链路层TX和RX数据包是否支持251字节长度。若是支持，则可以观察在Notification阶段，发送251字节数据包长度。
 
-<a id="方法：观察client设备是否发起过Exchange_MTU规程"></a>
+<a id="观察client设备是否发起过exchange-mtu规程"></a>
 
 ## 四、观察client设备是否发起过Exchange_MTU规程
 
@@ -128,7 +146,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <img src="img/gatt/exchange_mtu.png" alt="snoop:GATT_exchange_mtu" width="75%">
 
-<a id="方法：分析每个连接间隔的最大Event数量"></a>
+<a id="分析每个连接间隔的最大event数量"></a>
 
 ## 五、分析每个连接间隔的最大Event数量
 
@@ -136,7 +154,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 如上图，以连接间隔15ms为例，在一个连接间隔内可最大交互10个Event（15ms/1400us=10.2）
 
-<a id="#方法：观察当前空口环境是否复杂"></a>
+<a id="#六观察当前空口环境是否复杂"></a>
 
 ## 六、观察当前空口环境是否复杂
 
@@ -148,7 +166,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <img src="img/gatt/channel_quality.png" alt="snoop:信道传输质量" width="75%">
 
-<a id="方法：使用GATT_OVER_BR数据传输模式"></a>
+<a id="使用gatt-over-br数据传输模式"></a>
 
 ## 七、使用GATT OVER BR数据传输模式
 
@@ -156,7 +174,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <img src="img/gatt/spec_edr_acl_packets_rate.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
-<a id="方法：使用LE_COC数据传输模式"></a>
+<a id="使用le-coc数据传输模式"></a>
 
 ## 八、使用LE COC数据传输模式
 
@@ -176,21 +194,21 @@ Vela提供GATT吞吐测试工具，可以通过bttool与nRF Connect完成notific
 * 建议在屏蔽箱环境，避免环境干扰导致重传，影响吞吐有效性。
 * 建议关掉本地和对端设备的debug log，避免log刷屏，影响吞吐有效性。
 
-第一步，建议按照[方法：分析GATT理论吞吐](#方法分析gatt理论吞吐)，计算当前连接参数GATT的理论吞吐，后续测试结果可参考该理论值。
+第一步，建议按照[分析GATT理论吞吐](#分析gatt理论吞吐)，计算当前连接参数GATT的理论吞吐，后续测试结果可参考该理论值。
 
-第二步，建议按照[方法：bttool测试GATT吞吐](#方法bttool测试gatt吞吐)，观察测试结果是否符合预期。不符合预期，则建议按照如下步骤依次排查原因。否则，建议进入第三步。
+第二步，建议按照[bttool测试GATT吞吐](#bttool测试gatt吞吐)，观察测试结果是否符合预期。不符合预期，则建议按照如下步骤依次排查原因。否则，建议进入第三步。
 
-* 步骤一，建议按照[方法：检查是否打开DLE功能](#方法检查是否打开dle功能)，确认是否打开DLE功能。
+* 步骤一，建议按照[检查是否打开DLE功能](#检查是否打开dle功能)，确认是否打开DLE功能。
   
-* 步骤二，建议按照[方法：观察client设备是否发起过Exchange\_MTU规程](#方法观察client设备是否发起过exchange_mtu规程)，观察exchange_mtu规程，确认MTU是否为514。
+* 步骤二，建议按照[观察client设备是否发起过Exchange\_MTU规程](#观察client设备是否发起过exchange-mtu规程)，观察exchange_mtu规程，确认MTU是否为514。
   
-* 步骤三，建议按照[方法：分析每个连接间隔的最大Event数量](#方法分析每个连接间隔的最大event数量)，确认每个连接间隔的event个数是否符合预期，否则，与BTC Vendor进一步确认Controller的行为。
+* 步骤三，建议按照[分析每个连接间隔的最大Event数量](#分析每个连接间隔的最大event数量)，确认每个连接间隔的event个数是否符合预期，否则，与BTC Vendor进一步确认Controller的行为。
 
-* 步骤四，建议按照方法： [方法：观察当前空口环境是否复杂](#方法观察当前空口环境是否复杂)，观察当前空口环境是否复杂。若当前空口环境恶劣导致重传率过高，建议更换环境进行测试验证。
+* 步骤四，建议按照方法： [观察当前空口环境是否复杂](#六观察当前空口环境是否复杂)，观察当前空口环境是否复杂。若当前空口环境恶劣导致重传率过高，建议更换环境进行测试验证。
 
 第三步，若是上述分析结果依旧不符合预期，则建议考虑其他方式提高吞吐。比如：LE COC、GATT OVER BR等。
 
-* 若是当前业务支持LE COC通讯，则建议使用COC方案，参考[方法： 使用LE COC数据传输模式](#方法-使用le-coc数据传输模式)。
+* 若是当前业务支持LE COC通讯，则建议使用COC方案，参考[使用LE COC数据传输模式](#使用le-coc数据传输模式)。
   
-* 若是当前业务支持GATT OVER BR通讯，则建议使用GATT OVER BR方案。参考方法：[方法： 使用GATT OVER BR数据传输模式](#方法-使用gatt-over-br数据传输模式)。
+* 若是当前业务支持GATT OVER BR通讯，则建议使用GATT OVER BR方案。参考方法：[使用GATT OVER BR数据传输模式](#使用gatt-over-br数据传输模式)。
 
