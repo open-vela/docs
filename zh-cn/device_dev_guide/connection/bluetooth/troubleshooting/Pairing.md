@@ -316,6 +316,8 @@
 
 <img src="img/gap/snoop_connect_request_reject.png" alt="snoop:观察snoop log，ACL连接请求被拒绝" width="75%">
 
+<a id="观察是否成功开启扫描"></a>
+
 ## 十、观察是否成功开启扫描
 
 ### 1、观察蓝牙syslog，看设备是否成功开启扫描
@@ -450,7 +452,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 低功耗蓝牙的扫描过程，通常是由central设备开始扫描行为，接收对端发起的广播。可通过下面方法，进一步定位原因。
 
-* [观察是否成功开启扫描](#方法观察是否成功开启扫描)
+* [观察是否成功开启扫描](#观察是否成功开启扫描)
   * 若是成功开启，需要保证设置的扫描间隔和扫描窗口是否合适，并且确保此时没有音频业务或其他高吞吐业务占用带宽资源。
   * 否则，建议上传syslog、协议栈log和带广播设备广播包的snoop log进一步分析确认。
 
@@ -560,12 +562,12 @@ logmask 1 2 7
 
 设备信息参考：
 
-| 设备名称                | 地址                                  | 模式       | 描述               |
-| ----------------------- | ------------------------------------- | ---------- | ------------------ |
-| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable)        | Low Energy | REDMI Watch 5 eSIM |
-| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45                     | Dual Mode  | REDMI Watch 5 eSIM |
-| xxx的 iPhone            | B4:19:74:13:CE:4A                     | Dual Mode  | xxx的 iPhone       |
-| xxx的 iPhone            | 6B:FC:EE:54:F0- [适配启动](#适配启动) |
+| 设备名称                | 地址                                                 | 模式       | 描述               |
+| ----------------------- | ---------------------------------------------------- | ---------- | ------------------ |
+| REDMI Watch 5 eSIM F345 | 46:E3:3F:E2:8D:2E (Resolvable)                       | Low Energy | REDMI Watch 5 eSIM |
+| REDMI Watch 5 eSIM F345 | 3C:AF:B7:FC:F3:45                                    | Dual Mode  | REDMI Watch 5 eSIM |
+| xxx的 iPhone            | B4:19:74:13:CE:4A                                    | Dual Mode  | xxx的 iPhone       |
+| xxx的 iPhone            | 6B:FC:EE:54:F0- [适配启动](./adapter_and_startup.md) |
 
 设备重启后，Resolving List 需要更新到 Controller，重新建立连接：
 
