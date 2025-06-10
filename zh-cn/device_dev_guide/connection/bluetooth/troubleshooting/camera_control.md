@@ -37,7 +37,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 
 可以看到，HID L2CAP Channel连接断开，手机端主动发起断开L2CAP通道。
 
-<a id="方法：手机蓝牙设备绑定数量是否超过7个"></a>
+<a id="手机蓝牙设备绑定数量是否超过7个"></a>
 
 ## 三、手机蓝牙设备绑定数量是否超过7个
 
@@ -61,7 +61,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
   * 若是手表端断开连接，则打开协议栈syslog进一步排查。
   * 若是手机端断开连接，则进一步手机蓝牙设备绑定数量是否超过7个。
 
-* [手机蓝牙设备绑定数量是否超过7个](#方法：手机蓝牙设备绑定数量是否超过7个)
+* [手机蓝牙设备绑定数量是否超过7个](#手机蓝牙设备绑定数量是否超过7个)
 
   * 若是手机蓝牙设备绑定数量超过7个，则需要解绑手机蓝牙设备。
   * 否则，则检查手机端是否支持HID，让手机同学进一步分析。

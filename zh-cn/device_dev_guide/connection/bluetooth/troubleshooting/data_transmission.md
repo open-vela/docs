@@ -1,23 +1,5 @@
 # 数据传输问题
 
-- [数据传输问题](#数据传输问题)
-  - [一、分析GATT理论吞吐](#一分析gatt理论吞吐)
-  - [二、bttool测试GATT吞吐](#二bttool测试gatt吞吐)
-  - [三、检查是否打开DLE功能](#三检查是否打开dle功能)
-    - [1、通过HCI log检查是否支持DLE](#1通过hci-log检查是否支持dle)
-    - [2、通过Air log检查是否支持DLE](#2通过air-log检查是否支持dle)
-  - [四、观察client设备是否发起过Exchange\_MTU规程](#四观察client设备是否发起过exchange_mtu规程)
-    - [1、通过syslog观察client设备是否发起过Exchange\_MTU规程](#1通过syslog观察client设备是否发起过exchange_mtu规程)
-    - [2、通过snoop log观察client设备是否发起过Exchange\_MTU规程](#2通过snoop-log观察client设备是否发起过exchange_mtu规程)
-  - [五、分析每个连接间隔的最大Event数量](#五分析每个连接间隔的最大event数量)
-  - [六、观察当前空口环境是否复杂](#六观察当前空口环境是否复杂)
-    - [1、通过snoop log观察当前空口环境是否复杂](#1通过snoop-log观察当前空口环境是否复杂)
-  - [七、使用GATT OVER BR数据传输模式](#七使用gatt-over-br数据传输模式)
-  - [八、使用LE COC数据传输模式](#八使用le-coc数据传输模式)
-  - [典型问题](#典型问题)
-    - [问题一：GATT数据传输吞吐不达标](#问题一gatt数据传输吞吐不达标)
-
-
 本章介绍数据传输（GATT、 SPP）高吞吐传输过程中相关问题常用的分析、定位方法。
 GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。通常，主动发起连接的设备为client，被动接收连接的设备为server。设备可以同时充当client和server。GATT主要应用的高吞吐场景为，IOS OTA数据传输。
 
