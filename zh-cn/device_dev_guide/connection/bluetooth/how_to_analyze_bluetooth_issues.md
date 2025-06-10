@@ -4,239 +4,252 @@
 
 - [蓝牙问题定位指南](#蓝牙问题定位指南)
 - [适配和启动问题](#适配和启动问题)
-  - [一、观察蓝牙驱动是否注册成功](#一观察蓝牙驱动是否注册成功)
-    - [1、观察设备节点是否存在](#1观察设备节点是否存在)
-    - [2、观察Vendor驱动注册成功](#2观察vendor驱动注册成功)
-  - [二、检查蓝牙服务是否启动](#二检查蓝牙服务是否启动)
-    - [1、确认是否启动bluetoothd](#1确认是否启动bluetoothd)
-    - [2、检查各阶段初始化是否成功](#2检查各阶段初始化是否成功)
-    - [3、检查bluetoothd进程是否运行](#3检查bluetoothd进程是否运行)
-  - [三、检查蓝牙 Enable 是否成功](#三检查蓝牙-enable-是否成功)
-    - [1、观察蓝牙驱动节点是否打开成功](#1观察蓝牙驱动节点是否打开成功)
-    - [2、观察Enbale流程是否成功](#2观察enbale流程是否成功)
+  - [分析方法](#分析方法)
+    - [一、观察蓝牙驱动是否注册成功](#一观察蓝牙驱动是否注册成功)
+      - [1 观察设备节点是否存在](#1-观察设备节点是否存在)
+      - [2 观察Vendor驱动注册成功](#2-观察vendor驱动注册成功)
+    - [二、检查蓝牙服务是否启动](#二检查蓝牙服务是否启动)
+      - [1 确认是否启动bluetoothd](#1-确认是否启动bluetoothd)
+      - [2 检查各阶段初始化是否成功](#2-检查各阶段初始化是否成功)
+      - [3 检查bluetoothd进程是否运行](#3-检查bluetoothd进程是否运行)
+    - [三、检查蓝牙 Enable 是否成功](#三检查蓝牙-enable-是否成功)
+      - [1 观察蓝牙驱动节点是否打开成功](#1-观察蓝牙驱动节点是否打开成功)
+      - [2 观察Enbale流程是否成功](#2-观察enbale流程是否成功)
   - [典型问题](#典型问题)
-    - [问题一 创建蓝牙 instance 失败](#问题一-创建蓝牙-instance-失败)
+    - [一、创建蓝牙 instance 失败](#一创建蓝牙-instance-失败)
 - [蓝牙配对问题](#蓝牙配对问题)
-  - [一、观察是否对方设备未打开可连接模式](#一观察是否对方设备未打开可连接模式)
-    - [1、通过第三方设备观察是否连接成功](#1通过第三方设备观察是否连接成功)
-    - [2、通过airlog观察是否Page成功](#2通过airlog观察是否page成功)
-    - [3、通过协议栈syslog观察是否Page成功](#3通过协议栈syslog观察是否page成功)
-    - [4、通过HCI log可观察是否Page成功](#4通过hci-log可观察是否page成功)
-  - [二、观察是否ACL连接超时断开（Connection Timeout）](#二观察是否acl连接超时断开connection-timeout)
-    - [1、通过蓝牙服务log可观察是否超时断开](#1通过蓝牙服务log可观察是否超时断开)
-    - [2、观察空口log，是否超时断开ACL连接](#2观察空口log是否超时断开acl连接)
-    - [3、观察snoop log，是否超时断开](#3观察snoop-log是否超时断开)
-  - [三、观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#三观察是否已经绑定成功但是未有profile连接acl主动断开)
-    - [1、观察蓝牙服务log，是否有Profile连接](#1观察蓝牙服务log是否有profile连接)
-    - [2、观察HCI log，是否有Profile连接](#2观察hci-log是否有profile连接)
-    - [3、观察空口log，是否有Profile连接](#3观察空口log是否有profile连接)
-  - [四、观察是否本地配对信息无效（Linkey Missing）](#四观察是否本地配对信息无效linkey-missing)
-    - [1、观察HCI log，手表本地配对信息无效，手机保存上次配对信息](#1观察hci-log手表本地配对信息无效手机保存上次配对信息)
-    - [2、观察空口log，手表本地配对信息无效，手机保存上次配对信息](#2观察空口log手表本地配对信息无效手机保存上次配对信息)
-    - [3、观察协议栈log，手表本地配对信息无效，手机保存上次配对信息](#3观察协议栈log手表本地配对信息无效手机保存上次配对信息)
-  - [五、观察是否对方配对信息无效（Linkey Missing）](#五观察是否对方配对信息无效linkey-missing)
-    - [1、观察HCI log，手机配对信息无效，本地配对信息有效](#1观察hci-log手机配对信息无效本地配对信息有效)
-    - [2、观察空口log，手机配对信息无效，本地配对信息有效](#2观察空口log手机配对信息无效本地配对信息有效)
-  - [六、观察本地是否打开可连接模式](#六观察本地是否打开可连接模式)
-    - [1、观察手表进入蓝牙耳机可连接模式](#1观察手表进入蓝牙耳机可连接模式)
-    - [2、观察miwear syslog，手表进入可连接模式](#2观察miwear-syslog手表进入可连接模式)
-    - [3 观察snoop log、 airlog等，手表进入可连接模式](#3-观察snoop-log-airlog等手表进入可连接模式)
-  - [七、观察对方是否发起回连操作](#七观察对方是否发起回连操作)
-    - [1、观察蓝牙服务syslog，耳机端发起回连操作](#1观察蓝牙服务syslog耳机端发起回连操作)
-    - [2、观察snoop log，耳机端发起回连操作](#2观察snoop-log耳机端发起回连操作)
-    - [3、观察空口log，耳机端发起回连操作](#3观察空口log耳机端发起回连操作)
-  - [八、观察本地是否收到ACL连接请求](#八观察本地是否收到acl连接请求)
-    - [1、观察syslog，本端蓝牙应用是否接收到ACL连接请求](#1观察syslog本端蓝牙应用是否接收到acl连接请求)
-  - [九、观察本端是否同意ACL连接请求](#九观察本端是否同意acl连接请求)
-    - [1、观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求](#1观察蓝牙服务syslog本端蓝牙应用是否同意acl连接请求)
-    - [2、观察对端设备snoop log，确认本端是否同意ACL连接请求](#2观察对端设备snoop-log确认本端是否同意acl连接请求)
-  - [十、观察是否成功开启扫描](#十观察是否成功开启扫描)
-    - [1、观察蓝牙syslog，看设备是否成功开启扫描](#1观察蓝牙syslog看设备是否成功开启扫描)
-    - [2、观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常](#2观察hci-log看hci-cmd是否发送成功hci-evt是否返回status是否正常)
-  - [十一、确认对端设备存在对应SPP服务](#十一确认对端设备存在对应spp服务)
-    - [1、观察对端设备snoop log，确认对端设备是否存在对应的SPP服务](#1观察对端设备snoop-log确认对端设备是否存在对应的spp服务)
-  - [十二、确认SPP连接状态与断连发起方](#十二确认spp连接状态与断连发起方)
-    - [1、观察syslog，确认断连发起方](#1观察syslog确认断连发起方)
-    - [2、观察snoop log，确认断连发起方](#2观察snoop-log确认断连发起方)
-    - [3、观察air log，确认断连发起方](#3观察air-log确认断连发起方)
+  - [分析方法](#分析方法-1)
+    - [一、观察是否对方设备未打开可连接模式](#一观察是否对方设备未打开可连接模式)
+      - [1 通过第三方设备观察是否连接成功](#1-通过第三方设备观察是否连接成功)
+      - [2 通过airlog观察是否Page成功](#2-通过airlog观察是否page成功)
+      - [3 通过协议栈syslog观察是否Page成功](#3-通过协议栈syslog观察是否page成功)
+      - [4 通过HCI log可观察是否Page成功](#4-通过hci-log可观察是否page成功)
+    - [二、观察是否ACL连接超时断开（Connection Timeout）](#二观察是否acl连接超时断开connection-timeout)
+      - [1 通过蓝牙服务log可观察是否超时断开](#1-通过蓝牙服务log可观察是否超时断开)
+      - [2 观察空口log，是否超时断开ACL连接](#2-观察空口log是否超时断开acl连接)
+      - [3 观察snoop log，是否超时断开](#3-观察snoop-log是否超时断开)
+    - [三、观察是否已经绑定成功，但是未有Profile连接，ACL主动断开](#三观察是否已经绑定成功但是未有profile连接acl主动断开)
+      - [1 观察蓝牙服务log，是否有Profile连接](#1-观察蓝牙服务log是否有profile连接)
+      - [2 观察HCI log，是否有Profile连接](#2-观察hci-log是否有profile连接)
+      - [3 观察空口log，是否有Profile连接](#3-观察空口log是否有profile连接)
+    - [四、观察是否本地配对信息无效（Linkey Missing）](#四观察是否本地配对信息无效linkey-missing)
+      - [1 观察HCI log，手表本地配对信息无效，手机保存上次配对信息](#1-观察hci-log手表本地配对信息无效手机保存上次配对信息)
+      - [2 观察空口log，手表本地配对信息无效，手机保存上次配对信息](#2-观察空口log手表本地配对信息无效手机保存上次配对信息)
+      - [3 观察协议栈log，手表本地配对信息无效，手机保存上次配对信息](#3-观察协议栈log手表本地配对信息无效手机保存上次配对信息)
+    - [五、观察是否对方配对信息无效（Linkey Missing）](#五观察是否对方配对信息无效linkey-missing)
+      - [1 观察HCI log，手机配对信息无效，本地配对信息有效](#1-观察hci-log手机配对信息无效本地配对信息有效)
+      - [2 观察空口log，手机配对信息无效，本地配对信息有效](#2-观察空口log手机配对信息无效本地配对信息有效)
+    - [六、观察本地是否打开可连接模式](#六观察本地是否打开可连接模式)
+      - [1 观察手表进入蓝牙耳机可连接模式](#1-观察手表进入蓝牙耳机可连接模式)
+      - [2 观察miwear syslog，手表进入可连接模式](#2-观察miwear-syslog手表进入可连接模式)
+      - [3 观察snoop log、 airlog等，手表进入可连接模式](#3-观察snoop-log-airlog等手表进入可连接模式)
+    - [七、观察对方是否发起回连操作](#七观察对方是否发起回连操作)
+      - [1 观察蓝牙服务syslog，耳机端发起回连操作](#1-观察蓝牙服务syslog耳机端发起回连操作)
+      - [2 观察snoop log，耳机端发起回连操作](#2-观察snoop-log耳机端发起回连操作)
+      - [3 观察空口log，耳机端发起回连操作](#3-观察空口log耳机端发起回连操作)
+    - [八、观察本地是否收到ACL连接请求](#八观察本地是否收到acl连接请求)
+      - [1 观察syslog，本端蓝牙应用是否接收到ACL连接请求](#1-观察syslog本端蓝牙应用是否接收到acl连接请求)
+    - [九、观察本端是否同意ACL连接请求](#九观察本端是否同意acl连接请求)
+      - [1 观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求](#1-观察蓝牙服务syslog本端蓝牙应用是否同意acl连接请求)
+      - [2 观察对端设备snoop log，确认本端是否同意ACL连接请求](#2-观察对端设备snoop-log确认本端是否同意acl连接请求)
+    - [十、观察是否成功开启扫描](#十观察是否成功开启扫描)
+      - [1 观察蓝牙syslog，看设备是否成功开启扫描](#1-观察蓝牙syslog看设备是否成功开启扫描)
+      - [2 观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常](#2-观察hci-log看hci-cmd是否发送成功hci-evt是否返回status是否正常)
+    - [十一、确认对端设备存在对应SPP服务](#十一确认对端设备存在对应spp服务)
+      - [1 观察对端设备snoop log，确认对端设备是否存在对应的SPP服务](#1-观察对端设备snoop-log确认对端设备是否存在对应的spp服务)
+    - [十二、确认SPP连接状态与断连发起方](#十二确认spp连接状态与断连发起方)
+      - [1 观察syslog，确认断连发起方](#1-观察syslog确认断连发起方)
+      - [2 观察snoop log，确认断连发起方](#2-观察snoop-log确认断连发起方)
+      - [3 观察air log，确认断连发起方](#3-观察air-log确认断连发起方)
   - [典型问题](#典型问题-1)
-    - [1、经典蓝牙设备主动绑定对方设备失败](#1经典蓝牙设备主动绑定对方设备失败)
-    - [2、耳机断开后回连手表失败](#2耳机断开后回连手表失败)
-    - [3、经典蓝牙设备未被对端设备成功连接](#3经典蓝牙设备未被对端设备成功连接)
-    - [4、低功耗蓝牙扫描不到对端设备](#4低功耗蓝牙扫描不到对端设备)
-    - [5、SPP主动连接失败](#5spp主动连接失败)
-    - [6、CTKD BLE LTK 生成 BR LinkKey 失败](#6ctkd-ble-ltk-生成-br-linkkey-失败)
-      - [6.1 打开协议栈 Debug 功能](#61-打开协议栈-debug-功能)
-      - [6.2 复现问题](#62-复现问题)
-      - [6.3 日志解读](#63-日志解读)
-      - [6.4 如何确认当前 LinkKey 是否由 CTKD 生成？](#64-如何确认当前-linkkey-是否由-ctkd-生成)
-    - [7、设备通过 RPA 地址广播未建立连接](#7设备通过-rpa-地址广播未建立连接)
-      - [7.1 BLE 配对状态机与流程图](#71-ble-配对状态机与流程图)
-      - [7.2 设备通过 RPA 地址广播建立连接过程](#72-设备通过-rpa-地址广播建立连接过程)
-      - [7.3 确认 BLE 配对完成](#73-确认-ble-配对完成)
-      - [7.4 确认 IRK 交换成功](#74-确认-irk-交换成功)
-      - [7.5 确认通过 Identity 地址建立 BR/EDR 连接](#75-确认通过-identity-地址建立-bredr-连接)
-      - [7.6 断连/重启后回连情况](#76-断连重启后回连情况)
-    - [8、设备使用 Public 地址未连接成功](#8设备使用-public-地址未连接成功)
+    - [一、经典蓝牙设备主动绑定对方设备失败](#一经典蓝牙设备主动绑定对方设备失败)
+    - [二、耳机断开后回连手表失败](#二耳机断开后回连手表失败)
+    - [三、经典蓝牙设备未被对端设备成功连接](#三经典蓝牙设备未被对端设备成功连接)
+    - [四、低功耗蓝牙扫描不到对端设备](#四低功耗蓝牙扫描不到对端设备)
+    - [五、SPP主动连接失败](#五spp主动连接失败)
+    - [六、CTKD BLE LTK 生成 BR LinkKey 失败](#六ctkd-ble-ltk-生成-br-linkkey-失败)
+      - [1 打开协议栈 Debug 功能](#1-打开协议栈-debug-功能)
+      - [2 复现问题](#2-复现问题)
+      - [3 日志解读](#3-日志解读)
+      - [4 如何确认当前 LinkKey 是否由 CTKD 生成？](#4-如何确认当前-linkkey-是否由-ctkd-生成)
+    - [七、设备通过 RPA 地址广播未建立连接](#七设备通过-rpa-地址广播未建立连接)
+      - [1 BLE 配对状态机与流程图](#1-ble-配对状态机与流程图)
+      - [2 设备通过 RPA 地址广播建立连接过程](#2-设备通过-rpa-地址广播建立连接过程)
+      - [3 确认 BLE 配对完成](#3-确认-ble-配对完成)
+      - [4 确认 IRK 交换成功](#4-确认-irk-交换成功)
+      - [5 确认通过 Identity 地址建立 BR/EDR 连接](#5-确认通过-identity-地址建立-bredr-连接)
+      - [6 断连/重启后回连情况](#6-断连重启后回连情况)
+      - [7 设备使用 Public 地址未连接成功](#7-设备使用-public-地址未连接成功)
 - [音频传输问题](#音频传输问题)
-  - [一、观察蓝牙和Media之间的transport是否正确建立](#一观察蓝牙和media之间的transport是否正确建立)
-  - [二、观察是否建立了AVDTP signaling连接](#二观察是否建立了avdtp-signaling连接)
-    - [1、通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因](#1通过snoop-log观察是否建立了avdtp-signaling连接以及观察可能的失败原因)
-  - [三、观察是否建立了AVDTP media连接](#三观察是否建立了avdtp-media连接)
-    - [1、通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因](#1通过snoop-log观察是否建立了avdtp-media连接以及观察可能的失败原因)
-      - [1.1 AVDTP Discovery](#11-avdtp-discovery)
-      - [1.2 AVDTP Get Capabilities](#12-avdtp-get-capabilities)
-      - [1.3 AVDTP Set Configuration](#13-avdtp-set-configuration)
-      - [1.4 AVDTP Stream Establishment](#14-avdtp-stream-establishment)
-      - [1.5 AVDTP media连接成功](#15-avdtp-media连接成功)
-    - [2、通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因](#2通过syslog观察是否建立了avdtp-media连接以及观察可能的失败原因)
-  - [四、观察Media是否成功设置了codec](#四观察media是否成功设置了codec)
-  - [五、观察A2DP SRC是否开始播放音乐](#五观察a2dp-src是否开始播放音乐)
-    - [1、通过syslog观察A2DP SRC是否开始播放音乐](#1通过syslog观察a2dp-src是否开始播放音乐)
-    - [2、通过air log观察A2DP SRC是否开始播放音乐](#2通过air-log观察a2dp-src是否开始播放音乐)
-  - [六、观察A2DP SRC是否停止音频流传输](#六观察a2dp-src是否停止音频流传输)
-    - [1、通过syslog观察A2DP SRC是否停止音频流传输](#1通过syslog观察a2dp-src是否停止音频流传输)
-    - [2、通过snoop log观察A2DP SRC是否停止传输音频包](#2通过snoop-log观察a2dp-src是否停止传输音频包)
-  - [七、观察AVDTP signaling连接是否断开](#七观察avdtp-signaling连接是否断开)
-    - [1、通过syslog观察是否断开了AVDTP signaling连接](#1通过syslog观察是否断开了avdtp-signaling连接)
-    - [2、通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因](#2通过snoop-log观察是否断开了avdtp-signaling连接以及观察可能的失败原因)
+  - [分析方法](#分析方法-2)
+    - [一、观察蓝牙和Media之间的transport是否正确建立](#一观察蓝牙和media之间的transport是否正确建立)
+    - [二、观察是否建立了AVDTP signaling连接](#二观察是否建立了avdtp-signaling连接)
+      - [1 通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因](#1-通过snoop-log观察是否建立了avdtp-signaling连接以及观察可能的失败原因)
+    - [三、观察是否建立了AVDTP media连接](#三观察是否建立了avdtp-media连接)
+      - [1 通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因](#1-通过snoop-log观察是否建立了avdtp-media连接以及观察可能的失败原因)
+        - [1.1 AVDTP Discovery](#11-avdtp-discovery)
+        - [1.2 AVDTP Get Capabilities](#12-avdtp-get-capabilities)
+        - [1.3 AVDTP Set Configuration](#13-avdtp-set-configuration)
+        - [1.4 AVDTP Stream Establishment](#14-avdtp-stream-establishment)
+        - [1.5 AVDTP media连接成功](#15-avdtp-media连接成功)
+      - [2 通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因](#2-通过syslog观察是否建立了avdtp-media连接以及观察可能的失败原因)
+    - [四、观察Media是否成功设置了codec](#四观察media是否成功设置了codec)
+    - [五、观察A2DP SRC是否开始播放音乐](#五观察a2dp-src是否开始播放音乐)
+      - [1 通过syslog观察A2DP SRC是否开始播放音乐](#1-通过syslog观察a2dp-src是否开始播放音乐)
+      - [2 通过air log观察A2DP SRC是否开始播放音乐](#2-通过air-log观察a2dp-src是否开始播放音乐)
+    - [六、观察A2DP SRC是否停止音频流传输](#六观察a2dp-src是否停止音频流传输)
+      - [1 通过syslog观察A2DP SRC是否停止音频流传输](#1-通过syslog观察a2dp-src是否停止音频流传输)
+      - [2 通过snoop log观察A2DP SRC是否停止传输音频包](#2-通过snoop-log观察a2dp-src是否停止传输音频包)
+    - [七、观察AVDTP signaling连接是否断开](#七观察avdtp-signaling连接是否断开)
+      - [1 通过syslog观察是否断开了AVDTP signaling连接](#1-通过syslog观察是否断开了avdtp-signaling连接)
+      - [2 通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因](#2-通过snoop-log观察是否断开了avdtp-signaling连接以及观察可能的失败原因)
     - [八、观察音频包序列号是否连续](#八观察音频包序列号是否连续)
-  - [九、观察air log中1秒内发送的音频数据样本点数量](#九观察air-log中1秒内发送的音频数据样本点数量)
-  - [十、观察air log中音频数据是否存在重传](#十观察air-log中音频数据是否存在重传)
+    - [九、观察air log中1秒内发送的音频数据样本点数量](#九观察air-log中1秒内发送的音频数据样本点数量)
+    - [十、观察air log中音频数据是否存在重传](#十观察air-log中音频数据是否存在重传)
     - [十一、观察syslog判段A2DP-SNK音乐卡顿原因](#十一观察syslog判段a2dp-snk音乐卡顿原因)
-    - [1、观察A2DP-SNK音乐卡顿是否可能由基带芯片引起](#1观察a2dp-snk音乐卡顿是否可能由基带芯片引起)
-    - [2、观察A2DP-SNK音乐卡顿是否可能由mips不足引起](#2观察a2dp-snk音乐卡顿是否可能由mips不足引起)
-    - [3、观察A2DP-SNK音乐卡顿是否可能由Bluetooth service](#3观察a2dp-snk音乐卡顿是否可能由bluetooth-service)
-    - [4、观察A2DP-SNK音乐卡顿是否可能由Media service](#4观察a2dp-snk音乐卡顿是否可能由media-service)
-  - [十二、观察A2DP-SNK卡顿是否来源于基带芯片](#十二观察a2dp-snk卡顿是否来源于基带芯片)
-    - [1、通过snoop log观察卡顿是否来源于基带芯片](#1通过snoop-log观察卡顿是否来源于基带芯片)
-    - [2、通过syslog观察卡顿是否来源于基带芯片](#2通过syslog观察卡顿是否来源于基带芯片)
-  - [十三、观察A2DP-SNK卡顿是否来源于mips不足](#十三观察a2dp-snk卡顿是否来源于mips不足)
-    - [1、通过ps命令观察cpu负载情况](#1通过ps命令观察cpu负载情况)
-    - [2、通过工具命令观察cpu负载情况](#2通过工具命令观察cpu负载情况)
-  - [十四、观察bluetoothd自身是否被阻塞](#十四观察bluetoothd自身是否被阻塞)
-    - [1、通过debug log判断bluetoothd是否被阻塞](#1通过debug-log判断bluetoothd是否被阻塞)
+      - [1 观察A2DP-SNK音乐卡顿是否可能由基带芯片引起](#1-观察a2dp-snk音乐卡顿是否可能由基带芯片引起)
+      - [2 观察A2DP-SNK音乐卡顿是否可能由mips不足引起](#2-观察a2dp-snk音乐卡顿是否可能由mips不足引起)
+      - [3 观察A2DP-SNK音乐卡顿是否可能由Bluetooth service](#3-观察a2dp-snk音乐卡顿是否可能由bluetooth-service)
+      - [4 观察A2DP-SNK音乐卡顿是否可能由Media service](#4-观察a2dp-snk音乐卡顿是否可能由media-service)
+    - [十二、观察A2DP-SNK卡顿是否来源于基带芯片](#十二观察a2dp-snk卡顿是否来源于基带芯片)
+      - [1 通过snoop log观察卡顿是否来源于基带芯片](#1-通过snoop-log观察卡顿是否来源于基带芯片)
+      - [2 通过syslog观察卡顿是否来源于基带芯片](#2-通过syslog观察卡顿是否来源于基带芯片)
+    - [十三、观察A2DP-SNK卡顿是否来源于mips不足](#十三观察a2dp-snk卡顿是否来源于mips不足)
+      - [1 通过ps命令观察cpu负载情况](#1-通过ps命令观察cpu负载情况)
+      - [2 通过工具命令观察cpu负载情况](#2-通过工具命令观察cpu负载情况)
+    - [十四、观察bluetoothd自身是否被阻塞](#十四观察bluetoothd自身是否被阻塞)
+      - [1 通过debug log判断bluetoothd是否被阻塞](#1-通过debug-log判断bluetoothd是否被阻塞)
   - [典型问题](#典型问题-2)
-    - [问题一：连接耳机播放音乐，耳机无声](#问题一连接耳机播放音乐耳机无声)
-    - [问题二：连接耳机播放音频文件，音频文件开头缺失](#问题二连接耳机播放音频文件音频文件开头缺失)
-    - [问题三：语音播报，结尾处有pop音](#问题三语音播报结尾处有pop音)
-    - [问题四：连接两对耳机时，出现断连和无声的问题](#问题四连接两对耳机时出现断连和无声的问题)
-    - [问题五: 连接耳机播放音乐，耳机无声](#问题五-连接耳机播放音乐耳机无声)
-    - [问题六: 连接耳机播放音频文件，音频文件开头缺失](#问题六-连接耳机播放音频文件音频文件开头缺失)
-    - [问题七: 语音播报，结尾处有pop音](#问题七-语音播报结尾处有pop音)
-    - [问题八: 连接手机播放音乐卡顿](#问题八-连接手机播放音乐卡顿)
-    - [问题九: 连接手机播放音乐无声](#问题九-连接手机播放音乐无声)
+    - [一、连接耳机播放音乐，耳机无声](#一连接耳机播放音乐耳机无声)
+    - [二、连接耳机播放音频文件，音频文件开头缺失](#二连接耳机播放音频文件音频文件开头缺失)
+    - [三、语音播报，结尾处有pop音](#三语音播报结尾处有pop音)
+    - [四、连接两对耳机时，出现断连和无声的问题](#四连接两对耳机时出现断连和无声的问题)
+    - [五、连接耳机播放音乐，耳机无声](#五连接耳机播放音乐耳机无声)
+    - [六、连接耳机播放音频文件，音频文件开头缺失](#六连接耳机播放音频文件音频文件开头缺失)
+    - [七、语音播报，结尾处有pop音](#七语音播报结尾处有pop音)
+    - [八、连接手机播放音乐卡顿](#八连接手机播放音乐卡顿)
+    - [九、连接手机播放音乐无声](#九连接手机播放音乐无声)
 - [音乐播放控制问题](#音乐播放控制问题)
-  - [一、观察是否建立了AVRCP连接](#一观察是否建立了avrcp连接)
-    - [1、通过syslog观察是否建立了AVRCP连接](#1通过syslog观察是否建立了avrcp连接)
-    - [2、通过snoop log观察是否建立了AVRCP连接，以及观察可能的失败原因](#2通过snoop-log观察是否建立了avrcp连接以及观察可能的失败原因)
-    - [3、通过air log观察是否建立了AVRCP连接，以及观察可能的失败原因](#3通过air-log观察是否建立了avrcp连接以及观察可能的失败原因)
-  - [二、观察设备是否支持AVRCP](#二观察设备是否支持avrcp)
-    - [1、通过syslog观察本地设备是否打开了AVRCP服务](#1通过syslog观察本地设备是否打开了avrcp服务)
-    - [2、通过snoop log或air log观察双方设备是否支持AVRCP](#2通过snoop-log或air-log观察双方设备是否支持avrcp)
-  - [三、观察是否发送了播放、暂停请求](#三观察是否发送了播放暂停请求)
-    - [1、通过syslog观察是否发送了播放、暂停请求](#1通过syslog观察是否发送了播放暂停请求)
-    - [2、通过snoop log或air log观察是否发送了播放、暂停请求](#2通过snoop-log或air-log观察是否发送了播放暂停请求)
-  - [四、观察是否注册了Notification](#四观察是否注册了notification)
-    - [1、通过syslog观察是否注册了Notification](#1通过syslog观察是否注册了notification)
-    - [2、通过snoop log或air log观察是否注册了Notification](#2通过snoop-log或air-log观察是否注册了notification)
-  - [五、观察是否正确反馈播放状态](#五观察是否正确反馈播放状态)
-    - [1、通过syslog观察是否正确反馈播放状态](#1通过syslog观察是否正确反馈播放状态)
-    - [2、通过snoop log或air log观察是否注册了Notification](#2通过snoop-log或air-log观察是否注册了notification-1)
-  - [六、观察播放状态变化是否由蓝牙引起](#六观察播放状态变化是否由蓝牙引起)
-  - [七、观察是否使用了绝对音量](#七观察是否使用了绝对音量)
-    - [1、通过syslog观察是否支持绝对音量](#1通过syslog观察是否支持绝对音量)
-    - [2、通过snoop log观察是否支持绝对音量](#2通过snoop-log观察是否支持绝对音量)
-  - [八、观察音乐源设备（手机）是否设置了绝对音量](#八观察音乐源设备手机是否设置了绝对音量)
-    - [1、通过snoop log或air log观察手机是否设置了绝对音量](#1通过snoop-log或air-log观察手机是否设置了绝对音量)
-  - [九、观察本地设备是否设置了绝对音量](#九观察本地设备是否设置了绝对音量)
-    - [1、通过syslog观察本地设备是否设置了绝对音量](#1通过syslog观察本地设备是否设置了绝对音量)
-  - [十、观察音乐源设备（手机）是否改变了音频幅值](#十观察音乐源设备手机是否改变了音频幅值)
-    - [1、通过音频源文件观察音乐源设备（手机）是否改变了音频幅值](#1通过音频源文件观察音乐源设备手机是否改变了音频幅值)
-    - [2、通过air log观察音乐源设备（手机）是否改变了音频幅值](#2通过air-log观察音乐源设备手机是否改变了音频幅值)
-  - [十一、观察是否打开了AVRCP配置](#十一观察是否打开了avrcp配置)
-  - [十二、观察音量变化是否由蓝牙引起](#十二观察音量变化是否由蓝牙引起)
-  - [十三、观察音量变化由AVRCP或是HFP控制](#十三观察音量变化由avrcp或是hfp控制)
-    - [1、通过snoop log观察音量变化由AVRCP或是HFP控制](#1通过snoop-log观察音量变化由avrcp或是hfp控制)
+  - [分析方法](#分析方法-3)
+    - [一、观察是否建立了AVRCP连接](#一观察是否建立了avrcp连接)
+      - [1 通过syslog观察是否建立了AVRCP连接](#1-通过syslog观察是否建立了avrcp连接)
+      - [2 通过snoop log观察是否建立了AVRCP连接，以及观察可能的失败原因](#2-通过snoop-log观察是否建立了avrcp连接以及观察可能的失败原因)
+      - [3 通过air log观察是否建立了AVRCP连接，以及观察可能的失败原因](#3-通过air-log观察是否建立了avrcp连接以及观察可能的失败原因)
+    - [二、观察设备是否支持AVRCP](#二观察设备是否支持avrcp)
+      - [1 通过syslog观察本地设备是否打开了AVRCP服务](#1-通过syslog观察本地设备是否打开了avrcp服务)
+      - [2 通过snoop log或air log观察双方设备是否支持AVRCP](#2-通过snoop-log或air-log观察双方设备是否支持avrcp)
+    - [三、观察是否发送了播放、暂停请求](#三观察是否发送了播放暂停请求)
+      - [1 通过syslog观察是否发送了播放、暂停请求](#1-通过syslog观察是否发送了播放暂停请求)
+      - [2 通过snoop log或air log观察是否发送了播放、暂停请求](#2-通过snoop-log或air-log观察是否发送了播放暂停请求)
+    - [四、观察是否注册了Notification](#四观察是否注册了notification)
+      - [1 通过syslog观察是否注册了Notification](#1-通过syslog观察是否注册了notification)
+      - [2 通过snoop log或air log观察是否注册了Notification](#2-通过snoop-log或air-log观察是否注册了notification)
+    - [五、观察是否正确反馈播放状态](#五观察是否正确反馈播放状态)
+      - [1 通过syslog观察是否正确反馈播放状态](#1-通过syslog观察是否正确反馈播放状态)
+      - [2 通过snoop log或air log观察是否注册了Notification](#2-通过snoop-log或air-log观察是否注册了notification-1)
+    - [六、观察播放状态变化是否由蓝牙引起](#六观察播放状态变化是否由蓝牙引起)
+    - [七、观察是否使用了绝对音量](#七观察是否使用了绝对音量)
+      - [1 通过syslog观察是否支持绝对音量](#1-通过syslog观察是否支持绝对音量)
+      - [2 通过snoop log观察是否支持绝对音量](#2-通过snoop-log观察是否支持绝对音量)
+    - [八、观察音乐源设备（手机）是否设置了绝对音量](#八观察音乐源设备手机是否设置了绝对音量)
+      - [1 通过snoop log或air log观察手机是否设置了绝对音量](#1-通过snoop-log或air-log观察手机是否设置了绝对音量)
+    - [九、观察本地设备是否设置了绝对音量](#九观察本地设备是否设置了绝对音量)
+      - [1 通过syslog观察本地设备是否设置了绝对音量](#1-通过syslog观察本地设备是否设置了绝对音量)
+    - [十、观察音乐源设备（手机）是否改变了音频幅值](#十观察音乐源设备手机是否改变了音频幅值)
+      - [1 通过音频源文件观察音乐源设备（手机）是否改变了音频幅值](#1-通过音频源文件观察音乐源设备手机是否改变了音频幅值)
+      - [2 通过air log观察音乐源设备（手机）是否改变了音频幅值](#2-通过air-log观察音乐源设备手机是否改变了音频幅值)
+    - [十一、观察是否打开了AVRCP配置](#十一观察是否打开了avrcp配置)
+    - [十二、观察音量变化是否由蓝牙引起](#十二观察音量变化是否由蓝牙引起)
+    - [十三、观察音量变化由AVRCP或是HFP控制](#十三观察音量变化由avrcp或是hfp控制)
+      - [1 通过snoop log观察音量变化由AVRCP或是HFP控制](#1-通过snoop-log观察音量变化由avrcp或是hfp控制)
   - [典型问题](#典型问题-3)
-    - [问题一：不能控制播放、暂停](#问题一不能控制播放暂停)
-    - [问题二：不能受控播放、暂停](#问题二不能受控播放暂停)
-    - [问题三：意外的播放、暂停](#问题三意外的播放暂停)
-    - [问题四：不能受音乐源设备（手机）控制调节音量](#问题四不能受音乐源设备手机控制调节音量)
-    - [问题五：音量异常变化](#问题五音量异常变化)
+    - [一、不能控制播放、暂停](#一不能控制播放暂停)
+    - [二、不能受控播放、暂停](#二不能受控播放暂停)
+    - [三、意外的播放、暂停](#三意外的播放暂停)
+    - [四、不能受音乐源设备（手机）控制调节音量](#四不能受音乐源设备手机控制调节音量)
+    - [五、音量异常变化](#五音量异常变化)
 - [通话问题](#通话问题)
-  - [一、观察是否建立了HFP连接](#一观察是否建立了hfp连接)
-    - [1、通过syslog观察是否建立了HFP连接](#1通过syslog观察是否建立了hfp连接)
-    - [2、通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因](#2通过snoop-log观察是否建立了hfp连接以及观察可能的失败原因)
-  - [二、观察设备是否支持HFP](#二观察设备是否支持hfp)
-    - [1、通过syslog观察设备是否支持HFP](#1通过syslog观察设备是否支持hfp)
-    - [2 通过snoop log或air log观察双方设备是否支持HFP](#2-通过snoop-log或air-log观察双方设备是否支持hfp)
-  - [三、观察是否建立了SCO连接](#三观察是否建立了sco连接)
-    - [1、通过syslog观察是否建立了SCO连接](#1通过syslog观察是否建立了sco连接)
-  - [四、观察是否向Media设置了SCO音频参数](#四观察是否向media设置了sco音频参数)
-  - [五、观察HF是否向AG发送了Answer请求](#五观察hf是否向ag发送了answer请求)
-    - [1、通过syslog观察HF是否向AG发送了Answer请求](#1通过syslog观察hf是否向ag发送了answer请求)
-    - [2、通过snoop log观察HF是否向AG发送了Answer请求](#2通过snoop-log观察hf是否向ag发送了answer请求)
-  - [六、观察AG是否向HF发送了来电信息](#六观察ag是否向hf发送了来电信息)
-    - [1、通过syslog观察AG是否向HF发送了来电信息](#1通过syslog观察ag是否向hf发送了来电信息)
-  - [七、观察HF端是否通知了应用AG端有来电](#七观察hf端是否通知了应用ag端有来电)
-    - [1、通过syslog观察HF端是否通知了应用AG端有来电](#1通过syslog观察hf端是否通知了应用ag端有来电)
+  - [分析方法](#分析方法-4)
+    - [一、观察是否建立了HFP连接](#一观察是否建立了hfp连接)
+      - [1 通过syslog观察是否建立了HFP连接](#1-通过syslog观察是否建立了hfp连接)
+      - [2 通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因](#2-通过snoop-log观察是否建立了hfp连接以及观察可能的失败原因)
+    - [二、观察设备是否支持HFP](#二观察设备是否支持hfp)
+      - [1 通过syslog观察设备是否支持HFP](#1-通过syslog观察设备是否支持hfp)
+      - [2 通过snoop log或air log观察双方设备是否支持HFP](#2-通过snoop-log或air-log观察双方设备是否支持hfp)
+    - [三、观察是否建立了SCO连接](#三观察是否建立了sco连接)
+      - [1 通过syslog观察是否建立了SCO连接](#1-通过syslog观察是否建立了sco连接)
+    - [四、观察是否向Media设置了SCO音频参数](#四观察是否向media设置了sco音频参数)
+    - [五、观察HF是否向AG发送了Answer请求](#五观察hf是否向ag发送了answer请求)
+      - [1 通过syslog观察HF是否向AG发送了Answer请求](#1-通过syslog观察hf是否向ag发送了answer请求)
+      - [2 通过snoop log观察HF是否向AG发送了Answer请求](#2-通过snoop-log观察hf是否向ag发送了answer请求)
+    - [六、观察AG是否向HF发送了来电信息](#六观察ag是否向hf发送了来电信息)
+      - [1 通过syslog观察AG是否向HF发送了来电信息](#1-通过syslog观察ag是否向hf发送了来电信息)
+    - [七、观察HF端是否通知了应用AG端有来电](#七观察hf端是否通知了应用ag端有来电)
+      - [1 通过syslog观察HF端是否通知了应用AG端有来电](#1-通过syslog观察hf端是否通知了应用ag端有来电)
   - [典型问题](#典型问题-4)
-    - [问题一：AG端接通电话，HF端通话无声](#问题一ag端接通电话hf端通话无声)
-    - [问题二：HF端接通电话，HF端无声](#问题二hf端接通电话hf端无声)
-    - [问题三：作为AG端，不能受HF端控制接听电话](#问题三作为ag端不能受hf端控制接听电话)
-    - [问题四：作为HF端，AG端来电，HF端无来电显示](#问题四作为hf端ag端来电hf端无来电显示)
+    - [一、AG端接通电话，HF端通话无声](#一ag端接通电话hf端通话无声)
+    - [二、HF端接通电话，HF端无声](#二hf端接通电话hf端无声)
+    - [三、作为AG端，不能受HF端控制接听电话](#三作为ag端不能受hf端控制接听电话)
+    - [四、作为HF端，AG端来电，HF端无来电显示](#四作为hf端ag端来电hf端无来电显示)
 - [数据传输问题](#数据传输问题)
-  - [一、分析GATT理论吞吐](#一分析gatt理论吞吐)
-  - [二、bttool测试GATT吞吐](#二bttool测试gatt吞吐)
-  - [三、检查是否打开DLE功能](#三检查是否打开dle功能)
-    - [1、通过HCI log检查是否支持DLE](#1通过hci-log检查是否支持dle)
-    - [2、通过Air log检查是否支持DLE](#2通过air-log检查是否支持dle)
-  - [四、观察client设备是否发起过Exchange\_MTU规程](#四观察client设备是否发起过exchange_mtu规程)
-    - [1、通过syslog观察client设备是否发起过Exchange\_MTU规程](#1通过syslog观察client设备是否发起过exchange_mtu规程)
-    - [2、通过snoop log观察client设备是否发起过Exchange\_MTU规程](#2通过snoop-log观察client设备是否发起过exchange_mtu规程)
-  - [五、分析每个连接间隔的最大Event数量](#五分析每个连接间隔的最大event数量)
-  - [六、观察当前空口环境是否复杂](#六观察当前空口环境是否复杂)
-    - [1、通过snoop log观察当前空口环境是否复杂](#1通过snoop-log观察当前空口环境是否复杂)
-  - [七、使用GATT OVER BR数据传输模式](#七使用gatt-over-br数据传输模式)
-  - [八、使用LE COC数据传输模式](#八使用le-coc数据传输模式)
+  - [分析方法](#分析方法-5)
+    - [一、分析GATT理论吞吐](#一分析gatt理论吞吐)
+    - [二、bttool测试GATT吞吐](#二bttool测试gatt吞吐)
+    - [三、检查是否打开DLE功能](#三检查是否打开dle功能)
+      - [1 通过HCI log检查是否支持DLE](#1-通过hci-log检查是否支持dle)
+      - [2 通过Air log检查是否支持DLE](#2-通过air-log检查是否支持dle)
+    - [四、观察client设备是否发起过Exchange\_MTU规程](#四观察client设备是否发起过exchange_mtu规程)
+      - [1 通过syslog观察client设备是否发起过Exchange\_MTU规程](#1-通过syslog观察client设备是否发起过exchange_mtu规程)
+      - [2 通过snoop log观察client设备是否发起过Exchange\_MTU规程](#2-通过snoop-log观察client设备是否发起过exchange_mtu规程)
+    - [五、分析每个连接间隔的最大Event数量](#五分析每个连接间隔的最大event数量)
+    - [六、观察当前空口环境是否复杂](#六观察当前空口环境是否复杂)
+      - [1 通过snoop log观察当前空口环境是否复杂](#1-通过snoop-log观察当前空口环境是否复杂)
+    - [七、使用GATT OVER BR数据传输模式](#七使用gatt-over-br数据传输模式)
+    - [八、使用LE COC数据传输模式](#八使用le-coc数据传输模式)
   - [典型问题](#典型问题-5)
-    - [问题一：GATT数据传输吞吐不达标](#问题一gatt数据传输吞吐不达标)
+    - [一、GATT数据传输吞吐不达标](#一gatt数据传输吞吐不达标)
 - [控制拍照问题](#控制拍照问题)
-  - [一、观察HID通道连接是否成功](#一观察hid通道连接是否成功)
-    - [1、通过syslog观察HID通道连接是否成功](#1通过syslog观察hid通道连接是否成功)
-    - [2、通过Airlog或者Snoop log观察HID Control L2CAP Channel是否连接成功](#2通过airlog或者snoop-log观察hid-control-l2cap-channel是否连接成功)
-    - [3、通过Airlog或者Snoop log观察HID Interrupt L2CAP Channel是否连接成功](#3通过airlog或者snoop-log观察hid-interrupt-l2cap-channel是否连接成功)
-  - [二、观察HID通道手表还是手机断开HID通道](#二观察hid通道手表还是手机断开hid通道)
-    - [1、通过通过Airlog或者Snoop log观察是否对方断开HID Control或者Interrupt L2CAP Channel](#1通过通过airlog或者snoop-log观察是否对方断开hid-control或者interrupt-l2cap-channel)
-  - [三、手机蓝牙设备绑定数量是否超过7个](#三手机蓝牙设备绑定数量是否超过7个)
+  - [分析方法](#分析方法-6)
+    - [一、观察HID通道连接是否成功](#一观察hid通道连接是否成功)
+      - [1. 通过syslog观察HID通道连接是否成功](#1-通过syslog观察hid通道连接是否成功)
+      - [2. 通过Airlog或者Snoop log观察HID Control L2CAP Channel是否连接成功](#2-通过airlog或者snoop-log观察hid-control-l2cap-channel是否连接成功)
+      - [3. 通过Airlog或者Snoop log观察HID Interrupt L2CAP Channel是否连接成功](#3-通过airlog或者snoop-log观察hid-interrupt-l2cap-channel是否连接成功)
+    - [二、观察HID通道手表还是手机断开HID通道](#二观察hid通道手表还是手机断开hid通道)
+      - [1. 通过通过Airlog或者Snoop log观察是否对方断开HID Control或者Interrupt L2CAP Channel](#1-通过通过airlog或者snoop-log观察是否对方断开hid-control或者interrupt-l2cap-channel)
+    - [三、手机蓝牙设备绑定数量是否超过7个](#三手机蓝牙设备绑定数量是否超过7个)
   - [典型问题](#典型问题-6)
-    - [问题一：手表无法控制手机拍照](#问题一手表无法控制手机拍照)
+    - [一、手表无法控制手机拍照](#一手表无法控制手机拍照)
 - [功耗问题](#功耗问题)
-  - [一、观察是否进入Sniff模式](#一观察是否进入sniff模式)
-    - [1、通过蓝牙service log观察设备进入Sniff模式](#1通过蓝牙service-log观察设备进入sniff模式)
-    - [2、通过协议栈syslog观察设备进入Sniff模式](#2通过协议栈syslog观察设备进入sniff模式)
-    - [3、通过snoop log观察设备进入Sniff模式](#3通过snoop-log观察设备进入sniff模式)
-    - [4、通过空口log观察设备进入Sniff](#4通过空口log观察设备进入sniff)
-  - [二、观察是否退出Sniff模式](#二观察是否退出sniff模式)
-    - [1、通过蓝牙service log观察设备退出Sniff模式](#1通过蓝牙service-log观察设备退出sniff模式)
-    - [2、通过协议栈syslog观察设备退出Sniff模式](#2通过协议栈syslog观察设备退出sniff模式)
-    - [3、通过snoop log观察设备退出Sniff模式](#3通过snoop-log观察设备退出sniff模式)
-    - [4、通过空口log观察设备退出Sniff](#4通过空口log观察设备退出sniff)
-  - [三、查找当前Profile工作状态的Sniff允许参数](#三查找当前profile工作状态的sniff允许参数)
-  - [四、对方优先请求进入Sniff优先级高于本地](#四对方优先请求进入sniff优先级高于本地)
-  - [五、对方优先请求退出Sniff优先级低于本地](#五对方优先请求退出sniff优先级低于本地)
+  - [分析方法](#分析方法-7)
+    - [一、观察是否进入Sniff模式](#一观察是否进入sniff模式)
+      - [1 通过蓝牙service log观察设备进入Sniff模式](#1-通过蓝牙service-log观察设备进入sniff模式)
+      - [2 通过协议栈syslog观察设备进入Sniff模式](#2-通过协议栈syslog观察设备进入sniff模式)
+      - [3 通过snoop log观察设备进入Sniff模式](#3-通过snoop-log观察设备进入sniff模式)
+      - [4 通过空口log观察设备进入Sniff](#4-通过空口log观察设备进入sniff)
+    - [二、观察是否退出Sniff模式](#二观察是否退出sniff模式)
+      - [1 通过蓝牙service log观察设备退出Sniff模式](#1-通过蓝牙service-log观察设备退出sniff模式)
+      - [2 通过协议栈syslog观察设备退出Sniff模式](#2-通过协议栈syslog观察设备退出sniff模式)
+      - [3 通过snoop log观察设备退出Sniff模式](#3-通过snoop-log观察设备退出sniff模式)
+      - [4 通过空口log观察设备退出Sniff](#4-通过空口log观察设备退出sniff)
+    - [三、查找当前Profile工作状态的Sniff允许参数](#三查找当前profile工作状态的sniff允许参数)
+    - [四、对方优先请求进入Sniff优先级高于本地](#四对方优先请求进入sniff优先级高于本地)
+    - [五、对方优先请求退出Sniff优先级低于本地](#五对方优先请求退出sniff优先级低于本地)
   - [典型问题](#典型问题-7)
-  - [问题一：设备经典蓝牙连接设备功耗异常](#问题一设备经典蓝牙连接设备功耗异常)
+    - [一、设备经典蓝牙连接设备功耗异常](#一设备经典蓝牙连接设备功耗异常)
 
 
 # 适配和启动问题
 
-## 一、观察蓝牙驱动是否注册成功
+<a id="蓝牙启动问题分析方法"></a>
+
+## 分析方法
+
+<a id="方法：观察蓝牙驱动是否注册成功"></a>
+### 一、观察蓝牙驱动是否注册成功
 
 Vela 支持丰富的设备驱动类型，包括 BTH4，BTH5，BT Bridge 等驱动协议，此外还支持片内蓝牙驱动，以及片外蓝牙驱动，可参考 Vela 蓝牙驱动文档。
 
-### 1、观察设备节点是否存在
+#### 1 观察设备节点是否存在
 
 通过`ls /dev/`命令，观察是否存在`ttyHCI0`设备节点，正常输出信息如下：
 
@@ -252,13 +265,13 @@ openvela-ap> ls /dev
  ......
 ```
 
-### 2、观察Vendor驱动注册成功
+#### 2 观察Vendor驱动注册成功
 
 可在 Vendor 主动注册函数添加 debug log，观察 Vendor 驱动是否注册成功。
 
 <a id="方法：检查蓝牙服务是否启动"></a>
 
-## 二、检查蓝牙服务是否启动
+### 二、检查蓝牙服务是否启动
 
 当前Vela蓝牙服务支持两种运行模式：在应用程序进程中，也支持运行在后台。可依据使用场景来配置。若运行在后台模式运行，可通过如下步骤观察蓝牙服务是否存在。
 
@@ -281,15 +294,14 @@ openvela-ap> ls /dev
 [    0.090100] [11] [ DEBUG] [ap] [81][service_loop]: set_ready
 ```
 
-### 1、确认是否启动bluetoothd
-
+#### 1 确认是否启动bluetoothd
 若是通过启动脚本启动bluetoothd服务，请确rcS启动脚本是否配置：
 
 ```text
 bluetoothd &
 ```
 
-### 2、检查各阶段初始化是否成功
+#### 2 检查各阶段初始化是否成功
 
 按照如上初始化log，可观察到如下初始化过程：
 
@@ -325,7 +337,7 @@ bluetoothd &
 
     若是失败，则检查libuv loop是否启动成功，btservice模块开源，可在btservice添加debug信息，可进一步确认。
 
-### 3、检查bluetoothd进程是否运行
+#### 3 检查bluetoothd进程是否运行
 
 利用`ps`命令，观察蓝牙服务线程是否存在，正常输出信息可以观察到名为`bluetoothd`的线程。
 
@@ -347,11 +359,11 @@ bluetoothd &
 
 <a id="方法：检查蓝牙Enable是否成功"></a>
 
-## 三、检查蓝牙 Enable 是否成功
+### 三、检查蓝牙 Enable 是否成功
 
 蓝牙Enable包括蓝牙设备驱动打开，蓝牙各Profile初始化，蓝牙绑定信息恢复等过程。可通过如下步骤观察蓝牙Enable是否成功：
 
-### 1、观察蓝牙驱动节点是否打开成功
+#### 1 观察蓝牙驱动节点是否打开成功
 
 ```c
 int bt_sal_hci_transport_init(const bt_vhal_interface* vhal)
@@ -376,7 +388,7 @@ int bt_sal_hci_transport_init(const bt_vhal_interface* vhal)
 ```
 若 fd = -1，蓝牙驱动打开失败， 确认[蓝牙驱动是否注册成功](#一观察蓝牙驱动是否注册成功)，则进一步排查CONFIG_BLUETOOTH_SERVICE_HCI_UART_NAME配置是否正确。
 
-### 2、观察Enbale流程是否成功
+#### 2 观察Enbale流程是否成功
 
 蓝牙启动状态机，可观察到蓝牙Enable过程，如下：
 
@@ -400,7 +412,7 @@ int bt_sal_hci_transport_init(const bt_vhal_interface* vhal)
 
 ## 典型问题
 
-### 问题一 创建蓝牙 instance 失败
+### 一、创建蓝牙 instance 失败
 
 当应用程序调用bluetooth_create_instance接口时，蓝牙instance创建失败，如下：
 
@@ -451,15 +463,19 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 本节介绍 BLE 发现、连接、配对绑定过程中可能遇到的问题分析方法。
 
-<a id="方法观察是否对方设备未打开可连接模式"></a>
+<a id="发现连接配对分析方法"></a>
 
-## 一、观察是否对方设备未打开可连接模式
+## 分析方法
+
+<a id="方法：观察是否对方设备未打开可连接模式"></a>
+
+### 一、观察是否对方设备未打开可连接模式
 通常，可以通过第三方设备、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否打开可连接模式。
 
-### 1、通过第三方设备观察是否连接成功
+#### 1 通过第三方设备观察是否连接成功
 使用第三个设备，在蓝牙设置界面主动发起绑定过程，观察能否和对方设备绑定成功，排除对方设备未打开可连接模式
 
-### 2、通过airlog观察是否Page成功
+#### 2 通过airlog观察是否Page成功
 观察空口log，检查是否对方不响应Page过程的ID包，其中，spec标准流程如下:
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/spec_page_response_sequence.png" alt="spec:通过airlog观察是否Page成功" width="75%">
@@ -468,7 +484,7 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_page_timeout.png" alt="sniffer:通过airlog观察是否Page成功" width="75%">
 
-### 3、通过协议栈syslog观察是否Page成功
+#### 3 通过协议栈syslog观察是否Page成功
 观察协议栈syslog，检查若是出现PageTimeout，对应错误码04。
 
 ```text
@@ -477,7 +493,7 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 [08/09 19:26:38.622400] [28] [ap] GAP_IND_CONNECTION_EVENT: <addr: 28:02:2e:82:b9:22.0><type: 2><status: 0><error: 4>
 ```
 
-### 4、通过HCI log可观察是否Page成功
+#### 4 通过HCI log可观察是否Page成功
 如下，观察HCI log看Create Connection对应的HCI Connection Complete事件为Page timeout，则表示对方未打开可连接模式。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/snoop_page_timeout.png" alt="snoop:通过HCI log可观察是否Page成功" width="75%">
@@ -485,25 +501,25 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 <a id="方法观察是否ACL连接超时断开"></a>
 
-## 二、观察是否ACL连接超时断开（Connection Timeout）
+### 二、观察是否ACL连接超时断开（Connection Timeout）
 
 通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察对方设备是否异常超时断开连接。
 
-### 1、通过蓝牙服务log可观察是否超时断开
+#### 1 通过蓝牙服务log可观察是否超时断开
 如下，可通过btservice的log事件CONNECTION_STATE_DISCONNECTED，08错误表示连接超时断开错误码。
 
 ```text
 [2024-12-31 20:04:31] [06/04 03:10:58.173500] [26] [ap] [660][adapter-svc]: ACL connection state changed, addr:28:02:2E:82:B9:22, link:0, state:CONNECTION_STATE_DISCONNECTED, status:0, reason:8
 ```
 
-### 2、观察空口log，是否超时断开ACL连接
+#### 2 观察空口log，是否超时断开ACL连接
 
 如下，可以通过空口log看，连接数据包在retry多次，直到最终超时断开。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_connection_timeout.png" alt="sniffer:观察空口log，是否超时断开ACL连接" width="75%">
 
 
-### 3、观察snoop log，是否超时断开
+#### 3 观察snoop log，是否超时断开
 如下，观察snoop log蓝牙断开连接事件HCI Disconnect Complete事件，对应reason为connection timeout。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/snoop_connection_timeout.png" alt="snoop:观察snoop log，是否超时断开" width="75%">
@@ -511,41 +527,41 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 <a id="方法观察是否已经绑定成功，但是未有Profile连接，ACL主动断开"></a>
 
-## 三、观察是否已经绑定成功，但是未有Profile连接，ACL主动断开
+### 三、观察是否已经绑定成功，但是未有Profile连接，ACL主动断开
 
 通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察双方是否有Profile连接，导致连接断开。
 
-### 1、观察蓝牙服务log，是否有Profile连接
+#### 1 观察蓝牙服务log，是否有Profile连接
 观察本地btservice log，设备绑定成功后，没有A2DP、SPP等Profile连接，ACL连接成功一段事件后，出现ACL连接断开事件
 如下，从btservice log看acl建立连接成功，SDP完成后，未连接其他Profile连接，最终断开错误码reason:19，表示对方主动断开。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/service_no_profile_acl_disconnect.png" alt="service:观察蓝牙服务log，是否有Profile连接" width="75%">
 
-### 2、观察HCI log，是否有Profile连接
+#### 2 观察HCI log，是否有Profile连接
 如下，从HCI log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备断开Remote User Terminated Connection（图上是对方主动断开，也很有可能本地协议栈主动断开）。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/snoop_no_profile_acl_disconnect.png" alt="snoop:观察HCI log，是否有Profile连接" width="75%">
 
-### 3、观察空口log，是否有Profile连接
+#### 3 观察空口log，是否有Profile连接
 如下，从空口log看ACL连接成功，设备绑定完成后，SDP服务发现完成，未连接其他Profile，最终设备Detach断开（图上是对方主动断开，也很有可能本地协议栈主动断开）。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_no_profile_acl_disconnect.png" alt="sniffer:观察空口log，是否有Profile连接" width="75%">
 
 <a id="方法观察是否本地配对信息无效"></a>
 
-## 四、观察是否本地配对信息无效（Linkey Missing）
+### 四、观察是否本地配对信息无效（Linkey Missing）
 
-### 1、观察HCI log，手表本地配对信息无效，手机保存上次配对信息
+#### 1 观察HCI log，手表本地配对信息无效，手机保存上次配对信息
 如下，HCI log看本地linkkey未空，发起配对时Host端回复Negative Reply，然后重启发起配对，最终在Simple Pairing Complete阶段提示Authentication Fail，断开连接。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/snoop_local_key_missing.png" alt="snoop:观察HCI log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
 
-### 2、观察空口log，手表本地配对信息无效，手机保存上次配对信息
+#### 2 观察空口log，手表本地配对信息无效，手机保存上次配对信息
 如下，从空口log看，手表本地配对信息无效，手机保存上次配对信息,提示DH Key Check失败。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_local_key_missing.png" alt="sniffer:观察空口log，手表本地配对信息无效，手机保存上次配对信息" width="75%">
 
-### 3、观察协议栈log，手表本地配对信息无效，手机保存上次配对信息
+#### 3 观察协议栈log，手表本地配对信息无效，手机保存上次配对信息
 如下，观察协议栈log，手表本地配对信息无效，手机保存上次配对信息,从协议栈的HCI log Authentication_Complete时收到PIN OR KEY MISSING，最终配对失败。
 
 ```text
@@ -601,44 +617,44 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 <a id="方法观察是否对方配对信息无效"></a>
 
-## 五、观察是否对方配对信息无效（Linkey Missing）
+### 五、观察是否对方配对信息无效（Linkey Missing）
 
-### 1、观察HCI log，手机配对信息无效，本地配对信息有效
+#### 1 观察HCI log，手机配对信息无效，本地配对信息有效
 如下，snoop  log看本地发起绑定过程，上报hci Authentication completed事件，对应的原因是PIN Or Key Missing。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/snoop_remote_key_missing.png" alt="snoop:观察HCI log，手机配对信息无效，本地配对信息有效" width="75%">
 
-### 2、观察空口log，手机配对信息无效，本地配对信息有效
+#### 2 观察空口log，手机配对信息无效，本地配对信息有效
 如下, air log看本地发起绑定，在LMP Authentication过程，提示LMP Not Accepted，原因是PIN Or Key Missing。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_remote_key_missing.png" alt="sniffer:观察空口log，手机配对信息无效，本地配对信息有效" width="75%">
 
 <a id="观察本地是否打开可连接模式"></a>
 
-## 六、观察本地是否打开可连接模式
+### 六、观察本地是否打开可连接模式
 
-### 1、观察手表进入蓝牙耳机可连接模式
+#### 1 观察手表进入蓝牙耳机可连接模式
 如下，进入蓝牙耳机搜索连接页面，让手表进入可连接模式。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/watch_headset_connectable.png" alt="watch:手表进入蓝牙耳机搜索连接页面" width="75%">
 
 
-### 2、观察miwear syslog，手表进入可连接模式
+#### 2 观察miwear syslog，手表进入可连接模式
 如下，观察miwear syslog，确认手表scan mode会进入CONNECTABLE模式。
 
 ```text
 [42] [ap] [bt] bind_manager_set_visibility: scan mode: [CONNECTABLE DISCOVERABLE]
 ```
 
-### 3 观察snoop log、 airlog等，手表进入可连接模式
+#### 3 观察snoop log、 airlog等，手表进入可连接模式
 
 通过，如上[观察是否对方设备未打开可连接模式](#方法观察是否对方设备未打开可连接模式)，确认手表scan mode会进入CONNECTABLE模式。
 
 <a id="方法观察对方是否发起回连操作"></a>
 
-## 七、观察对方是否发起回连操作
+### 七、观察对方是否发起回连操作
 
-### 1、观察蓝牙服务syslog，耳机端发起回连操作
+#### 1 观察蓝牙服务syslog，耳机端发起回连操作
 
 如下，通过蓝牙服务syslog，观察对方是否发起回连接请求。
 
@@ -648,22 +664,22 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 [27] [ap] [688][adapter-svc]: ACL Connect Request from :XX:XX:XX:XX:2E:43
 ```
 
-### 2、观察snoop log，耳机端发起回连操作
+#### 2 观察snoop log，耳机端发起回连操作
 
 如下，snoop log看耳机端发起回连操作，最终连接成功。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/snoop_headset_connect_request.png" alt="snoop:观察snoop log，耳机端发起回连操作" width="75%">
 
-### 3、观察空口log，耳机端发起回连操作
+#### 3 观察空口log，耳机端发起回连操作
 如下，空口log看手机发起回连操作，最终连接成功。
 
 <img src="img/how_to_analyze_bluetooth_issues/gap/sniffer_headset_connect_request.png" alt="sniffer:观察空口log，手机发起回连操作" width="75%">
 
 <a id="方法观察本地是否收到ACL连接请求"></a>
 
-## 八、观察本地是否收到ACL连接请求
+### 八、观察本地是否收到ACL连接请求
 
-### 1、观察syslog，本端蓝牙应用是否接收到ACL连接请求
+#### 1 观察syslog，本端蓝牙应用是否接收到ACL连接请求
 
 蓝牙服务与蓝牙应用均能够接收到ACL连接请求，log如下。
 
@@ -682,9 +698,9 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 <a id="方法观察本地是否同意ACL连接请求"></a>
 
-## 九、观察本端是否同意ACL连接请求
+### 九、观察本端是否同意ACL连接请求
 
-### 1、观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求
+#### 1 观察蓝牙服务syslog，本端蓝牙应用是否同意ACL连接请求
 
 如果应用未能同意ACL连接请求，可以观察到如下ACL连接失败的log如下，输出ACL status 55，表示本端拒绝了ACL连接请求。
 
@@ -695,7 +711,7 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 [15] [cp] [723][adapter-svc]: ACL connection state changed, addr:XX:XX:XX:XX:2E:43, link:1, state:CONNECTION_STATE_DISCONNECTED, status:55, reason:0
 ```
 
-### 2、观察对端设备snoop log，确认本端是否同意ACL连接请求
+#### 2 观察对端设备snoop log，确认本端是否同意ACL连接请求
 
 可以看到如下log，ACL连接被拒绝，显示Connection Rejected Due To Limited Resources。
 
@@ -703,9 +719,9 @@ int bt_socket_client_init(bt_instance_t* ins, int family,
 
 <a id="观察是否成功开启扫描"></a>
 
-## 十、观察是否成功开启扫描
+### 十、观察是否成功开启扫描
 
-### 1、观察蓝牙syslog，看设备是否成功开启扫描
+#### 1 观察蓝牙syslog，看设备是否成功开启扫描
 
 status为0表示成功开启扫描，status为1表示关闭扫描。
 
@@ -714,7 +730,7 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 [   24.055800] [20] [ DEBUG] [446][scanner]: scan_on_state_changed, state:0
 ```
 
-### 2、观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常
+#### 2 观察HCI log，看HCI CMD是否发送成功，HCI EVT是否返回status是否正常
 
 如下，HCI log看设备成功发起扫描，最终返回status正常。
 
@@ -724,9 +740,9 @@ bttool> [bttool] on_scan_start_status_cb, scanner:0xdf7943b0, status:0
 
 <a id="方法：确认对端设备存在对应SPP服务"></a>
 
-## 十一、确认对端设备存在对应SPP服务
+### 十一、确认对端设备存在对应SPP服务
 
-### 1、观察对端设备snoop log，确认对端设备是否存在对应的SPP服务
+#### 1 观察对端设备snoop log，确认对端设备是否存在对应的SPP服务
 
 spp client发起spp连接，需要获取到对端设备的spp服务信息。可以通过对端设备的snoop log确认是否存在想要的SPP服务。
 
@@ -736,9 +752,9 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 <a id="方法：确认SPP连接状态与断连发起方"></a>
 
-## 十二、确认SPP连接状态与断连发起方
+### 十二、确认SPP连接状态与断连发起方
 
-### 1、观察syslog，确认断连发起方
+#### 1 观察syslog，确认断连发起方
 
 主动断开SPP连接与被动断开SPP连接会呈现不同的SPP连接状态转换log。
 
@@ -762,9 +778,9 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 [15] [cp] [732][spp]: spp_on_connection_state_chaneged, addr: XX:XX:XX:XX:2E:43, scn: 5, port: 0, state: 0
 ```
 
-### 2、观察snoop log，确认断连发起方
+#### 2 观察snoop log，确认断连发起方
 
-### 3、观察air log，确认断连发起方
+#### 3 观察air log，确认断连发起方
 
 <a id="发现连接配对典型问题"></a>
 
@@ -772,7 +788,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 <a id="问题-经典蓝牙设备主动绑定对方设备失败"></a>
 
-### 1、经典蓝牙设备主动绑定对方设备失败
+### 一、经典蓝牙设备主动绑定对方设备失败
 
 设备绑定包括设备连接流程、绑定配对流程、协议连接过程。可通过如下方法，进一步定位原因。
 
@@ -802,7 +818,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 <a id="问题-耳机断开后回连手表失败"></a>
 
-### 2、耳机断开后回连手表失败
+### 二、耳机断开后回连手表失败
 
 耳机回连手表行为，是由耳机端发起，同时需要手表打开可发现连接模式。可通过下面方法，进一步定位原因。
 
@@ -816,7 +832,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
 
 <a id="问题-经典蓝牙设备未被对端设备成功连接"></a>
 
-### 3、经典蓝牙设备未被对端设备成功连接
+### 三、经典蓝牙设备未被对端设备成功连接
 
 对端设备主动连接失败，可通过下面方法，进一步定位原因。
 
@@ -833,7 +849,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
   * 若是蓝牙应用未同意连接请求，请确认应用端拒绝连接行为逻辑是否符合预期。
   * 否则，建议上传蓝牙服务log、协议栈log，进一步分析。
 
-### 4、低功耗蓝牙扫描不到对端设备
+### 四、低功耗蓝牙扫描不到对端设备
 
 低功耗蓝牙的扫描过程，通常是由central设备开始扫描行为，接收对端发起的广播。可通过下面方法，进一步定位原因。
 
@@ -841,7 +857,7 @@ spp client发起spp连接，需要获取到对端设备的spp服务信息。可�
   * 若是成功开启，需要保证设置的扫描间隔和扫描窗口是否合适，并且确保此时没有音频业务或其他高吞吐业务占用带宽资源。
   * 否则，建议上传syslog、协议栈log和带广播设备广播包的snoop log进一步分析确认。
 
-### 5、SPP主动连接失败
+### 五、SPP主动连接失败
 
 SPP主动连接失败问题，首先需要按照《发现、连接、配对问题》章节的分析方法，确认ACL连接是否正常建立。在确认ACL连接正常建立后，可以按照下面方法进一步分析。
 
@@ -853,11 +869,11 @@ SPP主动连接失败问题，首先需要按照《发现、连接、配对问�
   * 若是之前的SPP连接尚未断开，则需要确认SPP连接双方是否有发起断连操作。
   * 否则，建议上传蓝牙服务log、协议栈log、空口log和手机snoop log，进一步分析。
 
-### 6、CTKD BLE LTK 生成 BR LinkKey 失败
+### 六、CTKD BLE LTK 生成 BR LinkKey 失败
 
  Vela CTKD 流程在 Host 端完成，抓取 OTA/HCI 日志可以确认 BLE 配对过程是否正常。CTKD 问题深入分析需配合 vela 协议栈日志进行。
 
-#### 6.1 打开协议栈 Debug 功能
+#### 1 打开协议栈 Debug 功能
 
 ```c
 log enable stack
@@ -868,11 +884,11 @@ logmask 1 2 7
 
 若需打开除掩码 1 和 2 外其他的协议栈 debug 日志功能，请联系 vela 蓝牙开发人员开启对应宏配置并重新编译协议栈静态库。
 
-#### 6.2 复现问题
+#### 2 复现问题
 
 按照具体场景进行问题复现，并记录相关日志。
 
-#### 6.3 日志解读
+#### 3 日志解读
 
 * 在日志中全局搜索关键字 `SMP` 或 `CTKD`。
 * 若日志显示 `CTKD LE2BR OFF [LESC disabled]`，意味着从 BLE 到 BR 方向的 CTKD 功能被关闭，原因是未启用 LESC 功能。
@@ -884,7 +900,7 @@ logmask 1 2 7
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/le2brctkd_fail_syslog.png" alt="syslog:CTKD失败" width="75%">
 
-#### 6.4 如何确认当前 LinkKey 是否由 CTKD 生成？
+#### 4 如何确认当前 LinkKey 是否由 CTKD 生成？
 
 如下日志示例中，`state:2` 和 `ctkd:1` 表示设备已绑定，且使用 CTKD 生成了 LinkKey：
 
@@ -893,11 +909,11 @@ logmask 1 2 7
 [ap] [bt] bind_manager_send_event: ----> State[START] Event[12:EVENT_BT_CTKD_BONDED_SUCCESS]
 ```
 
-### 7、设备通过 RPA 地址广播未建立连接
+### 七、设备通过 RPA 地址广播未建立连接
 
 通过抓取空口日志观察 BLE 配对流程是否符合预期。
 
-#### 7.1 BLE 配对状态机与流程图
+#### 1 BLE 配对状态机与流程图
 
 - BLE 配对状态机：
 
@@ -907,7 +923,7 @@ logmask 1 2 7
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/BLE_Bond_flowchat.png" alt="BLE配对流程图" width="100%">
 
-#### 7.2 设备通过 RPA 地址广播建立连接过程
+#### 2 设备通过 RPA 地址广播建立连接过程
 
 - Ellisys 空口日志中过滤仅保留手表与 iPhone 手机的 RPA 地址：
 
@@ -921,19 +937,19 @@ logmask 1 2 7
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_3.png" alt="BLE连接建立" width="75%">
 
-#### 7.3 确认 BLE 配对完成
+#### 3 确认 BLE 配对完成
 
 - SMP 配对过程顺利完成，双方均支持 LESC，IdKey 分发正常，LinkKey 标志为 1：
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_4.png" alt="SMP配对完成" width="75%">
 
-#### 7.4 确认 IRK 交换成功
+#### 4 确认 IRK 交换成功
 
 - IRK 成功交换后，存入 Resolving List：
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_5.png" alt="IRK交换成功" width="75%">
 
-#### 7.5 确认通过 Identity 地址建立 BR/EDR 连接
+#### 5 确认通过 Identity 地址建立 BR/EDR 连接
 
 - Controller 主动向 Host 请求 LinkKey，并校验通过，无需再次进行 BR/EDR 配对：
 
@@ -943,7 +959,7 @@ logmask 1 2 7
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_8.png" alt="LinkKey校验成功" width="75%">
 
-#### 7.6 断连/重启后回连情况
+#### 6 断连/重启后回连情况
 
 设备信息参考：
 
@@ -962,7 +978,7 @@ logmask 1 2 7
 
 <img src="img/how_to_analyze_bluetooth_issues/smp/le_pairing_9.png" alt="正常断连回连成功" width="75%">
 
-### 8、设备使用 Public 地址未连接成功
+#### 7 设备使用 Public 地址未连接成功
 
 使用 Public 地址配对时，不生成或分发 IRK，无 IdKey 位：
 
@@ -985,9 +1001,11 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP)
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/diagram_a2dp_transports.png" alt="diagram:A2DP数据通路" width="75%">
 
+## 分析方法
+
 <a id="方法：观察蓝牙和Media之间的transport是否正确建立"></a>
 
-## 一、观察蓝牙和Media之间的transport是否正确建立
+### 一、观察蓝牙和Media之间的transport是否正确建立
 
 在蓝牙子系统初始化时，A2DP服务会创建socket server，随后，Media服务作为socket client与蓝牙建立连接，从而允许控制信令和音频数据在两个子系统之间传输。通常，可以通过syslog观察蓝牙和Media之间的control channel和data channel是否正确建立。
 
@@ -1007,11 +1025,11 @@ AVDTP是蓝牙音频传输控制协议，协议中定义了Stream End Point(SEP)
 
 <a id="观察是否建立了avdtp-signaling连接"></a>
 
-## 二、观察是否建立了AVDTP signaling连接
+### 二、观察是否建立了AVDTP signaling连接
 
 AVDTP signaling连接是两个蓝牙设备建立音频连接的必要步骤。通常，可以通过snoop log或者air log观察是否建立了AVDTP signaling连接。
 
-### 1、通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因
+#### 1 通过snoop log观察是否建立了AVDTP signaling连接，以及观察可能的失败原因
 
 AVDTP signaling连接成功的典型log如下：
 
@@ -1021,15 +1039,15 @@ AVDTP signaling连接成功的典型log如下：
 
 <a id="观察是否建立了avdtp-media连接"></a>
 
-## 三、观察是否建立了AVDTP media连接
+### 三、观察是否建立了AVDTP media连接
 
 建立AVDTP media连接之前，可能会进行Discovery、Get (ALL) Capabilities、Set/Get Configuration、Stream Establishment等过程，其中，Set Configuration和Stream Establishment过程是必要过程。通常，可以通过syslog、snoop log或者air log观察是否建立了AVDTP media连接。
 
-### 1、通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因
+#### 1 通过snoop log观察是否建立了AVDTP media连接，以及观察可能的失败原因
 
 以下几个示例展示了两个设备建立AVDTP media连接的过程。
 
-#### 1.1 AVDTP Discovery
+##### 1.1 AVDTP Discovery
 
 可选的，在建立AVDTP media连接之前，可以发起AVDTP Discovery过程，用于发现对端设备可用的Stream End Point(SEP)。通常，发起AVDTP signaling连接的设备会发起这一过程。典型log如下：
 
@@ -1037,7 +1055,7 @@ AVDTP signaling连接成功的典型log如下：
 
 Log显示ACP的序号从1到6，表明该设备的拥有的SEP至少有6个。
 
-#### 1.2 AVDTP Get Capabilities
+##### 1.2 AVDTP Get Capabilities
 
 可选的，在建立AVDTP media连接之前，可以通过Get Capabilities或者Get All Capabilities获取对端设备SEP的具体信息。通常，发起AVDTP signaling连接的设备会发起这一流程。典型log如下：
 
@@ -1045,7 +1063,7 @@ Log显示ACP的序号从1到6，表明该设备的拥有的SEP至少有6个。
 
 Log展示了获取编号为1的SEP的具体信息的过程，其中，编码格式为SBC，采样率为44.1kHz。
 
-#### 1.3 AVDTP Set Configuration
+##### 1.3 AVDTP Set Configuration
 
 在建立AVDTP media连接之前，需要通过Set Configuration过程指定双方的SEP，以及编解码参数。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
@@ -1053,13 +1071,13 @@ Log展示了获取编号为1的SEP的具体信息的过程，其中，编码格�
 
 Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建立连接。
 
-#### 1.4 AVDTP Stream Establishment
+##### 1.4 AVDTP Stream Establishment
 
 在建立AVDTP media连接之前，需要通过Open流程打开双方的SEP。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_stream_establishment.png" alt="snoop:AVDTP stream establishment" width="75%">
 
-#### 1.5 AVDTP media连接成功
+##### 1.5 AVDTP media连接成功
 
 完成Set Configuration和Stream Establish流程后，需要建立第二条AVDTP连接，也就是AVDTP media连接。通常，发起AVDTP signaling连接的设备应当发起这一流程。典型log如下：
 
@@ -1067,7 +1085,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 通常，AVDTP Open完成后，随之建立的L2CAP（PSM=AVDTP）是AVDTP media连接。
 
-### 2、通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因
+#### 2 通过syslog观察是否建立了AVDTP media连接，以及观察可能的失败原因
 
 典型log如下：
 
@@ -1085,7 +1103,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 <a id="观察Media是否成功设置了codec"></a>
 
-## 四、观察Media是否成功设置了codec
+### 四、观察Media是否成功设置了codec
 
 传输或播放音乐前，需要在Media子系统设置编解码参数。可以通过syslog观察Media是否成功设置了编解码参数。
 
@@ -1097,11 +1115,11 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 <a id="观察a2dp-src是否开始播放音乐"></a>
 
-## 五、观察A2DP SRC是否开始播放音乐
+### 五、观察A2DP SRC是否开始播放音乐
 
 通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否开始播放音乐。
 
-### 1、通过syslog观察A2DP SRC是否开始播放音乐
+#### 1 通过syslog观察A2DP SRC是否开始播放音乐
 
 在A2DP SRC端，Vela蓝牙服务开始播放音乐的流程由来自Media的命令触发，典型log如下：
 
@@ -1118,7 +1136,7 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 [a2dp_stm]: Enter State=Started, Peer=[11:22:33:44:55:66]
 ```
 
-### 2、通过air log观察A2DP SRC是否开始播放音乐
+#### 2 通过air log观察A2DP SRC是否开始播放音乐
 
 在音频流开始传输之前，A2DP SRC会发起Stream Start流程。在音频流传输过程中，A2DP SRC会向SNK发送media packets，典型log如下：
 
@@ -1126,11 +1144,11 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 
 <a id="观察a2dp-src是否停止传输音频包"></a>
 
-## 六、观察A2DP SRC是否停止音频流传输
+### 六、观察A2DP SRC是否停止音频流传输
 
 通常，可以通过syslog、snoop log或者air log观察A2DP SRC是否停止音频流传输。
 
-### 1、通过syslog观察A2DP SRC是否停止音频流传输
+#### 1 通过syslog观察A2DP SRC是否停止音频流传输
 
 当Vela设备为A2DP SRC时，蓝牙服务有两个途径终止传输音频数据。
 
@@ -1159,17 +1177,17 @@ Log中显示该流程的发起方请求使用1号SEP和对端设备的1号SEP建
 [a2dp_stm]: Enter State=Opened, Peer=[11:22:33:44:55:66]
 ```
 
-### 2、通过snoop log观察A2DP SRC是否停止传输音频包
+#### 2 通过snoop log观察A2DP SRC是否停止传输音频包
 
 典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/sniffer_avdtp_stream_suspend.png" alt="sniffer:AVDTP media suspend" width="75%">
 
-## 七、观察AVDTP signaling连接是否断开
+### 七、观察AVDTP signaling连接是否断开
 
 AVDTP signaling断开的原因包括以下几种：应用请求Vela蓝牙子系统断开A2DP连接，蓝牙协议栈主动断开连接，已经对端设备请求断开连接。通常，可以通过syslog，snoop log，或者air log观察是否断开了AVDTP signaling连接。
 
-### 1、通过syslog观察是否断开了AVDTP signaling连接
+#### 1 通过syslog观察是否断开了AVDTP signaling连接
 
 当应用请求断开A2DP连接时，A2DP状态机会收到DISCONNECT_REQ，并随后断开AVDTP signaling连接，典型log如下：
 
@@ -1185,7 +1203,7 @@ AVDTP signaling断开的原因包括以下几种：应用请求Vela蓝牙子系�
 [a2dp_stm]: Enter State=Idle, Peer=[11:22:33:44:55:66]
 ```
 
-### 2、通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因
+#### 2 通过snoop log观察是否断开了AVDTP signaling连接，以及观察可能的失败原因
 
 snoop log中AVDTP signaling连接断开的原因有两种：本地设备主动断开连接，以及对端设备请求断开连接。典型log如下：
 
@@ -1205,7 +1223,7 @@ AVDTP Media Packet的包头中有一个字段，称为Sequence Number。该字�
 
 <a id="观察air-log中1秒内发送的音频数据样本点数量"></a>
 
-## 九、观察air log中1秒内发送的音频数据样本点数量
+### 九、观察air log中1秒内发送的音频数据样本点数量
 
 AVDTP Media Packet的包头中有一个字段，称为Time Stamp。该字段表示了音频包的采样时刻，即该音频数据包中第一个样本点的编号。
 
@@ -1225,7 +1243,7 @@ AVDTP Media Packet的包头中有一个字段，称为Time Stamp。该字段表�
 
 <a id="观察air-log中音频数据是否存在重传"></a>
 
-## 十、观察air log中音频数据是否存在重传
+### 十、观察air log中音频数据是否存在重传
 
 air log中基带包有两个参数可以用来判断包是否存在重传，分别是SEQN和ARQN。正常情况下，SEQN的值在0和1之间交替变化，对端设备回复的ARQN是ACK。若出现重传，基带包中的SEQN值与上一包相同。
 
@@ -1262,34 +1280,34 @@ A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以�
 
 **注意：该方法仅能进行问题的初步定位**。
 
-### 1、观察A2DP-SNK音乐卡顿是否可能由基带芯片引起
+#### 1 观察A2DP-SNK音乐卡顿是否可能由基带芯片引起
 
 若未出现“===a2dp cpu busy time: y, buff_cnt: z===”，但存在"underflow, miss ticks: x"，卡顿很有可能是因则优先怀疑音乐卡顿来自于基带芯片。
 
-### 2、观察A2DP-SNK音乐卡顿是否可能由mips不足引起
+#### 2 观察A2DP-SNK音乐卡顿是否可能由mips不足引起
 
 若“===a2dp cpu busy time: y, buff_cnt: z===”与“===a2dp cpu busy time: y, buff_cnt: z===”交替出现，应优先怀疑卡顿由mips不足造成。
 
-### 3、观察A2DP-SNK音乐卡顿是否可能由Bluetooth service
+#### 3 观察A2DP-SNK音乐卡顿是否可能由Bluetooth service
 
 在syslog上，因为Bluetooth service产生的卡顿通常表现的类似于mips不足。
 
-### 4、观察A2DP-SNK音乐卡顿是否可能由Media service
+#### 4 观察A2DP-SNK音乐卡顿是否可能由Media service
 
 若出现“ipc blocking, block ticks: w”，说明发送给Media的音频数据没有被及时消费，导致在ipc通道前堆集了w个数据包，在这种情况下应优先考虑Media侧出现问题。
 
 <a id="观察a2dp-snk卡顿是否来源于基带芯片"></a>
 
-## 十二、观察A2DP-SNK卡顿是否来源于基带芯片
+### 十二、观察A2DP-SNK卡顿是否来源于基带芯片
 
-### 1、通过snoop log观察卡顿是否来源于基带芯片
+#### 1 通过snoop log观察卡顿是否来源于基带芯片
 
 典型log如下：\
 <img src="img/how_to_analyze_bluetooth_issues/a2dp/snoop_avdtp_audio_data.png" alt="snoop:AVDTP数据" width="75%">
 
 其中，在时间段能收到AVDTP数据的time stamp应大致符合以下关系，（end_time(s) - start_time(s)) * samplerate <= end_time_stamp - start_time_stamp。
 
-### 2、通过syslog观察卡顿是否来源于基带芯片
+#### 2 通过syslog观察卡顿是否来源于基带芯片
 
 在基带芯片驱动处添加syslog可以直接判断音乐卡顿是否来源于基带芯片。\
 **该syslog需要能确认基带芯片是否及时上报数据**，若未及时上报数据，则可以怀疑音乐卡顿来自于基带芯片。\
@@ -1297,29 +1315,29 @@ A2DP-SNK音乐卡顿问题，Bluetooth service提供以下三个syslog，可以�
 
 <a id="观察a2dp-snk卡顿是否来源于mips不足"></a>
 
-## 十三、观察A2DP-SNK卡顿是否来源于mips不足
+### 十三、观察A2DP-SNK卡顿是否来源于mips不足
 
 bluetoothd的优先级在整个系统中往往不是最高，所以如果出现系统mips不足，则有可能出现bluetoothd没有被及时调度去向media发送数据，从而导致Media侧未能及时接收到数据。
 
-### 1、通过ps命令观察cpu负载情况
+#### 1 通过ps命令观察cpu负载情况
 
 对于可持续的长时间卡顿问题，可以直接通过ps命令观察cpu负载情况。若idle task的cpu占用率已经很低/为零，说明存在mips不足的问题，则应先解决系统mips不足的问题。
 
-### 2、通过工具命令观察cpu负载情况
+#### 2 通过工具命令观察cpu负载情况
 
 对于偶现/不可持续的卡顿问题，可以通过抓取发生时间点的trace来分析是否存在短时间内的cpu占用率过高的问题。
 
 <a id="观察bluetoothd自身是否被阻塞"></a>
 
-## 十四、观察bluetoothd自身是否被阻塞
+### 十四、观察bluetoothd自身是否被阻塞
 
-### 1、通过debug log判断bluetoothd是否被阻塞
+#### 1 通过debug log判断bluetoothd是否被阻塞
 
 需要对整个蓝牙模块进行打点，可以通过脚本对蓝牙模块的所有函数添加打点log，在复现时间点根据打点log和代码流程观察是否有阻塞现象。
 
 ## 典型问题
 
-### 问题一：连接耳机播放音乐，耳机无声
+### 一、连接耳机播放音乐，耳机无声
 
 * [观察是否建立了AVDTP signaling连接](#观察是否建立了avdtp-signaling连接)
 
@@ -1345,7 +1363,7 @@ bluetoothd的优先级在整个系统中往往不是最高，所以如果出现�
 
   * 若本地设备为A2DP SRC，且Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
 
-### 问题二：连接耳机播放音频文件，音频文件开头缺失
+### 二、连接耳机播放音频文件，音频文件开头缺失
 
 * [观察音频包序列号是否连续](#观察音频包序列号是否连续)
 
@@ -1353,9 +1371,9 @@ bluetoothd的优先级在整个系统中往往不是最高，所以如果出现�
 
   * 若音频包序列号连续，建议Vela Media侧观察发送的音频包是否完整。
 
-### 问题三：语音播报，结尾处有pop音
+### 三、语音播报，结尾处有pop音
 
-### 问题四：连接两对耳机时，出现断连和无声的问题
+### 四、连接两对耳机时，出现断连和无声的问题
 
 Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连接连接一对耳机。当手表需要连接另一对耳机时，需要先断开前一对耳机。针对多设备切换导致的无声问题，可以按以下顺序排查：
 
@@ -1389,7 +1407,7 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
   * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
 
-### 问题五: 连接耳机播放音乐，耳机无声
+### 五、连接耳机播放音乐，耳机无声
 
 * [观察是否建立了AVDTP signaling连接](#观察是否建立了avdtp-signaling连接)
 
@@ -1415,7 +1433,7 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
   * 若Vela Media发送了音乐开始的命令，但耳机端无声，建议对比典型log，观察播放音乐流程中是否出现异常。
 
-### 问题六: 连接耳机播放音频文件，音频文件开头缺失
+### 六、连接耳机播放音频文件，音频文件开头缺失
 
 * [观察sequence number是否连续](#观察air-log中的音频包序列号是否连续)
 
@@ -1423,9 +1441,9 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
   * 若音频包序列号连续，建议Vela Media测观察发送的音频包是否完整。
 
-### 问题七: 语音播报，结尾处有pop音
+### 七、语音播报，结尾处有pop音
 
-### 问题八: 连接手机播放音乐卡顿
+### 八、连接手机播放音乐卡顿
 
 对于该问题需要进行以下分析：
 
@@ -1457,7 +1475,7 @@ Vela A2DP SRC当前不支持多设备连接，典型例子是：一个手表连�
 
 * 对于Media service未及时消费音频数据的问题，需要联系Media service的开发人员确认。
 
-### 问题九: 连接手机播放音乐无声
+### 九、连接手机播放音乐无声
 
 # 音乐播放控制问题
 
@@ -1470,14 +1488,15 @@ AVCTP是蓝牙音视频控制信令传输协议，协议主要由AV/C数字接�
 
 Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系统通过Media Session与各应用交互音视频控制信息，包括播放器的播放状态、播放进度等；Vela蓝牙子系统通过Media Framework和多媒体子系统交互媒体音量等信息；Vela蓝牙子系统通过蓝牙服务框架与前端应用交互歌曲名称等信息。
 
+## 分析方法
 
 <a id="方法：观察是否建立了AVRCP连接"></a>
 
-## 一、观察是否建立了AVRCP连接
+### 一、观察是否建立了AVRCP连接
 
 通常，可以通过syslog，snoop log，或者air log观察是否建立了AVRCP连接。
 
-### 1、通过syslog观察是否建立了AVRCP连接
+#### 1 通过syslog观察是否建立了AVRCP连接
 
 典型log如下：
 
@@ -1490,13 +1509,13 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 [avrcp_target]: avrc tg connnection --> device:[AA:AA:AA:AA:AA:AA], state: 2
 ```
 
-### 2、通过snoop log观察是否建立了AVRCP连接，以及观察可能的失败原因
+#### 2 通过snoop log观察是否建立了AVRCP连接，以及观察可能的失败原因
 
 典型log如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/avrcp/snoop_avctp_establishment.png" alt="snoop:AVRCP连接" width="75%">
 
-### 3、通过air log观察是否建立了AVRCP连接，以及观察可能的失败原因
+#### 3 通过air log观察是否建立了AVRCP连接，以及观察可能的失败原因
 
 典型log如下：
 
@@ -1504,11 +1523,11 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 <a id="方法：观察设备是否支持AVRCP"></a>
 
-## 二、观察设备是否支持AVRCP
+### 二、观察设备是否支持AVRCP
 
 当两个设备均未能发起AVRCP连接时，建议观察双方设备是否支持AVRCP。通常，可以通过syslog，snoop log，或者air log观察设备是否支持AVRCP。
 
-### 1、通过syslog观察本地设备是否打开了AVRCP服务
+#### 1 通过syslog观察本地设备是否打开了AVRCP服务
 
 典型log如下：
 
@@ -1529,7 +1548,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 [service_manager]: service_on_startup {AVRCP-TG} start ret:1
 ```
 
-### 2、通过snoop log或air log观察双方设备是否支持AVRCP
+#### 2 通过snoop log或air log观察双方设备是否支持AVRCP
 
 典型log如下：
 
@@ -1543,11 +1562,11 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 <a id="方法：观察是否发送了播放、暂停请求"></a>
 
-## 三、观察是否发送了播放、暂停请求
+### 三、观察是否发送了播放、暂停请求
 
 通过syslog，snoop log，或者air log可以观察是否发送了播放、暂停请求。
 
-### 1、通过syslog观察是否发送了播放、暂停请求
+#### 1 通过syslog观察是否发送了播放、暂停请求
 
 典型log如下：
 * 本地设备发送了播放、暂停请求
@@ -1563,7 +1582,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 [avrcp_target]: passthrough cmd: 42, state: 1
 ```
 
-### 2、通过snoop log或air log观察是否发送了播放、暂停请求
+#### 2 通过snoop log或air log观察是否发送了播放、暂停请求
 
 典型log如下：
 
@@ -1571,11 +1590,11 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 <a id="方法：观察是否注册了Notification"></a>
 
-## 四、观察是否注册了Notification
+### 四、观察是否注册了Notification
 
 通过syslog，snoop log，或者air log可以观察是否注册了Notification。
 
-### 1、通过syslog观察是否注册了Notification
+#### 1 通过syslog观察是否注册了Notification
 
 典型log如下：
 * 本地设备注册了notification，观察对端设备播放状态
@@ -1588,7 +1607,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 ```
 相似的，不同event数值代表不同的notification事件，syslog内容解析方法相同。
 
-### 2、通过snoop log或air log观察是否注册了Notification
+#### 2 通过snoop log或air log观察是否注册了Notification
 
 以播放状态Notification为例，典型log如下：
 
@@ -1596,11 +1615,11 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 <a id="方法：观察是否正确反馈播放状态"></a>
 
-## 五、观察是否正确反馈播放状态
+### 五、观察是否正确反馈播放状态
 
 在CT向TG注册播放状态变化后，TG可以向CT反馈播放状态变化。通过syslog，snoop log，或者air log可以观察TG是否正确向CT反馈播放状态变化。
 
-### 1、通过syslog观察是否正确反馈播放状态
+#### 1 通过syslog观察是否正确反馈播放状态
 
 典型log如下：
 * 本地设备向对端设备反馈播放状态变化
@@ -1613,7 +1632,7 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 [avrcp_controller]: playback status changed: PAUSED, get status now...
 ```
 
-### 2、通过snoop log或air log观察是否注册了Notification
+#### 2 通过snoop log或air log观察是否注册了Notification
 
 以播放状态Notification为例，典型log如下：
 
@@ -1621,24 +1640,24 @@ Vela音视频控制模块有多种类型的外部接口。其中，蓝牙子系�
 
 <a id="方法：观察播放状态变化是否由蓝牙引起"></a>
 
-## 六、观察播放状态变化是否由蓝牙引起
+### 六、观察播放状态变化是否由蓝牙引起
 
 通常，当蓝牙音乐播放器的播放状态异常变化时，可以在相同场景中尝试断开蓝牙连接，观察是否仍然引起了播放状态变化。若仍可见播放状态变化，通常该变化与蓝牙连接无关。
 
 <a id="方法：观察是否使用了绝对音量"></a>
 
-## 七、观察是否使用了绝对音量
+### 七、观察是否使用了绝对音量
 
 AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功能。
 
-### 1、通过syslog观察是否支持绝对音量
+#### 1 通过syslog观察是否支持绝对音量
 
 对端设备请求注册volume changed notification（EventID = 0x0D），表明双方均支持绝对音量
 ```
 [avrcp_controller]: register notification event: 13
 ```
 
-### 2、通过snoop log观察是否支持绝对音量
+#### 2 通过snoop log观察是否支持绝对音量
 
 绝对音量功能中，音乐源设备（手机）需要在SDP声明支持AVRCP-CT角色，音乐播放设备（耳机）需要在SDP声明支持AVRCP-TG角色。典型log如下：
 
@@ -1650,11 +1669,11 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 <a id="方法：观察手机是否设置了绝对音量"></a>
 
-## 八、观察音乐源设备（手机）是否设置了绝对音量
+### 八、观察音乐源设备（手机）是否设置了绝对音量
 
 当双方均支持绝对音量时，音乐源设备（手机）需要发送set absolute volume改变音乐播放设备（耳机）的音量。可以通过snoop log，或air log观察手机是否设置了绝对音量。
 
-### 1、通过snoop log或air log观察手机是否设置了绝对音量
+#### 1 通过snoop log或air log观察手机是否设置了绝对音量
 
 典型log如下：
 
@@ -1662,11 +1681,11 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 <a id="方法：观察本地设备是否设置了绝对音量"></a>
 
-## 九、观察本地设备是否设置了绝对音量
+### 九、观察本地设备是否设置了绝对音量
 
 若音乐源设备（手机）正确设置了绝对音量，本地却未能生效，需要观察本地音量未能生效的原因。通过syslog可以观察本地设备是否成功设置了绝对音量。
 
-### 1、通过syslog观察本地设备是否设置了绝对音量
+#### 1 通过syslog观察本地设备是否设置了绝对音量
 
 典型log如下：
 
@@ -1676,15 +1695,15 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 <a id="方法：观察手机是否改变了音频幅值"></a>
 
-## 十、观察音乐源设备（手机）是否改变了音频幅值
+### 十、观察音乐源设备（手机）是否改变了音频幅值
 
-### 1、通过音频源文件观察音乐源设备（手机）是否改变了音频幅值
+#### 1 通过音频源文件观察音乐源设备（手机）是否改变了音频幅值
 
 通常可以通过air log导出音频，解析音乐文件，观察幅值变化。典型的蓝牙音频文件如下：
 
 <img src="img/how_to_analyze_bluetooth_issues/avrcp/pcm_volume_changed.png" alt="pcm:通过幅值判断音量" width="75%">
 
-### 2、通过air log观察音乐源设备（手机）是否改变了音频幅值
+#### 2 通过air log观察音乐源设备（手机）是否改变了音频幅值
 
 对于SBC和AAC编码的音频，可以使用以下方式粗略的分辨音量大小，但不准确。更多的时候，可以用来判断是否静音。
 
@@ -1698,7 +1717,7 @@ AVRCP-CT和AVRCP-TG使用绝对音量的前提是双方均支持绝对音量功�
 
 <a id="方法：观察是否打开了AVRCP配置"></a>
 
-## 十一、观察是否打开了AVRCP配置
+### 十一、观察是否打开了AVRCP配置
 
 通常可以通过.config文件观察是否打开了AVRCP配置。在编译产物中，.config文件位于蓝牙服务所在核路径下，例如：
 ```
@@ -1714,17 +1733,17 @@ CONFIG_BLUETOOTH_AVRCP_CONTROL=y
 
 <a id="方法：观察音量变化是否由蓝牙引起"></a>
 
-## 十二、观察音量变化是否由蓝牙引起
+### 十二、观察音量变化是否由蓝牙引起
 
 通常，当蓝牙设备音量异常变化时，可以在相同场景中尝试断开蓝牙连接，观察是否仍然引起了音量变化。若仍可见音量变化，通常该音量变化与蓝牙连接无关。
 
 <a id="方法：观察音量变化由AVRCP或是HFP控制"></a>
 
-## 十三、观察音量变化由AVRCP或是HFP控制
+### 十三、观察音量变化由AVRCP或是HFP控制
 
 在蓝牙规范中，AVRCP和HFP均可以控制音量。通常可以通过snoop log确定音量控制的途径。
 
-### 1、通过snoop log观察音量变化由AVRCP或是HFP控制
+#### 1 通过snoop log观察音量变化由AVRCP或是HFP控制
 
 在蓝牙通话中，音量变化通常由HFP协议控制。在其他场景，音量变化通常由AVRCP协议控制。
 
@@ -1746,7 +1765,7 @@ HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
 
 ## 典型问题
 
-### 问题一：不能控制播放、暂停
+### 一、不能控制播放、暂停
 
 本地设备不能控制对端设备上的播放器进行播放、暂停，可能有多种原因导致，可考虑的定位方法包括：
 
@@ -1772,7 +1791,7 @@ HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
 
   * 若本地设备发送了播放、暂停请求，建议观察手机侧行为异常的原因。
 
-### 问题二：不能受控播放、暂停
+### 二、不能受控播放、暂停
 
 本地设备不能被对端设备控制播放、暂停，可能有多种原因导致，可考虑的定位方法包括：
 
@@ -1808,7 +1827,7 @@ HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
 
   * 若本地设备未能正确反馈播放状态，建议在Vela Media或App侧观察未能正确反馈的原因。
 
-### 问题三：意外的播放、暂停
+### 三、意外的播放、暂停
 
 当音乐播放器意外的播放、暂停时，通常有以下方法可以逐步缩小范围并定位问题。
 
@@ -1824,7 +1843,7 @@ HFP HF（耳机）设备可以主动设置通话音量，典型log如下：
 
   * 若CT设备发送了播放、暂停请求，建议在CT设备App侧观察播放状态变化的原因。
 
-### 问题四：不能受音乐源设备（手机）控制调节音量
+### 四、不能受音乐源设备（手机）控制调节音量
 
 AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要判断当前产品使用了哪一种调节方式。可考虑的定位方法包括：
 
@@ -1852,7 +1871,7 @@ AVRCP音量调节问题，分为绝对音量和相对音量两种。首先需要
 
   * 若使用相对音量时，手机正确改变了音频幅值，建议Vela Media侧观察音量变化未能体现的原因。
 
-### 问题五：音量异常变化
+### 五、音量异常变化
 
 当遇到蓝牙设备音量异常变化时，通常有以下方法可以逐步缩小范围并定位问题。
 
@@ -1876,13 +1895,15 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 
 <img src="img/how_to_analyze_bluetooth_issues/hfp/diagram_hfp_protocol_model.png" alt="diagram:A2DP协议栈模型" width="75%">
 
+## 分析方法
+
 <a id="方法：观察是否建立了HFP连接"></a>
 
-## 一、观察是否建立了HFP连接
+### 一、观察是否建立了HFP连接
 
 在HFP协议中，两个蓝牙设备间的连接包含多个层面。一般来说，Service Level Connection（SLC）的建立标志着HFP连接已经完成。通常，可以通过syslog，snoop log，或者air log观察是否建立了HFP连接。
 
-### 1、通过syslog观察是否建立了HFP连接
+#### 1 通过syslog观察是否建立了HFP连接
 
 典型log如下：
 
@@ -1894,8 +1915,7 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 ```
 [ag_stm]: Enter State=Connected, Peer=[AA:AA:AA:AA:AA:AA]
 ```
-
-### 2、通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因
+#### 2 通过snoop log观察是否建立了HFP连接，以及观察可能的失败原因
 
 在建立SLC连接的过程中，AG和HF设备需要在RFCOMM信道上交互多组AT命令，具体流程可参考下图。其中，实线箭头指代的命令为流程，虚线箭头指代的命令为可选流程。Standard Event Reporting Activation（AT+CMER）是必要流程中的最后一组命令，通常标志着SLC建立完成。
 
@@ -1907,11 +1927,11 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 
 <a id="方法：观察设备是否支持HFP"></a>
 
-## 二、观察设备是否支持HFP
+### 二、观察设备是否支持HFP
 
 当两个设备均未能发起HFP连接时，建议观察双方设备是否支持HFP。通常，可以通过syslog，snoop log，或者air log观察设备是否支持HFP。
 
-### 1、通过syslog观察设备是否支持HFP
+#### 1 通过syslog观察设备是否支持HFP
 
 典型log如下：
 
@@ -1932,7 +1952,7 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 [service_manager]: service_on_startup {HFP-AG} start ret:1
 ```
 
-### 2 通过snoop log或air log观察双方设备是否支持HFP
+#### 2 通过snoop log或air log观察双方设备是否支持HFP
 
 典型log如下：
 
@@ -1946,11 +1966,11 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 
 <a id="方法：观察是否建立了SCO连接"></a>
 
-## 三、观察是否建立了SCO连接
+### 三、观察是否建立了SCO连接
 
 两台设备之间传输通话语音需要建立SCO连接。通常，可以通过syslog，snoop log，或者air log观察SCO是否建立成功。
 
-### 1、通过syslog观察是否建立了SCO连接
+#### 1 通过syslog观察是否建立了SCO连接
 
 * 本地设备为HF，成功建立了SCO连接
 ```
@@ -1962,7 +1982,7 @@ HFP是蓝牙通话协议，包含Audio Gateway（AG）和Hands-Free unit （HF�
 ```
 <a id="方法：观察是否向Media设置了SCO音频参数"></a>
 
-## 四、观察是否向Media设置了SCO音频参数
+### 四、观察是否向Media设置了SCO音频参数
 
 AG和HF都需要在SCO建立完成之后向Media设置SCO音频参数，包含Codec采样率和设备结点可用的信息，典型log如下：
 ```
@@ -1972,11 +1992,11 @@ AG和HF都需要在SCO建立完成之后向Media设置SCO音频参数，包含Co
 
 <a id="方法：观察HF是否向AG发送了Answer请求"></a>
 
-## 五、观察HF是否向AG发送了Answer请求
+### 五、观察HF是否向AG发送了Answer请求
 
 当HF请求AG接听来电时，HF端需要发起Answer请求。具体的，HF会向AG发送ATA命令。通常，可以通过syslog，snoop log，或者air log观察AG是否收到了HF的Answer请求。
 
-### 1、通过syslog观察HF是否向AG发送了Answer请求
+#### 1 通过syslog观察HF是否向AG发送了Answer请求
 
 在AG端，Vela蓝牙服务有两个途径处理来自HF端的ATA命令，包括：
 
@@ -1998,17 +2018,17 @@ AG和HF都需要在SCO建立完成之后向Media设置SCO音频参数，包含Co
 [hf_stm]: Accept incoming call
 ```
 
-### 2、通过snoop log观察HF是否向AG发送了Answer请求
+#### 2 通过snoop log观察HF是否向AG发送了Answer请求
 
 <img src="img/how_to_analyze_bluetooth_issues/hfp/snoop_hfp_ata.png" alt="snoop:HFP-ATA" width="75%">
 
 <a id="方法：观察AG是否向HF发送了来电信息"></a>
 
-## 六、观察AG是否向HF发送了来电信息
+### 六、观察AG是否向HF发送了来电信息
 
 AG端收到来电时，需要向HF端发送+CIEV和RING指令，AG端还需要在+CLCC中描述来电详细信息，通常，可以通过syslog，snoop log，或者air log观察AG是否向HF发送了来电信息。
 
-### 1、通过syslog观察AG是否向HF发送了来电信息
+#### 1 通过syslog观察AG是否向HF发送了来电信息
 
 ```
 [hf_stm]: ProcessEvent, State=Connected, Peer=[AA:AA:AA:AA:AA:AA], Event=HF_STACK_EVENT_CALLSETUP
@@ -2018,11 +2038,11 @@ AG端收到来电时，需要向HF端发送+CIEV和RING指令，AG端还需要�
 
 <a id="方法：观察HF端是否通知了应用AG端有来电"></a>
 
-## 七、观察HF端是否通知了应用AG端有来电
+### 七、观察HF端是否通知了应用AG端有来电
 
 HF端收到AG端的来电通知后，需要将电话状态通知给应用，通常，可以通过syslog观察HF端是否通知了应用AG端有来电。
 
-### 1、通过syslog观察HF端是否通知了应用AG端有来电
+#### 1 通过syslog观察HF端是否通知了应用AG端有来电
 
 ```
 [hfp_hf]: hf_service_notify_callsetup
@@ -2033,7 +2053,7 @@ HF端收到AG端的来电通知后，需要将电话状态通知给应用，通�
 
 <a id="问题：AG端接通电话，HF端通话无声"></a>
 
-### 问题一：AG端接通电话，HF端通话无声
+### 一、AG端接通电话，HF端通话无声
 
 AG端接通电话，HF端通话无声的问题可能有多种原因导致，可考虑的定位方法包括：
 
@@ -2062,7 +2082,7 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 
 <a id="问题：HF端接通电话，HF端无声"></a>
 
-### 问题二：HF端接通电话，HF端无声
+### 二、HF端接通电话，HF端无声
 
 * [观察HF是否向AG发送了Answer](#方法：观察HF是否向AG发送了Answer请求)
 
@@ -2088,7 +2108,7 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 
 <a id="问题：作为AG端，不能受HF端控制接听电话"></a>
 
-### 问题三：作为AG端，不能受HF端控制接听电话
+### 三、作为AG端，不能受HF端控制接听电话
 
 * [观察HF是否向AG发送了Answer请求](#方法：观察HF是否向AG发送了Answer请求)
 
@@ -2098,7 +2118,7 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 
 <a id="问题：作为HF端，AG端来电，HF端无来电显示"></a>
 
-### 问题四：作为HF端，AG端来电，HF端无来电显示
+### 四、作为HF端，AG端来电，HF端无来电显示
 
 * [观察是否建立了HFP连接](#方法：观察是否建立了HFP连接)
 
@@ -2123,9 +2143,11 @@ AG端接通电话，HF端通话无声的问题可能有多种原因导致，可�
 本章介绍数据传输（GATT、 SPP）高吞吐传输过程中相关问题常用的分析、定位方法。
 GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。通常，主动发起连接的设备为client，被动接收连接的设备为server。设备可以同时充当client和server。GATT主要应用的高吞吐场景为，IOS OTA数据传输。
 
-<a id="分析gatt理论吞吐"></a>
+## 分析方法
 
-## 一、分析GATT理论吞吐
+<a id="方法：分析GATT理论吞吐"></a>
+
+### 一、分析GATT理论吞吐
 
 <img src="img/how_to_analyze_bluetooth_issues/gatt/le_ll_packet.png" alt="spec:GATT-DATA-PACKET" width="75%">
 
@@ -2141,7 +2163,7 @@ GATT是低功耗蓝牙通用属性协议，包含client和server两个角色。�
 
 <a id="bttool测试gatt吞吐"></a>
 
-## 二、bttool测试GATT吞吐
+### 二、bttool测试GATT吞吐
 
 第一步，启动bttool 后的操作步骤如下：
 
@@ -2209,17 +2231,17 @@ bttool> [bttool] Device [xx:xx:xx:xx:xx:xx][BREDR] bond state: BONDED, is_ctkd: 
 
 <a id="检查是否打开dle功能"></a>
 
-## 三、检查是否打开DLE功能
+### 三、检查是否打开DLE功能
 
 可以在hci log、snoop log、airlog中检查是否打开LE Data Length Extension功能。
 
-### 1、通过HCI log检查是否支持DLE
+#### 1 通过HCI log检查是否支持DLE
 
 <img src="img/how_to_analyze_bluetooth_issues/gatt/snoop_le_dle_feature.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
 如上图，在初始化阶段，读取本地Feature，是否支持DLE。若是支持，则可以观察在Notification阶段，发送251字节数据包长度。
 
-### 2、通过Air log检查是否支持DLE
+#### 2 通过Air log检查是否支持DLE
 
 <img src="img/how_to_analyze_bluetooth_issues/gatt/sniffer_le_dle_feature.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
@@ -2229,9 +2251,9 @@ bttool> [bttool] Device [xx:xx:xx:xx:xx:xx][BREDR] bond state: BONDED, is_ctkd: 
 
 <a id="观察client设备是否发起过exchange-mtu规程"></a>
 
-## 四、观察client设备是否发起过Exchange_MTU规程
+### 四、观察client设备是否发起过Exchange_MTU规程
 
-### 1、通过syslog观察client设备是否发起过Exchange_MTU规程
+#### 1 通过syslog观察client设备是否发起过Exchange_MTU规程
 
 在连接建立完成后，client端一般会主动发起exchange_mtu规程，典型syslog如下：
 ```
@@ -2242,7 +2264,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 [bttool] gatts_mtu_changed_callback, addr:AA:AA:AA:AA:AA:AA, mtu:20
 ```
 
-### 2、通过snoop log观察client设备是否发起过Exchange_MTU规程
+#### 2 通过snoop log观察client设备是否发起过Exchange_MTU规程
 
 典型log如下：
 
@@ -2250,7 +2272,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <a id="分析每个连接间隔的最大event数量"></a>
 
-## 五、分析每个连接间隔的最大Event数量
+### 五、分析每个连接间隔的最大Event数量
 
 <img src="img/how_to_analyze_bluetooth_issues/gatt/sniffer_gatt_througth_15ms.png" alt="sepc:GATT-TX-Throughput" width="75%">
 
@@ -2258,11 +2280,11 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <a id="#六观察当前空口环境是否复杂"></a>
 
-## 六、观察当前空口环境是否复杂
+### 六、观察当前空口环境是否复杂
 
 蓝牙使用的2.4GHz ISM频段（2400-2483.5MHz）是免许可的公共频段，广泛用于Wi-Fi、微波炉、ZigBee、无线摄像头等设备。这些设备同时工作时会产生同频干扰，将会破坏数据包的完整性或者丢包现象，最终表现为空口环境中的高重传率。
 
-### 1、通过snoop log观察当前空口环境是否复杂
+#### 1 通过snoop log观察当前空口环境是否复杂
 
 可以从图中的粉色柱体看到整个传输过程中的重传率，如下代表信道质量尚可
 
@@ -2270,7 +2292,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <a id="使用gatt-over-br数据传输模式"></a>
 
-## 七、使用GATT OVER BR数据传输模式
+### 七、使用GATT OVER BR数据传输模式
 
 在经典蓝牙物理连接上传输GATT数据，利用经典蓝牙3M带宽。启动多时隙包3DH5，理论速率可提升到（1021-4-6）/ 0.625 * 6 = 269.6KB/s
 
@@ -2278,7 +2300,7 @@ MTU为20时，表示client端未发起exchange_mtu规程，syslog如下：
 
 <a id="使用le-coc数据传输模式"></a>
 
-## 八、使用LE COC数据传输模式
+### 八、使用LE COC数据传输模式
 
 <img src="img/how_to_analyze_bluetooth_issues/gatt/le_coc_spp_coexist.png" alt="sepc:GATT-HCI-DLE" width="75%">
 
@@ -2288,7 +2310,7 @@ ATT传输通道是同步模式，GATT传输使用固定CID=0x04 L2CAP通道，�
 
 ## 典型问题
 
-### 问题一：GATT数据传输吞吐不达标
+### 一、GATT数据传输吞吐不达标
 
 Vela提供GATT吞吐测试工具，可以通过bttool与nRF Connect完成notification或者write through方向吞吐测试。
 
@@ -2316,11 +2338,13 @@ Vela提供GATT吞吐测试工具，可以通过bttool与nRF Connect完成notific
 
 # 控制拍照问题
 
+## 分析方法
+
 <a id="方法：观察HID通道连接是否成功"></a>
 
-## 一、观察HID通道连接是否成功
+### 一、观察HID通道连接是否成功
 
-### 1、通过syslog观察HID通道连接是否成功
+#### 1. 通过syslog观察HID通道连接是否成功
 
 如下是典型syslog，通过state字段可以看到HID通道连接成功，其中state字段为1表示连接中，2表示连接成功
 
@@ -2331,21 +2355,22 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br, state:2
 ```
 
-### 2、通过Airlog或者Snoop log观察HID Control L2CAP Channel是否连接成功
+#### 2. 通过Airlog或者Snoop log观察HID Control L2CAP Channel是否连接成功
 
 如下是典型snoop log，通过蓝色柱体可以看到HID 控制L2CAP Channel连接成功，L2CAP Connection Request和L2CAP Connection Response 对应Channels的连接事件：
 
 <img src="img/how_to_analyze_bluetooth_issues/hid/snoop_hidd_control_connection.png" alt="snoop:HID L2CAP 控制Channel连接成功" width="75%">
 
-### 3、通过Airlog或者Snoop log观察HID Interrupt L2CAP Channel是否连接成功
+
+#### 3. 通过Airlog或者Snoop log观察HID Interrupt L2CAP Channel是否连接成功
 
 如下是典型snoop log，通过蓝色柱体可以看到HID 中断L2CAP Channel连接成功，L2CAP Connection Request和L2CAP Connection Response 对应Channels的连接事件：
 
 <a id="方法：观察HID通道手表还是手机断开HID通道"></a>
 
-## 二、观察HID通道手表还是手机断开HID通道
+### 二、观察HID通道手表还是手机断开HID通道
 
-### 1、通过通过Airlog或者Snoop log观察是否对方断开HID Control或者Interrupt L2CAP Channel
+#### 1. 通过通过Airlog或者Snoop log观察是否对方断开HID Control或者Interrupt L2CAP Channel
 
 如下是典型snoop log，通过蓝色柱体可以看到HID L2CAP Channel连接断开，L2CAP Disconnection Request和L2CAP Disconnection Response 对应Channels的断开事件：
 
@@ -2355,7 +2380,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 
 <a id="手机蓝牙设备绑定数量是否超过7个"></a>
 
-## 三、手机蓝牙设备绑定数量是否超过7个
+### 三、手机蓝牙设备绑定数量是否超过7个
 
 进入设置->蓝牙->手机蓝牙设备，查看手机蓝牙设备绑定数量是否超过7个。若是，则需要解绑手机蓝牙设备。
 
@@ -2363,7 +2388,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 
 <a id="问题：手表无法控制手机拍照"></a>
 
-### 问题一：手表无法控制手机拍照
+### 一、手表无法控制手机拍照
 
 通常，可以通过蓝牙服务log、airlog协议流程、协议栈syslog流程、snoop log等方式，观察双方是否有ACL连接、 HID L2CAP连接等，导致无法控制手机拍照。
 
@@ -2384,13 +2409,15 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 
 # 功耗问题
 
+## 分析方法
+
 <a id="方法：观察是否进入Sniff模式"></a>
 
-## 一、观察是否进入Sniff模式
+### 一、观察是否进入Sniff模式
 
 正常情况下，可以通过蓝牙service log、协议栈的syslog、snoop log及空口log观察设备是否进入Sniff模式
 
-### 1、通过蓝牙service log观察设备进入Sniff模式
+#### 1 通过蓝牙service log观察设备进入Sniff模式
 
 ```text
 [20240906_11:33:55_242]#[01/01 01:19:13] [126] [ DEBUG] [ap] [392][pm_mgr]: pm_request_sniff, peer_addr:XX:XX:XX:D7:B4:85, max:800, min:400, attempt:4, timeout:1
@@ -2398,7 +2425,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 [20240906_11:33:55_302]#[01/01 01:19:13] [126] [ DEBUG] [ap] [784][pm_mgr]: bt_pm_remote_link_mode_changed, addr:XX:XX:XX:D7:B4:85, mode:1, sniff_interval:800
 ```
 
-### 2、通过协议栈syslog观察设备进入Sniff模式
+#### 2 通过协议栈syslog观察设备进入Sniff模式
 
 ```text
 [20240906_11:33:55_242]#[01/01 01:19:13] [200] [ DEBUG] [ap] ---->[HCI][Cbk][Reg:1][0x60ba2b51]
@@ -2437,17 +2464,16 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 [20240906_11:33:55_292]#[01/01 01:19:13] [200] [ DEBUG] [ap]      [Mode_Change][T:0x61c81320]
 ```
 
-### 3、通过snoop log观察设备进入Sniff模式
-
-### 4、通过空口log观察设备进入Sniff
+#### 3 通过snoop log观察设备进入Sniff模式
+#### 4 通过空口log观察设备进入Sniff
 
 <a id="方法：观察是否退出Sniff模式"></a>
 
-## 二、观察是否退出Sniff模式
+### 二、观察是否退出Sniff模式
 
 正常情况下，可以通过蓝牙service log、协议栈的syslog、snoop log及空口log观察设备是否退出Sniff模式
 
-### 1、通过蓝牙service log观察设备退出Sniff模式
+#### 1 通过蓝牙service log观察设备退出Sniff模式
 
 ```text
 [20240909_15:56:55_246]#[09/09 07:56:52] [26] [ DEBUG] [ap] [420][pm_mgr]: pm_request_active, peer_addr:XX:XX:XX:XX:B4:85
@@ -2455,7 +2481,7 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 [20240909_15:56:55_338]#[09/09 07:56:02] [26] [ DEBUG] [ap] [784][pm_mgr]: bt_pm_remote_link_mode_changed, addr:XX:XX:XX:XX:B4:85, mode:0, sniff_interval:0
 ```
 
-### 2、通过协议栈syslog观察设备退出Sniff模式
+#### 2 通过协议栈syslog观察设备退出Sniff模式
 
 ```text
 [20240913_11:54:44_358]#[09/13 03:54:43] [14] [cp] 
@@ -2495,13 +2521,13 @@ bttool> [bttool] hidd_connection_state_cb, addr:a4:cc:b3:xx:xx:xx, transport: br
 [20240913_11:54:44_747]#[09/13 03:54:44] [14] [cp]      [Mode_Change][T:0x2059f160]   
 ```
 
-### 3、通过snoop log观察设备退出Sniff模式
+#### 3 通过snoop log观察设备退出Sniff模式
 
-### 4、通过空口log观察设备退出Sniff
+#### 4 通过空口log观察设备退出Sniff
 
 <a id="方法：查找当前Profile工作状态的Sniff允许参数"></a>
 
-## 三、查找当前Profile工作状态的Sniff允许参数
+### 三、查找当前Profile工作状态的Sniff允许参数
 
 Vela支持如下各Profile的Sniff场景管理，其中每个Profile对应8种状态，每个状态对应的Sniff参数允许模式如下定义。
 
@@ -2634,7 +2660,7 @@ Vela一共定义7种Sniff模式，各种Sniff mode对应的Interval、Attempt和
 
 <a id="方法：对方优先请求进入Sniff优先级高于本地"></a>
 
-## 四、对方优先请求进入Sniff优先级高于本地
+### 四、对方优先请求进入Sniff优先级高于本地
 
 本地和对方均可以主动发起请求进入Sniff模式，可以通过上述“分析方法：观察是否进入Sniff模式”章节，若是对方优先调度请求进入Sniff，当Controller协商通过时，设备Sniff参数以对方发起协商为准。
 
@@ -2664,7 +2690,7 @@ void bt_pm_remote_link_mode_changed(bt_address_t* addr, uint8_t mode, uint16_t s
 
 <a id="方法：对方优先请求退出Sniff优先级低于本地"></a>
 
-## 五、对方优先请求退出Sniff优先级低于本地
+### 五、对方优先请求退出Sniff优先级低于本地
 
 本地和对方均可以主动发起请求进入Sniff模式，可以通过上述“分析方法：观察是否退出Sniff模式”章节，若是对方优先调度请求退出Sniff，当Controller协商通过，设备进入Active模式后，重新请求调度本地Sniff状态。
 
@@ -2698,7 +2724,7 @@ void bt_pm_remote_link_mode_changed(bt_address_t* addr, uint8_t mode, uint16_t s
 
 <a id="问题-设备经典蓝牙连接设备功耗异常"></a>
 
-## 问题一：设备经典蓝牙连接设备功耗异常
+### 一、设备经典蓝牙连接设备功耗异常
 一般情况下，设备在连接状态下，若是设备未发送数据，会进入Sniff模式。若是设备正在发送数据，则会进入Active模式。设备功耗异常，我们需要确认是否在Sniff模式，以及Sniff参数是否符合预期。
 
 Sniff间隔越大，功耗越低，但会导致设备响应变慢。反之，Sniff间隔越小，功耗越高，但会导致设备响应变快。因此，我们需要根据实际场景，选择合适的Sniff间隔。
