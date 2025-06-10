@@ -1,5 +1,3 @@
-<!-- title: 如何分析蓝牙问题 -->
-
 # 音乐播放控制问题
 
 本章介绍Audio/Vedio Remote Control Profile（AVRCP）相关问题常用的分析、定位方法。
