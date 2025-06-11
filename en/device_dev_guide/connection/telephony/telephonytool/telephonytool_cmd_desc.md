@@ -8,12 +8,12 @@
 
 ## 2. Syntax
 
-以下是命令行语法的规则说明：
+The following rules describe the command line syntax:
 
 | **Notation**               | **Description**                       | **Example**                                                     |
 | :----------------------- | :----------------------------- | :----------------------------------------------------------- |
-| Text without square brackets or curly brackets     | The `hold_and_answer` portion of the `hold_and_answer` command must be typed as is. |
-| [Text in square brackets]        | Indicates a placeholder that needs to be replaced with the actual value. | The `[slot_id]` in the `hangup-all [slot_id]` command needs to be replaced with the actual value. |[slot_id]` command needs to be replaced with the actual value.
+| Text without square brackets or curly brackets  | Type exactly as displayed.     | The `hold_and_answer` portion of the `hold_and_answer` command must be typed as is. |
+| [Text in square brackets]         | Indicates a placeholder that needs to be replaced with the actual value. | The `[slot_id]` in the `hangup-all [slot_id]` command needs to be replaced with the actual value. |
 
 ## 3. Example
 
