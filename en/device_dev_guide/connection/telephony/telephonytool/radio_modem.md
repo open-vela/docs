@@ -61,7 +61,7 @@ listen-modem [slot_id] [event_id]
 - slot_id: Set the slot to listen to, currently only `0` is supported.
 - event_id: The event ID to listen to.
 
-#### 支持的事件 ID 列表
+#### Supported Event ID List
 
 `event_id` is used to specify the event to listen to. The following are the supported event categories and their corresponding event IDs.
 
@@ -76,10 +76,10 @@ listen-modem [slot_id] [event_id]
 
 2. Call Events (Call Indication Message)
 
-    - `MSG_CALL_STATE_CHANGE_IND`：呼叫状态变化通知
-    - `MSG_CALL_RING_BACK_TONE_IND`：回铃音通知
-    - `MSG_ECC_LIST_CHANGE_IND`：紧急呼叫列表变化通知
-    - `MSG_DEFAULT_VOICECALL_SLOT_CHANGE_IND`：默认语音呼叫 slot 变化通知
+    - `MSG_CALL_STATE_CHANGE_IND`：Call state change notification
+    - `MSG_CALL_RING_BACK_TONE_IND`：Ringback tone notification
+    - `MSG_ECC_LIST_CHANGE_IND`：Emergency call list change notification
+    - `MSG_DEFAULT_VOICECALL_SLOT_CHANGE_IND`：Default voice call slot change notification
 
 3. Network Events (Network Indication Message)
 
