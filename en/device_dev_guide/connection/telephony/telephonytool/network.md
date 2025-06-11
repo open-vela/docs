@@ -1,50 +1,50 @@
-# network 命令
+# network commands
 
-\[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/network.md) | 简体中文 \]
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/network.md) \]
 
-## 一、简介
+## I. Introduction
 
-在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console， 来执行所有与网络（network）相关的操作。
+In the NSH command line of OpenVela, you can perform all network-related operations by accessing the Console of the telephonytool command tool.
 
-## 二、前提条件
+## II. Prerequisites
 
-确保已打开 `telephonytool` 工具，执行如下命令：
+Ensure that the `telephonytool` tool is opened by executing the following command:
 
 ```Bash
 ap> telephonytool
 ```
 
-## 三、命令
+## III. Commands
 
 ### 1、listen-network
 
-#### 命令说明
+#### Command Description
 
-`listen-network` 命令用于注册监听与网络（network）相关的事件。
+The `listen-network` command is used to register for listening to network-related events.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 listen-network [slot_id][event_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
-- event_id：事件 ID，支持以下事件类型：
-    - `MSG_NETWORK_STATE_CHANGE_IND`：网络状态变化指示。
-    - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`：语音注册状态变化指示。
-    - `MSG_CELLINFO_CHANGE_IND`：小区信息变化指示。
-    - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：信号强度变化指示。
-    - `MSG_NITZ_STATE_CHANGE_IND`：NITZ（Network Identity and Time Zone）状态变化指示。
+- slot_id: Sets the slot to listen to, currently only supports `0`.
+- event_id: Event ID; supports the following event types:
+    - `MSG_NETWORK_STATE_CHANGE_IND`：Indicates a change in network state.
+    - `MSG_VOICE_REGISTRATION_STATE_CHANGE_IND`：Indicates a change in voice registration state.
+    - `MSG_CELLINFO_CHANGE_IND`：Indicates a change in cell information.
+    - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：Indicates a change in signal strength.
+    - `MSG_NITZ_STATE_CHANGE_IND`：Indicates a change in NITZ (Network Identity and Time Zone) status.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>listen-network 0 18
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> listen-network 0 18
@@ -53,27 +53,27 @@ telephonytool> listen-network 0 18
 
 ### 2、unlisten-network
 
-#### 命令说明
+#### Command Description
 
-`unlisten-network` 命令用于取消监听与网络（network）相关的事件。
+The `unlisten-network` command is used to cancel listening to network-related events.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 unlisten-network [watch_id]
 ```
 
-- watch_id：对应 `listen-network` 命令的返回值，用于标识需要取消监听的事件。
+- watch_id： Corresponds to the return value of the `listen-network` command, used to identify the event to stop listening to.
 
-#### 示例
+##### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> 
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> unlisten-network 198
@@ -82,27 +82,27 @@ telephonytool> unlisten-network 198
 
 ### 3、register-auto
 
-#### 命令说明
+#### Command Description
 
-`register-auto` 命令用于设置为自动网络选择模式。
+The `register-auto` command sets the device to automatic network selection mode.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 register-auto [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Sets the slot to listen to, currently only supports `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>register-auto 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> register-auto 0
@@ -113,30 +113,30 @@ telephonytool> [21549.532800] [21] [  INFO] [ap] [0,0110]> RIL_REQUEST_SET_NETWO
 
 ### 4、register-manual
 
-#### 命令说明
+#### Command Description
 
-`register-manual` 命令用于设置手动选网模式。
+The `register-manual` command sets the device to manual network selection mode.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
  register-manual [slot_id][mcc][mnc][technology]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
-- mcc：国家码（Mobile Country Code）。
-- mnc：网络码（Mobile Network Code）。
-- technology：无线接入技术类型（RAT，Radio Access Technology），例如 `lte`。
+- slot_id: Sets the slot to listen to, currently only supports `0`.
+- mcc: Mobile Country Code.
+- mnc: Mobile Network Code.
+- technology: Radio Access Technology (RAT), such as `lte`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>register-manual 0 460 00 lte
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> register-manual 0 460 00 lte
@@ -146,27 +146,27 @@ telephonytool> [   23.514600] [21] [  INFO] [ap] [0,0079]> RIL_REQUEST_SET_NETWO
 
 ### 5、get-signalstrength
 
-#### 命令说明
+#### Command Description
 
-`get-signalstrength` 命令用于获取设备的信号强度信息。
+The `get-signalstrength` command is used to retrieve the signal strength information of the device.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-signalstrength [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Sets the slot to listen to, currently only supports `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-signalstrength 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-signalstrength 0
@@ -175,27 +175,27 @@ telephonytool> get-signalstrength 0
 
 ### 6、get-display-name
 
-#### 命令说明
+#### Command Description
 
-`get-display-name` 命令用于获取当前驻留网络的运营商名称。
+The `get-display-name` command retrieves the name of the current roaming network operator.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-display-name [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Sets the slot to listen to, currently only supports `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>get-display-name 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 get-display-name 0
@@ -204,27 +204,27 @@ get-display-name 0
 
 ### 7、get-registration-info
 
-#### 命令说明
+#### Command Description
 
-`get-registration-info` 命令用于获取设备的网络注册信息。
+The `get-registration-info` command is used to retrieve the network registration information of the device.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-registration-info [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Sets the slot to listen to, currently only supports `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-registration-info 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 get-registration-info 0
@@ -234,27 +234,27 @@ telephonytool> [   96.809800] [31] [ DEBUG] [ap] network_event_callback :
 
 ### 8、get-voice-nwtype
 
-#### 命令说明
+#### Command Description
 
-`get-voice-nwtype` 命令用于获取 CS（Circuit Switched）域的网络类型。
+The `get-voice-nwtype` command retrieves the network type of the CS (Circuit Switched) domain.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-voice-nwtype [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Sets the slot to listen to, currently only supports `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>get-voice-nwtype 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 get-voice-nwtype 0
@@ -263,27 +263,27 @@ get-voice-nwtype 0
 
 ### 9、get-voice-registered
 
-#### 命令说明
+#### Command Description
 
-`get-voice-registered` 命令用于获取 CS（Circuit Switched）域的注册状态。
+The `get-voice-registered` command retrieves the registration status of the CS (Circuit Switched) domain.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-voice-registered [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Sets the slot to listen to, currently only supports `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-voice-registered 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-voice-registered 0
@@ -292,27 +292,27 @@ telephonytool> get-voice-registered 0
 
 ### 10、get-voice-roaming
 
-#### 命令说明
+#### Command Description
 
-`get-voice-roaming` 命令用于获取 CS（Circuit Switched）域的漫游状态。
+The `get-voice-roaming` command is used to retrieve the roaming status in the CS (Circuit Switched) domain.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-voice-roaming [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>get-voice-roaming 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-voice-roaming 0
@@ -321,27 +321,27 @@ telephonytool> get-voice-roaming 0
 
 ### 11、scan-network
 
-#### 命令说明
+#### Command Description
 
-`scan-network` 命令用于发起搜网操作，查询当前可用的网络。
+The `scan-network` command initiates a network scan to query the currently available networks.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 scan-network [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>scan-network 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> scan-network 0
@@ -351,27 +351,27 @@ telephonytool> [  161.901900] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_QUERY_AVA
 
 ### 12、get-serving-cellinfo
 
-#### 命令说明
+#### Command Description
 
-`get-serving-cellinfo` 命令用于获取当前服务小区的相关信息。
+The `get-serving-cellinfo` command is used to obtain information related to the current serving cell.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-serving-cellinfo [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>get-serving-cellinfo 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-serving-cellinfo 0
@@ -382,27 +382,27 @@ telephonytool> [  175.409900] [21] [  INFO] [ap] [0,0088]> RIL_REQUEST_GET_CELL_
 
 ### 13、get-neighbouring-cellInfos
 
-#### 命令说明
+#### Command Description
 
-`get-neighbouring-cellInfos` 命令用于获取邻区的相关信息。
+The `get-neighbouring-cellInfos` command is used to retrieve information about neighboring cells.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-neighbouring-cellInfos [slot_id]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
+- slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>get-neighbouring-cellInfos 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-neighbouring-cellInfos 0
@@ -416,28 +416,28 @@ telephonytool> [  192.285200] [21] [  INFO] [ap] [0,0089]> RIL_REQUEST_GET_NEIGH
 
 ### 14、set-cell-info-list-rate
 
-#### 命令说明
+#### Command Description
 
-`set-cell-info-list-rate` 命令用于设置小区信息的更新周期。
+The `set-cell-info-list-rate` command is used to set the update rate for cell information.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 set-cell-info-list-rate [slot_id][period]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
-- period：更新周期，单位为秒。
+- slot_id：Specifies the slot to be monitored, currently supports only `0`.
+- period：Update rate in seconds.
 
-#### 示例
+##### Output information
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>set-cell-info-list-rate 0 10
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> set-cell-info-list-rate 0 10

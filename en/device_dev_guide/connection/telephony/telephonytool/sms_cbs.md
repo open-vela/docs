@@ -1,46 +1,46 @@
-# sms/cbs 命令
+# SMS/CBS Commands
 
-\[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/sms_cbs.md) | 简体中文 \]
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/sms_cbs.md) \]
 
-## 一、简介
+## 1. Introduction
 
-在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console，执行所有与 SMS（Short Message Service，短消息服务）和 CBS（Cell Broadcast Service，小区广播服务）相关的操作。
+In the NSH command line of openvela, you can enter the Console of the telephonytool command tool to perform all operations related to SMS (Short Message Service) and CBS (Cell Broadcast Service).
 
-## 二、前提条件
+## 2. Prerequisites
 
-确保已打开 `telephonytool` 工具，执行如下命令：
+Ensure that the telephonytool tool is opened by executing the following command:
 
 ```Bash
 ap> telephonytool
 ```
 
-## 三、命令
+## 3. Commands
 
-### 1、send-sms
+### 1. send-sms
 
-#### 命令说明
+#### Command Description
 
-`send-sms` 命令用于发送短消息（SMS，Short Message Service）。
+The send-sms command is used to send short messages (SMS, Short Message Service).
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 send-sms [slot_id][number][text]
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
-- number: 目标电话号码。
-- text: 短消息的内容。
+- slot_id: Specifies the slot to monitor， currently only `0` is supported.
+- number: The target phone number.
+- text: The content of the short message.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> send-sms 0 10086 hello
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> send-sms 0 10086 hello
@@ -61,34 +61,31 @@ telephonytool> send-sms 0 10086 hello
 
 ### 2、send-data-sms
 
-#### 命令说明
+#### Command Description
 
-`send-data-sms` 命令用于发送数据短消息（Data SMS）。数据短消息是一种特殊的 SMS 类型，通常用于传输二进制数据或应用程序间的通信。
+The `send-data-sms` command is used to send a Data SMS (Short Message). A Data SMS is a special type of SMS typically used to transmit binary data or for communication between applications.
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 send-sms [slot_id][number][text][port]
-slot_id:设置要监听的slot,当前只支持0
-number:目标电话号码
-text：短消息的内容
-port:发送数据短消息的port
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
-- number: 目标电话号码。
-- text: 短消息的内容。
-- port: 数据短消息的目标端口号。
+- slot_id: Specifies the slot to be monitored, currently only supports `0`.
+- number: The target phone number.
+- text: The content of the short message.
+- port: The port for sending the Data SMS.
 
-#### 示例
 
-##### 命令输入
+#### Example
+
+###### Command Input
 
 ```Bash
 telephonytool> send-data-sms 0 10086 hello 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> send-data-sms 0 10086 hello 0
@@ -111,27 +108,27 @@ telephonytool> send-data-sms 0 10086 hello 0
 
 ### 3、get-service-center-number
 
-#### 命令说明
+#### Command Description
 
-`get-service-center-number` 命令用于获取短消息服务中心（SMSC，Short Message Service Center）的电话号码。
+The `get-service-center-number` command is used to retrieve the phone number of the Short Message Service Center (SMSC).
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 get-service-center-number [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to query, currently only supports `0`.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool>get-service-center-number 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-service-center-number 0
@@ -140,28 +137,28 @@ telephonytool> get-service-center-number 0
 
 ### 4、set-service-center-number
 
-#### 命令说明
+#### Command Description
 
-`set-service-center-number` 命令用于设置短消息服务中心（SMSC，Short Message Service Center）的电话号码。
+The `set-service-center-number` command is used to set the phone number of the Short Message Service Center (SMSC).
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 set-service-center-number [slot_id][number]
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
-- number: 服务中心号码。
+- slot_id: Specifies the slot to be monitored, currently only supports `0`.
+- number: The service center number.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool>set-service-center-number 0 10086
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> set-service-center-number 0 10086
@@ -176,27 +173,27 @@ telephonytool> [18074.206600] [21] [  INFO] [ap] [0,0103]> RIL_REQUEST_SET_SMSC_
 
 ### 5、get-cell-broadcast-power
 
-#### 命令说明
+#### Command Description
 
-`get-cell-broadcast-power` 命令用于获取接收小区广播（Cell Broadcast，CB）功能的开关状态。
+The `get-cell-broadcast-power `command is used to get the status of the Cell Broadcast (CB) feature (enabled or disabled).
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 get-cell-broadcast-power [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to query, currently only supports `0`.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool>get-cell-broadcast-power 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-cell-broadcast-power 0
@@ -204,35 +201,35 @@ telephonytool> get-cell-broadcast-power 0
 ```
 
 - state:
-    - `1`: 表示小区广播功能已启用。
-    - `0`: 表示小区广播功能已禁用。
+    - `1`: Cell Broadcast feature is enabled.
+    - `0`: Cell Broadcast feature is disabled.
 
 ### 6、set-cell-broadcast-power
 
-#### 命令说明
+#### Command Description
 
-`set-cell-broadcast-power` 命令用于设置开启或关闭接收小区广播（Cell Broadcast，CB）功能。
+The `set-cell-broadcast-power` command is used to enable or disable the Cell Broadcast (CB) feature.
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 set-cell-broadcast-power [slot_id][state]
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to be monitored, currently only supports `0`.
 - state:
-    - `0`: 关闭接收小区广播。
-    - `1`: 开启接收小区广播。
+    - `0`: Disable Cell Broadcast reception.
+    - `1`: Enable Cell Broadcast reception.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> set-cell-broadcast-power 0 1
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> set-cell-broadcast-power 0 1
@@ -242,64 +239,65 @@ telephonytool> [18220.661800] [21] [  INFO] [ap] [0,0105]> RIL_REQUEST_GSM_SET_B
 ```
 
 - state:
-    - `1`: 表示小区广播功能已成功启用。
-    - `0`: 表示小区广播功能已成功关闭。
+    - `1`: Cell Broadcast feature has been successfully enabled.
+    - `0`: Cell Broadcast feature has been successfully disabled.
 
 ### 7、get-cell-broadcast-topics
 
-#### 命令说明
+#### Command Description
 
-`get-cell-broadcast-topics` 命令用于获取设备支持的广播消息类型（Cell Broadcast Topics）。
+The `get-cell-broadcast-topics` command is used to retrieve the supported types of Cell Broadcast messages.
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 get-cell-broadcast-topics [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to query, currently only supports `0`.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool>get-cell-broadcast-topics 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-cell-broadcast-topics 0
 [18328.263700] [46] [ DEBUG] [ap] telephonytool_tapi_sms_get_cell_broadcast_topics, slotId : 0  cbs_topics: 1
 ```
 
-- cbs_topics: 表示支持的广播消息类型。
+- cbs_topics: Indicates the supported types of Cell Broadcast messages.
 
 ### 8、set-cell-broadcast-topics
 
-#### 命令说明
+#### Command Description
 
-`set-cell-broadcast-topics` 命令用于设置设备支持的广播消息类型（Cell Broadcast Topics）。
+The `set-cell-broadcast-topics` command is used to set the supported types of Cell Broadcast messages.
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 set-cell-broadcast-topics [slot_id][topic_type]
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
-- topic_type: 指定广播消息的类型，例如 `etws`（Earthquake and Tsunami Warning System，地震和海啸预警系统）、`cmas`（Commercial Mobile Alert System，商业移动警报系统）等。
+- slot_id: Specifies the slot to be monitored, currently only supports `0`.
+- topic_type: Specifies the type of broadcast message, such as `etws` (Earthquake and Tsunami Warning System), cmas (Commercial Mobile Alert System), etc.
 
-#### 示例
 
-##### 命令输入
+#### Example
+
+###### Command Input
 
 ```Bash
 telephonytool> set-cell-broadcast-topics 0 1
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> set-cell-broadcast-topics 0 1
@@ -308,33 +306,33 @@ telephonytool> [18314.898000] [21] [  INFO] [ap] [0,0106]> RIL_REQUEST_GSM_SET_B
 [18314.901100] [15] [  INFO] [ap] [AT_RIL] onRequest: 90<->GSM_SET_BROADCAST_SMS_CONFIG, reqtype: 3
 ```
 
-- cbs_topics: 表示设置的广播消息类型。
+- cbs_topics: Indicates the types of broadcast messages set.
 
 ### 9、copy-sms-to-sim
 
-#### 命令说明
+#### Command Description
 
-`copy-sms-to-sim` 命令用于将短消息拷贝到 SIM 卡中。
+The `copy-sms-to-sim` command is used to copy a short message to the SIM card.
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 copy-sms-to-sim [slot_id][number][text]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
-- number：目标电话号码。
-- text：短消息的内容。
+- slot_id: Specifies the slot to be monitored, currently only supports `0`.
+- number: The target phone number.
+- text: The content of the short message.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> copy-sms-to-sim 0 10086 hello11
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> copy-sms-to-sim 0 10086 hello11
@@ -347,28 +345,28 @@ telephonytool> [18362.292600] [21] [  INFO] [ap] pdu_len: 14
 
 ### 10、delete-sms-from-sim
 
-#### 命令说明
+#### Command Description
 
-`delete-sms-from-sim` 命令用于删除 SIM 卡中的短消息。
+The `delete-sms-from-sim` command is used to delete a short message from the SIM card.
 
-#### 命令格式
+####  Command Format
 
 ```Bash
 delete-sms-from-sim [slot_id][index]
 ```
 
-- slot_id：设置要监听的卡槽，目前仅支持 `0`。
-- index：短消息对应的序号。
+- slot_id: Specifies the slot to be monitored, currently only supports `0`.
+- index: The index of the short message.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> delete-sms-from-sim 0 1
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> delete-sms-from-sim 0 1
