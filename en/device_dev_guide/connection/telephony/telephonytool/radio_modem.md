@@ -182,7 +182,7 @@ Stop listening to specified modem events.
 unlisten-modem [watch_id]
 ```
 
-- watch_id：监听 ID，来源于 `listen-modem` 命令的返回值。
+- watch_id：Listen ID, derived from the return value of the `listen-modem` command.
 
 #### Example
 
