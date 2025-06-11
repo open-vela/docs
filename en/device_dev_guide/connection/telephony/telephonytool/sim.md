@@ -1,48 +1,48 @@
-# sim 命令
+# sim Command
 
-\[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/sim.md) | 简体中文 \]
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/sim.md) \]
 
-## 一、简介
+## 1. Introduction
 
-在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console 来执行所有与 SIM 卡相关的操作。
+In the NSH command line of openvela, all operations related to the SIM card can be executed by entering the Console of the telephonytool command tool.
 
-## 二、前提条件
+## 2. Preconditions
 
-确保已打开 `telephonytool` 工具。
+Make sure the `telephonytool` is opened.
 
 ```Bash
 ap> telephonytool
 ```
 
-## 三、命令
+## 3. Commands
 
 ### 1、listen-sim
 
-#### 命令说明
+#### Command Description
 
-`listen-sim` 命令用于注册监听与 SIM 卡相关的事件。
+The `listen-sim` command is used to register for listening to events related to the SIM card.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 listen-sim [slot_id][event_id]
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
-- event_id: 要监听的事件 ID，支持以下事件：
-    - `MSG_SIM_STATE_CHANGE_IND`: SIM 状态变更事件。
-    - `MSG_SIM_UICC_APP_ENABLED_CHANGE_IND`: SIM UICC 应用启用状态变更事件。
-    - `MSG_SIM_ICCID_CHANGE_IND`: SIM ICCID（集成电路卡标识符）变更事件。
+- slot_id: Set the slot to listen to; currently, only `0` is supported.
+- event_id: The event ID to listen for, supports the following events:
+    - `MSG_SIM_STATE_CHANGE_IND`: SIM state change event.
+    - `MSG_SIM_UICC_APP_ENABLED_CHANGE_IND`: SIM UICC application enabled status change event.
+    - `MSG_SIM_ICCID_CHANGE_IND`: SIM ICCID (Integrated Circuit Card Identifier) change event.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> listen-sim 0 28
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 listen-sim 0 28
@@ -51,28 +51,28 @@ listen-sim 0 28
 
 ### 2、unlisten-sim
 
-#### 命令说明
+#### Command Description
 
-`unlisten-sim` 命令用于取消监听与 SIM 卡相关的事件。
+The `unlisten-sim`command is used to cancel listening to events related to the SIM card.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 unlisten-sim [watch_id]
 watch_id:对应listen-data的返回值
 ```
 
-- watch_id: 对应 `listen-sim` 命令返回的监听 ID，用于标识需要取消的监听事件。
+- watch_id: The corresponding return value from the `listen-sim`.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> unlisten-sim 189
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> unlisten-sim 189
@@ -81,27 +81,27 @@ telephonytool> unlisten-sim 189
 
 ### 3、has-icc
 
-#### 命令说明
+#### Command Description
 
-`has-icc` 命令用于查询指定插槽中是否存在 ICC（Integrated Circuit Card，集成电路卡）。
+The `has-icc` command is used to query whether there is an ICC (Integrated Circuit Card) present in the specified slot.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 has-icc [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to query; currently, only `0` is supported.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> has-icc 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> has-icc 0
@@ -110,27 +110,27 @@ telephonytool> has-icc 0
 
 ### 4、get-sim-state
 
-#### 命令说明
+#### Command Description
 
-`get-sim-state` 命令用于获取指定插槽中 SIM 卡的状态。
+The `get-sim-state` command is used to get the state of the SIM card in the specified slot.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-sim-state [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to query; currently, only `0` is supported.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-sim-state 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 get-sim-state 0
@@ -139,27 +139,27 @@ get-sim-state 0
 
 ### 5、get-iccid
 
-#### 命令说明
+#### Command Description
 
-`get-iccid` 命令用于获取指定插槽中 SIM 卡的 ICCID（Integrated Circuit Card Identifier，集成电路卡标识符）信息。
+The `get-iccid` command is used to obtain the ICCID (Integrated Circuit Card Identifier) information of the SIM card in the specified slot.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-iccid [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to query; currently, only `0` is supported.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>  get-iccid 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-iccid 0
@@ -168,27 +168,27 @@ telephonytool> get-iccid 0
 
 ### 6、get-sim-operator
 
-#### 命令说明
+#### Command Description
 
-`get-sim-operator` 命令用于获取指定插槽中 SIM 卡的 PLMN（Public Land Mobile Network，公共陆地移动网络）信息。PLMN 是由运营商的国家代码（MCC）和网络代码（MNC）组成的标识符，用于标识 SIM 卡所属的运营商。
+The `get-sim-operator` command is used to obtain the PLMN (Public Land Mobile Network) information of the SIM card in the specified slot. PLMN is an identifier composed of the operator's country code (MCC) and network code (MNC), which indicates the operator to which the SIM card belongs.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-sim-operator [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to query; currently, only `0` is supported.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-sim-operator 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-sim-operator 0
@@ -197,27 +197,27 @@ telephonytool> get-sim-operator 0
 
 ### 7、get-sim-operator-name
 
-#### 命令说明
+#### Command Description
 
-`get-sim-operator-name` 命令用于获取指定插槽中 SIM 卡所属运营商的名称（SPN，Service Provider Name）。
+The `get-sim-operator-name` command is used to obtain the name of the SIM card's operator (SPN, Service Provider Name) in the specified slot.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-sim-operator-name [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to query; currently, only `0` is supported.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-sim-operator-name 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-sim-operator-name 0
@@ -226,27 +226,27 @@ telephonytool> get-sim-operator-name 0
 
 ### 8、get-sim-subscriber-id
 
-#### 命令说明
+#### Command Description
 
-`get-sim-subscriber-id` 命令用于获取指定插槽中 SIM 卡的订阅者标识（Subscriber ID）。
+The `get-sim-subscriber-id` command is used to obtain the subscriber identifier of the SIM card in the specified slot.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-sim-subscriber-id [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to query; currently, only `0` is supported.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> get-sim-subscriber-id 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-sim-subscriber-id 0
@@ -255,30 +255,31 @@ telephonytool> get-sim-subscriber-id 0
 
 ### 9、change-pin
 
-#### 命令说明
+#### Command Description
 
-`change-pin` 命令用于修改指定插槽中 SIM 卡的 PIN（Personal Identification Number，个人识别码）。
+The `change-pin` command is used to modify the PIN (Personal Identification Number) of the SIM card in the specified slot.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 change-pin [slot_id][pin_type, pin or pin2][old_pin][new_pin]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- pin_type: PIN 码类型，可选值为 `pin` 或 `pin2`。
-- old_pin: 当前的 PIN 码值。
-- new_pin: 要设置的新 PIN 码值。
+- slot_id: Set the slot to query; currently, only `0` is supported.
+- pin_type: Type of the PIN code, optional values are `pin` or `pin2`.
+- old_pin: The current PIN code value.
+- new_pin: The new PIN code value to be set.
 
-#### 示例
 
-##### 命令输入
+#### Example
+
+##### Command Input
 
 ```Bash
 telephonytool> change-pin 0 pin 1234 2345
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> change-pin 0 pin 1234 2345
@@ -288,32 +289,27 @@ telephonytool> [12840.160200] [21] [  INFO] [ap] [0,0081]> RIL_REQUEST_CHANGE_SI
 
 ### 10、Enter-pin
 
-#### 命令说明
+#### Command Description
 
-`enter-pin` 命令用于验证指定插槽中 SIM 卡的 PIN（Personal Identification Number，个人识别码）。
-
-#### 命令格式
+The `enter-pin` command is used to validate the PIN (Personal Identification Number) of the SIM card in the specified slot.
+#### Command Format
 
 ```Bash
 enter-pin [slot_id][pin_type][pin]
-slot_id:设置要监听的slot,当前只支持0
-pin_type:pin码类型，pin or pin2
-pin:pin码值
 ```
+- slot_id: Set the slot to query; currently, only `0` is supported.
+- pin_type: Type of the PIN code, either `pin` or `pin2`.
+- pin: The PIN code value to be validated.
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- pin_type: PIN 码类型，可选值为 `pin` 或 `pin2`。
-- pin: 要验证的 PIN 码值。
+#### Example
 
-#### 示例
-
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> enter-pin 0 pin 1234
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> enter-pin 0 pin 1234
@@ -322,11 +318,11 @@ telephonytool> enter-pin 0 pin 1234
 
 ### 11、reset-pin
 
-#### 命令说明
+#### Command Description
 
-`reset-pin` 命令用于通过 PUK（Personal Unblocking Key，个人解锁密钥）重置指定插槽中 SIM 卡的 PIN（Personal Identification Number，个人识别码）。
+The `reset-pin` command is used to reset the PIN (Personal Identification Number) of a SIM card in a specified slot using the PUK (Personal Unblocking Key).
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 reset-pin [slot_id][puk_type][puk][new_pin]
@@ -336,20 +332,20 @@ puk:puk码值
 new_pin:新的pin码值
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- puk_type: PUK 码类型，可选值为 `puk` 或 `puk2`。
-- puk: 当前的 PUK 码值，用于解锁 PIN。
-- new_pin: 要设置的新 PIN 码值。
+- slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
+- puk_type: Type of PUK code. Options are `puk` or `puk2`.
+- puk: Value of the PUK code.
+- new_pin: Value of the new PIN code.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> reset-pin 0 puk 12345678 2345
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> reset-pin 0 puk 12345678 2345
@@ -358,32 +354,29 @@ telephonytool> reset-pin 0 puk 12345678 2345
 
 ### 12、lock-pin
 
-#### 命令说明
+#### Command Description
 
-`lock-pin` 命令用于激活 SIM 卡的 PIN 锁功能，确保 SIM 卡的安全性。
+The `lock-pin` command is used to activate the PIN lock feature on the SIM card to ensure its security.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 lock-pin [slot_id][pin_type, pin or pin2][pin]
-slot_id:设置要监听的slot,当前只支持0
-pin_type:pin码类型，pin or pin2
-pin:pin码值
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- pin_type: PIN 码类型，可选值为 `pin` 或 `pin2`。
-- pin: 当前的 PIN 码值，用于激活 PIN 锁。
+slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
+pin_type: Type of PIN code. Options are `pin` or `pin2`.
+pin: Value of the current PIN code.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool> lock-pin 0 pin 1234 
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> lock-pin 0 pin 1234
@@ -393,29 +386,29 @@ telephonytool> [12894.648800] [21] [  INFO] [ap] [0,0092]> RIL_REQUEST_SET_FACIL
 
 ### 13、unlock-pin
 
-#### 命令说明
+#### Command Description
 
-`unlock-pin` 命令用于去激活 SIM 卡的 PIN 锁功能，解除对 SIM 卡的 PIN 验证要求。
+The `unlock-pin` command is used to deactivate the PIN lock feature on the SIM card, removing the requirement for PIN verification.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 unlock-pin [slot_id][pin_type, pin or pin2][pin]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- pin_type: PIN 码类型，可选值为 `pin` 或 `pin2`。
-- pin: 当前的 PIN 码值，用于解除 PIN 锁。
+- slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
+- pin_type: Type of PIN code. Options are `pin` or `pin2`.
+- pin: Value of the current PIN code.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>unlock-pin 0 pin 1234
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> unlock-pin 0 pin 1234
@@ -425,28 +418,27 @@ telephonytool> [12907.882000] [21] [  INFO] [ap] [0,0093]> RIL_REQUEST_SET_FACIL
 
 ### 14、open-logical-channel
 
-#### 命令说明
+#### Command Description
 
-`open-logical-channel` 命令用于打开逻辑通道，以便对 SIM 卡进行读写操作。
-
-#### 命令格式
+The `open-logical-channel` command is used to open a logical channel for reading and writing operations on the SIM card.
+#### Command Format
 
 ```Bash
 open-logical-channel [slot_id] [aid_str]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- aid_str: 应用标识符（AID，Application Identifier）字符串，用于指定目标应用。
+- slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
+- aid_str: Application Identifier (AID) string used to specify the target application.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>open-logical-channel 0 A0000000871002FF86FFFF89FFFFFFFF 16
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> open-logical-channel 0 A0000000871002FF86FFFF89FFFFFFFF 16
@@ -463,32 +455,32 @@ telephonytool> [12924.334200] [21] [  INFO] [ap] [0,0094]> RIL_REQUEST_SIM_OPEN_
 12924.350600] [40] [ DEBUG] [ap] open logical channel respond session id : 1
 ```
 
-- session id: 返回的 `session id` 表示逻辑通道的会话标识符，用于后续的读写操作。
+- session id: The returned `session id` represents the logical channel session identifier for subsequent read/write operations.
 
 ### 15、close-logical-channel
 
-#### 命令说明
+#### Command Description
 
-`close-logical-channel` 命令用于关闭指定的逻辑通道，释放与 SIM 卡的会话资源。
+The `close-logical-channel` command closes a specified logical channel and releases the session resources with the SIM card.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 close-logical-channel [slot_id][session_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- session_id: 要关闭的逻辑通道的会话标识符（session ID）。
+- slot_id: Specifies the slot to query (currently only `0` is supported).
+- session_id: Session ID of the logical channel to be closed.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>close-logical-channel 0 1
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> close-logical-channel 0 1
@@ -504,34 +496,34 @@ telephonytool> [12950.641100] [21] [  INFO] [ap] [0,0095]> RIL_REQUEST_SIM_CLOSE
 [12950.648400] [40] [ DEBUG] [ap] result->arg2 : 1
 ```
 
-- session_id: 输出信息中的 `session id` 表示已成功关闭的逻辑通道会话标识符。
-
+- session_id: The `session od` in the output information represents the logical channel session identifier that has been successfully closed.
 ### 16、transmit-apdu-basic-channel
 
-#### 命令说明
+#### Command Description
 
-`transmit-apdu-logical-channel` 命令用于通过逻辑通道向 SIM 卡发送 APDU（Application Protocol Data Unit，应用协议数据单元）命令。
+The `transmit-apdu-logical-channel` command is used to send an APDU (Application Protocol Data Unit) command through a logical channel to the SIM card.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 transmit-apdu-logical-channel [slot_id][session_id][pdu][len]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- session_id: 逻辑通道的会话标识符（session ID）。
-- pdu: 要发送的 APDU 数据内容。
-- len: APDU 数据的字节长度。
+- lot_id: Specifies the slot to query, currently only supports `0`.
+- session_id: The session identifier of the logical channel.
+- pdu: The APDU data content to send.
+- len: The byte length of the APDU data.
 
-#### 示例
 
-##### 命令输入
+#### Example
+
+##### Command Input
 
 ```Bash
 telephonytool>transmit-apdu-logical-channel 0 1 FFF2000000 5
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> transmit-apdu-logical-channel 0 1 FFF2000000 5
@@ -541,29 +533,29 @@ telephonytool> [12972.002100] [21] [  INFO] [ap] [0,0097]> RIL_REQUEST_SIM_TRANS
 
 ### 17、transmit-apdu-basic-channel
 
-#### 命令说明
+#### Command Description
 
-`transmit-apdu-basic-channel` 命令用于通过基本通道向 SIM 卡发送 APDU（Application Protocol Data Unit，应用协议数据单元）命令。
+The `transmit-apdu-basic-channel` command is used to send an APDU (Application Protocol Data Unit) command through the basic channel to the SIM card.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 transmit-apdu-basic-channel [slot_id][pdu][len]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- pdu: 要发送的 APDU 数据内容。
-- len: APDU 数据的字节长度。
+- slot_id: Specifies the slot to query, currently only supports `0`.
+- pdu: The APDU data content to send.
+- len: The byte length of the APDU data.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>transmit-apdu-basic-channel 0 A0B000010473656E669000 11
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> transmit-apdu-basic-channel 0 A0B000010473656E669000 11
@@ -576,27 +568,29 @@ telephonytool> [12987.929800] [21] [  INFO] [ap] [0,0098]> RIL_REQUEST_SIM_TRANS
 
 ### 18、get-uicc-enablement
 
-#### 命令说明
+#### Command Description
 
-`get-uicc-enablement` 命令用于获取 UICC（Universal Integrated Circuit Card，通用集成电路卡）应用的启用状态。
+The `get-uicc-enablement` command is used to get the enablement status of the UICC (Universal Integrated Circuit Card) application.
 
-#### 命令格式
+
+
+#### Command Format
 
 ```Bash
 get-uicc-enablement [slot_id]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to query, currently only supports `0`.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>get-uicc-enablement 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> get-uicc-enablement 0
@@ -604,35 +598,37 @@ telephonytool> get-uicc-enablement 0
 ```
 
 - state:
-    - `0` 表示 UICC 应用未启用。
-    - `1` 表示 UICC 应用已启用。
+    - `0` indicates the UICC application is not enabled.
+    - `1` indicates the UICC application is enabled.
 
 ### 19、set-uicc-enablement
 
-#### 命令说明
+#### Command Description
 
-`set-uicc-enablement` 命令用于设置 UICC（Universal Integrated Circuit Card，通用集成电路卡）应用的启用或禁用状态。
+The `set-uicc-enablement` command is used to set the enablement or disablement status of the UICC (Universal Integrated Circuit Card) application.
 
-#### 命令格式
+
+
+#### Command Format
 
 ```Bash
 set-uicc-enablement [slot_id][[state]
 ```
 
-- slot_id: 设置要查询的插槽，目前仅支持 `0`。
-- state: 指定 UICC 应用的目标状态：
-    - `0`: 禁用 UICC 应用。
-    - `1`: 启用 UICC 应用。
+- slot_id: : Specifies the slot to query, currently only supports `0`.
+- state: Specifies the target state of the UICC application:
+    - `0`: Disable the UICC application.
+    - `1`: Enable the UICC application.
 
-#### 示例
+#### Example
 
-##### 命令输入
+##### Command Input
 
 ```Bash
 telephonytool>set-uicc-enablement 0 1
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> set-uicc-enablement 0 1
