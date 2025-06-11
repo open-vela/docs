@@ -1,8 +1,8 @@
+<!-- omit in toc -->
 # 蓝牙问题定位指南
 
 \[ [English](../../../../en/device_dev_guide/connection/bluetooth/how_to_analyze_bluetooth_issues.md) | 简体中文 \]
 
-- [蓝牙问题定位指南](#蓝牙问题定位指南)
 - [适配和启动问题](#适配和启动问题)
   - [分析方法](#分析方法)
     - [一、观察蓝牙驱动是否注册成功](#一观察蓝牙驱动是否注册成功)
