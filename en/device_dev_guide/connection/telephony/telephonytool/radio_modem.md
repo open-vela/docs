@@ -397,7 +397,7 @@ telephonytool> get-imei 0
 
 ##### Output Information
 
-以下是执行 `get-imei` 命令的完整示例：
+The following is a complete example of executing the `get-imei` command:
 
 ```Bash
 telephonytool> get-imei 0
