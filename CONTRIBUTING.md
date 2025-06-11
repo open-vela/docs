@@ -1,17 +1,5 @@
 # Contributing to openvela
 
-- [Contributing to openvela](#contributing-to-openvela)
-  - [Signing the Contributor License Agreement (CLA)](#signing-the-contributor-license-agreement-cla)
-  - [Bug Reports](#bug-reports)
-  - [Feature Requests](#feature-requests)
-  - [Code Submission](#code-submission)
-    - [Branching Strategy](#branching-strategy)
-    - [Tips Before Submitting Code](#tips-before-submitting-code)
-    - [Submitting Your Changes](#submitting-your-changes)
-      - [4 Create Pull Request](#4-create-pull-request)
-      - [5 Follow-up Work After Pull Request](#5-follow-up-work-after-pull-request)
-
-
 \[ English | [简体中文](CONTRIBUTING_zh-cn.md) | [繁體中文](CONTRIBUTING_zh-tw.md) \]
 
 openvela is developed by an active team of software engineers and researchers.You are welcome to join openvela, an open source community, and contribute in any way to this project!
