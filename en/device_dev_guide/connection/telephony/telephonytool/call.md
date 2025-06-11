@@ -298,7 +298,7 @@ telephonytool> [57714.489500] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_HANGUP_FO
 
 The swap command is used to switch the call status between active and hold calls.
 
-`swap` 命令用于切换通话状态：
+`swap` command to toggle the call state:
 
 #### Command Format
 
