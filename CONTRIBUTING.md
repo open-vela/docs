@@ -1,12 +1,24 @@
 # Contributing to openvela
 
+- [Contributing to openvela](#contributing-to-openvela)
+  - [Signing the Contributor License Agreement (CLA)](#signing-the-contributor-license-agreement-cla)
+  - [Bug Reports](#bug-reports)
+  - [Feature Requests](#feature-requests)
+  - [Code Submission](#code-submission)
+    - [Branching Strategy](#branching-strategy)
+    - [Tips Before Submitting Code](#tips-before-submitting-code)
+    - [Submitting Your Changes](#submitting-your-changes)
+      - [4 Create Pull Request](#4-create-pull-request)
+      - [5 Follow-up Work After Pull Request](#5-follow-up-work-after-pull-request)
+
+
 \[ English | [简体中文](CONTRIBUTING_zh-cn.md) | [繁體中文](CONTRIBUTING_zh-tw.md) \]
 
 openvela is developed by an active team of software engineers and researchers.You are welcome to join openvela, an open source community, and contribute in any way to this project!
 
 openvela is mainly subject to Apache License 2.0. See the LICENSE file for details.
 
-## Sign the CLA
+## Signing the Contributor License Agreement (CLA)
 
 In order to participate in community contributions, you need to sign a Contributor License Agreement before contributing to the community. Here are the specific steps for different platforms:
 
@@ -17,22 +29,21 @@ In order to participate in community contributions, you need to sign a Contribut
 - **GitHub platform**:
     - After submitting a new Pull Request (PR), the system will prompt you to complete the CLA signing. Please follow the prompts to complete the signing process.
 
-## Bug reports
+## Bug Reports
 
 If you think there is an error in openvela, make sure you have tested it with the latest version of openvela (the problem may have been fixed).
 
 If not, search the issue list to see if there is already a similar problem.
 
-## Feature request
+## Feature Requests
 
 Please submit an issue describing the feature you would like to add, why you need it, and how it is expected to work.
 
-## Contributing code and documentation
+## Code Submission
 
 If you want to add new features to openvela or fix some bugs, first check if similar issues already exist. If not, create a new issue and share your views.
 
-
-### Branching strategy
+### Branching Strategy
 
 - **trunk**: **trunk** branches do not accept pull requests
 - **dev**: fork code from **dev** branch and push a pull request
@@ -41,55 +52,89 @@ If you want to add new features to openvela or fix some bugs, first check if sim
 
 Follow these tips before making a pull request to speed up the review.
 
-- Add appropriate unit tests
-- Add integration tests if applicable
-- Lines that are not part of your change should not be edited (e.g. don't format unchanged lines, don't reorder existing imports)
-- Add the appropriate license headers to any new files
+- Add appropriate unit tests.
+- Add integration tests if applicable.
+- Lines that are not part of your change should not be edited (e.g. **don't format unchanged lines, don't reorder existing imports**).
+- Add the appropriate license headers to any new files.
 
-### Submitting your changes
+### Submitting Your Changes
 
-1. Test your changes
-
-    Run the test suite to make sure that nothing is wrong.
-  
-2. Sign the Contributor License Agreement
-
-    Make sure you have signed our Contributor License Agreement (CLA). We are not asking you to assign copyright to us, but to give us the right to distribute your code without restriction. We ask all contributors to sign it in order to assure our users of the origin and continuing existence of the code. You only need to sign the CLA once.
-
-3. **Rebase your changes**
-
-    Update your local repository with the latest code from the main openvela repository, and rebase your branch on top of the latest main branch. We prefer your initial changes to be squashed into a single commit. Later, if we ask you to make changes, add them as separate commits. This makes them easier to review. As a final step before merging, we will either ask you to squash all commits yourself or we'll do it for you.
-
-4. Submit a pull request
-
-  Push your local changes to your forked copy of the repository and submit a pull request. In the pull request, choose a title which sums up the changes made. In the body text, provide details about the changes. Also mention the number of the issue; for example, “Closing #123".
-
-### Resolving Conflicts
-
-When the platform indicates that your pull request "can't automatically merge", use the following command to rebase the pull request on top of the latest main branch:
-
-1. Rebase to the latest main branch
+1. Check current status.
 
     ```Bash
+    # View working directory status
+    git status
+    ```
+
+2. Stage changes.
+
+    ```Bash
+    # Add specific files to staging area
+    git add path/to/changed/file.cpp
+    # Or add all changes
+    git add .
+    ```
+
+3. Commit changes.
+
+    ```Bash
+    # Create commit
+    git commit -m "Concise commit message"
+    # Or use detailed commit message
+    git commit
+    ```
+
+4. Configure upstream repository.
+
+    ```Bash
+    # Display existing remote repository addresses
+    git remote -v
+    # Add upstream remote repository reference (only needed first time)
     git remote add upstream https://github.com/open-vela/[repository].git
+    # Display existing remote repository addresses (should include origin and upstream)
+    git remote -v
+    ```
+
+5. Fetch latest code and **rebase**.
+
+    ```Bash
+    # Fetch latest code from upstream repository
     git fetch upstream
+    # Rebase current branch to latest main branch
     git rebase upstream/dev
     ```
 
-2. Git may show conflicts when it can't merge, e.g. “conflict.cpp”. You need to modify the file manually to resolve the conflict, and mark it as resolved afterwards
+6. Resolve conflicts (if any).
 
     ```Bash
+    # Check conflict status (recommended)
+    git status
+    # Edit conflict files (e.g., conflict.cpp), using any editor like nano, vim, VSCode, etc.
+    nano conflict.cpp
+    # Mark as resolved
     git add conflict.cpp
-    ```
-
-3. Continue rebasing with:
-
-    ```Bash
+    # Continue rebase operation after resolving all conflicts
     git rebase --continue
+    # Confirm rebase completion status
+    git status
     ```
 
-4. Push to your fork, and the pull request will be updated
+7. Force push updates:
 
     ```Bash
-    git push --force
+    # Force push updated branch to your remote repository
+    git push --force origin dev
     ```
+
+#### 4 Create Pull Request
+
+1. Visit your forked repository on GitHub.
+2. Click the **New pull request** button.
+3. Click **Create pull request** to create the pull request.
+4. Fill in the pull request information.
+
+#### 5 Follow-up Work After Pull Request
+
+- Monitor the review comments on your pull request.
+- Respond promptly to reviewer feedback.
+- If modifications are needed, make changes on the same branch and push.

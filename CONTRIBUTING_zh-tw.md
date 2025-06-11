@@ -2,93 +2,137 @@
 
 \[ [English](CONTRIBUTING.md) | [简体中文](CONTRIBUTING_zh-cn.md) | 繁體中文 \]
 
-openvela 由一群活躍的軟體工程師和研究人員團隊開發。歡迎你加入 openvela 開源社區，為改進此專案做出任何貢獻！
-
-openvela 主要遵循 Apache License 2.0 授權，具體請查看 LICENSE 文件。
+openvela 由一支活躍的軟體工程師和研究人員團隊開發。歡迎您加入 openvela 開源社區，為改進此專案做出任何貢獻！
+openvela 主要遵循 Apache License 2.0 許可證，具體請參看 LICENSE 檔案。
 
 ## 簽署貢獻者許可協議 (CLA)
 
-為了參與社區貢獻，您需要簽署相應的「貢獻者授權協議」（Contributor License Agreement, CLA）。以下是針對不同平台的步驟說明：
+為了參與社區貢獻，首次提交程式碼時，需要簽署相應的**貢獻者許可協議（Contributor License Agreement, CLA）**。以下是針對不同平台的具體步驟：
 
-- **Gitee 平台**:
-    - 請前往 [Gitee CLA 簽署頁面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成簽署。
-    - 您可以通過 [我的 CLA 狀態](https://gitee.com/profile/clas) 查看簽署狀態。
+- **Gitee 平台**：
 
-- **GitHub 平台**:
-    - 提交新的 Pull Request (PR) 後，系統會提示您完成 CLA 的簽署。請根據提示操作以完成簽署流程。
+    - 請訪問 [Gitee CLA 簽署頁面](https://gitee.com/organizations/open-vela/cla/zs6b7c48u6juka2tsnrnkzx6k88np85e) 完成簽署。
+    - 您可以透過 [我簽署的 CLA](https://gitee.com/profile/clas) 查看簽署狀態。
+
+- **GitHub 平台**：
+
+    - 在提交新的 Pull Request (PR) 後，系統會提示您完成 CLA 的簽署。請根據提示操作以完成簽署流程。
 
 ## 錯誤報告
 
-如果您認為在 openvela 中發現了錯誤，請先確保您已使用了最新版本的 openvela 進行了測試（您的問題可能已在最新版本被修復）。
-
-如果未解決，請搜尋問題列表，查看是否已有類似的問題。
+如果您認為在 openvela 中發現了錯誤，請首先確保您已使用了最新版本的 openvela 進行了測試（您的問題可能已得到修復）。
+如果未解決，請搜索問題列表，查看是否已有類似的問題。
 
 ## 功能請求
 
-請提交一個 Issue，描述您希望新增的功能、您需要它的原因以及預期的工作方式。
+請提交一個 Issue，描述您希望添加的功能、您需要它的原因以及預期的工作方式。
 
-## 貢獻程式碼和文件
+## 提交程式碼
 
-如果您想為 openvela 增加新功能或修復一些錯誤，先確認是否有類似的問題。如果沒有，請您新建一個問題，和大家討論您的想法。
+如果您想給 openvela 增加新功能或者修復一些錯誤，先確認是否已有類似的問題。如果沒有，請您新建一個問題，與大家討論您的想法。
 
 ### 分支策略
 
 - **trunk**：**trunk** 分支不接受 pull request。
-- **dev**：從 **dev** 分支 fork 代碼，並發送到 pull request。
+- **dev**：從 **dev** 分支 fork 程式碼，並推送 pull request。
 
-### 提交程式碼前提示
+### 提交程式碼前準備
 
-在發送 pull request 之前遵循以下提示將加快審核的時間。
+在新建 pull request 之前遵循這些提示將加快審核週期。
 
-- 新增適當的單元測試
-- 如果適用，請新增整合測試
-- 不應該編輯不是您變更的地方（例如，不要格式化未更改的地方，不要重新排序現有的導入）
-- 在任何新文件中增加適當的授權標頭
+- 添加適當的單元測試。
+- 如果適用，添加整合測試。
+- 不屬於您更改範圍的行不應被編輯（例如，不要格式化未更改的行，不要重新排序現有的匯入）。
+- 在任何新檔案中添加適當的許可證標頭。
 
 ### 提交您的更改  
 
-1. 測試您的更改
+#### 1 測試您的更改
   
-   請執行測試套件以確保沒有出現任何問題。 
+請執行測試套件以確保沒有出現任何問題。  
 
-2. 簽署貢獻者許可協議
+#### 2 簽署貢獻者許可協議
 
-    請確保您已簽署我們的貢獻者授權協議（CLA）。我們不要求您轉讓版權，而是確保我們可以無限制地分發您的程式碼。所有貢獻者只需簽署一次 CLA，以向使用者保證程式碼的來源和持續存在。  
+**首次提交需完成**：簽署貢獻者許可協議，請參考[簽署貢獻者許可協議 (CLA)](#簽署貢獻者許可協議-cla)章節。
 
-3. **基於最新程式碼進行 Rebase**
+#### 3 提交程式碼
 
-    使用主 openvela 儲存庫中的最新程式碼更新您的本機儲存庫。然後，將您的特性分支基於最新的主分支進行變基，以合併上游變更。如果在變基過程中遇到衝突，請依照指示解決衝突並完成變基。我們希望您的初始變更被壓縮為單一提交。如果我們要求您進行額外更改，請將它們新增為單獨的提交，以方便審查。作為合併前的最後一步，請您自己壓縮所有​​提交，或者我們會為您完成。  
-
-4. 發送 pull request
-
-    將本機變更發送到您 fork 的儲存庫副本，並發送 pull request。在 pull request 中，選擇一個簡潔的標題來總結您的更改，並在正文中提供詳細說明。請提及相關問題的編號，例如「關閉 #123」。
-
-### 衝突的處理方式
-
-當平台提示您的 pull request 無法合併時，請使用下列命令將您的 pull request 重新定位到最新的主分支之上：
-
-1. 重新定位到最新的主分支
-
-     ```Bash
-     git remote add upstream https://github.com/open-vela/[repository].git
-     git fetch upstream
-     git rebase upstream/dev
-     ```
-
-2. git 可能會在無法合併時顯示一些衝突，例如 `conflict.cpp`，需要手動修改檔案以解決衝突，解決後將其標記為已解決
+1. 檢查當前狀態。
 
     ```Bash
-    git add conflict.cpp
+    # 查看工作區狀態
+    git status
     ```
 
-3. 你可以透過以下方式繼續進行 **`rebase`**
+2. 暫存更改。
 
     ```Bash
+    # 添加特定檔案到暫存區
+    git add path/to/changed/file.cpp
+    # 或添加所有更改
+    git add .
+    ```
+
+3. 提交更改。
+
+    ```Bash
+    # 創建提交
+    git commit -m "簡明扼要的提交資訊"
+    # 或使用詳細提交資訊
+    git commit
+    ```
+
+4. 配置上游倉庫。
+
+    ```Bash
+    # 顯示現有遠端倉庫地址
+    git remote -v
+    # 添加上游遠端倉庫引用（僅首次需要執行）
+    git remote add upstream https://github.com/open-vela/[repository].git
+    # 顯示現有遠端倉庫地址（應包含 origin 和 upstream）
+    git remote -v
+    ```
+
+5. 獲取最新程式碼並變基。
+
+    ```Bash
+    # 獲取上游倉庫的最新程式碼
+    git fetch upstream
+    # 將當前分支變基到最新主分支
+    git rebase upstream/dev
+    ```
+
+6. 解決衝突（如有）。
+
+    ```Bash
+    # 檢測衝突狀態（推薦）  
+    git status                   
+    # 編輯衝突檔案（如 conflict.cpp），可使用任何編輯器，如 nano、vim、VSCode 等
+    nano conflict.cpp            
+    # 標記為已解決  
+    git add conflict.cpp  
+    # 解決所有衝突後繼續變基操作
     git rebase --continue
+    # 確認變基完成狀態
+    git status
     ```
 
-4. 發送到你的 fork，然後 pull request 將會更新
+7. 強制推送更新：
 
     ```Bash
-    git push --force
+    # 強制推送更新後的分支到您的遠端倉庫
+    git push --force origin dev
     ```
+
+#### 4 創建合入請求
+
+1. 訪問 GitHub 上您的 fork 倉庫。
+2. 點擊 **New pull request** 按鈕。
+3. 點擊 **Create pull request** 創建合入請求。
+4. 填寫合入請求資訊。
+
+#### 5 合入請求後續工作
+
+- **持續監控合入請求的審查意見**
+- 及時回應審查者的反饋
+- 如需修改，在同一分支上進行更改並推送
