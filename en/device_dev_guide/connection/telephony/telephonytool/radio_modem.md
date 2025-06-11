@@ -565,7 +565,7 @@ telephonytool> get-modem-revision 0
 
 #### Command Description
 
-获取本地电话号码信息
+Get local phone number information
 
 #### Command Format
 
