@@ -59,7 +59,6 @@ The `unlisten-sim`command is used to cancel listening to events related to the S
 
 ```Bash
 unlisten-sim [watch_id]
-watch_id:对应listen-data的返回值
 ```
 
 - watch_id: The corresponding return value from the `listen-sim`.
@@ -163,7 +162,7 @@ telephonytool>  get-iccid 0
 
 ```Bash
 telephonytool> get-iccid 0
-[12378.832200] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_iccid, slotId : 0 iccid : 12345678901234567890  # 示例数据 
+[12378.832200] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_iccid, slotId : 0 iccid : 12345678901234567890  # sample data
 ```
 
 ### 6. get-sim-operator
