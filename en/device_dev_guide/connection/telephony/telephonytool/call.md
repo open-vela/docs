@@ -1,133 +1,137 @@
-# call 命令
+# Call Command
 
-\[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/call.md) | 简体中文 \]
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/call.md) \]
 
+## I. Introduction
 
-## 一、简介
+In the NSH command line of openvela, you can perform all call control-related operations by entering the Console of the `telephonytool` command tool.
 
-在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console，来执行所有与呼叫控制相关的操作。
+## II. Prerequisites
 
-## 二、前提条件
-
-确保已打开 `telephonytool`，执行如下命令：
+Make sure that `telephonytool` is enabled by executing the following command:
 
 ```Bash
 ap> telephonytool
 ```
 
-## 三、命令
+## III. Commands
 
-### 1、listen-call
+### 1. listen-call
 
-#### 命令说明
+#### Command Description
 
-`listen-call` 用于监听呼叫状态变化、紧急号码变化以及回铃音变化等信息。
+The `listen-call` command is used to monitor changes in call status, emergency number changes, and changes in the ringback tone, among other information.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 listen-call [slot_id][event_id]
 ```
 
-- slot_id: 设置要监听的插槽，目前仅支持 `0`。
+- slot_id: Sets the slot to monitor. Currently, only `0` is supported.
 - event_id:
-    - `0`: 呼叫状态变化（call state change）。
-    - `1`: 紧急号码列表变化（ecc list change）。
-    - `2`: 回铃音变化（ringback tone change）。
+    - `0`: Call status change.
+    - `1`: Emergency number list change.
+    - `2`: Ringback tone change.
 
-#### 示例
+#### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> listen-call 0 1
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool>  listen-call 0 1
 [12797.466700] [28] [ DEBUG] [ap] telephonytool_cmd_listen_call_manager_change, slot_id : 0, event_id : 1, watch_id : 95
 ```
 
-### 2、unlisten-call
+### 2. unlisten-call
 
-#### 命令说明
+#### Command Description
 
-`unlisten-call` 用于取消监听呼叫状态变化、紧急号码变化以及回铃音变化等信息。
+The `unlisten-call` command is used to cancel listening for changes in call status, emergency numbers, and ringback tone changes.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 unlisten-call [watch_id]
 ```
 
-- watch_id: 对应 `listen-call` 命令的返回值，用于标识需要取消监听的事件。
+- watch_id: Corresponds to the return value of the `listen-call` command, used to identify the event to stop monitoring.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> unlisten-call 95
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> unlisten-call 95
 [12820.712800] [28] [ DEBUG] [ap] stop to watch call event with watch_id : 95 with return value : 0
 ```
 
-### 3、listen-call-slot-change
+### 3. Listen-Call-Slot-Change
 
-#### 命令说明
-`swap` command to toggle the call state.
+#### Command Description
+
+the `listen-call-slot-change` command is used to monitor changes in the call slot.
+
+#### Command Format
+
+```Bash
 listen-call-slot-change
 ```
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> listen-call-slot-change
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> listen-call-slot-change
 [12935.086700] [28] [ DEBUG] [ap] telephonytool_cmd_listen_call_slot_change, , watch_id : 96
 ```
 
-### 4、dial
+### 4. dial
 
-#### 命令说明
+#### Command Description
 
-`dial` 命令用于发起电话请求。
+The `dial` command is used to initiate a phone call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 dial [slot_id][number][hide_call_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
-- number: 要拨打的电话号码。
-- hide_call_id: 是否隐藏本机号码：
-    - `0`: 显示本机号码（show）。
-    - `1`: 隐藏本机号码（hide）。
+- slot_id: Sets the slot to be used. Currently, only 0 is supported.
+- number: The phone number to dial.
+- hide_call_id: Whether to hide the caller ID:
+    - `0`: Show caller ID.
+    - `1`: Hide caller ID.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> dial 0 10086 0
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> dial 0 10086 0
@@ -136,117 +140,119 @@ telephonytool> dial 0 10086 0
 [13170.772100] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_DIAL (***,0,0,0)
 ```
 
-### 5、answer_0
+### 5. answer_0
 
-#### 命令说明
+#### Command Description
 
-接听来电
+The answer_0 command is used to answer an incoming call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 answer_0 [slot_id] [call_id]
-slot_id:设置要监听的slot,当前只支持0
-call_id:来电的call id信息
 ```
 
-#### 示例
+- `slot_id`:Set the slot you want to listen to, currently only `0` is supported.
+- `call_id`:Call id information of the incoming call.
 
-##### 命令输入
+##### Example
+
+###### Command Input
 
 ```Bash
 telephonytool> answer_0 0 /ril_0/voicecall01
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> answer_0  0  /ril_0/voicecall01
 [  187.166200] [28] [ DEBUG] [ap] telephonytool_cmd_answer_by_id, slotId : 0
 ```
 
-### 6、hangup_0
+### 6. hangup_0
 
-#### 命令说明
+#### Command Description
 
-`hangup_0` 命令用于挂断电话。
+The `hangup_0` command is used to hang up a call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 hangup_0 [slot_id][call_id] 
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
-- call_id: 呼叫的 ID 信息，用于指定要挂断的电话。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
+- call_id: The ID of the call to be disconnected.
 
-#### 示例
 
-##### 命令输入
+##### Example
+
+###### Command Input
 
 ```Bash
 telephonytool> hangup_0 0 /ril_0/voicecall01
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> hangup_0 0 /ril_0/voicecall01
 [  309.834700] [28] [ DEBUG] [ap] telephonytool_cmd_hangup_by_id, slotId : 0
 ```
 
-### 7、release_and_answer
+### 7. release_and_answer
 
-#### 命令说明
+#### Command Description
 
-`release_and_answer` 命令用于释放当前正在进行的电话，并接通最新的来电。
+The `release_and_answer` command releases the current ongoing call and answers the latest incoming call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 release_and_answer [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> release_and_answer 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> release_and_answer 0
 [55124.855300] [28] [ DEBUG] [ap] telephonytool_cmd_release_and_answer_call, slotId : 0
 ```
 
-### 8、hold_and_answer
+### 8. hold_and_answer
 
-#### 命令说明
+#### Command Description
 
-`hold_and_answer` 命令用于将当前正在进行的电话置于保持状态，并接通最新的来电。
+The `hold_and_answer` command places the current ongoing call on hold and answers the latest incoming call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 hold_and_answer [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> hold_and_answer 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> hold_and_answer 0
@@ -254,29 +260,29 @@ telephonytool> hold_and_answer 0
 [57690.628200] [28] [ DEBUG] [ap] OFONO_DFX_CALL_INFO:1,2,1,0,NA:HoldAndAnswer
 ```
 
-### 9、release_and_swap
+### 9. release_and_swap
 
-#### 命令说明
+#### Command Description
 
-`release_and_swap` 命令用于挂断当前正在进行的通话，并将处于保持状态的通话切换为活动通话。
+The `release_and_swap` command hangs up the current active call and switches a call that is on hold to the active call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 release_and_swap [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> release_and_swap 0
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 release_and_swap 0
@@ -286,37 +292,34 @@ telephonytool> [57714.489500] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_HANGUP_FO
 [57714.502300] [21] [  INFO] [ap] [0,0087]< RIL_REQUEST_HANGUP_FOREGROUND_RESUME_BACKGROUND
 ```
 
-### 10、swap
+### 10. swap
 
-#### 命令说明
+#### Command Description
 
-切换call的状态，从active call切换hold call或者从hold call切换到active call
+The swap command is used to switch the call status between active and hold calls.
 
-`swap` 命令用于切换通话状态：
+`swap` command to toggle the call state:
 
-- 从活动通话（active call）切换到保持通话（hold call）。
-- 或从保持通话（hold call）切换到活动通话（active call）。
-
-#### 命令格式
+#### Command Format
 
 ```Bash
 swap [slot_id][action]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
-- action: 指定切换操作：
-    - `1`: 切换到保持通话（hold call）。
-    - `0`: 切换到活动通话（unhold call）。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
+- action: Defines the switching action:
+    - `1`: Switch to hold call.
+    - `0`: Switch to active call.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> swap 0 1 
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool>  swap 0 1
@@ -326,29 +329,29 @@ telephonytool> [57750.211600] [21] [  INFO] [ap] [0,0089]> RIL_REQUEST_SWITCH_HO
 [57750.218900] [21] [  INFO] [ap] [0,0089]< RIL_REQUEST_SWITCH_HOLDING_AND_ACTIVE
 ```
 
-### 11、hangup-all
+### 11. hangup-all
 
-#### 命令说明
+#### Command Description
 
-`hangup-all` 命令用于挂断所有存在的通话，包括后台通话（background call）。
+The `hangup-all` command is used to hang up all active calls, including background calls.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
  hangup-all [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> hangup-all 0 
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> hangup-all 0
@@ -356,29 +359,29 @@ telephonytool> hangup-all 0
 [57768.043500] [28] [ DEBUG] [ap] OFONO_DFX_CALL_INFO:4,3,3,0,NA
 ```
 
-### 12、get-call
+### 12. get-call
 
-#### 命令说明
+#### Command Description
 
-`get-call` 命令用于获取当前所有通话的信息。
+The `get-call` command is used to retrieve information about all ongoing calls.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-call [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> get-call 0
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> get-call 0
@@ -400,58 +403,58 @@ telephonytool> [57791.194300] [27] [ DEBUG] [ap] call_list_query_complete :
 [57791.198200] [27] [ DEBUG] [ap] call Emergency: 0
 ```
 
-### 13、transfer
+### 13. transfer
 
-#### 命令说明
+#### Command Description
 
-`transfer` 命令用于将当前正在进行的通话转移到另一个设备。此功能依赖网络支持。
+The `transfer` command is used to transfer the current ongoing call to another device. This feature depends on network support.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 transfer [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to be used, currently only supports `0`.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> transfer 0
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> transfer 0
 [57861.765100] [28] [ DEBUG] [ap] telephonytool_cmd_transfer_call, slotId : 0
 ```
 
-### 14、get-ecclist
+### 14. get-ecclist
 
-#### 命令说明
+#### Command Description
 
-`get-ecclist` 命令用于获取所有紧急号码的信息。
+The `get-ecclist` command is used to retrieve information about all emergency numbers.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 get-ecclist [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to be used, currently only supports `0`.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> get-ecclist 0
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> get-ecclist 0
@@ -462,29 +465,29 @@ telephonytool> get-ecclist 0
 [57889.839500] [28] [ DEBUG] [ap] ecc number : 112,0,1
 ```
 
-### 15、is-ecc
+### 15. is-ecc
 
-#### 命令说明
+#### Command Description
 
-`is-ecc` 命令用于检查某个电话号码是否为紧急号码。
+The `is-ecc` command is used to check whether a specific phone number is an emergency number.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 is-ecc [number]
 ```
 
-- number: 要检查的电话号码。
+- number: The phone number to check.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> is-ecc 110
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> is-ecc 110
@@ -493,60 +496,60 @@ telephonytool> is-ecc 110
 [57906.270700] [28] [ DEBUG] [ap] telephonytool_cmd_is_emergency_number, ret : -1
 ```
 
-### 16、send-tones
+### 16. send-tones
 
-#### 命令说明
+#### Command Description
 
-`send-tones` 命令用于发送预置的 DTMF（Dual-Tone Multi-Frequency）命令。
+The `send-tones` command is used to send a preset DTMF (Dual-Tone Multi-Frequency) signal.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 send-tones [slot_id][dtmf]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
-- dtmf: 要发送的数字（DTMF 信号）。
+- slot_id: Set the slot to be used, currently only supports `0`.
+- dtmf: The number (DTMF signal) to be sent.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> send-tones 0 11
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 telephonytool> send-tones 0 11
 [58031.748600] [28] [ DEBUG] [ap] telephonytool_cmd_send_tones, slotId : 0 dtmf : 11
 ```
 
-### 17、start-dtmf
+### 17. start-dtmf
 
-#### 命令说明
+#### Command Description
 
-`start-dtmf` 命令用于在通话过程中发送单个 DTMF（Dual-Tone Multi-Frequency）信号。
+The `start-dtmf` command is used to send a single DTMF (Dual-Tone Multi-Frequency) signal during a call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 start-dtmf [slot_id][dtmf]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
-- dtmf: 要发送的数字（DTMF 信号）。
+- slot_id: Set the slot to be used, currently only supports 0.
+- dtmf: The number (DTMF signal) to be sent.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> start-dtmf 0 1
 ```
 
-##### 输出信息
+##### Output information
 
 ```Bash
 telephonytool> start-dtmf 0 1
@@ -562,29 +565,29 @@ telephonytool> [58070.453600] [21] [  INFO] [ap] [0,0104]> RIL_REQUEST_DTMF_STAR
 [58070.458800] [27] [ DEBUG] [ap] start dtmf , state : 0
 ```
 
-### 18、stop-dtmf
+### 18. stop-dtmf
 
-#### 命令说明
+#### Command Description
 
-`stop-dtmf` 命令用于在通话过程中停止发送 DTMF（Dual-Tone Multi-Frequency）信号。
+The `stop-dtmf` command is used to stop sending DTMF (Dual-Tone Multi-Frequency) signals during a call.
 
-#### 命令格式
+#### Command Format
 
 ```Bash
 stop-dtmf [slot_id]
 ```
 
-- slot_id: 设置要使用的插槽，目前仅支持 `0`。
+- slot_id: Set the slot to be used, currently only supports `0`.
 
-#### 示例
+##### Example
 
-##### 命令输入
+###### Command Input
 
 ```Bash
 telephonytool> stop-dtmf 0
 ```
 
-##### 输出信息
+##### Output Information
 
 ```Bash
 stop-dtmf 0

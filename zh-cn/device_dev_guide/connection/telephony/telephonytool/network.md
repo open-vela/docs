@@ -1,5 +1,7 @@
 # network 命令
 
+\[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/network.md) | 简体中文 \]
+
 ## 一、简介
 
 在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console， 来执行所有与网络（network）相关的操作。
