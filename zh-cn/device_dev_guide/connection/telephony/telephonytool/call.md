@@ -82,12 +82,7 @@ telephonytool> unlisten-call 95
 ### 3、listen-call-slot-change
 
 #### 命令说明
-
-`listen-call-slot-change` 用于监听呼叫插槽（call slot）的变化。
-
-#### 命令格式
-
-```Bash
+`swap` command to toggle the call state.
 listen-call-slot-change
 ```
 
