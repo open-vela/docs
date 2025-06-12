@@ -49,7 +49,7 @@ telephonytool>  listen-call 0 1
 [12797.466700] [28] [ DEBUG] [ap] telephonytool_cmd_listen_call_manager_change, slot_id : 0, event_id : 1, watch_id : 95
 ```
 
-### 2. Unlisten-call
+### 2. unlisten-call
 
 #### Command Description
 
