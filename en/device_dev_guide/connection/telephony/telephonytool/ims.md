@@ -1,4 +1,4 @@
-## ims command
+## Ims Command
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/ims.md) \]
 
