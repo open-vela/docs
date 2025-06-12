@@ -1,5 +1,7 @@
 # 内核开发概述
 
+\[ [English](../../../en/device_dev_guide/kernel/KernelDev.md) | 简体中文 \]
+
 ## 一、概述
 
 openvela 内核基于 NuttX 实时操作系统内核构建，作为符合 POSIX 标准的嵌入式实时操作系统，具备以下核心能力：
@@ -46,7 +48,7 @@ openvela 同时支持以下多处理器模式，旨在提供灵活的处理器�
 
 #### AMP（Asymmetric Multiprocessing）
 
-拥有多个 CPU，每个 CPU 可能采用不同的架构，每个 CPU 拥有独立内存空间。每个 CPU上 都运行一个独立的操作系统，CPU 之间通过核间通信实现协作。核间通讯相关内容，请参见[核间通讯框架]()。
+拥有多个 CPU，每个 CPU 可能采用不同的架构，每个 CPU 拥有独立内存空间。每个 CPU 上都运行一个独立的操作系统，CPU 之间通过核间通信实现协作。核间通讯相关内容，请参见[核间通讯框架]()。
 
 <img src="figures/011.png" alt="smp" width="75%">
 

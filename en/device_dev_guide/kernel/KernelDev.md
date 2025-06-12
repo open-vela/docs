@@ -1,5 +1,7 @@
 # Kernel Development Overview
 
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/kernel/KernelDev.md) \]
+
 ## I. Overview
 
 The openvela kernel is built on the NuttX real-time operating system kernel. As a POSIX-compliant embedded real-time operating system, it offers the following core capabilities.
