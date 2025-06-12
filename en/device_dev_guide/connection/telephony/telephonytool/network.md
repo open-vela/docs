@@ -1,4 +1,4 @@
-# network commands
+# Network Commands
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/network.md) \]
 
@@ -36,7 +36,7 @@ listen-network [slot_id][event_id]
     - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：Indicates a change in signal strength.
     - `MSG_NITZ_STATE_CHANGE_IND`：Indicates a change in NITZ (Network Identity and Time Zone) status.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -44,7 +44,7 @@ listen-network [slot_id][event_id]
 telephonytool>listen-network 0 18
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> listen-network 0 18
@@ -73,7 +73,7 @@ unlisten-network [watch_id]
 telephonytool> 
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> unlisten-network 198
@@ -94,7 +94,7 @@ register-auto [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -102,7 +102,7 @@ register-auto [slot_id]
 telephonytool>register-auto 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> register-auto 0
@@ -128,7 +128,7 @@ The `register-manual` command sets the device to manual network selection mode.
 - mnc: Mobile Network Code.
 - technology: Radio Access Technology (RAT), such as `lte`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -136,7 +136,7 @@ The `register-manual` command sets the device to manual network selection mode.
 telephonytool>register-manual 0 460 00 lte
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> register-manual 0 460 00 lte
@@ -158,7 +158,7 @@ get-signalstrength [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -166,7 +166,7 @@ get-signalstrength [slot_id]
 telephonytool> get-signalstrength 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-signalstrength 0
@@ -187,7 +187,7 @@ get-display-name [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -195,7 +195,7 @@ get-display-name [slot_id]
 telephonytool>get-display-name 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 get-display-name 0
@@ -216,7 +216,7 @@ get-registration-info [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -224,7 +224,7 @@ get-registration-info [slot_id]
 telephonytool> get-registration-info 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 get-registration-info 0
@@ -246,7 +246,7 @@ get-voice-nwtype [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -254,7 +254,7 @@ get-voice-nwtype [slot_id]
 telephonytool>get-voice-nwtype 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 get-voice-nwtype 0
@@ -275,7 +275,7 @@ get-voice-registered [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -283,7 +283,7 @@ get-voice-registered [slot_id]
 telephonytool> get-voice-registered 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-voice-registered 0
@@ -304,7 +304,7 @@ get-voice-roaming [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -312,7 +312,7 @@ get-voice-roaming [slot_id]
 telephonytool>get-voice-roaming 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-voice-roaming 0
@@ -333,7 +333,7 @@ scan-network [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -341,7 +341,7 @@ scan-network [slot_id]
 telephonytool>scan-network 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> scan-network 0
@@ -363,7 +363,7 @@ get-serving-cellinfo [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -371,7 +371,7 @@ get-serving-cellinfo [slot_id]
 telephonytool>get-serving-cellinfo 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-serving-cellinfo 0
@@ -394,7 +394,7 @@ get-neighbouring-cellInfos [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -402,7 +402,7 @@ get-neighbouring-cellInfos [slot_id]
 telephonytool>get-neighbouring-cellInfos 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-neighbouring-cellInfos 0
@@ -429,7 +429,7 @@ set-cell-info-list-rate [slot_id][period]
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 - period：Update rate in seconds.
 
-##### Output information
+##### Output Information
 
 ##### Command Input
 
@@ -437,7 +437,7 @@ set-cell-info-list-rate [slot_id][period]
 telephonytool>set-cell-info-list-rate 0 10
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> set-cell-info-list-rate 0 10
