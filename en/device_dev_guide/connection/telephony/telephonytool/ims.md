@@ -42,7 +42,7 @@ enable-ims [slot_id][action]
 telephonytool>enable-ims 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> enable-ims 0 1
@@ -73,7 +73,7 @@ get-ims-enabled [slot_id]
 telephonytool>get-ims-enabled 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-ims-enabled 0
@@ -105,7 +105,7 @@ set-ims-cap [slot_id][cap-value]
 telephonytool> set-ims-cap 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 set-ims-cap 0 1
@@ -142,7 +142,7 @@ listen-ims [slot_id]
 telephonytool>listen-ims 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> listen-ims 0
@@ -179,7 +179,7 @@ get-ims-registration [slot_id][action]
 telephonytool>get-ims-registration 0 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-ims-registration 0 0
