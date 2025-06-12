@@ -1,4 +1,4 @@
-# telephonytool Command
+# Telephonytool Command
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/telephonytool_cmd_desc.md) \]
 
