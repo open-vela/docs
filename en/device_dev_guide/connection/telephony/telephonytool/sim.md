@@ -1,4 +1,4 @@
-# sim Command
+# Sim Command
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/sim.md) \]
 
@@ -16,7 +16,7 @@ ap> telephonytool
 
 ## 3. Commands
 
-### 1、listen-sim
+### 1. listen-sim
 
 #### Command Description
 
@@ -42,14 +42,14 @@ listen-sim [slot_id][event_id]
 telephonytool> listen-sim 0 28
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 listen-sim 0 28
 [12296.667000] [46] [ DEBUG] [ap] start to watch sim event : 28 , return watch_id : 189
 ```
 
-### 2、unlisten-sim
+### 2. unlisten-sim
 
 #### Command Description
 
@@ -59,7 +59,6 @@ The `unlisten-sim`command is used to cancel listening to events related to the S
 
 ```Bash
 unlisten-sim [watch_id]
-watch_id:对应listen-data的返回值
 ```
 
 - watch_id: The corresponding return value from the `listen-sim`.
@@ -72,14 +71,14 @@ watch_id:对应listen-data的返回值
 telephonytool> unlisten-sim 189
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> unlisten-sim 189
 [12323.192900] [46] [ DEBUG] [ap] stop to watch sim event with watch_id : 189 with return value : 0
 ```
 
-### 3、has-icc
+### 3. has-icc
 
 #### Command Description
 
@@ -101,14 +100,14 @@ has-icc [slot_id]
 telephonytool> has-icc 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> has-icc 0
 [12341.192300] [46] [ DEBUG] [ap] telephonytool_cmd_has_icc_card, slotId : 0 value : 1
 ```
 
-### 4、get-sim-state
+### 4. get-sim-state
 
 #### Command Description
 
@@ -130,14 +129,14 @@ get-sim-state [slot_id]
 telephonytool> get-sim-state 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 get-sim-state 0
 [12357.230900] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_state, slotId : 0 state : SIM_READY
 ```
 
-### 5、get-iccid
+### 5. get-iccid
 
 #### Command Description
 
@@ -159,14 +158,14 @@ get-iccid [slot_id]
 telephonytool>  get-iccid 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-iccid 0
-[12378.832200] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_iccid, slotId : 0 iccid : 12345678901234567890  # 示例数据 
+[12378.832200] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_iccid, slotId : 0 iccid : 12345678901234567890  # sample data
 ```
 
-### 6、get-sim-operator
+### 6. get-sim-operator
 
 #### Command Description
 
@@ -188,14 +187,14 @@ get-sim-operator [slot_id]
 telephonytool> get-sim-operator 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-sim-operator 0
 [12795.415400] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_operator, slotId : 0 operator : 310260
 ```
 
-### 7、get-sim-operator-name
+### 7. get-sim-operator-name
 
 #### Command Description
 
@@ -217,14 +216,14 @@ get-sim-operator-name [slot_id]
 telephonytool> get-sim-operator-name 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-sim-operator-name 0
 [12809.795600] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_operator_name, slotId : 0 spn : T-Mobile
 ```
 
-### 8、get-sim-subscriber-id
+### 8. get-sim-subscriber-id
 
 #### Command Description
 
@@ -246,14 +245,14 @@ get-sim-subscriber-id [slot_id]
 telephonytool> get-sim-subscriber-id 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-sim-subscriber-id 0
 [12824.331100] [46] [ DEBUG] [ap] telephonytool_cmd_get_sim_subscriber_id, slotId : 0 subscriber_id : 310260000000000
 ```
 
-### 9、change-pin
+### 9. change-pin
 
 #### Command Description
 
@@ -279,7 +278,7 @@ change-pin [slot_id][pin_type, pin or pin2][old_pin][new_pin]
 telephonytool> change-pin 0 pin 1234 2345
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> change-pin 0 pin 1234 2345
@@ -287,7 +286,7 @@ telephonytool> change-pin 0 pin 1234 2345
 telephonytool> [12840.160200] [21] [  INFO] [ap] [0,0081]> RIL_REQUEST_CHANGE_SIM_PIN (old=***,new=***,aid=(null))
 ```
 
-### 10、Enter-pin
+### 10. Enter-pin
 
 #### Command Description
 
@@ -309,14 +308,14 @@ enter-pin [slot_id][pin_type][pin]
 telephonytool> enter-pin 0 pin 1234
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> enter-pin 0 pin 1234
 [12860.520000] [46] [ DEBUG] [ap] telephonytool_cmd_enter_sim_pin, slot_id: 0 pin_type: pin pin: ****
 ```
 
-### 11、reset-pin
+### 11. reset-pin
 
 #### Command Description
 
@@ -345,14 +344,14 @@ new_pin:新的pin码值
 telephonytool> reset-pin 0 puk 12345678 2345
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> reset-pin 0 puk 12345678 2345
 [12877.463600] [46] [ DEBUG] [ap] telephonytool_cmd_reset_sim_pin, slot_id: 0 puk_type: puk puk: ****** new_pin: ******
 ```
 
-### 12、lock-pin
+### 12. lock-pin
 
 #### Command Description
 
@@ -376,7 +375,7 @@ pin: Value of the current PIN code.
 telephonytool> lock-pin 0 pin 1234 
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> lock-pin 0 pin 1234
@@ -384,7 +383,7 @@ telephonytool> lock-pin 0 pin 1234
 telephonytool> [12894.648800] [21] [  INFO] [ap] [0,0092]> RIL_REQUEST_SET_FACILITY_LOCK (SC,1,***,0,aid=(null))
 ```
 
-### 13、unlock-pin
+### 13. unlock-pin
 
 #### Command Description
 
@@ -408,7 +407,7 @@ unlock-pin [slot_id][pin_type, pin or pin2][pin]
 telephonytool>unlock-pin 0 pin 1234
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> unlock-pin 0 pin 1234
@@ -416,7 +415,7 @@ telephonytool> unlock-pin 0 pin 1234
 telephonytool> [12907.882000] [21] [  INFO] [ap] [0,0093]> RIL_REQUEST_SET_FACILITY_LOCK (SC,0,***,0,aid=(null))
 ```
 
-### 14、open-logical-channel
+### 14. open-logical-channel
 
 #### Command Description
 
@@ -438,7 +437,7 @@ open-logical-channel [slot_id] [aid_str]
 telephonytool>open-logical-channel 0 A0000000871002FF86FFFF89FFFFFFFF 16
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> open-logical-channel 0 A0000000871002FF86FFFF89FFFFFFFF 16
@@ -457,7 +456,7 @@ telephonytool> [12924.334200] [21] [  INFO] [ap] [0,0094]> RIL_REQUEST_SIM_OPEN_
 
 - session id: The returned `session id` represents the logical channel session identifier for subsequent read/write operations.
 
-### 15、close-logical-channel
+### 15. close-logical-channel
 
 #### Command Description
 
@@ -480,7 +479,7 @@ close-logical-channel [slot_id][session_id]
 telephonytool>close-logical-channel 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> close-logical-channel 0 1
@@ -497,7 +496,7 @@ telephonytool> [12950.641100] [21] [  INFO] [ap] [0,0095]> RIL_REQUEST_SIM_CLOSE
 ```
 
 - session_id: The `session od` in the output information represents the logical channel session identifier that has been successfully closed.
-### 16、transmit-apdu-basic-channel
+### 16. transmit-apdu-basic-channel
 
 #### Command Description
 
@@ -523,7 +522,7 @@ transmit-apdu-logical-channel [slot_id][session_id][pdu][len]
 telephonytool>transmit-apdu-logical-channel 0 1 FFF2000000 5
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> transmit-apdu-logical-channel 0 1 FFF2000000 5
@@ -531,7 +530,7 @@ telephonytool> transmit-apdu-logical-channel 0 1 FFF2000000 5
 telephonytool> [12972.002100] [21] [  INFO] [ap] [0,0097]> RIL_REQUEST_SIM_TRANSMIT_APDU_CHANNEL (1, 255, 242, 0, 0, 0, (null))
 ```
 
-### 17、transmit-apdu-basic-channel
+### 17. transmit-apdu-basic-channel
 
 #### Command Description
 
@@ -555,7 +554,7 @@ transmit-apdu-basic-channel [slot_id][pdu][len]
 telephonytool>transmit-apdu-basic-channel 0 A0B000010473656E669000 11
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> transmit-apdu-basic-channel 0 A0B000010473656E669000 11
@@ -566,7 +565,7 @@ telephonytool> [12987.929800] [21] [  INFO] [ap] [0,0098]> RIL_REQUEST_SIM_TRANS
 [12987.935700] [21] [  INFO] [ap] [0,0098]< RIL_REQUEST_SIM_TRANSMIT_APDU_BASIC (sw1=0x90,sw2=0x00)
 ```
 
-### 18、get-uicc-enablement
+### 18. get-uicc-enablement
 
 #### Command Description
 
@@ -590,7 +589,7 @@ get-uicc-enablement [slot_id]
 telephonytool>get-uicc-enablement 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-uicc-enablement 0
@@ -601,7 +600,7 @@ telephonytool> get-uicc-enablement 0
     - `0` indicates the UICC application is not enabled.
     - `1` indicates the UICC application is enabled.
 
-### 19、set-uicc-enablement
+### 19. set-uicc-enablement
 
 #### Command Description
 
@@ -628,7 +627,7 @@ set-uicc-enablement [slot_id][[state]
 telephonytool>set-uicc-enablement 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> set-uicc-enablement 0 1
