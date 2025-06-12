@@ -1,4 +1,4 @@
-# radio/modem Commands
+# Radio/Modem Commands
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/radio_modem.md) \]
 
@@ -404,7 +404,7 @@ telephonytool> get-imei 0
 [  236.301900] [35] [ DEBUG] [ap] telephonytool_cmd_get_imei, slotId : 0 imei : 8674000******7199
 ```
 
-### 10、get-imeisv
+### 10. get-imeisv
 
 #### Command Description
 
@@ -433,7 +433,7 @@ telephonytool> get-imeisv 0
 [  401.567800] [35] [ DEBUG] [ap] telephonytool_cmd_get_imeisv, slotId : 0 imeisv : 8674000******7901
 ```
 
-### 11、get-phone-state
+### 11. get-phone-state
 
 #### Command Description
 
@@ -462,7 +462,7 @@ telephonytool> get-phone-state 0
 [ 9427.739300] [35] [ DEBUG] [ap] telephonytool_cmd_get_phone_state, slotId : 0 state : 0
 ```
 
-### 12、send-modem-power
+### 12. send-modem-power
 
 #### Command Description
 
@@ -499,7 +499,7 @@ telephonytool> [ 9461.415300] [21] [  INFO] [ap] modem_change_state, old state: 
 [ 9461.421100] [21] [  INFO] [ap] free_contexts
 ```
 
-### 13、get-radio-state
+### 13. get-radio-state
 
 #### Command Description
 
@@ -530,7 +530,7 @@ telephonytool> get-radio-state 0
 [ 9486.517900] [35] [ DEBUG] [ap] telephonytool_cmd_get_radio_state, slotId : 0 state : 1
 ```
 
-### 14、get-modem-revision
+### 14. get-modem-revision
 
 #### Command Description
 
@@ -561,7 +561,7 @@ telephonytool> get-modem-revision 0
 [ 9505.417900] [35] [ DEBUG] [ap] telephonytool_cmd_get_modem_revision, slotId : 0 value : 1.0.*.*  
 ```
 
-### 15、get-msisdn
+### 15. get-msisdn
 
 #### Command Description
 
@@ -593,7 +593,7 @@ telephonytool> get-msisdn 0
 [ 9529.025200] [35] [ DEBUG] [ap] telephonytool_cmd_get_phone_number, slotId : 0  number : +1555******67
 ```
 
-### 16、get-modem-activity-info
+### 16. get-modem-activity-info
 
 #### Command Description
 
@@ -624,7 +624,7 @@ telephonytool> get-modem-activity-info 0
 [ 9743.317300] [35] [ DEBUG] [ap] telephonytool_cmd_get_modem_activity_info, slotId : 0
 ```
 
-### 17、enable-modem
+### 17. enable-modem
 
 #### Command Description
 
@@ -658,7 +658,7 @@ telephonytool> enable-modem 0 1
 [   15.700700] [28] [ DEBUG] [ap] telephonytool_cmd_enable_modem, slotId : 0 target_state: 1
 ```
 
-### 18、get-modem-status
+### 18. get-modem-status
 
 #### Command Description
 
@@ -689,7 +689,7 @@ telephonytool> get-modem-status 0
 [  782.186200] [28] [ DEBUG] [ap] telephonytool_cmd_get_modem_status, slotId : 0
 ```
 
-### 19、oem-req-raw
+### 19. oem-req-raw
 
 #### Command Description
 
@@ -720,7 +720,7 @@ telephonytool> oem-req-raw 0 01A0B023 4
 [  854.969700] [28] [ DEBUG] [ap] telephonytool_cmd_oem_ril_req_raw, slot_id: 0 oem_req: 01A0B023 length: 4
 ```
 
-### 20、oem-req-strings
+### 20. oem-req-strings
 
 #### Command Description
 
@@ -751,7 +751,7 @@ telephonytool> oem-req-strings 0 AT+CPIN? 1
 [  870.751200] [28] [ DEBUG] [ap] telephonytool_cmd_oem_ril_req_strings, slot_id: 0 length: 1
 ```
 
-### 21、send-command
+### 21. send-command
 
 #### Command Description
 
@@ -783,7 +783,7 @@ telephonytool> send-command 0 16 57
 [  882.733000] [28] [ DEBUG] [ap] telephonytool_cmd_send_command, slot_id: 0 atom: 16  command: 57
 ```
 
-### 22、send-screen-state
+### 22. send-screen-state
 
 #### Command Description
 
