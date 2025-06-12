@@ -1,4 +1,4 @@
-# sim Command
+# Sim Command
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/sim.md) \]
 
