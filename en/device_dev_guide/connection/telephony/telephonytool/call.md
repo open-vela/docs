@@ -152,8 +152,8 @@ The answer_0 command is used to answer an incoming call.
 answer_0 [slot_id] [call_id]
 ```
 
-- `slot_id`:设置要监听的slot,当前只支持0
-- `call_id`:来电的call id信息
+- `slot_id`:Set the slot you want to listen to, currently only `0` is supported.
+- `call_id`:Call id information of the incoming call.
 
 ##### Example
 
