@@ -16,7 +16,7 @@ ap> telephonytool
 
 ## III. Commands
 
-### 1、listen-network
+### 1. listen-network
 
 #### Command Description
 
@@ -51,7 +51,7 @@ telephonytool> listen-network 0 18
 [21503.829200] [46] [ DEBUG] [ap] start to watch network event : 18 , return watch_id : 198
 ```
 
-### 2、unlisten-network
+### 2. unlisten-network
 
 #### Command Description
 
@@ -80,7 +80,7 @@ telephonytool> unlisten-network 198
 [21522.399100] [46] [ DEBUG] [ap] stop to watch network event with watch_id : 198 with return value : 0
 ```
 
-### 3、register-auto
+### 3. register-auto
 
 #### Command Description
 
@@ -111,7 +111,7 @@ telephonytool> [21549.532800] [21] [  INFO] [ap] [0,0110]> RIL_REQUEST_SET_NETWO
 [21549.534000] [15] [  INFO] [ap] [AT_RIL] onRequest: 46<->SET_NETWORK_SELECTION_AUTOMATIC, reqtype: 6
 ```
 
-### 4、register-manual
+### 4. register-manual
 
 #### Command Description
 
@@ -144,7 +144,7 @@ telephonytool> [   23.514600] [21] [  INFO] [ap] [0,0079]> RIL_REQUEST_SET_NETWO
 [   24.438000] [15] [  INFO] [ap] [AT_RIL] onRequest: 47<->SET_NETWORK_SELECTION_MANUAL, reqtype: 6
 ```
 
-### 5、get-signalstrength
+### 5. get-signalstrength
 
 #### Command Description
 
@@ -173,7 +173,7 @@ telephonytool> get-signalstrength 0
 [   53.030000] [35] [ DEBUG] [ap] telephonytool_cmd_query_signalstrength, slotId : 0 rssi :2147483647 rsrp :-68 rsrq :2147483647 rssnr :2147483647 cqi : 2147483647 level :4
 ```
 
-### 6、get-display-name
+### 6. get-display-name
 
 #### Command Description
 
@@ -202,7 +202,7 @@ get-display-name 0
 [   76.929700] [35] [ DEBUG] [ap] telephonytool_cmd_get_operator_name, slotId : 0 value :
 ```
 
-### 7、get-registration-info
+### 7. get-registration-info
 
 #### Command Description
 
@@ -232,7 +232,7 @@ telephonytool> [   96.809800] [31] [ DEBUG] [ap] network_event_callback :
 [   96.810200] [31] [ DEBUG] [ap] reg_state = 4 operator_name =  mcc =  mnc =
 ```
 
-### 8、get-voice-nwtype
+### 8. get-voice-nwtype
 
 #### Command Description
 
@@ -261,7 +261,7 @@ get-voice-nwtype 0
 [  117.115200] [35] [ DEBUG] [ap] telephonytool_cmd_get_voice_networktype, slotId : 0 value :0
 ```
 
-### 9、get-voice-registered
+### 9. get-voice-registered
 
 #### Command Description
 
@@ -290,7 +290,7 @@ telephonytool> get-voice-registered 0
 [  131.299100] [35] [ DEBUG] [ap] telephonytool_cmd_is_voice_registered, slotId : 0 value :0
 ```
 
-### 10、get-voice-roaming
+### 10. get-voice-roaming
 
 #### Command Description
 
@@ -319,7 +319,7 @@ telephonytool> get-voice-roaming 0
 [  149.630700] [35] [ DEBUG] [ap] telephonytool_cmd_is_voice_roaming, slotId : 0 value :0
 ```
 
-### 11、scan-network
+### 11. scan-network
 
 #### Command Description
 
@@ -349,7 +349,7 @@ telephonytool> [  161.901900] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_QUERY_AVA
 [  161.906400] [15] [  INFO] [ap] [AT_RIL] onRequest: 48<->QUERY_AVAILABLE_NETWORKS , reqtype: 6
 ```
 
-### 12、get-serving-cellinfo
+### 12. get-serving-cellinfo
 
 #### Command Description
 
@@ -380,7 +380,7 @@ telephonytool> [  175.409900] [21] [  INFO] [ap] [0,0088]> RIL_REQUEST_GET_CELL_
 [  175.417500] [21] [  INFO] [ap] [0,0088]< RIL_REQUEST_GET_CELL_INFO_LIST cell_info_cnt = 1 {type = 1, registered = 1, mcc = 311, mnc = 740, lac = 8514, ci = 47108, strength = 0, ber = 1}
 ```
 
-### 13、get-neighbouring-cellInfos
+### 13. get-neighbouring-cellInfos
 
 #### Command Description
 
@@ -414,7 +414,7 @@ telephonytool> [  192.285200] [21] [  INFO] [ap] [0,0089]> RIL_REQUEST_GET_NEIGH
 [  192.300900] [31] [ DEBUG] [ap] ci : 0, mcc : 000, mnc : 00, registered : 1, type : 0,
 ```
 
-### 14、set-cell-info-list-rate
+### 14. set-cell-info-list-rate
 
 #### Command Description
 
