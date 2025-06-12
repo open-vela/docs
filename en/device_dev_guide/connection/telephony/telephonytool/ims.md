@@ -51,7 +51,7 @@ telephonytool> [149517.786400] [21] [  INFO] [ap] [0,0124]> RIL_REQUEST_IMS_REG_
 [149518.064500] [25] [  INFO] [ap] [AT_NETWORK] Receive signal strength URC
 ```
 
-### 2、get-ims-enabled
+### 2. get-ims-enabled
 
 #### Command Description
 
@@ -80,7 +80,7 @@ telephonytool> get-ims-enabled 0
 [149542.284600] [35] [ DEBUG] [ap] telephonytool_cmd_get_ims_enabled: slot_id: 0, ims enable: 1
 ```
 
-###  3、set-ims-cap
+###  3. set-ims-cap
 
 #### Command Description
 
@@ -120,7 +120,7 @@ telephonytool> [149558.409700] [21] [  INFO] [ap] [0,0127]> RIL_REQUEST_IMS_SET_
 [149558.425400] [21] [  INFO] [ap] /ril_0 reg_info:1 ext_info:1
 ```
 
-### 4、listen-ims
+### 4. listen-ims
 
 #### Command Description
 
@@ -153,7 +153,7 @@ telephonytool> get-ims-enabled 0[149578.065500] [25] [  INFO] [ap] [AT_NETWORK] 
 [149578.068000] [21] [  INFO] [ap] [0,UNSOL]< UNSOL_SIGNAL_STRENGTH {gw: 99, cdma: -1, evdo: -1, lte: 99 59 2147483647 2147483647 2147483647}
 ```
 
-### 5、get-ims-registration
+### 5. get-ims-registration
 
 #### Command Description
 
