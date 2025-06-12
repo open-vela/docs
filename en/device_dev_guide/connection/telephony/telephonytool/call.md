@@ -42,7 +42,7 @@ listen-call [slot_id][event_id]
 telephonytool> listen-call 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool>  listen-call 0 1
