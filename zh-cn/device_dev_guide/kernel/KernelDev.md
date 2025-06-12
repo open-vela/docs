@@ -22,7 +22,7 @@ openvela 内核基于 NuttX 实时操作系统内核构建，作为符合 POSIX 
 - 支持通用 Linux 用户程序移植。
 - 实现模块化组件的复用和互操作。
 
-这些特性使 openvela 能够在资源受限的嵌入式平台上实现高效可靠的实时操作，满足工业控制、物联网设备等场景的复杂需求。 
+这些特性使 openvela 能够在资源受限的嵌入式平台上实现高效可靠的实时操作。
 
 ## 二、支持的处理器架构
 
@@ -36,19 +36,19 @@ openvela 支持多种处理器架构，且覆盖了多种主流嵌入式设备�
 
 ### 2、多处理器支持
 
-openvela 同时支持以下多处理器模式，旨在提供灵活的处理器调度和优化的并行处理能力，以满足不同应用场景的需求：
+openvela 同时支持以下多处理器模式，旨在提供灵活的处理器调度和优化的并行处理能力，以满足不同应用场景的需求。
 
 #### SMP（Symmetric Multiprocessing）
 
 拥有多个 CPU，每个 CPU 采用相同的架构，多个 CPU 共享同一内存空间。操作系统运行在这多个 CPU 上，并将工作负载分摊给各个 CPU。SMP架构相关详细内容，请参见 [SMP]()。
 
-![img](./figures/010.png)
+<img src="figures/010.png" alt="smp" width="75%">
 
 #### AMP（Asymmetric Multiprocessing）
 
 拥有多个 CPU，每个 CPU 可能采用不同的架构，每个 CPU 拥有独立内存空间。每个 CPU上 都运行一个独立的操作系统，CPU 之间通过核间通信实现协作。核间通讯相关内容，请参见[核间通讯框架]()。
 
-![img](./figures/011.png)
+<img src="figures/011.png" alt="smp" width="75%">
 
 ## 三、代码目录结构
 
@@ -111,7 +111,7 @@ openvela 的内核代码目录结构如下：
 
 开发者可以通过以下代码仓库获取 openvela 内核的相关代码和资源：
 
-- [openvela NuttX 仓库](https://github.com/open-vela/nuttx)
+- [openvela NuttX 仓库](../../../../open-vela/nuttx)
 
 ## 四、系统特性
 
@@ -159,7 +159,7 @@ openvela 将任务/线程划分为三类（关系见示意图）：
     - 用户自定义的独立执行单元。
     - 可包含单线程或多线程结构。
 
-![img](./figures/012.png)
+<img src="figures/012.png" alt="smp" width="75%">
 
 以下各节将详细介绍这些线程类型及其调度机制。
 
@@ -306,7 +306,7 @@ openvela 提供多种资源同步机制，以确保多线程环境下的数据�
 #### 参考
 
 - 信号量的详细说明请参见[信号量机制](./resource_sync/semaphore_mechanism.md)。
-- 相关实现代码请参见 [openvela semaphore](https://github.com/open-vela/nuttx/tree/dev/sched/semaphore)。
+- 相关实现代码请参见 [openvela semaphore](../../../../open-vela/nuttx/tree/dev/sched/semaphore)。
 
 ### 2、互斥体
 
@@ -325,7 +325,7 @@ openvela 提供多种资源同步机制，以确保多线程环境下的数据�
 
 #### 参考
 
-相关实现代码可参考 [openvela mutex](https://github.com/open-vela/nuttx/blob/dev/libs/libc/misc/lib_mutex.c)。
+相关实现代码可参考 [openvela mutex](../../../../open-vela/nuttx/tree/dev/libs/libc/misc/lib_mutex.c)。
 
 ### 3、自旋锁（SpinLock）
 
@@ -345,7 +345,7 @@ openvela 提供多种资源同步机制，以确保多线程环境下的数据�
 
 #### 参考
 
-相关实现代码可参考 [openvela spinlock](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/spinlock.h)。
+相关实现代码可参考 [openvela spinlock](../../../../open-vela/nuttx/tree/dev/include/nuttx/spinlock.h)。
 
 ### 4、原子操作
 
@@ -364,7 +364,7 @@ openvela 提供多种资源同步机制，以确保多线程环境下的数据�
 #### 参考
 
 - 原子操作的详细说明，请参见[原子操作接口](./resource_sync/atomic_operation.md)。
-- 相关接口代码请参见 [openvela atomic](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/atomic.h)。
+- 相关接口代码请参见 [openvela atomic](../../../../open-vela/nuttx/tree/dev/include/nuttx/atomic.h)。
 
 ### 5、开关中断（IRQ Control）
 
@@ -381,8 +381,8 @@ openvela 通过 `up_irq_xxx()` 实现对本 CPU 的中断屏蔽控制，这些�
 
 #### 参考
 
-- 中断系统适配详情请参考[中断系统适配指南](./../../chip_porting/Interrupt_System_Adaptation_Guide.md)章节。
-- 接口代码请参考 [openvela irq 接口](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/irq.h)。
+- 中断系统适配详情请参考[中断系统适配指南](./../../chip_porting/Interrupt_System_Adaptation_Guide.md)。
+- 接口代码请参考 [openvela irq 接口](../../../../open-vela/nuttx/tree/dev/include/nuttx/irq.h)。
 
 ### 6、开关调度（Scheduler Control）
 
@@ -462,7 +462,7 @@ int nsh_builtin(FAR struct nsh_vtbl_s *vtbl, FAR const char *cmd,
 
 #### 参考
 
-实现代码请参考 [openvela sched lock](https://github.com/open-vela/nuttx/blob/dev/sched/sched/sched_lock.c) 和 [openvela sched unlock](https://github.com/open-vela/nuttx/blob/dev/sched/sched/sched_unlock.c)。
+实现代码请参考 [openvela sched lock](../../../../open-vela/nuttx/tree/dev/sched/sched/sched_lock.c) 和 [openvela sched unlock](../../../../open-vela/nuttx/tree/dev/sched/sched/sched_unlock.c)。
 
 ### 7、Pthread 互斥锁（Pthread Mutex）
 
@@ -470,23 +470,15 @@ POSIX 线程标准提供的互斥锁机制，仅用于 Pthread 线程。
 
 #### 相关接口
 
-- 互斥锁：`pthread_mutex_lock()`, `pthread_mutex_unlock()`
-- 读写锁：`pthread_rwlock_rdlock()`, `pthread_rwlock_wrlock()`
-- 自旋锁：`pthread_spin_lock()`, `pthread_spin_trylock()`
-- 屏障：`pthread_barrier_init()`, `pthread_barrier_wait()`
-- 一次性初始化：`pthread_once()`
-
-```HTML
-https://linux.die.net/man/3/pthread_mutex_lock
-https://linux.die.net/man/3/pthread_rwlock_rdlock
-https://linux.die.net/man/3/pthread_spin_trylock
-https://linux.die.net/man/3/pthread_barrier_init
-https://linux.die.net/man/3/pthread_once
-```
+- 互斥锁：`pthread_mutex_lock()`, `pthread_mutex_unlock()` [] ([man page](https://linux.die.net/man/3/pthread_mutex_lock))
+- 读写锁：`pthread_rwlock_rdlock()`, `pthread_rwlock_wrlock()` ([man page](https://linux.die.net/man/3/pthread_rwlock_rdlock))
+- 自旋锁：`pthread_spin_lock()`, `pthread_spin_trylock()` ([man page](https://linux.die.net/man/3/pthread_spin_trylock))
+- 屏障：`pthread_barrier_init()`, `pthread_barrier_wait()` ([man page](https://linux.die.net/man/3/pthread_barrier_init))
+- 一次性初始化：`pthread_once()` ([man page](https://linux.die.net/man/3/pthread_once))
 
 #### 参考
 
-实现代码请参考 [openvela pthread](https://github.com/open-vela/nuttx/tree/dev/libs/libc/pthread)。
+实现代码请参考 [openvela pthread](../../../../open-vela/nuttx/tree/dev/libs/libc/pthread)。
 
 ### 8、同步机制的选择
 
@@ -527,9 +519,6 @@ openvela 操作系统提供多种线程和进程间通信机制，使开发者�
 - 工作线程：从队列取出工作项并执行。
 - 调度器：管理工作项的调度和执行。
 
-#### 工作逻辑
-
-![img](./figures/013.jpeg)
 
 #### 工作队列类型
 
@@ -551,8 +540,8 @@ openvela 支持三种工作队列类型，各具不同特性：
 
 #### 参考
 
-- 工作队列的详细说明，可参考[工作队列]()章节。
-- 实现代码请查看 [openvela wqueue](https://github.com/open-vela/nuttx/tree/dev/sched/wqueue) 源码。
+- 工作队列的详细说明，可参考[工作队列]()。
+- 实现代码请查看 [openvela wqueue](../../../../open-vela/nuttx/tree/dev/sched/wqueue) 源码。
 
 ### 2、消息队列
 
@@ -577,8 +566,8 @@ openvela 支持三种工作队列类型，各具不同特性：
 
 #### 参考
 
-- 消息队列的详细说明请参考[消息队列]()章节。
-- 实现代码请参考 [openvela mqueue](https://github.com/open-vela/nuttx/tree/dev/sched/mqueue) 源码。
+- 消息队列的详细说明请参考[消息队列]()。
+- 实现代码请参考 [openvela mqueue](../../../../open-vela/nuttx/tree/dev/sched/mqueue) 源码。
 
 ### 3、通信方案的选择
 
@@ -596,9 +585,6 @@ openvela 支持三种工作队列类型，各具不同特性：
 | 线程+信号量   | 线程栈 2KB                                     | 线程完全独立线程优先级可配置实现简单直观     | 仅适合简单同步不支持数据传递   |
 | 线程+消息队列 | 消息队列框架 1.5KB线程栈 2KB消息预分配空间 1KB | 线程完全独立线程优先级可配置消息优先级可配置 | 配置参数复杂使用场景需仔细评估 |
 
-#### 决策路径
-
-![](./figures/014.jpeg)
 
 ## 八、示例分享
 
