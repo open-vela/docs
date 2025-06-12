@@ -59,7 +59,7 @@ telephonytool> send-sms 0 10086 hello
 [17860.511000] [40] [ DEBUG] [ap] send message successed, uuid : /ril_0/message_80E48FEE******2BE819803B
 ```
 
-### 2、send-data-sms
+### 2. send-data-sms
 
 #### Command Description
 
@@ -85,7 +85,7 @@ send-sms [slot_id][number][text][port]
 telephonytool> send-data-sms 0 10086 hello 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> send-data-sms 0 10086 hello 0
@@ -106,7 +106,7 @@ telephonytool> send-data-sms 0 10086 hello 0
 [17884.890300] [40] [ DEBUG] [ap] send message successed, uuid : /ril_0/message_064DE2FF8******F8C77
 ```
 
-### 3、get-service-center-number
+### 3. get-service-center-number
 
 #### Command Description
 
@@ -128,14 +128,14 @@ get-service-center-number [slot_id]
 telephonytool>get-service-center-number 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-service-center-number 0
 [18090.348600] [46] [ DEBUG] [ap] telephonytool_tapi_sms_get_service_center_number, slotId : 0  smsc_addr: 10086
 ```
 
-### 4、set-service-center-number
+### 4. set-service-center-number
 
 #### Command Description
 
@@ -158,7 +158,7 @@ set-service-center-number [slot_id][number]
 telephonytool>set-service-center-number 0 10086
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> set-service-center-number 0 10086
@@ -171,7 +171,7 @@ telephonytool> [18074.206600] [21] [  INFO] [ap] [0,0103]> RIL_REQUEST_SET_SMSC_
 [18074.216100] [21] [  INFO] [ap] [0,0104]< RIL_REQUEST_GET_SMSC_ADDRESS {type=129,number=***}
 ```
 
-### 5、get-cell-broadcast-power
+### 5. get-cell-broadcast-power
 
 #### Command Description
 
@@ -193,7 +193,7 @@ get-cell-broadcast-power [slot_id]
 telephonytool>get-cell-broadcast-power 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-cell-broadcast-power 0
@@ -204,7 +204,7 @@ telephonytool> get-cell-broadcast-power 0
     - `1`: Cell Broadcast feature is enabled.
     - `0`: Cell Broadcast feature is disabled.
 
-### 6、set-cell-broadcast-power
+### 6. set-cell-broadcast-power
 
 #### Command Description
 
@@ -229,7 +229,7 @@ set-cell-broadcast-power [slot_id][state]
 telephonytool> set-cell-broadcast-power 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> set-cell-broadcast-power 0 1
@@ -242,7 +242,7 @@ telephonytool> [18220.661800] [21] [  INFO] [ap] [0,0105]> RIL_REQUEST_GSM_SET_B
     - `1`: Cell Broadcast feature has been successfully enabled.
     - `0`: Cell Broadcast feature has been successfully disabled.
 
-### 7、get-cell-broadcast-topics
+### 7. get-cell-broadcast-topics
 
 #### Command Description
 
@@ -264,7 +264,7 @@ get-cell-broadcast-topics [slot_id]
 telephonytool>get-cell-broadcast-topics 0
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> get-cell-broadcast-topics 0
@@ -273,7 +273,7 @@ telephonytool> get-cell-broadcast-topics 0
 
 - cbs_topics: Indicates the supported types of Cell Broadcast messages.
 
-### 8、set-cell-broadcast-topics
+### 8. set-cell-broadcast-topics
 
 #### Command Description
 
@@ -297,7 +297,7 @@ set-cell-broadcast-topics [slot_id][topic_type]
 telephonytool> set-cell-broadcast-topics 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> set-cell-broadcast-topics 0 1
@@ -308,7 +308,7 @@ telephonytool> [18314.898000] [21] [  INFO] [ap] [0,0106]> RIL_REQUEST_GSM_SET_B
 
 - cbs_topics: Indicates the types of broadcast messages set.
 
-### 9、copy-sms-to-sim
+### 9. copy-sms-to-sim
 
 #### Command Description
 
@@ -332,7 +332,7 @@ copy-sms-to-sim [slot_id][number][text]
 telephonytool> copy-sms-to-sim 0 10086 hello11
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> copy-sms-to-sim 0 10086 hello11
@@ -343,7 +343,7 @@ telephonytool> [18362.292600] [21] [  INFO] [ap] pdu_len: 14
 [18362.298600] [21] [  INFO] [ap] [0,0107]< RIL_REQUEST_WRITE_SMS_TO_SIM
 ```
 
-### 10、delete-sms-from-sim
+### 10. delete-sms-from-sim
 
 #### Command Description
 
@@ -366,7 +366,7 @@ delete-sms-from-sim [slot_id][index]
 telephonytool> delete-sms-from-sim 0 1
 ```
 
-##### Output information
+##### Output Information
 
 ```Bash
 telephonytool> delete-sms-from-sim 0 1
