@@ -143,26 +143,9 @@ Thread scheduling is the core process by which the operating system manages mult
 
 ### 2. openvela Task Classification
 
-openvela categorizes tasks/threads into three types (relationship shown in the diagram):
-
-1. Kernel Threads (Kthread)
-
-    - Run in kernel space.
-    - Directly managed by the operating system scheduler.
-
-2. User-space POSIX Threads (Pthread)
-
-    - User-level threads conforming to POSIX standards.
-    - Managed through thread libraries (such as pthread).
-
-3. User Tasks (User Task)
-
-    - User-defined independent execution units.
-    - Can contain single-thread or multi-thread structures.
+openvela categorizes tasks/threads into three types, as shown in the diagram and detailed below.
 
 <img src="figures/012.png" alt="smp" width="75%">
-
-The following sections detail these thread types and their scheduling mechanisms.
 
 #### Kernel Threads (Kthread)
 
@@ -579,11 +562,11 @@ Avoid creating threads indiscriminately. In a single-core system, multi-threadin
 
 When multi-threading is necessary, the following common schemes can be considered:
 
-| **Scheme**                 | **Overhead**                                                                        | **Advantages**                                                                                 | **Disadvantages**                                                         |
-| :------------------------- | :---------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ |
-| **Work Queue**             | Framework: ~1 KB <br> Thread Stack: ~2 KB * n (configurable)                        | Centralizes interrupt bottom-half processing, saving resources; ideal for deferred operations. | Supports only FIFO; no priority strategy.                                 |
-| **Thread + Semaphore**     | Thread Stack: ~2 KB                                                                 | Provides fully independent, priority-configurable threads; simple and intuitive.               | Suitable only for simple synchronization; does not support data transfer. |
-| **Thread + Message Queue** | MQ Framework: ~1.5 KB <br>Thread Stack ~2 KB <br>Pre-allocated Message Space: ~1 KB | Provides independent threads; both thread and message priorities are configurable.             | Has complex parameters; its usage scenario must be carefully evaluated.   |
+| **Scheme**                 | **Overhead**                                                                           | **Advantages**                                                                                 | **Disadvantages**                                                         |
+| :------------------------- | :------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------ |
+| **Work Queue**             | Framework: ~1 KB <br> Thread Stack: ~2 KB * n (configurable)                           | Centralizes interrupt bottom-half processing, saving resources; ideal for deferred operations. | Supports only FIFO; no priority strategy.                                 |
+| **Thread + Semaphore**     | Thread Stack: ~2 KB                                                                    | Provides fully independent, priority-configurable threads; simple and intuitive.               | Suitable only for simple synchronization; does not support data transfer. |
+| **Thread + Message Queue** | MQ Framework: ~1.5 KB <br> Thread Stack: ~2 KB <br> Pre-allocated Message Space: ~1 KB | Provides independent threads; both thread and message priorities are configurable.             | Has complex parameters; its usage scenario must be carefully evaluated.   |
 
 ## VIII. Examples
 
