@@ -43,10 +43,3 @@ LVGL 是最流行的免费开源嵌入式图形库，可为任何 MCU、MPU 和�
 - [Framebuffer_Driver](./Framebuffer_Driver.md)
 - [LCD_Driver](./LCD_Driver.md)
 
-## 三、（不开源）Reference
-[Understanding PinePhone's Display (MIPI DSI) (lupyuen.github.io)](https://lupyuen.github.io/articles/dsi)
-[Rendering PinePhone's Display (DE and TCON0) (lupyuen.github.io)](https://lupyuen.github.io/articles/de)
-[Vela RTOS for PinePhone: MIPI Display Serial Interface (lupyuen.github.io)](https://lupyuen.github.io/articles/dsi3)
-[Vela RTOS for PinePhone: Display Engine (lupyuen.github.io)](https://lupyuen.github.io/articles/de3)
-[Vela RTOS for PinePhone: LCD Panel (lupyuen.github.io)](https://lupyuen.github.io/articles/lcd)
-[Vela RTOS for PinePhone: Framebuffer (lupyuen.github.io)](https://lupyuen.github.io/articles/fb)

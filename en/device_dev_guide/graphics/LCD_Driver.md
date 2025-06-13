@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/LCD_Driver.md) \]
 
-## I. Introduction
+## I Introduction
 
 For devices with modest resolution requirements, Universal mode (SPI/I2C/UART) interface screens are often used to conserve memory. In such cases, the primary adaptation requirement is the LCD driver (LCD driver).
 
-## II. openvela LCD Interface
+## II openvela LCD Interface
 
 openvela's LCD framework provides standard VFS file operation interfaces to upper layers. Users can operate /`dev/lcd0` device through these methods:
 
@@ -84,7 +84,7 @@ Reference Implementation:
 
 Demonstrates full implementation of `struct lcd_dev_s` methods for specific LCD controllers.
 
-## III. Enable openvela LCD
+## III Enable openvela LCD
 
 When using the openvela LCD feature, it is necessary to enable related compilation options and complete initialization and registration during the system startup phase. The following are the specific steps:
 
@@ -182,7 +182,7 @@ struct lcd_planeinfo_s
 2. `bpp`
 - Function: the number of bits occupied by a pixel.
 
-## IV. LCD Framebuffer Mode
+## IV LCD Framebuffer Mode
 
 LCD Framebuffer is a framebuffer wrapper for the LCD driver in openvela. After enabling the LCD Framebuffer mode, the application layer can access and control the LCD device through `/dev/fb0`. It is important to note that this mode will allocate a frame graphic buffer (Framebuffer), which will consume additional memory space.
 
@@ -343,7 +343,9 @@ In LCD Framebuffer mode, the following compilation options must be enabled:
 >
 > - The `CONFIG_LCD_EXTERNINIT` option is not enabled by default.
 
-## V、Related code repository
-[nuttx/include/nuttx/lcd/lcd.h at dev · open-vela/nuttx](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/lcd/lcd.h)
+## V Related code repository
+[nuttx/include/nuttx/lcd/lcd.h at dev · open-vela/nuttx](../../../../nuttx/include/nuttx/lcd
+/lcd.h)
 
-[https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c](https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)
+[https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c](../../../../nuttx/drivers/lcd
+/lcd_framebuffer.c)

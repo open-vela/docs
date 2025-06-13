@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/VSync.md) \]
 
-## I. overview
+## I overview
 
 This document mainly introduces the knowledge of VSync and the methods of adapting the hardware driver. It is suitable for students who want to understand the relationship between the renderer and the Display.
 
-## II. What is VSync
+## II What is VSync
 
 First, let's consider a simple scenario:
 
@@ -27,7 +27,7 @@ To solve this problem, you need to introduce a synchronization mechanism to ensu
 
 This synchronization mechanism is called VSync (Vertical Synchronization), also called vertical synchronization.
 
-## III. VSync implementation
+## III VSync implementation
 
 ### 1. Implementation principle
 
@@ -122,7 +122,7 @@ static void lcdc_irqconfig(void)
 }
 ```
 
-## IV. VSync Adaptation
+## IV VSync Adaptation
 
 There are two ways to implement VSync:
 
@@ -524,10 +524,10 @@ static void lcdc_te_irq(int irq, void *context, void *arg)
 }
 ```
 
-### 2、(Not Recommended) Blocking Mode
+### 2. (Not Recommended) Blocking Mode
 
 Using semaphores for synchronization is equivalent to locking the Framebuffer. The renderer must acquire the lock each time it begins rendering; otherwise, it will remain in a blocked state. Please refer to this [link](https://github.com/open-vela/nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c) for the code.
 
-## 5. Related Repositories
+## V Related Repositories
 
 - [nuttx](https://github.com/open-vela/nuttx)

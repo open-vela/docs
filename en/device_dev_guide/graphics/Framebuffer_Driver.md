@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/Framebuffer_Driver.md) \]
 
-## I. What is Framebuffer
+## I What is Framebuffer
 
 Framebuffer (frame buffer/video memory) is a memory region used to store LCD image data for one frame. In embedded systems, Framebuffer is typically implemented through memory simulation, with its size determined by the LCD resolution and bytes per pixel.
 
@@ -18,7 +18,7 @@ Take a 480x320 screen as example, the Framebuffer sizes under different pixel mo
     - Calculation formula: 480 x 320 x 2 (bytes)
     - Size: 307,200 bytes
 
-## II. Framebuffer Display Principle
+## II Framebuffer Display Principle
 
 The Framebuffer display principle can be summarized as: LCD Controller (LCDC) reads pixel data from the Framebuffer and transmits it to the LCD panel through a parallel data interface.
 
@@ -39,7 +39,7 @@ LCDC transmits data to the LCD panel through the following signals:
 - Data: Pixel data, including R (red), G (green), and B (blue) three color channels.
 - Control: Control signal, used to manage the timing and state of data transmission.
 
-## III. openvela Framebuffer Interface
+## III openvela Framebuffer Interface
 
 openvela's Framebuffer interface consists of two layers: upper-level user interface and lower-level driver interface. They provide flexible operation capabilities for users and device drivers, respectively. The following is a detailed description of the interface.
 
@@ -52,7 +52,7 @@ openvela's Framebuffer user interface resembles Linux systems, offering standard
 
 ### 2. Lower-level Driver Interface
 
-openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
+openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](../../../../nuttx/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](../../../../nuttx/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
 
 
 ```C
@@ -108,7 +108,7 @@ From the code, we can see the Framebuffer provides these 3 interfaces for LCD de
 3. `void up_fbuninitialize(int display)`
     - Opposite operation of `up_fbinitialize` for resource release. Can be implemented as empty function when no operation needed.
 
-### III. `struct fb_vtable_s` Structure
+### III `struct fb_vtable_s` Structure
 
 `fb_vtable_s` is the core structure of Framebuffer, containing all interfaces for interacting with video hardware. The following are the main functional modules:
 
@@ -287,7 +287,7 @@ struct fb_vtable_s
 
 Developers should implement these interfaces according to specific hardware requirements to meet Framebuffer functionality needs.
 
-## IV. Enable Framebuffer
+## IV Enable Framebuffer
 
 Follow these steps to enable Framebuffer:
 
@@ -318,8 +318,8 @@ Call `fb_register` during system initialization phase:
 
 To prevent screen tearing and improve rendering performance, VSync (Vertical Synchronization) handling is recommended. Implementation details and optimization methods can be found in  [VSync](./VSync.md).
 
-## V. Related Repositories
+## V Related Repositories
 
 Here are the links to the code repository related to Framebuffer driver:
-- [fb.c](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
-- [fb.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.
+- [fb.c](../../../../nuttx/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
+- [fb.h](../../../../nuttx/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.
