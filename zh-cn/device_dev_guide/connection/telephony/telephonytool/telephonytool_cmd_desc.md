@@ -1,5 +1,7 @@
 # telephonytool 命令
 
+\[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/telephonytool_cmd_desc.md) | 简体中文 \]
+
 ## 一、简介
 
 `telephonytool` 是一个在 openvela 的 NSH 命令行中执行的工具，用于进入 Telephony 命令工具的控制台（Console）。在控制台中，可以执行 `telephonytool` 工具内集成的特定子命令。

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Radio/Modem Commands
-=======
-# radio/modem Commands
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/radio_modem.md) \]
 
@@ -65,11 +61,7 @@ listen-modem [slot_id] [event_id]
 - slot_id: Set the slot to listen to, currently only `0` is supported.
 - event_id: The event ID to listen to.
 
-<<<<<<< HEAD
 #### Supported Event ID List
-=======
-#### 支持的事件 ID 列表
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 `event_id` is used to specify the event to listen to. The following are the supported event categories and their corresponding event IDs.
 
@@ -84,17 +76,10 @@ listen-modem [slot_id] [event_id]
 
 2. Call Events (Call Indication Message)
 
-<<<<<<< HEAD
     - `MSG_CALL_STATE_CHANGE_IND`：Call state change notification
     - `MSG_CALL_RING_BACK_TONE_IND`：Ringback tone notification
     - `MSG_ECC_LIST_CHANGE_IND`：Emergency call list change notification
     - `MSG_DEFAULT_VOICECALL_SLOT_CHANGE_IND`：Default voice call slot change notification
-=======
-    - `MSG_CALL_STATE_CHANGE_IND`：呼叫状态变化通知
-    - `MSG_CALL_RING_BACK_TONE_IND`：回铃音通知
-    - `MSG_ECC_LIST_CHANGE_IND`：紧急呼叫列表变化通知
-    - `MSG_DEFAULT_VOICECALL_SLOT_CHANGE_IND`：默认语音呼叫 slot 变化通知
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 3. Network Events (Network Indication Message)
 
@@ -197,11 +182,7 @@ Stop listening to specified modem events.
 unlisten-modem [watch_id]
 ```
 
-<<<<<<< HEAD
 - watch_id：Listen ID, derived from the return value of the `listen-modem` command.
-=======
-- watch_id：监听 ID，来源于 `listen-modem` 命令的返回值。
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Example
 
@@ -416,22 +397,14 @@ telephonytool> get-imei 0
 
 ##### Output Information
 
-<<<<<<< HEAD
 The following is a complete example of executing the `get-imei` command:
-=======
-以下是执行 `get-imei` 命令的完整示例：
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> get-imei 0
 [  236.301900] [35] [ DEBUG] [ap] telephonytool_cmd_get_imei, slotId : 0 imei : 8674000******7199
 ```
 
-<<<<<<< HEAD
 ### 10. get-imeisv
-=======
-### 10、get-imeisv
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -460,11 +433,7 @@ telephonytool> get-imeisv 0
 [  401.567800] [35] [ DEBUG] [ap] telephonytool_cmd_get_imeisv, slotId : 0 imeisv : 8674000******7901
 ```
 
-<<<<<<< HEAD
 ### 11. get-phone-state
-=======
-### 11、get-phone-state
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -493,11 +462,7 @@ telephonytool> get-phone-state 0
 [ 9427.739300] [35] [ DEBUG] [ap] telephonytool_cmd_get_phone_state, slotId : 0 state : 0
 ```
 
-<<<<<<< HEAD
 ### 12. send-modem-power
-=======
-### 12、send-modem-power
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -534,11 +499,7 @@ telephonytool> [ 9461.415300] [21] [  INFO] [ap] modem_change_state, old state: 
 [ 9461.421100] [21] [  INFO] [ap] free_contexts
 ```
 
-<<<<<<< HEAD
 ### 13. get-radio-state
-=======
-### 13、get-radio-state
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -569,11 +530,7 @@ telephonytool> get-radio-state 0
 [ 9486.517900] [35] [ DEBUG] [ap] telephonytool_cmd_get_radio_state, slotId : 0 state : 1
 ```
 
-<<<<<<< HEAD
 ### 14. get-modem-revision
-=======
-### 14、get-modem-revision
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -604,19 +561,11 @@ telephonytool> get-modem-revision 0
 [ 9505.417900] [35] [ DEBUG] [ap] telephonytool_cmd_get_modem_revision, slotId : 0 value : 1.0.*.*  
 ```
 
-<<<<<<< HEAD
 ### 15. get-msisdn
 
 #### Command Description
 
 Get local phone number information
-=======
-### 15、get-msisdn
-
-#### Command Description
-
-获取本地电话号码信息
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Format
 
@@ -644,11 +593,7 @@ telephonytool> get-msisdn 0
 [ 9529.025200] [35] [ DEBUG] [ap] telephonytool_cmd_get_phone_number, slotId : 0  number : +1555******67
 ```
 
-<<<<<<< HEAD
 ### 16. get-modem-activity-info
-=======
-### 16、get-modem-activity-info
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -679,11 +624,7 @@ telephonytool> get-modem-activity-info 0
 [ 9743.317300] [35] [ DEBUG] [ap] telephonytool_cmd_get_modem_activity_info, slotId : 0
 ```
 
-<<<<<<< HEAD
 ### 17. enable-modem
-=======
-### 17、enable-modem
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -717,11 +658,7 @@ telephonytool> enable-modem 0 1
 [   15.700700] [28] [ DEBUG] [ap] telephonytool_cmd_enable_modem, slotId : 0 target_state: 1
 ```
 
-<<<<<<< HEAD
 ### 18. get-modem-status
-=======
-### 18、get-modem-status
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -752,11 +689,7 @@ telephonytool> get-modem-status 0
 [  782.186200] [28] [ DEBUG] [ap] telephonytool_cmd_get_modem_status, slotId : 0
 ```
 
-<<<<<<< HEAD
 ### 19. oem-req-raw
-=======
-### 19、oem-req-raw
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -787,11 +720,7 @@ telephonytool> oem-req-raw 0 01A0B023 4
 [  854.969700] [28] [ DEBUG] [ap] telephonytool_cmd_oem_ril_req_raw, slot_id: 0 oem_req: 01A0B023 length: 4
 ```
 
-<<<<<<< HEAD
 ### 20. oem-req-strings
-=======
-### 20、oem-req-strings
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -822,11 +751,7 @@ telephonytool> oem-req-strings 0 AT+CPIN? 1
 [  870.751200] [28] [ DEBUG] [ap] telephonytool_cmd_oem_ril_req_strings, slot_id: 0 length: 1
 ```
 
-<<<<<<< HEAD
 ### 21. send-command
-=======
-### 21、send-command
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -858,11 +783,7 @@ telephonytool> send-command 0 16 57
 [  882.733000] [28] [ DEBUG] [ap] telephonytool_cmd_send_command, slot_id: 0 atom: 16  command: 57
 ```
 
-<<<<<<< HEAD
 ### 22. send-screen-state
-=======
-### 22、send-screen-state
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 

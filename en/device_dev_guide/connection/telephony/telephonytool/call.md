@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Call Command
-=======
-# call command
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/call.md) \]
 
@@ -20,11 +16,7 @@ ap> telephonytool
 
 ## III. Commands
 
-<<<<<<< HEAD
 ### 1. listen-call
-=======
-### 1、listen-call
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -50,22 +42,14 @@ listen-call [slot_id][event_id]
 telephonytool> listen-call 0 1
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool>  listen-call 0 1
 [12797.466700] [28] [ DEBUG] [ap] telephonytool_cmd_listen_call_manager_change, slot_id : 0, event_id : 1, watch_id : 95
 ```
 
-<<<<<<< HEAD
 ### 2. unlisten-call
-=======
-### 2、unlisten-call
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -94,11 +78,7 @@ telephonytool> unlisten-call 95
 [12820.712800] [28] [ DEBUG] [ap] stop to watch call event with watch_id : 95 with return value : 0
 ```
 
-<<<<<<< HEAD
 ### 3. Listen-Call-Slot-Change
-=======
-### 3、listen-call-slot-change
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -118,22 +98,14 @@ listen-call-slot-change
 telephonytool> listen-call-slot-change
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> listen-call-slot-change
 [12935.086700] [28] [ DEBUG] [ap] telephonytool_cmd_listen_call_slot_change, , watch_id : 96
 ```
 
-<<<<<<< HEAD
 ### 4. dial
-=======
-### 4、dial
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -159,11 +131,7 @@ dial [slot_id][number][hide_call_id]
 telephonytool> dial 0 10086 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> dial 0 10086 0
@@ -172,11 +140,7 @@ telephonytool> dial 0 10086 0
 [13170.772100] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_DIAL (***,0,0,0)
 ```
 
-<<<<<<< HEAD
 ### 5. answer_0
-=======
-### 5、answer_0
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -188,13 +152,8 @@ The answer_0 command is used to answer an incoming call.
 answer_0 [slot_id] [call_id]
 ```
 
-<<<<<<< HEAD
 - `slot_id`:Set the slot you want to listen to, currently only `0` is supported.
 - `call_id`:Call id information of the incoming call.
-=======
-- `slot_id`:设置要监听的slot,当前只支持0
-- `call_id`:来电的call id信息
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ##### Example
 
@@ -204,22 +163,14 @@ answer_0 [slot_id] [call_id]
 telephonytool> answer_0 0 /ril_0/voicecall01
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> answer_0  0  /ril_0/voicecall01
 [  187.166200] [28] [ DEBUG] [ap] telephonytool_cmd_answer_by_id, slotId : 0
 ```
 
-<<<<<<< HEAD
 ### 6. hangup_0
-=======
-### 6、hangup_0
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -250,11 +201,7 @@ telephonytool> hangup_0 0 /ril_0/voicecall01
 [  309.834700] [28] [ DEBUG] [ap] telephonytool_cmd_hangup_by_id, slotId : 0
 ```
 
-<<<<<<< HEAD
 ### 7. release_and_answer
-=======
-### 7、release_and_answer
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -283,11 +230,7 @@ telephonytool> release_and_answer 0
 [55124.855300] [28] [ DEBUG] [ap] telephonytool_cmd_release_and_answer_call, slotId : 0
 ```
 
-<<<<<<< HEAD
 ### 8. hold_and_answer
-=======
-### 8、hold_and_answer
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -317,11 +260,7 @@ telephonytool> hold_and_answer 0
 [57690.628200] [28] [ DEBUG] [ap] OFONO_DFX_CALL_INFO:1,2,1,0,NA:HoldAndAnswer
 ```
 
-<<<<<<< HEAD
 ### 9. release_and_swap
-=======
-### 9、release_and_swap
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -353,21 +292,13 @@ telephonytool> [57714.489500] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_HANGUP_FO
 [57714.502300] [21] [  INFO] [ap] [0,0087]< RIL_REQUEST_HANGUP_FOREGROUND_RESUME_BACKGROUND
 ```
 
-<<<<<<< HEAD
 ### 10. swap
-=======
-### 10、swap
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
 The swap command is used to switch the call status between active and hold calls.
 
-<<<<<<< HEAD
 `swap` command to toggle the call state:
-=======
-`swap` 命令用于切换通话状态：
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Format
 
@@ -398,11 +329,7 @@ telephonytool> [57750.211600] [21] [  INFO] [ap] [0,0089]> RIL_REQUEST_SWITCH_HO
 [57750.218900] [21] [  INFO] [ap] [0,0089]< RIL_REQUEST_SWITCH_HOLDING_AND_ACTIVE
 ```
 
-<<<<<<< HEAD
 ### 11. hangup-all
-=======
-### 11、hangup-all
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -432,11 +359,7 @@ telephonytool> hangup-all 0
 [57768.043500] [28] [ DEBUG] [ap] OFONO_DFX_CALL_INFO:4,3,3,0,NA
 ```
 
-<<<<<<< HEAD
 ### 12. get-call
-=======
-### 12、get-call
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -458,11 +381,7 @@ get-call [slot_id]
 telephonytool> get-call 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> get-call 0
@@ -484,11 +403,7 @@ telephonytool> [57791.194300] [27] [ DEBUG] [ap] call_list_query_complete :
 [57791.198200] [27] [ DEBUG] [ap] call Emergency: 0
 ```
 
-<<<<<<< HEAD
 ### 13. transfer
-=======
-### 13、transfer
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -510,22 +425,14 @@ transfer [slot_id]
 telephonytool> transfer 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> transfer 0
 [57861.765100] [28] [ DEBUG] [ap] telephonytool_cmd_transfer_call, slotId : 0
 ```
 
-<<<<<<< HEAD
 ### 14. get-ecclist
-=======
-### 14、get-ecclist
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -547,11 +454,7 @@ get-ecclist [slot_id]
 telephonytool> get-ecclist 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> get-ecclist 0
@@ -562,11 +465,7 @@ telephonytool> get-ecclist 0
 [57889.839500] [28] [ DEBUG] [ap] ecc number : 112,0,1
 ```
 
-<<<<<<< HEAD
 ### 15. is-ecc
-=======
-### 15、is-ecc
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -588,11 +487,7 @@ is-ecc [number]
 telephonytool> is-ecc 110
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> is-ecc 110
@@ -601,11 +496,7 @@ telephonytool> is-ecc 110
 [57906.270700] [28] [ DEBUG] [ap] telephonytool_cmd_is_emergency_number, ret : -1
 ```
 
-<<<<<<< HEAD
 ### 16. send-tones
-=======
-### 16、send-tones
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -628,22 +519,14 @@ send-tones [slot_id][dtmf]
 telephonytool> send-tones 0 11
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> send-tones 0 11
 [58031.748600] [28] [ DEBUG] [ap] telephonytool_cmd_send_tones, slotId : 0 dtmf : 11
 ```
 
-<<<<<<< HEAD
 ### 17. start-dtmf
-=======
-### 17、start-dtmf
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -682,11 +565,7 @@ telephonytool> [58070.453600] [21] [  INFO] [ap] [0,0104]> RIL_REQUEST_DTMF_STAR
 [58070.458800] [27] [ DEBUG] [ap] start dtmf , state : 0
 ```
 
-<<<<<<< HEAD
 ### 18. stop-dtmf
-=======
-### 18、stop-dtmf
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -708,11 +587,7 @@ stop-dtmf [slot_id]
 telephonytool> stop-dtmf 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 stop-dtmf 0

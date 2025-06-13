@@ -42,11 +42,7 @@ enable-ims [slot_id][action]
 telephonytool>enable-ims 0 1
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> enable-ims 0 1
@@ -55,11 +51,7 @@ telephonytool> [149517.786400] [21] [  INFO] [ap] [0,0124]> RIL_REQUEST_IMS_REG_
 [149518.064500] [25] [  INFO] [ap] [AT_NETWORK] Receive signal strength URC
 ```
 
-<<<<<<< HEAD
 ### 2. get-ims-enabled
-=======
-### 2、get-ims-enabled
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -81,22 +73,14 @@ get-ims-enabled [slot_id]
 telephonytool>get-ims-enabled 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> get-ims-enabled 0
 [149542.284600] [35] [ DEBUG] [ap] telephonytool_cmd_get_ims_enabled: slot_id: 0, ims enable: 1
 ```
 
-<<<<<<< HEAD
 ###  3. set-ims-cap
-=======
-###  3、set-ims-cap
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -121,11 +105,7 @@ set-ims-cap [slot_id][cap-value]
 telephonytool> set-ims-cap 0 1
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 set-ims-cap 0 1
@@ -140,11 +120,7 @@ telephonytool> [149558.409700] [21] [  INFO] [ap] [0,0127]> RIL_REQUEST_IMS_SET_
 [149558.425400] [21] [  INFO] [ap] /ril_0 reg_info:1 ext_info:1
 ```
 
-<<<<<<< HEAD
 ### 4. listen-ims
-=======
-### 4、listen-ims
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -166,11 +142,7 @@ listen-ims [slot_id]
 telephonytool>listen-ims 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> listen-ims 0
@@ -181,11 +153,7 @@ telephonytool> get-ims-enabled 0[149578.065500] [25] [  INFO] [ap] [AT_NETWORK] 
 [149578.068000] [21] [  INFO] [ap] [0,UNSOL]< UNSOL_SIGNAL_STRENGTH {gw: 99, cdma: -1, evdo: -1, lte: 99 59 2147483647 2147483647 2147483647}
 ```
 
-<<<<<<< HEAD
 ### 5. get-ims-registration
-=======
-### 5、get-ims-registration
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 #### Command Description
 
@@ -211,11 +179,7 @@ get-ims-registration [slot_id][action]
 telephonytool>get-ims-registration 0 0
 ```
 
-<<<<<<< HEAD
 ##### Output Information
-=======
-##### Output information
->>>>>>> 623ed49 (translate open-vela/docs/tree/dev/zh-cn/device_dev_guide/connection/telephony/telephonytool)
 
 ```Bash
 telephonytool> get-ims-registration 0 0
