@@ -78,7 +78,7 @@ Follow these tips before making a pull request to speed up the review.
     # Display existing remote repository addresses
     git remote -v
     # Add upstream remote repository reference (only needed first time)
-    git remote add upstream https://github.com/open-vela/[repository].git
+    git remote add upstream git@github.com:open-vela/[repository].git
     # Display existing remote repository addresses (should include origin and upstream)
     git remote -v
     ```

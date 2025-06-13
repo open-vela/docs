@@ -91,7 +91,7 @@ openvela 主要遵循 Apache License 2.0 许可证，具体请参看 LICENSE 文
     git remote -v
 
     # 添加上游远程仓库引用（仅首次需要执行）
-    git remote add upstream https://github.com/open-vela/[repository].git
+    git remote add upstream git@github.com:open-vela/[repository].git
 
     # 显示现有远程仓库地址（应包含origin和upstream）
     git remote -v
