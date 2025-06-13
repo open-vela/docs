@@ -1,5 +1,7 @@
 # Backtrace 使用指南
 
+\[ [English](../../../en/debugging_tools/offline_debugging/backtrace.md) | 简体中文 \]
+
 ## 一、概述
 
 在日常开发中，我们常常需要查看指定线程的栈信息，常见的场景包括：
@@ -174,6 +176,8 @@ extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd)
     nuttx/libs/libc/sched/task_startup.c:151
     nuttx/sched/task/task_start.c:130
     ```
+
+3. 利用 `dump_stack()` 的地址定位错误位置，或者通过[打开符号表](./allsyms_guide.md)功能直接打印函数名称，方便分析。
 
 ### 3、`dumpstack` 命令
 

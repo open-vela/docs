@@ -1,5 +1,6 @@
 # Backtrace User Guide
-\[ English | [简体中文](../../../../zh-cn/debugging_tools/memory_debugging/offline_debugging/backtrace.md) \]
+
+\[ English | [简体中文](../../../zh-cn/debugging_tools/offline_debugging/backtrace.md) \]
 
 ## I. Overview
 
@@ -65,6 +66,7 @@ CONFIG_UNWINDER_ARM
 ``` #### ARM Cortex-M 
 
 In the ARM Cortex-M series, there are three implementations of backtrace, choose one according to project needs:
+
  ```Makefile 
  # Method 1: Backtrace implementation based on fp (注意编译器限制) 
  CONFIG_UNWINDER_FRAME_POINTER=y 
@@ -74,16 +76,17 @@ In the ARM Cortex-M series, there are three implementations of backtrace, choose
 
  # Method 3: Backtrace implementation based on .exidx section 
  CONFIG_UNWINDER_ARM=y 
- ``` 
+ ```
+
  - CONFIG_UNWINDER_FRAME_POINTER: There are related limitations on GCC compiler (for details refer to [GCC issues](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92172)). 
  - CONFIG_UNWINDER_STACK_POINTER: Obtains pc address through `bl`/`blx` instructions, suitable for resource-constrained devices, but has a certain probability of misjudgment. If the project code is scattered across multiple regions, multiple code regions need to be configured through the following API: 
- 
+
 ```C 
 void up_backtrace_init_code_regions(FAR void **regions) 
 ``` 
 - CONFIG_UNWINDER_ARM: Generates .exidx section during compilation, increasing the code size by 5%-8%. 
 
-### 3. RISC-V 
+### 3. RISC-V
 
 In the RISC-V architecture, backtrace is implemented based on the frame pointer. Just enable the following configuration: 
 
@@ -136,7 +139,7 @@ extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd) __
     42 }
     ```
 
-Print output example:
+    Print output example:
 
     ```Bash
     ap> hello
@@ -159,6 +162,8 @@ Print output example:
     nuttx/libs/libc/sched/task_startup.c:151
     nuttx/sched/task/task_start.c:130
     ```
+
+3. Use the addresses from dump_stack() to locate the point of error, or print function names directly for easier analysis by [enabling the symbol table]().
 
 ### 3. `dumpstack` Command
 
