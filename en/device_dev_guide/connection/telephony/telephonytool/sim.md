@@ -325,10 +325,6 @@ The `reset-pin` command is used to reset the PIN (Personal Identification Number
 
 ```Bash
 reset-pin [slot_id][puk_type][puk][new_pin]
-slot_id:设置要监听的slot,当前只支持0
-puk_type：puk码类型,puk or puk2
-puk:puk码值
-new_pin:新的pin码值
 ```
 
 - slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
