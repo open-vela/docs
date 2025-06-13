@@ -344,8 +344,6 @@ In LCD Framebuffer mode, the following compilation options must be enabled:
 > - The `CONFIG_LCD_EXTERNINIT` option is not enabled by default.
 
 ## V Related code repository
-[nuttx/include/nuttx/lcd/lcd.h at dev · open-vela/nuttx](../../../../nuttx/include/nuttx/lcd
-/lcd.h)
+[nuttx/include/nuttx/lcd/lcd.h at dev · open-vela/nuttx](../../../../nuttx/include/nuttx/lcd/lcd.h)
 
-[https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c](../../../../nuttx/drivers/lcd
-/lcd_framebuffer.c)
+[https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c](../../../../nuttx/drivers/lcd/lcd_framebuffer.c)
