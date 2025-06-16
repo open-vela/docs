@@ -21,10 +21,10 @@
 
 执行逻辑：
 
-- 工作线程在启动后，调用 `nxsem_wait_uninterruptible` 等待信号量，使线程进入阻塞状态，不消耗 CPU。
-- 当硬件中断发生时，ISR 被触发。
-- ISR 调用 `nxsem_post` 释放（或增加）信号量，然后立即退出。
-- 工作线程因信号量被释放而唤醒，并开始处理相关任务。
+1. 工作线程在启动后，调用 `nxsem_wait_uninterruptible` 等待信号量，使线程进入阻塞状态，不消耗 CPU。
+2. 当硬件中断发生时，ISR 被触发。
+3. ISR 调用 `nxsem_post` 释放（或增加）信号量，然后立即退出。
+4. 工作线程因信号量被释放而唤醒，并开始处理相关任务。
 
 ### 关键函数说明
 
@@ -39,7 +39,7 @@
 
 以下代码摘自 `Rpmsg Virtio Driver`，清晰地展示了该设计模式的典型实现。
 
-##### 步骤一 初始化信号量与内核线程
+#### 步骤一 初始化信号量与内核线程
 
 在 `rpmsg_virtio_lite_initialize` 函数中，系统会创建用于接收数据的信号量 (`semrx`) 和一个专用的内核线程 (`rpmsg_virtio_lite_thread`)。
 
@@ -66,7 +66,7 @@ int rpmsg_virtio_lite_initialize(FAR struct rpmsg_virtio_lite_s *dev)
 }
 ```
 
-##### 步骤二 在工作线程中等待信号量
+#### 步骤二 在工作线程中等待信号量
 
 内核线程 `rpmsg_virtio_lite_thread` 在一个无限循环中运行。它调用 `nxsem_wait_uninterruptible` 来阻塞自身，等待中断事件的通知。
 
@@ -95,7 +95,7 @@ static int rpmsg_virtio_lite_thread(int argc, FAR char *argv[])
 }
 ```
 
-##### 步骤三 在中断回调中释放信号量
+#### 步骤三 在中断回调中释放信号量
 
 当硬件数据到达并触发中断时，`rpmsg_virtio_lite_callback` (作为 ISR) 被调用。它会通过 `nxsem_post` 信号量来唤醒工作线程。检查 `semcount` 可防止信号量计数值无限制增长。
 
@@ -347,4 +347,4 @@ static void sam_adc_endconversion(void *arg)
 
 ## 相关文档
 
-- [内核开发概述](https://xiaomi.f.mioffice.cn/wiki/ULs6wysXMiFeyekuLolk4Ejv4wA)
+- [内核开发概述](./KernelDev.md)

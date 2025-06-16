@@ -572,4 +572,4 @@ openvela 支持三种工作队列类型，各具不同特性：
 
 ## 八、示例分享
 
-[异步编程开发示例](./asyn_samples.md)
+[异步编程开发示例](./async_samples.md)
