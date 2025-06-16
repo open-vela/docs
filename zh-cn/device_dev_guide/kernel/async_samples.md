@@ -1,5 +1,7 @@
 # openvela 异步编程开发示例
 
+\[ [English](../../../en/device_dev_guide/kernel/async_samples.md) | 简体中文 \]
+
 ## 一、驱动开发中的信号量使用
 
 在 `openvela` 的驱动程序开发中，处理来自中断的异步事件时，必须采用高效且可靠的同步机制。

@@ -1,5 +1,7 @@
 # openvela Asynchronous Programming Examples
 
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/kernel/async_samples.md) \]
+
 ## I. Semaphore Usage in Driver Development
 
 In openvela driver development, handling asynchronous events from interrupts requires efficient and reliable synchronization mechanisms.
