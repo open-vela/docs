@@ -1,5 +1,7 @@
 # 安全配置
 
+\[ [English](../../../en/device_dev_guide/security/security_configuration.md) | 简体中文 \]
+
 ## 一、简介
 
 本文介绍如何通过 Kconfig 配置，在设备或模拟器上搭建 TEE（Trusted Execution Environment）和安全服务框架。配置内容涵盖 TEE 核 和 AP 核，包括以下核心模块：
