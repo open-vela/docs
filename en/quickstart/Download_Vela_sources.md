@@ -46,7 +46,7 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
 Run the following command to download the source code tree of openvela to your working directory:
 
 ```bash
-repo sync -c -j$(nproc)
+repo sync -c -j8
 ```
 
 > Note
