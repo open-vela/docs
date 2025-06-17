@@ -1,5 +1,7 @@
 # Telephony 概述
 
+\[ [English](../../../../en/device_dev_guide/connection/telephony/overview_of_telephony.md) | 简体中文 \]
+
 ## 一、背景
 
 当前 openvela 已广泛应用于多类消费终端产品中。其中部分终端（如轻智能 eSIM 手表）需要支持蜂窝通信功能。为了满足这一需求，openvela 需要构建一个标准化、兼容性良好且可持续演进的 openvela Telephony 子系统，以管理蜂窝通信相关的核心功能和外围接口。这将进一步丰富和促进 openvela 生态系统的发展。

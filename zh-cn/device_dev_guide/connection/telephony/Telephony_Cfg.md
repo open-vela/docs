@@ -1,5 +1,7 @@
 # Telephony 配置
 
+\[ [English](../../../../en/device_dev_guide/connection/telephony/Telephony_Cfg.md) | 简体中文 \]
+
 Telephony 业务涉及模块众多，以下是相关配置的详细说明。
 
 ## 一、DBUS 配置

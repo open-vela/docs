@@ -1,33 +1,32 @@
-# 原子操作接口
+# Atomic Operation Interface
 
-\[ [English](../../../../en/device_dev_guide/kernel/resource_sync/atomic_operation.md) | 简体中文 \]
+\[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/resource_sync/atomic_operation.md) \]
 
-## 一、概述
+## 1. Overview
 
-在 openvela 的 prebuilts 工具链中，已支持内联原子操作接口，这些接口定义在 `stdatomic.h` 头文件中。
+The prebuilts toolchain in openvela supports inline atomic operation interfaces, which are defined in the `stdatomic.h` header file.
 
-### 1、文件路径
+### 1、File Path
 
-以 ARM 架构为例，`stdatomic.h` 文件路径如下：
+Taking the ARM architecture as an example, the file path for `stdatomic.h` is as follows:
 
 ```Shell
 # 以 arm 架构为例
 prebuilts/gcc/linux/arm/arm-none-eabi/include/stdatomic.h
 ```
 
-### 2、原子操作的实现方式
+### 2、Implementation of Atomic Operations
 
-- 硬件支持：如果编译器支持目标 CPU 架构的原子操作指令，则原子操作将在硬件层面保证原子性。
+- Hardware Support: If the compiler supports atomic operation instructions for the target CPU architecture, atomicity will be guaranteed at the hardware level.
+- Software Implementation: If the compiler does not support atomic operation instructions, generic atomic operation interfaces can be used.
 
-- 软件实现：如果编译器不支持原子操作指令，可以使用通用原子操作接口。
+    Relevant configuration file path:
 
-  相关配置文件路径：
+    - [nuttx/libs/libc/machine/Make.defs](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/Make.defs)
 
-  - [nuttx/libs/libc/machine/Make.defs](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/Make.defs)
+### 3、Configuration Options Explanation
 
-### 3、配置选项说明
-
-以下是 `CONFIG_LIBC_ARCH_ATOMIC` 的配置选项：
+Below is the configuration option for `CONFIG_LIBC_ARCH_ATOMIC`:
 
 ```Shell
 config LIBC_ARCH_ATOMIC
@@ -39,23 +38,23 @@ config LIBC_ARCH_ATOMIC
                 atomic function.
 ```
 
-在 `Make.defs` 文件中，`arch_atomic.c` 的编译规则如下：
+In the `Make.defs` file, the compilation rule for `arch_atomic.c` is as follows:
 
 ```Makefile
 CSRCS += arch_atomic.c
 ```
 
-## 二、包含头文件
+## 2. Included Header Files
 
-在代码中使用原子操作时，需要包含以下头文件：
+When using atomic operations in the code, include the following header file:
 
 ```C
 #include <stdatomic.h>
 ```
 
-## 三、原子变量类型
+## 3. Atomic Variable Types
 
-原子变量支持以下类型，后续文档中统一使用 `atomic_type` 表示：
+Atomic variables support the following types, referred to as `atomic_type` in subsequent documentation:
 
 ```Shell
 atomic_bool  
@@ -96,61 +95,65 @@ atomic_intmax_t
 atomic_uintmax_t
 ```
 
-## 四、原子操作接口
+## 4. Atomic Operation Interfaces
 
-原子操作接口提供了一组线程安全的操作，用于对原子变量进行初始化、读取、修改和比较等操作。以下是接口的详细说明。
+Atomic operation interfaces provide a set of thread-safe operations for initializing, reading, modifying, and comparing atomic variables. Below is a detailed description of the interfaces.
 
-### 1、整型原子操作
+### 1. Integer Atomic Operations
 
-以下是整型原子操作的常用接口及其功能说明：
+Below are common interfaces for integer atomic operations and their descriptions:
 
 ```C
-//对原子变量初始化
+// Initialize atomic variable
 ATOMIC_VAR_INIT(value)
 void atomic_init(obj, value)
 
-//对原子变量进行设置
+// Set value for atomic variable
 void atomic_store(atomic_type *object, int desired);
 
-//读取原子变量并返回
+// Load value from atomic variable
 atomic_type atomic_load(atomic_type *object);
 
-//对原子变量进行减法操作，并返回减法操作完的旧值
+// Perform subtraction on atomic variable and return the old value after subtraction
 atomic_type atomic_fetch_sub(atomic_type *object, atomic_type desired);
 
-//对原子变量进行加法操作，并返回加法操作完的旧值
+// Perform addition on atomic variable and return the old value after addition
 atomic_type atomic_fetch_add(atomic_type *object, atomic_type desired);
 
-//对原子变量执行交换操作,并返回旧值
+// Perform exchange on atomic variable and return the old value
 atomic_type atomic_exchange(atomic_type *object, atomic_type desired);
 
-//对原子变量执行比较和交换操作，比较原子变量和一个期望值，如果相等，则将新值存储到原子变量中，并返回true,否则直接返回false。
+// Perform compare-and-swap on atomic variable; if the variable equals the expected value, 
+// store the new value in the atomic variable and return true, otherwise return false
 bool atomic_compare_exchange_weak(atomic_type *object, int *expected, int desired);
 
-//同样执行比较和交换操作，不同于weak函数的是该函数会强制执行自旋锁等待，直到比较和交换成功或达到一定的重试次数
+// Perform compare-and-swap with a stronger guarantee; this function will force a spinlock 
+// wait until the compare-and-swap is successful or a certain retry count is reached
 bool atomic_compare_exchange_strong(atomic_type *object, int *expected, int desired);
 ```
 
-### 2、位原子操作
+### 2. Bitwise Atomic Operations
 
-以下是位操作相关的原子操作接口及其功能说明：
+Below are bitwise atomic operations and their descriptions:
 
 ```C
-//按位异或操作，将指定值与原子变量的值进行按位异或运算，并返回执行xor操作前的旧值
+// Perform bitwise XOR operation, XOR the specified value with the atomic variable value,
+// and return the old value before the XOR operation
 atomic_type atomic_fetch_xor(atomic_type *object, atomic_type desired);
 
-//按位或操作，将指定值与原子变量进行按位或运算，并返回执行or操作前的旧值
+// Perform bitwise OR operation, OR the specified value with the atomic variable,
+// and return the old value before the OR operation
 atomic_type atomic_fetch_or(atomic_type *object, atomic_type desired);
 
-//按位与操作，将指定值与原子变量进行按位与运算，并返回执行and操作前的旧值
+// Perform bitwise AND operation, AND the specified value with the atomic variable,
+// and return the old value before the AND operation
 atomic_type atomic_fetch_and(atomic_type *object, atomic_type desired);
 ```
 
-## 五、Vela 内部实现
-
-为避免不同 toolchain 对于原子接口的支持能力不同，因此在 Vela 内提供了一套系统的实现，当 Toolchain 不支持 Atomic 时，将通过 Vela Atomic 的实现来作为替代。
-完整内容可参考文件 [arch_atomic.c](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/arch_atomic.c)
-Vela 内部的实现方式主要是通过 spinlock 的操作来模拟原子的操作，它将不同的操作如 load / store / exchange / CAS 等行为拆分成不同功能的宏实现，例如 atomic_store , 它的函数原型如下
+## 5. Internal Implementation in Vela
+o avoid inconsistencies in atomic interface support across different toolchains, Vela provides a set of system-level implementations. When the toolchain does not support atomic operations, Vela's implementation of Atomic will be used as a substitute.
+For complete details, refer to the file [arch_atomic.c](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/arch_atomic.c)
+Vela’s internal implementation mainly uses spinlocks to simulate atomic operations. It decomposes operations such as load, store, exchange, and CAS into different macros. For example, atomic_store, which has the following function prototype:
 
 ```C
 #define STORE(fn, n, type)                                         \
@@ -166,7 +169,7 @@ Vela 内部的实现方式主要是通过 spinlock 的操作来模拟原子的�
   }
 ```
 
-通过宏声明的方式可以声明出不同 size 类型的 atomic_store 原型，即
+By using macros, different size types of `atomic_store` prototypes can be declared, such as:
 
 ```C
 /****************************************************************************
@@ -194,7 +197,7 @@ STORE(4, uint32_t)
 STORE(8, uint64_t)
 ```
 
-接着通过判断传入变量的类型大小，来判断它的变量类型处理
+Then, by checking the size of the passed variable, it determines the type of variable for processing:
 
 ```C
 #define atomic_store_n(obj, val, type) \
@@ -206,11 +209,11 @@ STORE(8, uint64_t)
 #define atomic_store(obj, val) atomic_store_n(obj, val, __ATOMIC_RELAXED)
 ```
 
-## 六、测试示例
+## 6. Test Example
 
-以下示例代码展示了如何使用原子操作接口对不同类型的原子变量进行测试。代码通过一系列操作验证了原子操作的正确性。
+The following example code demonstrates how to use atomic operation interfaces to test atomic variables of different types. The code performs a series of operations to verify the correctness of atomic operations.
 
-### 1、示例代码
+### 1. Example Code
 
 ```C
 /****************************************************************************
@@ -297,15 +300,14 @@ int main(int argc, FAR char *argv[])
 }
 ```
 
-### 2、测试结果
+### 2. Test Results
 
 ```Shell
 qemu-armv8a-ap> atomic
-atomic test complete!        // 测试通过
+atomic test complete!        // Test Passed
 ```
 
-测试结果表明，所有原子操作均正确执行，验证通过。
-
-## 六、参考资料
+The test results indicate that all atomic operations were executed correctly and the verification was successful.
+## 6. References
 
 - [GCC 官方文档：atomic Builtins](https://gcc.gnu.org/onlinedocs/gcc-12.3.0/gcc/_005f_005fatomic-Builtins.html)

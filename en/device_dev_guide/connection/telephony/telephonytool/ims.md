@@ -35,7 +35,7 @@ enable-ims [slot_id][action]
 
 
 #### Example
-.
+
 ##### Command Input
 
 ```Bash
