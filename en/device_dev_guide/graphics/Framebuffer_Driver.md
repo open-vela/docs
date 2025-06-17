@@ -321,5 +321,5 @@ To prevent screen tearing and improve rendering performance, VSync (Vertical Syn
 ## V Related Repositories
 
 Here are the links to the code repository related to Framebuffer driver:
-- [fb.c](../../../../nuttx/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
-- [fb.h](../../../../nuttx/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.
+- [fb.c](../../../../../../nuttx/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
+- [fb.h](../../../../../../nuttx/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.
