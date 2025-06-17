@@ -2,7 +2,7 @@
 
 \[ [English](./../../en/quickstart/Download_Vela_sources.md) | 简体中文 \]
 
-openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](https://gitee.com/open-vela) 托管的 Git 仓库中。
+openvela 源码位于由 [GitHub](https://github.com/open-Vela)、[Gitee](https://gitee.com/open-vela) 和 [GitCode](https://gitcode.com/open-vela) 托管的 Git 仓库中。
 
 ## 步骤一 初始化 Repo 客户端
 
@@ -15,7 +15,7 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
 
 2. 初始化用于操作源码的工作目录：
 
-    - Github（需注册公钥，请参考 [Github文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)）：
+    - Github（需注册公钥，请参考 [Github 文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)）：
 
         ``` bash
         repo init --partial-clone -u git@github.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
@@ -28,10 +28,24 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela) 或 [Gitee](http
         cd ../../
         ```
 
-    - Gitee（需注册公钥，请参考 [码云文档](https://gitee.com/help/articles/4191)）：
+    - Gitee（需注册公钥，请参考[码云文档](https://gitee.com/help/articles/4191)）：
 
         ```bash
         repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+
+        # Install Git LFS (Large File Storage) for managing large files
+        sudo apt install git-lfs
+        cd .repo/manifests 
+        git lfs install
+        git lfs --version
+        cd ../../
+        ```
+
+    - GitCode（需注册公钥，请参考[码云文档](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)）：
+
+        ```bash
+        repo init --partial-clone -u
+        https://gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
 
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
