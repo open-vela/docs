@@ -113,7 +113,7 @@ openvela 的内核代码目录结构如下：
 
 开发者可以通过以下代码仓库获取 openvela 内核的相关代码和资源：
 
-- [openvela NuttX 仓库](../../../../openvela/nuttx/)
+- [openvela NuttX 仓库](../../../../../../../open-vela/nuttx/)
 
 ## 四、系统特性
 
