@@ -291,7 +291,7 @@ openvela 提供多种资源同步机制，以确保多线程环境下的数据�
 #### 参考
 
 - 信号量的详细说明请参见[信号量机制](./resource_sync/semaphore_mechanism.md)。
-- 相关实现代码请参见 [openvela semaphore](../../../../open-vela/nuttx/tree/dev/sched/semaphore)。
+- 相关实现代码请参见 [openvela semaphore](../../../../../../../open-vela/nuttx/tree/dev/sched/semaphore)。
 
 ### 2、互斥体
 
