@@ -525,7 +525,7 @@ openvela 支持三种工作队列类型，各具不同特性：
 #### 参考
 
 - 工作队列的详细说明，可参考[工作队列]()。
-- 实现代码请查看 [openvela wqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/wqueue) 源码。
+- 实现代码请查看 [openvela wqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/wqueue)。
 
 ### 2、消息队列
 
@@ -552,7 +552,6 @@ openvela 支持三种工作队列类型，各具不同特性：
 
 - 消息队列的详细说明请参考[消息队列](./IPC/work_queue.md)。
 - 实现代码请参考 [openvela mqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/mqueue) 源码。
-- 实现代码请参考 [openvela mqueue](../../../../..) 源码。
 
 ### 3、通信方案的选择
 
