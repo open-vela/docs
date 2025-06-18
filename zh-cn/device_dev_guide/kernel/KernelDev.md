@@ -113,7 +113,7 @@ openvela 的内核代码目录结构如下：
 
 开发者可以通过以下代码仓库获取 openvela 内核的相关代码和资源：
 
-- [openvela NuttX 仓库](../../../../open-vela/nuttx)
+- [openvela NuttX 仓库](../../../../nuttx/)
 
 ## 四、系统特性
 
@@ -550,8 +550,9 @@ openvela 支持三种工作队列类型，各具不同特性：
 
 #### 参考
 
-- 消息队列的详细说明请参考[消息队列]()。
+- 消息队列的详细说明请参考[消息队列](./IPC/work_queue.md)。
 - 实现代码请参考 [openvela mqueue](../../../../open-vela/nuttx/tree/dev/sched/mqueue) 源码。
+- 实现代码请参考 [openvela mqueue](../../../../..) 源码。
 
 ### 3、通信方案的选择
 
