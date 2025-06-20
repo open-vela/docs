@@ -1,5 +1,8 @@
 # 消息队列开发指南
 
+\[ [English](../../../../en/device_dev_guide/kernel/IPC/message_queue.md) | 简体中文 \]
+
+
 ## 一、概述
 
 本文档为您介绍如何在 openvela 操作系统中使用 POSIX (Portable Operating System Interface) 消息队列。消息队列是实现任务间可靠、异步通信的关键机制。
