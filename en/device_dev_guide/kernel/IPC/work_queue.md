@@ -289,7 +289,7 @@ Tasks can be added to a specified work queue through the `work_queue()` function
  *   worker - The worker callback to be invoked.  The callback will be
  *            invoked on the worker thread of execution.
  *   arg    - The argument that will be passed to the worker callback when
- *            int is invoked.
+ *            it is invoked.
  *   delay  - Delay (in clock ticks) from the time queue until the worker
  *            is invoked. Zero means to perform the work immediately.
  *
@@ -576,7 +576,7 @@ To maintain queue order, the implementation of `work_qqueue()` is more complex t
  *   worker - The worker callback to be invoked.  The callback will be
  *            invoked on the worker thread of execution.
  *   arg    - The argument that will be passed to the worker callback when
- *            int is invoked.
+ *            it is invoked.
  *   delay  - Delay (in clock ticks) from the time queue until the worker
  *            is invoked. Zero means to perform the work immediately.
  *

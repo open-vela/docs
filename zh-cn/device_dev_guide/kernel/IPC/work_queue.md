@@ -289,7 +289,7 @@ static int work_thread(int argc, FAR char *argv[])
  *   worker - The worker callback to be invoked.  The callback will be
  *            invoked on the worker thread of execution.
  *   arg    - The argument that will be passed to the worker callback when
- *            int is invoked.
+ *            it is invoked.
  *   delay  - Delay (in clock ticks) from the time queue until the worker
  *            is invoked. Zero means to perform the work immediately.
  *
@@ -576,7 +576,7 @@ static void work_process(FAR struct usr_wqueue_s *wqueue)
  *   worker - The worker callback to be invoked.  The callback will be
  *            invoked on the worker thread of execution.
  *   arg    - The argument that will be passed to the worker callback when
- *            int is invoked.
+ *            it is invoked.
  *   delay  - Delay (in clock ticks) from the time queue until the worker
  *            is invoked. Zero means to perform the work immediately.
  *
