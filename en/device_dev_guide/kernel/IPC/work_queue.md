@@ -5,7 +5,7 @@
 
 ## I. Overview
 
-The openvela operating system provides a Work Queue mechanism to defer tasks (Work) for execution in a dedicated worker thread context. The core advantage of this mechanism are **deferred execution** and **serial execution** of tasks. The system places pending tasks into a first-in-first-out (FIFO) queue, where they are retrieved and executed in order by threads from the worker thread pool.
+The openvela operating system provides a Work Queue mechanism to defer tasks (Work) for execution in a dedicated worker thread context. The core advantages of this mechanism are **deferred execution** and **serial execution** of tasks. The system places pending tasks into a first-in-first-out (FIFO) queue, where they are retrieved and executed in order by threads from the worker thread pool.
 
 openvela offers three different types of work queues to meet various scenario requirements:
 
