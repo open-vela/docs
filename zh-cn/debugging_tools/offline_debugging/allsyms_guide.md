@@ -1,4 +1,4 @@
-# openvela Allsyms 符号表功能使用指南
+# Allsyms 符号表功能使用指南
 
 本文档指导您如何在 openvela 系统中启用并使用 Allsyms 功能。通过启用此功能，您可以将完整的符号表编译到固件镜像中，从而在设备运行时将函数地址直接解析为可读的函数名，提升在线调试（例如分析崩溃栈）的效率。
 
@@ -40,7 +40,7 @@ CONFIG_ALLSYMS=y
 
 **代码示例：**
 
-```Plaintext
+```C
 #include <stdio.h>
 extern void hello_world(void);
 void my_debug_function(void)

@@ -109,7 +109,7 @@ In the code, the header file `#include <execinfo.h>` must be included. This chap
 
 Using the backtrace series of functions can capture the current program state and print stack information. Below is a description of common functions.
 
-For more details, please refer to the Linux Man Page: [backtrace](https://man7.org/linux/man-pages/man3/backtrace.3.html). 
+For more details, please refer to the Linux Man Page: [backtrace](https://man7.org/linux/man-pages/man3/backtrace.3.html).
 
 ```C 
 #include<execinfo.h> 
@@ -125,7 +125,7 @@ extern int backtrace (void **__array, int __size) __nonnull ((1));
 extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd) __THROW __nonnull ((1));
 ``` 
 
-### 2. `dump_stack()` 
+### 2. `dump_stack()`
 
 1. In the openvela system, you can directly call the `dump_stack()` function to print stack information. For example:
 
@@ -148,7 +148,6 @@ extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd) __
     ```
 2. Use the `addr2line` tool to resolve the printed backtrace addresses to specific code lines:
 
-
     ```Bash
     addr2line -fe nuttx 0xc070a96  0xc063d7c  0xc0809bc  0xc063d38  0xc0587de  
     ```
@@ -163,7 +162,7 @@ extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd) __
     nuttx/sched/task/task_start.c:130
     ```
 
-3. Use the addresses from dump_stack() to locate the point of error, or print function names directly for easier analysis by [enabling the symbol table]().
+3. Use the addresses from dump_stack() to locate the point of error, or print function names directly for easier analysis by [allsyms symbol table feature usage guide](./allsyms_guide.md).
 
 ### 3. `dumpstack` Command
 
