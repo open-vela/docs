@@ -1,5 +1,7 @@
 # Allsyms 符号表功能使用指南
 
+\[ [English](../../../en/debugging_tools/offline_debugging/allsyms_guide.md) | 简体中文 \]
+
 本文档指导您如何在 openvela 系统中启用并使用 Allsyms 功能。通过启用此功能，您可以将完整的符号表编译到固件镜像中，从而在设备运行时将函数地址直接解析为可读的函数名，提升在线调试（例如分析崩溃栈）的效率。
 
 ## 前置条件

@@ -1,5 +1,7 @@
 # Allsyms Symbol Table Feature Usage Guide
 
+\[ English | [简体中文](../../../zh-cn/debugging_tools/offline_debugging/allsyms_guide.md) \]
+
 This document provides guidance on enabling and using the **Allsyms** feature in the openvela system. By enabling this feature, you can compile a complete symbol table into the firmware image, enabling the system to resolve function addresses into human-readable function names during runtime. This enhances on-device debugging efficiency, especially for analyzing crash stacks.
 
 ## Prerequisites
