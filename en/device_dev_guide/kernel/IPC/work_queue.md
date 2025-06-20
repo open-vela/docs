@@ -1,5 +1,8 @@
 # Work Queue
 
+\[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/IPC/work_queue.md) \]
+
+
 ## I. Overview
 
 The openvela operating system provides a Work Queue mechanism to defer tasks (Work) for execution in a dedicated worker thread context. The core advantage of this mechanism are **deferred execution** and **serial execution** of tasks. The system places pending tasks into a first-in-first-out (FIFO) queue, where they are retrieved and executed in order by threads from the worker thread pool.
