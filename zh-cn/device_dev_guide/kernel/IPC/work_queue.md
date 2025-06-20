@@ -959,7 +959,7 @@ int work_queue_period(int qid, FAR struct work_s *work, worker_t worker,
                       FAR void *arg, clock_t delay, clock_t period);
 ```
 
-## 五、总结
+## 六、总结
 
 Openvela 的工作队列（Work Queue）是一个强大且灵活的后台任务处理框架，其核心目标是将耗时或非紧急的任务从关键执行路径（如中断处理程序、高优先级任务）中剥离，交由专用的低优先级线程异步执行，从而提高系统的响应能力和稳定性。
 
