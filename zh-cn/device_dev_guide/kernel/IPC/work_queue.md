@@ -81,7 +81,7 @@ openvela 提供三种不同类型的工作队列，以满足不同场景的需�
 | CONFIG_LIB_USRWORKPRIORITY  | 工作线程的优先级               | 100    |
 | CONFIG_LIB_USRWORKSTACKSIZE | 工作线程的栈大小（单位：字节） | 2048   |
 
-## 二、原理
+## 三、原理
 
 ### 工作队列的组成
 
@@ -650,7 +650,7 @@ static int work_qqueue(FAR struct usr_wqueue_s *wqueue,
 }
 ```
 
-## 三、数据结构
+## 四、数据结构
 
 openvela 工作队列的核心是围绕 `struct work_s` 结构展开的，它代表一个需要被异步执行的任务。系统通过不同的队列管理结构来组织和调度这些任务。
 
@@ -789,7 +789,7 @@ struct work_notifier_entry_s
 };
 ```
 
-## 四、API接口
+## 五、API接口
 
 openvela 工作队列的 API 分布在不同的内核文件中，每个文件都承担着特定的功能。下面我们将按照模块划分，详细解析其核心接口。
 
