@@ -1,5 +1,8 @@
 # 工作队列
 
+\[ [English](../../../../en/device_dev_guide/kernel/IPC/work_queue.md) | 简体中文 \]
+
+
 ## 一、概述
 
 openvela 操作系统提供工作队列（Work Queue）机制，用于将任务（Work）推迟到专用的工作线程上下文中执行。此机制的核心优势在于实现任务的**延迟执行**和**串行执行**。系统将待处理的任务放入一个先进先出（FIFO）的队列中，由工作线程池中的线程按序取出并执行。
@@ -81,7 +84,7 @@ openvela 提供三种不同类型的工作队列，以满足不同场景的需�
 | CONFIG_LIB_USRWORKPRIORITY  | 工作线程的优先级               | 100    |
 | CONFIG_LIB_USRWORKSTACKSIZE | 工作线程的栈大小（单位：字节） | 2048   |
 
-## 二、原理
+## 三、原理
 
 ### 工作队列的组成
 
@@ -286,7 +289,7 @@ static int work_thread(int argc, FAR char *argv[])
  *   worker - The worker callback to be invoked.  The callback will be
  *            invoked on the worker thread of execution.
  *   arg    - The argument that will be passed to the worker callback when
- *            int is invoked.
+ *            it is invoked.
  *   delay  - Delay (in clock ticks) from the time queue until the worker
  *            is invoked. Zero means to perform the work immediately.
  *
@@ -573,7 +576,7 @@ static void work_process(FAR struct usr_wqueue_s *wqueue)
  *   worker - The worker callback to be invoked.  The callback will be
  *            invoked on the worker thread of execution.
  *   arg    - The argument that will be passed to the worker callback when
- *            int is invoked.
+ *            it is invoked.
  *   delay  - Delay (in clock ticks) from the time queue until the worker
  *            is invoked. Zero means to perform the work immediately.
  *
@@ -650,7 +653,7 @@ static int work_qqueue(FAR struct usr_wqueue_s *wqueue,
 }
 ```
 
-## 三、数据结构
+## 四、数据结构
 
 openvela 工作队列的核心是围绕 `struct work_s` 结构展开的，它代表一个需要被异步执行的任务。系统通过不同的队列管理结构来组织和调度这些任务。
 
@@ -789,7 +792,7 @@ struct work_notifier_entry_s
 };
 ```
 
-## 四、API接口
+## 五、API接口
 
 openvela 工作队列的 API 分布在不同的内核文件中，每个文件都承担着特定的功能。下面我们将按照模块划分，详细解析其核心接口。
 
@@ -956,7 +959,7 @@ int work_queue_period(int qid, FAR struct work_s *work, worker_t worker,
                       FAR void *arg, clock_t delay, clock_t period);
 ```
 
-## 五、总结
+## 六、总结
 
 Openvela 的工作队列（Work Queue）是一个强大且灵活的后台任务处理框架，其核心目标是将耗时或非紧急的任务从关键执行路径（如中断处理程序、高优先级任务）中剥离，交由专用的低优先级线程异步执行，从而提高系统的响应能力和稳定性。
 
