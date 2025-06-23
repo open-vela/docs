@@ -314,8 +314,7 @@ This hierarchical design is a reasonable approach with the following advantages:
 Through this hierarchical design, openvela's driver development can meet hardware adaptation requirements while maintaining code universality and maintainability.  
 
 #### 3.1 I3C Driver Framework  
->[I3C](https://xiaomi.f.mioffice.cn/wiki/wikk4CFCHSiWVYFOCoge8O7xyif "Open Feishu Document")  
->
+
 >I3C is more complex than I2C. In addition to hardware improvements, it is reflected in the following aspects at the functional level:  
 >- Addressing and access based on dynamic addresses;  
 >- Support for CCC (Common Command Codes) commands, enabling extension of business requirements;  
@@ -326,16 +325,14 @@ Through this hierarchical design, openvela's driver development can meet hardwar
 <img src="./figures/005.png" width="75%">  
 
 #### 3.2 RTC Driver Framework  
->[RTC](https://xiaomi.f.mioffice.cn/wiki/wikk4uo5RhxKgBL4I4RTJkP42fg "Open Feishu Document")  
->
+
 >In Vela, all operations interacting with RTC hardware are abstracted into the collection `struct rtc_ops_s`, which is the main body of the rtc_lowerhalf driver implementation and connects to the rtc upperhalf driver upwards. Vela internally uses up_rtc_xxapi as the main interface for RTC operations, which obtains the handle of the rtc lowerhalf to operate the RTC hardware. The rtc upperhalf will register the RTC device node, and applications can set and obtain RTC information through regular file operations.  
 
 <img src="./figures/006.png" width="75%">  
 <img src="./figures/007.png" width="75%">  
 
 #### 3.3 IR Driver Framework  
->[IR](https://xiaomi.f.mioffice.cn/wiki/wikk4jHT3cMogY32Upm9RqZRBSB "Open Feishu Document")  
->
+
 >The IR driver is divided into two layers: upper half and lower half. The upper half implements general functions, including device registration, character device file_operation implementation, circular buffer management, and upper-layer poll implementation. The lower half interacts with specific infrared devices, can inject data into the upper half's circular buffer through the interface `lirc_xxx_event`, send infrared data through `tx_xxx`, and application control of the device through ioctl can be mapped to the operations provided by the lower half.  
 
 <img src="./figures/008.png" width="75%">  

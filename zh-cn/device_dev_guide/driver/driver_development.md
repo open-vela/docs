@@ -328,8 +328,7 @@ openvela 中的其他驱动实现机制与 ADC 驱动类似，均采用分层设
 通过这种分层设计，openvela 的驱动开发既能满足硬件适配的需求，又能保持代码的通用性和可维护性。
 
 #### 3.1 I3C驱动框架
->[I3C](https://xiaomi.f.mioffice.cn/wiki/wikk4CFCHSiWVYFOCoge8O7xyif "打开飞书文档")
->
+
 > I3C 相对于I2C更为复杂，除硬件特性的改进外，从功能层面体现为以下方面：
 >- 基于动态地址的寻址与访问；
 >- 支持CCC（Common Command Codes）命令，从而可对业务需求进行扩展；
@@ -340,16 +339,14 @@ openvela 中的其他驱动实现机制与 ADC 驱动类似，均采用分层设
 <img src="./figures/005.png" width="75%">
 
 #### 3.2 RTC驱动框架
->[RTC](https://xiaomi.f.mioffice.cn/wiki/wikk4uo5RhxKgBL4I4RTJkP42fg "打开飞书文档")
->
+
 >在Vela中，所有与rtc硬件交互的操作都被抽象成集合struct rtc_ops_s，它是rtc_lowerhalf驱动实现的主体，向上对接rtc upperhalf驱动。Vela内部使用rtc操作是以up_rtc_xxapi为主，它会获取到rtc lowerhalf的句柄，去操作rtc硬件。rtc upperhalf会注册rtc设备节点，应用可通过常规文件操作去设置、获取rtc等。
 
 <img src="./figures/006.png" width="75%">
 <img src="./figures/007.png" width="75%">
 
 #### 3.3 IR驱动框架
->[IR](https://xiaomi.f.mioffice.cn/wiki/wikk4jHT3cMogY32Upm9RqZRBSB "打开飞书文档")
->
+
 >IR驱动分为upper half和lower half两层，upper half实现通用功能，包括设备注册，字符设备file_operation实现，环形buffer管理，以及上层poll实现。lower half与具体的红外设备交互，通过接口lirc_xxx_event可向upper half的环形buffer中灌入数据，通过tx_xxx可发送红外设备，应用通过ioctl控制设备可映射到lower half提供的operation中。
 
 <img src="./figures/008.png" width="75%">
