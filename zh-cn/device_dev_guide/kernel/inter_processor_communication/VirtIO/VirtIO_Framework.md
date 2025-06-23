@@ -1,5 +1,7 @@
 # VirtIO 框架
 
+\[ [English](../../../../../en/device_dev_guide/kernel/inter_processor_communication/VirtIO/VirtIO_Framework.md) | 简体中文 \]
+
 ## 一、简介
 
 openvela 基于 OpenAMP 实现了完整的 VirtIO 框架。该框架在上层支持实现与 VirtIO 标准兼容的多种 VirtIO 驱动，例如 VirtIO-Net 和 VirtIO-Block 等；在下层支持不同的 VirtIO 传输层实现，包括 VirtIO-MMIO 和 VirtIO-PCI 等。
