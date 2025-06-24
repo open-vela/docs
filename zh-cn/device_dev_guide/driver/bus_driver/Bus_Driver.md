@@ -1,5 +1,7 @@
 # 总线驱动
 
+\[ [English](../../../../en/device_dev_guide/driver/bus_driver/Bus_Driver.md) | 简体中文 \]
+
 ## 概述
 
 openvela 提供了全面的总线驱动支持，能够实现设备与外设之间的高效通信。这些支持的总线驱动类型包括：
