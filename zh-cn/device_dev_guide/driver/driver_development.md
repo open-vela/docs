@@ -87,7 +87,7 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 当驱动注册到文件系统后，会创建一个`inode`，并将其与设备文件关联。inode 是文件系统中用于表示文件或设备的核心数据结构。以下是与驱动注册相关的关键字段和操作函数集的说明。
 
-https://github.com/open-vela/nuttx/blob/dev/include/nuttx/fs/fs.h
+\[ [fs.h](../../../../nuttx/blob/dev/include/nuttx/fs/fs.h)\]
 
 ```C
 struct inode
