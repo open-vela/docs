@@ -1,5 +1,7 @@
 # Arch Timer 驱动框架开发指南
 
+\[ [English](../../../../../en/device_dev_guide/driver/timer_driver/timer/Arch_Timer.md) | 简体中文 \]
+
 ## 一、概述
 
 本文主要介绍基于 Timer Driver 的 Arch Timer 驱动框架实现，以及相关接口的使用和具体实现说明。本文适用于以下场景：
