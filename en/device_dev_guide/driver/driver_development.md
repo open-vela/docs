@@ -80,9 +80,10 @@ In openvela, the application layer accesses drivers through system calls, with t
 
 **System call -> VFS (Virtual File System) -> Driver**.  
 
-To understand how drivers are registered with the file system, it is necessary to first understand the relevant data structures. The definitions of these data structures are located in the [`include/nuttx/fs/fs.h`](../../../../nuttx/include/nuttx/fs/fs.h)file.  
+To understand how drivers are registered with the file system, it is necessary to first understand the relevant data structures. The definitions of these data structures are located in the [`include/nuttx/fs/fs.h`](../../../../../../nuttx/blob/dev/include/nuttx/fs/fs.h)file.  
 
 #### 1.1 Driver Registration and `inode`  
+
 When a driver is registered with the file system, an `inode` is created and associated with the device file. The inode is the core data structure in the file system used to represent files or devices. The following describes the key fields and operation function sets related to driver registration.  
 
 ```c
