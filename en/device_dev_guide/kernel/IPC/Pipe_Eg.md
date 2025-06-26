@@ -7,13 +7,16 @@
 Pipes are widely used in systems for various purposes, including the following common types:
 
 1. Pipe (Anonymous Pipe):
-   - Used to create a pipe that allows inter-process communication (IPC).
-   - The created pipe contains two file descriptors: one for reading (read end), and the other for writing (write end).
+
+    - Used to create a pipe that allows inter-process communication (IPC).
+    - The created pipe contains two file descriptors: one for reading (read end), and the other for writing (write end).
+
 2. `popen`/`pclose` calls:
-   - Creates a pipe connected to another process, allowing reading from its output or sending data to its input.
+    - Creates a pipe connected to another process, allowing reading from its output or sending data to its input.
+
 3. FIFO (Named Pipe):
-   - Allows data exchange between unrelated processes.
-   - Creating a FIFO is similar to creating a file and requires specifying a path.
+    - Allows data exchange between unrelated processes.
+    - Creating a FIFO is similar to creating a file and requires specifying a path.
 
 ## II. API Interfaces
 
@@ -31,11 +34,11 @@ int pipe2(int fd[2], int flags);
 ```
 
 - Pipe File Descriptors：
-  - `fd[0]`：The read end of the pipe.
-  - `fd[1]`：The write end of the pipe.
+    - `fd[0]`：The read end of the pipe.
+    - `fd[1]`：The write end of the pipe.
 - Notes：
-  - Writing to a closed read end: When data is written to a pipe whose read end is closed, a SIGPIPE signal is generated. If the signal is ignored or returned from the signal handler, `write` returns -1 and sets `errno` to EPIPE.
-  - Multi-process writing: When multiple processes write to a pipe simultaneously, data may interleave.
+    - Writing to a closed read end: When data is written to a pipe whose read end is closed, a SIGPIPE signal is generated. If the signal is ignored or returned from the signal handler, `write` returns -1 and sets `errno` to EPIPE.
+    - Multi-process writing: When multiple processes write to a pipe simultaneously, data may interleave.
 
 #### Configuration Enabling
 
@@ -175,14 +178,14 @@ int mkfifoat(int dirfd, const char *path, mode_t mode);
 
 - `mode` Parameter: Specifies the file permissions of the FIFO, same as the `mode` parameter in the `open` function.
 - `path` Parameter in `mkfifoat`: 
-  - If specified as an absolute `path`, the dirfd parameter is ignored, and behavior is similar to `mkfifo`.
-  - If specified as a relative path, it is relative to the directory opened by `dirfd`.
-  - If specified as a relative path and `dirfd` is `AT_FDCWD`, the path is relative to the current directory.
+    - If specified as an absolute `path`, the dirfd parameter is ignored, and behavior is similar to `mkfifo`.
+    - If specified as a relative path, it is relative to the directory opened by `dirfd`.
+    - If specified as a relative path and `dirfd` is `AT_FDCWD`, the path is relative to the current directory.
 - Notes on Opening FIFO: 
-  - If non-blocking flag `O_NONBLOCK` is not set: 
+    - If non-blocking flag `O_NONBLOCK` is not set: 
     - When opened as read-only (`O_RDONLY`), the process will block until another process opens the FIFO for writing.
     - When opened as write-only (`O_WRONLY`), the process will block until another process opens the FIFO for reading.
-  - It is not recommended to open FIFO with `O_RDWR` (read-write mode), as this may cause the read to never encounter an end-of-file (EOF). Non-blocking mode should be used to avoid blocking behavior.
+    - It is not recommended to open FIFO with `O_RDWR` (read-write mode), as this may cause the read to never encounter an end-of-file (EOF). Non-blocking mode should be used to avoid blocking behavior.
 
 #### Configuration Enabling
 

@@ -62,7 +62,7 @@ RPMsg 采用模块化的分层架构，其设计思想类似于网络协议栈�
     定义并实现消息在处理器之间的具体传输方式。开发者可以根据系统的物理连接和性能要求，选择或定制不同的传输层。详情请参见[RPMsg 传输层]()。
     - **主要实现**：
         - **Rptun / RPMsg VirtIO**：基于共享内存和中断的片内通信方案，遵循 VirtIO 标准，性能高效。它包含两个版本：
-            - **Rptun**：作为 VirtIO 的功能增强版，它支持更复杂的系统特性，是 OpenVela 系统中推荐的首选传输层。
+            - **Rptun**：作为 VirtIO 的功能增强版，它支持更复杂的系统特性，是 openvela 系统中推荐的首选传输层。
             - **RPMsg VirtIO**：轻量级实现，适用于资源受限的设备或简单的通信场景。
         - **RPMsg UART**：使用通用异步收发器（UART）作为物理介质，适用于低速的板级跨芯片通信。
         - **RPMsg SPI**：使用串行外设接口（SPI）作为物理介质，相比 UART 能提供更高的带宽，同样支持板级跨芯片通信。
@@ -187,7 +187,7 @@ int rpmsg_create_ept(struct rpmsg_endpoint *ept, struct rpmsg_device *rdev,
 
 例如，在某项目的主控核心（AP）上，通过 `ps` 或 `tasks` 命令看到以下线程列表：
 
-<img src="./figures/009.png" alt="处理消息" width="75%">
+<img src="./figures/008.png" alt="处理消息" width="75%">
 
 这个输出清晰地表明：
 
