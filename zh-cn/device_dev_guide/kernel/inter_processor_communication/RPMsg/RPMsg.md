@@ -1,5 +1,7 @@
 # RPMsg 核心概念与工作原理
 
+\[ [English](../../../../../en/device_dev_guide/kernel/inter_processor_communication/RPMsg/RPMsg.md) | 简体中文 \]
+
 ## 一、概述
 
 **远程处理器消息传递**（Remote Processor Messaging, RPMsg）是一个轻量级的消息传递框架，专为异构多核系统中的核间通信而设计。它定义了一套标准的二进制接口，使运行不同操作系统（如 Linux）或实时操作系统（Real-Time Operating System, RTOS）的处理器核心能够高效、可靠地交换数据。

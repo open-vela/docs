@@ -1,5 +1,7 @@
 # RPMsg: Core Concepts and Working Principles
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/kernel/inter_processor_communication/RPMsg/RPMsg.md) \]
+
 ## I. Overview
 
 **Remote Processor Messaging (RPMsg)** is a lightweight messaging framework designed for inter-core communication in heterogeneous multicore systems. It defines a standardized binary interface, enabling processor cores running different operating systems (e.g., Linux) or real-time operating systems (RTOS) to efficiently and reliably exchange data.
