@@ -1,4 +1,6 @@
-# 使用 _FORTIFY_SOURCE 增强 C 语言内存安全性
+# Enhancing C Memory Safety with _FORTIFY_SOURCE
+
+\[ [English](../../../../../en/debugging_tools/crash/memory/heap/fortify_source.md) | 简体中文 \]
 
 本文档全面介绍了 _FORTIFY_SOURCE 的功能、配置和原理，并对其与 KASan 的差异进行了分析。通过阅读本文，开发者可以理解如何利用 **_FORTIFY_SOURCE** 检测并避免库函数引发的越界问题，从而提升应用程序的安全性。
 
