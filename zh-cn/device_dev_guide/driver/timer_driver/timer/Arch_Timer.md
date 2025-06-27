@@ -39,7 +39,7 @@ Arch Timer 的整体架构和相关接口设计如下图所示。
 - 基于微秒（`us`）的接口。
 - 基于计时单元（`tick`）的接口。
 
-开发者可以通过配置选项 `CONFIG_SCHED_TICKLESS_TICK_ARGUMENT` 来选择启用哪一种接口。为了减少 `sched` 和 `arch` 模块之间的时间单位转换，`arch`` ``timer` 默认支持 `tick` 接口，以确保运行效率。
+开发者可以通过配置选项 `CONFIG_SCHED_TICKLESS_TICK_ARGUMENT` 来选择启用哪一种接口。为了减少 `sched` 和 `arch` 模块之间的时间单位转换，`arch timer` 默认支持 `tick` 接口，以确保运行效率。
 
 以下对接口功能进行简要说明。
 
@@ -47,7 +47,7 @@ Arch Timer 的整体架构和相关接口设计如下图所示。
 
 1. `up_timer_set_lowerhalf`
 
-    初始化 Arch Timer 定时器，设置一个 `timer``_``lowerhalf``_s` 实例，并启动定时器。
+    初始化 Arch Timer 定时器，设置一个 `timer_lowerhalf_s` 实例，并启动定时器。
 
     ```C
     void up_timer_set_lowerhalf(FAR struct timer_lowerhalf_s *lower)
@@ -164,15 +164,15 @@ grep -rE "CONFIG_TIMER|CONFIG_TIMER_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH_H
 
 在 **board** 初始化过程，需要调用具体 **Vendor** 实现的 `***_timer_initialize` 函数完成初始化。该函数会完成以下操作：
 
-1. 分配并初始化 [struct timer_lowerhalf_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h#L227) 结构实例。
-2. 利用 [timer_register](https://github.com/open-vela/nuttx/blob/dev/drivers/timers/timer.c#L480) 函数将 `timer_lowerhalf_s` 实例注册为 Timer 驱动。
+1. 分配并初始化 [struct timer_lowerhalf_s](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h) 结构实例。
+2. 利用 [timer_register](../../../../../../../../nuttx/blob/dev/drivers/timers/timer.c) 函数将 `timer_lowerhalf_s` 实例注册为 Timer 驱动。
 
     - 注册过程会生成 `/dev/timer` 设备节点。
     - 同时将 `struct file_operations` 和 `g_timerops` 实例绑定到 `timer_lowerhalf_s` 实例。
 
 在平台代码中，需要实现 `up_timer_initialize` 函数，用于调用 `up_timer_set_lowerhalf` 函数，将 `***_timer_initialize` 返回的实例绑定到系统中，作为系统定时器。
 
-相关接口定义在：[/include/nuttx/timers/timer.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h)。
+相关接口定义在：[/include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h)。
 
 #### `timer_register` 函数说明
 
@@ -244,7 +244,7 @@ FAR void *timer_register(FAR const char *path,
 
 #### 接口定义
 
-以下是 [struct timer_ops_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h#L163) 的详细定义：
+以下是 [struct timer_ops_s](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h) 的详细定义：
 
 ```C
 struct timer_ops_s
@@ -487,7 +487,7 @@ struct timer_lowerhalf_s *systick_initialize(bool coreclk,
 
 在 ARMv7-M 的 Arch Timer 适配中，`lower-half` 方法的出现形式如下：
 
-文件路径： [arch/arm/src/armv7-m/arm_systick.c](https://github.com/open-vela/nuttx/blob/dev/arch/arm/src/armv7-m/arm_systick.c)
+文件路径： [arch/arm/src/armv7-m/arm_systick.c](../../../../../../../../nuttx/blob/dev/arch/arm/src/armv7-m/arm_systick.c)
 
 ```C
 /* "Lower half" driver methods */
@@ -510,7 +510,7 @@ static const struct timer_ops_s g_systick_ops =
 
 以下是定时相关 POSIX API 的简要概述，这些接口的具体使用方法请参考相关的 `man` 页面。
 
-头文件位置：[include/time.h](https://github.com/open-vela/nuttx/blob/dev/include/time.h)
+头文件位置：[include/time.h](../../../../../../../../nuttx/blob/dev/include/time.h)
 
 1. `timer_create`
 
@@ -586,7 +586,7 @@ static const struct timer_ops_s g_systick_ops =
 
 #### 支持的 IOCTL 命令
 
-以下是当前支持的 IOCTL 命令，相关接口定义在 [include/nuttx/timers/timer.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h) 中：
+以下是当前支持的 IOCTL 命令，相关接口定义在 [include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h) 中：
 
 - `TCIOC_START`：启动定时器。
 - `TCIOC_STOP`：停止定时器。

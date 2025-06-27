@@ -7,8 +7,8 @@
 This document introduces the implementation of the Arch Timer driver framework based on Timer Driver, as well as the usage and specific implementation instructions of related interfaces. This document applies to the following scenarios:  
 
 
-- **Application Developers or Testers**: Can refer to the [Test Cases](#vii-test-cases) in this document for development or testing.  
-- **Driver Developers**: Can refer to the [Driver Adaptation Example](#v-driver-adaptation-example) to complete driver development that meets requirements.  
+- Application Developers or Testers: Can refer to the [Test Cases](#vii-test-cases) in this document for development or testing.  
+- Driver Developers: Can refer to the [Driver Adaptation Example](#v-driver-adaptation-example) to complete driver development that meets requirements.  
 
 
 ### 1. What is Arch Timer  
@@ -16,8 +16,8 @@ This document introduces the implementation of the Arch Timer driver framework b
 The Arch Timer is an interval timer implemented based on Timer Driver. It provides a series of timer interfaces for the `sched` module in the operating system and supports the following two working modes:  
 
 
-- **Tickless Mode**: Allows more flexible and efficient system scheduling.  
-- **Tick Mode**: Provides a fixed-time interval scheduling mechanism.  
+- Tickless Mode: Allows more flexible and efficient system scheduling.  
+- Tick Mode: Provides a fixed-time interval scheduling mechanism.  
 
 
 The position framework of Arch Timer in the system is as shown in the following figure:  
@@ -31,8 +31,8 @@ The position framework of Arch Timer in the system is as shown in the following 
 The overall architecture and related interface design of Arch Timer are as shown in the following figure:  
 
 
-- **Upper-half**: Provided by openvela, where the `up_timer_initialize` interface needs to be implemented by chip manufacturers.  
-- **Lower-half**: Needs to be adapted by chip manufacturers.  
+- `Upper-half`: Provided by openvela, where the `up_timer_initialize` interface needs to be implemented by chip manufacturers.  
+- `Lower-half`: Needs to be adapted by chip manufacturers.  
 - Application programs can call upper-half or lower-half interfaces through standard POSIX API interfaces or `ioctl` interfaces to complete corresponding functions.  
 
 
@@ -60,7 +60,7 @@ The following is a brief description of the interface functions.
 ### Arch Timer Interface Description  
 
 
-1. **`up_timer_set_lowerhalf`**  
+1. `up_timer_set_lowerhalf` 
    Initialize the Arch Timer, set a `timer_lowerhalf_s` instance, and start the timer.  
 
    ```c
@@ -68,7 +68,7 @@ The following is a brief description of the interface functions.
    ```  
 
 
-2. **`up_timer_tick_start`**  
+2. `up_timer_tick_start`  
    Start the timer, used only in Tickless mode. The function's parameter is the timer's timeout period in `tick`.  
 
    ```c
@@ -76,7 +76,7 @@ The following is a brief description of the interface functions.
    ```  
 
 
-3. **`up_timer_tick_cancel`**  
+3. `up_timer_tick_cancel`  
    Stop the Arch Timer, used only in Tickless mode. It returns the remaining `tick` count of the timer when executed.  
 
    ```c
@@ -84,7 +84,7 @@ The following is a brief description of the interface functions.
    ```  
 
 
-4. **`up_timer_getmask`**  
+4. `up_timer_getmask`  
    Get the value of the timer-supported time mask (`mask`).  
 
    ```c
@@ -92,7 +92,7 @@ The following is a brief description of the interface functions.
    ```  
 
 
-5. **`up_timer_gettick`**  
+5. `up_timer_gettick` 
    Get the current number of `tick` that have elapsed on the timer.  
 
    ```c
@@ -100,7 +100,7 @@ The following is a brief description of the interface functions.
    ```  
 
 
-6. **`up_udelay`**  
+6. `up_udelay`  
    Implement delay operations in microseconds (`us`) for precise delays.  
 
    ```c
@@ -108,7 +108,7 @@ The following is a brief description of the interface functions.
    ```  
 
 
-7. **`up_mdelay`**  
+7. `up_mdelay`  
    Implement delay operations in milliseconds (`ms`) for longer delay requirements.  
 
    ```c
@@ -121,11 +121,11 @@ The following is a brief description of the interface functions.
 openvela provides a generic timer (Timer) driver. According to openvela's driver framework, this driver is divided into two layers:  
 
 
-- **Upper Half**: Provides generic timer interfaces for application-level programs. This layer is already provided by openvela, so application developers do not need to modify it.  
-- **Lower Half**: Platform-specific driver programs for implementing hardware-level control and adaptation. This layer is the focus for driver developers.  
+- `Upper Half`: Provides generic `timer` interfaces for application-level programs. This layer is already provided by openvela, so application developers do not need to modify it.  
+- `Lower Half`: Platform-specific driver programs for implementing hardware-level control and adaptation. This layer is the focus for driver developers.  
 
 
-The definitions of Timer driver-related interfaces can be found in the `/include/nuttx/timers/timer.h` file, and the interfaces are also divided into two layers: upper half and lower half.  
+The definitions of Timer driver-related interfaces can be found in the `/include/nuttx/timers/timer.h` file, and the interfaces are also divided into two layers: `upper half` and `lower half`.  
 
 
 ### 1. Configuration Instructions  
@@ -136,12 +136,11 @@ When adapting the **board**, the following three key options need to be configur
 #### Configure the Driver  
 
 
-1. **Enable Timer Driver**: Enable Timer Driver functionality by setting `CONFIG_TIMER`, making the timer driver available.  
-2. **Enable Arch Timer**: Configure the `CONFIG_TIMER_ARCH` option to enable the `arch timer` module. This option allows architecture-level support for architecture-related timer functions.  
-3. **Enable Tickless Mode**: Configure `CONFIG_SCHED_TICKLESS` to enable Tickless mode.  
+1. Enable Timer Driver: Enable Timer Driver functionality by setting `CONFIG_TIMER`, making the timer driver available.  
+2. Enable Arch Timer: Configure the `CONFIG_TIMER_ARCH` option to enable the `arch timer` module. This option allows architecture-level support for architecture-related timer functions.  
+3. Enable Tickless Mode: Configure `CONFIG_SCHED_TICKLESS` to enable Tickless mode. 
 
-
-- **Characteristics of Tickless Mode**: No periodic clock interrupts. When no tasks are executing, the system enters an idle (Idle) mode and resumes when the next task executes or an interrupt occurs.  
+- Characteristics of Tickless Mode: No periodic clock interrupts. When no tasks are executing, the system enters an idle (Idle) mode and resumes when the next task executes or an interrupt occurs.  
 
 
 #### Configuration File Paths  
@@ -149,7 +148,7 @@ When adapting the **board**, the following three key options need to be configur
 The following are the configuration file paths for Timer Driver in Tickless mode:  
 
 
-1. **File**: `sched/Kconfig`  
+1. File: `sched/Kconfig`  
 
    ```shell
    # sched/Kconfig
@@ -161,7 +160,7 @@ The following are the configuration file paths for Timer Driver in Tickless mode
    ```  
 
 
-2. **File**: `drivers/timers/Kconfig`  
+2. File: `drivers/timers/Kconfig`  
 
    ```shell
    # drivers/timers/Kconfig
@@ -188,11 +187,11 @@ grep -rE "CONFIG_TIMER|CONFIG_TIMER_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH_H
 
 ### 2. Initialization  
 
-During board initialization, the `***_timer_initialize` function implemented by the specific **Vendor** needs to be called to complete initialization. This function will perform the following operations:  
+During **board** initialization, the `***_timer_initialize` function implemented by the specific **Vendor** needs to be called to complete initialization. This function will perform the following operations:  
 
 
-1. Allocate and initialize an instance of [struct timer_lowerhalf_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h#L227).  
-2. Register the `timer_lowerhalf_s` instance as a Timer driver using the [timer_register](https://github.com/open-vela/nuttx/blob/dev/drivers/timers/timer.c#L480) function.  
+1. Allocate and initialize an instance of [struct timer_lowerhalf_s](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h).  
+2. Register the `timer_lowerhalf_s` instance as a Timer driver using the [timer_register](../../../../../../../../nuttx/blob/dev/drivers/timers/timer.c) function.  
 
 
 - The registration process generates the `/dev/timer` device node.  
@@ -202,12 +201,12 @@ During board initialization, the `***_timer_initialize` function implemented by 
 In the platform code, the `up_timer_initialize` function needs to be implemented to call the `up_timer_set_lowerhalf` function, binding the instance returned by `***_timer_initialize` to the system as the system timer.  
 
 
-Related interface definitions are in: [/include/nuttx/timers/timer.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h).  
+Related interface definitions are in: [/include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h).  
 
 
 #### `timer_register` Function Description  
 
-The following is a detailed description of the `timer_register` function, which binds the lower-half Timer driver instance with the upper-half Timer device and registers the device for use by application programs.  
+The following is a detailed description of the `timer_register` function, which binds the `lower-half` Timer driver instance with the `upper-half` Timer device and registers the device for use by application programs.  
 
 ```c
 /****************************************************************************
@@ -245,27 +244,27 @@ FAR void *timer_register(FAR const char *path,
 ```  
 
 
-### 3. Upper-half Interfaces  
+### 3. `Upper-half` Interfaces  
 
-Upper-half interfaces provide standardized Timer functions for various modules in the kernel and support the following modes:  
+`Upper-half`interfaces provide standardized Timer functions for various modules in the kernel and support the following modes:  
 
 
-- **Tickless Mode**: Depending on the time unit, interfaces are divided into two groups: `struct timespec` and `tick` interfaces.  
-- **Tick Mode**: Natively supports `tick` interfaces to reduce time conversion work between the `sched` and `arch` modules.  
+- Tickless Mode: Depending on the time unit, interfaces are divided into two groups: `struct timespec` and `tick` interfaces.  
+- Tick Mode: Natively supports `tick` interfaces to reduce time conversion work between the `sched` and `arch` modules.  
 
 
 Developers can select which interface to enable by configuring the option `CONFIG_SCHED_TICKLESS_TICK_ARGUMENT`.  
 
 
-Upper-half interfaces are mainly called by `sched`. The Timer interfaces required by `sched` are defined in the `/include/nuttx/arch.h` file, and interface descriptions can be found in [Arch Timer Interfaces](#ii-arch-timer-interfaces).  
+`Upper-half` interfaces are mainly called by `sched`. The Timer interfaces required by `sched` are defined in the `/include/nuttx/arch.h` file, and interface descriptions can be found in [Arch Timer Interfaces](#ii-arch-timer-interfaces).  
 
 
-### 4. Lower-half Interfaces  
+### 4. `Lower-half` Interfaces  
 
-The lower-half driver provides standardized `struct timer_ops_s` interfaces for use by the following components:  
+The `lower-half` driver provides standardized `struct timer_ops_s` interfaces for use by the following components:  
 
 
-- Upper-half  
+- `Upper-half`  
 - `ioctl` system calls  
 - Other driver programs  
 - Kernel modules  
@@ -274,7 +273,7 @@ The lower-half driver provides standardized `struct timer_ops_s` interfaces for 
 #### Interface Grouping  
 
 
-- Lower-half interfaces are divided into two groups based on time units:  
+- `lower-half` interfaces are divided into two groups based on time units:  
   - In units of `struct timespec`.  
   - In units of `tick`.  
 
@@ -284,7 +283,7 @@ The lower-half driver provides standardized `struct timer_ops_s` interfaces for 
 
 #### Interface Definitions  
 
-The following is the detailed definition of [struct timer_ops_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h#L163):  
+The following is the detailed definition of [struct timer_ops_s](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h):  
 
 ```c
 struct timer_ops_s
@@ -331,7 +330,7 @@ The following is a functional description of some interfaces.
    ```  
 
 
-2. **`TIMER_STOP`**  
+2. `TIMER_STOP`
    Stop the Timer.  
 
    ```c
@@ -340,7 +339,7 @@ The following is a functional description of some interfaces.
    ```  
 
 
-3. **`TIMER_GETSTATUS/TIMER_TICK_GETSTATUS`**  
+3. `TIMER_GETSTATUS/TIMER_TICK_GETSTATUS`  
    Get the current status of the Timer. The interface is implemented in two units:  
 
 
@@ -362,7 +361,7 @@ The following is a functional description of some interfaces.
   ```  
 
 
-4. **`TIMER_MAXTIMEOUT/TIMER_TICK_MAXTIMEOUT`**  
+4. `TIMER_MAXTIMEOUT/TIMER_TICK_MAXTIMEOUT`
    Get the maximum timeout supported by the Timer.  
 
 
@@ -384,7 +383,7 @@ The following is a functional description of some interfaces.
   ```  
 
 
-5. **`TIMER_SETCALLBACK`**  
+5. `TIMER_SETCALLBACK`  
    Set the Timer's timeout callback function.  
 
    ```cpp
@@ -393,8 +392,8 @@ The following is a functional description of some interfaces.
    ```  
 
 
-6. **`TIMER_IOCTL`**  
-   The lower-half `ioctl` interface for handling commands not recognized by the upper-half driver.  
+6. `TIMER_IOCTL`  
+   The `lower-half` `ioctl` interface for handling commands not recognized by the `upper-half` driver.  
 
    ```cpp
    CODE int (*ioctl)(FAR struct timer_lowerhalf_s *lower, int cmd,
@@ -402,7 +401,7 @@ The following is a functional description of some interfaces.
    ```  
 
 
-For the implementation of lower-half interfaces, please refer to [Lower-half Interface Implementation](#2-implement-lower-half-interfaces).  
+For the implementation of `lower-half`interfaces, please refer to [Lower-half Interface Implementation](#2-implement-lower-half-interfaces).  
 
 
 ## IV. Call Flow Description  
@@ -429,20 +428,20 @@ The following is the call flow chart in Tickless mode:
 ![img](./figures/003.svg)  
 
 
-1. **Initialize the timer**:  
+1. Initialize the timer:  
    During system initialization, `arch timer` completes initialization, and the `up_timer_set_lowerhalf` is called to bind the timer instance.  
 
-2. **Calculate timeout**:  
+2. Calculate timeout:  
    `sched` queries all currently registered `wd` and selects the shortest timeout as the next execution time.  
 
-3. **Configure the timer**:  
+3. Configure the timer:  
    - Call `TIMER_TICK_SETTIMEOUT` to set the new timer timeout period.  
    - Call `up_timer_tick_start` to start the timer.  
 
-4. **Trigger timeout callback**:  
+4. Trigger timeout callback:  
    When the timer times out, trigger the `timer_callback` callback function to notify `sched` of the timeout event.  
 
-5. **Subsequent scheduling**:  
+5. Subsequent scheduling:  
    `nxsched_resume_timer` reassigns the timeout period to the timer and starts the next timer or task as needed.  
 
 
@@ -453,21 +452,21 @@ The following is the call flow chart in Tickless mode:
 In Tick mode:  
 
 
-- `sched` enables a periodic timer (arch timer) with a fixed time interval.  
+- `sched` enables a periodic timer (`arch timer`) with a fixed time interval.  
 - The timer's time interval is configured as `CONFIG_USEC_PER_TICK` microseconds and runs fixed with the system's work cycle.  
 - The system starts the periodic timer upon initializing `arch timer`, eliminating the need for frequent calls to `start` and `stop` interfaces.  
 
 
 #### Process Description  
 
-1. **Timer initialization**:  
+1. Timer initialization:  
    `arch timer` directly starts the periodic timer during the initialization phase, with an interval of `CONFIG_USEC_PER_TICK` microseconds.  
 
-2. **Periodic triggering**:  
+2. Periodic triggering:  
    - The timer triggers events at fixed intervals without dynamic timeout calculation.  
    - Reduces the frequency of `start` and `stop` interface calls.  
 
-3. **Realtime guarantee**:  
+3. Realtime guarantee:  
    Each timer timeout triggers the scheduler for scheduling to meet the execution requirements of periodic tasks.  
 
 
@@ -477,7 +476,7 @@ Taking `nrf52` (based on the ARMv7-M architecture) as an example, the driver ada
 
 
 1. Implement the initialization interface `up_timer_initialize` and register `timer_register`.  
-2. Implement lower-half interfaces to control hardware operation.  
+2. Implement `lower-half` interfaces to control hardware operation.  
 
 
 The specific implementations of these two parts are introduced separately below.  
@@ -533,17 +532,17 @@ struct timer_lowerhalf_s *systick_initialize(bool coreclk,
 ```  
 
 
-### 2. Implement Lower-half Interfaces  
+### 2. Implement `lower-half` Interfaces  
 
 The lower-half is the driver interface part that implements hardware functions, and developers need to implement and define specific methods. The following are the contents that developers need to focus on:  
 
 
-#### Lower-half Methods  
+#### `lower-half` Methods  
 
 In the ARMv7-M Arch Timer adaptation, the lower-half methods appear as follows:  
 
 
-File path: [arch/arm/src/armv7-m/arm_systick.c](https://github.com/open-vela/nuttx/blob/dev/arch/arm/src/armv7-m/arm_systick.c)  
+File path: [arch/arm/src/armv7-m/arm_systick.c](../../../../../../../../nuttx/blob/dev/arch/arm/src/armv7-m/arm_systick.c)  
 
 ```c
 /* "Lower half" driver methods */
@@ -569,10 +568,10 @@ This chapter briefly introduces POSIX API interfaces related to timers and clock
 The following is a brief overview of timing-related POSIX APIs. For specific usage of these interfaces, please refer to the relevant `man` pages.  
 
 
-Header file location: [include/time.h](https://github.com/open-vela/nuttx/blob/dev/include/time.h)  
+Header file location: [include/time.h](../../../../../../../../nuttx/blob/dev/include/time.h)  
 
 
-1. **`timer_create`**  
+1. `timer_create` 
 
    ```c
    /*
@@ -587,7 +586,7 @@ Header file location: [include/time.h](https://github.com/open-vela/nuttx/blob/d
    ```  
 
 
-2. **`timer_delete`**  
+2. `timer_delete`  
 
    ```c
    /*
@@ -600,7 +599,7 @@ Header file location: [include/time.h](https://github.com/open-vela/nuttx/blob/d
    ```  
 
 
-3. **`timer_settime`**  
+3. `timer_settime`  
 
    ```c
    /* Set the timer
@@ -618,7 +617,7 @@ Header file location: [include/time.h](https://github.com/open-vela/nuttx/blob/d
    ```  
 
 
-4. **`timer_gettime`**  
+4. `timer_gettime`  
 
    ```c
    /*
@@ -632,7 +631,7 @@ Header file location: [include/time.h](https://github.com/open-vela/nuttx/blob/d
    ```  
 
 
-5. **`timer_getoverrun`**  
+5. `timer_getoverrun`  
 
    ```c
    /*
@@ -651,7 +650,7 @@ Application-level programs can directly operate the timer through the `ioctl` fu
 
 #### Supported IOCTL Commands  
 
-The following are currently supported IOCTL commands, with related interface definitions in [include/nuttx/timers/timer.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/timer.h):  
+The following are currently supported IOCTL commands, with related interface definitions in [include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/timer.h):  
 
 
 - `TCIOC_START`: Start the timer.  
@@ -669,7 +668,6 @@ This chapter describes how to test timer functions through IOCTL interfaces and 
 
 - API testing  
 - IOCTL interface testing  
-
 
 The descriptions and code implementations are provided separately below.  
 
@@ -701,11 +699,10 @@ This section describes how to test timer-related functions, verifying the entire
 This example tests the following functions through the timer's POSIX API:  
 
 
-1. **Timer creation**: Tests the `timer_create` API to implement timer creation.  
-2. **Timer configuration**: Tests the `timer_settime` and `timer_gettime` APIs to verify timer time setting and retrieval.  
-3. **Timer triggering**: Tests the callback function during timer use.  
-4. **Timer deletion**: Verifies whether timer resources are correctly released through `timer_delete`.  
-
+1. Timer creation: Tests the `timer_create` API to implement timer creation.  
+2. Timer configuration: Tests the `timer_settime` and `timer_gettime` APIs to verify timer time setting and retrieval.  
+3. Timer triggering: Tests the callback function during timer use.  
+4. Timer deletion: Verifies whether timer resources are correctly released through `timer_delete`.  
 
 The following is a detailed explanation of the code, with comments at each step for easy understanding.  
 
@@ -929,11 +926,11 @@ This chapter describes how to test timer functions through IOCTL interfaces, wit
 Control the timer device (e.g., `/dev/timerX`) through IOCTL interface commands to implement the following functions:  
 
 
-1. **Start the timer**: Start the timer through the `TCIOC_START` control instruction.  
-2. **Stop the timer**: Stop the timer through the `TCIOC_STOP` control instruction.  
-3. **Set the timer interval**: Dynamically adjust the trigger interval using `TCIOC_SETTIMEOUT`.  
-4. **Register a callback**: Register the SIG action after timer timeout through `TCIOC_NOTIFICATION`.  
-5. **Verify timing interval accuracy**: Verify the timer's time precision by sampling and validating timestamps.  
+1. Start the timer: Start the timer through the `TCIOC_START` control instruction.  
+2. Stop the timer: Stop the timer through the `TCIOC_STOP` control instruction.  
+3. Set the timer interval: Dynamically adjust the trigger interval using `TCIOC_SETTIMEOUT`.  
+4. Register a callback: Register the SIG action after timer timeout through `TCIOC_NOTIFICATION`.  
+5. Verify timing interval accuracy: Verify the timer's time precision by sampling and validating timestamps.  
 
 
 #### Code Implementation  
