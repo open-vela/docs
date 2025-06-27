@@ -1,5 +1,7 @@
 # UART 驱动适配与使用指南
 
+\[ [English](../../../../../en/device_dev_guide/driver/bus_driver/UART/UART.md) | 简体中文 \]
+
 ## 一、概述
 
 ### 1、简介
@@ -553,9 +555,9 @@ arch/risc-v/src/esp32c3/esp32c3_serial.c
 
 1. 中断操作：
 
-- 调用 `uart_xmitchars` 函数，将数据从发送缓冲区写入硬件 FIFO。
-- 通过 `poll_notify` 通知应用程序可写事件（`POLLOUT`），唤醒等待写入的线程或任务。
-- 若线程被阻塞在写操作，调用 `nxsem_post(&dev->xmitsem)` 唤醒线程。
+    - 调用 `uart_xmitchars` 函数，将数据从发送缓冲区写入硬件 FIFO。
+    - 通过 `poll_notify` 通知应用程序可写事件（`POLLOUT`），唤醒等待写入的线程或任务。
+    - 若线程被阻塞在写操作，调用 `nxsem_post(&dev->xmitsem)` 唤醒线程。
 
 ##### 读事件处理流程
 
@@ -720,7 +722,7 @@ int file_ioctl(FAR struct file *filep, int req, ...);
 
     - 输入数字 `0` 并按下回车键。
     - 再输入符号 `#` 并按下回车键确认。
-@    - 测试完成，验证输入是否符合预期。
+    - 测试完成，验证输入是否符合预期。
 
 运行以上测试后，如果成功，程序将输出`[  PASSED  ] 3 test(s)`。
 
@@ -751,3 +753,10 @@ int main(int argc, FAR char *argv[])
   return cmocka_run_group_tests(tests, NULL, NULL);
 }
 ```
+
+## 六、参考资料
+
+以下资源提供了关于 UART 驱动及 TTY 工作原理的进一步说明：
+
+- [NuttX RTOS for PinePhone: UART Driver](https://lupyuen.github.io/articles/uart)
+- [The TTY Demystified](https://www.linusakesson.net/programming/tty/)

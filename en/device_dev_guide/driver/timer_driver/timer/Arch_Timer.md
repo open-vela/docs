@@ -140,7 +140,7 @@ When adapting the **board**, the following three key options need to be configur
 2. Enable Arch Timer: Configure the `CONFIG_TIMER_ARCH` option to enable the `arch timer` module. This option allows architecture-level support for architecture-related timer functions.  
 3. Enable Tickless Mode: Configure `CONFIG_SCHED_TICKLESS` to enable Tickless mode. 
 
-- Characteristics of Tickless Mode: No periodic clock interrupts. When no tasks are executing, the system enters an idle (Idle) mode and resumes when the next task executes or an interrupt occurs.  
+    - Characteristics of Tickless Mode: No periodic clock interrupts. When no tasks are executing, the system enters an idle (Idle) mode and resumes when the next task executes or an interrupt occurs.  
 
 
 #### Configuration File Paths  
