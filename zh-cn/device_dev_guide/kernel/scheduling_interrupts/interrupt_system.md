@@ -1,5 +1,7 @@
 # 中断系统
 
+\[ [English](../../../../en/device_dev_guide/kernel/scheduling_interrupts/interrupt_system.md) | 简体中文 \]
+
 ## 一、实现芯片中断调试
 
 在调试芯片中断子系统（`bringup`）时，厂商需要实现一系列与架构相关的函数（`arch` 函数），以完成以下任务：
@@ -14,7 +16,7 @@
 
 以下是厂商（Vendor）需要实现的中断相关函数及其功能说明。
 
-#### 1.1 初始化中断系统
+#### 1. 初始化中断系统，包括禁用所有中断、配置向量表位置、设置默认优先级以及启用中断。
 
 ```C
 void up_irqinitialize(void)
@@ -27,9 +29,7 @@ void up_irqinitialize(void)
 }
 ```
 
-此函数用于初始化中断系统，包括禁用所有中断、配置向量表位置、设置默认优先级以及启用中断。
-
-#### 1.2 启用指定中断
+#### 2. 启用指定中断
 
 ```C
 void up_enable_irq(int irq)
@@ -40,7 +40,7 @@ void up_enable_irq(int irq)
 
 此函数用于启用指定的中断号。
 
-#### 1.3 禁用指定中断
+#### 3. 禁用指定的中断号
 
 ```C
 void up_disable_irq(int irq)
@@ -49,9 +49,7 @@ void up_disable_irq(int irq)
 }
 ```
 
-此函数用于禁用指定的中断号。
-
-#### 1.4 （可选）设置中断优先级
+#### 4. 设置中断优先级
 
 如果启用了 `CONFIG_ARCH_IRQPRIO` 配置，则需要实现以下函数：
 
@@ -64,11 +62,7 @@ int up_prioritize_irq(int irq, int priority)
 #endif
 ```
 
-此函数用于设置指定中断的优先级。
-
-#### 1.5 中断状态管理
-
-以下函数用于管理中断状态：
+#### 5. 管理中断状态
 
 - 判断 `flags` 当前是否是关中断状态。
 
@@ -82,7 +76,6 @@ int up_prioritize_irq(int irq, int priority)
     // 关中断
     irqstate_t up_irq_save(void)
     {
-
     }
     ```
 
@@ -92,7 +85,6 @@ int up_prioritize_irq(int irq, int priority)
     // 恢复flags表示的中断状态
     void up_irq_restore(irqstate_t flags)
     {
-
     }
     ```
 
@@ -114,18 +106,14 @@ int up_prioritize_irq(int irq, int priority)
     }
     ```
 
-#### 1.6 核间中断
-
-以下函数用于处理核间中断：
+#### 6. 处理核间中断
 
 ```C
 // 发起核间中断
 void up_trigger_irq(int irq, cpu_set_t cpuset)
 ```
 
-#### 1.7 中断安全属性
-
-以下函数用于设置中断的安全属性：
+#### 7. 设置中断的安全属性
 
 - 设置指定中断的安全属性。
 
@@ -143,23 +131,23 @@ void up_trigger_irq(int irq, cpu_set_t cpuset)
 
 ### 2、需要定义的中断相关宏
 
-除上面的函数实现，厂商还需定义一系列中断相关的宏，用于描述 NVIC 的配置，这些宏需定义在`chips/chip_name/include/irq.h` 文件中。可参考实现：[RTL8720C 示例](https://github.com/open-vela/nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h)。
+除上面的函数实现，厂商还需定义一系列中断相关的宏，用于描述 NVIC（Nested vectored interrupt controller） 的配置，这些宏需定义在`chips/chip_name/include/irq.h` 文件中。可参考[RTL8720C 示例](../../../../../../../nuttx/blob/dev/arch/arm/src/rtl8720c/include/irq.h)。
 
 以下是必须实现的宏及其功能说明：
 
-#### 2.1 第一个中断向量号
+#### 1. 第一个中断向量号
 
 ```C
 #define NVIC_IRQ_FIRST  (16)   /* Vector number of the first interrupt */
 ```
 
-#### 2.2 中断数量
+#### 2. 中断数量
 
 ```C
 #define NR_IRQS (64)
 ```
 
-#### 2.3 NVIC 优先级级别
+#### 3. NVIC 优先级级别
 
 - 最低优先级
 
@@ -201,25 +189,23 @@ void up_trigger_irq(int irq, cpu_set_t cpuset)
 int irq_attach(int irq, xcpt_t isr, FAR void *arg)
 ```
 
-#### 工作机制
+#### 1. 工作机制
 
-- 当中断触发时，`isr` 在中断上下文中被调用。
-- 这种方式的优点是效率高，因为中断处理直接在中断上下文中完成。
-- `isr` 执行期间会屏蔽所有中断应，对实时性要求较高的系统不太合适。
-- `isr`中不能调用会导致阻塞的 API（例如 `sleep`、`wait` 等）。
+ - 当中断触发时，`isr` 在中断上下文中被调用。
+ - 这种方式的优点是效率高，因为中断处理直接在中断上下文中完成。
+ - `isr` 执行期间会屏蔽所有中断响应，对实时性要求较高的系统不太合适。
+ - `isr`中不能调用会导致阻塞的 API（例如 `sleep`、`wait` 等）。
 
-#### 解除绑定
+#### 2. 解除绑定
 
-- 使用以下方法解除绑定：
+```C
+irq_detach(irq)
+```
 
-    ```C
-    irq_detach(irq)
-    ```
+#### 3.优缺点
 
-#### 优缺点
-
-- 优点：处理效率高。
-- 缺点：中断处理期间屏蔽所有中断，影响系统实时性。
+ - 优点：处理效率高。
+ - 缺点：中断处理期间屏蔽所有中断，影响系统实时性。
 
 ### 2、使用`irq_attach_thread`
 
@@ -227,25 +213,25 @@ int irq_attach(int irq, xcpt_t isr, FAR void *arg)
 int irq_attach_thread(int irq, xcpt_t isr, xcpt_t isrthread, FAR void *arg, int priority, int stack_size)
 ```
 
-#### 工作机制
+#### 1. 工作机制
 
 - 用户需提供 1 个或者 2 个处理函数：
     - `isr` 在中断上下文中被调用，通常用于屏蔽当前中断并快速唤醒 `isrthread`。
     - `isrthread` 在线程上下文中被调用，用于处理剩余中断任务。
 - 如果 `isr` 为 `NULL`，会直接调用 `isrthread`。
 
-#### 优势
+#### 2. 优势
 
 - `isr` 的执行时间被尽可能缩短，从而提升系统实时性。
 - `isrthread` 作为线程运行，支持优先级调度，可以被其他高优先级任务抢占。
 
-#### 劣势
+#### 3. 劣势
 
 - 消耗更多内存（独立线程栈和中断线程结构体）。
 - 增加一次上下文切换，降低效率。
 - 中断处理完成时间会有一定延迟（约 5 微秒）。
 
-#### 解除绑定
+#### 4. 解除绑定
 
 - 使用以下方法解除绑定：
 
@@ -259,33 +245,31 @@ int irq_attach_thread(int irq, xcpt_t isr, xcpt_t isrthread, FAR void *arg, int 
 int irq_attach_wqueue(int irq, xcpt_t isr, xcpt_t isrwork, FAR void *arg, int priority)
 ```
 
-#### 工作机制
+#### 1. 工作机制
 
-- 用户需提供 1 个或 2 个处理函数：
-    - `isr` 在中断上下文中被调用。
-    - `isrwork` 在工作队列上下文中被调用。
-- 与 `irq_attach_thread` 的区别在于，`isrwork` 在工作队列中被执行，而不是独立线程中。
+ - 用户需提供 1 个或 2 个处理函数：
+     - `isr` 在中断上下文中被调用。
+     - `isrwork` 在工作队列上下文中被调用。
+ - 与 `irq_attach_thread` 的区别在于，`isrwork` 在工作队列中被执行，而不是独立线程中。
 
-#### 优势
+#### 2. 优势
 
-- 多个优先级相同的中断可以复用同一个工作队列，从而节省内存。
-- 高优先级的工作队列可以抢占低优先级队列。
-- 如果中断数量较多，比 `irq_attach_thread` 更节省内存。
+ - 多个优先级相同的中断可以复用同一个工作队列，从而节省内存。
+ - 高优先级的工作队列可以抢占低优先级队列。
+ - 如果中断数量较多，比 `irq_attach_thread` 更节省内存。
 
-#### 劣势
+#### 3. 劣势
 
-- 如果只有一个中断，工作队列的创建会带来额外开销。
-- 在多核系统中，控制线程属性和数量的灵活性较差。
+ - 如果只有一个中断，工作队列的创建会带来额外开销。
+ - 在多核系统中，控制线程属性和数量的灵活性较差。
 
-#### 解除绑定
+#### 4. 解除绑定
 
-- 使用以下方法解除绑定：
+```C
+irq_detach_wqueue(irq)
+```
 
-    ```C
-    irq_detach_wqueue(irq)
-    ```
-
-### 4、总结对比
+### 总结对比
 
 | 绑定方式          | 优点                             | 缺点                                               | 使用场景                             |
 | :---------------- | :------------------------------- | :------------------------------------------------- | :----------------------------------- |
@@ -312,9 +296,7 @@ irq_attach_work(IRQ, isrhandle, isrwork, arg, 253)
 
 ### 2、中断处理函数示例
 
-在 `isrhandle` 中返回 `IRQ_WAKE_THREAD`，以唤醒中断线程或工作队列。如果返回 `OK`，则不会唤醒中断线程。
-
-#### 示例代码
+在 `isrhandle` 中返回 `IRQ_WAKE_THREAD`，以唤醒中断线程或工作队列。如果返回 `OK`，则不会唤醒中断线程。示例代码如下：
 
 ```C
 static int isrhandle(int irq, void *regs, void *arg)  
@@ -326,9 +308,7 @@ static int isrhandle(int irq, void *regs, void *arg)
 
 ### 3、中断线程/工作队列处理函数示例
 
-`isrwork` 用于处理中断任务，并在完成后清除中断状态。
-
-#### 示例代码
+`isrwork` 用于处理中断任务，并在完成后清除中断状态。示例代码如下：
 
 ```C
 static int isrwork(int irq, void *regs, void *arg)
@@ -361,7 +341,7 @@ struct irq_info_s g_irqvector[NR_IRQS];
 
 为了解决上述问题，可以通过如下动态映射的方式优化中断结构体的存储。
 
-#### 1.1 映射关系数组
+#### 映射关系数组
 
 定义一个映射关系数组，用于动态建立中断号与中断结构体的映射：
 
@@ -372,7 +352,7 @@ irq_mapped_t g_irqmap[NR_IRQS]
 - 该数组仅占用 `NR_IRQS` 字节的额外内存。
 - 在中断使用时，动态建立映射关系。
 
-#### 1.2 精简中断结构体数组
+#### 精简中断结构体数组
 
 将 `g_irqvector` 定义为：
 
@@ -383,7 +363,7 @@ struct irq_info_s g_irqvector[CONFIG_ARCH_NUSER_INTERRUPTS];
 - `CONFIG_ARCH_NUSER_INTERRUPTS` 表示系统中可能使用的最大中断数量加 1 。
 - 通过限制数组大小，仅为实际可能使用的中断分配内存。
 
-#### 1.3 中断使用统计
+#### 中断使用统计
 
 使用 `g_irqmap_count` 统计当前已使用的中断数量，便于监控和调试。
 
@@ -409,4 +389,4 @@ CONFIG_ARCH_NUSER_INTERRUPTS=24
 
 ## 五、相关仓
 
-- [nuttx](https://github.com/open-vela/nuttx)
+- [nuttx](../../../../../../../nuttx)
