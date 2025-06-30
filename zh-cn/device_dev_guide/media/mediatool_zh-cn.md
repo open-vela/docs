@@ -1,8 +1,8 @@
 # Mediatool 使用指南
 
-[[English](./mediatool.md) | 简体中文]
+[[English](../../../en/device_dev_guide/media/mediatool.md) | 简体中文]
 
-Mediatool 是一款测试程序，用于验证 Media Framework API 的功能，可基于模拟的实际使用场景测试媒体框架。 
+Mediatool 是一款测试程序，用于验证 Media Framework API 的功能，可基于模拟的实际使用场景测试媒体框架。
 
 ## 一、配置 Mediatool 工具
 

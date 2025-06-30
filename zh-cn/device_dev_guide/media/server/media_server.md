@@ -1,6 +1,6 @@
-# 服务端
+# Media Server 开发指南
 
-[[English](./README.md) | 简体中文]
+[[English](../../../../en/device_dev_guide/media/server/media_server.md) | 简体中文]
 
 ## 一、概述
 
@@ -29,7 +29,7 @@
 
 Media Daemon 是 Media Server的核心，负责创建和管理 Media 的各个模块，如 `Media Focus`、`Media Graph`、`Media Session`、`Media Policy` 等。`Medid Daemon` 的核心原理是使用 `poll` 函数, 监听 `RPC socket fd`，和音视频设备驱动注册的 `message queue fd`，处理 RPC 命令并触发 FFmpeg 工作。
 
-![Media Daemon架构图](../images/server/Media_Daemon_zh-cn.jpg)
+<img src="../images/server/Media_Daemon_zh-cn.jpg" alt="Media Daemon架构图" width="75%">
 
 Media Daemon 的主要工作在一个循环中进行，大体步骤如下：
 
@@ -47,7 +47,7 @@ Media Focus 模块是 Media Server 的一个重要组成部分，目的是给多
 - 声音事件类型的输入以 `media wrapper` 中的不同 `MEDIA_SCENARIO_XXX` 宏为准。目前包含 11 种类型的声音事件。
 - 支持应用发起**焦点请求**、**放弃焦点请求**、**焦点改变通知**等功能。
 
-### 3、Media Garph
+### 3、Media Graph
 
 Media Graph 的原理是将音视频相关的 `filter` 的 `inputs`，`outputs` 链接在一起，构成播放和录制的链路。主要策略如下：
 
