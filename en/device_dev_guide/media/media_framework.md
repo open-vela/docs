@@ -56,11 +56,11 @@ A dual-socket communication model is used, with two independent sockets for comm
 
 <img src="./images/Distributed_Server_Architecture.jpg" alt="Media Distributed Server Architecture Diagram" width="75%">
 
-- [Client Model](./client/README.md)
-- [Server Model](./server/README.md)
+- [Client Model](./client/media_client.md)
+- [Server Model](./server/media_server.md)
 
 ## IV. **Test Media Framework**
 
  The Mediatool test program is used to test the Media Framework API, which can simulate real-world usage scenarios.
 
-[Test the Media Framework API with the Mediatool tool](./mediatool.md)
+[Mediatool User Guide](./mediatool.md)
