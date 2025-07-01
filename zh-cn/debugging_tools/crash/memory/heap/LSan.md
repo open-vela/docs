@@ -1,5 +1,7 @@
 # LeakSanitizer (LSan) 使用指南
 
+\[ [English](../../../../../en/debugging_tools/crash/memory/heap/LSan.md) | 简体中文 \]
+
 ## 一、概述
 
 LeakSanitizer (LSan) 是一款高效的堆内存泄漏检测工具。它作为运行时工具，能够在程序退出时自动检测并报告未释放的内存，帮助开发者定位和修复内存泄漏问题。LSan 可以与 [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer) (ASan) 或 [MemorySanitizer](https://github.com/google/sanitizers/wiki/MemorySanitizer) (MSan) 协同工作，也可以独立运行。

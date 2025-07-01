@@ -1,5 +1,7 @@
 # LeakSanitizer (LSan) User Guide
 
+\[ English | [简体中文](./../../../../../zh-cn/debugging_tools/crash/memory/heap/LSan.md) \]
+
 ## I. Overview
 
 LeakSanitizer (LSan) is an efficient heap memory leak detector. As a runtime tool, it automatically detects and reports memory that has not been freed when a program exits, helping developers locate and fix memory leaks. LSan can work in conjunction with [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer) (ASan) or [MemorySanitizer](https://github.com/google/sanitizers/wiki/MemorySanitizer) (MSan), or it can run standalone.
