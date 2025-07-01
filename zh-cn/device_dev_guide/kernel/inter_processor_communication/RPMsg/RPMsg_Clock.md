@@ -1,5 +1,7 @@
 # RPMsg Clock 使用指南
 
+\[ [English](../../../../../en/device_dev_guide/kernel/inter_processor_communication/RPMsg/RPMsg_Clock.md) | 简体中文 \]
+
 ## 一、简介
 
 RPMsg Clock（Remote Processor Messaging Clock）是一种基于 RPMsg 框架（Remote Processor Messaging Framework）构建的跨核时钟服务，用于实现跨核的时钟控制。
@@ -21,6 +23,9 @@ CONFIG_CLK_RPMSG=y
 ### 1、注册时钟资源
 
 Client 端能够访问或控制 Server 端时钟资源的前提是，Server 端已完成实际时钟子系统的初始化，即通过调用 `clk_register` 完成时钟资源的注册。Client 端无需进行时钟注册。
+
+有关时钟注册的示例代码，请参考以下链接：[nuttx/drivers/clk/song](https://github.com/FishsemiCode/nuttx/tree/song-u1/drivers/clk/song)
+
 
 ### 2、获取时钟实例
 
@@ -174,4 +179,4 @@ static int clk_rpmsg_enable_handler(FAR struct rpmsg_endpoint *ept,
 
 ## 五、相关文档
 
-- 有关时钟驱动的设计，请参考 [Clock](https://github.com/open-vela/docs/blob/dev/zh-cn/device_dev_guide/power_mgt/Clock.md)。
+- 有关时钟驱动的设计，请参考 [Clock](../../../../../zh-cn/device_dev_guide/power_mgt/Clock.md)。
