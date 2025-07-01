@@ -1,5 +1,7 @@
 # 时钟框架概述
 
+\[ [English](../../../en/device_dev_guide/power_mgt/Clock.md) | 简体中文 \]
+
 ## 一、时钟配置
 
 ### 配置选项
@@ -44,9 +46,9 @@ CONFIG_CLK_RPMSG=y //支持跨核控制
 | **phase**       | `get_phase`           | 获取时钟相位。                                       |
 |                 | `set_phase`           | 设置时钟相位。                                       |
 
-#### `struct clk_ops_s` 定义
+- `struct clk_ops_s` 定义
 
-以下是 `struct clk_ops_s` 的定义及其接口参数：
+  以下是 `struct clk_ops_s` 的定义及其接口参数：
 
 ```C
 struct clk_ops_s
@@ -72,9 +74,9 @@ struct clk_ops_s
 };
 ```
 
-#### 时钟节点注册接口
+- 时钟节点注册接口
 
-框架提供 `clk_register` 接口，用于注册时钟控制节点。定义如下：
+  框架提供 `clk_register` 接口，用于注册时钟控制节点。定义如下：
 
 ```C
 FAR struct clk_s *clk_register(FAR const char *name,
@@ -126,7 +128,7 @@ FAR struct clk_s *clk_register_divider(FAR const char *name,
                                        uint16_t clk_divider_flags)
 ```
 
-##### 参数说明
+- 参数说明
 
 | **参数**          | **说明**                             |
 | ----------------- | ------------------------------------ |
@@ -140,7 +142,7 @@ FAR struct clk_s *clk_register_divider(FAR const char *name,
 
 - 功能：根据 `reg` 对应位的值对父时钟频率进行分频。
 
-##### 属性及计算公式
+- 属性及计算公式
 
 以下是分频器的属性标志及其计算公式和作用：
 
@@ -156,7 +158,7 @@ FAR struct clk_s *clk_register_divider(FAR const char *name,
 | **CLK_DIVIDER_MINDIV_OFF**    | `flags` 中最小除法数的偏移量。                                                                  |
 | **CLK_DIVIDER_MINDIV_MSK**    | `flags` 中最小除法数的位掩码。                                                                  |
 
-##### `round_rate` 算法流程
+- `round_rate` 算法流程
 
 以下是分频器 `round_rate` 算法的流程图：
 
@@ -171,29 +173,29 @@ FAR struct clk_s *clk_register_fixed_factor(FAR const char *name,
                                             uint8_t div)
 ```
 
-##### 调频公式
+- 调频公式
 
-固定系数调频器的输出频率 (fout) 通过以下公式计算：
+  固定系数调频器的输出频率 (fout) 通过以下公式计算：
 
-`fout = fin * mult / div`
+  `fout = fin * mult / div`
+```shell
+    fin：父时钟频率。
+    mult：倍频因子。
+    div：分频因子。
+    round_rate 算法
+```
 
-- `fin`：父时钟频率。
-- `mult`：倍频因子。
-- `div`：分频因子。
+- `round_rate` 算法用于计算最接近目标频率的输出频率，具体步骤如下：
 
-##### `round_rate` 算法
+  1. 根据目标输出频率 (`fout`) 反推父时钟频率 (`fp`)：
 
-`round_rate` 算法用于计算最接近目标频率的输出频率，具体步骤如下：
+      fp = fout * div / mult
 
-1. 根据目标输出频率 (`fout`) 反推父时钟频率 (`fp`)：
+  2. 对父时钟频率 (`fp`) 进行四舍五入，得到最接近的父时钟频率 (`fpbest`)。
 
-    `fp = fout * div / mult`
+  3. 根据最优父时钟频率 (`fpbest`) 计算最优输出频率 (`foutbest`)：
 
-2. 对父时钟频率 (`fp`) 进行四舍五入，得到最接近的父时钟频率 (`fpbest`)。
-
-3. 根据最优父时钟频率 (`fpbest`) 计算最优输出频率 (`foutbest`)：
-
-    `foutbest = fpbest * mult / div`
+     foutbest = fpbest * mult / div
 
 #### 3.3 固定频率调节器
 
@@ -228,7 +230,7 @@ FAR struct clk_s *clk_register_multiplier(FAR const char *name,
                                           uint8_t clk_multiplier_flags)
 ```
 
-##### 参数说明
+- 参数说明
 
 | 参数  | 说明               |
 | ----- | ------------------ |
@@ -236,7 +238,7 @@ FAR struct clk_s *clk_register_multiplier(FAR const char *name,
 | shift | 倍频寄存器偏移量。 |
 | width | 倍频寄存器宽度。   |
 
-##### 倍频器属性及计算公式
+- 倍频器属性及计算公式
 
 以下是倍频器的属性标志及其计算公式和作用：
 
@@ -248,7 +250,7 @@ FAR struct clk_s *clk_register_multiplier(FAR const char *name,
 | CLK_MULT_MAX_HALF      | 计算最大倍频系数为掩码值的一半。                                                  |
 | CLK_MULT_ROUND_CLOSEST | 在 round_rate 时，寻找最接近目标频率的倍频值。                                    |
 
-##### `round_rate` 算法流程
+- `round_rate` 算法流程
 
 ![img](./figures/003.svg)
 
@@ -263,7 +265,7 @@ FAR struct clk_s *clk_register_mux(FAR const char *name,
                                    uint8_t clk_mux_flags)
 ```
 
-##### 参数说明
+- 参数说明
 
 | 参数  | 说明                     |
 | ----- | ------------------------ |
@@ -271,9 +273,9 @@ FAR struct clk_s *clk_register_mux(FAR const char *name,
 | shift | 多路选择器寄存器偏移量。 |
 | width | 多路选择器寄存器宽度。   |
 
-- 功能：根据 `reg` 对应的位选择父时钟频率输出。
+功能：根据 `reg` 对应的位选择父时钟频率输出。
 
-##### 多路选择器属性说明
+- 多路选择器属性说明
 
 | 属性                  | 说明                                                                            |
 | --------------------- | ------------------------------------------------------------------------------- |
@@ -281,7 +283,7 @@ FAR struct clk_s *clk_register_mux(FAR const char *name,
 | CLK_MUX_READ_ONLY     | 只支持获取父时钟频率，不支持修改。                                              |
 | CLK_MUX_ROUND_CLOSEST | 在 determine_rate 时，寻找最接近目标频率的父时钟频率。                          |
 
-##### `determine_rate` 步骤
+- `determine_rate` 步骤
 
 ![img](./figures/004.png)
 
@@ -295,7 +297,7 @@ FAR struct clk_s *clk_register_phase(FAR const char *name,
                                      uint8_t clk_phase_flags)
 ```
 
-##### 参数说明
+- 参数说明
 
 | 参数  | 说明                     |
 | ----- | ------------------------ |
@@ -303,9 +305,9 @@ FAR struct clk_s *clk_register_phase(FAR const char *name,
 | shift | 相位调节器寄存器偏移量。 |
 | width | 相位调节器寄存器宽度。   |
 
-- 功能：根据 `reg` 对应的位选择父时钟频率，并进行相位调节。
+功能：根据 `reg` 对应的位选择父时钟频率，并进行相位调节。
 
-##### 相位调节器属性说明
+- 相位调节器属性说明
 
 | **属性**              | **说明**                                                                          |
 | :-------------------- | :-------------------------------------------------------------------------------- |
@@ -323,7 +325,7 @@ clk_register_fractional_divider(FAR const char *name,
                                 uint8_t clk_divider_flags)
 ```
 
-##### 参数说明
+- 参数说明
 
 | 参数   | 说明                         |
 | ------ | ---------------------------- |
@@ -333,9 +335,9 @@ clk_register_fractional_divider(FAR const char *name,
 | nshift | 分数除法器分子寄存器偏移量。 |
 | nwidth | 分数除法器分子寄存器宽度。   |
 
-- 功能：根据 `reg` 对应的位选择父时钟频率，通过分数除法计算输出频率。
+功能：根据 `reg` 对应的位选择父时钟频率，通过分数除法计算输出频率。
 
-##### 分数除法器属性及计算公式
+- 分数除法器属性及计算公式
 
 | **属性**               | **说明**                                                               |
 | :--------------------- | :--------------------------------------------------------------------- |
@@ -366,11 +368,12 @@ clk_register_fractional_divider(FAR const char *name,
 
 通过 `/proc/clk` 文件节点，可以查看时钟树的结构关系，以及每个时钟节点的以下信息：
 
-- enable_cnt：时钟启用计数。
-- rate：时钟频率。
-- phase：时钟相位。
+   - enable_cnt：时钟启用计数。
+   - rate：时钟频率。
+   - phase：时钟相位。
 
-### 示例操作
+
+- 示例操作
 
 以下是通过 `cat` 命令查看 `/proc/clk` 文件的示例：
 
