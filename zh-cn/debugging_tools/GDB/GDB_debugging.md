@@ -1,5 +1,7 @@
 # GDB 调试指南
 
+\[ [English](../../../en/debugging_tools/GDB/GDB_debugging.md) | 简体中文 \]
+
 ## 一、概述
 
 本指南旨在为开发者提供一份全面而实用的 GNU Debugger (GDB) 操作手册。无论您是初学者还是希望深化嵌入式调试技能的开发者，都能从中获益。
