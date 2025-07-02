@@ -1,64 +1,69 @@
-# 使用 J-Link GDB 插件增强 openvela 线程调试
+# Using J-Link GDB Plug-in to Enhance openvela Thread Debugging  
 
-\[ [English](../../../../en/debugging_tools/crash/JLINK/J_Link.md) | 简体中文 \]
+\[ English | [简体中文](../../../../zh-cn/debugging_tools/crash/JLINK/J_Link.md) \] 
 
-## 一、概述
+## I. Overview  
 
-在标准的嵌入式开发流程中，使用 **SEGGER J-Link** 和 **GDB** (the GNU Project Debugger) 进行调试时，**GDB** 默认无法识别 **openvela**（基于 NuttX RTOS）的线程模型。这导致开发者无法列出当前系统的所有线程或在它们之间自由切换，极大地限制了多线程应用的调试效率。
+In standard embedded development workflows, when debugging with **SEGGER J-Link** and **GDB** (the GNU Project Debugger), **GDB** cannot recognize the thread model of **openvela** (based on NuttX RTOS) by default. This limitation prevents developers from listing all system threads or switching between them freely, significantly hindering debugging efficiency for multithreaded applications.  
 
-本指南详细介绍如何通过 **J-Link** 的 **RTOS** 插件，扩展 **GDB** 的调试能力，从而实现对 **openvela** 系统的线程级调试。您将学习如何编译、配置并使用该插件来查看线程信息、切换线程上下文、以及分析特定线程的调用栈。
+This guide details how to extend **GDB** debugging capabilities using the **J-Link** **RTOS** plug-in, enabling thread-level debugging for openvela systems. You will learn to compile, configure, and use the plug-in to view thread information, switch thread contexts, and analyze call stacks for specific threads.  
 
-## 二、先决条件
 
-在开始之前，请确保您的开发环境满足以下条件：
+## II. Prerequisites  
 
-- 已正确安装 **SEGGER J-Link** 驱动和相关工具。
-- 已准备好多架构 GDB 工具链（例如 `gdb-multiarch`）。
-- 拥有 openvela 项目的完整源代码。
+Ensure your development environment meets these requirements:  
 
-## 三、操作步骤
+- **SEGGER J-Link** drivers and tools are installed correctly.  
+- A multi-architecture GDB toolchain (e.g., `gdb-multiarch`) is available.  
+- The complete openvela project source code is accessible.  
 
-请遵循以下步骤来编译和启用线程调试插件。
 
-### 步骤 1：编译 RTOS 插件
+## III. Operation Steps  
 
-1. 插件的源代码位于 NuttX 的 `tools` 目录下。您需要手动编译生成动态库文件 (`.so`)。
+Follow these steps to compile and enable the thread debugging plug-in.  
 
-    ```Bash
+
+### Step 1: Compile the RTOS Plug-in  
+
+1. Locate the plug-in source code in NuttX's `tools` directory and compile the dynamic library (`.so`).  
+
+    ```bash
     cd nuttx/tools
-    ```
+    ```  
 
-2. 执行 `make` 命令编译插件。
+2. Execute the `make` command to build the plug-in:  
 
-    ```Makefile
+    ```makefile
     make -f Makefile.host jlink-nuttx.so
-    ```
+    ```  
 
-    编译成功后，将在当前目录下生成 `jlink-nuttx.so` 文件。
+    A successful compilation generates `jlink-nuttx.so` in the current directory.  
 
-### 步骤 2：启动 J-Link GDB 服务器并加载插件
 
-启动 J-Link GDB 服务器时，必须通过 `-rtos` 参数指定插件的绝对路径，以使其生效。
+### Step 2: Start J-Link GDB Server with Plug-in Loading  
 
-```Bash
+Launch the J-Link GDB server with the `-rtos` parameter specifying the plug-in's absolute path:  
+
+```bash
 JLinkGDBServer -if SWD -device Cortex-M55 -rtos <your-nuttx-project-path>/nuttx/tools/jlink-nuttx.so
-```
+```  
 
-- `-if SWD`: 指定调试接口为 SWD。
-- `-device Cortex-M55`: 指定目标设备的核心类型。请根据您的硬件平台进行修改。
-- `-rtos`: 指定 RTOS 插件的绝对路径。
+- `-if SWD`: Sets the debug interface to SWD.  
+- `-device Cortex-M55`: Specifies the target CPU core (modify for your hardware).  
+- `-rtos`: Designates the RTOS plug-in path.  
 
-### 步骤 3：连接 GDB 客户端并验证插件加载
 
-1. 启动 GDB 客户端，并连接到 J-Link GDB 服务器。默认端口为 `2331`。
+### Step 3: Connect GDB Client and Verify Plug-in Loading  
 
-    ```Bash
+1. Start the GDB client and connect to the J-Link GDB server (default port `2331`)  
+
+    ```bash
     gdb-multiarch nuttx -ex "target remote localhost:2331"
-    ```
+    ```  
 
-2. 观察 GDB 的启动信息。如果看到以下输出，则表示插件已成功加载。
+2. Check GDB startup messages for successful plug-in loading:  
 
-    ```Plaintext
+    ```plaintext
     Loading RTOS plugin: /<your-nuttx-project-path>/nuttx/tools/jlink-nuttx.so...
     RTOS plugin (API v1.0) loaded successfully
     RTOS plugin: Loaded
@@ -68,17 +73,19 @@ JLinkGDBServer -if SWD -device Cortex-M55 -rtos <your-nuttx-project-path>/nuttx/
     Received symbol: g_cpuload_total (0x3C036DE0)
     Received symbol: g_assignedtasks (0x00000000)
     All mandatory symbols successfully loaded.
-    ```
+    ```  
 
-## 四、核心调试命令与结果分析
 
-插件加载成功后，您可以使用 GDB 的标准线程命令来调试 openvela 系统。
+## IV. Core Debug Commands and Result Analysis  
 
-### 1、查看所有线程 (`info threads`)
+After loading the plug-in, use GDB's standard thread commands for openvela debugging.  
 
-此命令列出系统中所有正在运行的线程及其状态。
 
-```Bash
+### 1. List All Threads (`info threads`)  
+
+This command displays all running threads and their statuses:  
+
+```bash
   (gdb) info thread
   Id   Target Id                                           Frame
 * 2    Thread 1 ([PID:000]Idle Task:0003[PRI:000])         nx_start () at init/nx_start.c:797
@@ -94,35 +101,36 @@ JLinkGDBServer -if SWD -device Cortex-M55 -rtos <your-nuttx-project-path>/nuttx/
   12   Thread 14 ([PID:013]rpmsg-gpio:0005[PRI:224])       arm_switchcontext (saveregs=0x3c012acc, restoreregs=0x3c00efdc) at /home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121
   13   Thread 15 ([PID:014]rpmsg-uorb-audio:0005[PRI:100]) arm_switchcontext (saveregs=0x3c013cdc, restoreregs=0x3c014e2c) at /home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121
   14   Thread 16 ([PID:015]rpmsg-uorb-cp:0005[PRI:100])    arm_switchcontext (saveregs=0x3c014e2c, restoreregs=0x3c015fbc) at /home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121
-```
+```  
 
-如何解读输出信息：
+**Output interpretation:**  
+- `*`: Indicates the current GDB context thread (active thread).  
+- `Id`: Unique GDB thread identifier for subsequent operations.  
+- `Target Id`: Thread ID reported by J-Link plug-in (typically `Target Id = PID + 1` in openvela).  
+- Parentheses contain:  
+  - `PID`: Thread process ID.  
+  - `Name`: Thread name (e.g., `Idle Task`).  
+  - `PRI`: Thread priority.  
+- `Frame`: Current function and code location.  
 
-- `*` (星号)：标记当前 GDB 上下文所在的线程（即当前活动线程）。
-- `Id`：GDB 为每个线程分配的唯一标识符。后续的线程操作（如切换）将使用此 `Id`。
-- `Target Id`：由 J-Link 插件报告的线程 ID。在 openvela 中，`Target Id` 与 `PID` 的关系通常是 `Target Id = PID + 1`。例如，`Thread 2` 对应的系统 `PID` 是 `1`。
-- 括号内包含丰富的线程信息：
-    - `PID`: 线程的进程 ID。
-    - `Name`: 线程名称，如 `Idle Task`。
-    - `PRI`: 线程的实时优先级。
-- `Frame`：显示该线程当前停止的函数及代码位置。
 
-### 2、切换活动线程 (`thread <Id>`)
+### 2. Switch Active Thread (`thread <Id>`)  
 
-使用 `thread` 命令并指定 GDB `Id`，可以将调试上下文切换到目标线程。
+Switch debugging context to a target thread by GDB `Id`:  
 
-```Bash
+```bash
 (gdb) thread 4
 [Switching to thread 4 (Thread 19)]
 #0  arm_switchcontext (saveregs=0x3c015fbc, restoreregs=0x3c00efdc) at /home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121
 121          return reg0;
-```
+```  
 
-执行此命令后，GDB 的焦点将切换到 `Id` 为 `4` 的线程（即 `PID` 为 `18` 的 `rpmsg-uorb-sens` 任务）。后续的调试命令（如查看调用栈、寄存器）都将针对此线程执行。
+This switches GDB focus to thread `Id 4` (the `rpmsg-uorb-sens` task with `PID 18`), directing subsequent commands to this thread.  
 
-### 3、查看线程调用栈 (`bt`)
 
-```Bash
+### 3. View Thread Call Stack (`bt`)  
+
+```bash
 (gdb) bt
 #0  arm_switchcontext (saveregs=0x3c015fbc, restoreregs=0x3c00efdc) at /home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121
 #1  0x2c016ab6 in up_block_task (tcb=tcb@entry=0x3c015f30, task_state=task_state@entry=TSTATE_WAIT_SEM) at armv8-m/arm_blocktask.c:139
@@ -136,15 +144,15 @@ JLinkGDBServer -if SWD -device Cortex-M55 -rtos <your-nuttx-project-path>/nuttx/
 #9  0x2c00971a in nxtask_start () at task/task_start.c:130
 #10 0x00000000 in ?? ()
 Backtrace stopped: previous frame identical to this frame (corrupt stack?)
-```
+```  
 
-通过调用栈，您可以清晰地追踪函数的调用路径，例如从任务入口 `nxtask_start` 到当前阻塞点 `arm_switchcontext`。
+With the call stack, you can clearly trace the path of a function, e.g. from the task entry `nxtask_start` to the current choke point `arm_switchcontext`.
 
-### 4、查看栈帧信息 (`info frame`)
+### 4. View Stack Frame Details (`info frame`)  
+ 
+This command provides detailed information about the current stack frames, including program counters (PC), register save locations, and so on.
 
-此命令提供当前栈帧的详细信息，包括程序计数器（PC）、寄存器保存位置等。
-
-```Bash
+```bash
 (gdb) info frame
 Stack level 0, frame at 0x3c016b20:
  pc = 0x2c016f52 in arm_switchcontext (/home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121); saved pc = 0x2c016ab6
@@ -154,19 +162,19 @@ Stack level 0, frame at 0x3c016b20:
  Locals at 0x3c016b18, Previous frame's sp is 0x3c016b20
  Saved registers:
   r7 at 0x3c016b18, lr at 0x3c016b1c
-```
+```  
 
-可以看到：
+Key insights:  
+- Current PC address: `0x2c016f52`  
+- Context save address: `saveregs=0x3c015fbc`  
+- Context restore address: `restoreregs=0x3c00efdc`  
 
-- 当前 PC 指针地址为 `0x2c016f52`。
-- 上下文保存的地址为 `saveregs=0x3c015fbc`。
-- 恢复的地址为 `restoreregs=0x3c00efdc`。
 
-### 5、查看寄存器 (`info registers`)
+### 5. Display Register Values (`info registers`)  
 
-此命令显示当前活动线程上下文中的所有 CPU 寄存器值。
+View all CPU registers for the active thread:  
 
-```Bash
+```bash
 (gdb) info registers
 r0             0x2                 2
 r1             0x3c015fbc          1006723004
@@ -192,10 +200,10 @@ basepri        0x0                 0
 faultmask      0x0                 0
 control        0x0                 0
 fpscr          0x0                 0
-```
+```  
 
-您可以查看通用寄存器（`r0-r12`, `sp`, `lr`, `pc`）以及特殊寄存器（`xpsr`, `primask` 等）的值，以进行深度调试。
+You can view the values of general registers (`r0-r12`, `sp`, `lr`, `pc`) as well as special registers (`xpsr`, `primask`, etc.) for in-depth debugging.
 
-## 五、相关资料
+## V. Related Resources  
 
 - [ELC-E Linux Awareness in Debugger (PDF)](https://events.static.linuxfound.org/sites/events/files/slides/ELC-E%20Linux%20Awareness.pdf)
