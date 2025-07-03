@@ -103,8 +103,8 @@ sudo apt install gdb-multiarch
 | `info registers`         | 显示所有 CPU **寄存器**的当前值。                                                                                                                                                                                                             |
 | `info threads`           | 在多线程程序（如 openvela）中，显示所有线程及其 ID。                                                                                                                                                                                          |
 | `thread <id>`            | 切换到指定 ID 的线程上下文。                                                                                                                                                                                                                  |
-| `ptype <expr>`           | 显示变量或类型的**数据结构定义**。 例如 `ptype struct my_struct`。                                                                                                                                                                            |
-| `set var <name>=<value>` | 在运行时**修改变量的值**。 例如 `set var i = 10`。                                                                                                                                                                                            |
+| `ptype <expr>`           | 显示变量或类型的**数据结构定义**。 例如 <br>`ptype struct my_struct`。<br>                                                                                                                                                                    |
+| `set var <name>=<value>` | 在运行时**修改变量的值**。 例如 `set var i = 10`。不引起歧义时，可使用 `set i = 10`。                                                                                                                                                         |
 
 ### 5、与源码和汇编交互
 
@@ -115,7 +115,7 @@ sudo apt install gdb-multiarch
 | `layout asm`         | 分屏显示**汇编代码**。                                                                                                  |
 | `layout split`       | 分屏**同时显示源代码和汇编代码**。 <br> 在此模式下，可使用 `focus` 命令或快捷键 `Ctrl + X` + `O` 在不同窗口间切换焦点。 |
 | `Ctrl + X, A`        | 退出 TUI 模式，返回标准 GDB 命令行界面。                                                                                |
-| `disassemble <func>` | `disas`，反汇编指定的函数。<br> `/m` 参数表示，混合显示源代码与反汇编代码。                                             |
+| `disassemble <func>` | `disas`，反汇编指定的函数。<br> `/m` 参数表示混合显示源代码与反汇编代码。                                               |
 
 ### 6、GDB 环境与 Shell 交互
 
@@ -168,7 +168,7 @@ sudo apt install gdb-multiarch
 #### 调试策略
 
 1. **设置观察点**：启动 GDB 后，使用 `watch my_global_variable` 或 `watch *<address_of_variable>` 为该变量设置一个写观察点。
-2. **运行并等待**：输入 `r` 运行程序。当该变量的值被修改时，程序会立即暂停。
+2. **运行并等待**：输入 `run` 或者 `continue` 启动或继续运行程序。当该变量的值被修改时，程序会立即暂停。
 3. **定位修改者**：GDB 会报告变量的新旧值，并停在修改该变量的代码行。使用 `bt` 查看调用栈，即可找到修改变量的代码。
 
 ### 场景四：分析被编译器优化的变量

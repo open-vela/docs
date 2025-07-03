@@ -103,8 +103,8 @@ When the program is paused, these commands help you investigate the source of th
 | `info registers`         | Displays the current values of all CPU **registers**.                                                                                                                                                                                                                                           |
 | `info threads`           | In a multi-threaded program (like `openvela`), displays all threads and their IDs.                                                                                                                                                                                                              |
 | `thread <id>`            | Switches to the context of the specified thread ID.                                                                                                                                                                                                                                             |
-| `ptype <expr>`           | Displays the **data structure definition** of a variable or type. <br>For example, `ptype struct my_struct`.                                                                                                                                                                                    |
-| `set var <name>=<value>` | **Modifies the value of a variable** at runtime. <br>For example, `set var i = 10`.                                                                                                                                                                                                             |
+| `ptype <expr>`           | Displays the **data structure definition** of a variable or type. For example:<br> `ptype struct my_struct`.<br>The `ptype /o <type>` command displays the complete memory layout for a specified type, detailing the offset and size of each member.                                           |
+| `set var <name>=<value>` | **Modifies the value of a variable** at runtime. <br>For example, `set var i = 10`. When there is no ambiguity, you can use `set i = 10`                                                                                                                                                        |
 
 ### 5. Interacting with Source Code and Assembly
 
@@ -168,7 +168,7 @@ A global variable's value is being incorrectly modified at some point, but there
 #### Debugging Strategy
 
 1. **Set a Watchpoint**: After starting GDB, set a write watchpoint on the variable using `watch my_global_variable` or `watch *<address_of_variable>`.
-2. **Run and Wait**: Type `r` to run the program. When the variable's value is modified, the program will pause immediately.
+2. **Run and Wait**: Type `run` or `continue` to start or resume program execution. The program will pause immediately when the variable's value is modified.
 3. **Locate the Modifier**: GDB will report the old and new values of the variable and stop at the line of code that modified it. Use `bt` to view the call stack to find the code responsible for the change.
 
 ### Scenario 4: Analyzing Compiler-Optimized Variables
