@@ -243,7 +243,7 @@ source [-s] [-v] filename
 
 ### 2、相关调试实践
 
-- **IDE** **集成**：关于如何在 VSCode 中配置 GDB 以调试 `sim` 环境，请参考[VSCode 调试 SIM]()
+- **IDE 集成**：关于如何在 VSCode 中配置 GDB 以调试 `sim` 环境，请参考[使用 VSCode 调试 SIM 环境](./VSCODE_debugging.md)
 - **线程感知调试**：为了在 GDB 中更好地查看 `openvela` 的线程信息，可以利用 J-Link 的 GDB 插件，详情请参见[使用 J-Link GDB 插件增强 openvela 线程调试](../crash/JLINK/J_Link.md)。
 
 ## 七、故障排查 (Troubleshooting)
