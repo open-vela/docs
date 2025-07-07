@@ -1,5 +1,7 @@
 # 时间系统
 
+\[ [English](../../../en/device_dev_guide/kernel/time_system.md) | 简体中文 \]
+
 ## 一、简介
 
 本文档提供了时间系统的概述，包括关键时间概念、时间类型、API 和管理时间及时区的命令。
@@ -15,25 +17,25 @@
 
 - 定义：日历时间是一种相对时间，用秒数表示从某个标准时间点到当前时刻的时间间隔。
 - 特点
-    - 统一性：无论在哪个时区，同一时刻的日历时间相对于同一标准时间点始终一致。
-    - 标准时间点：通常以 UTC 时间 1970-01-01 00:00:00 为基准时间点（即 Unix 时间纪元）。
-    - 表示方式：以秒数形式表示，常用于计算机系统中作为时间戳。
+     - 统一性：无论在哪个时区，同一时刻的日历时间相对于同一标准时间点始终一致。
+     - 标准时间点：通常以 UTC 时间 1970-01-01 00:00:00 为基准时间点（即 Unix 时间纪元）。
+     - 表示方式：以秒数形式表示，常用于计算机系统中作为时间戳。
 
 ## 三、`localtime` 在 openvela 中的实现说明
 
 ### 两种实现方式
 
 - 打开 `CONFIG_LIBC_LOCALTIME`：
-    - `localtime` 的实现依赖 `zoneinfo`，可以根据时区正确转换时间。
-    - 优点：支持时区转换，功能更完善。
-    - 缺点：会增加代码体积， **增加约 6.4KB**。
+     - `localtime` 的实现依赖 `zoneinfo`，可以根据时区正确转换时间。
+     - 优点：支持时区转换，功能更完善。
+     - 缺点：会增加代码体积， **增加约 6.4KB**。
 
         ![img](./figures/001.png)
 
 - 未打开 `CONFIG_LIBC_LOCALTIME`：
-    - `localtime` 和 `gmtime` 的效果相同，直接返回 UTC 时间，不进行时区转换。
-    - 优点：节省空间，无额外开销。
-    - 缺点：不支持时区转换。
+     - `localtime` 和 `gmtime` 的效果相同，直接返回 UTC 时间，不进行时区转换。
+     - 优点：节省空间，无额外开销。
+     - 缺点：不支持时区转换。
 
 ## 四、设置时区
 
@@ -41,8 +43,8 @@
 
 - 从环境变量 `TZ` 获取时区信息，初始化以下内容：
 
-    - `timezone` ：当前时区相对于 UTC 的偏移（以秒为单位）。
-    - `daylight` ：是否启用夏令时（非零表示启用）。
+     - `timezone` ：当前时区相对于 UTC 的偏移（以秒为单位）。
+     - `daylight` ：是否启用夏令时（非零表示启用）。
 
 ### 1、TZ 环境变量格式
 
@@ -60,13 +62,13 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
     表示时区缩写，由三个或三个以上的字符组成。例如：
 
-    - CST：中国标准时间。
-    - EST：东部标准时间。
+     - CST：中国标准时间。
+     - EST：东部标准时间。
 
 2. offset
 
-    - 当前时区与 UTC 的偏移量。
-    - 格式为 `±hh:mm:ss`，例如 `+8:00:00` 表示东八区（UTC+8）。
+     - 当前时区与 UTC 的偏移量。
+     - 格式为 `±hh:mm:ss`，例如 `+8:00:00` 表示东八区（UTC+8）。
 
 3. dst（可选）
 
@@ -74,8 +76,8 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 4. offset（可选）
 
-    - 夏令时相对于 UTC 的偏移量。
-    - 如果省略，默认比标准时间提前 1 小时。
+     - 夏令时相对于 UTC 的偏移量。
+     - 如果省略，默认比标准时间提前 1 小时。
 
 5. start[/time]，end[/time]（可选）
 
@@ -83,10 +85,10 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
     - 格式为 `M<month>.<week>.<day>`：
 
-        - `M10.1.0`：10 月的第一周的星期天。
-        - `M3.3.0`：3 月的第三周的星期天。
+         - `M10.1.0`：10 月的第一周的星期天。
+         - `M3.3.0`：3 月的第三周的星期天。
 
-    - `/time` 表示具体时间（可选）。
+     - `/time` 表示具体时间（可选）。
 
 #### 文件路径格式
 
@@ -94,9 +96,9 @@ std offset[dst[offset][,start[/time],end[/time]]]
 
 1. 路径格式。
 
-    - `Asia/Shanghai`：相对路径，表示系统时区目录（由 `CONFIG_LIBC_TZDIR` 指定）下的文件。
-    - `/Asia/Shanghai`：绝对路径，表示直接指定时区文件的完整路径。
-    - `:Asia/Shanghai`：同时支持绝对路径和系统时区目录下的相对路径。
+     - `Asia/Shanghai`：相对路径，表示系统时区目录（由 `CONFIG_LIBC_TZDIR` 指定）下的文件。
+     - `/Asia/Shanghai`：绝对路径，表示直接指定时区文件的完整路径。
+     - `:Asia/Shanghai`：同时支持绝对路径和系统时区目录下的相对路径。
 
 2. 解析规则：找到时区文件后，会根据 `tzfile` 格式解析文件内容，加载对应的时区信息。
 
@@ -243,8 +245,8 @@ timedatectl set-timezone Asia/Tokyo
 
 在多核系统中，openvela 建议：
 
-1. UI 显示的核：负责设置时区信息，用于本地时间显示。
-2. 其他核：始终使用 UTC 时间，避免设置时区。
+1. **UI 显示的核**：负责设置时区信息，用于本地时间显示。
+2. **其他核**：始终使用 UTC 时间，避免设置时区。
 
 **原因：**
 
@@ -263,12 +265,12 @@ timedatectl set-timezone Asia/Tokyo
 
 ## 六、时间类型
 
-`time_t`
+**`time_t`**
 
-- 描述：存储从 1970 年 1 月 1 日 00:00:00 到现在经过的秒数。
-- 实现：在 openvela 中，`time_t` 实现为 `uint32_t` 或 `int64_t`。
+- **描述**：存储从 1970 年 1 月 1 日 00:00:00 到现在经过的秒数。
+- **实现**：在 openvela 中，`time_t` 实现为 `uint32_t` 或 `int64_t`。
 
-`struct timeval`
+**`struct timeval`**
 
 - 描述：提供秒和微秒单位，最高精度是微秒。
 - 结构：
@@ -281,7 +283,7 @@ timedatectl set-timezone Asia/Tokyo
     };
     ```
 
-`struct timespec`
+**`struct timespec`**
 
 - 描述：提供秒和纳秒单位，最高精度是纳秒。
 - 结构：
@@ -294,7 +296,7 @@ timedatectl set-timezone Asia/Tokyo
     };
     ```
 
-`stuct tm`
+**`stuct tm`**
 
 - 描述：提供详细的日期和时间信息。
 - 结构：
@@ -337,10 +339,10 @@ timedatectl set-timezone Asia/Tokyo
 
 - 描述：获取指定时钟的当前时间。
 - 参数：
-    - `clockid`： 要获取时间的时钟。常见值：`CLOCK_REALTIME`、`CLOCK_MONOTONIC`。
-    - `tp`： 指向 `struct timespec` 的指针，用于存储获取的时间。
-    - 返回值：成功返回 `0`，失败返回 `-1`。
-    - 示例：
+     - `clockid`： 要获取时间的时钟。常见值：`CLOCK_REALTIME`、`CLOCK_MONOTONIC`。
+     - `tp`： 指向 `struct timespec` 的指针，用于存储获取的时间。
+     - 返回值：成功返回 `0`，失败返回 `-1`。
+     - 示例：
 
         ```C
         struct timespec ts;  
@@ -364,9 +366,9 @@ timedatectl set-timezone Asia/Tokyo
 
 2. `FAR struct tm *gmtime(FAR const time_t *timep)`
 
-    - 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用 UTC 时间表示。
+     - 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用 UTC 时间表示。
 
-    - 说明：`gmtime_r` 是线程安全版本。
+     - 说明：`gmtime_r` 是线程安全版本。
 
 3. `time_t mktime(FAR struct tm *tp)`
 
@@ -374,13 +376,13 @@ timedatectl set-timezone Asia/Tokyo
 
 4. `FAR struct tm *localtime(FAR const time_t *timep)`
 
-    - 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用本地时区表示。
-    - 说明：`localtime_r` 是线程安全版本。
+     - 描述：将从 `1970-01-01 00:00:00` 至今的秒数转换为 `struct tm` 格式的时间，并用本地时区表示。
+     - 说明：`localtime_r` 是线程安全版本。
 
 5. `FAR char *asctime(FAR const struct tm *tp)`
 
-    - 描述：将日期和时间格式化为字符串并返回。
-    - 说明：`asctime_r` 是线程安全版本。
+     - 描述：将日期和时间格式化为字符串并返回。
+     - 说明：`asctime_r` 是线程安全版本。
 
 6. `size_t strftime(FAR char *s, size_t max, FAR const char *format, FAR const struct tm *tm)`
 
@@ -392,8 +394,8 @@ timedatectl set-timezone Asia/Tokyo
 
 8. `FAR char *ctime(FAR const time_t *timep)`
 
-    - 描述：返回一个表示当地时间（`localtime`）的字符串。
-    - 说明：`ctime_r` 是线程安全版本。
+     - 描述：返回一个表示当地时间（`localtime`）的字符串。
+     - 说明：`ctime_r` 是线程安全版本。
 
 9. `double difftime(time_t time2, time_t time1)`
 
@@ -403,13 +405,13 @@ timedatectl set-timezone Asia/Tokyo
 
 1. `int gettimeofday(FAR struct timeval *tv, FAR struct timezone *tz)`
 
-    - 描述：返回当前时间，包含自 `1970-01-01 00:00:00` 起的秒数和微秒数。
+    - **描述**：返回当前时间，包含自 `1970-01-01 00:00:00` 起的秒数和微秒数。
 
-    - 参数
-        - `tv`：指向 `struct timeval` 的指针，用于存储秒数和微秒数。
-        - `tz`：时区信息，通常传入 `NULL`。
+    - **参数**
+         - `tv`：指向 `struct timeval` 的指针，用于存储秒数和微秒数。
+         - `tz`：时区信息，通常传入 `NULL`。
 
-    - 示例：
+    - **示例**：
 
         ```C
         struct timeval tv;  
@@ -419,11 +421,11 @@ timedatectl set-timezone Asia/Tokyo
 
 2. `int settimeofday(FAR const struct timeval *tv, FAR struct timezone *tz)`
 
-    描述：设置系统时间（UTC）。
+     描述：设置系统时间（UTC）。
 
 3. `int clock_systime_timespec(FAR struct timespec *ts)`
 
-    描述：获取系统的运行时间（内核版 API）。
+     描述：获取系统的运行时间（内核版 API）。
 
 ## 八、命令说明
 
