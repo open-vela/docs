@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](../../zh-cn/chip_porting/Interrupt_System_Adaptation_Guide.md) \]
 
-## 1. Implementing Chip Interrupt Debugging  
+## I. Implementing Chip Interrupt Debugging  
 
 When debugging the chip interrupt subsystem (`bringup`), vendors need to implement a series of architecture-related functions (`arch` functions) to accomplish the following tasks:  
 
@@ -12,7 +12,7 @@ When debugging the chip interrupt subsystem (`bringup`), vendors need to impleme
 
 The following information provides specific requirements and implementation examples.  
 
-### 1.1 Required Interrupt-Related Functions  
+### 1. Required Interrupt-Related Functions  
 
 The following are the interrupt-related functions that vendors need to implement, along with their descriptions.  
 
@@ -123,7 +123,7 @@ The following are the interrupt-related functions that vendors need to implement
         void up_secure_irq_all(bool secure)  
         ```  
 
-### 1.2 Required Interrupt-Related Macros  
+### 2. Required Interrupt-Related Macros  
 
 Alongside the above function implementations, vendors need to define a series of interrupt-related macros, which describe the configuration of the NVIC (Nested Vectored Interrupt Controller). These macros should be defined in the `chips/chip_name/include/irq.h` file. Refer to the [RTL8720C example](https://github.com/open-vela/nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h) for guidance.  
 
@@ -175,7 +175,7 @@ The required macros and their descriptions are as follows:
 
 ---
 
-## 2. Binding Interrupt Handlers  
+## II. Binding Interrupt Handlers  
 
 During interrupt processing, handlers can be bound using the following three methods. Each method is suitable for different scenarios and has its own advantages and disadvantages.  
 
@@ -265,13 +265,13 @@ int irq_attach_wqueue(int irq, xcpt_t isr, xcpt_t isrwork, FAR void *arg, int pr
 
 ### Summary Comparison  
 
-| Binding Method    | Advantages                       | Disadvantages                                      | Use Cases                           |  
-| :---------------- | :------------------------------- | :------------------------------------------------ | :----------------------------------- |  
-| irq_attach        | High efficiency, direct handling in the interrupt context. | Interrupts are masked during handling, unsuitable for systems with high real-time requirements. | Scenarios with simple processing and low real-time requirements. |  
-| irq_attach_thread | Improves real-time performance, supports priority scheduling. | Consumes more memory, introduces context switches, and has some delay in processing completion. | Scenarios with high real-time requirements. |  
-| irq_attach_wqueue | Saves memory, supports work queue reuse. | Low efficiency for single-interrupt scenarios, limited flexibility in multi-core systems. | Scenarios with many interrupts and limited memory resources. |  
+| Binding Method    | Advantages                                                    | Disadvantages                                                                                   | Use Cases                                                        |
+| :---------------- | :------------------------------------------------------------ | :---------------------------------------------------------------------------------------------- | :--------------------------------------------------------------- |
+| irq_attach        | High efficiency, direct handling in the interrupt context.    | Interrupts are masked during handling, unsuitable for systems with high real-time requirements. | Scenarios with simple processing and low real-time requirements. |
+| irq_attach_thread | Improves real-time performance, supports priority scheduling. | Consumes more memory, introduces context switches, and has some delay in processing completion. | Scenarios with high real-time requirements.                      |
+| irq_attach_wqueue | Saves memory, supports work queue reuse.                      | Low efficiency for single-interrupt scenarios, limited flexibility in multi-core systems.       | Scenarios with many interrupts and limited memory resources.     |
 
-## 3. Implementation Example of Interrupt Thread/Work Queue  
+## III. Implementation Example of Interrupt Thread/Work Queue  
 
 Below is an example of binding interrupts and implementing interrupt threads or work queues.
 
@@ -318,7 +318,7 @@ static int isrwork(int irq, void *regs, void *arg)
 
 For certain one-shot interrupts, `isrhandle` can be set to `NULL`, and `isrwork` can be used directly to handle interrupt tasks.  
 
-## 4. Interrupt Structure Optimization  
+## IV. Interrupt Structure Optimization  
 
 When using interrupts, the system typically defines a global interrupt structure array: 
 
@@ -330,10 +330,6 @@ Here, `NR_IRQS` represents the maximum number of interrupts supported by the sys
 
 - **Memory Waste**: Even if only a small number of interrupts are used, memory must still be allocated for all possible interrupt numbers, requiring storage for `NR_IRQS` structures.  
 - **Inefficient Resource Utilization**: The majority of interrupt numbers’ corresponding structures remain unused, leading to resource waste.  
-
-### 1、优化策略与实现原理
-
-为了解决上述问题，可以通过如下动态映射的方式优化中断结构体的存储。
 
 ### 1. Optimization Strategy and Implementation Principle  
 
@@ -385,6 +381,6 @@ CONFIG_ARCH_NUSER_INTERRUPTS=24
 - **Flexibility Improvement**: Supports sparsely distributed interrupt numbers through dynamic mapping.  
 - **Scalability**: Flexibly adjusts the interrupt limit via configuration macros.  
 
-## 5. Related Repository
+## V. Related Repository
 
 - [nuttx](https://github.com/open-vela/nuttx)

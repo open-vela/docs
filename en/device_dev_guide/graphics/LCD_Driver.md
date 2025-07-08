@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/LCD_Driver.md) \]
 
-## I Introduction
+## I. Introduction
 
 For devices with modest resolution requirements, Universal mode (SPI/I2C/UART) interface screens are often used to conserve memory. In such cases, the primary adaptation requirement is the LCD driver (LCD driver).
 
-## II openvela LCD Interface
+## II. openvela LCD Interface
 
 openvela's LCD framework provides standard VFS file operation interfaces to upper layers. Users can operate /`dev/lcd0` device through these methods:
 
@@ -79,7 +79,9 @@ struct lcd_dev_s
   int (*setcontrast)(struct lcd_dev_s *dev, unsigned int contrast);
 };
 ```
+
 Reference Implementation:
+
 - `boards/arm/stm32/stm32f4discovery/src/stm32_st7789.c`
 
 Demonstrates full implementation of `struct lcd_dev_s` methods for specific LCD controllers.
@@ -166,21 +168,31 @@ struct lcd_planeinfo_s
 ##### Data transfer interface
 
 1. `putrun`
-- Write the specified number (`npixels`) of pixels to a certain line.
+
+    - Write the specified number (`npixels`) of pixels to a certain line.
+
 2. `putarea`
-- Write the pixel data to the specified rectangular area.
+
+    - Write the pixel data to the specified rectangular area.
+
 3. `getrun`
-- Read the specified number (`npixels`) of pixels from a certain line.
+
+    - Read the specified number (`npixels`) of pixels from a certain line.
+
 4. `getarea`
-- Read the pixel data of the specified rectangular area.
+
+    - Read the pixel data of the specified rectangular area.
 
 ##### Plane color characteristics
 
 1. `buffer`
-- Function: workspace buffer, one LCD device for each, multiple layers share a buffer.  
-- Requirement: the buffer must be able to store one line of data (`bpp * xres / 8`), and it needs to be aligned with the pixel format.
+
+    - Function: workspace buffer, one LCD device for each, multiple layers share a buffer.  
+    - Requirement: the buffer must be able to store one line of data (`bpp * xres / 8`), and it needs to be aligned with the pixel format.
+
 2. `bpp`
-- Function: the number of bits occupied by a pixel.
+
+    - Function: the number of bits occupied by a pixel.
 
 ## IV LCD Framebuffer Mode
 
@@ -332,18 +344,18 @@ errout_with_state:
 }
 ```
 
-### 3.Configuration Options
+### 3. Configuration Options
+
 In LCD Framebuffer mode, the following compilation options must be enabled:
 
 - `CONFIG_LCD`: Enable LCD support.
 - `CONFIG_VIDEO_FB`: Enable Framebuffer support.
 - `CONFIG_LCD_FRAMEBUFFER`: Enable LCD Framebuffer support.
 
-> Note:
->
-> - The `CONFIG_LCD_EXTERNINIT` option is not enabled by default.
+**Note**: The `CONFIG_LCD_EXTERNINIT` option is not enabled by default.
 
 ## V Related code repository
-[nuttx/include/nuttx/lcd/lcd.h at dev · open-vela/nuttx](../../../../../../nuttx/blob/dev/include/nuttx/lcd/lcd.h)
 
-[https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)
+- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/dev/include/nuttx/lcd/lcd.h)
+
+- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)

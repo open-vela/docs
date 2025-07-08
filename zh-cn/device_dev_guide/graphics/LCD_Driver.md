@@ -341,11 +341,9 @@ errout_with_state:
 - `CONFIG_VIDEO_FB`：启用 Framebuffer 支持。
 - `CONFIG_LCD_FRAMEBUFFER`：启用 LCD 的 Framebuffer 支持。
 
-> 注意
->
-> 在该模式下，无需启用 `CONFIG_LCD_DEV` 选项。
+**注意**：在该模式下，无需启用 `CONFIG_LCD_DEV` 选项。
 
 ## 五、相关仓
-[nuttx/include/nuttx/lcd/lcd.h at dev · open-vela/nuttx](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/lcd/lcd.h)
 
-[https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c](https://github.com/open-vela/nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)
+- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/dev/include/nuttx/lcd/lcd.h)
+- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)
