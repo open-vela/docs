@@ -33,9 +33,9 @@ The `scanmode` command is used to get the current scanning status attribute of t
 
 #### Parameter Table
 
-| **Parameter** | **Description**                                                     | **Type**       |
-| :-----------: | :------------------------------------------------------------------ | :------------: |
-| scan mode     | Discoverability and connectivity state:<br>0: Not discoverable, not connectable.<br>1: Not discoverable but connectable.<br>2: (Default) Discoverable and connectable. | Decimal integer |  
+| **Parameter** | **Description**                                                                                                                                                        |    **Type**     |
+| :-----------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: |
+|   scan mode   | Discoverability and connectivity state:<br>0: Not discoverable, not connectable.<br>1: Not discoverable but connectable.<br>2: (Default) Discoverable and connectable. | Decimal integer |
 
 #### Example
 
@@ -72,9 +72,9 @@ The `iocap` command is used to get the input/output (IO) capability of the local
 
 #### Parameter Table
 
-| **Parameter**      | **Description**                                                     | **Type**       |
-| :----------------: | :------------------------------------------------------------------ | :------------: |
-| <io capability>    | The IO capability of the local Bluetooth adapter:<br>0: displayonly – no input capability, only displays or transmits a 6-digit decimal number.<br>1: yes/no – has a yes/no input mechanism and can display or transmit a 6-digit decimal number.<br>2: keyboardonly – can input numbers “0” to “9”, confirmation, and “yes”/“no”, but cannot output.<br>3: (Default) no-in/no-out – no input and output capability.<br>4: keyboard&display – can input numbers “0” to “9”, confirmation, and “yes”/“no”, and can display or transmit a 6-digit decimal number. | Decimal Integer |
+| **Parameter** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |    **Type**     |
+| :-----------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: |
+| io capability | The IO capability of the local Bluetooth adapter:<br>0: displayonly – no input capability, only displays or transmits a 6-digit decimal number.<br>1: yes/no – has a yes/no input mechanism and can display or transmit a 6-digit decimal number.<br>2: keyboardonly – can input numbers “0” to “9”, confirmation, and “yes”/“no”, but cannot output.<br>3: (Default) no-in/no-out – no input and output capability.<br>4: keyboard&display – can input numbers “0” to “9”, confirmation, and “yes”/“no”, and can display or transmit a 6-digit decimal number. | Decimal Integer |
 
 #### Example
 
@@ -285,9 +285,9 @@ The `bonded` command is used to retrieve the information of devices that are cur
 
 #### Parameter Table
 
-| **Parameter** | **Description**                           | **Type**       |
-| :-----------: | :---------------------------------------- | :------------: |
-| transport     | Transport mode:<br>0: LE<br>1: BREDR         | Decimal Integer |
+| **Parameter** | **Description**                      |    **Type**     |
+| :-----------: | :----------------------------------- | :-------------: |
+|   transport   | Transport mode:<br>0: LE<br>1: BREDR | Decimal Integer |
 
 #### Example
 
@@ -339,9 +339,9 @@ The `connected` command is used to retrieve the detailed information of devices 
 
 #### Parameter Table
 
-| **Parameter** | **Description**                           | **Type**       |
-| :-----------: | :---------------------------------------- | :------------: |
-| transport     | Transport mode:<br>0: LE<br>1: BREDR         | Decimal Integer |
+| **Parameter** | **Description**                      |    **Type**     |
+| :-----------: | :----------------------------------- | :-------------: |
+|   transport   | Transport mode:<br>0: LE<br>1: BREDR | Decimal Integer |
 
 #### Example
 

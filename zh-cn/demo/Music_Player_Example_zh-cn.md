@@ -16,7 +16,7 @@
 
 1. 切换到 openvela 仓库的根目录，执行如下命令来配置音乐播放器。
 
-    > 模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译开发板的代码。
+    **说明**：模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译开发板的代码。
 
     ```Bash
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
@@ -37,7 +37,7 @@
     LVX_MUSIC_PLAYER_DATA_ROOT="/data"
     ```
 
-    > 以LVX_USE_DEMO_MUSIC_PLAYER为例进行操作，其余配置方式相同。
+    **说明**：以 LVX_USE_DEMO_MUSIC_PLAYER为例进行操作，其余配置方式相同。
 
     1. 输入待搜索的配置 `LVX_USE_DEMO_MUSIC_PLAYER`，支持模糊搜索，例如 `music_player`，找到对应的配置，按回车键进入该配置。
 

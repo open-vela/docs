@@ -81,7 +81,7 @@ extern "C" int main(int argc, char *argv[])
 
 以下是 `Kconfig` 文件的示例内容：
 
-```Plain
+```plaintext
 config EXAMPLES_HELLO
         tristate "\"Hello, World!\" example"
         default n
@@ -89,7 +89,7 @@ config EXAMPLES_HELLO
                 Enable the \"Hello, World!\" example
 
 if EXAMPLES_HELLO
-// 下面 <default "hello"> 中的 hello 需要运行的指令
+# 下面 default "hello" 中的 hello 需要运行的指令
 config EXAMPLES_HELLO_PROGNAME
         string "Program name"
         default "hello"
@@ -116,7 +116,9 @@ endif
 # .config 中的所有配置已加载到 CMake 环境，因此可以直接使用变量  
 
 # Enable Config, 代替原Make.defs configured_apps的配置
+
 if(CONFIG_EXAMPLES_HELLO) # 如果defconfig使能了该feature则加入编译
+
   # call 添加应用module `nuttx_add_application` 将hello添加为一个builtin app.
   nuttx_add_application(
     NAME                                #参数标志：application唯一名称
@@ -317,3 +319,69 @@ mount -t hostfs -o fs=. /data # 挂载 Host 文件系统到 /data
 hello    # 前台运行 hello
 hello &  # 后台运行 hello
 ```
+
+## 四、实现应用程序自启动
+
+openvela 采用 NuttShell (NSH) 的启动脚本机制来实现应用程序的自启动。基本流程如下：
+
+1. 系统在启动过程中，会将一个预置的只读文件系统 (Read-Only File System, ROMFS) 挂载到 `/etc` 目录。
+2. 挂载完成后，NSH 会自动执行 `/etc/init.d/rcS` 脚本文件。
+3. 您只需将需要自启动的应用程序命令写入 `rcS` 脚本，即可实现开机自启。
+
+### 1、启用自启动功能
+
+要使用此功能，您需要通过 Kconfig 系统配置，在构建配置中启用以下选项。
+
+| **配置项**                 | **推荐值**            | **描述**                                           |
+| :------------------------- | :-------------------- | :------------------------------------------------- |
+| `CONFIG_FS_ROMFS`          | `y`                   | 启用 ROMFS 支持，这是存放启动脚本的基础。          |
+| `CONFIG_NSH_ROMFSETC`      | `y`                   | 启用在系统启动时自动挂载 ROMFS 到 `/etc` 目录。    |
+| `CONFIG_NSH_ROMFSMOUNTPT`  | `"/etc"`              | 指定 ROMFS 的挂载点路径。                          |
+| `CONFIG_NSH_SYSINITSCRIPT` | `"init.d/rc.sysinit"` | 指定系统级初始化脚本的路径。                       |
+| `CONFIG_NSH_INITSCRIPT`    | `"init.d/rcS"`        | 指定用户级初始化脚本的路径，这是您需要编辑的文件。 |
+
+### 2、编辑用户启动脚本
+
+#### 脚本位置
+
+您需要修改的文件是用户启动脚本 `rcS`。
+
+- 用户脚本 (推荐修改): `vendor/openvela/boards/vela/src/etc/init.d/rcS`
+- 系统脚本 (请勿修改): `vendor/openvela/boards/vela/src/etc/init.d/rc.sysinit` 此脚本负责核心的系统初始化，修改它可能导致系统无法启动。
+
+#### 脚本编写示例
+
+以下是 `rcS` 脚本的一个示例。NSH 脚本支持标准的 Shell 命令，并兼容 C 语言的预处理器指令（如 `#ifdef`）。
+
+```Bash
+# NuttShell 脚本 (rcS)
+
+#include <nuttx/config.h>
+
+# 使用 C 预处理器指令，判断是否配置了主机文件系统 (Host FS)
+#ifdef CONFIG_FS_HOSTFS
+  # 如果已配置，则执行 mount 命令将主机目录挂载到 /data
+  mount -t hostfs -o fs=. /data
+#endif
+
+# 启动一个名为 "hello" 的应用程序在前台运行。
+# 脚本将在此处阻塞，直到 hello 程序执行完毕。
+hello
+
+# 启动一个名为 "hello" 的应用程序在后台运行。
+# "&" 符号让程序在后台执行，脚本会立即继续执行下一行命令。
+hello &
+```
+
+#### 注意事项
+
+1. 任务创建方式。
+
+    对于需要在系统启动时运行的应用程序，我们推荐以下方式：
+
+    - 通过 NSH 脚本启动 (推荐)：对于大多数应用，在 `rcS` 脚本中使用 `&` 将其置于后台运行是最简单、最稳健的方法。
+    - 通过程序化接口启动：对于需要复杂初始化或动态创建任务的场景，您可以在应用程序内部使用 POSIX 标准的 `pthread_create()` 函数来创建新线程。
+
+2. 线程管理。
+
+    如果您的主应用程序使用 `pthread_create()` 创建了子线程，请确保主线程在所有子线程安全退出后才终止。过早退出主线程可能导致子线程被意外终止，从而引发系统不稳定或资源泄漏等问题。

@@ -37,17 +37,17 @@ This article describes how to run the example on Emulator.
     LVX_USE_DEMO_X_TRACK = y
     ```
 
-   > How to enable “LIB_PNG” configuration is shown as an example. Other configuration operations are the same.
+    **Note**: How to enable “LIB_PNG” configuration is shown as an example. Other configuration operations are the same.
 
-   1. Press the “/” button on the keyboard to enter the search mode, type “LIB_PNG” in the search field, use the arrow keys to move the cursor to “LIB_PNG”, and press Enter to confirm.
+    1. Press the “/” button on the keyboard to enter the search mode, type “LIB_PNG” in the search field, use the arrow keys to move the cursor to “LIB_PNG”, and press Enter to confirm.
 
-        ![img](images/008.png)
+            ![img](images/008.png)
 
-   2. Press the “space bar” for the “Enable libpng” option to turn this option on, and a \* that appears in [ ] indicates that this configuration is turned on.
+    2. Press the “space bar” for the “Enable libpng” option to turn this option on, and a \* that appears in [ ] indicates that this configuration is turned on.
 
-        ![img](images/009.png)
+            ![img](images/009.png)
 
-   3. The other configurations are turned on in the same way.
+    3. The other configurations are turned on in the same way.
 
 ## Step 2: Start to compile
 
@@ -94,9 +94,10 @@ This article describes how to run the example on Emulator.
 ### 1. Startup page
 
 1. To enable the “X-TRACK” program, enter the following command in the emulator's terminal environment “openvela-ap”:
-   ```Bash
-   x_track &
-   ```
+
+    ```Bash
+    x_track &
+    ```
 
 2. This happens after execution:
 
@@ -110,19 +111,19 @@ The three function buttons below are used for jumping to different function page
 
 1. Motion tracking page
 
-   The bottom left corner of this page shows the general information of the current movement. The middle part shows the current movement direction and the past trajectory. You can swipe right to return to the previous page.
+    The bottom left corner of this page shows the general information of the current movement. The middle part shows the current movement direction and the past trajectory. You can swipe right to return to the previous page.
 
     ![img](images/012.png)
 
 2. Shutdown page
 
-   This page mimics the shutdown page of a mobile phone. Hold and drag the yellow scroll bar up to the end and then release it to turn off the machine. Click somewhere or swipe right to return to the previous page.
+    This page mimics the shutdown page of a mobile phone. Hold and drag the yellow scroll bar up to the end and then release it to turn off the machine. Click somewhere or swipe right to return to the previous page.
 
     ![img](images/019.png)
 
 3. System information page
 
-   This page shows detailed system information. Swipe up or down or click the corresponding icons to see different information. Swipe right to return to the previous page.
+    This page shows detailed system information. Swipe up or down or click the corresponding icons to see different information. Swipe right to return to the previous page.
 
     ![img](images/018.png)
 
@@ -151,6 +152,7 @@ sudo apt install android-tools-adb
 ### 2. Garbled text is shown
 
 #### Reason
+
 Font resources are not loaded correctly.
 
 #### Solution
@@ -178,6 +180,7 @@ This is normal because the battery level on an emulator is just randomly simulat
 ### 6. Is this trajectory simulated?
 
 #### Reason
+
 Yes. It accesses a [GPX](https://en.wikipedia.org/wiki/GPS_Exchange_Format) file for track replay and simulates GNSS to generate data.
 
 ### 7. How to replace the track file that shows my track?

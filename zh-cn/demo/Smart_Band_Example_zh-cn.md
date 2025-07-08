@@ -3,6 +3,7 @@
 \[ [English](../../en/demo/Smart_Band_Example.md) | 简体中文 \]
 
 ## 简介
+
 Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、心率、秒表、睡眠、运动、设置、手电筒，分辨率为 194*368。可以在 `apps/packages/demos/bandx/` 目录中了解有关 bandx 的更多详细信息。
 
 本文介绍如何在模拟器上运行该示例。
@@ -17,7 +18,7 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
 1. 切换到 openvela 仓库的根目录，执行如下命令来配置手环 Bandx。
 
-    > 模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译模拟器的代码。
+    **说明**：模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译模拟器的代码。
 
     ```cpp
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
@@ -39,7 +40,7 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
     BANDX_BASE_PATH = "/data"
     ```
 
-    > 以LV_USE_FRAGMENT为例进行操作，其余配置方式相同。
+    以 LV_USE_FRAGMENT 为例进行操作，其余配置方式相同。
 
     1. 输入待搜索的配置。
 
@@ -75,7 +76,7 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
 2. 成功执行后，将得到以下文件：
 
-    ```cpp
+    ```plaintext
     ./nuttx
     ├── vela_ap.elf
     ├── vela_ap.bin
@@ -102,7 +103,7 @@ Bandx 中使用的字体和图像资源位于 `apps/packages/demos/bandx/resourc
     adb push apps/packages/demos/bandx/resource/image/assets /data/image/
     ```
 
-    > 如果将 `BANDX_BASE_PATH` 更改为非默认值，如 `/tmp`，则资源文件也必须传输到 `/tmp/font/` 和 `/tmp/image/` 目录。否则将出现找不到资源的错误。
+    如果将 `BANDX_BASE_PATH` 更改为非默认值，如 `/tmp`，则资源文件也必须传输到 `/tmp/font/` 和 `/tmp/image/` 目录。否则将出现找不到资源的错误。
 
 ## 步骤四 启动 Bandx
 
@@ -116,7 +117,7 @@ Bandx 中使用的字体和图像资源位于 `apps/packages/demos/bandx/resourc
 
 2. 要访问 Launcher 界面，`从右向左`快速滑动。单击不同的图标导航到子页面，如下图所示的 Heart Rate 页面。要退出页面，`从左向右`快速滑动。
 
-    > 说明：music页面只是UI展示，没有接入音频。
+    **说明**：music页面只是UI展示，没有接入音频。
 
     ![img](images/007.png)
 

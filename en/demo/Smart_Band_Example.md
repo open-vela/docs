@@ -18,49 +18,49 @@ This article describes how to run this example on Emulator.
 
 1. Switch to the root directory of openvela repository and execute the following command to configure Bandx.
 
-   > The emulator configuration file (defconfig) is in the “vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/” directory, and the emulator code is configured and compiled using “build.sh”.
+    **Note**: The emulator configuration file (defconfig) is in the “vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/” directory, and the emulator code is configured and compiled using “build.sh”.
 
-    ```Bash
-    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
-    ```
+        ```Bash
+        ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
+        ```
 
-   - build.sh: A script for compilation used to configure and compile openvela code.
-   - vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap: configuration path
-   - menuconfig: Open the menuconfig page to modify the configuration of the project code.
+    - build.sh: A script for compilation used to configure and compile openvela code.
+    - vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap: configuration path
+    - menuconfig: Open the menuconfig page to modify the configuration of the project code.
 
-   The following screen appears after execution:
+    The following screen appears after execution:
 
-    ![](images/001.png)
+    ![](./images/001.png)
 
 2. Press the “/” key to search and modify the following configurations:
 
-   ```Bash
-   LV_USE_FRAGMENT = y
-   LVX_USE_DEMO_BANDX = y
-   BANDX_BASE_PATH = "/data"
-   ```
+    ```Bash
+    LV_USE_FRAGMENT = y
+    LVX_USE_DEMO_BANDX = y
+    BANDX_BASE_PATH = "/data"
+    ```
 
-   > Take LV_USE_FRAGMENT as an example for illustration. The other configurations are modified is the same way.
+    Take LV_USE_FRAGMENT as an example for illustration. The other configurations are modified is the same way.
 
     1. Enter the configuration to be searched.
 
         ![](images/002.png)
 
-   2. Press “Enter” to go to the configuration page.
+    2. Press “Enter” to go to the configuration page.
 
         ![](images/003.png)
 
-   3. Press “Enter” to open the configuration, and a \* that appears in [ ] indicates that the configuration is opened.
+    3. Press “Enter” to open the configuration, and a \* that appears in [ ] indicates that the configuration is opened.
 
         ![](images/004.png)
 
-   4. Press the “/” key to continue searching for the remaining configurations, and modify them as described above.
+    4. Press the “/” key to continue searching for the remaining configurations, and modify them as described above.
 
-   5. Press the letter Q to bring up the exit Save screen as follows.
+    5. Press the letter Q to bring up the exit Save screen as follows.
 
         ![](images/005.png)
 
-   6. Press the letter Y to save the configuration and exit the Modify Configuration page.
+    6. Press the letter Y to save the configuration and exit the Modify Configuration page.
 
 ## Step 2: Compile the project
 
@@ -70,13 +70,13 @@ This article describes how to run this example on Emulator.
     # Clean up build artifacts
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap distclean -j8
 
-   #Start to build
-   ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
-   ```
+    #Start to build
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
+    ```
 
 2. After successful execution, you will get the following files:
 
-    ```Bash
+    ```plaintext
     ./nuttx
     ├── vela_ap.elf
     ├── vela_ap.bin
@@ -103,21 +103,21 @@ The font and image resources used in Bandx are located in ‘apps/packages/demos
     adb push apps/packages/demos/bandx/resource/image/assets /data/image/
     ```
 
-   > If “BANDX_BASE_PATH” is changed to a non-default value like “/tmp”, the resource files must also be moved to the “/tmp/font/” and “/tmp/image/” directories.Otherwise, a “resource not found” error will occur.
+    **Note**: If “BANDX_BASE_PATH” is changed to a non-default value like “/tmp”, the resource files must also be moved to the “/tmp/font/” and “/tmp/image/” directories.Otherwise, a “resource not found” error will occur.
 
 ## Step 4: Start Bandx
 
 1. Enter the following command in the emulator's terminal environment “openvela-ap”:
 
-   ```Bash
-   bandx &
-   ```
+    ```Bash
+    bandx &
+    ```
 
     ![](images/006.png)
 
 2. To access the Launcher screen, swipe quickly from right to left.Single-click different icons to navigate to subpages, such as the Heart Rate page shown below.To exit the page, swipe quickly from left to right.
 
-   > Note: The music page is just a UI display, with no access to audio.
+    **Note**: The music page is just a UI display, with no access to audio.
 
     ![](images/007.png)
 

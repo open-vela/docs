@@ -151,7 +151,7 @@
 
 - `geo nmea sentence`
 
-    向模拟设备发送 `NMEA 0183` 语句，就像是从模拟的 GPS 调制解调器发送的一样。让 sentence 以 “$GP” 开头。 目前仅支持“$GPGGA” 和 “$GPRCM” 语句。以下示例是一个 GPGGA（全球定位系统定位数据）语句，它描述了 GPS 接收器接收的时间、位置和定位数据：
+    向模拟设备发送 `NMEA 0183` 语句，就像是从模拟的 GPS 调制解调器发送的一样。让 sentence 以 “\$GP” 开头。 目前仅支持“$GPGGA” 和 “$GPRCM” 语句。以下示例是一个 GPGGA（全球定位系统定位数据）语句，它描述了 GPS 接收器接收的时间、位置和定位数据：
   
     ```bash
     geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx

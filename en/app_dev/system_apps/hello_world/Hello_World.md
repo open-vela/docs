@@ -3,10 +3,10 @@
 \[ English | [简体中文](../../../../zh-cn/app_dev/system_apps/hello_world/Hello_World.md) \]
 
 ## I Overview
+
 openvela is built based on the open-source operating system NuttX, which further provides a variety of complex system-level services. To make openvela more comprehensive and feature-rich, it is necessary to introduce a complete development framework or functional module. A complete development framework typically includes the following two components:
 
 - System Applications: Internally developed system applications, usually stored in folders such as `apps/` and others.
-
 - Third-Party System Libraries: Integration of third-party libraries and their adaptation, usually stored in folders such as `external/` and others.
 
 The directory structure for new features and frameworks is shown in the figure below:
@@ -23,19 +23,17 @@ The directory structure for new features and frameworks is shown in the figure b
 ```
 
 ## II Add Hello World Example
+
 This section describes how to add a `Hello World` example application in openvela, including the main framework, file contents, and related build configurations.
 
 ### 1. Main Framework
+
 The Hello World example application needs to include the following core files:
 
 - `hello_main.c`: Defines the main logic of the application.
-
 - `Kconfig`: Defines conditional compilation macros for feature trimming.
-
 - `CMakeLists.txt`: Organizes the build system for openvela using `CMake`.
-
 - `Make.defs`: Indicates whether the current directory needs to be compiled and must be included by the parent directory.
-
 - `Makefile`: Defines the internal file compilation rules and compilation flags (FLAGS) for the library.
 
 An example of the directory structure is shown below:
@@ -83,7 +81,7 @@ extern "C" int main(int argc, char *argv[])
 
 Here's an example of what a `kconfig` file looks like:
 
-```Plain
+```plaintext
 config EXAMPLES_HELLO
         tristate "\"Hello, World!\" example"
         default n
@@ -91,7 +89,7 @@ config EXAMPLES_HELLO
                 Enable the \"Hello, World!\" example
 
 if EXAMPLES_HELLO
-# The following directives < default "hello" > need to be run :
+# The following directives default "hello" need to be run :
 config EXAMPLES_HELLO_PROGNAME
         string "Program name"
         default "hello"
@@ -120,15 +118,16 @@ Here's an example of the contents of a `CMakeLists.txt` file, where all the conf
 # Enable Config, which replaces the configuration of the original Make.defs configured_apps
 if(CONFIG_EXAMPLES_HELLO) # If defconfig enables this feature, add it to compilation
 # call Add app module 'nuttx_add_application' Add hello as a builtin app.
+
 nuttx_add_application(
-NAME #Parameter flags: the unique name of the application
-${CONFIG_EXAMPLES_HELLO_PROGNAME} #Parameter value: Set the value in hello kconfig as the name of the hello application
-SRCS #Parameter flags: Source file
-hello_main.c #Parameter value: The source file of the application, which can be multiple, and the main must be the first
-STACKSIZE #Parameter flags: STACK SIZE
-${CONFIG_EXAMPLES_HELLO_STACKSIZE} #Parameter value: takes the value set in Kconfig, and if you don't pass it, it is CONFIG_DEFAULT_TASK_STACKSIZE
-PRIORITY #Parameter flags: THE PRIORITY OF THE TASK
-${CONFIG_EXAMPLES_HELLO_PRIORITY}) #Parameter value: takes the value set in Kconfig, and if you don't pass it, it is SCHED_PRIORITY_DEFAULT
+NAME                                                 #Parameter flags: the unique name of the application
+${CONFIG_EXAMPLES_HELLO_PROGNAME}                    #Parameter value: Set the value in hello kconfig as the name of the hello application
+SRCS                                                 #Parameter flags: Source file
+hello_main.c                                         #Parameter value: The source file of the application, which can be multiple, and the main must be the first
+STACKSIZE                                            #Parameter flags: STACK SIZE
+${CONFIG_EXAMPLES_HELLO_STACKSIZE}                   #Parameter value: takes the value set in Kconfig, and if you don't pass it, it is CONFIG_DEFAULT_TASK_STACKSIZE
+PRIORITY                                             #Parameter flags: THE PRIORITY OF THE TASK
+${CONFIG_EXAMPLES_HELLO_PRIORITY})                   #Parameter value: takes the value set in Kconfig, and if you don't pass it, it is SCHED_PRIORITY_DEFAULT
 endif()
 ```
 
@@ -200,7 +199,7 @@ CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/external/libs/include
 # CFLAGS += -I$(APPDIR)/external/libs/include
 
 # For C++ projects, add include paths to CXXFLAGS:
-# CXXFLAGS += …
+# CXXFLAGS
 
 # To include other internally developed source files, append them here:
 CSRCS += device_example.c
@@ -243,75 +242,109 @@ endif
 ```
 
 ## III Verification and Testing
+
 The newly added application must be cleaned and rebuilt before it can take effect. Follow these steps to verify:
 
 ### 1. Clean the Build
+
 Run the following command to perform a clean:
 
 ```Bash
 # clean the project  
-./build.sh vendor/sim/boards/vela/configs/vela distclean -j8/
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  distclean -j8
 ```
 
 ### 2. Configure via Menuconfig
+
 Enable the new application in the `menuconfig`:
 
 ```Bash
-# launch menuconfig  
-./build.sh vendor/sim/boards/vela/configs/vela menuconfig -j8
+# 启动 menuconfig  
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  menuconfig -j8
 ```
 
-- Inside `menuconfig`, navigate to and enable `hello_main`:
+Inside `menuconfig`, navigate to and enable `hello_main`:
 
-    ![img](./figures/001.png)
-
+![img](./figures/001.png)
 
 ## 3. Build and Run
+
 ```Bash
 # Build: 
-./build.sh vendor/sim/boards/vela/configs/vela -j8
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  -j8
 
 # Run:
-./nuttx/nuttx
+./emulator.sh vela
 ```
+
 After booting, at the serial console prompt type the program name (as defined in your `Kconfig`). For example:
 
 ![img](./figures/002.png)
 
+## IV. Implementing Application Auto-Start
 
-## 4. Application Auto-Start
-openvela’s startup scripts reside under `/etc`, which is packed into the image as a `romfs` and automatically mounted by `nshlib` at boot. The following explains how to enable auto-start for your application.
+openvela uses the NuttShell (NSH) startup script mechanism to run applications automatically at boot. The process is as follows:
 
-### 1. Configuration Options
-In your top-level `Makefile`, ensure these options are set to support ROMFS and init scripts:
+1. During system startup, a pre-configured Read-Only File System (ROMFS) is mounted to the `/etc` directory.
+2. After the mount is complete, NSH automatically executes the `/etc/init.d/rcS` script file.
+3. To enable auto-start for an application, add its launch command to the `rcS` script.
 
-```Makefile
-CONFIG_FS_ROMFS=y
-CONFIG_NSH_ROMFSETC=y
-CONFIG_NSH_ROMFSMOUNTPT="/etc"
-CONFIG_NSH_SYSINITSCRIPT="init.d/rc.sysinit"
-CONFIG_NSH_INITSCRIPT="init.d/rcS"
-```
+### 1. Enabling the Auto-Start Feature
 
-### 2. Startup Script Locations
-By convention, the default locations for the init scripts in your board directory are:
+To use this feature, enable the following options in your build configuration using the Kconfig system.
 
-```Bash
-board/arch/board/board/src/etc/init.d/rc.sysinit   # # system initialization script
-board/arch/board/board/src/etc/init.d/rc           # # user init script 
-```
+| Configuration Option       | Recommended Value     | Description                                                                                     |
+| :------------------------- | :-------------------- | :---------------------------------------------------------------------------------------------- |
+| `CONFIG_FS_ROMFS`          | `y`                   | Enables ROMFS support, which is required to store the startup script.                           |
+| `CONFIG_NSH_ROMFSETC`      | `y`                   | Enables the automatic mounting of the ROMFS to the `/etc` directory at system startup.          |
+| `CONFIG_NSH_ROMFSMOUNTPT`  | `"/etc"`              | Specifies the mount point path for the ROMFS.                                                   |
+| `CONFIG_NSH_SYSINITSCRIPT` | `"init.d/rc.sysinit"` | Specifies the path to the system-level initialization script.                                   |
+| `CONFIG_NSH_INITSCRIPT`    | `"init.d/rcS"`        | Specifies the path to the user-level initialization script, which is the file you need to edit. |
 
-### 3. Sample rcS Script
-Below is an example of what your `rcS` file might look like:
+### 2. Editing the User Startup Script
 
-```C++
+#### Script Location
+
+The file you need to modify is the user startup script, `rcS`.
+
+- **User Script (Recommended to modify):** `vendor/openvela/boards/vela/src/etc/init.d/rcS`
+- **System Script (Do not modify):** `vendor/openvela/boards/vela/src/etc/init.d/rc.sysinit`
+  This script handles core system initialization. Modifying it may prevent the system from booting.
+
+#### Script Writing Example
+
+The following is an example of an `rcS` script. NSH scripts support standard shell commands and are compatible with C preprocessor directives (e.g., `#ifdef`).
+
+```bash
+# NuttShell Script (rcS)
+
 #include <nuttx/config.h>
 
+# Use a C preprocessor directive to check if Host File System (Host FS) is configured.
 #ifdef CONFIG_FS_HOSTFS
-mount -t hostfs -o fs=. /data  /* Mount host filesystem to /data */
+  # If configured, mount the host directory to /data.
+  mount -t hostfs -o fs=. /data
 #endif
 
-hello    /* Run the hello app in foreground */
-hello &  /* Run the hello app in background */
+# Start an application named "hello" in the foreground.
+# The script blocks here until the hello program finishes execution.
+hello
+
+# Start an application named "hello" in the background.
+# The "&" symbol runs the program in the background, allowing the script
+# to continue to the next command immediately.
+hello &
 ```
-With this setup, your Hello World application will be automatically launched at system startup.
+
+#### Important Considerations
+
+1. Task Creation Methods.
+
+    We recommend the following methods for applications that need to run at system startup:
+
+    - **Start via NSH Script (Recommended)**: For most applications, the simplest and most robust method is to add the command to the `rcS` script and run it in the background using the `&` symbol.
+    - **Start via Programmatic Interface**: For scenarios requiring complex initialization or dynamic task creation, you can use the standard POSIX function `pthread_create()` within your application to create new threads.
+
+2. Thread Management.
+
+    If your main application creates child threads using `pthread_create()`, ensure the main thread waits for all child threads to exit safely before it terminates. Prematurely exiting the main thread can cause child threads to be terminated unexpectedly, leading to system instability or resource leaks.

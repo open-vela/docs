@@ -3,6 +3,7 @@
     "MD006":true,
     "MD007": { "indent": 4 },
     "MD013": false,
+    "MD046": false,
     "MD029": {
         "style": "ordered"
     }

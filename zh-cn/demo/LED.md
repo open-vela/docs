@@ -1,4 +1,4 @@
-#  在 STM32F411 上使用 openvela 点亮 LED
+# 在 STM32F411 上使用 openvela 点亮 LED
 
 ## 一、概述
 
