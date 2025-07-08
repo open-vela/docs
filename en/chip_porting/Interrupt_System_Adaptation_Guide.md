@@ -125,7 +125,7 @@ The following are the interrupt-related functions that vendors need to implement
 
 ### 2. Required Interrupt-Related Macros  
 
-Alongside the above function implementations, vendors need to define a series of interrupt-related macros, which describe the configuration of the NVIC (Nested Vectored Interrupt Controller). These macros should be defined in the `chips/chip_name/include/irq.h` file. Refer to the [RTL8720C example](https://github.com/open-vela/nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h) for guidance.  
+Alongside the above function implementations, vendors need to define a series of interrupt-related macros, which describe the configuration of the NVIC (Nested Vectored Interrupt Controller). These macros should be defined in the `chips/chip_name/include/irq.h` file. Refer to the [RTL8720C example](../../../../../nuttx/blob/dev/arch/arm/src/rtl8720c/include/irq.h) for guidance.  
 
 The required macros and their descriptions are as follows:  
 
@@ -383,4 +383,4 @@ CONFIG_ARCH_NUSER_INTERRUPTS=24
 
 ## V. Related Repository
 
-- [nuttx](https://github.com/open-vela/nuttx)
+- [nuttx](../../../../../nuttx)
