@@ -15,7 +15,7 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
 
 2. Initialize the working directory for source code:
 
-   - Github (Public key registration is required. Refer to [Github documents](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account):
+    - Github (Public key registration is required. Refer to [Github documents](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account):
 
         ``` bash
         repo init --partial-clone -u git@github.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
@@ -28,11 +28,24 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
         cd ../../
         ```
 
-   - Gitee (Public key registration is required. Refer to [Gitee document](https://gitee.com/help/articles/4191):
+    - Gitee (Public key registration is required. Refer to [Gitee document](https://gitee.com/help/articles/4191):
 
         ```bash
         repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         
+        # Install Git LFS (Large File Storage) for managing large files
+        sudo apt install git-lfs
+        cd .repo/manifests 
+        git lfs install
+        git lfs --version
+        cd ../../
+        ```
+
+    - GitCode（Public key registration is required. Refer to [GitCode document](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)）：
+
+        ```bash
+        repo init --partial-clone -u https://gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
         cd .repo/manifests 
