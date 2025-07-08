@@ -1,4 +1,4 @@
-# Arch_Alarm 框架开发指南
+# Arch Alarm 框架开发指南
 
 \[ [English](../../../../../en/device_dev_guide/driver/timer_driver/timer/Arch_Alarm.md) | 简体中文 \]
 

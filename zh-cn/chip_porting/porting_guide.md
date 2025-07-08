@@ -2,12 +2,9 @@
 
 \[ [English](../../en/chip_porting/porting_guide.md) | 简体中文 \]
 
-## 一、本文目标
+本文旨在介绍 openvela 的启动（bringup）流程，以及如何为其适配新的芯片和板级设计。
 
-1. 了解 openvela 启动（bringup）流程。
-2. 了解在 openvela 中如何适配新的芯片和板级设计。
-
-## 二、概述
+## 一、概述
 
 openvela 是一个支持多种硬件平台的嵌入式操作系统，具有模块化和高扩展性。通过分层架构设计，openvela 简化了从处理器架构、芯片层到板级平台的适配工作。本文档介绍 openvela 的系统架构、移植步骤及相关开发资源。
 
@@ -53,7 +50,7 @@ openvela 已支持多种主流开发板，可参考 [Supported Platforms](https:
 
 移植 openvela 时，需要完成以下操作：
 
-1. 熟悉代码结构。 开发者需熟悉 [Vendor 代码仓](Vendor.md)的基本结构，`vendor` 目录支持通过 Git 仓库管理厂商定制化代码。目录命名通常以厂商名称命名，例如 [open-vela/vendor_template](../../../../open-vela/vendor_template) 为适配模板。
+1. 熟悉代码结构。 开发者需熟悉 [Vendor 代码仓](Vendor.md)的基本结构，`vendor` 目录支持通过 Git 仓库管理厂商定制化代码。目录命名通常以厂商名称命名，例如 [open-vela/vendor_template](../../../../../vendor_template) 为适配模板。
 2. 配置 Kconfig 文件。
 
     - Kconfig：用于定义编译选项和模块依赖项。开发者需根据硬件模块和外设配置文件，确保所需功能已在 Kconfig 中启用。Kconfig 使用可参考 [Kconfig 使用指南](../device_dev_guide/build/Kconfig.md)。
@@ -62,7 +59,7 @@ openvela 已支持多种主流开发板，可参考 [Supported Platforms](https:
 
     - Makefile 使用工具链完成代码编译，需确保规则定义正确，并支持目标硬件平台。
 
-4. 完成芯片层（Chip/SoC）与板级层（Board）代码适配。 根据 [open-vela/vendor_template](../../../../open-vela/vendor_template) 中的模板，适配芯片层和板级层代码。需要更新驱动文件、板级配置文件，以及完成硬件初始化逻辑。
+4. 完成芯片层（Chip/SoC）与板级层（Board）代码适配。 根据 [open-vela/vendor_template](../../../../../vendor_template) 中的模板，适配芯片层和板级层代码。需要更新驱动文件、板级配置文件，以及完成硬件初始化逻辑。
 5. 编译与测试。 编译并生成目标静态库和最终运行文件，测试所有功能是否工作正常。
 
 ### 4、编译方式与产物管理
@@ -81,9 +78,9 @@ openvela 已支持多种主流开发板，可参考 [Supported Platforms](https:
 
 ![img](./figures/002.png)
 
-下面以 `vendor` 目录下适配为例，所有 **vendor** 仓库的初始源代码为 [open-vela/vendor_template](../../../../open-vela/vendor_template)，该模板包含了 操作系统的基本代码结构，因此适配过程只需打开相应文件进行修改。
+下面以 `vendor` 目录下适配为例，所有 **vendor** 仓库的初始源代码为 [open-vela/vendor_template](../../../../../vendor_template)，该模板包含了 操作系统的基本代码结构，因此适配过程只需打开相应文件进行修改。
 
-## 三、芯片层适配
+## 二、芯片层适配
 
 芯片层适配是 openvela 框架中支持硬件平台的重要环节，主要完成基于操作系统的入口函数，涉及以下方面的实现与配置：
 
@@ -452,7 +449,7 @@ Make.defs 文件用于管理参与编译的源文件列表，确保构建系统�
     - 明确区分局部与公共文件，避免混淆和冲突。
     - 保证代码模块化，架构统一。
 
-## 四、板级层适配
+## 三、板级层适配
 
 板级层适配主要完成以下内容：
 
@@ -550,7 +547,7 @@ int board_app_finalinitialize(uintptr_t arg)
     - 删除 `etctmp` 目录后，触发增量编译。
     - 启动后，文件可通过 `/etc/` 路径访问。
 
-##### 示例 `Make.defs` 配置
+#### 示例 `Make.defs` 配置
 
 ```Makefile
 ifeq ($(CONFIG_ETC_ROMFS),y)                                  
@@ -666,7 +663,7 @@ SECTIONS                                                                        
 
 厂商可导入自定义工具链，通常存放于 `vendor/vendor_name/prebuilt`。可通过 `board/scripts/Make.defs` 配置编译器、链接器工具路径等。
 
-## 五、构建运行
+## 四、构建运行
 
 openvela 支持两种编译方式：CMake 和 Make。
 
@@ -678,7 +675,7 @@ openvela 支持两种编译方式：CMake 和 Make。
 
 执行上述命令后，将生成 `vela_ap.bin` 文件，厂商可采用相应的烧录方式进行运行验证。
 
-## 六、测试验证
+## 五、测试验证
 
 厂商完成适配后，需要通过准入测试进行检验，主要包括以下几个方面：
 

@@ -1,4 +1,4 @@
-# Arch_Alarm Framework Development Guide
+# Arch Alarm Framework Development Guide
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/timer_driver/timer/Arch_Alarm.md) \]
 
@@ -284,9 +284,9 @@ In openvela, the Upper-Half interfaces provide unified timer services for kernel
 
 The time unit type is selected via the configuration `CONFIG_SCHED_TICKLESS_TICK_ARGUMENT`:
 
-| Mode | Time Unit | Applicable Scenario | Configuration Item |
-| ---- | --------- | ------------------- | ------------------- |
-| Tick Interface | System Ticks | Scenes requiring alignment with hardware timer ticks | Enabled by default |
+| Mode               | Time Unit                             | Applicable Scenario                                  | Configuration Item                              |
+| ------------------ | ------------------------------------- | ---------------------------------------------------- | ----------------------------------------------- |
+| Tick Interface     | System Ticks                          | Scenes requiring alignment with hardware timer ticks | Enabled by default                              |
 | Timespec Interface | High-Precision Time (struct timespec) | Real-time tasks requiring nanosecond-level precision | Configure CONFIG_SCHED_TICKLESS_TICK_ARGUMENT=n |
 
 Design Principles:
