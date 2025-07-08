@@ -79,6 +79,9 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 - [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
 - [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
 - [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)
+- [计算器](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md)
+- [亲戚计算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)
+- [计算器](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md)
 
 ## 参与贡献
 

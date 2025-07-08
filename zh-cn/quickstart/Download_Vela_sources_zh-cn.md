@@ -41,7 +41,7 @@ openvela 源码位于由 [GitHub](https://github.com/open-Vela)、[Gitee](https:
         cd ../../
         ```
 
-    - GitCode（需注册公钥，请参考[GitCode 文档](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)）：
+    - GitCode（需注册公钥，请参考 [GitCode 文档](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)）：
 
         ```bash
         repo init --partial-clone -u https://gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
