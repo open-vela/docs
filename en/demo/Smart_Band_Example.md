@@ -20,9 +20,9 @@ This article describes how to run this example on Emulator.
 
     **Note**: The emulator configuration file (defconfig) is in the “vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/” directory, and the emulator code is configured and compiled using “build.sh”.
 
-        ```Bash
-        ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
-        ```
+    ```Bash
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
+    ```
 
     - build.sh: A script for compilation used to configure and compile openvela code.
     - vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap: configuration path
@@ -30,7 +30,7 @@ This article describes how to run this example on Emulator.
 
     The following screen appears after execution:
 
-    ![](./images/001.png)
+    <img src="images/001.png" alt="" width="60%">
 
 2. Press the “/” key to search and modify the following configurations:
 
@@ -40,25 +40,25 @@ This article describes how to run this example on Emulator.
     BANDX_BASE_PATH = "/data"
     ```
 
-    Take LV_USE_FRAGMENT as an example for illustration. The other configurations are modified is the same way.
+    Take **LV_USE_FRAGMENT** as an example for illustration. The other configurations are modified is the same way.
 
     1. Enter the configuration to be searched.
 
-        ![](images/002.png)
+        <img src="images/002.png" alt="" width="60%">
 
     2. Press “Enter” to go to the configuration page.
 
-        ![](images/003.png)
+        <img src="images/003.png" alt="" width="60%">
 
     3. Press “Enter” to open the configuration, and a \* that appears in [ ] indicates that the configuration is opened.
 
-        ![](images/004.png)
+        <img src="images/004.png" alt="" width="60%">
 
     4. Press the “/” key to continue searching for the remaining configurations, and modify them as described above.
 
     5. Press the letter Q to bring up the exit Save screen as follows.
 
-        ![](images/005.png)
+        <img src="images/005.png" alt="" width="60%">
 
     6. Press the letter Y to save the configuration and exit the Modify Configuration page.
 

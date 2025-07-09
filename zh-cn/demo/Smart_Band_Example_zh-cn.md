@@ -30,7 +30,7 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
     执行后出现如下界面：
 
-    ![img](images/001.png)
+    <img src="images/001.png" alt="" width="60%">
 
 2. 按下 `/` 键逐个搜索修改如下配置项：
 
@@ -44,21 +44,21 @@ Bandx 是一款智能手环演示，包括手表表盘、启动器、音乐、�
 
     1. 输入待搜索的配置。
 
-        ![img](images/002.png)
+        <img src="images/002.png" alt="" width="60%">
 
     2. 按下`Enter`进入到配置页面。
 
-        ![img](images/003.png)
+        <img src="images/003.png" alt="" width="60%">
 
     3. 按下`Enter`键打开该配置，`[ ]` 中出现 `*` 表示该配置被打开。
 
-        ![img](images/004.png)
+        <img src="images/004.png" alt="" width="60%">
 
     4. 按下 `/` 键可以继续搜索剩下的配置，并按上述步骤修改其余配置。
 
     5. 按下字母`Q`键，弹出如下退出保存界面。
 
-        ![img](images/005.png)
+        <img src="images/005.png" alt="" width="60%">
 
     6. 按下字母`Y`键保存配置，并退出修改配置页面。
 

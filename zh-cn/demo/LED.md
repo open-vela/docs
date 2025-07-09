@@ -6,7 +6,7 @@
 
 ## 二、最终效果
 
-https://github.com/user-attachments/assets/3f4f498b-b9d9-4222-bd07-3336e45fc731
+<img src="./images/leds.gif" alt="stsw-link007" width="25%">
 
 ## 三、准备工作
 

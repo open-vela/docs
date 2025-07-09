@@ -134,49 +134,49 @@ Shut down the emulator to exit Demo, as shown below:
     }
     ```
 
-   | Parameters | Description of parameters                                         |
-   | :--------- | :---------------------------------------------------------------- |
-   | path       | File path of the media item to be played                          |
-   | name       | Name of the media item                                            |
-   | artist     | Name of the artist                                                |
-   | cover      | Cover path. If no cover is provided, the cover will be displayed. |
-   | total_time | The total playing duration of the media item in “milliseconds”.   |
-   | color      | Theme color, not currently used.                                  |
+2. Add the media item you want to play to that configuration file. Refer to the format:
 
-   Refer to the format. Add the media item you want to play to that configuration file.
+    | Parameters | Description of parameters                                         |
+    | :--------- | :---------------------------------------------------------------- |
+    | path       | File path of the media item to be played                          |
+    | name       | Name of the media item                                            |
+    | artist     | Name of the artist                                                |
+    | cover      | Cover path. If no cover is provided, the cover will be displayed. |
+    | total_time | The total playing duration of the media item in “milliseconds”.   |
+    | color      | Theme color, not currently used.                                  |
 
-   For example, to add music “Happiness.wav” with a playing time of 186,507 ms, you can modify it as follows.
+    For example, to add music “Happiness.wav” with a playing time of 186,507 ms, you can modify it as follows.
 
-   ```JSON
-   {
-     "musics": [
-       {
-         "path": "UnamedRhythm.wav",
-         "name": "UnamedRhythm",
-         "artist": "Benign X",
-         "cover": "UnamedRhythm.png",
-         "total_time": 12000,
-         "color": "#114514"
-       },
-       {
-         "path": "Happiness.wav",
-         "name": "Xin",
-         "artist": "Tang",
-         "cover": "Good.png",
-         "total_time": 186507,
-         "color": "#252525"
-       },
-     ]
-   }
-   ```
+    ```JSON
+    {
+        "musics": [
+        {
+            "path": "UnamedRhythm.wav",
+            "name": "UnamedRhythm",
+            "artist": "Benign X",
+            "cover": "UnamedRhythm.png",
+            "total_time": 12000,
+            "color": "#114514"
+        },
+        {
+            "path": "Happiness.wav",
+            "name": "Xin",
+            "artist": "Tang",
+            "cover": "Good.png",
+            "total_time": 186507,
+            "color": "#252525"
+        },
+        ]
+    }
+    ```
 
-   After modifying the configuration, you need to push resources again by executing the following command:
+3. After modifying the configuration, you need to push resources again by executing the following command:
 
     ```Bash
     # Push resources
     adb push apps/packages/demos/music_player/res /data/
     ```
 
-2. Exit the emulator.
+4. Exit the emulator.
 
-3. Execute [Step 3](#step-3-launch-the-emulator-and-push-resources) and [Step 4](#step-4-start-the-music-player) again.
+5. Execute [Step 3](#step-3-launch-the-emulator-and-push-resources) and [Step 4](#step-4-start-the-music-player) again.

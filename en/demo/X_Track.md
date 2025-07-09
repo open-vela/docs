@@ -41,11 +41,11 @@ This article describes how to run the example on Emulator.
 
     1. Press the “/” button on the keyboard to enter the search mode, type “LIB_PNG” in the search field, use the arrow keys to move the cursor to “LIB_PNG”, and press Enter to confirm.
 
-            ![img](images/008.png)
+        ![img](images/008.png)
 
     2. Press the “space bar” for the “Enable libpng” option to turn this option on, and a \* that appears in [ ] indicates that this configuration is turned on.
 
-            ![img](images/009.png)
+        ![img](images/009.png)
 
     3. The other configurations are turned on in the same way.
 
@@ -101,9 +101,9 @@ This article describes how to run the example on Emulator.
 
 2. This happens after execution:
 
-    ![img](images/015.png)
+    <img src="images/015.png" alt="" width="75%">
 
-### 2 Main interface
+### 2. Main interface
 
 ![img](images/016.png)
 
