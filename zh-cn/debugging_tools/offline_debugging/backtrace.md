@@ -97,7 +97,7 @@ CONFIG_FRAME_POINTER=y
 CONFIG_SCHED_BACKTRACE=y
 ```
 
-更多信息参考：[RISC-V Backtrace 实现](https://github.com/open-vela/nuttx/blob/dev/arch/risc-v/src/common/riscv_backtrace.c)
+更多信息参考：[RISC-V Backtrace 实现](../../../../../../nuttx/blob/dev/arch/risc-v/src/common/riscv_backtrace.c)
 
 ### 4、Xtensa
 

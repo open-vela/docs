@@ -28,7 +28,7 @@
 
     执行后出现如下界面：
 
-    ![img](images/020.png)
+    <img src="images/020.png" alt="" width="75%">
 
 2. 按下 `/` 键逐个搜索修改如下配置：
 
@@ -41,19 +41,19 @@
 
     1. 输入待搜索的配置 `LVX_USE_DEMO_MUSIC_PLAYER`，支持模糊搜索，例如 `music_player`，找到对应的配置，按回车键进入该配置。
 
-        ![img](images/021.png)
+        <img src="images/021.png" alt="" width="75%">
 
     2. 按下空格键，`[ ]` 中出现 `*` 表示打开该配置。
 
-        ![img](images/022.png)
+        <img src="images/022.png" alt="" width="75%">
 
     3. 将 `LVX_MUSIC_PLAYER_DATA_ROOT` 设置为 `/data`，修改后按下回车键保存当前配置项。
 
-        ![img](images/023.png)
+        <img src="images/023.png" alt="" width="75%">
 
     4. 按下 `Q` 键，弹出如下退出保存界面。
 
-        ![img](images/024.png)
+        <img src="images/024.png" alt="" width="75%">
 
     5. 按下字母`Y` 键保存配置，退出修改配置页面。
 
@@ -105,7 +105,7 @@
 music_player &
 ```
 
-![img](images/025.png)
+<img src="images/025.png" alt="" width="50%">
 
 ## 步骤五 退出 Demo
 

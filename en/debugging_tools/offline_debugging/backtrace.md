@@ -50,13 +50,13 @@ CONFIG_UNWINDER_ARM
 
 Currently, openvela supports the backtrace function of ARM, RISC-V, and Xtensa architectures, and the configuration and implementation of each architecture are as follows.
 
-### 2、ARM
+### 2. ARM
 
 #### ARM Cortex-A/R
 
 In the ARM Cortex-A and Cortex-R families, the backtrace implementation supports one of two ways:
 
-```Makefile 
+```Makefile
 # Method 1: Backtrace implementation based on fp register 
 CONFIG_UNWINDER_FRAME_POINTER 
 
@@ -78,26 +78,27 @@ In the ARM Cortex-M series, there are three implementations of backtrace, choose
  CONFIG_UNWINDER_ARM=y 
  ```
 
- - CONFIG_UNWINDER_FRAME_POINTER: There are related limitations on GCC compiler (for details refer to [GCC issues](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92172)). 
- - CONFIG_UNWINDER_STACK_POINTER: Obtains pc address through `bl`/`blx` instructions, suitable for resource-constrained devices, but has a certain probability of misjudgment. If the project code is scattered across multiple regions, multiple code regions need to be configured through the following API: 
+- CONFIG_UNWINDER_FRAME_POINTER: There are related limitations on GCC compiler (for details refer to [GCC issues](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92172)). 
+- CONFIG_UNWINDER_STACK_POINTER: Obtains pc address through `bl`/`blx` instructions, suitable for resource-constrained devices, but has a certain probability of misjudgment. If the project code is scattered across multiple regions, multiple code regions need to be configured through the following API:
 
-```C 
-void up_backtrace_init_code_regions(FAR void **regions) 
-``` 
-- CONFIG_UNWINDER_ARM: Generates .exidx section during compilation, increasing the code size by 5%-8%. 
+    ```C
+    void up_backtrace_init_code_regions(FAR void **regions) 
+    ```
+
+- CONFIG_UNWINDER_ARM: Generates .exidx section during compilation, increasing the code size by 5%-8%.
 
 ### 3. RISC-V
 
-In the RISC-V architecture, backtrace is implemented based on the frame pointer. Just enable the following configuration: 
+In the RISC-V architecture, backtrace is implemented based on the frame pointer. Just enable the following configuration:
 
-```Makefile 
+```Makefile
 CONFIG_FRAME_POINTER=y 
 CONFIG_SCHED_BACKTRACE=y 
 ```
 
- For more information, refer to: [RISC-V Backtrace Implementation](https://github.com/open-vela/nuttx/blob/dev/arch/risc-v/src/common/riscv_backtrace.c)
+ For more information, refer to: [RISC-V Backtrace Implementation](../../../../../../nuttx/blob/dev/arch/risc-v/src/common/riscv_backtrace.c).
 
-### 4. Xtensa 
+### 4. Xtensa
   
 In the Xtensa architecture,  backtrace supports stack unwinding by default, and there is no need to enable the `-fno-omit-frame-pointer` option additionally. 
 
@@ -105,14 +106,15 @@ In the Xtensa architecture,  backtrace supports stack unwinding by default, and 
 
 In the code, the header file `#include <execinfo.h>` must be included. This chapter describes how to use backtrace to obtain function call stack information, print logs, and locate error lines. 
 
-### 1. Using backtrace in code 
+### 1. Using backtrace in code
 
 Using the backtrace series of functions can capture the current program state and print stack information. Below is a description of common functions.
 
 For more details, please refer to the Linux Man Page: [backtrace](https://man7.org/linux/man-pages/man3/backtrace.3.html).
 
-```C 
-#include<execinfo.h> 
+```C
+#include <execinfo.h> 
+
 /* Store the current program state in the __array array. The maximum number of elements in array is __size. The return value is the actual number of elements stored */ 
 extern int backtrace (void **__array, int __size) __nonnull ((1)); 
 
@@ -123,7 +125,7 @@ extern int backtrace (void **__array, int __size) __nonnull ((1));
 /* Function: Similar to backtrace_symbols, but does not require additional space; it writes directly to the file descriptor __fd. 
 */ 
 extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd) __THROW __nonnull ((1));
-``` 
+```
 
 ### 2. `dump_stack()`
 
@@ -146,6 +148,7 @@ extern void backtrace_symbols_fd (void *const *__array, int __size, int __fd) __
     Hello, World!!
     [07:06:21] [28] [  INFO] [BackTrace|28|0]:   0xc070a96  0xc063d7c  0xc0809bc  0xc063d38  0xc0587de
     ```
+
 2. Use the `addr2line` tool to resolve the printed backtrace addresses to specific code lines:
 
     ```Bash
@@ -171,7 +174,6 @@ In the command line, you can use the `dumpstack` command to obtain the backtrace
 #### Use `dumpstack [pid]` to get the task stack
 
 1. Obtain the stack of the process.
-
 
     ```Bash
     # Check Process Status

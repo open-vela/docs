@@ -28,7 +28,7 @@ This article describes how to run the music player demo on Emulator.
 
     The following screen appears after execution:
 
-    ![img](images/020.png)
+    <img src="images/020.png" alt="" width="75%">
 
 2. Press the “/” key to search and modify the following configurations:
 
@@ -41,16 +41,19 @@ This article describes how to run the music player demo on Emulator.
 
     1. Enter the configuration “LVX_USE_DEMO_MUSIC_PLAYER” to be searched. Fuzzy search is supported; for example, “music_player” will get the corresponding configuration. Press the Enter key to enter that configuration.
 
-        ![img](images/021.png)
+        <img src="images/021.png" alt="" width="75%">
 
     2. Press the spacebar, and a \* that appears in [ ] indicates that the configuration is turned on.
-        ![img](images/022.png)
+
+        <img src="images/022.png" alt="" width="75%">
 
     3. Set “LVX_MUSIC_PLAYER_DATA_ROOT” to “/data”, and press Enter to save the current configuration.
-        ![img](images/023.png)
+
+        <img src="images/023.png" alt="" width="75%">
 
     4. Press the letter Q to bring up the exit Save screen as follows.
-        ![img](images/024.png)
+
+        <img src="images/024.png" alt="" width="75%">
 
     5. Press the letter Y to save the configuration and exit the Modify Configuration page.
 
@@ -102,7 +105,7 @@ Enter the following command in the emulator's terminal environment “openvela-a
 music_player &
 ```
 
-![img](images/025.png)
+<img src="images/025.png" alt="" width="50%">
 
 ## Step 5: Exit Demo
 
