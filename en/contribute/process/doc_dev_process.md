@@ -2,11 +2,7 @@
 
 \[ English | [简体中文](../../../zh-cn/contribute/process/doc_dev_process.md) \]
 
-## Flowchart
-
-![documentation_development_process](./images/doc_dev_process.svg)
-
-## What Development Engineers Should Do 
+## What Development Engineers Should Do
 
 ### 1. Develop Documentation  
 
@@ -29,10 +25,10 @@ If you are responsible for developing a particular feature, you need to collabor
 
 ### 4. Submit for Translation  
 
-- Self-translation is recommended. 
+- Self-translation is recommended.
 - To request translation support from the documentation team, submit a translation request after the Chinese documentation is finalized (post-review and testing). Include the following:  
-  1. Add new terms to the [Glossary](../../overview/glossary.md).  
-  2. Provide English screenshots.  
+    1. Add new terms to the [Glossary](../../overview/glossary.md).  
+    2. Provide English screenshots.  
 
 ## What Documentation Engineers Should Do
 
@@ -47,9 +43,9 @@ If you are responsible for developing a particular feature, you need to collabor
 #### Information Architecture
 
 - When adding a new Markdown page:  
-  - Use the appropriate content template.  
+    - Use the appropriate content template.  
 - When modifying an existing Markdown page:  
-  - Verify that changes do not break links to other community content (local checks recommended).  
+    - Verify that changes do not break links to other community content (local checks recommended).  
 
 ### 2. Test Documentation
 
@@ -57,4 +53,4 @@ Documentation engineers will test the documentation. Issues identified during te
 
 ### 3. Translate Documentation
 
-Complete translations for core documentation. 
+Complete translations for core documentation.

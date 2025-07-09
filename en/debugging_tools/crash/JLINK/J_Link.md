@@ -8,7 +8,6 @@ In standard embedded development workflows, when debugging with **SEGGER J-Link*
 
 This guide details how to extend **GDB** debugging capabilities using the **J-Link** **RTOS** plug-in, enabling thread-level debugging for openvela systems. You will learn to compile, configure, and use the plug-in to view thread information, switch thread contexts, and analyze call stacks for specific threads.  
 
-
 ## II. Prerequisites  
 
 Ensure your development environment meets these requirements:  
@@ -17,11 +16,9 @@ Ensure your development environment meets these requirements:
 - A multi-architecture GDB toolchain (e.g., `gdb-multiarch`) is available.  
 - The complete openvela project source code is accessible.  
 
-
 ## III. Operation Steps  
 
 Follow these steps to compile and enable the thread debugging plug-in.  
-
 
 ### Step 1: Compile the RTOS Plug-in  
 
@@ -39,7 +36,6 @@ Follow these steps to compile and enable the thread debugging plug-in.
 
     A successful compilation generates `jlink-nuttx.so` in the current directory.  
 
-
 ### Step 2: Start J-Link GDB Server with Plug-in Loading  
 
 Launch the J-Link GDB server with the `-rtos` parameter specifying the plug-in's absolute path:  
@@ -51,7 +47,6 @@ JLinkGDBServer -if SWD -device Cortex-M55 -rtos <your-nuttx-project-path>/nuttx/
 - `-if SWD`: Sets the debug interface to SWD.  
 - `-device Cortex-M55`: Specifies the target CPU core (modify for your hardware).  
 - `-rtos`: Designates the RTOS plug-in path.  
-
 
 ### Step 3: Connect GDB Client and Verify Plug-in Loading  
 
@@ -75,11 +70,9 @@ JLinkGDBServer -if SWD -device Cortex-M55 -rtos <your-nuttx-project-path>/nuttx/
     All mandatory symbols successfully loaded.
     ```  
 
-
 ## IV. Core Debug Commands and Result Analysis  
 
 After loading the plug-in, use GDB's standard thread commands for openvela debugging.  
-
 
 ### 1. List All Threads (`info threads`)  
 
@@ -103,16 +96,16 @@ This command displays all running threads and their statuses:
   14   Thread 16 ([PID:015]rpmsg-uorb-cp:0005[PRI:100])    arm_switchcontext (saveregs=0x3c014e2c, restoreregs=0x3c015fbc) at /home/zyl/code/m1ap/nuttx/include/arch/armv8-m/syscall.h:121
 ```  
 
-**Output interpretation:**  
+**Output interpretation:**
+
 - `*`: Indicates the current GDB context thread (active thread).  
 - `Id`: Unique GDB thread identifier for subsequent operations.  
 - `Target Id`: Thread ID reported by J-Link plug-in (typically `Target Id = PID + 1` in openvela).  
 - Parentheses contain:  
-  - `PID`: Thread process ID.  
-  - `Name`: Thread name (e.g., `Idle Task`).  
-  - `PRI`: Thread priority.  
+    - `PID`: Thread process ID.  
+    - `Name`: Thread name (e.g., `Idle Task`).  
+    - `PRI`: Thread priority.  
 - `Frame`: Current function and code location.  
-
 
 ### 2. Switch Active Thread (`thread <Id>`)  
 
@@ -126,7 +119,6 @@ Switch debugging context to a target thread by GDB `Id`:
 ```  
 
 This switches GDB focus to thread `Id 4` (the `rpmsg-uorb-sens` task with `PID 18`), directing subsequent commands to this thread.  
-
 
 ### 3. View Thread Call Stack (`bt`)  
 
@@ -149,7 +141,7 @@ Backtrace stopped: previous frame identical to this frame (corrupt stack?)
 With the call stack, you can clearly trace the path of a function, e.g. from the task entry `nxtask_start` to the current choke point `arm_switchcontext`.
 
 ### 4. View Stack Frame Details (`info frame`)  
- 
+
 This command provides detailed information about the current stack frames, including program counters (PC), register save locations, and so on.
 
 ```bash
@@ -165,10 +157,10 @@ Stack level 0, frame at 0x3c016b20:
 ```  
 
 Key insights:  
+
 - Current PC address: `0x2c016f52`  
 - Context save address: `saveregs=0x3c015fbc`  
 - Context restore address: `restoreregs=0x3c00efdc`  
-
 
 ### 5. Display Register Values (`info registers`)  
 

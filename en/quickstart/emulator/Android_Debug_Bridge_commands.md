@@ -1,6 +1,6 @@
 # ADB commands
 
-\[ English | [简体中文](./../../../zh-cn/debugging_tools/emulator/Android_Debug_Bridge_commands_zh-cn.md) \]
+\[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Android_Debug_Bridge_commands_zh-cn.md) \]
 
 ADB is a versatile command-line tool that lets you communicate with a device.With access to the device’s Unix shell, ADB allows you to run a variety of commands on the device.It is a client-server program that includes three components:
 

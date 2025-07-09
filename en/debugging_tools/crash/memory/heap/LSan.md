@@ -77,10 +77,12 @@ LSan does not require compiler instrumentation. It works by intercepting memory 
 1. **Track Allocations**: As the program runs, LSan records all memory blocks allocated on the heap.
 2. **Stop the Program**: When the program exits or a check is manually triggered, LSan pauses all threads to get a stable snapshot of memory.
 3. **Identify Root Sets**: LSan scans all root regions that can legally hold pointers to heap memory, including:
+
     - Global variables
     - The stacks of all threads
     - CPU registers
     - Thread-Local Storage (TLS)
+
 4. **Mark Reachable Objects**: Starting from the root sets, LSan recursively traverses all pointers, marking all accessible heap memory blocks.
 5. **Identify Leaks**: After the traversal, any **unmarked** heap memory blocks are considered memory leaks.
 6. **Generate Report**: LSan reports all leaked memory blocks, along with the call stack recorded at the time of allocation.
@@ -194,13 +196,13 @@ This situation is typically a **logical leak**, not a **reachability leak**, whi
 - **Reachability Leak**: Memory is allocated, but all pointers to it are lost, making it impossible for the program to access or free it. This is what LSan detects.
 - **Logical Leak**: Memory is technically still reachable (e.g., held by a global list or cache) but is no longer needed from a program logic perspective.
 
-**Example**
+#### Example
 
 A global data cache continuously adds new entries but never, or rarely, removes old, unused ones.
 
 Because these unused entries are still referenced by a global data structure, LSan considers them **reachable** and will not report a leak. However, they are still consuming memory.
 
-**How to Address It:**
+#### How to Address It
 
 For **logical leaks**, you need to use other tools for manual analysis. For example, switch back to the system's built-in memory allocator and use [Leak Detection]() methods to check for changes in memory usage, which can help you locate the module causing the continuous memory growth.
 

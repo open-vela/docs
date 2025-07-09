@@ -259,12 +259,10 @@ _Common issues encountered during development._
 
 _Describe various issues encountered during development and their solutions to improve efficiency._
 
-_For writing templates, refer to [FAQ Template](faq-template.md)._
+_For writing templates, refer to [FAQ Template](./faq_template.md)._
 
 ## Next Steps
 
 **_【Writing Tips】_**
 
 _Use a bulleted list (no more than 5 items) to suggest topics developers may be interested in exploring next._
-
-

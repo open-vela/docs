@@ -1,6 +1,6 @@
 # 发送模拟器控制台命令
 
-\[ [English](./../../../en/debugging_tools/emulator/Send_emulator_console_commands.md) | 简体中文 \]
+\[ [English](./../../../en/quickstart/emulator/Send_emulator_console_commands.md) | 简体中文 \]
 
 每个正在运行的虚拟设备都提供了一个控制台，可用来查询和控制模拟设备的环境。
 

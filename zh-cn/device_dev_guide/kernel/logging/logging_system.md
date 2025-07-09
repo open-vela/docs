@@ -109,7 +109,6 @@ CONFIG_SYSLOG_DEFAULT=y      # 默认配置，输出到串口
 CONFIG_RAMLOG=y                # 启用 RAMLOG  
 CONFIG_RAMLOG_SYSLOG=y         # 启用 RAMLOG 的 syslog 支持  
 CONFIG_RAMLOG_BUFSIZE=1024     # RAMLOG 缓冲区大小  
-CONFIG_RAMLOG_OVERWRITE=y      # 缓冲区满后覆盖旧日志  
 RAMLOG_BUFFER_SECTION=".bss"   # 将缓冲区放置到固定 section
 ```
 

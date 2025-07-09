@@ -1,6 +1,6 @@
 # 使用模拟器调试
 
-\[ [English](./../../../en/debugging_tools/emulator/Debugging_Vela_with_Vela_Emulator.md) | 简体中文 \]
+\[ [English](./../../../en/quickstart/emulator/Debugging_Vela_with_Vela_Emulator.md) | 简体中文 \]
 
 ## 一、使用 GDB Console
 

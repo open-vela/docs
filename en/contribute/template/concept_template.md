@@ -5,6 +5,7 @@
 > **Note:**
 >
 > _1. This template provides recommended writing guidelines for concept - related documents._
+>
 > _2. All italicized text is for writing guidance and should be deleted entirely in the formal document._
 
 ## Overview
@@ -23,4 +24,4 @@ _[Writing Requirements]_ **Optional**, provide a simple example related to the c
 
 ## Subsequent Operations
 
-_[Writing Requirements]_ **Optional**, provide a bulleted list (up to 5 items) to help readers further learn and master the concept. 
+_[Writing Requirements]_ **Optional**, provide a bulleted list (up to 5 items) to help readers further learn and master the concept.

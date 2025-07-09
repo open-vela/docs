@@ -149,7 +149,7 @@ _Common issues developers may encounter during the operation process._
 
 _Describe various issues that may be encountered during the operation process and their solutions to improve development efficiency._
 
-_Refer to the [FAQ template](faq-template.md) for writing guidelines._
+_Refer to the [FAQ template](./faq_template.md) for writing guidelines._
 
 ## Next Steps
 

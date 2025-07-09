@@ -1,6 +1,6 @@
 # Debugging with Emulator
 
-\[ English | [简体中文](./../../../zh-cn/debugging_tools/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
+\[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
 
 ## Using GDB Console
 
