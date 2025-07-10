@@ -54,7 +54,7 @@ The following goldfish-specific drivers have been implemented in openvela:
     lvgldemo &
     ```
     
-   This appears after execution:
+    This appears after execution:
     ![img](images/001.png)
 
 3. Exit the Emulator instance, as shown below:
@@ -65,12 +65,12 @@ The following goldfish-specific drivers have been implemented in openvela:
 
 You can control a running instance of Emulator with ADB or the console.
 
-- [ADB commands](./Android_Debug_Bridge_commands.md)
-- [Send emulator console commands](./Send_emulator_console_commands.md)
+- [ADB commands](./emulator/Android_Debug_Bridge_commands.md)
+- [Send emulator console commands](./emulator/Send_emulator_console_commands.md)
 
 ## Debug with Emulator
 
-- [Debugging with Emulator](./Debugging_Vela_with_Vela_Emulator.md)
+- [Debugging with Emulator](./emulator/Debugging_Vela_with_Vela_Emulator.md)
 
 ## Common Issues
 

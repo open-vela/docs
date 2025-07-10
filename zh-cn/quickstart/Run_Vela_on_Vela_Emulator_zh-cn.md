@@ -64,12 +64,12 @@
 
 可以通过 ADB 或控制台对运行中的模拟器实例进行控制。
 
-* [ADB 命令](../debugging_tools/emulator/Android_Debug_Bridge_commands_zh-cn.md)
-* [发送模拟器控制台命令](../debugging_tools/emulator/Send_emulator_console_commands_zh-cn.md)
+* [ADB 命令](./emulator/Android_Debug_Bridge_commands_zh-cn.md)
+* [发送模拟器控制台命令](./emulator/Send_emulator_console_commands_zh-cn.md)
 
 ## 使用模拟器调试
 
-* [使用模拟器调试](../debugging_tools/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md)
+* [使用模拟器调试](./emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md)
 
 ## 常见问题
 
