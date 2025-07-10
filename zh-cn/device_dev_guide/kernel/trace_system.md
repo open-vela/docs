@@ -1,6 +1,8 @@
 
 # Trace 系统
 
+\[ [English](../../../en/device_dev_guide/kernel/trace_system.md) | 简体中文 \]
+
 ## 一、Trace 简介
 
 Trace 是一种用于跟踪和记录系统活动的工具，能够详细捕获内核（`Kernel`）、内核扩展程序（`Kernel Extension`）和用户程序（`User Program`）的行为，尤其是以下事件：
@@ -8,6 +10,7 @@ Trace 是一种用于跟踪和记录系统活动的工具，能够详细捕获�
 - 系统调用（`System Call`）
 - 内核服务（`Kernel Service`）
 - 中断处理（`Interrupt Handlers`）
+- 线程切换 （`Context Switch`）
 
 Trace 以微秒为单位记录事件，并按时间顺序排列，提供精确的系统运行日志。
 
@@ -78,8 +81,6 @@ CONFIG_PERF_OVERFLOW_CORRECTION=y
 # 默认的 Trace Buffer 大小为 2K。建议根据需求调整为更大的值，例如 2M：
 CONFIG_DRIVERS_NOTERAM_BUFSIZE=204800
 ```
-
-#### 可选配置
 
 ##### 指定 Buffer 所在的 Section
 
@@ -204,6 +205,7 @@ Trace 系统通过插桩 API 收集系统运行数据，并将数据分发到不
 - RTT
 - SysView
 - RPMsg
+- ITM
 
 ## 五、API 使用说明
 
@@ -750,6 +752,7 @@ private:
 3. 查看时序图。
 
     使用 [Perfetto](http://ui.perfetto.dev) 可查看 trace 的时序图。
+    ![img](./figures/015.png)
 
 ## 七、函数自动插桩
 
