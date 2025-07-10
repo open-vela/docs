@@ -1,4 +1,4 @@
-# Bluetooth Adapter "get" Sub-command
+# Bluetooth Adapter get Sub-command
 
 \[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/get.md) \]
 

@@ -1,4 +1,4 @@
-# Bluetooth Adapter "set" Sub-command
+# Bluetooth Adapter set Sub-command
 
 \[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/set.md) \]
 
@@ -34,9 +34,9 @@ set
 
 #### Parameters
 
-| **Parameter** | **Description** | **Type** |  
-| :------------ | :-------------- | :------- |  
-| scan mode   | Configures discoverability and connectability:<br>0: Not discoverable and not connectable.<br>1: Not discoverable but connectable.<br>2: (Default) Discoverable and connectable. | Decimal integer |  
+| **Parameter** | **Description**                                                                                                                                                                  | **Type**        |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------- |
+| scan mode     | Configures discoverability and connectability:<br>0: Not discoverable and not connectable.<br>1: Not discoverable but connectable.<br>2: (Default) Discoverable and connectable. | Decimal integer |
 
 
 #### Example
@@ -76,9 +76,9 @@ The expected results are as follows:
 
 #### Parameters
 
-| **Parameter** | **Description** | **Type** |  
-| :------------ | :-------------- | :------- |  
-| io capability | IO capability options:<br>0: `DisplayOnly` – No input capability; can only display/transmit 6-digit codes.<br>1: `Yes/No` – Can accept "Yes" or "No" input; can display/transmit 6-digit codes.<br>2: `KeyboardOnly` – Can input digits 0-9, "Confirm," "Yes," or "No"; no output capability.<br>3: (Default) `NoInputNoOutput` – No input or output capability.<br>4: `KeyboardDisplay` – Can input digits 0-9, "Confirm," "Yes," or "No"; can display/transmit 6-digit codes. | Decimal integer |  
+| **Parameter** | **Description**                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | **Type**        |
+| :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :-------------- |
+| io capability | IO capability options:<br>0: `DisplayOnly` – No input capability; can only display/transmit 6-digit codes.<br>1: `Yes/No` – Can accept "Yes" or "No" input; can display/transmit 6-digit codes.<br>2: `KeyboardOnly` – Can input digits 0-9, "Confirm," "Yes," or "No"; no output capability.<br>3: (Default) `NoInputNoOutput` – No input or output capability.<br>4: `KeyboardDisplay` – Can input digits 0-9, "Confirm," "Yes," or "No"; can display/transmit 6-digit codes. | Decimal integer |
 
 #### Example
 
@@ -119,9 +119,9 @@ The number `0` corresponds to the `displayonly` IO capability.
 
 #### Parameters
 
-| **Parameter** | **Description**            | **Type**   | **Range**             | **Default** |
-|---------------|----------------------------|------------|------------------------|-------------|
-| local name    | Adapter name               | String     | Up to 64 characters    | N/A         |
+| **Parameter** | **Description** | **Type** | **Range**           | **Default** |
+| ------------- | --------------- | -------- | ------------------- | ----------- |
+| local name    | Adapter name    | String   | Up to 64 characters | N/A         |
 
 #### Example
 
@@ -161,9 +161,9 @@ The expected results are as follows:
 
 #### Parameters  
 
-| **Parameter** | **Description** | **Type** | **Default** |  
-| :------------ | :-------------- | :------- | :---------- |  
-| class        | Device class:<br>Bits 23–13: Major Service Class.<br>Bits 12–8: Major Device Class.<br>Bits 7–2: Minor Device Class.<br>Bits 1–0: Fixed to `0`. | Hexadecimal integer | 0x00280704 |  
+| **Parameter** | **Description**                                                                                                                                 | **Type**            | **Default** |
+| :------------ | :---------------------------------------------------------------------------------------------------------------------------------------------- | :------------------ | :---------- |
+| class         | Device class:<br>Bits 23–13: Major Service Class.<br>Bits 12–8: Major Device Class.<br>Bits 7–2: Minor Device Class.<br>Bits 1–0: Fixed to `0`. | Hexadecimal integer | 0x00280704  |
 
 #### Notes
 
@@ -214,9 +214,9 @@ The expected results are as follows:
 
 #### Parameters
 
-| **Parameter**  | **Description**                                                                                                     | **Type**      | **Default** |
-|----------------|---------------------------------------------------------------------------------------------------------------------|---------------|-------------|
-| appearance     | 16-bit value (bit 16–6: category, bit 5–0: subcategory). See [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers/) Section 2.6.3. | Hex Integer   | 0           |
+| **Parameter** | **Description**                                                                                                                                            | **Type**    | **Default** |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ----------- |
+| appearance    | 16-bit value (bit 16–6: category, bit 5–0: subcategory). See [Assigned Numbers](https://www.bluetooth.com/specifications/assigned-numbers/) Section 2.6.3. | Hex Integer | 0           |
 
 #### Example
 
@@ -259,12 +259,12 @@ In LE mode, Bluetooth devices can use either a public address or a random addres
 
 - Description of address types:
 
-| **Bits 47–46** | **Type**              |
-|----------------|-----------------------|
-| 0b00           | Non-resolvable private|
-| 0b01           | Resolvable private    |
-| 0b10           | Reserved              |
-| 0b11           | Static address        |
+| **Bits 47–46** | **Type**               |
+| -------------- | ---------------------- |
+| 0b00           | Non-resolvable private |
+| 0b01           | Resolvable private     |
+| 0b10           | Reserved               |
+| 0b11           | Static address         |
 
 #### Address Type Description
 
@@ -286,9 +286,9 @@ In LE mode, Bluetooth devices can use either a public address or a random addres
 
 #### Parameters
 
-| **Parameter** | **Description**                                    | **Type**  | **Default** |
-|---------------|----------------------------------------------------|-----------|-------------|
-| leaddr        | LE private address in format `XX:XX:XX:XX:XX:XX`.  | String    | N/A         |
+| **Parameter** | **Description**                                   | **Type** | **Default** |
+| ------------- | ------------------------------------------------- | -------- | ----------- |
+| leaddr        | LE private address in format `XX:XX:XX:XX:XX:XX`. | String   | N/A         |
 
 #### Example
 
@@ -325,16 +325,14 @@ The expected results are as follows:
 
 `id` sets the adapter's static or public identity address for LE mode.
 
-> Note: This feature is currently **not supported**.
+> **Note**: This feature is currently **not supported**.
 
 #### Parameters
 
-| **Parameter**      | **Description**                         | **Type**  | **Default** |
-|--------------------|-----------------------------------------|-----------|-------------|
-| identity addr       | Identity address in `XX:XX:XX:XX:XX:XX` format | String   | N/A         |
-| addr type           | Address type: 0 = Static, 1 = Public    | Integer   | 1           |
-
-
+| **Parameter** | **Description**                                | **Type** | **Default** |
+| ------------- | ---------------------------------------------- | -------- | ----------- |
+| identity addr | Identity address in `XX:XX:XX:XX:XX:XX` format | String   | N/A         |
+| addr type     | Address type: 0 = Static, 1 = Public           | Integer  | 1           |
 
 ### 8. scanparam
 
@@ -344,12 +342,12 @@ The expected results are as follows:
 
 #### Parameters
 
-| **Parameter** | **Description** | **Type** | **Default** |  
-| :------------ | :-------------- | :------- | :---------- |  
-| mode         | Scan mode:<br>0: Inquiry Scan (discoverable).<br>1: Page Scan (connectable). | Decimal integer | N/A |  
-| type         | Scan type:<br>0: Standard Scan.<br>1: Interlaced Scan. | Decimal integer | N/A |  
-| interval     | Scan interval (period between scans).<br>Range: 18–4096 slots (1 slot = 0.625ms). | Decimal integer | Inquiry: 4096<br>Page: 2048 |  
-| window       | Scan window (duration of each scan).<br>Range: 17–`<interval>` slots. | Decimal integer | 18 |  
+| **Parameter** | **Description**                                                                   | **Type**        | **Default**                 |
+| :------------ | :-------------------------------------------------------------------------------- | :-------------- | :-------------------------- |
+| mode          | Scan mode:<br>0: Inquiry Scan (discoverable).<br>1: Page Scan (connectable).      | Decimal integer | N/A                         |
+| type          | Scan type:<br>0: Standard Scan.<br>1: Interlaced Scan.                            | Decimal integer | N/A                         |
+| interval      | Scan interval (period between scans).<br>Range: 18–4096 slots (1 slot = 0.625ms). | Decimal integer | Inquiry: 4096<br>Page: 2048 |
+| window        | Scan window (duration of each scan).<br>Range: 17–`<interval>` slots.             | Decimal integer | 18                          |
 
 #### Notes
 

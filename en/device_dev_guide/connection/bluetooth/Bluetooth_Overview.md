@@ -4,7 +4,7 @@
 
 ## I. Introduction
 
-OpenVela Bluetooth is certified for Bluetooth 5.4. Supported Bluetooth capabilities include:
+openvela Bluetooth is certified for Bluetooth 5.4. Supported Bluetooth capabilities include:
 
 - Core  
     - BR/EDR/BLE  
@@ -28,19 +28,19 @@ OpenVela Bluetooth is certified for Bluetooth 5.4. Supported Bluetooth capabili
     - VCP/VCS  
 - Mesh  
 
-OpenVela Bluetooth also supports various open‑source and proprietary stacks, such as Zephyr, BlueZ, Bluedroid, Barrot, etc.
+openvela Bluetooth also supports various open‑source and proprietary stacks, such as Zephyr, BlueZ, Bluedroid, Barrot, etc.
 
 ## II. Architecture Diagram
 
 ![img](./img/Bluetooth_arch.png)
 
-- The OpenVela Bluetooth Framework provides a unified programming API for `Android Native`, wearables, speakers, IoT, and other applications.  
+- The openvela Bluetooth Framework provides a unified programming API for `Android Native`, wearables, speakers, IoT, and other applications.  
 - These APIs cover Bluetooth operations such as power on/off, scanning, connecting, and pairing, all implemented by a comprehensive set of Bluetooth service components.  
 - To support multiple stacks, the Bluetooth Framework defines a unified Stack Abstraction Layer interface (`SAL API`), allowing third‑party stacks to integrate easily with OpenVela. When integrating a new stack, in addition to adapting the `SAL API`, you must also adapt NuttX’s `POSIX APIs` so that the stack runs efficiently on `NuttX`.
 
 ## III. Code Directory
 
-After cloning the [frameworks_bluetooth](https://github.com/open-vela/frameworks_bluetooth) repository, it maps to the `frameworks/connectivity/bluetooth` folder. The directory structure is as follows:
+After cloning the [frameworks_bluetooth](../../../../../../../frameworks_bluetooth/) repository, it maps to the `frameworks/connectivity/bluetooth` folder. The directory structure is as follows:
 
 ```bash
 ├── Android.bp                     * Android build configuration *
@@ -83,7 +83,7 @@ After cloning the [frameworks_bluetooth](https://github.com/open-vela/frameworks
 
 ### 1. Bluetooth Application Development
 
-Third‑party application developers can use the OpenVela QuickApp Feature, a set of C++ APIs built on the QuickJS engine, to access system Bluetooth capabilities. For more details, see [Bluetooth API](https://doc.quickapp.cn/features/system/bluetooth.html).
+Third‑party application developers can use the openvela QuickApp Feature, a set of C++ APIs built on the QuickJS engine, to access system Bluetooth capabilities. For more details, see [Bluetooth API](https://doc.quickapp.cn/features/system/bluetooth.html).
 
 Additionally, the Bluetooth Framework provides NDK interfaces to access all Bluetooth system capabilities. Refer to the headers in `framework/include` for more information.
 
@@ -95,18 +95,18 @@ OpenVela Bluetooth supports multiple driver architectures. Below is an example u
 
 Chip vendors implement a variable of type **struct bt_driver_s** and initialize the following member functions:
 
-- CODE int (*open)(FAR struct bt_driver_s *btdev);  
-- CODE int (*send)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len);  
-- CODE int (*ioctl)(FAR struct bt_driver_s *btdev, int cmd, unsigned long arg);  
-- CODE void (*close)(FAR struct bt_driver_s *btdev);  
+- `CODE int (*open)(FAR struct bt_driver_s *btdev)`
+- `CODE int (*send)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len)`
+- `CODE int (*ioctl)(FAR struct bt_driver_s *btdev, int cmd, unsigned long arg)`
+- `CODE void (*close)(FAR struct bt_driver_s *btdev)`
 
 These functions depend on the HCI transport between the Host and Controller.
 
 #### Registering the Driver
 
-After implementing the structure, register the driver instance via the API **bt_driver_register**():
+After implementing the structure, register the driver instance via the API `bt_driver_register()`:
 
-- int **bt_driver_register**(FAR struct bt_driver_s *drv);
+- `int bt_driver_register**(FAR struct bt_driver_s *drv)`
 
 See the type definition in `nuttx/include/nuttx/wireless/bluetooth/bt_driver.h`. The call flow is shown below:
 
@@ -116,13 +116,12 @@ See the type definition in `nuttx/include/nuttx/wireless/bluetooth/bt_driver.h`.
 
 Vendors do not need to define the `receive()` member; the BTH4 driver initializes it:
 
-- CODE int (*receive)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len);
+- `CODE int (*receive)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len)`
 
-When HCI data arrives from the chip, simply call **bt_netdev_receive**(), which invokes `receive()` to enqueue the data.
+When HCI data arrives from the chip, simply call `bt_netdev_receive()`, which invokes `receive()` to enqueue the data.
 
 ## V. Related Repositories
 
-- [frameworks_bluetooth](https://github.com/open-vela/frameworks_bluetooth): Provides rich Bluetooth application programming interfaces for developers, including API layers, service components, SAL abstraction, and HAL layers. The repo also includes tools like [bttool](../bluetooth/functionality_test/bttool_cmd.md) for testing Bluetooth features and sample API usage.  
-- [external_zblue](https://github.com/open-vela/external_zblue): Based on Zephyr’s stack, enhanced by OpenVela.  
-- [docs](https://github.com/open-vela/docs): Contains additional technical documentation for the Bluetooth module.
-
+- [frameworks_bluetooth](../../../../../../../frameworks_bluetooth): Provides rich Bluetooth application programming interfaces for developers, including API layers, service components, SAL abstraction, and HAL layers. The repo also includes tools like [bttool](../bluetooth/functionality_test/bttool_cmd.md) for testing Bluetooth features and sample API usage.  
+- [external_zblue](../../../../../../../external_zblue): Based on Zephyr’s stack, enhanced by OpenVela.  
+- [docs](../../../../../../../docs): Contains additional technical documentation for the Bluetooth module.

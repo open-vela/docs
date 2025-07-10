@@ -1,4 +1,4 @@
-# Bluetooth Adapter "state" Sub-command
+# Bluetooth Adapter state Sub-command
 
 \[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/state.md) \]
 
@@ -34,15 +34,15 @@ Adapter State: <state value>
 
 #### Adapter States
 
-| State Value | Description                       |
-| :---------- | :-------------------------------- |
-| 0           | Bluetooth is off.                 |
-| 1           | Enabling BLE functionality.       |
-| 2           | BLE functionality enabled.        |
-| 3           | Enabling BR/EDR functionality.    |
-| 4           | BR/EDR functionality enabled.     |
-| 5           | Disabling BR/EDR functionality.   |
-| 6           | Disabling BLE functionality.      |
+| State Value | Description                     |
+| :---------- | :------------------------------ |
+| 0           | Bluetooth is off.               |
+| 1           | Enabling BLE functionality.     |
+| 2           | BLE functionality enabled.      |
+| 3           | Enabling BR/EDR functionality.  |
+| 4           | BR/EDR functionality enabled.   |
+| 5           | Disabling BR/EDR functionality. |
+| 6           | Disabling BLE functionality.    |
 
 #### Sample Output
 
@@ -76,4 +76,3 @@ Upon success, the output will display:
 ```Bash
 [bttool] Adapter State: 4
 ```
- 

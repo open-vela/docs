@@ -1,4 +1,4 @@
-# Bluetooth Adapter "disable" Sub-command
+# Bluetooth Adapter disable Sub-command
 
 \[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/disable.md) \]
 
@@ -23,11 +23,11 @@ bttool> disable
 
 ### Notes
 
-- If the Bluetooth adapter is already inactive, the command returns state machine information only, e.g.:  
+If the Bluetooth adapter is already inactive, the command returns state machine information only, e.g.:  
 
-    ```Bash
-    Process, State=Off, Event=SYS_TURN_OFF  
-    ```
+```Bash
+Process, State=Off, Event=SYS_TURN_OFF  
+```
 
 ### Output Information
 
@@ -39,11 +39,11 @@ Adapter state changed: 0
 
 ### Adapter States
 
-| State | Description                |
-| :---  | :------------------------- |
-| 0     | Bluetooth off.             |
-| 5     | BR/EDR functionality off.  |
-| 6     | BLE functionality off.     |
+| State | Description               |
+| :---- | :------------------------ |
+| 0     | Bluetooth off.            |
+| 5     | BR/EDR functionality off. |
+| 6     | BLE functionality off.    |
 
 ### Sample Output
 

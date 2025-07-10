@@ -1,4 +1,4 @@
-# Bluetooth Adapter "enable" Sub-command
+# Bluetooth Adapter enable Sub-command
 
 \[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/AdapterBTCommands/enable.md) \]
 
@@ -37,7 +37,7 @@ This output indicates that both the BR/EDR (Basic Rate/Enhanced Data Rate) and L
 #### Adapter States
 
 | State | Description                    |
-| :---  | :----------------------------- |
+| :---- | :----------------------------- |
 | 1     | Enabling BLE functionality.    |
 | 2     | BLE functionality enabled.     |
 | 3     | Enabling BR/EDR functionality. |
@@ -58,4 +58,3 @@ The following is an example of the Bluetooth adapter state changes:
 [bttool] Adapter Name: XIAOMI VELA-052, Cap: 3, Class: 0x00280704, Mode:2
 [bttool] Context2:0xf1893590, Adapter state changed: 4
 ```
-
