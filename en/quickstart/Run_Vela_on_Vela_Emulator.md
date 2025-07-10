@@ -53,7 +53,7 @@ The following goldfish-specific drivers have been implemented in openvela:
     ```Bash
     lvgldemo &
     ```
-    
+
     This appears after execution:
     ![img](images/001.png)
 

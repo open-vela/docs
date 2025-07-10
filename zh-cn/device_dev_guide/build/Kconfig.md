@@ -12,9 +12,15 @@
 
 在项目配置中，如果需要设置某一配置项，可以通过以下步骤检查和设置：
 
-1. 查看配置项状态。 可以通过 `.config` 文件检查该配置是否已经设置，以及设置的值是否满足预期。如果满足预期，直接使用即可。否则，建议通过 `menuconfig` 工具进行设置。
+1. 查看配置项状态。
 
-2. 示例：配置 KVDB 存储路径。 以配置 `KVDB` 的数据库存储路径 `CONFIG_KVDB_PERSIST_PATH` 为例：
+    可以通过 `.config` 文件检查该配置是否已经设置，以及设置的值是否满足预期。如果满足预期，直接使用即可。否则，建议通过 `menuconfig` 工具进行设置。
+
+    **说明**：使用 `menuconfig` 工具能够保证所有配置的依赖关系完整且正确。
+
+2. 示例：配置 KVDB 存储路径。
+
+    以配置 `KVDB` 的数据库存储路径 `CONFIG_KVDB_PERSIST_PATH` 为例：
 
     - 默认情况下，配置项使用默认值，因此不会出现在 `defconfig` 文件中。
     - 在 `.config` 文件中可以看到其默认值为 `"/data/persist.db"`。如果您期望的值不同，可以通过 `menuconfig` 查找并设置对应的配置项。
@@ -34,10 +40,6 @@
         CONFIG_FTL_WRITEBUFFER=y  
         CONFIG_DRVR_WRITEBUFFER=y  
         ```
-
-> **注意**
->
-> 使用 `menuconfig` 工具能够保证所有配置的依赖关系完整且正确。
 
 ## 三、各文件作用
 
@@ -102,25 +104,26 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 
     在 `menuconfig` 界面中，可以输入 `/` 键后跟配置关键字进行搜索。例如，搜索 `EXAMPLES_HELLO`：
 
-    > **说明**
-    >
-    > 如果搜索结果中存在 `depends on`，需输入 `?` 继续搜索依赖的配置并将其使能（enable）。
+    **说明**：如果搜索结果中存在 `depends on`，需输入 `?` 继续搜索依赖的配置并将其使能（enable）。
 
     ![img](./figures/008.png)
 
 4. 选择与导航配置项。
 
     通过方向键上下移动，并按下回车键选择对应的选项。
+
     ![img](./figures/009.png)
 
 5. 查看配置详情。
 
     在选中某个配置项后，可以通过按 `Shift` + `?` 键查看该配置的详细说明和所在文件的位置。
+
     ![img](./figures/010.png)
 
 6. 选择具体选项。
 
     依据配置提示，例如红框中的选项编号（如“1”），可以进一步进入子选项界面。
+
     ![img](./figures/011.png)
 
 7. 修改配置项的值。
@@ -143,6 +146,4 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
 
 以下链接提供了更多关于 Kconfig 使用的详细信息：
 
-- [Zephyr 项目 - Kconfig Tips](https://docs.zephyrproject.org/latest/build/kconfig/tips.html)
-- [Zephyr 项目 - Kconfig Extensions](https://docs.zephyrproject.org/latest/build/kconfig/extensions.html)
 - [Kernel Documentation - Kconfig Language](https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html)

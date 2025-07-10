@@ -41,12 +41,12 @@
 
 3. 文件生成与调用。
 
-    1. 文件生成
+    - 文件生成
 
         - 在 `nuttx/` 和 `apps/` 的各级子目录中，`Makefile`、`Make.defs` 和 `Make.dep` 文件会在 `Makefile` 执行的各阶段中被调用或生成。
         - `Make.dep`：由工具 `tools/mkdep` 在编译过程中生成，其内部使用 `gcc -M` 命令生成符合 `Makefile` 构建目标格式的依赖语句。
 
-    2. 文件调用
+    - 文件调用
 
         - 各级子目录的 `Makefile` 文件会在文件头部 `include` 板级构建宏配置文件 `nuttx/Make.defs`。
 
@@ -147,7 +147,7 @@ pass2dep: context tools/mkdeps$(HOSTEXEEXT) tools/cnvwindeps$(HOSTEXEEXT)
 
 在 `apps` 目录中，`pass2dep` 目标会生成依赖文件，并将其引入到构建过程中。
 
-##### `apps` 目录的 Makefile 配置
+**`apps` 目录的 Makefile 配置**
 
 以下是 `nuttx-apps/Makefile` 中的依赖生成逻辑：
 
@@ -162,7 +162,7 @@ pass2dep: context tools/mkdeps$(HOSTEXEEXT) tools/cnvwindeps$(HOSTEXEEXT)
 depend: .depend
 ```
 
-##### 在配置的 app 内执行
+**在配置的 app 内执行**
 
 每个 app 的依赖生成逻辑定义在 `Application.mk` 文件中。以下是具体的 Makefile 配置：
 
@@ -178,7 +178,7 @@ depend: .depend
 depend:: .depend
 ```
 
-##### 最终效果
+**最终效果**
 
 - 生成的 `Make.dep` 文件会被 `Application.mk` 自动引入到编译过程中。
 - 该过程确保了每个 app 的依赖关系正确无误。
@@ -191,13 +191,13 @@ depend:: .depend
 
 `sched` 模块的静态库生成逻辑定义在 `sched/` 目录下的 `Makefile` 文件中。以下是其主要功能和配置。
 
-##### 功能描述
+**功能描述**
 
 - 将汇编源文件（`.S`）和 C 源文件（`.c`）分别编译为目标文件（`.o`）。
 - 将所有目标文件打包为静态库文件（`libsched.a`）。
 - 使用通用的构建规则（如 `ASSEMBLE` 和 `COMPILE`）简化编译过程。
 
-##### Makefile 示例
+**Makefile 示例**
 
 在顶层 `tools/LibTargets.mk` 文件中，定义了 `sched` 模块的构建目标和安装规则：
 
@@ -260,13 +260,13 @@ $(BIN): $(OBJS)
 
 `apps` 模块的静态库生成逻辑定义在 `nuttx-apps/Makefile` 文件中。与 `sched` 不同，`apps` 模块需要分别编译每个配置的应用程序，并最终将它们链接为一个统一的静态库（`libapps.a`）。
 
-##### 功能描述
+**功能描述**
 
 - 遍历所有配置的应用程序目录（`CONFIGURED_APPS`）。
 - 在每个应用程序目录中执行 `archive` 目标，生成对应的目标文件。
 - 将所有目标文件链接为一个静态库文件（`libapps.a`）。
 
-##### Makefile 示例
+**Makefile 示例**
 
 以下是 `nuttx-apps/Makefile` 文件中定义的静态库生成规则：
 
@@ -301,7 +301,7 @@ $(BIN): $(foreach SDIR, $(CONFIGURED_APPS), $(SDIR)_all)
 
 在每个应用程序目录中，`archive` 目标的实现逻辑定义在 `nuttx-apps/Application.mk` 文件中。以下是其主要功能和配置。
 
-##### Makefile 示例
+**Makefile 示例**
 
 ```Makefile
 ## nuttx-apps/Application.mk文件，也就是每个app编译执行的Makefile
@@ -316,7 +316,7 @@ archive:
             
 ```
 
-##### 关键点解析
+关键点解析
 
 1. 目标文件生成：
 
@@ -361,7 +361,7 @@ $(Q) $(MAKE) -C $(ARCH_SRC) EXTRA_OBJS="$(EXTRA_OBJS)" LINKLIBS="$(LINKLIBS)" AP
 
 #### 不同架构下的链接规则
 
-##### 1. `sim` 架构
+**`sim` 架构**
 
 在 `sim` 架构下，链接规则定义在 `arch/sim/src/Makefile` 文件中。以下是主要的链接逻辑：
 
@@ -406,7 +406,7 @@ endif
 - 最终链接： 根据是否启用 `CONFIG_ALLSYMS`，选择不同的链接流程。
 - 生成符号表文件： 使用 `nm` 工具生成 `System.map` 文件。
 
-##### 2. `arm` 架构
+**`arm` 架构**
 
 在 `arm` 架构下，链接规则定义在 `arch/arm/src/Makefile` 文件中。以下是主要的链接逻辑：
 

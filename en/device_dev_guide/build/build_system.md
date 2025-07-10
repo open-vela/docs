@@ -15,37 +15,39 @@ The `nuttx/tools/` directory contains the necessary scripts and C programs requi
 
 In addition to the core build files, the following key files and configurations are required to build **openvela**:  
 
-1. **Board-level macros and build options file.**  
+1. Board-level macros and build options file.
 
-    - **Location:** `nuttx/Make.defs`.  
-    - **Source:** Copied from the template file located at `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs`.  
+    - Location: `nuttx/Make.defs`.  
+    - Source: Copied from the template file located at `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs`.  
 
-2. **Conditional build configuration file.**  
-   - **Location:** `configs/defconfig` in the root directory.  
-   - **Function:**  
-     - Copied as `.config` and serves as the base configuration file for **openvela**, supporting highly customizable and modular configurations.  
-   - **Implementation:**  
-     - Achieved via per-module `kernel Kconfig` files located in each module directory.  
+2. Conditional build configuration file. 
+
+    - Location: `configs/defconfig` in the root directory.  
+    - Function: Copied as `.config` and serves as the base configuration file for **openvela**, supporting highly customizable and modular configurations.  
+    - Implementation: Achieved via per-module `kernel Kconfig` files located in each module directory.  
 
 ### 2. Key Points in the Build Process  
 
-1. **Configuring the Host Build Environment.**  
-   Use the `nuttx/tools/configure.sh` script to select the appropriate configuration for the build host.  
+1. Configuring the Host Build Environment.
 
-2. **Key File Inclusions.**  
-   In the `Make.defs` file, the following two critical files are included and passed to different stages of the `Makefile` process:  
+    Use the `nuttx/tools/configure.sh` script to select the appropriate configuration for the build host.  
 
-   - `nuttx/.config`: The build configuration file.  
-   - `nuttx/tools/Config.mk`: A file containing common macro definitions.  
+2. Key File Inclusions.
+    In the `Make.defs` file, the following two critical files are included and passed to different stages of the `Makefile` process:  
 
-3. **File Generation and Invocation:**  
+    - `nuttx/.config`: The build configuration file.  
+    - `nuttx/tools/Config.mk`: A file containing common macro definitions.  
 
-   1. **File Generation.**  
-      - At various stages of the `Makefile` execution, the `Makefile`, `Make.defs`, and `Make.dep` files in the `nuttx/` and `apps/` directories and their subdirectories are either generated or invoked.  
-      - **`Make.dep`:** Generated using the `tools/mkdep` tool during the build process. Internally, it utilizes the `gcc -M` command to create dependency statements in a format compliant with `Makefile` build targets.  
+3. File Generation and Invocation:
 
-   2. **File Invocation.**  
-      - `Makefile` files in subdirectories include the board-level macros configuration file `nuttx/Make.defs` at the top.  
+    - File Generation.
+
+        - At various stages of the `Makefile` execution, the `Makefile`, `Make.defs`, and `Make.dep` files in the `nuttx/` and `apps/` directories and their subdirectories are either generated or invoked.  
+        - `Make.dep`: Generated using the `tools/mkdep` tool during the build process. Internally, it utilizes the `gcc -M` command to create dependency statements in a format compliant with `Makefile` build targets.  
+
+    - File Invocation.
+
+        - `Makefile` files in subdirectories include the board-level macros configuration file `nuttx/Make.defs` at the top.  
 
 By organizing the build system in this way, **openvela** achieves a flexible build process that supports multi-platform builds and highly modular configurations.  
 
@@ -61,16 +63,13 @@ The nodes in the dependency tree represent an overview of various targets in the
 
 ### 2. How the Dependency Tree is Resolved  
 
-- **Dependency Resolution:**  
-  The `Makefile` resolves dependencies and begins execution from the build targets of child nodes.  
+- Dependency Resolution: The `Makefile` resolves dependencies and begins execution from the build targets of child nodes.  
 
-- **Leaf Node Annotation:**  
-  Dashed boxes in the dependency tree depict the actions executed as part of the `Makefile`’s leaf node targets.  
+- Leaf Node Annotation: Dashed boxes in the dependency tree depict the actions executed as part of the `Makefile`’s leaf node targets.  
 
-- **Efficient Execution:**  
-  This dependency tree structure enables the `Makefile` to efficiently parse and execute build targets, ensuring an orderly and modular compilation process.  
+- Efficient Execution: This dependency tree structure enables the `Makefile` to efficiently parse and execute build targets, ensuring an orderly and modular compilation process.  
 
-## 3. Key Targets  
+## III. Key Targets
 
 ### 1. `context` Target  
 
@@ -80,7 +79,7 @@ The `context` target is used to define the context environment of the build targ
 - Execute `make context` within each build target to ensure the correctness of the lower-level build environment.  
 - Create symbolic links (`ln`) for specific configuration directories, which are used to locate resources during subsequent `Makefile` execution.  
 
-**Makefile Example:**  
+Makefile Example:
 
 ```Makefile
 # context
@@ -96,7 +95,7 @@ The `context` target is used to define the context environment of the build targ
         $(Q) touch $@
 ```
 
-**Special Case: `context` in the `apps` Directory**  
+Special Case: `context` in the `apps` Directory
 
 - In most directories, the `context` target does not perform any additional actions.  
 - In the critical `apps` directory, the `context` target executes `register-all`. This target further invokes the `register` target in the configured `buildin` app directories.  
@@ -106,13 +105,13 @@ The `context` target is used to define the context environment of the build targ
 
 The `tools/mkdep` target is a critical part of the build system and is used to generate dependency configurations for source files. It utilizes the `mkdeps` tool during the `depend` stage to automatically produce dependency files compliant with `Makefile` syntax.  
 
-**Functionality:**  
+Functionality:
 
 - The `mkdeps` tool is built from the source file `tools/mkdeps.c`.  
 - It uses the `gcc -M` command to generate dependency information and outputs it in `Makefile` format.  
 - `Make.dep` files for subdirectories are automatically created by the `mkdeps` tool during the `depend` target's execution and are later included in subsequent build steps.  
 
-**Makefile Example:**  
+Makefile Example:
 
 Below is the core `Makefile` configuration for `tools/mkdep`:  
 
@@ -127,13 +126,13 @@ tools/mkdeps$(HOSTEXEEXT):
 
 The `pass2dep` target uses the `mkdep` tool to generate dependency files across all build directories. It traverses through the configured directories, invokes the `depend` target in each, and ensures all dependencies are correctly established.  
 
-**Functionality:**  
+Functionality:
 
 - The `pass2dep` target depends on the `context` and `tools/mkdeps` targets.  
 - It iterates over all kernel dependency directories (`KERNDEPDIRS`) and invokes the `depend` target in each directory.  
 - The generated dependency files are automatically incorporated into subsequent build processes.  
 
-**Makefile Example:**  
+Makefile Example:
 
 Below is the core `Makefile` configuration for `pass2dep`:  
 
@@ -149,7 +148,7 @@ pass2dep: context tools/mkdeps$(HOSTEXEEXT) tools/cnvwindeps$(HOSTEXEEXT)
 
 In the `apps` directory, the `pass2dep` target generates dependency files and incorporates them into the build process.  
 
-##### Makefile Configuration in the `apps` Directory  
+**Makefile Configuration in the `apps` Directory**
 
 The following is the dependency generation logic in the `nuttx-apps/Makefile`:  
 
@@ -162,7 +161,7 @@ The following is the dependency generation logic in the `nuttx-apps/Makefile`:
 depend: .depend
 ```
 
-##### Execute Within Configured Apps  
+**Execute Within Configured Apps**
 
 The dependency generation logic for each app is defined in the `Application.mk` file. Below is the specific Makefile configuration:  
 
@@ -178,7 +177,7 @@ The dependency generation logic for each app is defined in the `Application.mk` 
 depend:: .depend
 ```
 
-##### Final Effect  
+**Final Effect**
 
 - The generated `Make.dep` file will be automatically included in the build process by `Application.mk`.  
 - This process ensures that the dependencies of each app are accurate and correctly established.  
@@ -191,13 +190,13 @@ In the build system, static libraries (`lib.a`) are a core part of modular const
 
 The static library for the `sched` module is generated based on the logic defined in the `Makefile` located in the `sched/` directory. Below are its main functionalities and configurations.  
 
-##### Functional Description  
+**Functional Description**
 
 - Assemble source files (`.S`) and C source files (`.c`) into object files (`.o`).  
 - Package all object files into a static library file (`libsched.a`).  
 - Simplify the build process by using generic build rules (such as `ASSEMBLE` and `COMPILE`).  
 
-##### Makefile Example  
+**Makefile Example**
 
 The top-level file `tools/LibTargets.mk` defines the build targets and installation rules for the `sched` module:  
 
@@ -260,13 +259,13 @@ Key Points:
 
 The static library generation logic for the `apps` module is defined in the `nuttx-apps/Makefile` file. Unlike `sched`, the `apps` module requires compiling each configured application separately and finally linking them into a unified static library (`libapps.a`).  
 
-##### Functional Description  
+**Functional Description**
 
 - Iterate through all configured application directories (`CONFIGURED_APPS`).  
 - Execute the `archive` target in each application directory to generate the corresponding object files.  
 - Link all object files into a single static library file (`libapps.a`).  
 
-##### Makefile Example  
+**Makefile Example**
 
 The following static library generation rules are defined in the `nuttx-apps/Makefile` file:  
 
@@ -285,26 +284,24 @@ Key Points:
 
 1. Iterating Through Application Directories:  
 
-   - Use `foreach` to iterate through all configured application directories (`CONFIGURED_APPS`).  
-   - Each application directory is handled individually to ensure modular building.  
+    - Use `foreach` to iterate through all configured application directories (`CONFIGURED_APPS`).  
+    - Each application directory is handled individually to ensure modular building.  
 
 2. Independent Compilation:  
 
-   - Execute the `archive` target in each application directory to generate the corresponding object files.  
-   - Each application's object files are compiled separately, making it easier for subsequent unified packaging.  
+    - Execute the `archive` target in each application directory to generate the corresponding object files.  
+    - Each application's object files are compiled separately, making it easier for subsequent unified packaging.  
 
 3. Unified Packaging:  
 
-   - Link all object files from the applications into a single static library file (`libapps.a`).  
-   - The unified static library file facilitates subsequent linking and management.  
-
-##### Makefile 示例
+    - Link all object files from the applications into a single static library file (`libapps.a`).  
+    - The unified static library file facilitates subsequent linking and management.  
 
 #### Compilation Rules for Application Directories  
 
 In each application directory, the implementation logic for the `archive` target is defined in the `nuttx-apps/Application.mk` file. The following outlines its main functionality and configuration.  
 
-##### Makefile Example  
+**Makefile Example**
 
 ```makefile  
 ## nuttx-apps/Application.mk file, which serves as the Makefile executed for each app  
@@ -318,20 +315,20 @@ archive:
         PATH,$(BIN)), $(OBJS))  
 ```
 
-##### Key Points Analysis  
+Key Points Analysis
 
 1. Generation of Object Files:  
 
-   - Source files in various languages (e.g., C, C++, Rust, Zig) are compiled into object files (`OBJS`).  
-   - The generation of object files is automatically handled by the build system.  
+    - Source files in various languages (e.g., C, C++, Rust, Zig) are compiled into object files (`OBJS`).  
+    - The generation of object files is automatically handled by the build system.  
 
 2. Static Library Packaging:  
 
-   - The `archive` target calls the `ARCHIVE_ADD` macro, which adds the object files to the static library.  
+    - The `archive` target calls the `ARCHIVE_ADD` macro, which adds the object files to the static library.  
 
 3. Macro Definition:  
 
-   - The `ARCHIVE_ADD` macro is defined in the `Config.mk` file, with the following implementation:  
+    - The `ARCHIVE_ADD` macro is defined in the `Config.mk` file, with the following implementation:  
 
         ```makefile  
         ## Config.mk file  
@@ -343,7 +340,7 @@ archive:
         endef  
         ```  
 
-    This macro uses the `ar` tool to add object files to the static library and outputs build logs.
+        This macro uses the `ar` tool to add object files to the static library and outputs build logs.
 
 ### 5. Generation of the `nuttx` Binary File  
 
@@ -363,7 +360,7 @@ $(Q) $(MAKE) -C $(ARCH_SRC) EXTRA_OBJS="$(EXTRA_OBJS)" LINKLIBS="$(LINKLIBS)" AP
 
 #### Linking Rules for Different Architectures  
 
-##### 1. `sim` Architecture  
+**`sim` Architecture**
 
 For the `sim` architecture, the linking rules are defined in the `arch/sim/src/Makefile` file. The main linking logic is as follows:  
 
@@ -401,14 +398,14 @@ endif
                 sort > $(TOPDIR)/System.map
 ```
 
-### Key Points
+Key Points
 
 - Intermediate File Generation: Produces the `nuttx.rel` file as an intermediate result of the link process.  
 - Symbol Table Processing: Uses `OBJCOPY` and `sed` to modify the symbol table, ensuring symbol names conform to requirements.  
 - Final Linking: Depending on whether `CONFIG_ALLSYMS` is enabled, different linking processes are used.  
 - Symbol Table File Generation: Uses the `nm` tool to generate the `System.map` file.  
 
-##### 2. `arm` Architecture  
+**`arm` Architecture**
 
 For the `arm` architecture, the linking rules are defined in the `arch/arm/src/Makefile` file. The main linking logic is as follows:  
 
@@ -477,10 +474,10 @@ endif
         $(call POSTBUILD, $(TOPDIR))
 ```
 
-### Key Points
+Key Points:
 
 - Multi-format support: Generate `.hex`, `.srec`, `.bin`, and `uImage` files based on configuration options.  
 - U-Boot image generation: Use the `mkimage` tool to create the `uImage` file, with support for automatically copying it to the TFTP directory.  
 - Post-build processing: Invoke the `POSTBUILD` hook to execute additional post-build processing tasks.  
 
-At this point, the build process is complete.  
+At this point, the build process is complete.
