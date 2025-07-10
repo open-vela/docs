@@ -16,8 +16,9 @@ The `nuttx/tools/` directory contains the necessary scripts and C programs requi
 In addition to the core build files, the following key files and configurations are required to build **openvela**:  
 
 1. **Board-level macros and build options file.**  
-   - **Location:** `nuttx/Make.defs`.  
-   - **Source:** Copied from the template file located at `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs`.  
+
+    - **Location:** `nuttx/Make.defs`.  
+    - **Source:** Copied from the template file located at `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs`.  
 
 2. **Conditional build configuration file.**  
    - **Location:** `configs/defconfig` in the root directory.  
