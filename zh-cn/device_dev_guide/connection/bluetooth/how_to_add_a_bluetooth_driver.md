@@ -8,19 +8,17 @@
 
 开发者或芯片厂商可以实现一个 `struct bt_driver_s` 类型的变量，并为其初始化以下成员函数：
 
-- CODE int (*open)(FAR struct bt_driver_s *btdev);
-- CODE int (*send)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len);
-- CODE int (*ioctl)(FAR struct bt_driver_s *btdev, int cmd, unsigned long arg);
-- CODE void (*close)(FAR struct bt_driver_s *btdev);
+- `CODE int (*open)(FAR struct bt_driver_s *btdev)`
+- `CODE int (*send)(FAR struct bt_driver_s *btdev, enum bt_buf_type_e type, FAR void *data, size_t len)`
+- `CODE int (*ioctl)(FAR struct bt_driver_s *btdev, int cmd, unsigned long arg)`
+- `CODE void (*close)(FAR struct bt_driver_s *btdev)`
 
-上述成员函数的实现依赖于 `HCI（Host Controller Interface）` 的实际工作方式，也就是 `Host` 和 `Controller` 之间的物理总线。
+上述成员函数的实现依赖于 `HCI(Host Controller Interface)` 的实际工作方式，也就是 `Host` 和 `Controller` 之间的物理总线。
 
 ### 示例
 
-> **说明**
->
-> - 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
-> - 但在实际接入或使用时，建议在 [vendor](https://github.com/open-vela/vendor_template/tree/dev/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
+- 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
+- 但在实际接入或使用时，建议在 [vendor](../../../../../../vendor_template/blob/dev/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
 
 1. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
 
@@ -28,11 +26,9 @@
     #include <nuttx/wireless/bluetooth/bt_driver.h> /* 添加bt_driver.h头文件引用 */
     ```
 
-2. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中完成成员函数的实现编写。
+2. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c) 文件中完成成员函数的实现编写。
 
-    > **说明**
-    >
-    > 在 openvela 中，`struct bt_driver_s` 的 `receive` 成员函数已经在 [uart_bth4.c](https://github.com/open-vela/nuttx/blob/dev/drivers/serial/uart_bth4.c) 文件中提供了默认实现。因此，开发者或厂商无需重新定义或实现此方法。
+    在 openvela 中，`struct bt_driver_s` 的 `receive` 成员函数已经在 [uart_bth4.c](../../../../../../../nuttx/blob/dev/drivers/serial/uart_bth4.c) 文件中提供了默认实现。因此，开发者或厂商无需重新定义或实现此方法。
 
     ```C
     /* 以下为示例实现，仅做示范。
@@ -68,7 +64,7 @@
     /* 4. receive成员函数在驱动注册时由openvela指定 */
     ```
 
-3. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中，完成 `struct bt_driver_s` 结构体的定义。
+3. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c) 文件中，完成 `struct bt_driver_s` 结构体的定义。
 
     以下代码展示了一个完整的 `struct bt_driver_s` 结构体初始化示例，其中函数指针被赋值为上面定义的示例函数：
 
@@ -90,29 +86,17 @@
 
 实现上述结构体类型的变量后，需要通过如下 API 注册该驱动实例，使用其中一个 API 即可。
 
-- `bt_driver_register()`
+- `bt_driver_register()`：注册后缀 `id` 值为 0。
 
-    > **说明**
-    >
-    > 注册后缀 `id` 值为 0
+- `bt_driver_register_with_id(FAR struct bt_driver_s *driver, int id)`：注册指定 id 编号。
 
-- `bt_driver_register_with_id(FAR struct bt_driver_s *driver, int id)`
-
-    > **说明**
-    >
-    > 注册指定 id 编号
-
-`int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h)。调用关系如下图所示：
+`int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](../../../../../../../nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h)。对于 `receive()` 成员函数，厂商或开发者无需定义，BTH4 驱动会为其初始化。调用关系如下图所示：
 
 ![img](img/bt_driver.png)
 
-> **说明**
->
-> 对于 receive() 成员函数，厂商或开发者无需定义，BTH4 驱动会为其初始化。
-
 ### 示例
 
-完成上述实现驱动示例代码编写后，需要在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件内的 `drivers_initialize()` 函数末尾，调用驱动注册 API 完成驱动的注册操作：
+完成上述实现驱动示例代码编写后，需要在 [drivers_initialize.c](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c) 文件内的 `drivers_initialize()` 函数末尾，调用驱动注册 API 完成驱动的注册操作：
 
 ```C
 void drivers_initialize(void)
@@ -188,9 +172,7 @@ void drivers_initialize(void)
 
 4. 验证驱动成员函数，执行如下命令：
 
-    > **说明**
-    >
-    > 由于蓝牙驱动所注册文件节点对应的 `file_operations write` 函数，会校验数据是否符合 BTH4 格式，检验成功后，才会再将数据传入实现的 `sample_send` 函数。
+    **说明**：由于蓝牙驱动所注册文件节点对应的 `file_operations write` 函数，会校验数据是否符合 BTH4 格式，检验成功后，才会再将数据传入实现的 `sample_send` 函数。
 
     ```C
     openvela-ap> echo "Hello openvelabluetooth" > /dev/ttyHCI2

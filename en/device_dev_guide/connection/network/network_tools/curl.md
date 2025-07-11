@@ -7,6 +7,7 @@
 openvela provides a built-in curl tool, a command-line-based file transfer utility. curl supports file upload and download through URL syntax, making it a comprehensive transfer solution. Additionally, curl includes the libcurl library designed for software development, which enables building applications based on HTTP, FTP, and other protocols.
 
 ## II. Configuration Instructions
+
 Before using the curl tool, enable the following options in the configuration file:
 
 ```Makefile
@@ -16,61 +17,74 @@ CONFIG_LIB_CURL=y
 CONFIG_UTILS_CURL=y
 ```
 
-Note
-Ensure these options are properly configured to meet the dependencies required for the curl tool.
+> **Note**
+>
+> Ensure these options are properly configured to meet the dependencies required for the curl tool.
 
-## Common Use Cases
+## III. Common Use Cases
+
 The `curl` tool can be used for file downloads, network performance testing, and more. Below are typical scenarios and operational steps.
 
 ### 1. Downloading Files
+
 #### Prerequisites
+
 The openvela-equipped device and PC must connect to the same router (wired or wireless).
 
 #### Operation Steps
-1. Start an HTTP server on the PC.
 
-    Run one of the following commands based on your Python version:
-    ```
+1. Start an HTTP server on the PC. Run one of the following commands based on your Python version:
+
     - For Python 2:
-              
+
+        ```bash
         python -m SimpleHTTPServer
+        ```
+
     - For Python 3+:
-            
-        python -m http.server  
 
-        
-This will start an HTTP server using the current directory as the root.
+        ```bash
+        python -m http.server
+        ```
 
-1. Prepare the file for transfer.
-Place the target file (e.g., ota.zip) in the directory where the Python command is executed.
+    This will start an HTTP server using the current directory as the root.
 
-1. Connect the openvela device to the router via Wi-Fi.
-Run the following commands on the device:
+2. Prepare the file for transfer.
+
+    Place the target file (e.g., ota.zip) in the directory where the Python command is executed.
+
+3. Connect the openvela device to the router via Wi-Fi.
+
+    Run the following commands on the device:
+
     ```Bash
     ifup wlan0
     wapi mode wlan0 2
-    wapi psk wlan0 YOUR_WIFI_PASSWORD 3 # # Replace with Wi-Fi password
-    wapi essid wlan0 YOUR_WIFI_NAME 1  # Replace with Wi-Fi SSID
+    wapi psk wlan0 <YOUR_WIFI_PASSWORD> 3 # # Replace with Wi-Fi password
+    wapi essid wlan0 <YOUR_WIFI_NAME> 1  # Replace with Wi-Fi SSID
     renew wlan0
     ```
-Note
-Replace `YOUR_WIFI_PASSWORD` with the actual Wi-Fi password and `YOUR_WIFI_NAME` with the actual Wi-Fi name.
 
-1. Download the file from the HTTP server.
-Execute this command on the device:
+4. Download the file from the HTTP server.
+
+    Execute this command on the device:
+
+    **Note**: Replace `YOUR_FILE_SERVER_IP` with the PC's IP address. This saves `ota.zip` to `/data/ota.zip`.
 
     ```Bash
-    curl -o /data/ota.zip http://YOUR_FILE_SERVER_IP:8000/ota.zip &
+    curl -o /data/ota.zip http://<YOUR_FILE_SERVER_IP>:8000/ota.zip &
     ```
-Note
-Replace `YOUR_FILE_SERVER_IP` with the PC's IP address. This saves `ota.zip` to `/data/ota.zip`.
 
 ### 2.Uploading Device Files
+
 Follow these steps to upload files from the device to a local PC using curl.
 
 #### Operation Steps
+
 1. Prepare an upload script.
+
     Create a Python script upload.py on the PC:
+
     ```Python
     #!/bin/env python3
 
@@ -98,67 +112,81 @@ Follow these steps to upload files from the device to a local PC using curl.
         print("curl -X POST -F file=@./a.log %s:4321/upload/" % my_ip())
         uvicorn.run(app, host="0.0.0.0", port=4321)
     ```
+
 2. Install dependencies.
-Run on the PC:
+
+    Run on the PC:
+
     ```Bash
-   # Install Python dependencies
+    # Install Python dependencies
     pip install uvicorn fastapi python-multipart
     ```
+
 3. Run the upload script.
+
     ```Bash
     # Execute upload.py
     sudo chmod 777 upload.py
 
     ./upload.py
     ```
-The script will print a `curl` command template, e.g.:
+
+    The script will print a `curl` command template, for example:
+
     ```Bash
     curl -X POST -F file=@./a.log <PC_IP>:4321/upload/
     ```
+
 4. Upload the device file.
-On the connected device, run:
+
+    On the connected device, run:
+
     ```Bash
     curl -X POST -F file=@/data/trace.log http://<PC_IP>:4321/upload/
     ```
- - `/data/trace.log`: Path to the file on the device.
 
- - `<PC_IP>`: The PC's IP address displayed by the script.
+    - `/data/trace.log`: Path to the file on the device.
+    - `<PC_IP>`: The PC's IP address displayed by the script.
 
 5. Notes.
 
-- If the upload fails, check the PC's network configuration:
-      ```Nginx
+    - If the upload fails, check the PC's network configuration, confirm the PC's WAN IP and update <PC_IP> in the command.
+
+        ```bash
         ifconfig
         ```
-        Confirm the PC's WAN IP and update <PC_IP> in the command.
 
-- Ensure the device and PC are on the same network, and port 4321 is unblocked.
+    - Ensure the device and PC are on the same network, and port 4321 is unblocked.
 
 ### 3、Retrieving Web Content
+
 Use `curl` to fetch and print webpage content:
 
 ```Bash
 curl www.example.com
 ```
 
-Note
-This sends a GET request to `www.example.com` and prints the response. Replace `www.example.com` with the target URL.
+> **Note**
+>
+> This sends a GET request to `www.example.com` and prints the response. Replace `www.example.com` with the target URL.
 
 ### 4. Fetching Network Files with Redirects
-Use the -L flag to follow redirects:
 
+Use the -L flag to follow redirects:
 
 ```Bash
 curl -L -o /data/test.mp3 https://example.com
 ```
+
 #### Key Considerations
+
 1. Example:
 
     - `https://example.com` is a placeholder. Replace it with the actual download link.
-
     - `/data/test.mp3` is the output path. Modify it as needed.
 
 2. Redirect Handling:
+
     Use `-L` to automatically follow redirects and fetch the final file.
 
 3. URL Format:
@@ -166,40 +194,40 @@ curl -L -o /data/test.mp3 https://example.com
     - When running on a device, do not use quotation marks around the URL.
     - When running on a PC, URLs can use quotation marks.
 
-
 4. Special Character Escaping:
 
-
     | **Original** | **Escaped** |
-    | ---------- | ---------- |
-    | +          | %2B        |
-    | 空格       | %20        |
-    | /          | %2F        |
-    | ?          | %3F        |
-    | %          | %25        |
-    | &          | %26        |
-    | =          | %3D        |
-    | #          | %23        |
+    | ------------ | ----------- |
+    | +            | %2B         |
+    | 空格         | %20         |
+    | /            | %2F         |
+    | ?            | %3F         |
+    | %            | %25         |
+    | &            | %26         |
+    | =            | %3D         |
+    | #            | %23         |
 
 ### 5.Network Performance Testing
-Measure TCP/SSL handshake times with -w:
-examples:
+
+Measure TCP/SSL handshake times with -w.
+
+#### Examples
+
 ```Bash
-curl -w "TCP handshake: %{time_connect}, SSL handshake: %{time_appconnect}\n" -so /dev/null https://speech-preview.example.com/
+curl -w "TCP handshake: %{time_connect}, SSL handshake: %{time_appconnect}\n" -so /dev/null <https://speech-preview.example.com/>
 ```
 
-Sample Output:
+#### Sample Output
 
 ```Bash
 TCP handshake: 0.035127, SSL handshake: 0.500842
 ```
 
-TCP handshake: Time taken for TCP three-way handshake.
+- TCP handshake: Time taken for TCP three-way handshake.
+- SSL handshake: Time taken for SSL/TLS handshake.
 
-SSL handshake: Time taken for SSL/TLS handshake.
+## IV. Parameter Reference
 
-
-## Parameter Reference
 Full list of curl parameters (run curl --help all for details):
 
 ```Shell

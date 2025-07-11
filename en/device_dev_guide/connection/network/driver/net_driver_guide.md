@@ -3,14 +3,17 @@
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/driver/net_driver_guide.md) \]
 
 ## I. Introduction to Network Driver
-OpenVela has a built-in lightweight **TCP/IP** **protocol stack** and provides a network driver framework. Through this framework, the built-in TCP/IP protocol stack can interact with chip drivers to implement network packet transmission and reception.
 
-In the network driver architecture, OpenVela provides a generic **Upper Half implementation**, and manufacturers only need to implement the **LowerHalf** of the driver to complete the adaptation work, thereby giving OpenVela the ability to access the internet.
+openvela has a built-in lightweight **TCP/IP** **protocol stack** and provides a network driver framework. Through this framework, the built-in TCP/IP protocol stack can interact with chip drivers to implement network packet transmission and reception.
+
+In the network driver architecture, openvela provides a generic **Upper Half implementation**, and manufacturers only need to implement the **LowerHalf** of the driver to complete the adaptation work, thereby giving openvela the ability to access the internet.
 
 ## II. Configuration Instructions
-OpenVela uses the Kconfig tool for feature configuration. Below are the main network-related configuration options:
+
+openvela uses the Kconfig tool for feature configuration. Below are the main network-related configuration options:
 
 ### 1. Network Protocol Stack Configuration
+
 Enable required network protocols based on needs:
 
 ```Makefile
@@ -27,30 +30,35 @@ CONFIG_NET_ROUTE
 CONFIG_NET_ETHERNET
 ```
 
-### 2、Driver-Related Configuration
+### 2. Driver-Related Configuration
+
 The following options are used to configure network driver functionality:
 
 ```Makefile
-/* Driver配置相关 */
+/* Network Driver Configuration */
 CONFIG_NETDEVICES
 CONFIG_NETDEV_IOCTL
 CONFIG_NETDEV_WIRELESS_HANDLER
 ```
 
 ## III. Data Transmission and Reception Flow
+
 ### 1. Sending process
 
 ![img](./figures/001.svg)
 
-### 2、Receiving process
+### 2. Receiving process
 
 ![img](./figures/002.svg)
 
 ## IV. Driver Adaptation Interface Description
-This section introduces the design and implementation of OpenVela network driver adaptation interfaces, primarily based on the nuttx/net/netdev_lowerhalf.h file. Through these interfaces, developers can implement network device driver adaptation.
+
+This section introduces the design and implementation of openvela network driver adaptation interfaces, primarily based on the `nuttx/net/netdev_lowerhalf.h` file. Through these interfaces, developers can implement network device driver adaptation.
 
 ### 1. Driver Interface
-Driver Interface Definition
+
+#### Driver Interface Definition
+
 The following defines the network device operation interface, including device startup, shutdown, data transmission and reception, MAC address management, and other functions.
 
 ```C
@@ -71,6 +79,7 @@ struct netdev_ops_s
 ```
 
 #### Wireless Network Operation Interface
+
 The operation interface definition for wireless network devices is as follows, supporting wireless network connection, disconnection, and related parameter read/write operations.
 
 ```C
@@ -95,6 +104,7 @@ struct wireless_ops_s
 ```
 
 #### Network Device Structure
+
 The core structure of a network device, `netdev_lowerhalf_s`, is defined as follows:
 
 ```C
@@ -107,8 +117,11 @@ struct netdev_lowerhalf_s
   ...
 };
 ```
+
 #### Driver Adaptation API
+
 Here are the main APIs for network device adaptation:
+
 ```C
 int netdev_lower_register(FAR struct netdev_lowerhalf_s *dev,
                           enum net_lltype_e lltype);
@@ -121,18 +134,20 @@ void netdev_lower_txdone(FAR struct netdev_lowerhalf_s *dev);
 ```
 
 #### Network Device Operation Description
+
 Here's an API description of network device operations:
 
-- ifup(): Start the network device.
-- ifdown(): Shut down the network device.
-- transmit(): Notify the driver to send a data packet, and the driver returns the sending result.
-- receive(): Get received data packets from the driver, and the driver returns the reception result (packet).
-- addmac() (optional): Add a MAC address for receiving multicast to the network device. If the device does not involve MAC address filtering, this need not be implemented.
-- rmmac() (optional): Remove a MAC address for receiving multicast from the network device. If the device does not involve MAC address filtering, this need not be implemented.
-- ioctl() (optional): Implement other control commands, mainly used for wireless network-related commands (can be implemented alternatively with `wireless_ops_s`).
-- reclaim() (optional): Used for resource recovery. When the transmit buffer (TX Quota) is exhausted, the upper layer will call this interface. Mainly used for auxiliary device polling mode resource recovery. If the device can release the buffer in time and call `TX Done`, it does not need to be implemented.
+- `ifup()`: Start the network device.
+- `ifdown()`: Shut down the network device.
+- `transmit()`: Notify the driver to send a data packet, and the driver returns the sending result.
+- `receive()`: Get received data packets from the driver, and the driver returns the reception result (packet).
+- `addmac()` (optional): Add a MAC address for receiving multicast to the network device. If the device does not involve MAC address filtering, this need not be implemented.
+- `rmmac()` (optional): Remove a MAC address for receiving multicast from the network device. If the device does not involve MAC address filtering, this need not be implemented.
+- `ioctl()` (optional): Implement other control commands, mainly used for wireless network-related commands (can be implemented alternatively with `wireless_ops_s`).
+- `reclaim()` (optional): Used for resource recovery. When the transmit buffer (TX Quota) is exhausted, the upper layer will call this interface. Mainly used for auxiliary device polling mode resource recovery. If the device can release the buffer in time and call `TX Done`, it does not need to be implemented.
 
-### 2、NetPKT Interface
+### 2. NetPKT Interface
+
 NetPKT is a data structure used by the `transmit` and `receive` interfaces to exchange network packets with the upper layer. This section will introduce the NetPKT related interfaces and their usage.
 
 #### NetPKT Buffer Structure
@@ -148,6 +163,7 @@ NetPKT is a data structure used by the `transmit` and `receive` interfaces to ex
 - next: Pointer to the next buffer (used for linked structure).
 
 #### Buffer Interface
+
 The following defines interfaces related to NetPKT Buffer operations:
 
 ```C
@@ -191,11 +207,12 @@ bool netpkt_is_fragmented(FAR netpkt_t *pkt);
 
 #### TX Buffer Layout
 
-In OpenVela's network driver, the TX Buffer (Transmit Buffer) is used to store data that is about to be sent. Below is the layout structure of the TX Buffer and related explanation.
+In openvela's network driver, the TX Buffer (Transmit Buffer) is used to store data that is about to be sent. Below is the layout structure of the TX Buffer and related explanation.
 
 ![img](./figures/004.svg)
 
 The layout structure of TX Buffer is as follows:
+
 - reserved: Reserved field, which might be used by the driver.
 - tx data: The starting address of the transmit data.
 - base: The starting address of the buffer.
@@ -207,7 +224,8 @@ The layout structure of TX Buffer is as follows:
 Note: `TX_RESERVED = LL_GUARDSIZE - LL_HDRLEN`
 
 #### RX Buffer Layout
-In OpenVela's network driver, the RX Buffer (Receive Buffer) is used to store received data. Below is the layout structure of the RX Buffer and related explanation.
+
+In openvela's network driver, the RX Buffer (Receive Buffer) is used to store received data. Below is the layout structure of the RX Buffer and related explanation.
 
 ![img](./figures/005.svg)
 
@@ -222,7 +240,7 @@ The layout structure of RX Buffer is as follows:
 - data end: The end address of the buffer.
 - reserved: Reserved field.
 
-### 3、Other Interfaces
+### 3. Other Interfaces
 
 - `wdog`:
 
@@ -233,8 +251,10 @@ The layout structure of RX Buffer is as follows:
 
     - Network packet transmission and reception processing
     - Lower half processing of interrupts
+    - Reference: [Work Queue Development Guide](../../../kernel/IPC/work_queue.md)
 
 - `ninfo`, `nwarn`, `nerr`: Used to print logs of different levels for debugging network modules. To enable logging for the network module, the following configuration options need to be enabled:
+
     ```Makefile
     CONFIG_DEBUG_NET
     CONFIG_DEBUG_NET_ERROR
@@ -244,10 +264,12 @@ The layout structure of RX Buffer is as follows:
     CONFIG_DEBUG_NET_INFO
     ```
 
-## Driver Implementation
-This section introduces key parts of OpenVela driver implementation, including driver data structures, and methods for implementing network packet transmission and reception. The example code is based on `arch/sim/src/sim/sim_netdriver.c`.
+## V. Driver Implementation
+
+This section introduces key parts of openvela driver implementation, including driver data structures, and methods for implementing network packet transmission and reception. The example code is based on `arch/sim/src/sim/sim_netdriver.c`.
 
 ### 1. Driver Data Structure
+
 Here's the definition and initialization method of the driver data structure:
 
 ```C
@@ -296,8 +318,10 @@ int <chip>_netdev_init(FAR struct <chip>_priv_s *priv)
 }
 ```
 
-### 2、Network Packet Transmission
+### 2. Network Packet Transmission
+
 #### Data Transmission Process
+
 1. Upper Half: Call the `transmit` interface to send data packets.
 2. Lower Half: The driver processes the packets and completes the transmission.
 3. Transmission Completion Notification: Notify the upper layer of the completion of transmission via `txdone`.
@@ -354,7 +378,8 @@ static void <chip>_txdone_interrupt(FAR struct <chip>_priv_s *priv)
 }
 ```
 
-### 3、Network Packet Reception
+### 3. Network Packet Reception
+
 This section introduces the implementation process of network packet reception, including interrupt handling and the specific implementation of packet reception.
 
 ![img](./figures/008.svg)
@@ -397,7 +422,8 @@ static FAR netpkt_t *<chip>_receive(FAR struct netdev_lowerhalf_s *dev)
 }
 ```
 
-### 4、WAPI Command Integration
+### 4. WAPI Command Integration
+
 WAPI (Wireless Application Protocol Interface) commands rely on the driver's `ioctl()` interface implementation. The upper layer sets or gets Wi-Fi parameters through WAPI commands to control Wi-Fi behavior. Common functions have been abstracted as interfaces; just set them to `dev->iw_ops` during initialization.
 
 #### WAPI Interface Definition
@@ -436,36 +462,31 @@ struct wireless_ops_s
 };
 ```
 
-Note:
-
-- The driver needs to complete the adaptation of all WAPI commands in the list; after completing these interfaces, WAPI commands can be used for verification.
-
 #### WAPI Command List
 
-| **No.** | **Item**                 | **Usage**                                             | **Results**                                                  |
-| :------- | :----------------------- | :---------------------------------------------------- | :----------------------------------------------------------- |
-| 1        | Show info                | `wapi show <ifname>`                                  | Print information about the network card corresponding to <ifname>.| 
-| 2        | Scan                     | `wapi scan <ifname>`                                  | Print information about scanned AP.| 
-| 3        | Scan SSID                | `wapi scan <ifname> <essid>`                          | Print scan information for the specified ESSID.| 
-| 4        | Set channel or frequency | `wapi freq <ifname> <frequency/channel> <index/flag>` | Specify the channel in scenarios where multiple APs have the same SSID but different channels.| 
-| 5        | Set ESSID                | `wapi essid <ifname> <essid> <index/flag>`            | Set ESSID and complete network configuration.Flag explanation:0: Disconnect1: Connect.2: Set ESSID, but do not connect yet; connect after setting BSSID. |
-| 6        | Set PSK                  | `wapi psk <ifname> <passphrase> <index/flag>`         | Set AP password and encryption type (this command is not required for open networks).Flag explanation:1: WEP2: TKIP3: CCMP |
-| 7        | Disconnect               | `wapi disconnect <ifname>`                            | 	Disconnect the current wireless connection (STA/AP mode); network communication will be interrupted after disconnection.     |
-| 8        | Set mode (STA/AP)        | `wapi mode <ifname> <index/mode>`                     | Set the working mode of the wireless network.
-Mode explanation:
-2: STA mode
-3: AP mode |
-| 9        | Set BSSID                | `wapi ap <ifname> <``MAC`` address>`                  | Connect to the specified BSSID (Basic Service Set Identifier) to prevent router APs from modifying the ESSID. |
-| 10       | Save config to wapi.conf | `wapi save_config <ifname>`                           | Save the current network information to the /data/wapi.conf file.     |
-| 11       | Reconnect from wapi.conf | `wapi reconnect <ifname>`                             | Load configuration from `/data/wapi.conf` and reconnect to the network.                  |
-| 12       | Set Country Code         | `wapi country <ifname> <country code>`                | Set the country code.码。                                                 |
-| 13       | Sensitivity(RSSI)        | `wapi sense <ifname>`                                 | Get the signal strength (RSSI, Received Signal Strength Indication) of the current connection.          |
+The driver needs to complete the adaptation of all WAPI commands in the list; after completing these interfaces, WAPI commands can be used for verification.
+
+| **No.** | **Item**                 | **Usage**                                             | **Results**                                                                                                                                                                     |
+| :------ | :----------------------- | :---------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1       | Show info                | `wapi show <ifname>`                                  | Print information about the network card corresponding to `ifname`.                                                                                                             |
+| 2       | Scan                     | `wapi scan <ifname>`                                  | Print information about scanned AP.                                                                                                                                             |
+| 3       | Scan SSID                | `wapi scan <ifname> <essid>`                          | Print scan information for the specified ESSID.                                                                                                                                 |
+| 4       | Set channel or frequency | `wapi freq <ifname> <frequency/channel> <index/flag>` | Specify the channel in scenarios where multiple APs have the same SSID but different channels.                                                                                  |
+| 5       | Set ESSID                | `wapi essid <ifname> <essid> <index/flag>`            | Set ESSID and complete network configuration. <br> Flag explanation: <br> 0: Disconnect <br> 1: Connect <br> 2: Set ESSID, but do not connect yet; connect after setting BSSID. |
+| 6       | Set PSK                  | `wapi psk <ifname> <passphrase> <index/flag>`         | Set AP password and encryption type (this command is not required for open networks). <br> Flag explanation: <br> 1: WEP <br> 2: TKIP <br> 3: CCMP                              |
+| 7       | Disconnect               | `wapi disconnect <ifname>`                            | Disconnect the current wireless connection (STA/AP mode); network communication will be interrupted after disconnection.                                                        |
+| 8       | Set mode (STA/AP)        | `wapi mode <ifname> <index/mode>`                     | Set the working mode of the wireless network. <br> Mode explanation: <br> 2: STA mode <br> 3: AP mode                                                                           |
+| 9       | Set BSSID                | `wapi ap <ifname> <MAC address>`                      | Connect to the specified BSSID (Basic Service Set Identifier) to prevent router APs from modifying the ESSID.                                                                   |
+| 10      | Save config to wapi.conf | `wapi save_config <ifname>`                           | Save the current network information to the /data/wapi.conf file.                                                                                                               |
+| 11      | Reconnect from wapi.conf | `wapi reconnect <ifname>`                             | Load configuration from `/data/wapi.conf` and reconnect to the network.                                                                                                         |
+| 12      | Set Country Code         | `wapi country <ifname> <country code>`                | Set the country code.码。                                                                                                                                                       |
+| 13      | Sensitivity(RSSI)        | `wapi sense <ifname>`                                 | Get the signal strength (RSSI, Received Signal Strength Indication) of the current connection.                                                                                  |
 
 #### WAPI Command Usage Examples
+
 Below are common usage scenarios for WAPI commands:
 
-#### AP Mode
-
+**AP Mode**
 
 ```Bash
 wapi disconnect wlan0
@@ -475,7 +496,9 @@ wapi psk wlan0 <psk> 3
 wapi essid wlan0 <ssid> 1
 dhcpd wlan0 &
 ```
-##### STA Mode
+
+**STA Mode**
+
 1. Connect via ESSID:
 
     ```Bash
@@ -486,6 +509,7 @@ dhcpd wlan0 &
     wapi essid wlan0 <ssid> 1
     renew wlan0
     ```
+
 2. Connect via BSSID:
 
     ```Bash
@@ -497,19 +521,21 @@ dhcpd wlan0 &
     renew wlan0
     ```
 
-##### Configuration Saving and Loading
+**Configuration Saving and Loading**
 
 ```Bash
-wapi save_config wlan0   # 保存当前配置到 wapi.conf  
-wapi reconnect wlan0     # 从 wapi.conf 加载配置并重新联网  
+wapi save_config wlan0   # Save the current configuration to wapi.conf
+wapi reconnect wlan0     # Load the configuration from wapi.conf and reconnect
 ```
-### 5、How to Implement Dual Network Cards (AP/STA)
 
-In OpenVela's Wi-Fi framework, coexistence of AP (Access Point) and STA (Station) modes is supported. By enumerating two network card instances (such as `wlan0` and `wlan1`) during driver initialization, they can be fixed as STA mode and AP mode respectively.
+### 5. How to Implement Dual Network Cards (AP/STA)
+
+In openvela's Wi-Fi framework, coexistence of AP (Access Point) and STA (Station) modes is supported. By enumerating two network card instances (such as `wlan0` and `wlan1`) during driver initialization, they can be fixed as STA mode and AP mode respectively.
 
 #### Dual Network Card Mode Feature Description
 
 1. Dual Functionality Support: The module can both connect to wireless hotspots in the environment (STA mode) and allow external wireless terminals to connect (AP mode).
+
 2. DHCP Function Support:
     - On the `wlan0` interface, DHCP Client functionality is supported to dynamically obtain IP addresses from external wireless hotspots.
     - On the `wlan1` interface, DHCP Server functionality is supported to dynamically assign IP addresses to external wireless terminals.
@@ -519,14 +545,15 @@ In OpenVela's Wi-Fi framework, coexistence of AP (Access Point) and STA (Station
     - When a Wi-Fi connection is established or released on one interface, Wi-Fi connections on the other interface are not affected.
 
 #### Driver Implementation Notes
+
 1. Deprecated Methods:
-- The WAPI_ESSID_DELAY_ON method has been deprecated.
+    - The WAPI_ESSID_DELAY_ON method has been deprecated.
 
 2. New Connection Logic:
 
-- When setting the MAC address of an AP, if ESSID (Extended Service Set Identifier) has not been set, no action will be triggered.
-- When setting ESSID, a connection operation will be triggered.
-- If ESSID has been set previously, setting the MAC address of the AP will also trigger a new connection.
+    - When setting the MAC address of an AP, if ESSID (Extended Service Set Identifier) has not been set, no action will be triggered.
+    - When setting ESSID, a connection operation will be triggered.
+    - If ESSID has been set previously, setting the MAC address of the AP will also trigger a new connection.
 
 #### Reference Implementation Code
 
@@ -537,11 +564,12 @@ Below are links to related implementations in Linux for reference:
 
 ## VI.Testing Tools
 
-OpenVela provides multiple network testing tools for driver migration and network throughput debugging. Below are descriptions and usage of relevant tools.
+openvela provides multiple network testing tools for driver migration and network throughput debugging. Below are descriptions and usage of relevant tools.
 
 ### 1. ping (Packet Internet Groper)
 
 #### Function Description
+
 - Purpose of ping: Used to test network connectivity and response time.
 - Configuration Enablement: Ping functionality can be enabled by configuring the CONFIG_NETUTILS_PING option.
 
@@ -564,13 +592,15 @@ Where:
 
 > r //This command sends 50 packets with 1400 bytes of data each to www.xiaomi.com at 100ms intervals, with a response timeout of 200ms
 ```
-### 2、iperf2/3
+
+### 2. iperf2/3
+
 For detailed usage instructions for iperf2 and iperf3, please refer to the following documents:
 
 - [iperf2](../network_tools/iperf2.md)
 - [iperf3](../network_tools/iperf3.md)
 
-### 3、tcpdump
+### 3. tcpdump
 
 For detailed usage instructions for tcpdump, please refer to the following document:
 

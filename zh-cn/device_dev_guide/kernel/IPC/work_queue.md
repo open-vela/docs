@@ -1,7 +1,6 @@
-# 工作队列
+# 工作队列开发指南
 
 \[ [English](../../../../en/device_dev_guide/kernel/IPC/work_queue.md) | 简体中文 \]
-
 
 ## 一、概述
 

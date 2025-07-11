@@ -1,7 +1,6 @@
-# Work Queue
+# Work Queue Development Guide
 
 \[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/IPC/work_queue.md) \]
-
 
 ## I. Overview
 
@@ -28,12 +27,12 @@ When the high-priority work queue is disabled, its cleanup work is downgraded fo
 
 #### Configuration Options
 
-| Configuration Item               | Description                            | Default Value |
-|----------------------------------|----------------------------------------|---------------|
-| CONFIG_SCHED_HPWORK              | Enable high-priority work queue        | y             |
-| CONFIG_SCHED_HPNTHREADS          | Number of worker threads               | 1             |
-| CONFIG_SCHED_HPWORKPRIORITY      | Priority of worker threads             | 224           |
-| CONFIG_SCHED_HPWORKSTACKSIZE     | Stack size per worker thread (bytes)   | 2048          |
+| Configuration Item           | Description                          | Default Value |
+| ---------------------------- | ------------------------------------ | ------------- |
+| CONFIG_SCHED_HPWORK          | Enable high-priority work queue      | y             |
+| CONFIG_SCHED_HPNTHREADS      | Number of worker threads             | 1             |
+| CONFIG_SCHED_HPWORKPRIORITY  | Priority of worker threads           | 224           |
+| CONFIG_SCHED_HPWORKSTACKSIZE | Stack size per worker thread (bytes) | 2048          |
 
 ### Low-Priority (LP) Work Queue
 
@@ -50,21 +49,21 @@ Currently, only the openvela asynchronous I/O (AIO) module uses this dynamic pri
 
 #### Configuration Options
 
-| Configuration Item               | Description                            | Default Value |
-|----------------------------------|----------------------------------------|---------------|
-| CONFIG_SCHED_LPWORK              | Enable low-priority work queue         | y             |
-| CONFIG_SCHED_LPNTHREADS          | Number of worker threads               | 1             |
-| CONFIG_SCHED_LPWORKPRIORITY      | Minimum priority of worker threads     | 100           |
-| CONFIG_SCHED_LPWORKPRIOMAX       | Maximum priority to which worker threads can be elevated | 176 |
-| CONFIG_SCHED_LPWORKSTACKSIZE     | Stack size per worker thread (bytes)   | 2048          |
+| Configuration Item           | Description                                              | Default Value |
+| ---------------------------- | -------------------------------------------------------- | ------------- |
+| CONFIG_SCHED_LPWORK          | Enable low-priority work queue                           | y             |
+| CONFIG_SCHED_LPNTHREADS      | Number of worker threads                                 | 1             |
+| CONFIG_SCHED_LPWORKPRIORITY  | Minimum priority of worker threads                       | 100           |
+| CONFIG_SCHED_LPWORKPRIOMAX   | Maximum priority to which worker threads can be elevated | 176           |
+| CONFIG_SCHED_LPWORKSTACKSIZE | Stack size per worker thread (bytes)                     | 2048          |
 
 ### Comparison of Kernel Work Queues
 
-| Feature        | High-Priority (HP) Work Queue                                                                 | Low-Priority (LP) Work Queue                                                                 |
-|----------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Application Scenario | **High-real-time tasks**: Interrupt bottom half processing, urgent data handling, tasks on critical paths. | **Background or non-urgent tasks**: Logging, file system cleanup, memory garbage collection, asynchronous I/O. |
-| Advantages     | **Low latency**: Tasks are processed promptly to ensure system response speed.<br>**High real-time performance**: Ensures tasks complete within expected time. | **Resource-friendly**: Executes when system load is low to avoid competing with critical tasks.<br>**Enhances system stability**: Isolates non-critical tasks to safeguard high-priority service quality. |
-| Disadvantages  | **Resource competition**: May preempt the CPU, causing low-priority tasks to starve.<br>**Overload risk**: A large number of high-priority tasks may overload the system. | **High latency**: Task execution timing is uncertain and may be deferred for a long time.<br>**Not suitable for real-time scenarios**: Cannot guarantee immediate task response. |
+| Feature              | High-Priority (HP) Work Queue                                                                                                                                             | Low-Priority (LP) Work Queue                                                                                                                                                                              |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Application Scenario | **High-real-time tasks**: Interrupt bottom half processing, urgent data handling, tasks on critical paths.                                                                | **Background or non-urgent tasks**: Logging, file system cleanup, memory garbage collection, asynchronous I/O.                                                                                            |
+| Advantages           | **Low latency**: Tasks are processed promptly to ensure system response speed.<br>**High real-time performance**: Ensures tasks complete within expected time.            | **Resource-friendly**: Executes when system load is low to avoid competing with critical tasks.<br>**Enhances system stability**: Isolates non-critical tasks to safeguard high-priority service quality. |
+| Disadvantages        | **Resource competition**: May preempt the CPU, causing low-priority tasks to starve.<br>**Overload risk**: A large number of high-priority tasks may overload the system. | **High latency**: Task execution timing is uncertain and may be deferred for a long time.<br>**Not suitable for real-time scenarios**: Cannot guarantee immediate task response.                          |
 
 ### User-Mode Work Queue
 
@@ -78,11 +77,11 @@ In `protected` or `kernel` build modes, user applications cannot directly access
 
 #### Configuration Options
 
-| Configuration Item                | Description                         | Default Value |
-|-----------------------------------|-------------------------------------|---------------|
-| CONFIG_LIB_USRWORK               | Enable user-mode work queue         | y             |
-| CONFIG_LIB_USRWORKPRIORITY       | Priority of worker threads          | 100           |
-| CONFIG_LIB_USRWORKSTACKSIZE      | Stack size per worker thread (bytes)| 2048          |
+| Configuration Item          | Description                          | Default Value |
+| --------------------------- | ------------------------------------ | ------------- |
+| CONFIG_LIB_USRWORK          | Enable user-mode work queue          | y             |
+| CONFIG_LIB_USRWORKPRIORITY  | Priority of worker threads           | 100           |
+| CONFIG_LIB_USRWORKSTACKSIZE | Stack size per worker thread (bytes) | 2048          |
 
 ## III. Principles
 
@@ -820,12 +819,12 @@ int work_queue_wq(FAR struct kwork_wqueue_s *wqueue,
                                               
 ```
 
-| Function                | Description                                                                                                                                                                                                 |
-|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| int work_queue(...)      | **General task enqueue interface**: <br> Submits a task to the specified global work queue based on qid (e.g., HPWORK or LPWORK). The delay parameter specifies how many system ticks to defer execution from the current time. If delay is 0, the task is scheduled for execution as soon as possible. |
-| int work_queue_wq(...)   | **Specified queue task enqueue interface**: Functions the same as work_queue but directly accepts a work queue instance pointer wqueue instead of a queue ID. This is mainly used for operating private work queues dynamically created via work_queue_create. |
-| int work_queue_period(...) | **Periodic task enqueue interface**: Submits a task to the global work queue specified by qid. The task executes after the first delay and then repeats at the period specified, until canceled. |
-| int work_queue_wq_period(...) | Functions the same as work_queue_period but directly accepts a work queue instance pointer wqueue for dynamically created queues. |
+| Function                      | Description                                                                                                                                                                                                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| int work_queue(...)           | **General task enqueue interface**: <br> Submits a task to the specified global work queue based on qid (e.g., HPWORK or LPWORK). The delay parameter specifies how many system ticks to defer execution from the current time. If delay is 0, the task is scheduled for execution as soon as possible. |
+| int work_queue_wq(...)        | **Specified queue task enqueue interface**: Functions the same as work_queue but directly accepts a work queue instance pointer wqueue instead of a queue ID. This is mainly used for operating private work queues dynamically created via work_queue_create.                                          |
+| int work_queue_period(...)    | **Periodic task enqueue interface**: Submits a task to the global work queue specified by qid. The task executes after the first delay and then repeats at the period specified, until canceled.                                                                                                        |
+| int work_queue_wq_period(...) | Functions the same as work_queue_period but directly accepts a work queue instance pointer wqueue for dynamically created queues.                                                                                                                                                                       |
 
 ### Task Cancellation (`kwork_cancel.c`)
 
@@ -842,11 +841,11 @@ int work_cancel(int qid, FAR struct work_s *work);
 int work_cancel_sync(int qid, FAR struct work_s *work);
 ```
 
-| Function               | Description                                                                                                                                                                                                 |
-|------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| int work_cancel(...)   | **Asynchronous task cancellation**: <br> Attempts to remove a pending task from the global work queue specified by qid. The function returns immediately without waiting for the cancellation to complete. If the task has started execution or is complete, it cannot be canceled. |
-| int work_cancel_sync(...) | **Synchronous task cancellation**: <br> Functions similarly to work_cancel but blocks until the task is successfully removed or (if the task is already running) until the task completes execution. This ensures that by the time the function returns, the work structure is no longer used by the work queue and can be safely freed or reused. |
-| static int work_qcancel(...) | Internal implementation of work_cancel and work_cancel_sync, operating directly on the work queue instance without being exposed externally. |
+| Function                     | Description                                                                                                                                                                                                                                                                                                                                        |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| int work_cancel(...)         | **Asynchronous task cancellation**: <br> Attempts to remove a pending task from the global work queue specified by qid. The function returns immediately without waiting for the cancellation to complete. If the task has started execution or is complete, it cannot be canceled.                                                                |
+| int work_cancel_sync(...)    | **Synchronous task cancellation**: <br> Functions similarly to work_cancel but blocks until the task is successfully removed or (if the task is already running) until the task completes execution. This ensures that by the time the function returns, the work structure is no longer used by the work queue and can be safely freed or reused. |
+| static int work_qcancel(...) | Internal implementation of work_cancel and work_cancel_sync, operating directly on the work queue instance without being exposed externally.                                                                                                                                                                                                       |
 
 ### Event Notification Mechanism (`kwork_notifier.c`)
 
@@ -863,12 +862,12 @@ This module implements a publish-subscribe pattern event notification system. It
 
 #### Interface Description
 
-| Function                    | Description                                                                                                                                                                                                 |
-|-----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| int work_notifier_setup(...) | Set up/subscribe to a notification: Registers a notifier and returns a unique key for subsequent operations upon success. |
-| void work_notifier_teardown(...) | Deregister a notification: Moves the notifier specified by the key from the pending queue to the idle queue. |
-| void work_notifier_signal(...) | Trigger/publish an event: Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution. |
-| static ... work_notifier_*  | Internal helper functions like work_notifier_key, work_notifier_find, and work_notifier_worker, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
+| Function                         | Description                                                                                                                                                                                                     |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| int work_notifier_setup(...)     | Set up/subscribe to a notification: Registers a notifier and returns a unique key for subsequent operations upon success.                                                                                       |
+| void work_notifier_teardown(...) | Deregister a notification: Moves the notifier specified by the key from the pending queue to the idle queue.                                                                                                    |
+| void work_notifier_signal(...)   | Trigger/publish an event: Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution.                    |
+| static ... work_notifier_*       | Internal helper functions like work_notifier_key, work_notifier_find, and work_notifier_worker, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
 
 ```C
 /*generate a unique key for a work notifier*/
@@ -903,12 +902,12 @@ void work_notifier_signal(enum work_evtype_e evtype, FAR void *qualifier)；
 
 This module is specifically designed to solve the **priority inversion** problem, particularly in the low-priority work queue (LPWORK). When a high-priority task needs to wait for results processed by a low-priority worker thread, these interfaces can be used to temporarily elevate the worker thread's priority, ensuring the critical path is not blocked.
 
-| Function                       | Description                                                                                                                                                                                                 |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| void lpwork_boostpriority(...) | Elevates the priority of all low-priority worker threads to the specified level reqprio. |
-| void lpwork_restorepriority(...) | Restores the original priority of all low-priority worker threads that have had their priority elevated. |
-| static void lpwork_boostworker(...) | Internal function to elevate the priority of a specific worker thread. |
-| static void lpwork_restoreworker(...) | Internal function to restore the original priority of a specific worker thread. |
+| Function                              | Description                                                                                              |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| void lpwork_boostpriority(...)        | Elevates the priority of all low-priority worker threads to the specified level reqprio.                 |
+| void lpwork_restorepriority(...)      | Restores the original priority of all low-priority worker threads that have had their priority elevated. |
+| static void lpwork_boostworker(...)   | Internal function to elevate the priority of a specific worker thread.                                   |
+| static void lpwork_restoreworker(...) | Internal function to restore the original priority of a specific worker thread.                          |
 
 ```C
 /*Raise the priority of a specified low-priority worker thread*/
@@ -925,14 +924,14 @@ void lpwork_restorepriority(uint8_t reqprio);
 
 This file is the **implementation core** of the work queue, responsible for worker thread creation, main loop logic, dynamic queue lifecycle management, and task traversal, among other low-level functions.
 
-| Function                    | Description                                                                                                                                                                                                 |
-|-----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| work_queue_create(...)      | **Dynamically create a new work queue**: <br> Allows users to customize the queue name, number of worker threads, priority, and stack size. Internally calls work_thread_create to create worker threads. |
-| int work_queue_free(...)    | **Free a dynamically created work queue**: <br> Stops and cleans up all associated worker threads, then frees the memory occupied by the queue itself. |
-| void work_foreach(...)      | **Traverse tasks in the queue**: <br> Executes a handler callback function for each work item in the queue specified by qid, commonly used for debugging or status checks. |
-| static int work_thread(...) | **Main function of the worker thread**: <br> Each worker thread runs this function, which waits for task signals in an infinite loop, then retrieves and executes tasks from the queue. This is the foundation for the work queue to consume tasks. |
-| static int work_thread_create(...) | Internal interface called by work_queue_create, responsible for creating and starting a specific worker thread using the specified parameters. |
-| int work_queue_priority_wq(...) | Gets the current scheduling priority of worker threads in the specified work queue wqueue. |
+| Function                           | Description                                                                                                                                                                                                                                         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| work_queue_create(...)             | **Dynamically create a new work queue**: <br> Allows users to customize the queue name, number of worker threads, priority, and stack size. Internally calls work_thread_create to create worker threads.                                           |
+| int work_queue_free(...)           | **Free a dynamically created work queue**: <br> Stops and cleans up all associated worker threads, then frees the memory occupied by the queue itself.                                                                                              |
+| void work_foreach(...)             | **Traverse tasks in the queue**: <br> Executes a handler callback function for each work item in the queue specified by qid, commonly used for debugging or status checks.                                                                          |
+| static int work_thread(...)        | **Main function of the worker thread**: <br> Each worker thread runs this function, which waits for task signals in an infinite loop, then retrieves and executes tasks from the queue. This is the foundation for the work queue to consume tasks. |
+| static int work_thread_create(...) | Internal interface called by work_queue_create, responsible for creating and starting a specific worker thread using the specified parameters.                                                                                                      |
+| int work_queue_priority_wq(...)    | Gets the current scheduling priority of worker threads in the specified work queue wqueue.                                                                                                                                                          |
 
 ```C
 /*take out of the work from queue and execute it

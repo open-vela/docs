@@ -249,8 +249,9 @@ bool netpkt_is_fragmented(FAR netpkt_t *pkt);
 
 - `work_queue`： 内核利用独立线程实现的异步执行机制，与 Linux 的工作队列类似，可用于任务的异步处理。例如：
 
-    - 网络数据包的收发处理
-    - 中断的下半部处理
+    - 网络数据包的收发处理。
+    - 中断的下半部处理。
+    - 参考文档：[工作队列](../../../kernel/IPC/work_queue.md)
 
 - `ninfo`，`nwarn`，`nerr`： 用于打印不同等级的日志（Log），便于调试网络模块。 打开网络模块的日志功能需要启用以下配置选项：
 
@@ -461,33 +462,31 @@ struct wireless_ops_s
 };
 ```
 
-说明：
-
-- 驱动需要完成列表中所有 WAPI 命令的适配，完成上述接口后，WAPI 命令即可用于验证。
-
 #### WAPI 命令列表
 
-| **序号** | **Item**                 | **Usage**                                             | **Results**                                                  |
-| :------- | :----------------------- | :---------------------------------------------------- | :----------------------------------------------------------- |
-| 1        | Show info                | `wapi show <ifname>`                                  | 打印当前 `<ifname>` 对应网卡的相关信息。                     |
-| 2        | Scan                     | `wapi scan <ifname>`                                  | 打印扫描到的 AP 信息。                                       |
-| 3        | Scan SSID                | `wapi scan <ifname> <essid>`                          | 打印指定 ESSID 的扫描信息。                                  |
-| 4        | Set channel or frequency | `wapi freq <ifname> <frequency/channel> <index/flag>` | 在多个相同 SSID 但频道（Channel）不同的场景下，指定频道。    |
+驱动需要完成列表中所有 WAPI 命令的适配，完成上述接口后，WAPI 命令即可用于验证。
+
+| **序号** | **Item**                 | **Usage**                                             | **Results**                                                                                                                |
+| :------- | :----------------------- | :---------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------- |
+| 1        | Show info                | `wapi show <ifname>`                                  | 打印当前 `ifname` 对应网卡的相关信息。                                                                                     |
+| 2        | Scan                     | `wapi scan <ifname>`                                  | 打印扫描到的 AP 信息。                                                                                                     |
+| 3        | Scan SSID                | `wapi scan <ifname> <essid>`                          | 打印指定 ESSID 的扫描信息。                                                                                                |
+| 4        | Set channel or frequency | `wapi freq <ifname> <frequency/channel> <index/flag>` | 在多个相同 SSID 但频道（Channel）不同的场景下，指定频道。                                                                  |
 | 5        | Set ESSID                | `wapi essid <ifname> <essid> <index/flag>`            | 设置 ESSID 并完成配网操作。<br>Flag 说明：<br>0：断开连接 <br>1：连接 <br>2：设置 ESSID，但暂不连接，待设置 BSSID 后连接。 |
-| 6        | Set PSK                  | `wapi psk <ifname> <passphrase> <index/flag>`         | 设置 AP 密码及加密类型（开放网络无需此命令）。<br>Flag 说明：<br>1：WEP <br>2：TKIP <br>3：CCMP |
-| 7        | Disconnect               | `wapi disconnect <ifname>`                            | 断开当前无线连接（STA/AP 模式），断开后网络通信将中断。      |
-| 8        | Set mode (STA/AP)        | `wapi mode <ifname> <index/mode>`                     | 设置无线网络的工作模式。<br>Mode 说明：<br>2：STA 模式 <br>3：AP 模式    |
-| 9        | Set BSSID                | `wapi ap <ifname> <``MAC`` address>`                  | 指定 BSSID（基本服务集标识符）连接，防止路由 AP 修改 ESSID。 |
-| 10       | Save config to wapi.conf | `wapi save_config <ifname>`                           | 保存当前联网信息到 `/data/wapi.conf` 文件。                  |
-| 11       | Reconnect from wapi.conf | `wapi reconnect <ifname>`                             | 从 `/data/wapi.conf` 加载配置并重新联网。                    |
-| 12       | Set Country Code         | `wapi country <ifname> <country code>`                | 设置国家码。                                                 |
-| 13       | Sensitivity(RSSI)        | `wapi sense <ifname>`                                 | 获取当前连接的信号强度（RSSI，接收信号强度指示）。           |
+| 6        | Set PSK                  | `wapi psk <ifname> <passphrase> <index/flag>`         | 设置 AP 密码及加密类型（开放网络无需此命令）。<br>Flag 说明：<br>1：WEP <br>2：TKIP <br>3：CCMP                            |
+| 7        | Disconnect               | `wapi disconnect <ifname>`                            | 断开当前无线连接（STA/AP 模式），断开后网络通信将中断。                                                                    |
+| 8        | Set mode (STA/AP)        | `wapi mode <ifname> <index/mode>`                     | 设置无线网络的工作模式。<br>Mode 说明：<br>2：STA 模式 <br>3：AP 模式                                                      |
+| 9        | Set BSSID                | `wapi ap <ifname> <``MAC`` address>`                  | 指定 BSSID（基本服务集标识符）连接，防止路由 AP 修改 ESSID。                                                               |
+| 10       | Save config to wapi.conf | `wapi save_config <ifname>`                           | 保存当前联网信息到 `/data/wapi.conf` 文件。                                                                                |
+| 11       | Reconnect from wapi.conf | `wapi reconnect <ifname>`                             | 从 `/data/wapi.conf` 加载配置并重新联网。                                                                                  |
+| 12       | Set Country Code         | `wapi country <ifname> <country code>`                | 设置国家码。                                                                                                               |
+| 13       | Sensitivity(RSSI)        | `wapi sense <ifname>`                                 | 获取当前连接的信号强度（RSSI，接收信号强度指示）。                                                                         |
 
 #### WAPI 命令使用示例
 
 以下是 WAPI 命令的常见使用场景：
 
-##### AP 模式
+**AP 模式**
 
 ```Bash
 wapi disconnect wlan0
@@ -498,7 +497,7 @@ wapi essid wlan0 <ssid> 1
 dhcpd wlan0 &
 ```
 
-##### STA 模式
+**STA 模式**
 
 1. 通过 ESSID 连接：
 
@@ -522,7 +521,7 @@ dhcpd wlan0 &
     renew wlan0
     ```
 
-##### 配置保存与加载
+**配置保存与加载**
 
 ```Bash
 wapi save_config wlan0   # 保存当前配置到 wapi.conf  

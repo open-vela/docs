@@ -62,26 +62,20 @@ CONFIG_UTILS_CURL=y
     ```Bash
     ifup wlan0
     wapi mode wlan0 2
-    wapi psk wlan0 YOUR_WIFI_PASSWORD 3 # 加粗标记为 Wi-Fi密码
-    wapi essid wlan0 YOUR_WIFI_NAME 1  # 加粗标记为 Wi-Fi名称
+    wapi psk wlan0 <YOUR_WIFI_PASSWORD> 3 # # Replace with Wi-Fi password
+    wapi essid wlan0 <YOUR_WIFI_NAME> 1  # Replace with Wi-Fi SSID
     renew wlan0
     ```
 
-    > 说明
-    >
-    > 请将 `YOUR_WIFI_PASSWORD` 替换为实际的 Wi-Fi 密码，将 `YOUR_WIFI_NAME` 替换为实际的 Wi-Fi 名称。
-
-4. 从 HTTP 服务器下载文件。
+4. Download the file from the HTTP server.
 
     在设备上运行以下命令，从 HTTP 服务器下载文件并保存到本地：
 
-    ```Bash
-    curl -o /data/ota.zip http://YOUR_FILE_SERVER_IP:8000/ota.zip &
-    ```
+    **说明**：将 `YOUR_FILE_SERVER_IP` 替换为 PC 的 IP 地址。此命令会将服务器上的 `ota.zip` 文件保存到设备的 `/data/ota.zip` 路径下。
 
-    > 说明
-    >
-    > 将 `YOUR_FILE_SERVER_IP` 替换为 PC 的 IP 地址。此命令会将服务器上的 `ota.zip` 文件保存到设备的 `/data/ota.zip` 路径下。
+    ```Bash
+    curl -o /data/ota.zip http://<YOUR_FILE_SERVER_IP>:8000/ota.zip &
+    ```
 
 ### 2、上传设备文件
 
@@ -158,13 +152,11 @@ CONFIG_UTILS_CURL=y
 
 5. 注意事项。
 
-    - 如果上传失败，请在本地电脑上运行以下命令检查网络配置：
+    - 如果上传失败，请在本地电脑上运行以下命令检查网络配置，确认本地电脑的 IP 地址（WAN 口 IP），并替换命令中的 `<PC_IP>`：
 
         ```Nginx
         ifconfig
         ```
-
-        确认本地电脑的 IP 地址（WAN 口 IP），并替换命令中的 `<PC_IP>`。
 
     - 确保设备和本地电脑在同一网络下，且本地电脑的防火墙允许端口 `4321` 的访问。
 
@@ -176,7 +168,7 @@ CONFIG_UTILS_CURL=y
 curl www.example.com
 ```
 
-> 说明
+> **说明**
 >
 > - 上述命令会对 `www.example.com` 域名发起一个 GET 请求，并将返回的网页内容打印到当前窗口。
 > - `www.example.com` 仅为示例，请替换为实际的目标网址。
@@ -227,14 +219,10 @@ curl -L -o /data/test.mp3 https://example.com
 #### 示例命令
 
 ```Bash
-curl -w "TCP handshake: %{time_connect}, SSL handshake: %{time_appconnect}\n" -so /dev/null https://speech-preview.example.com/
+curl -w "TCP handshake: %{time_connect}, SSL handshake: %{time_appconnect}\n" -so /dev/null <https://speech-preview.example.com/>
 ```
 
-> 说明
->
-> `https://speech-preview.example.com/` 仅为示例，请替换为实际需要测试的目标网址。
-
-#### 示例输出
+#### Sample Output
 
 以下是执行结果的示例：
 
