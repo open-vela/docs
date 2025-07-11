@@ -199,7 +199,7 @@ curl -L -o /data/test.mp3 https://example.com
     | **Original** | **Escaped** |
     | ------------ | ----------- |
     | +            | %2B         |
-    | 空格         | %20         |
+    | Space        | %20         |
     | /            | %2F         |
     | ?            | %3F         |
     | %            | %25         |
