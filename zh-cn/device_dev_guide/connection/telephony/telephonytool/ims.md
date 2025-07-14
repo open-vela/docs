@@ -2,7 +2,7 @@
 
 \[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/ims.md) | 简体中文 \]
 
-## 一、简介
+## 一、概述
 
  在 openvela 的 NSH 命令行中，可以通过 `telephonytool` 命令工具进入 Console，执行所有与 IMS（IP Multimedia Subsystem）相关的操作。
 

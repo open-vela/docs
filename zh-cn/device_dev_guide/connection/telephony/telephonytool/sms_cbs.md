@@ -2,7 +2,7 @@
 
 \[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/sms_cbs.md) | 简体中文 \]
 
-## 一、简介
+## 一、概述
 
 在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console，执行所有与 SMS（Short Message Service，短消息服务）和 CBS（Cell Broadcast Service，小区广播服务）相关的操作。
 

@@ -18,11 +18,11 @@ ap> telephonytool
 
 ### 1. listen-call
 
-#### Command Description
+#### Description
 
 The `listen-call` command is used to monitor changes in call status, emergency number changes, and changes in the ringback tone, among other information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 listen-call [slot_id][event_id]
@@ -37,13 +37,13 @@ listen-call [slot_id][event_id]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> listen-call 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool>  listen-call 0 1
@@ -52,11 +52,11 @@ telephonytool>  listen-call 0 1
 
 ### 2. unlisten-call
 
-#### Command Description
+#### Description
 
 The `unlisten-call` command is used to cancel listening for changes in call status, emergency numbers, and ringback tone changes.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 unlisten-call [watch_id]
@@ -64,15 +64,15 @@ unlisten-call [watch_id]
 
 - watch_id: Corresponds to the return value of the `listen-call` command, used to identify the event to stop monitoring.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> unlisten-call 95
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool> unlisten-call 95
@@ -81,25 +81,25 @@ telephonytool> unlisten-call 95
 
 ### 3. Listen-Call-Slot-Change
 
-#### Command Description
+#### Description
 
 the `listen-call-slot-change` command is used to monitor changes in the call slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 listen-call-slot-change
 ```
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> listen-call-slot-change
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> listen-call-slot-change
@@ -108,11 +108,11 @@ telephonytool> listen-call-slot-change
 
 ### 4. dial
 
-#### Command Description
+#### Description
 
 The `dial` command is used to initiate a phone call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 dial [slot_id][number][hide_call_id]
@@ -125,15 +125,15 @@ dial [slot_id][number][hide_call_id]
     - `0`: Show caller ID.
     - `1`: Hide caller ID.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> dial 0 10086 0
 ```
 
-##### Output Information
+#### Output
 
 ```Bash
 telephonytool> dial 0 10086 0
@@ -144,11 +144,11 @@ telephonytool> dial 0 10086 0
 
 ### 5. answer_0
 
-#### Command Description
+#### Description
 
 The answer_0 command is used to answer an incoming call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 answer_0 [slot_id] [call_id]
@@ -157,15 +157,15 @@ answer_0 [slot_id] [call_id]
 - `slot_id`:Set the slot you want to listen to, currently only `0` is supported.
 - `call_id`:Call id information of the incoming call.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> answer_0 0 /ril_0/voicecall01
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> answer_0  0  /ril_0/voicecall01
@@ -174,11 +174,11 @@ telephonytool> answer_0  0  /ril_0/voicecall01
 
 ### 6. hangup_0
 
-#### Command Description
+#### Description
 
 The `hangup_0` command is used to hang up a call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 hangup_0 [slot_id][call_id] 
@@ -187,15 +187,15 @@ hangup_0 [slot_id][call_id]
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 - call_id: The ID of the call to be disconnected.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> hangup_0 0 /ril_0/voicecall01
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool> hangup_0 0 /ril_0/voicecall01
@@ -204,11 +204,11 @@ telephonytool> hangup_0 0 /ril_0/voicecall01
 
 ### 7. release_and_answer
 
-#### Command Description
+#### Description
 
 The `release_and_answer` command releases the current ongoing call and answers the latest incoming call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 release_and_answer [slot_id]
@@ -216,15 +216,15 @@ release_and_answer [slot_id]
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> release_and_answer 0
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool> release_and_answer 0
@@ -233,11 +233,11 @@ telephonytool> release_and_answer 0
 
 ### 8. hold_and_answer
 
-#### Command Description
+#### Description
 
 The `hold_and_answer` command places the current ongoing call on hold and answers the latest incoming call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 hold_and_answer [slot_id]
@@ -245,15 +245,15 @@ hold_and_answer [slot_id]
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> hold_and_answer 0
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool> hold_and_answer 0
@@ -263,11 +263,11 @@ telephonytool> hold_and_answer 0
 
 ### 9. release_and_swap
 
-#### Command Description
+#### Description
 
 The `release_and_swap` command hangs up the current active call and switches a call that is on hold to the active call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 release_and_swap [slot_id]
@@ -275,15 +275,15 @@ release_and_swap [slot_id]
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> release_and_swap 0
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 release_and_swap 0
@@ -295,13 +295,13 @@ telephonytool> [57714.489500] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_HANGUP_FO
 
 ### 10. swap
 
-#### Command Description
+#### Description
 
 The swap command is used to switch the call status between active and hold calls.
 
 `swap` command to toggle the call state:
 
-#### Command Format
+#### Syntax
 
 ```Bash
 swap [slot_id][action]
@@ -313,15 +313,15 @@ swap [slot_id][action]
     - `1`: Switch to hold call.
     - `0`: Switch to active call.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> swap 0 1 
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool>  swap 0 1
@@ -333,11 +333,11 @@ telephonytool> [57750.211600] [21] [  INFO] [ap] [0,0089]> RIL_REQUEST_SWITCH_HO
 
 ### 11. hangup-all
 
-#### Command Description
+#### Description
 
 The `hangup-all` command is used to hang up all active calls, including background calls.
 
-#### Command Format
+#### Syntax
 
 ```Bash
  hangup-all [slot_id]
@@ -345,15 +345,15 @@ The `hangup-all` command is used to hang up all active calls, including backgrou
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> hangup-all 0 
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool> hangup-all 0
@@ -363,11 +363,11 @@ telephonytool> hangup-all 0
 
 ### 12. get-call
 
-#### Command Description
+#### Description
 
 The `get-call` command is used to retrieve information about all ongoing calls.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-call [slot_id]
@@ -375,15 +375,15 @@ get-call [slot_id]
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 
-##### Example
+#### Example
 
-###### Command Input
+###### Input
 
 ```Bash
 telephonytool> get-call 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-call 0
@@ -407,11 +407,11 @@ telephonytool> [57791.194300] [27] [ DEBUG] [ap] call_list_query_complete :
 
 ### 13. transfer
 
-#### Command Description
+#### Description
 
 The `transfer` command is used to transfer the current ongoing call to another device. This feature depends on network support.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 transfer [slot_id]
@@ -419,15 +419,15 @@ transfer [slot_id]
 
 - slot_id: Set the slot to be used, currently only supports `0`.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> transfer 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> transfer 0
@@ -436,11 +436,11 @@ telephonytool> transfer 0
 
 ### 14. get-ecclist
 
-#### Command Description
+#### Description
 
 The `get-ecclist` command is used to retrieve information about all emergency numbers.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-ecclist [slot_id]
@@ -448,15 +448,15 @@ get-ecclist [slot_id]
 
 - slot_id: Set the slot to be used, currently only supports `0`.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-ecclist 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-ecclist 0
@@ -469,11 +469,11 @@ telephonytool> get-ecclist 0
 
 ### 15. is-ecc
 
-#### Command Description
+#### Description
 
 The `is-ecc` command is used to check whether a specific phone number is an emergency number.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 is-ecc [number]
@@ -481,15 +481,15 @@ is-ecc [number]
 
 - number: The phone number to check.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> is-ecc 110
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> is-ecc 110
@@ -500,11 +500,11 @@ telephonytool> is-ecc 110
 
 ### 16. send-tones
 
-#### Command Description
+#### Description
 
 The `send-tones` command is used to send a preset DTMF (Dual-Tone Multi-Frequency) signal.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 send-tones [slot_id][dtmf]
@@ -513,15 +513,15 @@ send-tones [slot_id][dtmf]
 - slot_id: Set the slot to be used, currently only supports `0`.
 - dtmf: The number (DTMF signal) to be sent.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> send-tones 0 11
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> send-tones 0 11
@@ -530,11 +530,11 @@ telephonytool> send-tones 0 11
 
 ### 17. start-dtmf
 
-#### Command Description
+#### Description
 
 The `start-dtmf` command is used to send a single DTMF (Dual-Tone Multi-Frequency) signal during a call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 start-dtmf [slot_id][dtmf]
@@ -543,15 +543,15 @@ start-dtmf [slot_id][dtmf]
 - slot_id: Set the slot to be used, currently only supports 0.
 - dtmf: The number (DTMF signal) to be sent.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> start-dtmf 0 1
 ```
 
-##### Output information
+##### Output
 
 ```Bash
 telephonytool> start-dtmf 0 1
@@ -569,11 +569,11 @@ telephonytool> [58070.453600] [21] [  INFO] [ap] [0,0104]> RIL_REQUEST_DTMF_STAR
 
 ### 18. stop-dtmf
 
-#### Command Description
+#### Description
 
 The `stop-dtmf` command is used to stop sending DTMF (Dual-Tone Multi-Frequency) signals during a call.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 stop-dtmf [slot_id]
@@ -581,15 +581,15 @@ stop-dtmf [slot_id]
 
 - slot_id: Set the slot to be used, currently only supports `0`.
 
-##### Example
+#### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> stop-dtmf 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 stop-dtmf 0

@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/radio_modem.md) \]
 
-## 1. Introduction
+## I. Introduction
 
 In the NSH command line of openvela, you can enter the Console of the telephonytool command tool to perform all operations related to modem and radio management.
 
-## 2. Prerequisites
+## II. Prerequisites
 
 Ensure the telephonytool is opened.
 
@@ -16,15 +16,15 @@ ap> telephonytool
 
 After executing the above command, enter the telephonytool console and prepare to perform related operations.
 
-## 3. Commands
+## III. Commands
 
 ### 1. list-modem
 
-#### Command Description
+#### Description
 
 List all available modems.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 list-modem
@@ -32,13 +32,13 @@ list-modem
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> list-modem
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> [ 1050.782500] [31] [ DEBUG] [ap] modem_list_query_complete :
@@ -48,11 +48,11 @@ telephonytool> [ 1050.782500] [31] [ DEBUG] [ap] modem_list_query_complete :
 
 ### 2. listen-modem
 
-#### Command Description
+#### Description
 
 Set to listen for specific modem events.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 listen-modem [slot_id] [event_id]
@@ -157,13 +157,13 @@ listen-modem [slot_id] [event_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> listen-modem 0 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> listen-modem 0 0
@@ -172,11 +172,11 @@ telephonytool> listen-modem 0 0
 
 ### 3. unlisten-modem
 
-#### Command Description
+#### Description
 
 Stop listening to specified modem events.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 unlisten-modem [watch_id]
@@ -186,13 +186,13 @@ unlisten-modem [watch_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> unlisten-modem 75
 ```
 
-##### Output Information
+##### Output
 
 Complete example of executing the `unlisten-modem` command:
 
@@ -206,15 +206,16 @@ telephonytool>
 
 ### 4. get-radio-cap
 
-#### Command Description
+#### Description
 
 Query modem feature support status.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-radio-cap [feature_type]
 ```
+
 - feature_type: Specifies the feature type to query.
     - `0`：Voice
     - `1`：Data
@@ -223,13 +224,13 @@ get-radio-cap [feature_type]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-radio-cap 0
 ```
 
-##### Output Information
+##### Output
 
 Complete example of executing the `get-radio-cap` command:
 
@@ -242,11 +243,11 @@ telephonytool> get-radio-cap 1
 
 ### 5. set-radio-power
 
-#### Command Description
+#### Description
 
 Set the radio power state for the specified slot, corresponding to turning airplane mode off/on.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 set-radio-power [slot_id][state]
@@ -259,13 +260,13 @@ set-radio-power [slot_id][state]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>  set-radio-power 0 0
 ```
 
-##### Output Information
+##### Output
 
 Complete example of executing the `set-radio-power` command:
 
@@ -278,11 +279,11 @@ telephonytool> set-radio-power 0 1
 
 ### 6. get-radio-power
 
-#### Command Description
+#### Description
 
 Get the radio power status of the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-radio-power [slot_id]
@@ -290,13 +291,13 @@ get-radio-power [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-radio-power 0
 ```
 
-##### Output Information
+##### Output
 
 Complete example of executing the `get-radio-power` command:
 
@@ -307,11 +308,11 @@ telephonytool> get-radio-power 0
 
 ### 7. set-rat-mode
 
-#### Command Description
+#### Description
 
 Set the Radio Access Technology (RAT) mode for the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 set-rat-mode [slot_id] [mode]
@@ -328,13 +329,13 @@ set-rat-mode [slot_id] [mode]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> set-rat-mode 0 9
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> set-rat-mode 0 11
@@ -345,11 +346,11 @@ telephonytool> set-rat-mode 0 11
 
 ### 8. get-rat-mode
 
-#### Command Description
+#### Description
 
 Get the Radio Access Technology (RAT) mode of the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-rat-mode [slot_id]
@@ -359,13 +360,13 @@ get-rat-mode [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-rat-mode 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-rat-mode 0
@@ -374,28 +375,27 @@ telephonytool> get-rat-mode 0
 
 ### 9. get-imei
 
-#### Command Description
+#### Description
 
 Retrieve the device's IMEI (International Mobile Equipment Identity) information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 set-rat-mode [slot_id]
-
 ```
-- slot_id:Set the slot to listen to. Currently, only `0` is supported.
-- slot_id：Specify the slot to query, currently only `0` is supported.
+
+- slot_id：Specifies the SIM card slot to query. Currently, only slot 0 is supported.
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-imei 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `get-imei` command:
 
@@ -406,11 +406,11 @@ telephonytool> get-imei 0
 
 ### 10. get-imeisv
 
-#### Command Description
+#### Description
 
 Retrieve the device's IMEISV (International Mobile Equipment Identity Software Version) information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-imeisv [slot_id]
@@ -420,13 +420,13 @@ get-imeisv [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-imeisv 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-imeisv 0  
@@ -435,11 +435,11 @@ telephonytool> get-imeisv 0
 
 ### 11. get-phone-state
 
-#### Command Description
+#### Description
 
 Retrieve the device's phone state information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-phone-state [slot_id]
@@ -449,13 +449,13 @@ get-phone-state [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-phone-state 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-phone-state 0
@@ -464,11 +464,11 @@ telephonytool> get-phone-state 0
 
 ### 12. send-modem-power
 
-#### Command Description
+#### Description
 
 Control the power state of the Modem module.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 send-modem-power[slot_id] [on]
@@ -481,13 +481,13 @@ send-modem-power[slot_id] [on]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> send-modem-power 0 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `send-modem-power` command:
 
@@ -501,11 +501,11 @@ telephonytool> [ 9461.415300] [21] [  INFO] [ap] modem_change_state, old state: 
 
 ### 13. get-radio-state
 
-#### Command Description
+#### Description
 
 Retrieve the device's radio (Radio) state information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-radio-state [slot_id]
@@ -515,13 +515,13 @@ get-radio-state [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-radio-state 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `get-radio-state` command:
 
@@ -532,11 +532,11 @@ telephonytool> get-radio-state 0
 
 ### 14. get-modem-revision
 
-#### Command Description
+#### Description
 
 Retrieve the Modem's baseband version information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-modem-revision [slot_id]
@@ -546,13 +546,13 @@ get-modem-revision [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-modem-revision 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `get-modem-revision` command:
 
@@ -563,11 +563,11 @@ telephonytool> get-modem-revision 0
 
 ### 15. get-msisdn
 
-#### Command Description
+#### Description
 
 Get local phone number information
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-msisdn [slot_id]
@@ -577,13 +577,13 @@ get-msisdn [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-msisdn 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `get-msisdn` command:
 
@@ -595,11 +595,11 @@ telephonytool> get-msisdn 0
 
 ### 16. get-modem-activity-info
 
-#### Command Description
+#### Description
 
 Retrieve the Modem's activity information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-modem-activity-info [slot_id]
@@ -609,13 +609,13 @@ get-modem-activity-info [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-modem-activity-info 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `get-modem-activity-info` command:
 
@@ -626,11 +626,11 @@ telephonytool> get-modem-activity-info 0
 
 ### 17. enable-modem
 
-#### Command Description
+#### Description
 
 Enable or disable the Modem.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 enable-modem[slot_id] [state]
@@ -643,13 +643,13 @@ enable-modem[slot_id] [state]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> enable-modem 0 1
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `enable-modem` command:
 
@@ -660,11 +660,11 @@ telephonytool> enable-modem 0 1
 
 ### 18. get-modem-status
 
-#### Command Description
+#### Description
 
 Retrieve the Modem's status information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-modem-status [slot_id]
@@ -674,13 +674,13 @@ get-modem-status [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-modem-status 0
 ```
 
-##### Output Information
+##### Output
 
 The following is a complete example of executing the `get-modem-status` command:
 
@@ -691,11 +691,11 @@ telephonytool> get-modem-status 0
 
 ### 19. oem-req-raw
 
-#### Command Description
+#### Description
 
 Send formatted hexadecimal characters directly to the Modem for operations such as eSIM file download, eSIM file content reading, etc.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 oem-req-raw [slot_id][request_data][data_length]
@@ -707,13 +707,13 @@ oem-req-raw [slot_id][request_data][data_length]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> oem-req-raw 0 01A0B023 4
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> oem-req-raw 0 01A0B023 4
@@ -722,11 +722,11 @@ telephonytool> oem-req-raw 0 01A0B023 4
 
 ### 20. oem-req-strings
 
-#### Command Description
+#### Description
 
 Send a string directly to the Modem, such as an AT command.
 
-#### Command Format
+#### Syntax
 
 ```Bash
  oem-req-strings [slot_id][request_data][data_length]
@@ -738,13 +738,13 @@ Send a string directly to the Modem, such as an AT command.
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> oem-req-strings 0 AT+CPIN? 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> oem-req-strings 0 AT+CPIN? 1
@@ -753,11 +753,11 @@ telephonytool> oem-req-strings 0 AT+CPIN? 1
 
 ### 21. send-command
 
-#### Command Description
+#### Description
 
 Send an internal RIL (Radio Interface Layer) message directly.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 send-command [slot_id][atom id][ril request id]
@@ -769,13 +769,13 @@ send-command [slot_id][atom id][ril request id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> send-command 0 16 57
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telehonytool>
@@ -785,11 +785,11 @@ telephonytool> send-command 0 16 57
 
 ### 22. send-screen-state
 
-#### Command Description
+#### Description
 
 Set the screen power state information to the modem.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 send-screen-state [slot_id][][screen_state]
@@ -802,13 +802,13 @@ send-screen-state [slot_id][][screen_state]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> send-screen-state 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool>

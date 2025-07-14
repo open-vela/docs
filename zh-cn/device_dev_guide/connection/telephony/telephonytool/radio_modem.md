@@ -2,7 +2,7 @@
 
 \[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/radio_modem.md) | 简体中文 \]
 
-## 一、简介
+## 一、概述
 
 在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console，来执行所有与调制解调器（modem）和无线电（radio）管理相关的操作。
 

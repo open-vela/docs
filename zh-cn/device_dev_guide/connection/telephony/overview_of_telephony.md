@@ -16,7 +16,7 @@ oFono 是一个面向基于 Linux 的嵌入式移动设备和桌面系统的 Tel
 
 基于 oFono 的技术优势和开源生态，openvela 选择 oFono 作为基础，扩展开发 Telephony 子系统，以满足蜂窝通信的功能需求。
 
-## 三、openvela 的移动通信解决方案
+## 三、移动通信解决方案
 
 openvela 将 oFono 集成到系统中，并增强了其移动通信能力，例如支持 VoLTE（Voice over LTE）语音通话，从而提升了物联网实时操作系统的移动通信能力。通过层级封装和解耦，以及多样化的芯片平台集成方式，openvela 系统的整体移动通信解决方案能够让上层应用程序（APP） 实现跨平台复用，为用户提供最佳的通信体验。
 
@@ -43,17 +43,17 @@ TAPI 是一个基于 DBus Lib 库的 oFono D-Bus 接口封装层，主要目标�
 
 TAPI 内部按照业务功能划分为多个模块，每个模块的功能和代码说明如下：
 
-| **模块** | **文件**                       | **说明**                    |
-| :------- | :----------------------------- | :-------------------------- |
+| **模块** | **文件**                           | **说明**                    |
+| :------- | :--------------------------------- | :-------------------------- |
 | 公共接口 | `tapi_manager.c`<br>`tapi.h`       | 提供 Telephony 公共接口。   |
-| 工具接口 | `tapi_utils.c/h`               | 提供 Telephony 工具类接口。 |
+| 工具接口 | `tapi_utils.c/h`                   | 提供 Telephony 工具类接口。 |
 | 通话接口 | `tapi_call.c/h`<br>`tapi_ussd.c/h` | 通话管理接口。              |
-| 网络接口 | `tapi_network.c/h`             | 网络注册接口。              |
-| 数据接口 | `tapi_gprs.c/h`                | 提供数据服务接口。          |
+| 网络接口 | `tapi_network.c/h`                 | 网络注册接口。              |
+| 数据接口 | `tapi_gprs.c/h`                    | 提供数据服务接口。          |
 | SIM 接口 | `tapi_sim.c/h`<br>`tapi_stk.c/h`   | SIM 卡管理接口。            |
-| 短信接口 | `tapi_sms.c/h`                 | 短信管理接口。              |
-| IMS 接口 | `tapi_ims.c/h`                 | 提供 IMS 服务接口。         |
-| 测试工具 | `telephony_tools.c`            | 提供客户端模拟工具。        |
+| 短信接口 | `tapi_sms.c/h`                     | 短信管理接口。              |
+| IMS 接口 | `tapi_ims.c/h`                     | 提供 IMS 服务接口。         |
+| 测试工具 | `telephony_tools.c`                | 提供客户端模拟工具。        |
 
 ### 2、RIL 说明
 

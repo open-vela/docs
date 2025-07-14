@@ -1,8 +1,8 @@
-## Ims Command
+## IMS Command
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/ims.md) \]
 
-## I. Introduction
+## I. Overview
 
 In the openvela NSH command line, you can use the `telephonytool` command tool to enter the Console and perform all operations related to IMS (IP Multimedia Subsystem).
 
@@ -14,15 +14,15 @@ In the openvela NSH command line, you can use the `telephonytool` command tool t
 ap> telephonytool
 ```
 
-## Three commands
+## III. Commands
 
 ### 1. enable-ims
 
-#### Command Description
+#### Description
 
  The `enable-ims` command is used to enable or disable IMS (IP Multimedia Subsystem) capabilities.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 enable-ims [slot_id][action]
@@ -30,19 +30,19 @@ enable-ims [slot_id][action]
 
 - slot_id: The slot to listen to, currently only supports 0.
 - action:
+
     - `0`： Disable IMS capability.
     - `1`： Enable IMS capability.
 
-
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>enable-ims 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> enable-ims 0 1
@@ -53,11 +53,11 @@ telephonytool> [149517.786400] [21] [  INFO] [ap] [0,0124]> RIL_REQUEST_IMS_REG_
 
 ### 2. get-ims-enabled
 
-#### Command Description
+#### Description
 
  The `get-ims-enabled` command is used to retrieve the current status of the IMS (IP Multimedia Subsystem) switch.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-ims-enabled [slot_id]
@@ -67,30 +67,31 @@ get-ims-enabled [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-ims-enabled 0
 ```
 
-##### Output Information
+##### Information
 
 ```Bash
 telephonytool> get-ims-enabled 0
 [149542.284600] [35] [ DEBUG] [ap] telephonytool_cmd_get_ims_enabled: slot_id: 0, ims enable: 1
 ```
 
-###  3. set-ims-cap
+### 3. set-ims-cap
 
-#### Command Description
+#### Description
 
  The `set-ims-cap` command is used to set the IMS (IP Multimedia Subsystem) supported service capabilities.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 set-ims-cap [slot_id][cap-value]
 ```
+
 - slot_id: The slot to listen to, currently only supports 0.
 - cap-value: The IMS supported functionality type:
     - `1`： Voice.
@@ -99,13 +100,13 @@ set-ims-cap [slot_id][cap-value]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> set-ims-cap 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 set-ims-cap 0 1
@@ -122,11 +123,11 @@ telephonytool> [149558.409700] [21] [  INFO] [ap] [0,0127]> RIL_REQUEST_IMS_SET_
 
 ### 4. listen-ims
 
-#### Command Description
+#### Description
 
 The `listen-ims` command is used to listen for IMS (IP Multimedia Subsystem) registration status on the specified slot, including information like signal strength and network status changes.
-.
-#### Command Format
+
+#### Syntax
 
 ```Bash
 listen-ims [slot_id]
@@ -136,13 +137,13 @@ listen-ims [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>listen-ims 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> listen-ims 0
@@ -155,11 +156,11 @@ telephonytool> get-ims-enabled 0[149578.065500] [25] [  INFO] [ap] [AT_NETWORK] 
 
 ### 5. get-ims-registration
 
-#### Command Description
+#### Description
 
 The `get-ims-registration` command is used to query IMS (IP Multimedia Subsystem) related information, including IMS registration status and VoLTE (Voice over LTE) status.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-ims-registration [slot_id][action]
@@ -173,13 +174,13 @@ get-ims-registration [slot_id][action]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-ims-registration 0 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-ims-registration 0 0

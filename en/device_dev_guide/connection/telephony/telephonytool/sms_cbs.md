@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/sms_cbs.md) \]
 
-## 1. Introduction
+## I. Overview
 
 In the NSH command line of openvela, you can enter the Console of the telephonytool command tool to perform all operations related to SMS (Short Message Service) and CBS (Cell Broadcast Service).
 
-## 2. Prerequisites
+## II. Prerequisites
 
 Ensure that the telephonytool tool is opened by executing the following command:
 
@@ -14,15 +14,15 @@ Ensure that the telephonytool tool is opened by executing the following command:
 ap> telephonytool
 ```
 
-## 3. Commands
+## III. Commands
 
 ### 1. send-sms
 
-#### Command Description
+#### Description
 
 The send-sms command is used to send short messages (SMS, Short Message Service).
 
-#### Command Format
+#### Syntax
 
 ```Bash
 send-sms [slot_id][number][text]
@@ -34,13 +34,13 @@ send-sms [slot_id][number][text]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> send-sms 0 10086 hello
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> send-sms 0 10086 hello
@@ -61,11 +61,11 @@ telephonytool> send-sms 0 10086 hello
 
 ### 2. send-data-sms
 
-#### Command Description
+#### Description
 
 The `send-data-sms` command is used to send a Data SMS (Short Message). A Data SMS is a special type of SMS typically used to transmit binary data or for communication between applications.
 
-####  Command Format
+#### Syntax
 
 ```Bash
 send-sms [slot_id][number][text][port]
@@ -76,16 +76,15 @@ send-sms [slot_id][number][text][port]
 - text: The content of the short message.
 - port: The port for sending the Data SMS.
 
-
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> send-data-sms 0 10086 hello 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> send-data-sms 0 10086 hello 0
@@ -108,11 +107,11 @@ telephonytool> send-data-sms 0 10086 hello 0
 
 ### 3. get-service-center-number
 
-#### Command Description
+#### Description
 
 The `get-service-center-number` command is used to retrieve the phone number of the Short Message Service Center (SMSC).
 
-####  Command Format
+#### Syntax
 
 ```Bash
 get-service-center-number [slot_id]
@@ -122,13 +121,13 @@ get-service-center-number [slot_id]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-service-center-number 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-service-center-number 0
@@ -137,11 +136,11 @@ telephonytool> get-service-center-number 0
 
 ### 4. set-service-center-number
 
-#### Command Description
+#### Description
 
 The `set-service-center-number` command is used to set the phone number of the Short Message Service Center (SMSC).
 
-####  Command Format
+#### Syntax
 
 ```Bash
 set-service-center-number [slot_id][number]
@@ -152,13 +151,13 @@ set-service-center-number [slot_id][number]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool>set-service-center-number 0 10086
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> set-service-center-number 0 10086
@@ -173,11 +172,11 @@ telephonytool> [18074.206600] [21] [  INFO] [ap] [0,0103]> RIL_REQUEST_SET_SMSC_
 
 ### 5. get-cell-broadcast-power
 
-#### Command Description
+#### Description
 
 The `get-cell-broadcast-power `command is used to get the status of the Cell Broadcast (CB) feature (enabled or disabled).
 
-####  Command Format
+#### Syntax
 
 ```Bash
 get-cell-broadcast-power [slot_id]
@@ -187,13 +186,13 @@ get-cell-broadcast-power [slot_id]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-cell-broadcast-power 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-cell-broadcast-power 0
@@ -206,11 +205,11 @@ telephonytool> get-cell-broadcast-power 0
 
 ### 6. set-cell-broadcast-power
 
-#### Command Description
+#### Description
 
 The `set-cell-broadcast-power` command is used to enable or disable the Cell Broadcast (CB) feature.
 
-####  Command Format
+#### Syntax
 
 ```Bash
 set-cell-broadcast-power [slot_id][state]
@@ -223,13 +222,13 @@ set-cell-broadcast-power [slot_id][state]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> set-cell-broadcast-power 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> set-cell-broadcast-power 0 1
@@ -244,11 +243,11 @@ telephonytool> [18220.661800] [21] [  INFO] [ap] [0,0105]> RIL_REQUEST_GSM_SET_B
 
 ### 7. get-cell-broadcast-topics
 
-#### Command Description
+#### Description
 
 The `get-cell-broadcast-topics` command is used to retrieve the supported types of Cell Broadcast messages.
 
-####  Command Format
+#### Syntax
 
 ```Bash
 get-cell-broadcast-topics [slot_id]
@@ -258,13 +257,13 @@ get-cell-broadcast-topics [slot_id]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-cell-broadcast-topics 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-cell-broadcast-topics 0
@@ -275,11 +274,11 @@ telephonytool> get-cell-broadcast-topics 0
 
 ### 8. set-cell-broadcast-topics
 
-#### Command Description
+#### Description
 
 The `set-cell-broadcast-topics` command is used to set the supported types of Cell Broadcast messages.
 
-####  Command Format
+#### Syntax
 
 ```Bash
 set-cell-broadcast-topics [slot_id][topic_type]
@@ -288,16 +287,15 @@ set-cell-broadcast-topics [slot_id][topic_type]
 - slot_id: Specifies the slot to be monitored, currently only supports `0`.
 - topic_type: Specifies the type of broadcast message, such as `etws` (Earthquake and Tsunami Warning System), cmas (Commercial Mobile Alert System), etc.
 
-
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> set-cell-broadcast-topics 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> set-cell-broadcast-topics 0 1
@@ -310,11 +308,11 @@ telephonytool> [18314.898000] [21] [  INFO] [ap] [0,0106]> RIL_REQUEST_GSM_SET_B
 
 ### 9. copy-sms-to-sim
 
-#### Command Description
+#### Description
 
 The `copy-sms-to-sim` command is used to copy a short message to the SIM card.
 
-####  Command Format
+#### Syntax
 
 ```Bash
 copy-sms-to-sim [slot_id][number][text]
@@ -326,13 +324,13 @@ copy-sms-to-sim [slot_id][number][text]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> copy-sms-to-sim 0 10086 hello11
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> copy-sms-to-sim 0 10086 hello11
@@ -345,11 +343,11 @@ telephonytool> [18362.292600] [21] [  INFO] [ap] pdu_len: 14
 
 ### 10. delete-sms-from-sim
 
-#### Command Description
+#### Description
 
 The `delete-sms-from-sim` command is used to delete a short message from the SIM card.
 
-####  Command Format
+#### Syntax
 
 ```Bash
 delete-sms-from-sim [slot_id][index]
@@ -360,13 +358,13 @@ delete-sms-from-sim [slot_id][index]
 
 #### Example
 
-###### Command Input
+##### Input
 
 ```Bash
 telephonytool> delete-sms-from-sim 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> delete-sms-from-sim 0 1

@@ -2,20 +2,20 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/telephonytool_cmd_desc.md) \]
 
-## 1. Introduction
+## I. Overview
 
 `telephonytool` is a tool executed in the NSH command line of openvela, used to enter the Console of the Telephony command tool. Within the console, specific subcommands integrated in the `telephonytool` can be executed.
 
-## 2. Syntax
+## II. Syntax
 
 The following rules describe the command line syntax:
 
-| **Notation**               | **Description**                       | **Example**                                                     |
-| :----------------------- | :----------------------------- | :----------------------------------------------------------- |
-| Text without square brackets or curly brackets  | Type exactly as displayed.     | The `hold_and_answer` portion of the `hold_and_answer` command must be typed as is. |
-| [Text in square brackets]         | Indicates a placeholder that needs to be replaced with the actual value. | The `[slot_id]` in the `hangup-all [slot_id]` command needs to be replaced with the actual value. |
+| **Notation**                                   | **Description**                                                          | **Example**                                                                                       |
+| :--------------------------------------------- | :----------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------ |
+| Text without square brackets or curly brackets | Type exactly as displayed.                                               | The `hold_and_answer` portion of the `hold_and_answer` command must be typed as is.               |
+| [Text in square brackets]                      | Indicates a placeholder that needs to be replaced with the actual value. | The `[slot_id]` in the `hangup-all [slot_id]` command needs to be replaced with the actual value. |
 
-## 3. Example
+## III. Example
 
 The following example demonstrates how to launch the `telephonytool` in the NSH command line.
 

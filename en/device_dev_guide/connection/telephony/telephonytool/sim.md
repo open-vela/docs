@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/sim.md) \]
 
-## 1. Introduction
+## I. Overview
 
 In the NSH command line of openvela, all operations related to the SIM card can be executed by entering the Console of the telephonytool command tool.
 
-## 2. Preconditions
+## II. Preconditions
 
 Make sure the `telephonytool` is opened.
 
@@ -14,15 +14,15 @@ Make sure the `telephonytool` is opened.
 ap> telephonytool
 ```
 
-## 3. Commands
+## III. Commands
 
 ### 1. listen-sim
 
-#### Command Description
+#### Description
 
 The `listen-sim` command is used to register for listening to events related to the SIM card.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 listen-sim [slot_id][event_id]
@@ -36,13 +36,13 @@ listen-sim [slot_id][event_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> listen-sim 0 28
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 listen-sim 0 28
@@ -51,11 +51,11 @@ listen-sim 0 28
 
 ### 2. unlisten-sim
 
-#### Command Description
+#### Description
 
 The `unlisten-sim`command is used to cancel listening to events related to the SIM card.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 unlisten-sim [watch_id]
@@ -65,13 +65,13 @@ unlisten-sim [watch_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> unlisten-sim 189
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> unlisten-sim 189
@@ -80,11 +80,11 @@ telephonytool> unlisten-sim 189
 
 ### 3. has-icc
 
-#### Command Description
+#### Description
 
 The `has-icc` command is used to query whether there is an ICC (Integrated Circuit Card) present in the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 has-icc [slot_id]
@@ -94,13 +94,13 @@ has-icc [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> has-icc 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> has-icc 0
@@ -109,11 +109,11 @@ telephonytool> has-icc 0
 
 ### 4. get-sim-state
 
-#### Command Description
+#### Description
 
 The `get-sim-state` command is used to get the state of the SIM card in the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-sim-state [slot_id]
@@ -123,13 +123,13 @@ get-sim-state [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-sim-state 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 get-sim-state 0
@@ -138,11 +138,11 @@ get-sim-state 0
 
 ### 5. get-iccid
 
-#### Command Description
+#### Description
 
 The `get-iccid` command is used to obtain the ICCID (Integrated Circuit Card Identifier) information of the SIM card in the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-iccid [slot_id]
@@ -152,13 +152,13 @@ get-iccid [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>  get-iccid 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-iccid 0
@@ -167,11 +167,11 @@ telephonytool> get-iccid 0
 
 ### 6. get-sim-operator
 
-#### Command Description
+#### Description
 
 The `get-sim-operator` command is used to obtain the PLMN (Public Land Mobile Network) information of the SIM card in the specified slot. PLMN is an identifier composed of the operator's country code (MCC) and network code (MNC), which indicates the operator to which the SIM card belongs.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-sim-operator [slot_id]
@@ -181,13 +181,13 @@ get-sim-operator [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-sim-operator 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-sim-operator 0
@@ -196,11 +196,11 @@ telephonytool> get-sim-operator 0
 
 ### 7. get-sim-operator-name
 
-#### Command Description
+#### Description
 
 The `get-sim-operator-name` command is used to obtain the name of the SIM card's operator (SPN, Service Provider Name) in the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-sim-operator-name [slot_id]
@@ -210,13 +210,13 @@ get-sim-operator-name [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-sim-operator-name 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-sim-operator-name 0
@@ -225,11 +225,11 @@ telephonytool> get-sim-operator-name 0
 
 ### 8. get-sim-subscriber-id
 
-#### Command Description
+#### Description
 
 The `get-sim-subscriber-id` command is used to obtain the subscriber identifier of the SIM card in the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-sim-subscriber-id [slot_id]
@@ -239,13 +239,13 @@ get-sim-subscriber-id [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-sim-subscriber-id 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-sim-subscriber-id 0
@@ -254,11 +254,11 @@ telephonytool> get-sim-subscriber-id 0
 
 ### 9. change-pin
 
-#### Command Description
+#### Description
 
 The `change-pin` command is used to modify the PIN (Personal Identification Number) of the SIM card in the specified slot.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 change-pin [slot_id][pin_type, pin or pin2][old_pin][new_pin]
@@ -269,16 +269,15 @@ change-pin [slot_id][pin_type, pin or pin2][old_pin][new_pin]
 - old_pin: The current PIN code value.
 - new_pin: The new PIN code value to be set.
 
-
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> change-pin 0 pin 1234 2345
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> change-pin 0 pin 1234 2345
@@ -288,10 +287,10 @@ telephonytool> [12840.160200] [21] [  INFO] [ap] [0,0081]> RIL_REQUEST_CHANGE_SI
 
 ### 10. Enter-pin
 
-#### Command Description
+#### Description
 
 The `enter-pin` command is used to validate the PIN (Personal Identification Number) of the SIM card in the specified slot.
-#### Command Format
+#### Syntax
 
 ```Bash
 enter-pin [slot_id][pin_type][pin]
@@ -302,13 +301,13 @@ enter-pin [slot_id][pin_type][pin]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> enter-pin 0 pin 1234
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> enter-pin 0 pin 1234
@@ -317,11 +316,11 @@ telephonytool> enter-pin 0 pin 1234
 
 ### 11. reset-pin
 
-#### Command Description
+#### Description
 
 The `reset-pin` command is used to reset the PIN (Personal Identification Number) of a SIM card in a specified slot using the PUK (Personal Unblocking Key).
 
-#### Command Format
+#### Syntax
 
 ```Bash
 reset-pin [slot_id][puk_type][puk][new_pin]
@@ -334,13 +333,13 @@ reset-pin [slot_id][puk_type][puk][new_pin]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> reset-pin 0 puk 12345678 2345
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> reset-pin 0 puk 12345678 2345
@@ -349,11 +348,11 @@ telephonytool> reset-pin 0 puk 12345678 2345
 
 ### 12. lock-pin
 
-#### Command Description
+#### Description
 
 The `lock-pin` command is used to activate the PIN lock feature on the SIM card to ensure its security.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 lock-pin [slot_id][pin_type, pin or pin2][pin]
@@ -365,13 +364,13 @@ pin: Value of the current PIN code.
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> lock-pin 0 pin 1234 
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> lock-pin 0 pin 1234
@@ -381,11 +380,11 @@ telephonytool> [12894.648800] [21] [  INFO] [ap] [0,0092]> RIL_REQUEST_SET_FACIL
 
 ### 13. unlock-pin
 
-#### Command Description
+#### Description
 
 The `unlock-pin` command is used to deactivate the PIN lock feature on the SIM card, removing the requirement for PIN verification.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 unlock-pin [slot_id][pin_type, pin or pin2][pin]
@@ -397,13 +396,13 @@ unlock-pin [slot_id][pin_type, pin or pin2][pin]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>unlock-pin 0 pin 1234
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> unlock-pin 0 pin 1234
@@ -413,10 +412,10 @@ telephonytool> [12907.882000] [21] [  INFO] [ap] [0,0093]> RIL_REQUEST_SET_FACIL
 
 ### 14. open-logical-channel
 
-#### Command Description
+#### Description
 
 The `open-logical-channel` command is used to open a logical channel for reading and writing operations on the SIM card.
-#### Command Format
+#### Syntax
 
 ```Bash
 open-logical-channel [slot_id] [aid_str]
@@ -427,13 +426,13 @@ open-logical-channel [slot_id] [aid_str]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>open-logical-channel 0 A0000000871002FF86FFFF89FFFFFFFF 16
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> open-logical-channel 0 A0000000871002FF86FFFF89FFFFFFFF 16
@@ -454,11 +453,11 @@ telephonytool> [12924.334200] [21] [  INFO] [ap] [0,0094]> RIL_REQUEST_SIM_OPEN_
 
 ### 15. close-logical-channel
 
-#### Command Description
+#### Description
 
 The `close-logical-channel` command closes a specified logical channel and releases the session resources with the SIM card.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 close-logical-channel [slot_id][session_id]
@@ -469,13 +468,13 @@ close-logical-channel [slot_id][session_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>close-logical-channel 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> close-logical-channel 0 1
@@ -492,13 +491,14 @@ telephonytool> [12950.641100] [21] [  INFO] [ap] [0,0095]> RIL_REQUEST_SIM_CLOSE
 ```
 
 - session_id: The `session od` in the output information represents the logical channel session identifier that has been successfully closed.
+
 ### 16. transmit-apdu-basic-channel
 
-#### Command Description
+#### Description
 
 The `transmit-apdu-logical-channel` command is used to send an APDU (Application Protocol Data Unit) command through a logical channel to the SIM card.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 transmit-apdu-logical-channel [slot_id][session_id][pdu][len]
@@ -509,16 +509,15 @@ transmit-apdu-logical-channel [slot_id][session_id][pdu][len]
 - pdu: The APDU data content to send.
 - len: The byte length of the APDU data.
 
-
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>transmit-apdu-logical-channel 0 1 FFF2000000 5
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> transmit-apdu-logical-channel 0 1 FFF2000000 5
@@ -528,11 +527,11 @@ telephonytool> [12972.002100] [21] [  INFO] [ap] [0,0097]> RIL_REQUEST_SIM_TRANS
 
 ### 17. transmit-apdu-basic-channel
 
-#### Command Description
+#### Description
 
 The `transmit-apdu-basic-channel` command is used to send an APDU (Application Protocol Data Unit) command through the basic channel to the SIM card.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 transmit-apdu-basic-channel [slot_id][pdu][len]
@@ -544,13 +543,13 @@ transmit-apdu-basic-channel [slot_id][pdu][len]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>transmit-apdu-basic-channel 0 A0B000010473656E669000 11
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> transmit-apdu-basic-channel 0 A0B000010473656E669000 11
@@ -563,13 +562,11 @@ telephonytool> [12987.929800] [21] [  INFO] [ap] [0,0098]> RIL_REQUEST_SIM_TRANS
 
 ### 18. get-uicc-enablement
 
-#### Command Description
+#### Description
 
 The `get-uicc-enablement` command is used to get the enablement status of the UICC (Universal Integrated Circuit Card) application.
 
-
-
-#### Command Format
+#### Syntax
 
 ```Bash
 get-uicc-enablement [slot_id]
@@ -579,13 +576,13 @@ get-uicc-enablement [slot_id]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-uicc-enablement 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-uicc-enablement 0
@@ -598,13 +595,11 @@ telephonytool> get-uicc-enablement 0
 
 ### 19. set-uicc-enablement
 
-#### Command Description
+#### Description
 
 The `set-uicc-enablement` command is used to set the enablement or disablement status of the UICC (Universal Integrated Circuit Card) application.
 
-
-
-#### Command Format
+#### Syntax
 
 ```Bash
 set-uicc-enablement [slot_id][[state]
@@ -617,13 +612,13 @@ set-uicc-enablement [slot_id][[state]
 
 #### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>set-uicc-enablement 0 1
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> set-uicc-enablement 0 1

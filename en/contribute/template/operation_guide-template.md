@@ -95,9 +95,9 @@ _Are there any limitations when using this feature/module?_
 **_【Writing Tips】_**
 
 - _Describe limitations that may affect development. For example:_  
-  - **_Functional Limitations_**  
-    - _Unsupported usage scenarios._  
-    - _Specification limits._
+    - **_Functional Limitations_**  
+        - _Unsupported usage scenarios._  
+        - _Specification limits._
 
 **_【Writing Example】_**
 

@@ -2,7 +2,7 @@
 
 \[ [English](../../../../../en/device_dev_guide/connection/telephony/telephonytool/sim.md) | 简体中文 \]
 
-## 一、简介
+## 一、概述
 
 在 openvela 的 NSH 命令行中，可以通过进入 telephonytool 命令工具的 Console 来执行所有与 SIM 卡相关的操作。
 

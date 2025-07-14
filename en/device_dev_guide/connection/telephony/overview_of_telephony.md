@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](../../../../zh-cn/device_dev_guide/connection/telephony/overview_of_telephony.md) \]
 
-## 1. Background
+## I. Background
 
 Currently, openvela is widely used in various consumer terminal products. Some of these terminals, such as lightweight smart eSIM watches, require support for cellular communication functionality. To meet this demand, openvela needs to build a standardized, compatible, and sustainable openvela Telephony subsystem to manage core functions related to cellular communication and peripheral interfaces. This will further enrich and promote the development of the openvela ecosystem.
 
-## 2. Why Choose oFono as the Foundation
+## II. Why Choose oFono as the Foundation
 
 oFono is a Telephony Host Stack designed for Linux-based embedded mobile devices and desktop systems. It is licensed under the GPLv2 license. oFono is implemented using C language, GLib, and DBus, and supports various types of modems, such as:
 
@@ -16,7 +16,7 @@ oFono is a Telephony Host Stack designed for Linux-based embedded mobile devices
 
 Based on oFono's technical advantages and open-source ecosystem, openvela chooses oFono as the foundation to extend and develop the Telephony subsystem to meet cellular communication functionality requirements.
 
-## 3. openvela’s Mobile Communication Solution
+## III. Mobile Communication Solution
 
 openvela integrates oFono into the system and enhances its mobile communication capabilities, such as supporting VoLTE (Voice over LTE) voice calls, thereby improving the mobile communication capabilities of the Internet of Things real-time operating system. Through hierarchical encapsulation and decoupling, as well as diversified chip platform integration methods, the overall mobile communication solution of the openvela system allows upper-layer applications (APPs) to achieve cross-platform reuse, providing users with the best communication experience.
 
@@ -43,17 +43,17 @@ Here is the architecture diagram for the Telephony API:
 
 TAPI is internally divided into multiple modules based on business functionality, with each module's functionality and code description as follows:
 
-| **Module** | **File**                       | **Description**                    |
-| :------- | :----------------------------- | :-------------------------- |
-| Public API | `tapi_manager.c`<br>`tapi.h`       | Provides common Telephony API.   |
-| Utility API | `tapi_utils.c/h`               | Provides Telephony utility interfaces. |
-| Call API | `tapi_call.c/h`<br>`tapi_ussd.c/h` | Call management interfaces.              |
-| Network API | `tapi_network.c/h`             |Network registration interfaces.              |
-| Data API | `tapi_gprs.c/h`                | Provides data service interfaces.          |
-| SIM API | `tapi_sim.c/h`<br>`tapi_stk.c/h`   | SIM card management interfaces.            |
-| SMS API | `tapi_sms.c/h`                 | SMS management interfaces.              |
-| IMS API | `tapi_ims.c/h`                 | Provides IMS service interfaces.         |
-| Provides IMS service interfaces. | `telephony_tools.c`            | Provides client simulation tools.        |
+| **Module**                       | **File**                           | **Description**                        |
+| :------------------------------- | :--------------------------------- | :------------------------------------- |
+| Public API                       | `tapi_manager.c`<br>`tapi.h`       | Provides common Telephony API.         |
+| Utility API                      | `tapi_utils.c/h`                   | Provides Telephony utility interfaces. |
+| Call API                         | `tapi_call.c/h`<br>`tapi_ussd.c/h` | Call management interfaces.            |
+| Network API                      | `tapi_network.c/h`                 | Network registration interfaces.       |
+| Data API                         | `tapi_gprs.c/h`                    | Provides data service interfaces.      |
+| SIM API                          | `tapi_sim.c/h`<br>`tapi_stk.c/h`   | SIM card management interfaces.        |
+| SMS API                          | `tapi_sms.c/h`                     | SMS management interfaces.             |
+| IMS API                          | `tapi_ims.c/h`                     | Provides IMS service interfaces.       |
+| Provides IMS service interfaces. | `telephony_tools.c`                | Provides client simulation tools.      |
 
 ### 2. RIL Overview
 
@@ -85,7 +85,7 @@ Reference RIL divides the RIL module into two parts:
 2. Reference QEMU RIL: A reference implementation for the QEMU emulator.
 Modem chip vendors can refer to the Reference QEMU RIL to implement Vendor RIL modules, which interact with the Modem for control-plane operations. In commercial products, openvela LibRIL and Vendor RIL together implement the complete RIL functionality.
 
-## 4. Telephony Business Adaptation
+## IV. Telephony Business Adaptation
 
 To implement Telephony functionality on the openvela system, the following adaptation work must be completed:
 

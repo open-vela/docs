@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/telephony/telephonytool/network.md) \]
 
-## I. Introduction
+## I. Overview
 
 In the NSH command line of OpenVela, you can perform all network-related operations by accessing the Console of the telephonytool command tool.
 
@@ -18,11 +18,11 @@ ap> telephonytool
 
 ### 1. listen-network
 
-#### Command Description
+#### Description
 
 The `listen-network` command is used to register for listening to network-related events.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 listen-network [slot_id][event_id]
@@ -36,15 +36,15 @@ listen-network [slot_id][event_id]
     - `MSG_SIGNAL_STRENGTH_CHANGE_IND`：Indicates a change in signal strength.
     - `MSG_NITZ_STATE_CHANGE_IND`：Indicates a change in NITZ (Network Identity and Time Zone) status.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>listen-network 0 18
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> listen-network 0 18
@@ -53,11 +53,11 @@ telephonytool> listen-network 0 18
 
 ### 2. unlisten-network
 
-#### Command Description
+#### Description
 
 The `unlisten-network` command is used to cancel listening to network-related events.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 unlisten-network [watch_id]
@@ -65,15 +65,15 @@ unlisten-network [watch_id]
 
 - watch_id： Corresponds to the return value of the `listen-network` command, used to identify the event to stop listening to.
 
-##### Example
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> 
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> unlisten-network 198
@@ -82,11 +82,11 @@ telephonytool> unlisten-network 198
 
 ### 3. register-auto
 
-#### Command Description
+#### Description
 
 The `register-auto` command sets the device to automatic network selection mode.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 register-auto [slot_id]
@@ -94,15 +94,15 @@ register-auto [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>register-auto 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> register-auto 0
@@ -113,11 +113,11 @@ telephonytool> [21549.532800] [21] [  INFO] [ap] [0,0110]> RIL_REQUEST_SET_NETWO
 
 ### 4. register-manual
 
-#### Command Description
+#### Description
 
 The `register-manual` command sets the device to manual network selection mode.
 
-#### Command Format
+#### Syntax
 
 ```Bash
  register-manual [slot_id][mcc][mnc][technology]
@@ -128,15 +128,15 @@ The `register-manual` command sets the device to manual network selection mode.
 - mnc: Mobile Network Code.
 - technology: Radio Access Technology (RAT), such as `lte`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>register-manual 0 460 00 lte
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> register-manual 0 460 00 lte
@@ -146,11 +146,11 @@ telephonytool> [   23.514600] [21] [  INFO] [ap] [0,0079]> RIL_REQUEST_SET_NETWO
 
 ### 5. get-signalstrength
 
-#### Command Description
+#### Description
 
 The `get-signalstrength` command is used to retrieve the signal strength information of the device.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-signalstrength [slot_id]
@@ -158,15 +158,15 @@ get-signalstrength [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-signalstrength 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-signalstrength 0
@@ -175,11 +175,11 @@ telephonytool> get-signalstrength 0
 
 ### 6. get-display-name
 
-#### Command Description
+#### Description
 
 The `get-display-name` command retrieves the name of the current roaming network operator.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-display-name [slot_id]
@@ -187,15 +187,15 @@ get-display-name [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-display-name 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 get-display-name 0
@@ -204,11 +204,11 @@ get-display-name 0
 
 ### 7. get-registration-info
 
-#### Command Description
+#### Description
 
 The `get-registration-info` command is used to retrieve the network registration information of the device.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-registration-info [slot_id]
@@ -216,15 +216,15 @@ get-registration-info [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-registration-info 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 get-registration-info 0
@@ -234,11 +234,11 @@ telephonytool> [   96.809800] [31] [ DEBUG] [ap] network_event_callback :
 
 ### 8. get-voice-nwtype
 
-#### Command Description
+#### Description
 
 The `get-voice-nwtype` command retrieves the network type of the CS (Circuit Switched) domain.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-voice-nwtype [slot_id]
@@ -246,15 +246,15 @@ get-voice-nwtype [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-voice-nwtype 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 get-voice-nwtype 0
@@ -263,11 +263,11 @@ get-voice-nwtype 0
 
 ### 9. get-voice-registered
 
-#### Command Description
+#### Description
 
 The `get-voice-registered` command retrieves the registration status of the CS (Circuit Switched) domain.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-voice-registered [slot_id]
@@ -275,15 +275,15 @@ get-voice-registered [slot_id]
 
 - slot_id：Sets the slot to listen to, currently only supports `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool> get-voice-registered 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-voice-registered 0
@@ -292,11 +292,11 @@ telephonytool> get-voice-registered 0
 
 ### 10. get-voice-roaming
 
-#### Command Description
+#### Description
 
 The `get-voice-roaming` command is used to retrieve the roaming status in the CS (Circuit Switched) domain.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-voice-roaming [slot_id]
@@ -304,15 +304,15 @@ get-voice-roaming [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-voice-roaming 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-voice-roaming 0
@@ -321,11 +321,11 @@ telephonytool> get-voice-roaming 0
 
 ### 11. scan-network
 
-#### Command Description
+#### Description
 
 The `scan-network` command initiates a network scan to query the currently available networks.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 scan-network [slot_id]
@@ -333,15 +333,15 @@ scan-network [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>scan-network 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> scan-network 0
@@ -351,11 +351,11 @@ telephonytool> [  161.901900] [21] [  INFO] [ap] [0,0087]> RIL_REQUEST_QUERY_AVA
 
 ### 12. get-serving-cellinfo
 
-#### Command Description
+#### Description
 
 The `get-serving-cellinfo` command is used to obtain information related to the current serving cell.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-serving-cellinfo [slot_id]
@@ -363,15 +363,15 @@ get-serving-cellinfo [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-serving-cellinfo 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-serving-cellinfo 0
@@ -382,11 +382,11 @@ telephonytool> [  175.409900] [21] [  INFO] [ap] [0,0088]> RIL_REQUEST_GET_CELL_
 
 ### 13. get-neighbouring-cellInfos
 
-#### Command Description
+#### Description
 
 The `get-neighbouring-cellInfos` command is used to retrieve information about neighboring cells.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 get-neighbouring-cellInfos [slot_id]
@@ -394,15 +394,15 @@ get-neighbouring-cellInfos [slot_id]
 
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>get-neighbouring-cellInfos 0
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> get-neighbouring-cellInfos 0
@@ -416,11 +416,11 @@ telephonytool> [  192.285200] [21] [  INFO] [ap] [0,0089]> RIL_REQUEST_GET_NEIGH
 
 ### 14. set-cell-info-list-rate
 
-#### Command Description
+#### Description
 
 The `set-cell-info-list-rate` command is used to set the update rate for cell information.
 
-#### Command Format
+#### Syntax
 
 ```Bash
 set-cell-info-list-rate [slot_id][period]
@@ -429,15 +429,15 @@ set-cell-info-list-rate [slot_id][period]
 - slot_id：Specifies the slot to be monitored, currently supports only `0`.
 - period：Update rate in seconds.
 
-##### Output Information
+#### Example
 
-##### Command Input
+##### Input
 
 ```Bash
 telephonytool>set-cell-info-list-rate 0 10
 ```
 
-##### Output Information
+##### Output
 
 ```Bash
 telephonytool> set-cell-info-list-rate 0 10
