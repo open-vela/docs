@@ -331,7 +331,7 @@ This interface supports two time units (`struct timespec` and `tick`). Developer
 
 #### 4.2 Core Interface Description
 
-`struct oneshot_operations_s` is defined in [oneshot.h](../../../../../../../nuttx/blob/master/include/nuttx/timers/oneshot.h), with the following member functions.
+`struct oneshot_operations_s` is defined in [oneshot.h](../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h), with the following member functions.
 
 ##### Timer Control Interfaces
 
