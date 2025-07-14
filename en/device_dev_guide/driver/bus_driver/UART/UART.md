@@ -149,9 +149,9 @@ Explanations of key fields:
 
     A pointer to `struct uart_ops_s` that defines the operation set of the UART driver. For example:
 
-     - `setup()` configures hardware parameters.
-     - `send()` writes data to the serial port transmit buffer.
-     - `receive()` reads received data.
+        - `setup()` configures hardware parameters.
+        - `send()` writes data to the serial port transmit buffer.
+        - `receive()` reads received data.
 
 - `priv`:
 
@@ -425,8 +425,8 @@ fs/vfs/fs_open.c
 |_ nx_vopen
    |_ file_vopen
       |_ inode->u.i_mops->open(filep, desc.relpath, oflags, mode) == uart_open
-         |_ uart_setup == dev->ops->setup    //setup is called here
-         |_ uart_attach  == esp32c3_attach   //Attach interrupt handler
+         |_ uart_setup == dev->ops->setup    // setup is called here
+         |_ uart_attach  == esp32c3_attach   // attach interrupt handler
             |_ irq_attach(priv->irq, uart_handler, dev);
          |_ uart_dmarxfree(dev)  //Enable DMA for receive buffer (if applicable)
 ```
@@ -458,8 +458,8 @@ fs/vfs/fs_read.c
 1. Direct data reading: If the buffer has data, return it directly.
 2. Buffer empty handling:
 
-   - If DMA is enabled, call `uart_dmarxfree` to extract data.
-   - If DMA is not enabled, call `uart_enablerxint` to enable the receive interrupt.
+    - If DMA is enabled, call `uart_dmarxfree` to extract data.
+    - If DMA is not enabled, call `uart_enablerxint` to enable the receive interrupt.
 
 3. Blocking read: Call `nxsem_wait(&dev->recvsem)` to block the current process until the data is ready.
 
@@ -468,7 +468,7 @@ fs/vfs/fs_read.c
 `uart_write` is used to write data to the transmit buffer (`dev->xmit->buffer`) of the serial port device, implemented by calling the `uart_putxmitchar` function to write the specific data and trigger interrupt or DMA operations as needed.
 
 ```C
-fs/vfs/fs_write.cwrite
+fs/vfs/fs_write.c
 |_ nx_write
    |_ file_write
       |_ inode->u.i_ops->write(filep, buf, nbytes) == uart_write
@@ -498,13 +498,13 @@ fs/vfs/fs_write.cwrite
 Through `poll`, applications can monitor changes in the device's status (such as whether the device is readable or writable) in non-blocking mode.
 
 ```Rust
-fs/vfs/fs_poll.c
+fs/vfs/fs_poll
 |_ poll_setup(kfds, nfds, &sem);
    |_ poll_fdsetup(fds[i].fd, &fds[i], true)
       |_ file_poll(filep, fds, setup);
          |_ inode->u.i_ops->poll(filep, fds, setup); == uart_poll
    |_ if(timeout<0) 
-      |_ nxsem_wait(&sem);//阻塞的poll
+      |_ nxsem_wait(&sem);
 ```
 
 1. Initialize the polling state:
@@ -575,7 +575,7 @@ arch/risc-v/src/esp32c3/esp32c3_serial.c
 
 The `uart_close` function is used to release the UART device and related system resources. In the openvela system, `uart_close` is the core operation of the device closing process, including disabling interrupts, clearing the transmit buffer, and reclaiming hardware resources.
 
-```Swift
+```plaintext
  fs/inode/fs_files.c
  int close(int fd)
  |_ nx_close(fd)
@@ -667,6 +667,22 @@ struct termios
 - `c_speed`: Represents the hardware baud rate parameter, which needs to operate hardware registers.
 - `c_cc`: Represents control character parameters, which are related to software and do not require operating hardware.
 
+#### Example: Setting UART to RAW mode
+
+```C
+tcgetattr(ctx->recvfd, &term);
+cfmakeraw(&term);
+tcsetattr(ctx->recvfd, TCSANOW, &term);
+```
+
+or
+
+```C
+file_ioctl(&cmux->filep, TCGETS, &term);
+cfmakeraw(&term);
+file_ioctl(&cmux->filep, TCSETS, &term);
+```
+
 #### Example: Setting UART Baud Rate
 
 The following code shows how to set the UART baud rate through the `termios` structure and `ioctl` interface.
@@ -704,10 +720,10 @@ In the openvela system, the source code of the UART driver test program is in th
 
 To successfully compile and run this test program, the following three configuration options need to be enabled:
 
-```C
-+CONFIG_TESTING_CMOCKA=y
-+CONFIG_TESTING_DRIVER_TEST=y
-+CONFIG_TESTING_DRIVER_TEST_SIMPLE=y
+```Makefile
+CONFIG_TESTING_CMOCKA=y
+CONFIG_TESTING_DRIVER_TEST=y
+CONFIG_TESTING_DRIVER_TEST_SIMPLE=y
 ```
 
 ### 3. Test Cases

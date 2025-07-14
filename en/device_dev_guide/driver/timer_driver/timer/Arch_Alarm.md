@@ -2,12 +2,69 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/timer_driver/timer/Arch_Alarm.md) \]
 
+- [Arch Alarm Framework Development Guide](#arch-alarm-framework-development-guide)
+  - [I. Objective of This Document](#i-objective-of-this-document)
+  - [II. Overview](#ii-overview)
+    - [1. Oneshot Driver Architecture](#1-oneshot-driver-architecture)
+    - [2. Arch\_alarm Timer Introduction](#2-arch_alarm-timer-introduction)
+    - [3. Application Interface Invocation Method](#3-application-interface-invocation-method)
+      - [3.1 Invocation Method](#31-invocation-method)
+      - [3.2 Precautions](#32-precautions)
+      - [3.3 Invocation Process](#33-invocation-process)
+  - [III. Arch\_alarm API](#iii-arch_alarm-api)
+    - [1. Interface Classification](#1-interface-classification)
+    - [2. Interface Description](#2-interface-description)
+  - [IV. Oneshot Driver](#iv-oneshot-driver)
+    - [1. Configuration Description](#1-configuration-description)
+      - [1.1 Core Configuration Items](#11-core-configuration-items)
+      - [1.2 Configuration File Description](#12-configuration-file-description)
+        - [Configuration of `sched/Kconfig` File](#configuration-of-schedkconfig-file)
+        - [Configuration of `drivers/timers/Kconfig` File](#configuration-of-driverstimerskconfig-file)
+      - [1.3 Configuration Verification](#13-configuration-verification)
+    - [2. Oneshot Initialization](#2-oneshot-initialization)
+      - [2.1 Overview of Initialization Process](#21-overview-of-initialization-process)
+        - [Instance Creation: Call `oneshot_initialize`](#instance-creation-call-oneshot_initialize)
+        - [Device Registration: Call `oneshot_register`](#device-registration-call-oneshot_register)
+        - [System Binding: Implement `up_timer_initialize` Function](#system-binding-implement-up_timer_initialize-function)
+      - [2.2 Reference Implementation and Debugging](#22-reference-implementation-and-debugging)
+    - [3. Upper-Half Interfaces](#3-upper-half-interfaces)
+      - [3.1 Interface Division Under Tickless Mode](#31-interface-division-under-tickless-mode)
+      - [3.2 Core Interface Description](#32-core-interface-description)
+    - [4. Lower-Half Interfaces](#4-lower-half-interfaces)
+      - [4.1 Interface Classification and Implementation Strategy](#41-interface-classification-and-implementation-strategy)
+        - [Time Unit Selection](#time-unit-selection)
+        - [Implementation Strategy](#implementation-strategy)
+      - [4.2 Core Interface Description](#42-core-interface-description)
+        - [Timer Control Interfaces](#timer-control-interfaces)
+        - [Key Parameter Description](#key-parameter-description)
+      - [4.3 Adaptation Example Reference](#43-adaptation-example-reference)
+  - [V. Process Description](#v-process-description)
+    - [1. Tickless Mode](#1-tickless-mode)
+      - [1.1 Core Logic](#11-core-logic)
+      - [1.2 Invocation Process](#12-invocation-process)
+    - [2. Tick Mode](#2-tick-mode)
+      - [2.1 Core Logic](#21-core-logic)
+      - [2.2 Invocation Process](#22-invocation-process)
+  - [VI. Driver Adaptation Example](#vi-driver-adaptation-example)
+    - [1. Initialization Process](#1-initialization-process)
+      - [1.1 Code Execution Path](#11-code-execution-path)
+      - [1.2 Key Code Implementation](#12-key-code-implementation)
+    - [2. Lower-Half Interface Implementation](#2-lower-half-interface-implementation)
+  - [VII. POSIX Timer API and IOCTL Control](#vii-posix-timer-api-and-ioctl-control)
+    - [1. POSIX Timer API](#1-posix-timer-api)
+    - [2. IOCTL API](#2-ioctl-api)
+  - [VIII. Testing Examples](#viii-testing-examples)
+    - [1. Code Path](#1-code-path)
+    - [2. Code Description](#2-code-description)
+    - [3. Code Structure](#3-code-structure)
+
+
 ## I. Objective of This Document
 
 This document introduces the design and implementation of the **arch_alarm** driver framework based on the **oneshot** driver, along with interface usage and implementation details.
 
-- Application developers/testers: Can refer to the [Testing Examples](#VIII.TestingExamples) section for development or testing purposes.
-- Driver developers can refer to the [Driver Adaptation Example](#VI.DriverAdaptationExample) section for driver development.
+- Application developers/testers: Can refer to the [Testing Examples](#viii-testing-examples) section for development or testing purposes.
+- Driver developers can refer to the [Driver Adaptation Example](#vi-driver-adaptation-example) section for driver development.
 
 ## II. Overview
 
@@ -18,7 +75,7 @@ Openvela provides a generic **oneshot** driver, which is a one-time (non-periodi
 - **Upper Half**: Application-facing, provided by openvela, and does not require modification by chip vendors.
 - **Lower Half**: Platform-specific hardware control driver, which chip vendors need to adapt and provide.
 
-The **oneshot** driver-related interface information is in the [oneshot.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/oneshot.h  ) file, and is also divided into **Upper Half** and **Lower Half** interface layers.
+The **oneshot** driver-related interface information is in the [oneshot.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h) file, and is also divided into **Upper Half** and **Lower Half** interface layers.
 
 ### 2. Arch_alarm Timer Introduction
 
@@ -47,7 +104,7 @@ The **`up_timer_initialize`** function in the Upper Half of openvela must be imp
 
 ## III. Arch_alarm API
 
-`arch_alarm` provides a series of interfaces to meet the timer requirements of the sched module. Interface information can be found in the [arch.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/arch.h  ) header file.
+`arch_alarm` provides a series of interfaces to meet the timer requirements of the sched module. Interface information can be found in the [arch.h](../../../../../../../../nuttx/blob/dev/include/nuttx/arch.h) header file.
 
 ### 1. Interface Classification
 
@@ -175,7 +232,7 @@ config ALARM_ARCH
 #endif
 ```
 
-#### 1.4 Configuration Verification
+#### 1.3 Configuration Verification
 
 To ensure the above configurations take effect correctly, the following command can be used for verification:
 
@@ -193,7 +250,7 @@ In the openvela board adaptation, the initialization of the Oneshot timer requir
 
 ##### Instance Creation: Call `oneshot_initialize`
 
-During the board initialization phase, it is necessary to invoke the **vendor-customized initialization function** to complete the allocation and initialization of the [struct oneshot_lowerhalf_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/oneshot.h#L226  ) structure. This function is provided by the openvela framework, with the prototype as follows:
+During the board initialization phase, it is necessary to invoke the **vendor-customized initialization function** to complete the allocation and initialization of the [struct oneshot_lowerhalf_s](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h#L226) structure. This function is provided by the openvela framework, with the prototype as follows:
 
 ```C
 /****************************************************************************
@@ -224,7 +281,7 @@ Operation Instructions:
 
 ##### Device Registration: Call `oneshot_register`
 
-Bind the instance returned by `oneshot_initialize` to the system device model, register the character device node (e.g., `/dev/oneshot`), and associate it with the file operation interface `struct file_operations g_oneshot_ops`. The prototype of the function [oneshot_register](https://github.com/open-vela/nuttx/blob/master/drivers/timers/oneshot.c#L291  ) is as follows:
+Bind the instance returned by `oneshot_initialize` to the system device model, register the character device node (e.g., `/dev/oneshot`), and associate it with the file operation interface `struct file_operations g_oneshot_ops`. The prototype of the function [oneshot_register](../../../../../../../../nuttx/blob/master/drivers/timers/oneshot.c#L291) is as follows:
 
 ```C
 /****************************************************************************
@@ -272,8 +329,8 @@ Key Role:
 
 #### 2.2 Reference Implementation and Debugging
 
-- Structure Definition: For details on the members of `struct oneshot_lowerhalf_s`, refer to [oneshot.h](https://github.com/open-vela/nuttx/blob/master/include/nuttx/timers/oneshot.h#L226  ). Fill in function pointers such as interrupt triggering and timer startup according to hardware characteristics.
-- Example Code: For specific driver adaptation examples, refer to the [Driver Adaptation Example - Initialization Section](#1 Initialization Process), and adjust the hardware register operation logic according to the target platform (e.g., ARM Cortex-M/RISC-V).
+- Structure Definition: For details on the members of `struct oneshot_lowerhalf_s`, refer to [oneshot.h](../../../../../../../../nuttx/blob/master/include/nuttx/timers/oneshot.h#L226). Fill in function pointers such as interrupt triggering and timer startup according to hardware characteristics.
+- Example Code: For specific driver adaptation examples, refer to the [Driver Adaptation Example - Initialization Section](#1-initialization-process), and adjust the hardware register operation logic according to the target platform (e.g., ARM Cortex-M/RISC-V).
 - Debugging Suggestions: If initialization fails, check whether `CONFIG_ONESHOT`/`CONFIG_ALARM_ARCH` are correctly enabled, and use serial port logs to print the return value of `oneshot_initialize`.
 
 ### 3. Upper-Half Interfaces
@@ -296,7 +353,7 @@ Design Principles:
 
 #### 3.2 Core Interface Description
 
-Upper-Half interfaces are defined in [arch.h](https://github.com/open-vela/nuttx/blob/master/include/nuttx/arch.h#L1460  ), primarily for use by the scheduler (Sched).
+Upper-Half interfaces are defined in [arch.h](../../../../../../../../nuttx/blob/dev/include/nuttx/arch.h#L1460), primarily for use by the scheduler (Sched).
 
 ### 4. Lower-Half Interfaces
 
@@ -323,7 +380,7 @@ This interface supports two time units (`struct timespec` and `tick`). Developer
 - Vendor Selection
 
     - Choose to implement the `timespec` or `tick` interface group based on hardware capabilities.
-    - Unimplemented interface groups can be automatically mapped via openvela's built-in [conversion functions](https://github.com/open-vela/nuttx/blob/master/include/nuttx/timers/oneshot.h  ).
+    - Unimplemented interface groups can be automatically mapped via openvela's built-in [conversion functions](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h).
 
 - Performance Optimization
 
@@ -331,7 +388,7 @@ This interface supports two time units (`struct timespec` and `tick`). Developer
 
 #### 4.2 Core Interface Description
 
-`struct oneshot_operations_s` is defined in [oneshot.h](https://github.com/open-vela/nuttx/blob/master/include/nuttx/timers/oneshot.h  ), with the following member functions.
+`struct oneshot_operations_s` is defined in [oneshot.h](../../../../../../../nuttx/blob/master/include/nuttx/timers/oneshot.h), with the following member functions.
 
 ##### Timer Control Interfaces
 
@@ -373,7 +430,7 @@ struct oneshot_operations_s
 
 #### 4.3 Adaptation Example Reference
 
-- Code Example: [Driver Adaptation Example Lower-Half Interface Section]
+- Code Example: [Driver Adaptation Example Lower-Half Interface Section](#2-lower-half-interface-implementation)
 
 ## V. Process Description
 
@@ -432,7 +489,7 @@ board_late_initialize (or board_app_initialize)
 
 #### 1.2 Key Code Implementation
 
-- Hardware (Arch Layer) Timer Initialization, refer to code [arch/risc-v/src/bl602/bl602_timerisr.c](https://github.com/open-vela/nuttx/blob/master/arch/risc-v/src/bl602/bl602_timerisr.c#L57  ).
+- Hardware (Arch Layer) Timer Initialization, refer to code [arch/risc-v/src/bl602/bl602_timerisr.c](https://github.com/open-vela/nuttx/blob/dev/arch/risc-v/src/bl602/bl602_timerisr.c#L57  ).
 
     ```C
     /****************************************************************************
@@ -456,7 +513,7 @@ board_late_initialize (or board_app_initialize)
     }
     ```
 
-- Oneshot Driver Instantiation, refer to code [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](https://github.com/open-vela/nuttx/blob/master/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L361  ).
+- Oneshot Driver Instantiation, refer to code [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](../../../../../../../../nuttx/blob/dev/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L361).
 
     ```C
     struct oneshot_lowerhalf_s *oneshot_initialize(int      chan,
@@ -520,7 +577,7 @@ board_late_initialize (or board_app_initialize)
 
 ### 2. Lower-Half Interface Implementation
 
-The operation interface binding is as follows, and the detailed code can be referred to in [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](https://github.com/open-vela/nuttx/blob/master/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L96  ).
+The operation interface binding is as follows, and the detailed code can be referred to in [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](../../../../../../../../nuttx/blob/dev/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L96).
 
 ```C
 /* "Lower half" driver methods */
@@ -545,7 +602,7 @@ Below is a brief introduction to the timer API. For detailed information, refer 
 man timer_create
 ```
 
-Detailed code can be found in [include/time.h](https://github.com/open-vela/nuttx/blob/master/include/time.h#L233  ).
+Detailed code can be found in [include/time.h](../../../../../../../../nuttx/blob/dev/include/time.h#L233).
 
 ```C
 /*
@@ -600,7 +657,7 @@ int timer_getoverrun(timer_t timerid);
 
 ### 2. IOCTL API
 
-Applications can directly operate the Oneshot timer through the `ioctl` function. Before using this feature, the `/dev/oneshot` device node must be registered during the system startup (bringup) process. Refer to the header file [include/nuttx/timers/oneshot.h](https://github.com/open-vela/nuttx/blob/master/include/nuttx/timers/oneshot.h#L41  ) for the currently supported `ioctl` commands. Command descriptions are as follows:
+Applications can directly operate the Oneshot timer through the `ioctl` function. Before using this feature, the `/dev/oneshot` device node must be registered during the system startup (bringup) process. Refer to the header file [include/nuttx/timers/oneshot.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h#L41) for the currently supported `ioctl` commands. Command descriptions are as follows:
 
 - `OSIOC_START`
 
@@ -821,4 +878,3 @@ int main(int argc, FAR char *argv[])
   return cmocka_run_group_tests(tests, NULL, NULL);
 }
 ```
-

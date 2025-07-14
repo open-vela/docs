@@ -667,6 +667,22 @@ struct termios
 - `c_speed`**：** 表示硬件波特率参数，需操作硬件寄存器。
 - `c_cc`**：** 表示控制字符参数，与软件有关，无需操作硬件。
 
+#### 示例：设置 UART RAW mode
+
+```C
+tcgetattr(ctx->recvfd, &term);
+cfmakeraw(&term);
+tcsetattr(ctx->recvfd, TCSANOW, &term);
+```
+
+或
+
+```C
+file_ioctl(&cmux->filep, TCGETS, &term);
+cfmakeraw(&term);
+file_ioctl(&cmux->filep, TCSETS, &term);
+```
+
 #### 示例：设置 UART 波特率
 
 以下代码展示了如何通过 `termios` 结构体和 `ioctl` 接口设置 UART 的波特率。
