@@ -30,6 +30,7 @@ listen-call [slot_id][event_id]
 
 - slot_id: Sets the slot to monitor. Currently, only `0` is supported.
 - event_id:
+
     - `0`: Call status change.
     - `1`: Emergency number list change.
     - `2`: Ringback tone change.
@@ -120,6 +121,7 @@ dial [slot_id][number][hide_call_id]
 - slot_id: Sets the slot to be used. Currently, only 0 is supported.
 - number: The phone number to dial.
 - hide_call_id: Whether to hide the caller ID:
+
     - `0`: Show caller ID.
     - `1`: Hide caller ID.
 
@@ -184,7 +186,6 @@ hangup_0 [slot_id][call_id]
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 - call_id: The ID of the call to be disconnected.
-
 
 ##### Example
 
@@ -308,6 +309,7 @@ swap [slot_id][action]
 
 - slot_id: Specifies the slot to use; currently only slot `0` is supported.
 - action: Defines the switching action:
+
     - `1`: Switch to hold call.
     - `0`: Switch to active call.
 

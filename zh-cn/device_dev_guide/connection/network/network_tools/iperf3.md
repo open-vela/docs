@@ -131,9 +131,7 @@ CONFIG_UTILS_IPERF3_PRIORITY=89
 
 运行以下命令以建立常规 socket server：
 
-> 注意
->
-> 需要指定 `-4` 还是 `-6`。
+> **注意**：需要指定 `-4` 还是 `-6`。
 
 - 监听 IPv4：
 
@@ -203,7 +201,7 @@ Connecting to host 192.0.2.1, port 5201
 [  4]   0.00-10.02  sec   356 MBytes   298 Mbits/sec                  receiver
 ```
 
-## 五、常见问题
+## 五、FAQ
 
 ### 1、版本兼容问题
 

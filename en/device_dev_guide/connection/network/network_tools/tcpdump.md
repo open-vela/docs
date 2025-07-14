@@ -2,18 +2,13 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/network_tools/tcpdump.md) \]
 
-
 ## I. Overview
 
+This paper introduces the basic method of using the `tcpdump` tool to capture network data packets, including packet capture, exit, result interpretation and relevant instructions for network interface card driver adaptation.
 
-This paper introduces the basic method of using the`tcpdump `tool to capture network data packets, including packet capture, exit, result interpretation and relevant instructions for network interface card driver adaptation.
+## II. Configuration instructions
 
-
-## II Configuration instructions
-
-
-Before using the`tcpdump `tool, the following configuration items need to be enabled on the system:
-
+Before using the `tcpdump` tool, the following configuration items need to be enabled on the system:
 
 ```Makefile
 CONFIG_NET_PKT=y
@@ -23,105 +18,81 @@ CONFIG_SYSTEM_TCPDUMP=y
 CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192 
 ```
 
-
 ## III. Operation and use
-
 
 ### 1. tcpdump parameter description
 
-
-
 ```Bash
-Specify the name of the NIC to capture packets
+# Specify the name of the NIC to capture packets
 -i interface
 --interface=interface
 
-The path to save the capture file
+# The path to save the capture file
 -w file
 
-Sets the maximum save length for a single package. For example, for a packet that is 1KB long, you can save only the 100 bytes of the header.
+# Sets the maximum save length for a single package. For example, for a packet that is 1KB long, you can save only the 100 bytes of the header.
 -s snaplen
 --snapshot-length=snaplen
 ```
 
-### 2, the use of tcpdump
-
+### 2. the use of tcpdump
 
 1. Preparation.
 
+    Before using `tcpdump `to capture packages, the following preparations need to be completed:
 
-    Before using`tcpdump `to capture packages, the following preparations need to be completed:
-
-
-   - Prepare storage directories: Make sure there are available directories on the device for storing capture files, depending on the storage method of the device.
-   - Mount the host directory (for OpenVela SIM environment): The host directory can be mounted on the device for easy storage of capture files.
-
+    - Prepare storage directories: Make sure there are available directories on the device for storing capture files, depending on the storage method of the device.
+    - Mount the host directory (for OpenVela SIM environment): The host directory can be mounted on the device for easy storage of capture files.
 
         ```Bash
         # Take the SIM as an example, mount the directory on the host to /data1
         mount -t hostfs -o fs=. /data1
         ```
 
-2. Grab the bag.
+2. Capturing Packets.
 
+    Use the `tcpdump` command to capture network packets. The following are common methods:
 
-     Use the`tcpdump `command to fetch network data packets. The following are common operations:
+    - Basic capture.
 
-
-   - Basic bag capture.
-
-
-   Directly execute the'tcpdump 'command, specifying the network interface card and save path:
-
-
-     ```Bash
-    # Save the eth0 network packet to test.pcap
-           tcpdump -i eth0 -w /data1/test.pcap
-      ```
-
-   - Backstage grab bag.
-
-
-   If you need to execute other commands while capturing packages, you can set'tcpdump 'to run in the background (add' & 'to the end of the command):
-
+        Run the `tcpdump` command, specifying the network interface and the path to save the file:
 
         ```Bash
-        # Save eth0's network packet to test.pcap in the background
+        # Capture packets from eth0 and save them to test.pcap
+        tcpdump -i eth0 -w /data1/test.pcap
+        ```
+
+    - Background capture.
+
+        To execute other commands while the capture is in progress, run `tcpdump` as a background process by appending an ampersand (`&`) to the command:
+
+        ```Bash
+        # Capture packets from eth0 in the background and save to test.pcap
         tcpdump -i eth0 -w /data1/test.pcap &
         ```
 
+3. Stopping the Capture.
 
-3. Withdraw.
+    - Stopping a foreground process.
 
+        Press `Ctrl+C`. The `tcpdump` process will terminate, and the capture file will be saved.
 
-   - The foreground runs out.
+    - Stopping a background process.
 
-
-        Press`Ctrl + C` to exit `tcpdump`, the capture file will be saved normally and exited.
-
-
-   - The background run exits.
-
-
-        If`tcpdump `is running in the background, you can end the process with the following command:
-
+        If `tcpdump` is running in the background, use the following command to terminate the process:
 
         ```Bash
-        kill -2 <tcpdump 的 PID>
+        kill -2 <pid_of_tcpdump>
         ```
 
-        Description: This command has the same effect as pressing `Ctrl + C`.
-
+        Note: This command has the same effect as pressing `Ctrl+C`.
 
 ## IV. Interpretation of the results
 
-
 After capturing the package, you can use the **Wireshark** tool to analyze the generated `.pcap `file. Here are the basic steps:
 
-
 1. Open the **Wireshark** tool.
-2. Through the menu **File > Open**, select the `.pcap `file generated by capturing the package.
+2. Through the menu **File > Open**, select the `.pcap` file generated by capturing the package.
 3. View and analyze the details of network data packets.
 
-
-> Description: The specific use of **Wireshark** is beyond the scope of this article. Users can refer to the online public tutorial for more operation details.
+> **Note**: The specific use of **Wireshark** is beyond the scope of this article. Users can refer to the online public tutorial for more operation details.

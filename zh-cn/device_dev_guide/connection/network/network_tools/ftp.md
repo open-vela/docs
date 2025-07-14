@@ -4,13 +4,13 @@
 
 ## 一、概述
 
-文件传输协议（File Transfer Protocol，FTP）是一种用于在网络上进行文件传输的标准协议。它工作在 OSI 模型的第七层（应用层）和 TCP 模型的第四层，使用 TCP 进行传输，而非 UDP。
+- 文件传输协议（File Transfer Protocol，FTP）是一种用于在网络上进行文件传输的标准协议。它工作在 OSI 模型的第七层（应用层）和 TCP 模型的第四层，使用 TCP 进行传输，而非 UDP。
 
-在建立连接前，客户端与服务器需要经过“三次握手”过程，以确保连接的可靠性和面向连接的特性，从而为数据传输提供可靠保障。
+- 在建立连接前，客户端与服务器需要经过“三次握手”过程，以确保连接的可靠性和面向连接的特性，从而为数据传输提供可靠保障。
 
-FTP 允许用户通过文件操作（如增、删、改、查、传送等）与另一台主机进行通信。用户无需完全登录到目标计算机即可访问远程资源。通过 FTP 程序，用户可以实现文件传输、目录管理等操作，即使双方计算机的操作系统和文件存储方式不同。
+- FTP 允许用户通过文件操作（如增、删、改、查、传送等）与另一台主机进行通信。用户无需完全登录到目标计算机即可访问远程资源。通过 FTP 程序，用户可以实现文件传输、目录管理等操作，即使双方计算机的操作系统和文件存储方式不同。
 
-`ftpd` 是提供 FTP 服务的服务器端程序。
+- `ftpd` 是提供 FTP 服务的服务器端程序。
 
 ## 二、配置说明
 
@@ -72,7 +72,9 @@ ap> ftpd_start -4
 Initializing the network
 Starting the FTP daemon
 FTP daemon [223] started
-Adding accounts:  // 后续PC连接时使用如下用户名和密码做身份认证
+
+# 后续PC连接时使用如下用户名和密码做身份认证
+Adding accounts:  
 ```
 
 **注意**：
@@ -87,6 +89,7 @@ Adding accounts:  // 后续PC连接时使用如下用户名和密码做身份认
 ```Bash
 # PC端执行"ftp <设备实际 IP>"连接到openvela
 # 示例 IP 地址为 192.168.28.94，请根据实际网络环境替换。  
+ftp 192.168.28.94
 Connected to 192.168.28.94.
 220 NuttX FTP Server
 Name (192.168.28.94:usrname): root
@@ -109,7 +112,9 @@ drw-rw-rw-   1     1001      512        0 Mar  2 07:44 miot
 drwxrwxrwx   1     1001      512        0 Mar  2 07:44 misc
 -rw-r--r--   1     1001      512    12288 Mar  2 07:44 persist.db
 226 Transfer complete
-ftp> get persist.db persist.db.pc # 下载文件 persist.db，并将其保存为 persist.db.pc  
+
+# 下载文件 persist.db，并将其保存为 persist.db.pc
+ftp> get persist.db persist.db.pc 
 local: persist.db.pc remote: persist.db
 200 PORT command successful
 150 Opening data connection
@@ -123,7 +128,8 @@ ftp>
 使用以下命令将文件上传到设备：
 
 ```Bash
-ftp> put persist.db.pc persist.db.dev # 上传文件 persist.db.pc，并将其保存为 persist.db.dev                                      
+# 上传文件 persist.db.pc，并将其保存为 persist.db.dev                                   
+ftp> put persist.db.pc persist.db.dev    
 local: persist.db.pc remote: persist.db.dev
 200 PORT command successful
 150 Opening data connection

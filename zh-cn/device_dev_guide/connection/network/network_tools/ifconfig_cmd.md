@@ -1,4 +1,4 @@
-# ifconfig
+# 使用 ifconfig 命令配置网卡
 
 \[ [English](../../../../../en/device_dev_guide/connection/network/network_tools/ifconfig.md) | 简体中文 \]
 
@@ -34,29 +34,32 @@
 
 ## 三、参数说明
 
+> **说明**：openvela 的 ifconfig 和 Linux 的 ifconfig 有部分差异，暂时不支持 [-v] [-a] [-s] 等参数。
+
 ```Shell
 ifconfig interface [[inet|inet6] [<ip-address>|dhcp]] [dr|gw|gateway <dr-address>] [netmask <net-mask>|prefixlen <len>] [dns <dns-address>] [hw <hw-mac>]]
 ```
 
-> **说明**：openvela 的 ifconfig 和 Linux 的 ifconfig 有部分差异，暂时不支持 [-v] [-a] [-s] 等参数。
-
-| 参数                                | 描述                                                       |
-|-------------------------------------|------------------------------------------------------------|
-| interface                           | 接口的名称。<br> 这通常是一个驱动程序名，后面跟着一个单元号。例如用于第一个以太网接口的 eth0，Wi-Fi 类型的网卡一般为 wlan0。 |
-| inet/inet6                          | 选定地址族，与地址分配联合使用。                             |
-| \<ip-address>\|dhcp                  | 直接指定网卡静态 IP 地址或通过 DHCP 获取动态地址。           |
-| dr\|gw\|gateway \<dr-address>        | 设置网关地址。                                               |
-| netmask \<net-mask>\|prefixlen \<len> | 设置此接口的 IP 网络掩码。<br> 此值默认为通常的 A、B 或 C 类网络掩码（从接口 IP 地址派生），但可以设置为任何值。 |
-| dns <dns-address>                   | 设置 DNS。                                                    |
-| hw <hw-mac>                         | 如果设备驱动程序支持此操作，则设置此接口的硬件地址。         |
+| 参数                                  | 描述                                                                                                                         |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| interface                             | 接口的名称。<br> 这通常是一个驱动程序名，后面跟着一个单元号。例如用于第一个以太网接口的 eth0，Wi-Fi 类型的网卡一般为 wlan0。 |
+| inet/inet6                            | 选定地址族，与地址分配联合使用。                                                                                             |
+| \<ip-address>\|dhcp                   | 直接指定网卡静态 IP 地址或通过 DHCP 获取动态地址。                                                                           |
+| dr\|gw\|gateway \<dr-address>         | 设置网关地址。                                                                                                               |
+| netmask \<net-mask>\|prefixlen \<len> | 设置此接口的 IP 网络掩码。<br> 此值默认为通常的 A、B 或 C 类网络掩码（从接口 IP 地址派生），但可以设置为任何值。             |
+| dns \<dns-address>                    | 设置 DNS。                                                                                                                   |
+| hw \<hw-mac>                          | 如果设备驱动程序支持此操作，则设置此接口的硬件地址。                                                                         |
 
 ## 四、常用命令
 
 - ifup & ifdown 命令通常与 ifconfig 搭配使用，用以使能或关闭网卡。
 
     ```Bash
-    ifup eth0    #使能eth0网卡
-    ifdown eth0  #关闭eth0网卡
+    # 使能eth0网卡
+    ifup eth0  
+
+    # 关闭eth0网卡  
+    ifdown eth0
     ```
 
 - 不带选项的 ifconfig 命令将显示所有接口的配置。

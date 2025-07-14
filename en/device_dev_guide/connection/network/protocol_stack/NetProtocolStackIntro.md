@@ -2,27 +2,28 @@
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/network/protocol_stack/NetProtocolStackIntro.md) \]
 
-## I. Introduction
+## I. Overview
 
 ### 1. Functions of the OS Network Protocol Stack
+
 The OS network protocol stack mainly handles Layer 2, Layer 3, and Layer 4 protocols during network communication. Below is a comparison between the OSI seven-layer network model and the TCP/IP four-layer model, along with the corresponding network protocols used in network communications:
 
-| **OSI** **Seven-Layer Model** | **TCP/IP** **Four-Layer Conceptual Model**      | **Corresponding Network Protocols**                        |
-| :----------------------- | :------------------------------- | :-------------------------------------- |
-| Application Layer                  | Application Layer                           | HTTP，TFTP FTP, NFS, WAIS, SMTP         |
-| Presentation Layer                   | Telnet, Rlogin, SNMP, Gopher     |                                         |
-| Session Layer                   | SMTP, DNS                        |                                         |
-| Transport Layer                   | Transport Layer                          | TCP, UDP                                |
-| Network Layer                   | Network Layer                           | IP, ICMP, ARP, RARP, AKP, UUCP          |
-| Data Link Layer              | Data Link Layer                       | FDDI, Ethernet, Arpanet, PDN, SLIP, PPP |
-| Physical Layer                  | IEEE802.1A, IEEE802.2~IEEE802.11 |                                         |
+| **OSI 7-Layer Model** | **TCP/IP 4-Layer Conceptual Model** | **Corresponding Network Protocols**     |
+| :-------------------- | :---------------------------------- | :-------------------------------------- |
+| Application Layer     | Application Layer                   | HTTP, TFTP, FTP, NFS, WAIS, SMTP        |
+| Presentation Layer    |                                     | Telnet, Rlogin, SNMP, Gopher            |
+| Session Layer         |                                     | SMTP, DNS                               |
+| Transport Layer       | Transport Layer                     | TCP, UDP                                |
+| Network Layer         | Network Layer                       | IP, ICMP, ARP, RARP, AKP, UUCP          |
+| Data Link Layer       | Data Link Layer                     | FDDI, Ethernet, Arpanet, PDN, SLIP, PPP |
+| Physical Layer        |                                     | IEEE 802.1A, IEEE 802.2–IEEE 802.11     |
 
-###  Capabilities of the openvela Network Protocol Stack
+### 2. Capabilities of the openvela Network Protocol Stack
+
 The openvela network protocol stack provides full-stack network communication capabilities from the driver level to user space, supporting a variety of protocols and tools. The following diagram illustrates its core functionalities:
 
-![img](./figures/001.svg)
+### 3. User Space Interface
 
-### 3、 User Space Interface
 The Socket interface is the core of network communication. The openvela network protocol stack supports the standard POSIX Socket interface for efficient user space network communication. Below are some common Socket interface functions and their descriptions:
 
 ```C
@@ -66,11 +67,14 @@ int select(int nfds, FAR fd_set *readfds, FAR fd_set *writefds,
            FAR fd_set *exceptfds, FAR struct timeval *timeout);
 ```
 
-## Basic Capabilities of the Protocol Stack
+## II. Basic Capabilities of the Protocol Stack
+
 The openvela network protocol stack supports multiple network and transport layer protocols, including IPv4, IPv6, TCP, UDP, and ICMP, providing developers with comprehensive network communication capabilities. Below is a brief introduction to the functionalities of each protocol.
 
 ### 1. IPv4 / IPv6 Capabilities
+
 The openvela network protocol stack supports both IPv4 and IPv6 protocols and offers the following extended features:
+
 - ARP and NDP Protocols.
 -DHCP / DHCPv6: Supports both DHCP client and server functionalities.
 - Fragmentation Support: Supports fragmentation in both IPv4 and IPv6.
@@ -79,6 +83,7 @@ The openvela network protocol stack supports both IPv4 and IPv6 protocols and of
 - IPv6 Auto-Configuration: Supports the reception and transmission of IPv6 Router Advertisements, allowing automatic configuration of its own IPv6 address as well as providing prefixes for other devices.
 
 ### 2. TCP Capabilities
+
 The openvela network protocol stack supports the TCP protocol on both IPv4 and IPv6, and provides the following functionalities:
 
 - Standard Socket Interface Support:
@@ -86,6 +91,7 @@ The openvela network protocol stack supports the TCP protocol on both IPv4 and I
     - Provides standard POSIX Socket interfaces such as `bind`, `listen`, `connect`, `accept`, `send`, `recv`, `shutdown`, `poll`, etc.
 
 - TCP Feature Support:
+
     - Backlog: Supports connection queue management.
     - Keepalive: Supports the TCP keepalive mechanism.
     - SACK / Delayed ACK: Supports Selective Acknowledgment (SACK) and Delayed ACK.
@@ -100,13 +106,14 @@ The openvela network protocol stack supports the TCP protocol on both IPv4 and I
 In addition to the basic network communication capabilities, the OpenVela network stack also provides a series of advanced features for multi-core architectures, complex routing scenarios, and high-performance network requirements. The following is a detailed introduction to the advanced capabilities.
 
 #### UDP Capabilities
+
 - Standard Socket Interface Support:
 
     - Provides standard POSIX Socket interfaces such as bind, listen, connect, send, recv, poll, etc.
 
 - UDP Feature Support:
 
-    - Receive Buffer Management: Manages the receive buffer.
+    - Receive Buffer: Manages the receive buffer.
     - Multicast & Broadcast: Supports multicast and broadcast communications.
     - Bind to Device: Supports binding to a specific device.
 
@@ -120,60 +127,82 @@ In addition to the basic network communication capabilities, the OpenVela networ
         - Sends error messages for unreachable addresses or ports.
 
 ## III. Advanced Capabilities of the Protocol Stack
+
 In addition to the basic network communication capabilities, the openvela network protocol stack provides a series of advanced features suitable for multi-core architectures, complex routing scenarios, and high-performance network requirements. The details are described below.
 
 ### 1. Usrsock Proxy Capability
+
 Rpmsg Usrsock is a proxy mechanism implemented by openvela that transfers user space socket operations via methods such as RPMsg to be executed on the server side. It is divided into two parts—the client side and the server side—which are responsible for request forwarding and actual processing, respectively. The following diagram illustrates the concept:
 
-![img](./figures/002.png)
-
 #### Working Principle
+
 - Usrsock Client Side:
+
     - All socket operations (e.g., `send`, `recv`, etc.) performed by user space applications are forwarded via proxy mechanisms (such as RPMsg) to the server side.
 
 - Usrsock Server Side:
+
     - Responsible for executing the actual socket operations.
     - Applies the socket parameters received from the client side to the network protocol stack on the server side to complete the operations.
 
 #### Application Scenarios
+
 - Multi-Core openvela Products:
+
     - In multi-core devices, RPMsg-based Usrsock enables only one openvela instance to run the network protocol stack, while other cores access network functionality through the proxy.
+
 - Internet Connectivity in Emulators:
+
     - In an emulator environment, direct system calls implement Usrsock, effectively allowing openvela internal applications to use the host Linux socket interface.
 
 ### 2. Routing and Forwarding Capability
+
 When a device is equipped with multiple network interfaces, the openvela network protocol stack provides robust routing and forwarding features to support complex network topologies and efficient packet processing.
+
 - Basic Forwarding Capability:
+
     - When the device receives an IP packet with a destination address that does not belong to it, the packet is forwarded between interfaces.
     - During forwarding, the packet’s TTL (Time-To-Live) is decremented by 1, and the packet is sent out from another interface.
 
 - Routing Table and Longest Prefix Matching:
+
     - Supports route selection based on routing tables using the longest prefix matching algorithm.
 
 - Error Handling and ICMP Messages:
 
     - Sends ICMP and ICMPv6 messages when errors occur, such as:
+
         - TTL Expiry: Sends an error message when the packet’s TTL reaches 0.
         - Destination Unreachable: Sends an error message when the target address is unreachable.
 
 - IPv4/IPv6 NAT Support:
+
     - Provides NAT (Network Address Translation) functionality similar to Linux iptables, supporting both IPv4 and IPv6.
 
 ### 3. Other Advanced Capabilities
+
 The openvela network protocol stack also supports the following advanced features to meet high-performance and complex network demands:
+
 - Zero-Copy:
+
     - Supports zero-copy for fixed-length buffers (IOB Offloading).
     - Will soon support zero-copy for variable-length buffers to further enhance performance.
 
 - GRO/GSO:
-- GRO (Generic Receive Offload): Reduces protocol stack processing overhead at the receiver.
-- GSO (Generic Segmentation Offload): Reduces the segmentation processing overhead at the transmitter.
+
+    - GRO (Generic Receive Offload): Reduces protocol stack processing overhead at the receiver.
+    - GSO (Generic Segmentation Offload): Reduces the segmentation processing overhead at the transmitter.
+
 - Firewall:
+
     - Provides basic firewall functionalities for filtering and managing network traffic.
+
 - VLAN Support:
+
     - Supports Virtual Local Area Network (VLAN) features suitable for complex network topologies.
 
 ## IV. Driver Interface
+
 Netdev is the driver interface layer of the openvela network protocol stack and is responsible for connecting the network protocol stack with the underlying hardware drivers. Through standardized interfaces, Netdev offers flexible network device management capabilities, including device registration, data transmission and reception, and wireless network operations.
 
 ```C
@@ -234,7 +263,9 @@ int netdev_lower_carrier_off(FAR struct netdev_lowerhalf_s *dev);
 void netdev_lower_rxready(FAR struct netdev_lowerhalf_s *dev);
 void netdev_lower_txdone(FAR struct netdev_lowerhalf_s *dev);
 ```
-## Special Network Card Support
+
+## V. Special Network Card Support
+
 The openvela network protocol stack supports various special network cards suitable for virtualization and embedded scenarios. The following special network card types are supported:
 
 - RNDIS (Remote Network Driver Interface Specification).
