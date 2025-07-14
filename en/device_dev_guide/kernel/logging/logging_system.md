@@ -1,6 +1,5 @@
 # Logging System
 
-
 \[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/logging/logging_system.md) \] 
 
 ## I. syslog
