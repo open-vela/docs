@@ -5,6 +5,7 @@
 ## I. Driver Internal Structure
 
 The driver framework of openvela is relatively simple and does not provide a complex driver model like that in the Linux system (such as Device, Driver, Bus, Class, etc.). Compared with Linux, the driver framework of openvela has the following characteristics:
+
 - Driver registration interface: Register the driver with the VFS (Virtual File System) through a simple driver registration interface.
 - Implementation of function set: Implement the `file_operations` operation function set for upper-layer calls.
 - System call support: Upper-layer applications indirectly call underlying drivers to complete device operations through standard system calls.
@@ -14,6 +15,7 @@ This simplified design makes the driver framework of openvela easier to understa
 ### 1. Driver Types and Hierarchical Structure
 
 openvela supports multiple device drivers, which are mainly divided into the following types:
+
 - Character device drivers: zero, null, sensor, adc, etc.
 - Block device drivers: emmc, sd card, bch, etc.
 - Special device drivers: mtd, ptp, timer, netdev, etc.
@@ -23,22 +25,28 @@ The following is the workflow diagram of openvela drivers, showing the complete 
 <img src="./figures/001.png" width="75%">
 
 Among them, drivers are divided into two layers according to functions:
+
 1. Upper Half (provided by openvela)
-   - The driver registers itself with the openvela system through `register_driver` or `register_blockdriver`.
-   - Provide high-level system call interfaces (such as `read`, `write`, `close`, etc.).
-   - Interact with the Lower Half through the operation set functions.
+
+    - The driver registers itself with the openvela system through `register_driver` or `register_blockdriver`.
+    - Provide high-level system call interfaces (such as `read`, `write`, `close`, etc.).
+    - Interact with the Lower Half through the operation set functions.
+
 2. Lower Half (implemented by driver developers)
-   - Responsible for implementing interactions with hardware devices and architectures.
-   - Involves specific operations of underlying hardware such as buses and peripherals.
-   - Defines the core operation logic of the device driver, and driver developers need to implement the corresponding interfaces according to specific devices.
+
+    - Responsible for implementing interactions with hardware devices and architectures.
+    - Involves specific operations of underlying hardware such as buses and peripherals.
+    - Defines the core operation logic of the device driver, and driver developers need to implement the corresponding interfaces according to specific devices.
 
 ### 2. Characteristics of the Driver Model
 
 Compared with the Linux device driver model, the driver model of openvela is more simplified and has the following characteristics:
+
 - No matching and probing mechanisms: There is no matching and probing process of `bus`, `device`, and `driver` in openvela.
 - No device types and device numbers: The concepts of device types or device numbers (major/minor) are not used.
 - No module_init initialization function: The driver initialization function needs to be explicitly called in the board code for initialization.
 - Device node registration: In openvela, there are no interfaces like `cdev_add` or `device_create`, and the driver is registered through the `register_driver()` or `register_blockdriver()` interface.
+
 This design significantly reduces the complexity of the driver model, making openvela more suitable for resource-constrained MCU (Microcontroller Unit) environments.
 
 ### 3. Pseudo Root File System
@@ -51,8 +59,6 @@ The device drivers of openvela rely on the Pseudo Root File System, similar to `
 In other words, only device drivers can create device nodes, and the existence of device nodes indicates that the devices have been registered and are ready.
 
 <img src="./figures/002.png" width="75%">
-
-> What is the relationship between inode, file, and fd?
 
 ### 4. Driver Directory Structure
 
@@ -69,20 +75,19 @@ In addition to character device drivers, openvela provides a non-standard OS int
 - Power management: `board_poweroff`, `board_pmctl`
 - System reset: `board_reset`
 
-> Note
->
-> Under normal circumstances, application programs should control board-level logic through the `ioctl` interface of character device drivers instead of directly calling `boardctl`.
+**Note**: Under normal circumstances, application programs should control board-level logic through the `ioctl` interface of character device drivers instead of directly calling `boardctl`.
 
 ## II. Data Structures and Interfaces  
 
-### 1. Data Structures  
+### 1. Data Structures
+
 In openvela, the application layer accesses drivers through system calls, with the calling process as follows:  
 
 **System call -> VFS (Virtual File System) -> Driver**.  
 
-To understand how drivers are registered with the file system, it is necessary to first understand the relevant data structures. The definitions of these data structures are located in the [`include/nuttx/fs/fs.h`](../../../../../../nuttx/blob/dev/include/nuttx/fs/fs.h)file.  
+To understand how drivers are registered with the file system, it is necessary to first understand the relevant data structures. The definitions of these data structures are located in the [include/nuttx/fs/fs.h](../../../../../../nuttx/blob/dev/include/nuttx/fs/fs.h) file.  
 
-#### 1.1 Driver Registration and `inode`  
+#### Driver Registration and `inode`  
 
 When a driver is registered with the file system, an `inode` is created and associated with the device file. The inode is the core data structure in the file system used to represent files or devices. The following describes the key fields and operation function sets related to driver registration.  
 
@@ -112,7 +117,8 @@ struct inode
 };
 ```  
 
-#### 1.2 `i_flags` Field  
+#### `i_flags` Field
+
 The `i_flags` field in the `struct inode` structure marks the file type of the `inode`, such as a driver file or message queue. To set or determine whether `i_flags` represents a driver file, the following macro definitions are provided:  
 
 ```c
@@ -124,8 +130,10 @@ The `i_flags` field in the `struct inode` structure marks the file type of the `
 - `INODE_IS_DRIVER`: Determines whether the specified `inode` is a driver file.  
 - `INODE_SET_DRIVER`: Marks the specified `inode` as a driver file.  
 
-#### 1.3 `inode_ops_u` Field  
+#### `inode_ops_u` Field
+
 The `inode_ops_u` field in the `struct inode` structure is a union used to describe operation function sets. Depending on the type of `inode`, this field can contain one of the following operation function sets:  
+
 - Character device driver operation function set.  
 - Block device driver operation function set.  
 - Mount point operation function set.  
@@ -151,8 +159,10 @@ union inode_ops_u
 };
 ```  
 
-#### 1.4 Driver Operation Function Set  
-The operation function set for character device drivers is defined by `struct file_operations`, with the following structure:  
+#### Driver Operation Function Set
+
+The operation function set for character device drivers is defined by `struct file_operations`, with the following structure:
+
 ```c
 struct file_operations
 {
@@ -193,10 +203,12 @@ struct file_operations
 - The driver's operation function set is set in the inode corresponding to the device file.  
 - When a system call operates on a device file, it finds and calls the corresponding function based on the inode of the device file.  
 
-### 2. `register_driver` Interface  
+### 2. `register_driver` Interface
 
-- Code Implementation  
+#### Code Implementation
+
 When registering a driver, the `register_driver()` interface is called. The following is the code implementation of the `register_driver` interface:  
+
 ```c
 /****************************************************************************
  * Name: register_driver
@@ -254,17 +266,24 @@ int register_driver(FAR const char *path, FAR const struct file_operations *fops
 }
 ```  
 
-- Functional Description  
-The main function of the `register_driver` interface is to register character device drivers with the pseudo file system. It performs the following key operations:  
+#### Functional Description
+
+The main function of the `register_driver` interface is to register character device drivers with the pseudo file system. It performs the following key operations:
+
 1. Create or find an inode.  
-   - According to the passed `path` parameter (usually corresponding to the device file path, such as `/dev/xxxx`), check if a corresponding inode exists.  
-   - If not, create a new inode for the path.  
+
+    - According to the passed `path` parameter (usually corresponding to the device file path, such as `/dev/xxxx`), check if a corresponding inode exists.  
+    - If not, create a new inode for the path.  
+
 2. Update the inode's driver information.  
-   - Update the actual driver-implemented `struct file_operations` (i.e., `fops`) into the inode.  
-   - If permission configuration (`CONFIG_FILE_MODE`) is enabled, set the inode's permission information.  
+
+    - Update the actual driver-implemented `struct file_operations` (i.e., `fops`) into the inode.  
+    - If permission configuration (`CONFIG_FILE_MODE`) is enabled, set the inode's permission information.  
+
 3. Set private data.  
-   - Store `priv` data in the inode's private field.  
-   - This field is typically used to store the driver's private data, such as hardware-related context information.
+
+    - Store `priv` data in the inode's private field.  
+    - This field is typically used to store the driver's private data, such as hardware-related context information.
 
 ## III. Example: ADC Driver Process Analysis  
 
@@ -272,14 +291,16 @@ In the driver code of openvela, drivers are typically divided into two parts: Up
 
 ### 1. Driver Hierarchical Design  
 
-1. Upper Half  
-   - Provide general interfaces for application programs, mainly implementing the function set in `file_operations`.  
-   - For the ADC driver, the `drivers/analog/adc.c` file describes the operation logic of the Upper Half.  
-   - The implementation of the Upper Half is generic, suitable for all ADC devices, and does not require modification for specific hardware.  
+1. Upper Half
 
-2. Lower Half  
-   - Hardware driver programs based on specific platforms, responsible for implementing hardware-level control, such as register operations.  
-   - Implementations for specific hardware, such as the `arch/arm/src/lpc43xx/lpc43_adc.c` file, describe the ADC hardware driver for the LPC43xx platform.  
+    - Provide general interfaces for application programs, mainly implementing the function set in `file_operations`.  
+    - For the ADC driver, the `drivers/analog/adc.c` file describes the operation logic of the Upper Half.  
+    - The implementation of the Upper Half is generic, suitable for all ADC devices, and does not require modification for specific hardware.  
+
+2. Lower Half
+
+    - Hardware driver programs based on specific platforms, responsible for implementing hardware-level control, such as register operations.  
+    - Implementations for specific hardware, such as the `arch/arm/src/lpc43xx/lpc43_adc.c` file, describe the ADC hardware driver for the LPC43xx platform.  
 
 ### 2. Driver Framework  
 
@@ -287,56 +308,96 @@ The overall driver framework is shown in the following figure:
 
 <img src="./figures/003.png" width="75%">  
 
-1. Chip-related (Lower Half) <span style="color:red">Red part (driver developer)</span>  
-   - Responsible for actual hardware operations, such as register reading/writing and interrupt handling.  
-   - In the interrupt handling function, it will callback the Upper Half interface, such as notifying the upper-layer application that data is ready through a message queue.  
+1. Chip-related (Lower Half): <span style="color:red">Red part (driver developer)</span>  
 
-2. Generic Framework (Upper Half) <span style="color:green">Green part (provided by Vela)</span>  
-   - Provide system call interfaces, such as `open`, `read`, etc.  
-   - When implementing the `file_operations` function set, it will call the Lower Half interface to complete specific operations.  
+    - Responsible for actual hardware operations, such as register reading/writing and interrupt handling.  
+    - In the interrupt handling function, it will callback the Upper Half interface, such as notifying the upper-layer application that data is ready through a message queue.  
 
-3. Board-level part <span style="color:orange">Orange part (driver developer)</span>  
-   - Responsible for binding the Upper Half and Lower Half together, establishing connections, and registering them with the file system.  
-   - Interfaces in this part are typically called during the system boot phase.  
+2. Generic Framework (Upper Half): <span style="color:green">Green part (provided by Vela)</span>  
+
+    - Provide system call interfaces, such as `open`, `read`, etc.  
+    - When implementing the `file_operations` function set, it will call the Lower Half interface to complete specific operations.  
+
+3. Board-level part: <span style="color:orange">Orange part (driver developer)</span>  
+
+    - Responsible for binding the Upper Half and Lower Half together, establishing connections, and registering them with the file system.  
+    - Interfaces in this part are typically called during the system boot phase.  
 
 ### 3. Implementation of Other Drivers  
 
-The implementation mechanisms of other drivers in openvela are similar to the ADC driver, all adopting hierarchical design:  
+The implementation mechanisms of other drivers in openvela are similar to the ADC driver, all adopting hierarchical design:
+
 - Upper Half: Docks with application system calls and provides general interfaces.  
 - Lower Half: Implements hardware-level operations and adapts to specific platforms.  
 
-This hierarchical design is a reasonable approach with the following advantages:  
+This hierarchical design is a reasonable approach with the following advantages:
+
 - Universality: The Upper Half, as a generic framework, does not need to be modified and is suitable for all similar devices.  
 - Flexibility: The Lower Half implements specific operation interfaces for different hardware, facilitating adaptation to multiple platforms.  
 - Modularity: The separation of responsibilities between the upper and lower halves reduces coupling, making code maintenance and extension easier.  
 
 Through this hierarchical design, openvela's driver development can meet hardware adaptation requirements while maintaining code universality and maintainability.  
 
-#### 3.1 I3C Driver Framework  
+#### I3C Driver Framework  
 
->I3C is more complex than I2C. In addition to hardware improvements, it is reflected in the following aspects at the functional level:  
->- Addressing and access based on dynamic addresses;  
->- Support for CCC (Common Command Codes) commands, enabling extension of business requirements;  
->- Support for data transmission and reception based on I3C devices;  
->- Compatibility with data transmission and reception for I2C devices;  
+I3C is more complex than I2C. In addition to hardware improvements, it is reflected in the following aspects at the functional level:  
+
+- Addressing and access based on dynamic addresses.
+- Support for CCC (Common Command Codes) commands, enabling extension of business requirements.
+- Support for data transmission and reception based on I3C devices.
+- Compatibility with data transmission and reception for I2C devices.
 
 <img src="./figures/004.png" width="75%">  
-<img src="./figures/005.png" width="75%">  
 
-#### 3.2 RTC Driver Framework  
+<img src="./figures/005.png" width="100%">  
 
->In Vela, all operations interacting with RTC hardware are abstracted into the collection `struct rtc_ops_s`, which is the main body of the rtc_lowerhalf driver implementation and connects to the rtc upperhalf driver upwards. Vela internally uses up_rtc_xxapi as the main interface for RTC operations, which obtains the handle of the rtc lowerhalf to operate the RTC hardware. The rtc upperhalf will register the RTC device node, and applications can set and obtain RTC information through regular file operations.  
+#### RTC Driver Framework  
+
+- **Driver Model**
+
+    - **Lower Half:** This layer is hardware-specific and interfaces directly with the RTC chip. The primary task for a driver developer is to implement the `struct rtc_ops_s`. This structure defines a standard set of operations (e.g., `initialize`, `read_time`, `set_time`) that abstract the underlying hardware behavior.
+    - **Upper Half:** This is the generic, hardware-agnostic logic layer provided by OpenVela. It is responsible for creating a standard character device node (e.g., `/dev/rtc0`) and translating user-space VFS (Virtual File System) file operations, such as `ioctl`, into calls to the lower-half `rtc_ops_s` interface.
+
+- **Access Paths**
+
+    - **User-space Access (Application Level)**
+
+        - Applications interact with the RTC through its device node, `/dev/rtc0`.
+        - All communication is handled via standard C library file operations, for example, by using `ioctl()` to send commands like `RTC_RD_TIME` or `RTC_SET_TIME`.
+
+    - **Kernel-space Access (Kernel Level)**
+
+        - The kernel or other board-specific code can interact directly with the RTC using the `up_rtc_...` API family.
+        - These APIs provide a direct path that bypasses the VFS layer, allowing for direct calls to the lower-half driver operations. This approach is typically used during system initialization or in performance-critical scenarios. It works by acquiring a handle to the lower-half driver to operate on the hardware directly.
 
 <img src="./figures/006.png" width="75%">  
-<img src="./figures/007.png" width="75%">  
 
-#### 3.3 IR Driver Framework  
+<img src="./figures/007.png" width="100%">  
 
->The IR driver is divided into two layers: upper half and lower half. The upper half implements general functions, including device registration, character device file_operation implementation, circular buffer management, and upper-layer poll implementation. The lower half interacts with specific infrared devices, can inject data into the upper half's circular buffer through the interface `lirc_xxx_event`, send infrared data through `tx_xxx`, and application control of the device through ioctl can be mapped to the operations provided by the lower half.  
+#### IR Driver Framework  
+
+The IR driver framework adopts an industry-standard **layered architecture**, dividing the driver into an **Upper Half** and a **Lower Half**. This design decouples the hardware-agnostic generic logic from the hardware-specific implementation, greatly enhancing code portability and reusability.
+
+1. Upper Half: The Generic Logic Layer
+
+    The Upper Half is responsible for implementing the hardware-independent core driver logic, providing a standard interface for the kernel and user-space applications. Its primary responsibilities include:
+
+    - Device Registration: Registers the driver as a standard character device (e.g., `/dev/lirc0`), making it accessible from user-space.
+    - File Operations Interface: Implements the standard `file_operations` set (e.g., `open`, `read`, `ioctl`) to respond to system calls from user-space.
+    - Data Buffering: Features a built-in Ring Buffer to temporarily store infrared data reported by the Lower Half. This effectively prevents data loss and decouples the real-time intensive hardware interrupts from user-space read operations.
+    - Polling Mechanism: Provides a `poll` mechanism, allowing applications to wait for new data efficiently and avoid inefficient CPU polling.
+
+2. Lower Half: The Hardware Abstraction Layer
+
+    The Lower Half communicates directly with the physical infrared controller hardware, acting as the bridge between the generic logic of the Upper Half and the physical hardware. Its core tasks are:
+
+    - Hardware Interaction and Data Reporting: Responsible for receiving and decoding infrared signals from the hardware, then pushing the data to the Upper Half's ring buffer through a designated interface (e.g., `lirc_xxx_event`).
+    - Hardware Transmission: Provides a transmission interface (e.g., `tx_xxx`) that can be called by the Upper Half to send infrared signals via the hardware.
+    - Hardware Control Interface: Implements a set of hardware-specific `operations`. These operations are exposed to user-space through `ioctl` commands, allowing applications to perform low-level configuration and control of the hardware.
 
 <img src="./figures/008.png" width="75%">  
 
-### 4. Drivers Registered on a Certain Platform Are as Follows  
+### 4. Driver Registration Example
 
 ```c
 ap> ls -l 
@@ -394,5 +455,8 @@ ap> ls -l
  cr--r--r--           0 temp_skin
  cr--r--r--           0 temp_sub
  crw-rw-rw-           0 ttyAUDIO
-```  
-https://bootlin.com/doc/legacy/accessing-hardware/accessing-hardware.pdf
+```
+
+## IV. References
+
+- Accessing hardware from user-space, Bootlin, https://bootlin.com/doc/legacy/accessing-hardware/accessing-hardware.pdf

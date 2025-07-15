@@ -325,19 +325,19 @@ struct timer_ops_s
 
     - 以微秒 (us) 为单位:
 
-    ```C
-    /* 以us为单位的接口 */ 
-    CODE int (*maxtimeout)(FAR struct timer_lowerhalf_s *lower,
-                            FAR uint32_t *maxtimeout);
-    ```
+        ```C
+        /* 以us为单位的接口 */ 
+        CODE int (*maxtimeout)(FAR struct timer_lowerhalf_s *lower,
+                                FAR uint32_t *maxtimeout);
+        ```
 
     - 以 `tick` 为单位:
 
-    ```C
-    /* 以tick为单位的接口 */
-    CODE int (*tick_maxtimeout)(FAR struct timer_lowerhalf_s *lower,
-                                FAR uint32_t *maxtimeout);
-    ```
+        ```C
+        /* 以tick为单位的接口 */
+        CODE int (*tick_maxtimeout)(FAR struct timer_lowerhalf_s *lower,
+                                    FAR uint32_t *maxtimeout);
+        ```
 
 5. `TIMER_SETCALLBACK`
 

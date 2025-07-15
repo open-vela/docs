@@ -5,6 +5,7 @@
 ## 一、驱动内部结构
 
 openvela 的驱动框架相对简单，并未提供像 Linux 系统中那样复杂的驱动模型（例如 Device、Driver、Bus、Class 等）。相较于 Linux，openvela 的驱动框架具有以下特点：
+
 - 驱动注册接口：通过简单的驱动注册接口，将驱动注册到VFS文件系统中。
 - 函数集实现：实现  `file_operations` 操作函数集，供上层调用。
 - 系统调用支持：上层应用通过标准的系统调用，间接调用底层驱动完成设备操作。
@@ -14,6 +15,7 @@ openvela 的驱动框架相对简单，并未提供像 Linux 系统中那样复�
 ### 1、驱动类型与层次结构
 
 openvela 支持多种设备驱动，主要分为以下几种类型：
+
 - 字符设备驱动：zero、null、sensor、adc等
 - 块设备驱动：emmc，sd card、bch等
 - 特殊设备驱动：mtd、ptp、timer、netdev等
@@ -23,22 +25,28 @@ openvela 支持多种设备驱动，主要分为以下几种类型：
 <img src="./figures/001.png" width="75%">
 
 其中驱动按照功能划分为两层：
+
 1. 上半部（openvela 提供）
-  - 驱动通过 `register_driver `或 `register_blockdriver `将自身注册到 openvela 系统中。
-  - 提供高层次的系统调用接口（如 `read`、`write`、`close`等）。
-  - 通过操作集函数与 Lower Half 交互。
+
+    - 驱动通过 `register_driver `或 `register_blockdriver `将自身注册到 openvela 系统中。
+    - 提供高层次的系统调用接口（如 `read`、`write`、`close`等）。
+    - 通过操作集函数与 Lower Half 交互。
+
 2. 下半部（驱动开发者实现）
-  - 负责实现与硬件设备和架构的交互。
-  - 涉及总线、外设等底层硬件的具体操作。
-  - 定义了设备驱动的核心操作逻辑，驱动开发者需要根据具体设备实现对应的接口。
+
+    - 负责实现与硬件设备和架构的交互。
+    - 涉及总线、外设等底层硬件的具体操作。
+    - 定义了设备驱动的核心操作逻辑，驱动开发者需要根据具体设备实现对应的接口。
 
 ### 2、驱动模型的特点
 
 与 Linux 设备驱动模型相比，openvela 的驱动模型更为简化，具有以下特点：
+
 - 无匹配和探测机制：openvela 中不存在 `bus`、`device`和`driver`的匹配（match）和探测（probe）过程。
 - 无设备类型和设备号：不使用设备类型或设备号（major/minor）的概念。
 - 无module_init初始化函数：需要在board代码中显示调用驱动初始化函数进行初始化
 - 设备节点注册：openvela中无`cdev_add`、`device_create`这类接口，驱动通过`register_driver()`或`register_blockdriver()`接口注册。
+
 这种设计显著降低了驱动模型的复杂性，使 openvela 更适合资源受限的 MCU（Microcontroller Unit） 环境。
 
 ### 3、Pseudo Root File System
@@ -51,8 +59,6 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 换句话说，只有设备驱动可以创建设备节点，设备节点的存在表示设备已经注册并准备就绪。
 
 <img src="./figures/002.png" width="75%">
-
->inode，file，fd之间的有什么关系？
 
 ### 4、驱动目录结构
 
@@ -69,9 +75,7 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 - 电源管理：`board_poweroff`、`board_pmctl`
 - 系统复位：`board_reset`
 
-> 说明
->
-> 正常情况下，应用程序应通过字符设备驱动的 `ioctl` 接口控制板级逻辑，而不是直接调用 `boardctl`。
+**说明**：正常情况下，应用程序应通过字符设备驱动的 `ioctl` 接口控制板级逻辑，而不是直接调用 `boardctl`。
 
 ## 二、数据结构与接口
 
@@ -83,7 +87,7 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 为了理解驱动如何注册到文件系统中，需要先了解相关的数据结构。这些数据结构的定义位于 [`include/nuttx/fs/fs.h`](../../../../../../nuttx/blob/dev/include/nuttx/fs/fs.h)文件中。
 
-#### 1.1 驱动注册与`inode`
+#### 驱动注册与`inode`
 
 当驱动注册到文件系统后，会创建一个`inode`，并将其与设备文件关联。inode 是文件系统中用于表示文件或设备的核心数据结构。以下是与驱动注册相关的关键字段和操作函数集的说明。
 
@@ -113,7 +117,7 @@ struct inode
 };
 ```
 
-#### 1.2 `i_flags`字段
+#### `i_flags`字段
 
 `struct inode`结构体中的`i_flags`字段用于标记该`inode`的文件类型，例如驱动文件或消息队列。为了设置或判断`i_flags`是否为驱动文件，提供了以下宏定义：
 
@@ -126,9 +130,10 @@ struct inode
 - `INODE_IS_DRIVER`：用于判断指定的`inode`是否为驱动文件。
 - `INODE_SET_DRIVER`：用于将指定的`inode`标记为驱动文件。
 
-#### 1.3 `inode_ops_u`字段
+#### `inode_ops_u`字段
 
 `struct inode`结构体中的`inode_ops_u`字段是一个联合体，用于描述操作函数集。根据`inode`的类型，该字段可以包含以下操作函数集之一：
+
 - 字符设备驱动操作函数集。
 - 块设备驱动操作函数集。
 - 挂载点操作函数集。
@@ -154,9 +159,10 @@ union inode_ops_u
 };
 ```
 
-#### 1.4 驱动操作函数集
+#### 驱动操作函数集
 
 字符设备驱动的操作函数集由`struct file_operations`定义，其结构如下：
+
 ```C
 struct file_operations
 {
@@ -197,11 +203,12 @@ struct file_operations
 - 驱动的操作函数集会被设置到设备文件对应的 inode 中。
 - 当系统调用操作设备文件时，会根据设备文件对应的 inode 找到并调用相应的函数。
 
-### 2、 `register_driver`接口
+### 2、 `register_driver` 接口
 
-- 代码实现
+#### 代码实现
 
-驱动注册的时候，会调用 register_driver() 接口，以下是 register_driver 接口的代码实现：
+驱动注册的时候，会调用 `register_driver()` 接口，以下是 `register_driver` 接口的代码实现：
+
 ```C
 /****************************************************************************
  * Name: register_driver
@@ -259,18 +266,24 @@ int register_driver(FAR const char *path, FAR const struct file_operations *fops
 }
 ```
 
-- 功能说明
-register_driver 接口的主要功能是将字符设备驱动注册到伪文件系统中。它完成以下几个关键操作：
-1. 创建或查找 inode。
-  - 根据传入的 path 参数（通常对应设备文件路径，例如 /dev/xxxx），检查是否存在对应的 inode。
-  - 如果不存在，则为该路径创建一个新的 inode。
-2. 更新 inode 的驱动信息。
-  - 将实际驱动实现的 struct file_operations（即 fops）更新到 inode 中。
-  - 如果启用了权限配置（CONFIG_FILE_MODE），还会设置 inode 的权限信息。
-3. 设置私有数据。
-  - 将 priv 数据存储到 inode 的私有字段中。
-  - 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
+#### 功能说明
 
+`register_driver` 接口的主要功能是将字符设备驱动注册到伪文件系统中。它完成以下几个关键操作：
+
+1. 创建或查找 inode。
+
+    - 根据传入的 path 参数（通常对应设备文件路径，例如 /dev/xxxx），检查是否存在对应的 inode。
+    - 如果不存在，则为该路径创建一个新的 inode。
+
+2. 更新 inode 的驱动信息。
+
+    - 将实际驱动实现的 struct file_operations（即 fops）更新到 inode 中。
+    - 如果启用了权限配置（CONFIG_FILE_MODE），还会设置 inode 的权限信息。
+
+3. 设置私有数据。
+
+    - 将 priv 数据存储到 inode 的私有字段中。
+    - 该字段通常用于存放驱动的私有数据，例如硬件相关的上下文信息。
 
 ## 三、示例：ADC 驱动流程分析
 
@@ -293,19 +306,19 @@ register_driver 接口的主要功能是将字符设备驱动注册到伪文件�
 
 整体驱动框架如下图所示：
 
-<img src="./figures/003.png" width="75%">
+<img src="./figures/003.png" width="100%">
 
-1. 芯片相关（Lower Half）<span style="color:red"> 红色部分（驱动开发者）</span>
+1. 芯片相关（Lower Half）：<span style="color:red"> 红色部分（驱动开发者）</span>
 
     - 负责硬件的实际操作，例如寄存器读写和中断处理。
     - 在中断处理函数中，会回调 Upper half 的接口，例如通过消息队列通知上层应用数据已准备好。
 
-2. 通用框架（Upper Half）<span style="color:green"> 绿色部分（由Vela提供）</span>
+2. 通用框架（Upper Half）：<span style="color:green"> 绿色部分（由 openvela 提供）</span>
 
     - 提供系统调用接口，例如 `open`、`read` 等。
     - 在实现 `file_operations` 函数集时，会调用 Lower half 的接口完成具体操作。
 
-3. 板级部分<span style="color:orange"> 橘色部分（驱动开发者）</span>
+3. 板级部分：<span style="color:orange"> 橘色部分（驱动开发者）</span>
 
     - 负责将 Upper half 和 Lower half 绑定在一起，建立连接并注册到文件系统中。
     - 该部分的接口通常在系统启动（boot）阶段被调用。
@@ -325,33 +338,64 @@ openvela 中的其他驱动实现机制与 ADC 驱动类似，均采用分层设
 
 通过这种分层设计，openvela 的驱动开发既能满足硬件适配的需求，又能保持代码的通用性和可维护性。
 
-#### 3.1 I3C驱动框架
+#### I3C 驱动框架
 
-> I3C 相对于I2C更为复杂，除硬件特性的改进外，从功能层面体现为以下方面：
->- 基于动态地址的寻址与访问；
->- 支持CCC（Common Command Codes）命令，从而可对业务需求进行扩展；
->- 支持基于I3C器件的数据收发；
->- 兼容I2C器件的数据收发；
+I3C 相对于 I2C 更为复杂，除硬件特性的改进外，从功能层面体现为以下方面：
+
+- 基于动态地址的寻址与访问。
+- 支持CCC（Common Command Codes）命令，从而可对业务需求进行扩展。
+- 支持基于I3C器件的数据收发。
+- 兼容I2C器件的数据收发。
 
 <img src="./figures/004.png" width="75%">
 <img src="./figures/005.png" width="75%">
 
-#### 3.2 RTC驱动框架
+#### RTC 驱动框架
 
->在Vela中，所有与rtc硬件交互的操作都被抽象成集合struct rtc_ops_s，它是rtc_lowerhalf驱动实现的主体，向上对接rtc upperhalf驱动。Vela内部使用rtc操作是以up_rtc_xxapi为主，它会获取到rtc lowerhalf的句柄，去操作rtc硬件。rtc upperhalf会注册rtc设备节点，应用可通过常规文件操作去设置、获取rtc等。
+- 驱动模型
+
+    - 下层驱动 (Lower-Half): 这一层是与芯片硬件直接关联的部分。作为驱动开发者，您的主要任务是填充 `struct rtc_ops_s` 结构体。该结构体定义了一套标准的操作函数（如初始化、读取时间、设置时间），将特定硬件的行为抽象出来。
+    - 上层驱动 (Upper-Half): 这一层是 openvela 提供的通用逻辑层。它负责创建标准的字符设备节点（如 `/dev/rtc0`），并将来自用户空间的 VFS 文件操作（如 `ioctl`）转换为对下层 `rtc_ops_s` 接口的调用。
+
+- 访问路径
+
+    - 用户空间访问 (Application Level)
+        - 应用程序通过操作 `/dev/rtc0` 设备节点与 RTC 通信。
+        - 所有交互均通过标准的 C 库文件操作函数完成，例如使用 `ioctl()` 发送 `RTC_RD_TIME` 或 `RTC_SET_TIME` 等命令。
+    - 内核空间访问 (Kernel Level)
+        - 内核或特定板级代码可以通过 `up_rtc_...` API 族直接与 RTC 交互。
+        - 这些 API 提供了一条绕过 VFS、直接调用下层驱动操作的快捷路径，通常用于系统初始化或对性能敏感的场景。它们通过获取下层驱动的句柄（handle）来直接操作硬件。
 
 <img src="./figures/006.png" width="75%">
-<img src="./figures/007.png" width="75%">
 
-#### 3.3 IR驱动框架
+<img src="./figures/007.png" width="100%">
 
->IR驱动分为upper half和lower half两层，upper half实现通用功能，包括设备注册，字符设备file_operation实现，环形buffer管理，以及上层poll实现。lower half与具体的红外设备交互，通过接口lirc_xxx_event可向upper half的环形buffer中灌入数据，通过tx_xxx可发送红外设备，应用通过ioctl控制设备可映射到lower half提供的operation中。
+#### IR 驱动框架
 
-<img src="./figures/008.png" width="75%">
+IR 驱动框架采用了业界标准的**分层架构**设计，将驱动分为上层(Upper Half)和下层 (Lower Half)两部分。这种设计将硬件无关的通用逻辑与硬件相关的具体实现分离开来，极大地提高了代码的可移植性和可复用性：
 
-### 4、某平台上注册的驱动如下
+1. **上层 (Upper Half)：通用逻辑层**
 
-```C
+    上层负责实现独立于具体硬件的通用驱动核心，为内核及用户空间应用提供标准的交互接口。其主要职责包括：
+
+    - 设备注册：将驱动注册为标准的字符设备（例如 `/dev/lirc0`），供用户空间访问。
+    - 文件操作接口：实现标准的 `file_operations` 集合（如 `open`, `read`, `ioctl` 等），用于响应来自用户空间的系统调用。
+    - 数据缓冲：内置一个环形缓冲区 (Ring Buffer)，用于暂存由下层上报的红外数据。这可以有效防止数据丢失，并解耦实时性强的硬件中断与用户空间的数据读取操作。
+    - 轮询机制：提供 `poll` 机制，允许应用程序高效地等待新数据，避免无效的 CPU 轮询。
+
+2. **下层 (Lower Half)：硬件抽象层**
+
+    下层直接与具体的物理红外控制器硬件进行通信，是连接上层通用逻辑与物理硬件的桥梁。其核心任务是：
+
+    - 硬件交互与数据上报：负责从硬件接收红外信号，解码后通过约定的接口（如 `lirc_xxx_event`）将数据推送到上层的环形缓冲区中。
+    - 硬件发送：提供发送接口（如 `tx_xxx`），供上层调用，以通过硬件发送红外信号。
+    - 硬件控制接口：实现一组与硬件相关的特定操作（`operations`）。这些操作通过 `ioctl` 命令暴露给用户空间，允许应用对硬件进行底层的配置与控制。
+
+    <img src="./figures/008.png" width="75%">
+
+### 4、注册驱动示例
+
+```bash
 ap> ls -l 
 /dev:
 ap> ls -l 
@@ -408,4 +452,7 @@ ap> ls -l
  cr--r--r--           0 temp_sub
  crw-rw-rw-           0 ttyAUDIO
 ```
-https://bootlin.com/doc/legacy/accessing-hardware/accessing-hardware.pdf
+
+## 四、参考资料
+
+- Accessing hardware from user-space, Bootlin, https://bootlin.com/doc/legacy/accessing-hardware/accessing-hardware.pdf
