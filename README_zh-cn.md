@@ -91,7 +91,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos)。
 
-### 快应用
+### 快应用（Quick Apps）
 
 - [小米手环天气预报应用](../../.././packages_fe_examples/blob/dev/weather/README.md)：演示音频播放、列表管理和后台服务。
 - [音乐播放器](../../.././packages_fe_examples/blob/dev/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
