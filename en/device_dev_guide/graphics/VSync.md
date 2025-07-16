@@ -1,12 +1,12 @@
 # VSync
 
-\[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/VSync.md) \]
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/graphics/VSync.md) \]
 
-## I overview
+## I. overview
 
 This document mainly introduces the knowledge of VSync and the methods of adapting the hardware driver. It is suitable for students who want to understand the relationship between the renderer and the Display.
 
-## II What is VSync
+## II. What is VSync
 
 First, let's consider a simple scenario:
 
@@ -27,7 +27,7 @@ To solve this problem, you need to introduce a synchronization mechanism to ensu
 
 This synchronization mechanism is called VSync (Vertical Synchronization), also called vertical synchronization.
 
-## III VSync implementation
+## III. VSync implementation
 
 ### 1. Implementation principle
 
@@ -47,7 +47,7 @@ To address the issue of variable rendering duration, a third buffer should be in
 2. Renderer write operations and LCD read operations can run in parallel, ensuring maximum rendering efficiency.
 3. The renderer can occupy one buffer for extended rendering. When rendering exceeds the LCD transmission interval, the LCD will display the previously completed frame, maintaining visual integrity.
 
-### 2、Display Driver Modes
+### 2. Display Driver Modes
 
 There are two primary display types in the market: Video displays and Command displays, each with distinct characteristics:
 
@@ -63,17 +63,18 @@ There are two primary display types in the market: Video displays and Command di
 2. Transmission only activates when Framebuffer content changes, supporting partial updates to reduce data volume and power consumption compared to Video displays
 3. Higher cost due to additional LCD controller and RAM hardware components. Typically used in power-sensitive products like battery-powered wearable devices (smartwatches/bands).
 
-### 3、 Interrupt Service Functions
+### 3. Interrupt Service Functions
+
 > **Note:**
 >
->For interrupt fundamentals, refer to[Interrupt](https://en.wikipedia.org/wiki/Interrupt)
+> For interrupt fundamentals, refer to [Interrupt](https://en.wikipedia.org/wiki/Interrupt).
 
 The simplified hardware connection between MCU and display is shown below:
 
 ![img](./figures/006.svg)
 
-- TEST: Receives synchronization signals from the display. The display hardware changes this pin's voltage level before each frame refresh. MCU handles TE events through GPIO interrupts.
-- MIPI（Mobile Industry Processor Interface）:Communication interface for commands/data transfer between LCD controller and display. CPU controls display content via LCD controller registers. The controller notifies CPU of buffer transmission completion through interrupts.
+- **TE(Tearing Effect)**: Receives synchronization signals from the display. The display hardware changes this pin's voltage level before each frame refresh. MCU handles TE events through GPIO interrupts.
+- **MIPI(Mobile Industry Processor Interface)**: Communication interface for commands/data transfer between LCD controller and display. CPU controls display content via LCD controller registers. The controller notifies CPU of buffer transmission completion through interrupts.
 
 LCD drivers require two interrupt service routines:
 
@@ -87,12 +88,12 @@ LCD drivers require two interrupt service routines:
 
 - Framebuffer transmission complete interrupt service: Triggered by LCD controller, invoked when LCD transmission is complete.
 
-
     ```C
     static void lcdc_framedone_irq(int irq, void *context, void *arg)
     {
     }
     ```
+
 The timing relationship between TE IRQ and Framedone IRQ is shown below. Notably, TE IRQ occurs before LCD transmission starts - this interval allows register configuration.
 
 ![img](./figures/007.svg)
@@ -122,11 +123,11 @@ static void lcdc_irqconfig(void)
 }
 ```
 
-## IV VSync Adaptation
+## IV. VSync Adaptation
 
 There are two ways to implement VSync:
 
-### 1、(Recommended) Non-blocking way
+### 1. (Recommended) Non-blocking way
 
 In most business scenarios, the development is based on [libuv](https://libuv.org/), which means that the upper layer cannot use any synchronization blocking wait interface such as `sem_wait`, `usleep`, etc., otherwise it will affect the entire event loop.
 
@@ -134,7 +135,7 @@ The core of libuv is based on [poll](https://man7.org/linux/man-pages/man2/poll.
 
 ![img](./figures/008.svg)
 
-The Framebuffer driver framework of openvela provides the [interface](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c) needed for `poll`, to monitor whether the Framebuffer is in a writable state:
+The Framebuffer driver framework of openvela provides the [interface](../../../../../../nuttx/blob/dev/drivers/video/fb.c) needed for `poll`, to monitor whether the Framebuffer is in a writable state:
 
 ```C
 /****************************************************************************
@@ -296,6 +297,7 @@ static int fb_ioctl(FAR struct file *filep, int cmd, unsigned long arg)
     }
 }
 ```
+
 The driver uses the `fb_remove_paninfo` function to notify the upper layer that the buffer is no longer in use. `fb_remove_paninfo` will actively notify the currently blocking thread that is waiting to draw.
 
 ```C
@@ -410,10 +412,10 @@ int fb_remove_paninfo(FAR struct fb_vtable_s *vtable, int overlay);
 
 int fb_paninfo_count(FAR struct fb_vtable_s *vtable, int overlay);
 ```
+
 ##### Command Screen
 
 Since the Command screen has a one-frame buffer, when the frame is sent, it can be immediately deleted from the panbuf queue. When the TE signal arrives, only check whether there is a new frame in the panbuf queue. If there is, take out the address information for sending.
-
 
 ```C
 static void lcdc_te_irq(int irq, void *context, void *arg)
@@ -467,6 +469,7 @@ static void lcdc_framedone_irq(int irq, void *context, void *arg)
 #endif
 }
 ```
+
 ##### Video Screen
 
 Since the Video screen needs to send the Framebuffer for each VSync cycle, when the TE signal comes, it needs to determine whether a new Framebuffer has entered the panbuf queue. If there is, then the old Framebuffer is removed and the new Framebuffer is taken to send the data.
@@ -526,7 +529,7 @@ static void lcdc_te_irq(int irq, void *context, void *arg)
 
 ### 2. (Not Recommended) Blocking Mode
 
-Using semaphores for synchronization is equivalent to locking the Framebuffer. The renderer must acquire the lock each time it begins rendering; otherwise, it will remain in a blocked state. Please refer to this [link](https://github.com/open-vela/nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c) for the code.
+Using semaphores for synchronization is equivalent to locking the Framebuffer. The renderer must acquire the lock each time it begins rendering; otherwise, it will remain in a blocked state. Please refer to this [link](../../../../../../nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c) for the code.
 
 ## V Related Repositories
 

@@ -1,6 +1,6 @@
 # LCD Driver
 
-\[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/LCD_Driver.md) \]
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/graphics/LCD_Driver.md) \]
 
 ## I. Introduction
 
@@ -70,11 +70,16 @@ struct lcd_dev_s
      FAR struct fb_setcursor_s *settings);
 #endif
  
- // The unique control interface of the LCD// Get the power status of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the backlight brightness level.
-  int (*getpower)(struct lcd_dev_s *dev);  // Power // Set the power state of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the brightness value of the backlight.
+   // The unique control interface of the LCD
+  // Get the power status of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the backlight brightness level.
+  int (*getpower)(struct lcd_dev_s *dev);  
+  
+  // Set the power state of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the brightness value of the backlight.
   int (*setpower)(struct lcd_dev_s *dev, int power);   
-  //Get the current contrast (0-CONFIG_LCD_MAXCONTRAST)
+  
+  // Get the current contrast (0-CONFIG_LCD_MAXCONTRAST)
   int (*getcontrast)(struct lcd_dev_s *dev);  
+  
   // Set the current contrast (0-CONFIG_LCD_MAXCONTRAST)
   int (*setcontrast)(struct lcd_dev_s *dev, unsigned int contrast);
 };
@@ -86,7 +91,7 @@ Reference Implementation:
 
 Demonstrates full implementation of `struct lcd_dev_s` methods for specific LCD controllers.
 
-## III Enable openvela LCD
+## III. Enable openvela LCD
 
 When using the openvela LCD feature, it is necessary to enable related compilation options and complete initialization and registration during the system startup phase. The following are the specific steps:
 
@@ -125,9 +130,12 @@ In the system startup phase, call the following functions to complete the initia
 ##### Code description
 
 1. `board_lcd_initialize`
+
     -`Used to initialize the LCD chip, including SPI initialization, LCD register configuration, etc.`
     - If initialization fails, it will return a negative value and record an error log.
+
 2. `lcddev_register`
+
     - Register the LCD device instance, which is usually used to mount the LCD device to `/dev/lcd0`.
     - If registration fails, it will return a negative value and record an error log.
 
@@ -165,7 +173,7 @@ struct lcd_planeinfo_s
 
 #### Code description
 
-##### Data transfer interface
+**Data transfer interface**
 
 1. `putrun`
 
@@ -183,7 +191,7 @@ struct lcd_planeinfo_s
 
     - Read the pixel data of the specified rectangular area.
 
-##### Plane color characteristics
+**Plane color characteristics**
 
 1. `buffer`
 
@@ -194,19 +202,19 @@ struct lcd_planeinfo_s
 
     - Function: the number of bits occupied by a pixel.
 
-## IV LCD Framebuffer Mode
+## IV. LCD Framebuffer Mode
 
 LCD Framebuffer is a framebuffer wrapper for the LCD driver in openvela. After enabling the LCD Framebuffer mode, the application layer can access and control the LCD device through `/dev/fb0`. It is important to note that this mode will allocate a frame graphic buffer (Framebuffer), which will consume additional memory space.
 
-reference:`drivers/lcd/lcd_framebuffer.c`
+reference: `drivers/lcd/lcd_framebuffer.c`
 
 ### 1. Enable the following compilation options
 
 According to the description in [Framebuffer Driver](./Framebuffer_Driver.md), the LCD Framebuffer driver implements the following three core interfaces:
 
--`up_fbinitialize`: Initialize the LCD Framebuffer.
--`up_fbgetvplane`: Get the Video Plane information.
--`up_fbuninitialize`: Release the Framebuffer and related resources.
+- `up_fbinitialize`: Initialize the LCD Framebuffer.
+- `up_fbgetvplane`: Get the Video Plane information.
+- `up_fbuninitialize`: Release the Framebuffer and related resources.
 
 In the `up_fbinitialize` function, the initialization call of the LCD driver is completed.
 

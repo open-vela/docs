@@ -1,5 +1,7 @@
 # Framebuffer 驱动
 
+\[ [English](../../../en/device_dev_guide/graphics/Framebuffer_Driver.md) | 简体中文 \]
+
 ## 一、什么是 Framebuffer
 
 Framebuffer（帧缓存/显存）是一个用于存储一帧 LCD 图像数据的内存区域。在嵌入式系统中，Framebuffer 通常通过内存模拟实现，其大小由 LCD 的分辨率和每个像素的字节大小决定。
@@ -297,7 +299,7 @@ struct fb_vtable_s
 
 在配置文件中启用以下选项：
 
-```C
+```makefile
 CONFIG_VIDEO_FB  
 ```
 

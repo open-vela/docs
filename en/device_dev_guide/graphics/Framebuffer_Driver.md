@@ -1,12 +1,12 @@
 # Framebuffer Driver
 
-\[ English | [简体中文](../../../zh-cn\device_dev_guide/graphics/Framebuffer_Driver.md) \]
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/graphics/Framebuffer_Driver.md) \]
 
-## I What is Framebuffer
+## I. What is Framebuffer
 
 Framebuffer (frame buffer/video memory) is a memory region used to store LCD image data for one frame. In embedded systems, Framebuffer is typically implemented through memory simulation, with its size determined by the LCD resolution and bytes per pixel.
 
-### 1 Framebuffer Size Calculation
+### 1. Framebuffer Size Calculation
 
 Take a 480x320 screen as example, the Framebuffer sizes under different pixel modes are:
 
@@ -14,15 +14,18 @@ Take a 480x320 screen as example, the Framebuffer sizes under different pixel mo
 
     - Calculation formula: 480 x 320 x 4 (bytes)
     - Size: 614,400 bytes
+
 2. RGB565 (16bpp):
+
     - Calculation formula: 480 x 320 x 2 (bytes)
     - Size: 307,200 bytes
 
-## II Framebuffer Display Principle
+## II. Framebuffer Display Principle
 
 The Framebuffer display principle can be summarized as: LCD Controller (LCDC) reads pixel data from the Framebuffer and transmits it to the LCD panel through a parallel data interface.
 
-### 1 Display Flowchart
+### 1. Display Flowchart
+
 Below is the Framebuffer display workflow:
 
 ![img](./figures/012.svg)
@@ -31,7 +34,7 @@ Below is the Framebuffer display workflow:
 - LCDC: Reads pixel data from the Framebuffer and transmits it to the LCD panel.
 - LCD Panel: Receives data and displays the image.
 
-### 2 Data Transfer Interface
+### 2. Data Transfer Interface
 
 LCDC transmits data to the LCD panel through the following signals:
 
@@ -39,21 +42,25 @@ LCDC transmits data to the LCD panel through the following signals:
 - Data: Pixel data, including R (red), G (green), and B (blue) three color channels.
 - Control: Control signal, used to manage the timing and state of data transmission.
 
-## III openvela Framebuffer Interface
+## III. openvela Framebuffer Interface
 
 openvela's Framebuffer interface consists of two layers: upper-level user interface and lower-level driver interface. They provide flexible operation capabilities for users and device drivers, respectively. The following is a detailed description of the interface.
 
-### 1 Upper-level User Interface
+### 1. Upper-level User Interface
 
 openvela's Framebuffer user interface resembles Linux systems, offering standard operations via VFS (Virtual File System), including `open`, `close`, `read`, `write`, and `ioctl`. Users can access the following functions by operating `/dev/fbx` device files:
 
-1. Map Framebuffer to user space: Use `mmap` to map Framebuffer into user space for direct read/write operations
-2. Switch Framebuffer: Use `ioctl` interface to switch between different Framebuffer configurations or modes.
+1. Map Framebuffer to user space: 
+
+    Use `mmap` to map Framebuffer into user space for direct read/write operations
+
+2. Switch Framebuffer: 
+
+    Use `ioctl` interface to switch between different Framebuffer configurations or modes.
 
 ### 2. Lower-level Driver Interface
 
 openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](../../../../nuttx/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](../../../../nuttx/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
-
 
 ```C
 int fb_register(int display, int plane)
@@ -94,29 +101,37 @@ errout_with_fb:
   return ret;
 }
 ```
+
 From the code, we can see the Framebuffer provides these 3 interfaces for LCD device drivers (must be implemented by drivers):
 
 1. `void up_fbinitialize(int display)`
+
     - Initializes hardware LCD controller
     - Example: On STM32 platforms, `up_fbinitialize` needs to initialize LTDC (LCD-TFT Controller) or MIPI interface, and complete DSI peripheral & LCD IC initialization
+
 2. `FAR struct fb_vtable_s *up_fbgetvplane(int display, int vplane)`
+
     - Retrieves `fb_vtable_s` structure information for LCD
     - `fb_vtable_s` is the core Framebuffer structure containing all interfaces. This function registers LCD controller information into the Framebuffer framework
     - Reference implementations:
     - `drivers/video/vnc/vnc_fbdev.c`
     - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
+
 3. `void up_fbuninitialize(int display)`
+
     - Opposite operation of `up_fbinitialize` for resource release. Can be implemented as empty function when no operation needed.
 
-### III `struct fb_vtable_s` Structure
+### 3. `struct fb_vtable_s` Structure
 
 `fb_vtable_s` is the core structure of Framebuffer, containing all interfaces for interacting with video hardware. The following are the main functional modules:
 
 1. Core functions
+
     - `getvideoinfo`: Retrieves video controller configuration and color plane information
     - `getplaneinfo`: Retrieves information for the specified color plane
 
 2. Optional functions (enabled based on configuration)
+
     - Color mapping (`CONFIG_FB_CMAP`):
         - `getcmap`: Retrieves the current color mapping table
         - `putcmap`: Updates the color mapping table
@@ -139,6 +154,7 @@ From the code, we can see the Framebuffer provides these 3 interfaces for LCD de
             - `blend`: Performs Blend operation between overlay layers
 
 3. Other control functions
+
     - Display translation:
         - `pandisplay`: Performs translation operation for multi-buffered display
     - Frame rate control:
@@ -287,20 +303,21 @@ struct fb_vtable_s
 
 Developers should implement these interfaces according to specific hardware requirements to meet Framebuffer functionality needs.
 
-## IV Enable Framebuffer
+## IV. Enabling the Framebuffer
 
-Follow these steps to enable Framebuffer:
+To enable the framebuffer, follow these steps:
 
-### 1.Enable Framebuffer Compilation Option
-Activate in configuration file:
+### 1. Enable the Framebuffer Build Option
 
-```C
+Enable the following option in your configuration file:
+
+```makefile
 CONFIG_VIDEO_FB  
 ```
 
-### 2.Enable Framebuffer Driver
+### 2. Register the Framebuffer
 
-Call `fb_register` during system initialization phase:
+During the system initialization phase, call the `fb_register` function to register the framebuffer. Here is an example:
 
 ```C
 #include <nuttx/video/fb.h>  
@@ -314,12 +331,13 @@ Call `fb_register` during system initialization phase:
 #endif
 ```
 
-### 3.Handle VSync
+### 3. Handle VSync
 
-To prevent screen tearing and improve rendering performance, VSync (Vertical Synchronization) handling is recommended. Implementation details and optimization methods can be found in  [VSync](./VSync.md).
+To prevent screen tearing and improve rendering performance, it is recommended to handle VSync (Vertical Sync) in your implementation. For details on how to implement and optimize VSync, please refer to the [VSync](./VSync.md).
 
-## V Related Repositories
+## V. Related Repositories
 
 Here are the links to the code repository related to Framebuffer driver:
+
 - [fb.c](../../../../../../nuttx/blob/dev/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
 - [fb.h](../../../../../../nuttx/blob/dev/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.

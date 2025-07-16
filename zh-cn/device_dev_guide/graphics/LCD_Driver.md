@@ -1,5 +1,7 @@
 # LCD 驱动
 
+\[ [English](../../../en/device_dev_guide/graphics/LCD_Driver.md) | 简体中文 \]
+
 ## 一、概述
 
 对于分辨率要求不高的设备，为了节省内存，通常会采用 Universal mode（SPI/I2C/UART）类型接口的屏幕。在这种情况下，需要适配的主要是 LCD 驱动程序（LCD driver）。
@@ -164,7 +166,7 @@ struct lcd_planeinfo_s
 
 #### 代码说明
 
-##### 数据传输接口
+**数据传输接口**
 
 1. `putrun`
     - 向某一行写入指定数量（`npixels`）的像素数据。
@@ -175,7 +177,7 @@ struct lcd_planeinfo_s
 4. `getarea`
     - 从指定的矩形区域读取像素数据。
 
-##### Plane 颜色特性
+**Plane 颜色特性**
 
 1. `buffer`
     - 功能：工作区缓冲区，每个 LCD 设备一个，多个图层（layer）共享一个缓冲区。
