@@ -89,7 +89,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 - [亲戚计算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
 - [打地鼠](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md)：演示游戏循环、随机数生成和动画效果。
 
-查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos)。
+查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/dev/README_zh-cn.md)。
 
 ### 快应用（Quick Apps）
 
