@@ -463,10 +463,10 @@ Virtqueue 采用无锁设计以提升性能。通过明确划分 Driver 和 Devi
 
 #### 6.1 访问权限划分
 
-| Role    | Descriptor Table | Available Ring | Used Ring | desc_head_idx | last_avail_idx | last_used_idx |  
-|---------|------------------|----------------|-----------|---------------|----------------|---------------|  
-| Driver  | <span style="color:blue;">RW</span> | <span style="color:blue;">RW</span> | <span style="color:blue;">R</span> | <span style="color:blue;">RW</span> | × | <span style="color:blue;">RW</span> |  
-| Device  | <span style="color:orange;">R</span> | <span style="color:orange;">R</span> | <span style="color:orange;">RW</span> | × | <span style="color:orange;">RW</span> | × |  
+| Role   | Descriptor Table                     | Available Ring                       | Used Ring                             | desc_head_idx                       | last_avail_idx                        | last_used_idx                       |
+| ------ | ------------------------------------ | ------------------------------------ | ------------------------------------- | ----------------------------------- | ------------------------------------- | ----------------------------------- |
+| Driver | <span style="color:blue;">RW</span>  | <span style="color:blue;">RW</span>  | <span style="color:blue;">R</span>    | <span style="color:blue;">RW</span> | ×                                     | <span style="color:blue;">RW</span> |
+| Device | <span style="color:orange;">R</span> | <span style="color:orange;">R</span> | <span style="color:orange;">RW</span> | ×                                   | <span style="color:orange;">RW</span> | ×                                   |
 
 - 蓝色部分：由 Driver 维护。
 - 橙色部分：由 Device 维护。
@@ -929,4 +929,5 @@ VirtIO 的传输层定义了 Driver 和 Device 之间的通信方式。以下是
 
 ## 五、参考文档
 
-- [Virtual I/O Device (VIRTIO) Version 1.2](https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.pdf)
+- [Virtual I/O Device (VIRTIO) Version 1.2](https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.pdf) (VIRTIO 官方标准 v1.2)
+- [Virtio: A De-Facto Standard For Virtual I/O Devices](https://ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf) (由 Rusty Russell 撰写的原始论文)

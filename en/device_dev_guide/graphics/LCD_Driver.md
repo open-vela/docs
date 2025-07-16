@@ -70,7 +70,7 @@ struct lcd_dev_s
      FAR struct fb_setcursor_s *settings);
 #endif
  
-   // The unique control interface of the LCD
+  // The unique control interface of the LCD
   // Get the power status of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the backlight brightness level.
   int (*getpower)(struct lcd_dev_s *dev);  
   

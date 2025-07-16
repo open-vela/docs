@@ -58,9 +58,9 @@ There are two types of Virtqueues:
 
 2. Packed Virtqueue: Proposed in VirtIO v1.1, which merges the Descriptor Table, Available Ring, and Used Ring of the Split Virtqueue into one structure, being more friendly to caches and hardware.
 
-> Note
+> **Note**
 >
-> This article only introduces Split Virtqueue because OpenAMP currently only implements this type.
+> This article only introduces **Split Virtqueue** because OpenAMP currently only implements this type.
 
 ### 2. Data Flow Schematic of Split Virtqueue
 
@@ -73,21 +73,27 @@ The following is a data flow schematic of the Split Virtqueue:
 The structure of Split Virtqueue is as follows:
 
 1. Descriptor Table
+
     The Descriptor Table is used to describe the data buffer for interaction between the Driver and Device, containing the following information:
+
     - Buffer address
     - Buffer length
     - Flag bits (used to implement additional functions)
 
 2. Available Ring and Used Ring
+
     Available Ring and Used Ring are used to manage the data sending and receiving processes:
+
     - Driver sends data:
-        - The Driver places the index of the Descriptor Table containing the sent data in the Available Ring for the Device to obtain.
-        - After the Device receives the data, it places the index of the Descriptor Table in the Used Ring, indicating that the data has been returned to the Driver.
+
+        1. The Driver places the index of the Descriptor Table containing the sent data in the Available Ring for the Device to obtain.
+        2. After the Device receives the data, it places the index of the Descriptor Table in the Used Ring, indicating that the data has been returned to the Driver.
 
     - Driver receives data:
-        - The Driver places the index of the Descriptor Table containing blank memory in the Available Ring for the back-end driver to obtain.
-        - The back-end driver fills the data to be sent into the blank memory and places the index in the Used Ring.
-        - The Driver obtains the corresponding Descriptor Table from the Used Ring to get the data.
+
+        1. The Driver places the index of the Descriptor Table containing blank memory in the Available Ring for the back-end driver to obtain.
+        2. The back-end driver fills the data to be sent into the blank memory and places the index in the Used Ring.
+        3. The Driver obtains the corresponding Descriptor Table from the Used Ring to get the data.
 
 ### 4. Data Structures
 
@@ -129,9 +135,11 @@ struct indirect_descriptor_table {
 2. len:
     - Length of the buffer.
 3. flags:
+
     - VIRTQ_DESC_F_NEXT: If set, it indicates that the current buffer is part of a linked list, and the `next` field points to the position of the next buffer in the Descriptor Table.
     - VIRTQ_DESC_F_WRITE: If set, it indicates that the buffer is writable by the device; if not set, it indicates that the buffer is read-only by the device.
     - VIRTQ_DESC_F_INDIRECT: If set, it indicates that an indirect Descriptor Table (secondary table) is used to transmit the buffer.
+
 4. next:
     - If `flags & VIRTQ_DESC_F_NEXT` is true, it indicates the position of the next buffer in the Descriptor Table.
 
@@ -436,10 +444,10 @@ Virtqueue adopts a lock-free design to improve performance. By clearly dividing 
 
 #### 6.1 Access Permission Division
 
-| Role    | Descriptor Table | Available Ring | Used Ring | desc_head_idx | last_avail_idx | last_used_idx |  
-|---------|------------------|----------------|-----------|---------------|----------------|---------------|  
-| Driver  | <span style="color:blue;">RW</span> | <span style="color:blue;">RW</span> | <span style="color:blue;">R</span> | <span style="color:blue;">RW</span> | × | <span style="color:blue;">RW</span> |  
-| Device  | <span style="color:orange;">R</span> | <span style="color:orange;">R</span> | <span style="color:orange;">RW</span> | × | <span style="color:orange;">RW</span> | × |  
+| Role   | Descriptor Table                     | Available Ring                       | Used Ring                             | desc_head_idx                       | last_avail_idx                        | last_used_idx                       |
+| ------ | ------------------------------------ | ------------------------------------ | ------------------------------------- | ----------------------------------- | ------------------------------------- | ----------------------------------- |
+| Driver | <span style="color:blue;">RW</span>  | <span style="color:blue;">RW</span>  | <span style="color:blue;">R</span>    | <span style="color:blue;">RW</span> | ×                                     | <span style="color:blue;">RW</span> |
+| Device | <span style="color:orange;">R</span> | <span style="color:orange;">R</span> | <span style="color:orange;">RW</span> | ×                                   | <span style="color:orange;">RW</span> | ×                                   |
 
 - Blue part: Maintained by the Driver.
 - Orange part: Maintained by the Device.
@@ -897,6 +905,7 @@ The transport layer of VirtIO defines the communication method between the Drive
 - VirtIO PCI
 - VirtIO MMIO
 
-## V. Reference Documents
+## V. References
 
-- [Virtual I/O Device (VIRTIO) Version 1.2](https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.pdf)
+- [Virtual I/O Device (VIRTIO) Version 1.2](https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.pdf) - The official OASIS standard for VIRTIO.
+- [Virtio: A De-Facto Standard For Virtual I/O Devices](https://ozlabs.org/~rusty/virtio-spec/virtio-paper.pdf) - The original paper by Rusty Russell.

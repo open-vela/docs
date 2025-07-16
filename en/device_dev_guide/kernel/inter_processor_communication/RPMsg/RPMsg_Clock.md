@@ -1,8 +1,8 @@
-# RPMsg Clock Usage Guide
+# RPMsg Clock Development Guide
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/kernel/inter_processor_communication/RPMsg/RPMsg_Clock.md) \]
 
-## I. Introduction
+## I. Overview
 
 RPMsg Clock (Remote Processor Messaging Clock) is a cross-core clock service built based on the RPMsg framework (Remote Processor Messaging Framework), used to implement cross-core clock control.
 
@@ -11,7 +11,7 @@ RPMsg Clock (Remote Processor Messaging Clock) is a cross-core clock service bui
 When using RPMsg Clock, ensure the following configurations are enabled:
 
 ```Makefile
-/* The following configurations need to be enabled for both server and client sides */
+# The following configurations need to be enabled for both server and client sides
 CONFIG_CLK_RPMSG=y
 ```
 
@@ -40,10 +40,12 @@ FAR struct clk_s *clk_get(FAR const char *name);
 #### Parameter Description
 
 - Server side:
-     - The parameter of the `clk_get` function is the clock resource name passed in when calling `clk_register`.
+    - The parameter of the `clk_get` function is the clock resource name passed in when calling `clk_register`.
+
 - Client side:
-     - The parameter of the `clk_get` function needs to include the CPU name (`cpuname`) of the server side and the clock resource name.
-     - For example: Suppose the CPU name of the server side is `"ap"`, and the clock resource name to be accessed is `"spi_clk"`, then when the client side calls the `clk_get` function, the parameter passed in should be `"ap/spi_clk"`.
+
+    - The parameter of the `clk_get` function needs to include the CPU name (`cpuname`) of the server side and the clock resource name.
+    - For example: Suppose the CPU name of the server side is `"ap"`, and the clock resource name to be accessed is `"spi_clk"`, then when the client side calls the `clk_get` function, the parameter passed in should be `"ap/spi_clk"`.
 
 ## IV. Working Principle
 
@@ -68,10 +70,16 @@ const struct clk_ops_s g_clk_rpmsg_ops =
 ```
 
 Operation process:
-- Client-side request forwarding: The function implementation in `g_clk_rpmsg_ops` forwards the request to the server side. The forwarding target is determined by the `cpuname` string in the clock source name.
-- Server-side request processing: The server side completes the actual function call and returns the result to the client side.
 
-### 2. Processing Flow for Enabling Clock
+- Client-side request forwarding:
+
+    The function implementation in `g_clk_rpmsg_ops` forwards the request to the server side. The forwarding target is determined by the `cpuname` string in the clock source name.
+
+- Server-side request processing:
+
+    The server side completes the actual function call and returns the result to the client side.
+
+### 2. Clock Enable Process
 
 For example, the `clk_rpmsg_enable` function sends a `CLK_RPMSG_ENABLE` request to the server side. The following is the implementation of the `clk_rpmsg_enable` function, which is responsible for forwarding the request to enable the clock from the client side to the server side:
 
@@ -112,8 +120,10 @@ static int clk_rpmsg_enable(FAR struct clk_s *clk)
 
 1. Obtain communication endpoint:
     - The function obtains the communication endpoint with the target server side through `clk_rpmsg_get_ept`. If the communication endpoint does not exist, it returns the error code `-ENODEV`.
+
 2. Construct the message:
     - The function allocates a message buffer through `rpmsg_get_tx_payload_buffer` and copies the clock name into the message.
+
 3. Send the request and receive the response:
     - The function calls `clk_rpmsg_sendrecv` to send the `CLK_RPMSG_ENABLE` request to the server side and waits for the response.
 
@@ -164,14 +174,16 @@ static int clk_rpmsg_enable_handler(FAR struct rpmsg_endpoint *ept,
 }
 ```
 
-#### Description of Processing Logic:
+#### Description of Processing Logic
 
 1. Obtain the clock instance:
     - The function obtains the clock instance with the specified name through `clk_rpmsg_get_clk`.
     - If the clock instance exists, call the `clk_enable` function to enable the clock.
     - If the clock instance does not exist, return the error code `-ENOENT`.
+
 2. Update the counter:
     - If the clock is enabled successfully (`clk_enable` returns 0), increment the clock's reference count `clkrp->count`.
+
 3. Return the result:
     - Return the operation result to the client side through `rpmsg_send`.
 

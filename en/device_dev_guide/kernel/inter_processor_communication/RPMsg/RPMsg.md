@@ -1,4 +1,4 @@
-# RPMsg: Core Concepts and Working Principles
+# RPMsg Core Concepts and Working Principles
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/kernel/inter_processor_communication/RPMsg/RPMsg.md) \]
 
@@ -12,7 +12,7 @@ RPMsg is primarily used in **Asymmetric Multiprocessing (AMP)** architectures an
 
 The RPMsg framework supports various hardware topologies and communication media. The following are two typical application scenarios.
 
-### Heterogeneous AMP Systems (Big.LITTLE)
+### 1. Heterogeneous AMP Systems (Big.LITTLE)
 
 In a system containing high-performance cores ("big" cores) and low-power cores ("little" cores), RPMsg enables them to work collaboratively.
 
@@ -25,7 +25,7 @@ As illustrated in the diagram below:
 
 <img src="./figures/001.png" alt="Diagram of a Big.LITTLE architecture" width="75%">
 
-### Homogeneous AMP Systems (All "Little" Cores)
+### 2. Homogeneous AMP Systems (All "Little" Cores)
 
 In a system composed of multiple, identical low-power cores, RPMsg can also serve as an efficient communication bus.
 
@@ -38,7 +38,7 @@ In a system composed of multiple, identical low-power cores, RPMsg can also serv
 
 RPMsg employs a layered architecture, similar to a network protocol stack, to modularize communication functions. This allows upper-layer applications to remain agnostic to the underlying physical implementation.
 
-### Layered Architecture
+### 1. Layered Architecture
 
 <img src="./figures/003.png" alt="Diagram of the RPMsg layered architecture" width="75%">
 
@@ -81,7 +81,7 @@ RPMsg uses a modular, layered architecture inspired by network protocol stacks. 
         - Operating the registers of hardware controllers like SPI and UART.
         - Managing and responding to low-level hardware interrupts.
 
-### Message Encapsulation
+### 2. Message Encapsulation
 
 <img src="./figures/004.png" alt="Diagram of message encapsulation" width="75%">
 
@@ -91,7 +91,7 @@ As an RPMsg message travels from the Services Layer down to the Physical Layer, 
 
 RPMsg's message transport functionality is realized through a well-defined workflow, covering the entire lifecycle from establishing a communication link to sending and receiving data.
 
-### Establishing a Communication Channel
+### 1. Establishing a Communication Channel
 
 The fundamental logical unit of RPMsg communication is the **channel**, which represents a bidirectional connection between a pair of endpoints on two processor cores. An application creates an endpoint and initiates the channel establishment process by calling the `rpmsg_create_ept()` function.
 
@@ -136,7 +136,7 @@ The framework supports the following two channel establishment matching methods:
 
 <img src="./figures/005.png" alt="Diagram of establishing a message channel" width="75%">
 
-### Sending a Message
+### 2. Sending a Message
 
 Applications use the APIs provided by the RPMsg framework layer to send data. The framework offers two primary methods for sending:
 
@@ -146,7 +146,7 @@ Applications use the APIs provided by the RPMsg framework layer to send data. Th
     1. **Get Buffer**: Call `rpmsg_get_tx_payload_buffer()` to obtain an available transmit buffer directly from the transport layer.
     2. **Send Data**: The application fills this buffer with data and then calls `rpmsg_send_nocopy()` to send it. This approach avoids data copying between the application and framework layers, significantly improving efficiency for large data transfers.
 
-### Receiving and Processing a Message
+### 3. Receiving and Processing a Message
 
 As illustrated below, the message reception process can be broken down into several key steps:
 
@@ -167,7 +167,7 @@ The diagram below depicts the message processing path on the receiving end:
 3. **Serial Processing**: The RX thread runs in a loop, continuously dequeuing messages from a shared memory ring buffer (vring).
 4. **Callback Dispatch**: For each message dequeued, the RPMsg framework parses its destination endpoint and immediately calls the callback function registered with that endpoint.
 
-#### Key Features and Design Considerations
+#### 4. Key Features and Design Considerations
 
 - **FIFO Order Guarantee:**
 

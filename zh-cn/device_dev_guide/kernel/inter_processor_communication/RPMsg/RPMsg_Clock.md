@@ -1,8 +1,8 @@
-# RPMsg Clock 使用指南
+# RPMsg Clock 开发指南
 
 \[ [English](../../../../../en/device_dev_guide/kernel/inter_processor_communication/RPMsg/RPMsg_Clock.md) | 简体中文 \]
 
-## 一、简介
+## 一、概述
 
 RPMsg Clock（Remote Processor Messaging Clock）是一种基于 RPMsg 框架（Remote Processor Messaging Framework）构建的跨核时钟服务，用于实现跨核的时钟控制。
 
@@ -11,7 +11,7 @@ RPMsg Clock（Remote Processor Messaging Clock）是一种基于 RPMsg 框架（
 在使用 RPMsg Clock 时，需要确保以下配置已启用：
 
 ```Makefile
-/* server端和client端均需要使能如下配置 */
+# server端和client端均需要使能如下配置
 CONFIG_CLK_RPMSG=y
 ```
 
