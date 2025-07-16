@@ -74,14 +74,30 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 - [文档中心](https://doc.openvela.com/document)
 
-## 示例教程
+## 应用示例中心
 
-- [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
-- [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
-- [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)
-- [计算器](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md)
-- [亲戚计算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)
-- [打地鼠](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md)
+汇总可供开发者参考学习的原生应用与快应用示例。
+
+### 原生应用 (Native Apps)
+
+以下是一些典型的原生应用示例，展示了不同模块和功能的使用方法。
+
+- [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)：演示音频播放、列表管理和后台服务。
+- [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)：演示睡眠监测、心率监测、音乐播放、秒表计时。
+- [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)：演示 GPS 定位、实时数据显示和运动轨迹记录。
+- [计算器](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md)：一个基础的 UI 与逻辑交互示例。
+- [亲戚计算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
+- [打地鼠](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md)：演示游戏循环、随机数生成和动画效果。
+
+查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos)。
+
+### 快应用
+
+- [小米手环天气预报应用](../../.././packages_fe_examples/blob/dev/weather/README.md)：演示音频播放、列表管理和后台服务。
+- [音乐播放器](../../.././packages_fe_examples/blob/dev/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
+- [日历](../../.././packages_fe_examples/blob/dev/player/README.md)：演示一个基础的日历。
+
+快应用相关示例正在持续丰富中。查看所有示例，请访问[快应用示例仓库](../../../packages_fe_examples)。
 
 ## 参与贡献
 

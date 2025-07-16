@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](../../../zh-cn/device_dev_guide/file_system/file_system.md) \]
 
-## 1. Introduction
+## I. Overview
 
 A file system is a mechanism for organizing data and metadata on storage devices. It is a core subsystem of the operating system for managing persistent data, providing data storage and access functions.
 
@@ -67,7 +67,7 @@ In openvela, different task creation methods handle file descriptors (fd) as fol
     - New tasks will create a new task group.
     - Will copy the file descriptor (fd) list of the parent task.
 
-## 2. Data Structures
+## II. Data Structures
 
 ### 1. `struct inode`
 
@@ -116,7 +116,7 @@ Field Description
 
     Stores a collection of operation functions for `inode`. For different types of `inode`, this field contains different operation functions.
 
-#### 1.1 `union inode_ops_u`
+#### `union inode_ops_u`
 
 `union inode_ops_u` is a collection of operations for `inode`, used to provide a unified operation interface for different types of file systems and devices. It defines a set of operation functions through function pointers, supporting file operations, block device operations, mount point operations, and special resource management. Its definition is as follows:
 
@@ -319,11 +319,15 @@ When a process calls the POSIX standard `open()` interface to open a file, the s
 
 Through the file descriptor, the process can easily access and operate the corresponding file. The system will find the corresponding `struct file` structure according to the file descriptor to complete operations such as reading, writing, and closing the file.
 
-## 3. Principle Analysis
+## III. Principle Analysis
 
 The architecture and mounting process of the file system are the core parts of file management in the operating system. The following content conducts a detailed analysis from two aspects: the architecture framework and the mounting process.
 
 ### 1. Framework Analysis
+
+The architecture diagram is as follows:
+
+![img](./figures/001.png)
 
 #### User Layer
 
@@ -597,9 +601,7 @@ The file system mounting operation mainly completes the following key steps:
 
     Purpose: Determine the operation mode of the file system and associate the corresponding block device driver (if needed) to prepare for subsequent mounting operations.
 
-    > Note
-    >
-    > If `mount_findfs()` fails to find, it may return an error message, causing the mounting operation to be unable to continue.
+    **Note**: If `mount_findfs()` fails to find, it may return an error message, causing the mounting operation to be unable to continue.
 
 2. Find or create the `inode` node of the mount point.
 
@@ -610,10 +612,7 @@ The file system mounting operation mainly completes the following key steps:
 
     Purpose: Determine the position of the mount point in the file system to ensure that the file system can be mounted to the specified path subsequently.
 
-    > Note
-    >
-    > - The mount point must be a valid directory node, not a special node (such as a device node).
-    > - If `inode_reserve()` fails, it may be due to an invalid path, an existing node, or insufficient memory.
+    **Note**: The mount point must be a valid directory node, not a special node (such as a device node). If `inode_reserve()` fails, it may be due to an invalid path, an existing node, or insufficient memory.
 
 3. (Optional) Bind the file system to the block device driver.
 
@@ -624,9 +623,7 @@ The file system mounting operation mainly completes the following key steps:
 
     Purpose: Realize the association between the file system and the block device driver (if needed), so that the file system can read and write data through the block device.
 
-    > Note
-    >
-    > If the `bind()` function returns an error, the system will roll back the mounting operation and release related resources.
+    **Note**: If the `bind()` function returns an error, the system will roll back the mounting operation and release related resources.
 
 4. Update the content of the mount point `inode` node.
 
@@ -637,7 +634,4 @@ The file system mounting operation mainly completes the following key steps:
 
     Purpose: Complete the final setting of the mount point, so that the file system is successfully mounted to the specified path.
 
-    > Description
-    >
-    > - After the mounting is completed, users can access the files and directories in the file system through the mount point.
-    > - When the mount point `mountpt_inode` is opened, the system will retrieve the corresponding file system information according to the `i_private` field.
+    Description: After the mounting is completed, users can access the files and directories in the file system through the mount point. When the mount point `mountpt_inode` is opened, the system will retrieve the corresponding file system information according to the `i_private` field.

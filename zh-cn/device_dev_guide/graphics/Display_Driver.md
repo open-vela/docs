@@ -11,6 +11,7 @@ openvela 已集成图形库 NxWM，但由于其功能相对简单，无法满足
 目前，openvela 系统采用功能更强大的 **LVGL** 图形库，以支持更广泛的应用场景。
 
 ### 2、LVGL
+
 LVGL 是最流行的免费开源嵌入式图形库，可为任何 MCU、MPU 和显示屏类型创建精美的用户界面。
 从消费电子产品到工业自动化，任何应用程序都可以利用 LVGL 的 30 多种内置 Widget、100 多种样式属性、类 Web 布局以及支持多种语言的排版系统。
 
@@ -42,4 +43,3 @@ LVGL 是最流行的免费开源嵌入式图形库，可为任何 MCU、MPU 和�
 
 - [Framebuffer_Driver](./Framebuffer_Driver.md)
 - [LCD_Driver](./LCD_Driver.md)
-
