@@ -14,7 +14,7 @@ openvela offers three different types of work queues to meet various scenario re
 
 ## II. Work Queue Classification and Characteristics
 
-### High-Priority (HP) Work Queue
+### 1. High-Priority (HP) Work Queue
 
 The high-priority work queue is designed for processing urgent and short-duration tasks, particularly suitable for handling the bottom half of interrupt service routines (ISRs) (referring to deferred cleanup or processing work stripped from the interrupt context, such as deferred memory deallocation).
 
@@ -34,7 +34,7 @@ When the high-priority work queue is disabled, its cleanup work is downgraded fo
 | CONFIG_SCHED_HPWORKPRIORITY  | Priority of worker threads           | 224           |
 | CONFIG_SCHED_HPWORKSTACKSIZE | Stack size per worker thread (bytes) | 2048          |
 
-### Low-Priority (LP) Work Queue
+### 2. Low-Priority (LP) Work Queue
 
 The low-priority work queue is primarily used for processing background tasks and non-urgent application-level jobs, such as file system cleanup, logging, and asynchronous I/O (AIO) operations. By scheduling these tasks at a lower priority, it avoids interfering with the execution of critical tasks, thereby enhancing the overall responsiveness and stability of the system.
 
@@ -57,7 +57,7 @@ Currently, only the openvela asynchronous I/O (AIO) module uses this dynamic pri
 | CONFIG_SCHED_LPWORKPRIOMAX   | Maximum priority to which worker threads can be elevated | 176           |
 | CONFIG_SCHED_LPWORKSTACKSIZE | Stack size per worker thread (bytes)                     | 2048          |
 
-### Comparison of Kernel Work Queues
+### 4. Comparison of Kernel Work Queues
 
 | Feature              | High-Priority (HP) Work Queue                                                                                                                                             | Low-Priority (LP) Work Queue                                                                                                                                                                              |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -65,7 +65,7 @@ Currently, only the openvela asynchronous I/O (AIO) module uses this dynamic pri
 | Advantages           | **Low latency**: Tasks are processed promptly to ensure system response speed.<br>**High real-time performance**: Ensures tasks complete within expected time.            | **Resource-friendly**: Executes when system load is low to avoid competing with critical tasks.<br>**Enhances system stability**: Isolates non-critical tasks to safeguard high-priority service quality. |
 | Disadvantages        | **Resource competition**: May preempt the CPU, causing low-priority tasks to starve.<br>**Overload risk**: A large number of high-priority tasks may overload the system. | **High latency**: Task execution timing is uncertain and may be deferred for a long time.<br>**Not suitable for real-time scenarios**: Cannot guarantee immediate task response.                          |
 
-### User-Mode Work Queue
+### 4. User-Mode Work Queue
 
 In `protected` or `kernel` build modes, user applications cannot directly access kernel-space work queues. To meet the asynchronous execution needs of user-space programs, openvela provides a user-mode work queue.
 
@@ -85,7 +85,7 @@ In `protected` or `kernel` build modes, user applications cannot directly access
 
 ## III. Principles
 
-### Composition of Work Queue
+### 1. Composition of Work Queue
 
 The work queue in the openvela operating system consists of the following three core components:
 
@@ -97,7 +97,7 @@ The following diagram illustrates the basic working principle of the work queue:
 
 <img src="./figures/001.png" alt="work_queue" width="75%">
 
-### Work Queue Startup Process
+### 2. Work Queue Startup Process
 
 During system startup, openvela automatically creates and starts all configured work queues. The process begins with `nx_start()`, and the call chain is as follows:
 
@@ -112,7 +112,7 @@ nx_start()
 
 As shown above, the `nx_workqueues()` function is the unified entry point for initializing all types of work queues.
 
-### Kernel Work Queue Implementation
+### 3. Kernel Work Queue Implementation
 
 The working principles of high-priority and low-priority kernel work queues are very similar. The following details the creation and operation mechanism of the high-priority work queue.
 
@@ -315,7 +315,7 @@ int work_queue(int qid, FAR struct work_s *work, worker_t worker,
 }
 ```
 
-### User-Mode Work Queue Implementation
+### 4. User-Mode Work Queue Implementation
 
 The user-mode work queue (User Work Queue) maintains API design consistency with the kernel queue, but its internal implementation mechanism differs significantly to adapt to user-space resources and constraints. It does not rely on the kernel's watchdog timer but implements a self-contained deferred processing logic.
 
@@ -656,7 +656,7 @@ static int work_qqueue(FAR struct usr_wqueue_s *wqueue,
 
 The core of the openvela work queue revolves around the `struct work_s` structure, which represents a task that needs to be executed asynchronously. The system organizes and schedules these tasks through different queue management structures.
 
-### Core Task Structure (`struct work_s`)
+### 1. Core Task Structure (`struct work_s`)
 
 `struct work_s` is the **atomic unit** of the work queue mechanism, encapsulating all information about a task to be executed asynchronously. Whether for kernel or user queues, the basic scheduling object is this structure.
 
@@ -696,7 +696,7 @@ Key points:
 
 - Lifecycle management: The structure is allocated by the caller, but its internal members are managed by the work queue API (`work_queue()`). Users should not modify its contents directly after the task is enqueued.
 
-### Queue and Worker Thread Structures (Kernel)
+### 2. Queue and Worker Thread Structures (Kernel)
 
 These data structures define the form and state of kernel-mode work queues (HPWORK and LPWORK).
 
@@ -741,7 +741,7 @@ extern struct lp_wqueue_s g_lpwork;
 #endif
 ```
 
-### User Interface and Usage
+### 3. User Interface and Usage
 
 From a user perspective, the main interaction with the work queue involves the callback function type definition and the use of `struct work_s`.
 
@@ -767,7 +767,7 @@ void schedule_my_work(void)
 }
 ```
 
-### Notification Mechanism-Related Structures (Optional)
+### 4. Notification Mechanism-Related Structures (Optional)
 
 openvela builds a notification mechanism on top of the work queue, allowing code to **subscribe** to certain system events (such as process termination). The following are the related data structures.
 
@@ -795,7 +795,7 @@ struct work_notifier_entry_s
 
 The openvela work queue APIs are distributed across different kernel files, with each file assuming specific functions. Below, we will detail the core interfaces according to module divisions.
 
-### Task Scheduling (`kwork_queue.c`)
+### 1. Task Scheduling (`kwork_queue.c`)
 
 This module provides the core APIs for submitting tasks (work) to the work queue, which are the most frequently used interfaces by developers. It supports scheduling of one-time tasks and periodic tasks.
 
@@ -826,7 +826,7 @@ int work_queue_wq(FAR struct kwork_wqueue_s *wqueue,
 | int work_queue_period(...)    | **Periodic task enqueue interface**: Submits a task to the global work queue specified by qid. The task executes after the first delay and then repeats at the period specified, until canceled.                                                                                                        |
 | int work_queue_wq_period(...) | Functions the same as work_queue_period but directly accepts a work queue instance pointer wqueue for dynamically created queues.                                                                                                                                                                       |
 
-### Task Cancellation (`kwork_cancel.c`)
+### 2. Task Cancellation (`kwork_cancel.c`)
 
 This module provides a mechanism to remove a task from the work queue before it is executed.
 
@@ -847,7 +847,7 @@ int work_cancel_sync(int qid, FAR struct work_s *work);
 | int work_cancel_sync(...)    | **Synchronous task cancellation**: <br> Functions similarly to work_cancel but blocks until the task is successfully removed or (if the task is already running) until the task completes execution. This ensures that by the time the function returns, the work structure is no longer used by the work queue and can be safely freed or reused. |
 | static int work_qcancel(...) | Internal implementation of work_cancel and work_cancel_sync, operating directly on the work queue instance without being exposed externally.                                                                                                                                                                                                       |
 
-### Event Notification Mechanism (`kwork_notifier.c`)
+### 3. Event Notification Mechanism (`kwork_notifier.c`)
 
 This module implements a publish-subscribe pattern event notification system. It allows various parts of the system to **subscribe** to specific events (such as process exit), and when an event is **published**, it automatically triggers the preset callback task and places it in the work queue for asynchronous execution.
 
@@ -862,12 +862,12 @@ This module implements a publish-subscribe pattern event notification system. It
 
 #### Interface Description
 
-| Function                         | Description                                                                                                                                                                                                     |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| int work_notifier_setup(...)     | Set up/subscribe to a notification: Registers a notifier and returns a unique key for subsequent operations upon success.                                                                                       |
-| void work_notifier_teardown(...) | Deregister a notification: Moves the notifier specified by the key from the pending queue to the idle queue.                                                                                                    |
-| void work_notifier_signal(...)   | Trigger/publish an event: Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution.                    |
-| static ... work_notifier_*       | Internal helper functions like work_notifier_key, work_notifier_find, and work_notifier_worker, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
+| Function                           | Description                                                                                                                                                                                                           |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `int work_notifier_setup(...)`     | Set up/subscribe to a notification: <br> Registers a notifier and returns a unique key for subsequent operations upon success.                                                                                        |
+| `void work_notifier_teardown(...)` | Deregister a notification: <br> Moves the notifier specified by the key from the pending queue to the idle queue.                                                                                                     |
+| `void work_notifier_signal(...)`   | Trigger/publish an event: <br> Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution.                     |
+| `static ... work_notifier_*`       | Internal helper functions like `work_notifier_key`, `work_notifier_find`, and `work_notifier_worker`, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
 
 ```C
 /*generate a unique key for a work notifier*/
@@ -898,7 +898,7 @@ void work_notifier_teardown(int key)；
 void work_notifier_signal(enum work_evtype_e evtype, FAR void *qualifier)；
 ```
 
-### Priority Inheritance (`kwork_inherit.c`)
+### 4. Priority Inheritance (`kwork_inherit.c`)
 
 This module is specifically designed to solve the **priority inversion** problem, particularly in the low-priority work queue (LPWORK). When a high-priority task needs to wait for results processed by a low-priority worker thread, these interfaces can be used to temporarily elevate the worker thread's priority, ensuring the critical path is not blocked.
 
@@ -920,7 +920,7 @@ void lpwork_boostpriority(uint8_t reqprio);
 void lpwork_restorepriority(uint8_t reqprio);
 ```
 
-### Thread and Queue Management (`kwork_thread.c`)
+### 5. Thread and Queue Management (`kwork_thread.c`)
 
 This file is the **implementation core** of the work queue, responsible for worker thread creation, main loop logic, dynamic queue lifecycle management, and task traversal, among other low-level functions.
 
@@ -970,8 +970,8 @@ The openvela work queue is a powerful and flexible background task processing fr
 **From an architectural and implementation perspective, this mechanism has the following key features:**
 
 1. **Diversified queue types**: The system provides multiple preset work queues to meet different scenario requirements:
-   1. **Kernel high-priority queue (HPWORK)**: Processes time-sensitive, fast-response kernel-level tasks.
-   2. **Kernel low-priority queue (LPWORK)**: A general-purpose background task processing queue for most routine tasks that do not require immediate execution.
-   3. In addition, it supports **user-mode work queues**, offering great flexibility.
+    - **Kernel high-priority queue (HPWORK)**: Processes time-sensitive, fast-response kernel-level tasks.
+    - **Kernel low-priority queue (LPWORK)**: A general-purpose background task processing queue for most routine tasks that do not require immediate execution.
+    - In addition, it supports **user-mode work queues**, offering great flexibility.
 2. **Feature-rich APIs**: Provides a complete set of APIs covering task scheduling (`work_queue`), cancellation (`work_cancel`), event subscription/publishing (`work_notifier_setup`/`signal`), and dynamic management (`work_queue_create`), capable of meeting complex application requirements.
 3. **Simple and consistent design**: In the openvela OS, despite different queue types, the underlying implementation follows a unified and simple design philosophy. Each queue consists of a task queue and a group of worker threads, scheduled uniformly by the kernel. This consistency reduces system complexity and the learning curve for developers.

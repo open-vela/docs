@@ -1,8 +1,8 @@
-# Pipe
+# 管道开发指南
 
-\[ [English](../../../../en/device_dev_guide/kernel/IPC/Pipe_Eg.md) | 简体中文 \]
+\[ [English](../../../../en/device_dev_guide/kernel/IPC/Pipe.md) | 简体中文 \]
 
-## 一、简介
+## 一、概述
 
 管道（Pipe）在系统中有多种用法，常见的包括以下几种：
 
@@ -41,7 +41,7 @@ int pipe2(int fd[2], int flags);
 
 以下是管道功能的配置选项：
 
-```C
+```bash
 CONFIG_PIPES=y
 CONFIG_DEV_PIPE_SIZE>0
 ```
@@ -120,12 +120,12 @@ int pclose(FILE *fp);
 
 `popen` 函数通过调用 `posix_spawn` 创建一个新进程来执行指定的命令字符串（`cmdstring`），并将其输入或输出重定向。具体行为取决于参数 `type` 的值：
 
-- 如果 `type` 为 `"r"`，文件指针连接到 `cmdstring` 的标准输出（stdout）。
-- 如果 `type` 为 `"w"`，文件指针连接到 `cmdstring` 的标准输入（stdin）。
+- 如果 `type` 为 `r`，文件指针连接到 `cmdstring` 的标准输出（stdout）。
+- 如果 `type` 为 `w`，文件指针连接到 `cmdstring` 的标准输入（stdin）。
 
 #### 使能配置
 
-```C
+```bash
 CONFIG_SYSTEM_POPEN=y
 ```
 
@@ -186,7 +186,7 @@ int mkfifoat(int dirfd, const char *path, mode_t mode);
 
 #### 使能配置
 
-```C
+```bash
 CONFIG_PIPES=y
 CONFIG_DEV_FIFO_SIZE>0
 ```

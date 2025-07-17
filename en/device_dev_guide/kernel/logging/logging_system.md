@@ -342,7 +342,6 @@ If you need to print logs to memory, configure the following options:
 ```Makefile
 CONFIG_RAMLOG=y                # Enable RAMLOG  
 CONFIG_RAMLOG_SYSLOG=y         # Enable syslog support for RAMLOG  
-CONFIG_RAMLOG_BUFSIZE=1024     # RAMLOG buffer size  
 CONFIG_RAMLOG_OVERWRITE=y      # Overwrite old logs when the buffer is full  
 RAMLOG_BUFFER_SECTION=".bss"   # Place the buffer in a fixed section
 ```
@@ -381,11 +380,11 @@ board_app_initialize()
 ```
 Configuration description:
 
-| SYSLOG_FILE | Enable file channel feature |
-|:------|:------|
-|SYSLOG_FILE_SEPARATE|Each time the log file is opened, a blank line will be added to distinguish logs from two starts. The default is n| 
-|SYSLOG_FILE_ROTATIONS|When the size of the log file reaches a certain size, a new file will be created to store logs. This macro is the maximum number of new files created. The default is 0| 
-| SYSLOG_FILE_SIZE_LIMIT| When SYSLOG_FILE_ROTATIONS is enabled, the maximum size of a single log file. The default is 524288|
+| SYSLOG_FILE            | Enable file channel feature                                                                                                                                             |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SYSLOG_FILE_SEPARATE   | Each time the log file is opened, a blank line will be added to distinguish logs from two starts. The default is n                                                      |
+| SYSLOG_FILE_ROTATIONS  | When the size of the log file reaches a certain size, a new file will be created to store logs. This macro is the maximum number of new files created. The default is 0 |
+| SYSLOG_FILE_SIZE_LIMIT | When SYSLOG_FILE_ROTATIONS is enabled, the maximum size of a single log file. The default is 524288                                                                     |
 
 
 #### 8.4 Printing to Device File
@@ -500,14 +499,14 @@ CONFIG_SYSLOG_CDCACM=y     Configure CDCACM as a channel of SYSLOG
 
 Format printing refers to adding system information, such as timestamp, pid, etc., to the log string printed by the user. The supported macro configurations are as follows:
 
-| Field name and description                                                                 | Detailed description                                                                                   |
-| :----------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
-| SYSLOG_TIMESTAMP<br>Display timestamp                                                   |  SYSLOG_TIMESTAMP_REALTIME：wall-clock (the time since 1970)<br> SYSLOG_TIMESTAMP_FORMATTED：formatted time output<br> SYSLOG_TIMESTAMP_LOCALTIME：display in local time<br> SYSLOG_TIMESTAMP_FORMAT："%d/%m/%y %H:%M:%S"<br> SYSLOG_TIMESTAMP_FORMAT_MICROSECOND：add ms<br> SYSLOG_TIMESTAMP_BUFFER：buffer for timestamp |
-| SYSLOG_PRIORITY                                                                 | Display log priority (info, err, etc.)                                                                |
-| SYSLOG_PROCESS_NAME                                                             | Display thread name                                                                                |
-| SYSLOG_PROCESSID                                                                | Display thread PID                                                                                 |
-| SYSLOG_PREFIX <br> Add log prefix                                                  | SYSLOG_PREFIX_STRING<br>Added prefix string                                     |
-| SYSLOG_COLOR_OUTPUT                                                             | Display logs printed with different log priorities in different colors (it is forbidden to add color printing characters in the log printing of itself)                  |
+| Field name and description            | Detailed description                                                                                                                                                                                                                                                                                                       |
+| :------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SYSLOG_TIMESTAMP<br>Display timestamp | SYSLOG_TIMESTAMP_REALTIME：wall-clock (the time since 1970)<br> SYSLOG_TIMESTAMP_FORMATTED：formatted time output<br> SYSLOG_TIMESTAMP_LOCALTIME：display in local time<br> SYSLOG_TIMESTAMP_FORMAT："%d/%m/%y %H:%M:%S"<br> SYSLOG_TIMESTAMP_FORMAT_MICROSECOND：add ms<br> SYSLOG_TIMESTAMP_BUFFER：buffer for timestamp |
+| SYSLOG_PRIORITY                       | Display log priority (info, err, etc.)                                                                                                                                                                                                                                                                                     |
+| SYSLOG_PROCESS_NAME                   | Display thread name                                                                                                                                                                                                                                                                                                        |
+| SYSLOG_PROCESSID                      | Display thread PID                                                                                                                                                                                                                                                                                                         |
+| SYSLOG_PREFIX <br> Add log prefix     | SYSLOG_PREFIX_STRING<br>Added prefix string                                                                                                                                                                                                                                                                                |
+| SYSLOG_COLOR_OUTPUT                   | Display logs printed with different log priorities in different colors (it is forbidden to add color printing characters in the log printing of itself)                                                                                                                                                                    |
 
 For example:
 ```Makefile

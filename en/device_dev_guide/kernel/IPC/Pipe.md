@@ -1,8 +1,8 @@
-# Pipe
+# Pipe Development Guide
 
 \[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/IPC/Pipe.md) \]
 
-## I. Introduction
+## I. Overview
 
 Pipes are widely used in systems for various purposes, including the following common types:
 
@@ -44,7 +44,7 @@ int pipe2(int fd[2], int flags);
 
 Below are the configuration options for enabling pipe functionality:
 
-```C
+```bash
 CONFIG_PIPES=y
 CONFIG_DEV_PIPE_SIZE>0
 ```
@@ -123,12 +123,12 @@ int pclose(FILE *fp);
 
 The `popen` function creates a new process using `posix_spawn` to execute the specified command string (`cmdstring`) and redirects its input or output. The specific behavior depends on the value of the `type` parameter:
 
-- If `type` is `"r"`, the file pointer connects to the standard output (stdout) of `cmdstring`.
-- If `type` is `"w"`, the file pointer connects to the standard input (stdin) of `cmdstring`.
+- If `type` is `r`, the file pointer connects to the standard output (stdout) of `cmdstring`.
+- If `type` is `w`, the file pointer connects to the standard input (stdin) of `cmdstring`.
 
 #### Configuration Enabling
 
-```C
+```Bash
 CONFIG_SYSTEM_POPEN=y
 ```
 
@@ -189,7 +189,7 @@ int mkfifoat(int dirfd, const char *path, mode_t mode);
 
 #### Configuration Enabling
 
-```C
+```bash
 CONFIG_PIPES=y
 CONFIG_DEV_FIFO_SIZE>0
 ```
