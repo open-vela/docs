@@ -146,9 +146,9 @@ atomic_type atomic_fetch_or(atomic_type *object, atomic_type desired);
 atomic_type atomic_fetch_and(atomic_type *object, atomic_type desired);
 ```
 
-## 五、Vela 内部实现
+## 五、openvela 内部实现
 
-为避免不同 toolchain 对于原子接口的支持能力不同，因此在 Vela 内提供了一套系统的实现，当 Toolchain 不支持 Atomic 时，将通过 Vela Atomic 的实现来作为替代。
+为避免不同 toolchain 对于原子接口的支持能力不同，因此在 openvela 内提供了一套系统的实现，当 Toolchain 不支持 Atomic 时，将通过 Vela Atomic 的实现来作为替代。
 完整内容可参考文件 [arch_atomic.c](https://github.com/open-vela/nuttx/blob/dev/libs/libc/machine/arch_atomic.c)
 Vela 内部的实现方式主要是通过 spinlock 的操作来模拟原子的操作，它将不同的操作如 load / store / exchange / CAS 等行为拆分成不同功能的宏实现，例如 atomic_store , 它的函数原型如下
 
