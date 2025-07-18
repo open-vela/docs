@@ -1,5 +1,7 @@
 # 系统日志 (Syslog) 深度解析
 
+\[ [English](../../../../en/device_dev_guide/kernel/logging/syslog.md) | 简体中文 \]
+
 ## 一、概述
 
 `syslog` 是 openvela 系统中用于记录内核与应用日志的标准框架。它提供了一套灵活、可扩展的日志解决方案，能够捕获系统运行时的关键信息。
