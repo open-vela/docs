@@ -13,17 +13,19 @@
 在以下两种情况下，系统支持零延迟中断嵌套：
 
 - 无中断栈，只有进程栈。
-     - 默认支持中断嵌套。
-     - 正常情况下和触发中断异常时都使用由 MSP（Main Stack Pointer）指向的当前进程栈。
-     - 需要注意：此模式可能需要配置更大的进程栈。
+
+    - 默认支持中断嵌套。
+    - 正常情况下和触发中断异常时都使用由 MSP（Main Stack Pointer）指向的当前进程栈。
+    - 需要注意：此模式可能需要配置更大的进程栈。
 
 - 有中断栈。
-     - 需要配置 `CONFIG_ARCH_INTERRUPTSTACK`（详情请参见 [CONFIG 配置](#1config-配置)）。
-     - Handler 模式（触发中断/异常时进入）：硬件会自动切换到 MSP，系统初始化完成后，MSP 始终指向中断栈，中断/异常处理过程运行在中断栈上。
-     - Thread 模式（正常进程执行时进入）：使用 PSP（Process Stack Pointer），系统初始化完成后，PSP 始终指向当前进程栈，进程执行过程运行在进程栈上。
-     - 系统复位（Reset）后：
-         - 系统处于 Thread 模式，特权等级，硬件默认使用 MSP，MSP 默认指向 `_vectors` 表中的 `IDLE_STACK`（详情请参见 [系统初始化](#2系统初始化)）。
-         - 系统初始化过程中会调整 MSP 和 PSP，将 MSP 指向中断栈顶，PSP 指向 IDLE 进程栈的当前位置。
+
+    - 需要配置 `CONFIG_ARCH_INTERRUPTSTACK`（详情请参见 [CONFIG 配置](#1config-配置)）。
+    - Handler 模式（触发中断/异常时进入）：硬件会自动切换到 MSP，系统初始化完成后，MSP 始终指向中断栈，中断/异常处理过程运行在中断栈上。
+    - Thread 模式（正常进程执行时进入）：使用 PSP（Process Stack Pointer），系统初始化完成后，PSP 始终指向当前进程栈，进程执行过程运行在进程栈上。
+    - 系统复位（Reset）后：
+        - 系统处于 Thread 模式，特权等级，硬件默认使用 MSP，MSP 默认指向 `_vectors` 表中的 `IDLE_STACK`（详情请参见 [系统初始化](#2系统初始化)）。
+        - 系统初始化过程中会调整 MSP 和 PSP，将 MSP 指向中断栈顶，PSP 指向 IDLE 进程栈的当前位置。
 
 #### 零延迟中断优先级排布
 
