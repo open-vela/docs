@@ -15,8 +15,6 @@ The only recommended use case for `printf` is in the development of command-line
 - **Function**: To output program status, user prompts, or debugging information to the console (terminal) in real-time.
 - **Example**: A tool that requires user-input parameters and immediately displays the results.
 
-## 三、禁用场景与核心风险分析
-
 ## III. Prohibited Scenarios and Core Risk Analysis
 
 The use of `printf` must be forbidden in the following scenarios:
