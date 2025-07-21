@@ -19,81 +19,84 @@ OpenVela provides developers with a comprehensive development self-testing frame
 ```
 
 ## III. Developing Test Cases
+
 ### 1. Creating a New Case Directory
+
 All test cases written with cmocka should be placed in the tests directory. When you need to write new test cases using cmocka, follow these steps:
 
 1. Create a test case subdirectory and various level directories in the corresponding subdirectory to store test case files, header files, test resources, test entry files, etc. The directory structure is shown below:
 
-   ```Bash
-   ├─tests
-   │   └── mytest  # Automation test suite name, name according to your actual situation
-   │       ├── Kconfig
-   │       ├── Make.defs
-   │       ├── Makefile
-   │       ├── include    # Header files needed for test cases, declarations of custom functions
-   │       ├── src        # Directory for test case files
-   │       ├── util       # Directory for common functions
-   ```
+    ```Bash
+    ├─tests
+    │   └── mytest  # Automation test suite name, name according to your actual situation
+    │       ├── Kconfig
+    │       ├── Make.defs
+    │       ├── Makefile
+    │       ├── include    # Header files needed for test cases, declarations of custom functions
+    │       ├── src        # Directory for test case files
+    │       ├── util       # Directory for common functions
+    ```
 
 2. Modify the Kconfig file to set compilation options.
 
-Define test switches, priorities, and STACKSIZE in the Kconfig file. Refer to the following example and complete the Kconfig file according to actual needs.
+    Define test switches, priorities, and STACKSIZE in the Kconfig file. Refer to the following example and complete the Kconfig file according to actual needs.
 
-```Bash
-   config MY_TESTS                 
-       tristate "vela auto tests mytest"
-       default n
-       depends on TESTING_CMOCKA             # Must include, can depend on the module being tested
-       ---help---
-           Enable auto tests for the open-vela
+    ```Bash
+    config MY_TESTS                 
+        tristate "vela auto tests mytest"
+        default n
+        depends on TESTING_CMOCKA             # Must include, can depend on the module being tested
+        ---help---
+            Enable auto tests for the open-vela
 
-if MY_TESTS
-   
-   config MY_TESTS_PRIORITY            # Priority
-       int "Task priority"
-       default 100
-   
-   config MY_TESTS_STACKSIZE           # stack size
-       int "Stack size"
-       default DEFAULT_TASK_STACKSIZE
-   
-   endif
-   ```
+    if MY_TESTS
+    
+    config MY_TESTS_PRIORITY            # Priority
+        int "Task priority"
+        default 100
+    
+    config MY_TESTS_STACKSIZE           # stack size
+        int "Stack size"
+        default DEFAULT_TASK_STACKSIZE
+    
+    endif
+    ```
 
 3. Modify the Makefile file.
 
-Define the test PROGNAME and MAINSRC file. Refer to the following example and complete the Makefile according to actual needs.
+    Define the test PROGNAME and MAINSRC file. Refer to the following example and complete the Makefile according to actual needs.
 
-Note: **PROGNAME must start with cmocka_**.
+    > Note: **PROGNAME must start with cmocka_**.
 
-```Makefile
-   include $(APPDIR)/Make.defs
-  # Common functions and header files
-   CFLAGS += -I$(APPDIR)/tests/mytest/util
-   CSRCS += $(wildcard $(APPDIR)/tests/mytest/util/*.c)
-   
-  # Test case files and test case header files
-   CFLAGS += -I$(APPDIR)/tests/mytest/include
-   CSRCS += $(wildcard $(APPDIR)/tests/mytest/src/*.c)
-   
-   # Header files for API calls (add as needed)
-   CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/include
-   
-   PRIORITY  = $(CONFIG_MY_TESTS_PRIORITY)
-   STACKSIZE = $(CONFIG_MY_TESTS_STACKSIZE)
-   MODULE    = $(CONFIG_MY_TESTS)
-   
-   PROGNAME += cmocka_mytest_test       # PROGNAME is the application name used when launching in nsh
-   MAINSRC  += $(CURDIR)/mytest_entry.c  #  Unified test entry file for all written test cases, cmocka unit test entry file (see Section 2.2 below for details)
-   include $(APPDIR)/Application.mk
-   ```
+    ```Makefile
+    include $(APPDIR)/Make.defs
+    # Common functions and header files
+    CFLAGS += -I$(APPDIR)/tests/mytest/util
+    CSRCS += $(wildcard $(APPDIR)/tests/mytest/util/*.c)
+    
+    # Test case files and test case header files
+    CFLAGS += -I$(APPDIR)/tests/mytest/include
+    CSRCS += $(wildcard $(APPDIR)/tests/mytest/src/*.c)
+    
+    # Header files for API calls (add as needed)
+    CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/include
+    
+    PRIORITY  = $(CONFIG_MY_TESTS_PRIORITY)
+    STACKSIZE = $(CONFIG_MY_TESTS_STACKSIZE)
+    MODULE    = $(CONFIG_MY_TESTS)
+    
+    PROGNAME += cmocka_mytest_test       # PROGNAME is the application name used when launching in nsh
+    MAINSRC  += $(CURDIR)/mytest_entry.c  #  Unified test entry file for all written test cases, cmocka unit test entry file (see Section 2.2 below for details)
+    include $(APPDIR)/Application.mk
+    ```
 
 4. Modify the Make.defs file.
-  ```Makefile
-   ifneq ($(CONFIG_MY_TESTS),)
-   CONFIGURED_APPS += $(APPDIR)/tests/mytest
-   endif
-   ```
+
+    ```Makefile
+    ifneq ($(CONFIG_MY_TESTS),)
+    CONFIGURED_APPS += $(APPDIR)/tests/mytest
+    endif
+    ```
 
 ### 2、Writing Test Cases
 
@@ -201,7 +204,9 @@ void test_mytest_example_01(FAR void **state);
 void test_mytest_example_02(FAR void **state);
 void test_mytest_example_03(FAR void **state);
 ```
+
 ### 3、Writing the Test Entry File
+
 To better decouple module test cases from test case entries and ensure that modifications to individual modules do not render the entire test suite unusable, the test entry file is kept separate and placed in the root directory of the module's test cases. The complete directory structure is shown below:
 
 ```Bash
@@ -312,7 +317,9 @@ void test_mytest_example_02(FAR void **state)
     assert_int_equal(ret, 15);
 }
 ```
+
 ### 5、 Using the State Pointer
+
 Variables created in the setup function can be passed to test cases via the state pointer. The state pointer implementation is as follows:
 
 ```C
@@ -349,6 +356,7 @@ void test_mytest_example_03(FAR void **state)
 ```
 
 ### 6、Assertions
+
 Cmocka provides a set of assertions for testing logical conditions, which are used in the same way as standard C assertions. Implementation is as follows:
 
 ```C
@@ -365,23 +373,24 @@ void test_mytest_example_01(FAR void **state)
     assert_in_set(ret, ret_set, 3);
 }
 ```
+
 ## IV. Executing Test Cases
 
 ### 1. Compiling Test Cases
 
 1. Use menuconfig to enable the `TESTING_CMOCKA` switch.
 
-Note: `TESTING_CMOCKA` depends on `LIBC_REGEX`, and `LIBC_REGEX` depends on `ALLOW_MIT_COMPONENTS`. If these two configs are not enabled, they need to be enabled first.
+    Note: `TESTING_CMOCKA` depends on `LIBC_REGEX`, and `LIBC_REGEX` depends on `ALLOW_MIT_COMPONENTS`. If these two configs are not enabled, they need to be enabled first.
 
-```Bash
-./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
- ```
+    ```Bash
+    ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
+    ```
 
-<img src="./figures/1.1.1.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/1.1.1.png" alt="img" style="zoom:150%;" />
 
 2. Use menuconfig to enable the module-defined test case switch (CONFIG_MYTEST_TEST).
 
-<img src="./figures/1.2.1.png" alt="img" style="zoom:150%;" />
+    <img src="./figures/1.2.1.png" alt="img" style="zoom:150%;" />
 
 3. Compile by executing the following command:
 
@@ -390,6 +399,7 @@ Note: `TESTING_CMOCKA` depends on `LIBC_REGEX`, and `LIBC_REGEX` depends on `ALL
     ```
 
 ### 2、Executing Test Cases
+
 After compilation, enter nsh and execute the following command:
 
 ```Bash
@@ -401,7 +411,8 @@ After compilation, enter nsh and execute the following command:
 - Enter the corresponding PROGNAME to run the test. This method will run all test cases in the group sequentially. If you need the execution results of a specific test case, you must wait for the process to complete.
 
     <img src="./figures/2.2.png" alt="img" style="zoom:150%;" />
-- OpenVela implements a command-line tool for cmocka for flexible execution of test cases. Below shows how to print cases and execute specific cases.
+
+- openvela implements a command-line tool for cmocka for flexible execution of test cases. Below shows how to print cases and execute specific cases.
 
     - Print all cases by executing the following command:
 
@@ -416,15 +427,17 @@ After compilation, enter nsh and execute the following command:
     ```Bash
     cmocka -t TestNuttxMm01
     ```
-  <img src="./figures/2.4.png" alt="img" style="zoom:150%;" />
 
-  ### 3、Viewing Test Results
+    <img src="./figures/2.4.png" alt="img" style="zoom:150%;" />
+
+### 3、Viewing Test Results
+
 Test case execution results have three states:
 
 - **PASSED**
 - **FAILED**
 - **SKIPPED**
 
-Note: If a test case **FAILED**, the corresponding error message will be displayed, including the code file, file line number, and the cause of the exception, facilitating problem identification. After all cases are executed, statistics for the three result types will be provided.
+> **Note**: If a test case **FAILED**, the corresponding error message will be displayed, including the code file, file line number, and the cause of the exception, facilitating problem identification. After all cases are executed, statistics for the three result types will be provided.
 
 <img src="./figures/3.1.png" alt="img" style="zoom:150%;" />

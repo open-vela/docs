@@ -212,9 +212,7 @@ The Trace system collects system runtime data through instrumentation APIs and d
 
 The following APIs are used to add fixed instrumentation code within the kernel.
 
-> Note
->
-> Normally, you do not need to call these APIs directly unless you have special requirements.
+> **Note**: Normally, you do not need to call these APIs directly unless you have special requirements.
 
 #### Task-related APIs
 
@@ -457,6 +455,7 @@ void note_rpmsg_initialize(void)
 - Kernel scheduling `Hook` functions.
   
     The kernel scheduling `Hook` functions are already added in the code by default. No additional code is needed for their use. You only need to modify the relevant configurations in `menuconfig` to enable them.
+
 - Application tracing.
 
     Application tracing is an extension of `sched_note` that can be used for tracing in application code. It is configured via the `CONFIG_SCHED_INSTRUMENTATION_DUMP` macro (this feature is primarily based on the application tracing implementation of ATRACE).
@@ -510,6 +509,8 @@ int main(int argc, FAR char *argv[])
 
 1. Generate Trace File.
 
+    > **Note**: The generated trace log file is named trace.txt.
+
     ```Bash
     ap> trace start 
     ap> hello
@@ -518,10 +519,6 @@ int main(int argc, FAR char *argv[])
     ```
 
     ![img](./figures/007.png)
-
-    > Note
-    >
-    > The generated trace log file is named trace.txt.
 
 2. Upload File.
 
@@ -792,7 +789,7 @@ __cyg_profile_func_exit(void *this_fn, void *call_site)
     ```
 
 2. Enable Instrumentation for a Module. 
-   
+
     Add the following compiler option to the target module's `Makefile`:
 
     ```Makefile
@@ -802,7 +799,7 @@ __cyg_profile_func_exit(void *this_fn, void *call_site)
     This option automatically instruments all functions in the module, recording function entry and exit information.
 
 3. Exclude Specific Files or Functions.
-    
+
     Add the following parameters to the `Makefile` to exclude specified files or functions from instrumentation:
 
     ```Makefile

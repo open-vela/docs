@@ -101,7 +101,6 @@ ap> ls /dev/audio
 
 Device node registration is the process by which the Upper Half Driver establishes its link to the Lower Half Driver. The key steps are outlined below.
 
-
 #### 1.1 `audio_register`
 
 ```Bash
@@ -110,13 +109,13 @@ int audio_register(FAR const char *name, FAR struct audio_lowerhalf_s *dev)
 
 - Parameters:
 
-  - `name`: the device-node name, e.g., `"pcm0p"`.
-  - `dev`: pointer to the lower-half driver’s structure.
+    - `name`: the device-node name, e.g., `"pcm0p"`.
+    - `dev`: pointer to the lower-half driver’s structure.
+
 - Return Value:
 
-  - Returns `0` on success.
-  - Returns a negative error code on failure.
-
+    - Returns `0` on success.
+    - Returns a negative error code on failure.
 
 ##### Data Structures
 
@@ -197,7 +196,6 @@ int audio_register(FAR const char *name, FAR struct audio_lowerhalf_s *dev)
 }
 ```
 
-
 The `g_audioops` structure defines the device operations:
 
 ```C
@@ -219,7 +217,6 @@ Through g_audioops, the audio device’s fundamental operations are abstracted i
 The UML diagram below illustrates the complete call path from `nxplayer` to the lower-half driver:
 
 ![img](./figures/005.svg)
-
 
 ##### Call Stacks
 
@@ -272,7 +269,6 @@ The following GDB backtraces show the paths for `audio_open`, `audio_ioctl`, and
     #9  0x00000000 in ?? ()
     ```
 
-
 ##### Example
 
 On the Simulator platform, the lower-half driver uses the host’s ALSA capabilities. For example:
@@ -284,7 +280,6 @@ On the Simulator platform, the lower-half driver uses the host’s ALSA capabili
 - `"pcm0p"` is the registered node name.
 - `sim_audio_initialize` initializes the lower-half driver.
 
-
 #### 1.2 `audio_comp_initialize`
 
 `audio_comp_initialize` is a function used to register a composite audio device. Its functionality is similar to combining `platform`/`dai`/`codec` drivers in the Linux ASoC framework; however, in OpenVela all audio drivers are abstracted as `audio_lowerhalf`, with no distinction between `platform`, `dai`, and `codec`.  
@@ -295,14 +290,12 @@ On the Simulator platform, the lower-half driver uses the host’s ALSA capabili
 FAR struct audio_lowerhalf_s *audio_comp_initialize(FAR const char *name, ...);
 ```
 
-
 ##### Description
 
 Unlike `audio_register`, `audio_comp_initialize` accepts a variable number of `audio_lowerhalf` arguments, allowing multiple lower-half drivers to be combined into a single PCM device.
 
 - `audio_register`: Single-device registration.
 - `audio_comp_initialize`: Composite registration with multiple devices.
-
 
 ##### Use Cases
 
@@ -390,6 +383,7 @@ FAR struct audio_lowerhalf_s *audio_comp_initialize(FAR const char *name,
     return &priv->export;
 }
 ```
+
 Process Description:
 
 1. Allocate Private Data Structure: Use `kmm_zalloc` to allocate the `audio_comp_priv_s` structure and initialize its operation interface.
@@ -444,8 +438,8 @@ static const struct audio_ops_s g_audio_comp_ops =
 
 Core Functions:
 
-* Provides a unified operation interface for composite audio devices, for use by upper-half drivers.
-* Implements abstraction of external functionalities for composite audio devices, supporting features such as pause, start, and buffer management.
+- Provides a unified operation interface for composite audio devices, for use by upper-half drivers.
+- Implements abstraction of external functionalities for composite audio devices, supporting features such as pause, start, and buffer management.
 
 ###### `audio_comp_callback`
 
@@ -473,46 +467,46 @@ static void audio_comp_callback(FAR void *arg, uint16_t reason,
 }
 ```
 
-* Parameter Descriptions:
+- Parameter Descriptions:
 
-  * `arg`: Pointer to the composite audio device's private data structure `audio_comp_priv_s`.
-  * `reason`: The reason for the callback, such as buffer completion or error.
-  * `apb`: Audio buffer.
-  * `status`: Callback status.
-  * `session` (optional): Session information when multi-session support is enabled.
+    - `arg`: Pointer to the composite audio device's private data structure `audio_comp_priv_s`.
+    - `reason`: The reason for the callback, such as buffer completion or error.
+    - `apb`: Audio buffer.
+    - `status`: Callback status.
+    - `session` (optional): Session information when multi-session support is enabled.
 
 ##### Call Flow
 
 The following outlines the function call flow for composite audio devices:
 
-* `open` and `close`: Consistent with standard audio devices, no changes.
+- `open` and `close`: Consistent with standard audio devices, no changes.
 
-* `ioctl` Call Chain:
+- `ioctl` Call Chain:
 
-  `ioctl` → `file_vioctl` → `audio_ioctl` → `audio_comp_configure`, where in the `audio_comp_configure` function, each `audio_lowerhalf` driver's `configure` interface is called sequentially to complete the configuration of the composite device.
+    `ioctl` → `file_vioctl` → `audio_ioctl` → `audio_comp_configure`, where in the `audio_comp_configure` function, each `audio_lowerhalf` driver's `configure` interface is called sequentially to complete the configuration of the composite device.
 
-  ```c
-  static int audio_comp_configure(FAR struct audio_lowerhalf_s *dev,
-                                  FAR const struct audio_caps_s *caps)
-  {
-    for (i = 0; i < priv->count; i++)
-      {
-        if (lower[i]->ops->configure)
-          {
-            /* Forward ioctl to lowerhalf driver*/
-  #ifdef CONFIG_AUDIO_MULTI_SESSION
-            int tmp = lower[i]->ops->configure(lower[i], sess[i], caps);
-  #else
-            int tmp = lower[i]->ops->configure(lower[i], caps);
-  #endif
-          }
-      }
+    ```c
+    static int audio_comp_configure(FAR struct audio_lowerhalf_s *dev,
+                                    FAR const struct audio_caps_s *caps)
+    {
+        for (i = 0; i < priv->count; i++)
+        {
+            if (lower[i]->ops->configure)
+            {
+                /* Forward ioctl to lowerhalf driver*/
+    #ifdef CONFIG_AUDIO_MULTI_SESSION
+                int tmp = lower[i]->ops->configure(lower[i], sess[i], caps);
+    #else
+                int tmp = lower[i]->ops->configure(lower[i], caps);
+    #endif
+            }
+        }
 
-    return ret;
-  }
-  ```
+        return ret;
+    }
+    ```
 
-* Function: `audio_comp_configure` forwards the configuration command (`configure`) to each `audio_lowerhalf` driver that constitutes the composite device, achieving the configuration of the composite device.
+- Function: `audio_comp_configure` forwards the configuration command (`configure`) to each `audio_lowerhalf` driver that constitutes the composite device, achieving the configuration of the composite device.
 
 ### 2. When to Register Device Node
 
@@ -542,17 +536,17 @@ In the previous chapter, we introduced the complete call path from the applicati
 
 Here are some common scenarios of differences:
 
-* **Capability Differences**: For example, different products may support different sampling rates or channel counts.
+- **Capability Differences**: For example, different products may support different sampling rates or channel counts.
 
-* **Data Processing Method Differences**:
+- **Data Processing Method Differences**:
 
-  * Some platforms have a general-purpose DMA module, and the audio driver may need to reserve a specific DMA channel.
-  * Other platforms may have DMA functionality as an internal auxiliary feature of the audio.
+    - Some platforms have a general-purpose DMA module, and the audio driver may need to reserve a specific DMA channel.
+    - Other platforms may have DMA functionality as an internal auxiliary feature of the audio.
 
-* **External PA Support**:
+- **External PA Support**:
 
-  * Some platforms support registering audio drivers through a combination of `i2s lower-half driver` and `pa lower-half driver`.
-  * In specific projects, if the PA needs to be updated, simply re-implementing the `pa lower-half driver` can meet the requirements.
+    - Some platforms support registering audio drivers through a combination of `i2s lower-half driver` and `pa lower-half driver`.
+    - In specific projects, if the PA needs to be updated, simply re-implementing the `pa lower-half driver` can meet the requirements.
 
 In summary, due to platform specificity, audio lower-half drivers are typically implemented by chip manufacturers.
 
@@ -587,9 +581,9 @@ struct audio_lowerhalf_s
 }; 
 ```
 
-* `ops`: A pointer to `audio_ops_s`, defining all the interfaces that the audio lower-half driver needs to implement, such as device control, playback, recording, and buffer management. The audio lower-half driver must re-implement these interfaces based on hardware characteristics.
-* `upper`: The callback function for the upper-half driver, used for buffer management, event notification, etc.
-* `priv`: A private data pointer used to pass context information in callbacks.
+- `ops`: A pointer to `audio_ops_s`, defining all the interfaces that the audio lower-half driver needs to implement, such as device control, playback, recording, and buffer management. The audio lower-half driver must re-implement these interfaces based on hardware characteristics.
+- `upper`: The callback function for the upper-half driver, used for buffer management, event notification, etc.
+- `priv`: A private data pointer used to pass context information in callbacks.
 
 ### 2. `audio_ops_s`
 
@@ -671,20 +665,20 @@ static const struct audio_ops_s g_audio_dma_ops =
 };
 ```
 
-* **Control interfaces**: Functions such as `getcaps`, `configure`, `start`, and `stop` control the audio device.
-* **Data interfaces**: Functions such as `allocbuffer`, `freebuffer`, and `enqueuebuffer` manage audio data flow.
+- **Control interfaces**: Functions such as `getcaps`, `configure`, `start`, and `stop` control the audio device.
+- **Data interfaces**: Functions such as `allocbuffer`, `freebuffer`, and `enqueuebuffer` manage audio data flow.
 
 ### 1.2 Control Interfaces
 
 The control interfaces of `audio_dma` are tightly coupled with the hardware and ultimately invoke the underlying DMA module APIs (e.g., `DMA_START_CYCLIC`). Some of the control interfaces are described below:
 
-* `getcaps`: Retrieves the capabilities of the device.
-* `configure`: Configures device parameters.
-* `start/stop`: Starts or stops the audio device.
-* `pause/resume`: Pauses or resumes the audio device.
-* `ioctl`: Supports multiple control commands, such as:
+- `getcaps`: Retrieves the capabilities of the device.
+- `configure`: Configures device parameters.
+- `start/stop`: Starts or stops the audio device.
+- `pause/resume`: Pauses or resumes the audio device.
+- `ioctl`: Supports multiple control commands, such as:
 
-  * `AUDIOIOC_SETPARAMTER`: Sets parameters using a `key=value` format, for example, `set_scenario=phone`.
+    - `AUDIOIOC_SETPARAMTER`: Sets parameters using a `key=value` format, for example, `set_scenario=phone`.
 
 An example implementation of the `configure` interface:
 
@@ -721,11 +715,11 @@ Two key data structures are used for data exchange in the audio driver:
 
 1. **`ap_buffer_s`**: Represents a buffer that holds actual audio data, including its memory location and metadata. Important fields:
 
-   * `samp`: Pointer to the audio data.
-   * `nmaxbytes`: Maximum size of the buffer.
-   * `nbytes`: Actual size of the audio data.
-   * `curbytes`: Current offset for data processing, typically 0.
-   * `nsamples`: Number of audio samples stored.
+    - `samp`: Pointer to the audio data.
+    - `nmaxbytes`: Maximum size of the buffer.
+    - `nbytes`: Actual size of the audio data.
+    - `curbytes`: Current offset for data processing, typically 0.
+    - `nsamples`: Number of audio samples stored.
 
 2. **`audio_buf_desc_s`**: A descriptor structure used to represent `ap_buffer_s`, typically passed as an argument to `ioctl` calls.
 
@@ -739,99 +733,100 @@ Below are the key `audio_dma` interfaces and their functions:
 
 1. `AUDIOIOC_GETBUFFERINFO`
 
-   * **Function**: Retrieves buffer size and count from the driver.
+    - **Function**: Retrieves buffer size and count from the driver.
 
 2. `AUDIOIOC_SETBUFFERINFO`
 
-   * **Function**: Sets buffer size and count.
+    - **Function**: Sets buffer size and count.
 
 3. `AUDIOIOC_ALLOCBUFFER`
 
-   * **Function**: Allocates an audio buffer.
+    - **Function**: Allocates an audio buffer.
 
-   * **Details**:
+    - **Details**:
 
-     * Memory shared between the audio driver and the application is allocated by the driver.
-     * The default allocator is `apb_alloc`, but custom implementations are allowed in the lower-half driver.
-     * By default, `apb_alloc` allocates a contiguous block large enough to hold both the `ap_buffer_s` structure and the actual audio data (`apb->samp`).
-     * `audio_dma_allocbuffer` ensures DMA compatibility by allocating a physically contiguous region for the buffer.
+        - Memory shared between the audio driver and the application is allocated by the driver.
+        - The default allocator is `apb_alloc`, but custom implementations are allowed in the lower-half driver.
+        - By default, `apb_alloc` allocates a contiguous block large enough to hold both the `ap_buffer_s` structure and the actual audio data (`apb->samp`).
+        - `audio_dma_allocbuffer` ensures DMA compatibility by allocating a physically contiguous region for the buffer.
 
-   * **Optimization**:
+    - **Optimization**:
 
-     * Using the default `apb_alloc` may involve an extra data copy.
-     * `audio_dma` allows the application to write directly into the DMA buffer, reducing memory copy overhead.
+        - Using the default `apb_alloc` may involve an extra data copy.
+        - `audio_dma` allows the application to write directly into the DMA buffer, reducing memory copy overhead.
 
 4. `AUDIOIOC_FREEBUFFER`
 
-   * **Function**: Frees an audio buffer.
+    - **Function**: Frees an audio buffer.
 
 5. `AUDIOIOC_ENQUEUBUFFER`
 
-   * **Function**: Passes an audio buffer to the driver for playback or receives an empty buffer for recording.
+    - **Function**: Passes an audio buffer to the driver for playback or receives an empty buffer for recording.
 
-   * **Implementation example**:
+    - **Implementation example**:
 
-     ```c
-     flags = enter_critical_section();
-     dq_addlast(&apb->dq_entry, &audio_dma->pendq);  // Add to pending queue
-     leave_critical_section(flags);
-     ```
+    ```c
+    flags = enter_critical_section();
+    dq_addlast(&apb->dq_entry, &audio_dma->pendq);  // Add to pending queue
+    leave_critical_section(flags);
+    ```
 
-   * **Processing mechanism**:
+    - **Processing mechanism**:
 
-     * **Interrupt handler**: Functions like `audio_dma_callback` are invoked by DMA interrupts to trigger the `DEQUEUE` callback.
-     * **High-priority worker thread**: Waits for signals from hardware callbacks (e.g., DMA or I2S) to consume the next audio frame.
+        - **Interrupt handler**: Functions like `audio_dma_callback` are invoked by DMA interrupts to trigger the `DEQUEUE` callback.
+        - **High-priority worker thread**: Waits for signals from hardware callbacks (e.g., DMA or I2S) to consume the next audio frame.
 
 ### 1.5 Key Handler Functions
 
 #### `audio_dma_enqueuebuffer`
 
-* **Function**: Enqueues an audio buffer into the pending queue.
-* **Implementation**:
+- **Function**: Enqueues an audio buffer into the pending queue.
+- **Implementation**:
 
-  ```c
-  static int audio_dma_enqueuebuffer(struct audio_lowerhalf_s *dev,
-                                     struct ap_buffer_s*apb)
-  {
-    struct audio_dma_s *audio_dma = (struct audio_dma_s*)dev;
-    irqstate_t flags;
-    ...
-    apb->flags |= AUDIO_APB_OUTPUT_ENQUEUED;
+    ```c
+    static int audio_dma_enqueuebuffer(struct audio_lowerhalf_s *dev,
+                                        struct ap_buffer_s*apb)
+    {
+        struct audio_dma_s *audio_dma = (struct audio_dma_s*)dev;
+        irqstate_t flags;
+        ...
+        apb->flags |= AUDIO_APB_OUTPUT_ENQUEUED;
 
-    flags = enter_critical_section();
-    dq_addlast(&apb->dq_entry, &audio_dma->pendq);
-    leave_critical_section(flags);
-    ...
-    return OK;
-  }
-  ```
+        flags = enter_critical_section();
+        dq_addlast(&apb->dq_entry, &audio_dma->pendq);
+        leave_critical_section(flags);
+        ...
+        return OK;
+    }
+    ```
 
 #### `audio_dma_callback`
 
-* **Function**: DMA interrupt handler that dequeues a buffer and triggers the `DEQUEUE` callback.
-* **Implementation**:
+- **Function**: DMA interrupt handler that dequeues a buffer and triggers the `DEQUEUE` callback.
 
-  ```c
-  static void audio_dma_callback(struct dma_chan_s *chan,
-                                 void* arg, ssize_t len)
-  {
-    struct audio_dma_s *audio_dma = (struct audio_dma_s*)arg;
-    struct ap_buffer_s *apb;
-    bool final = false;
+- **Implementation**:
 
-    apb = (struct ap_buffer_s *)dq_remfirst(&audio_dma->pendq);
-    ...
-    // Trigger DEQUEUE callback
-  #ifdef CONFIG_AUDIO_MULTI_SESSION
-    audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
-                         apb, OK, NULL);
-  #else
-    audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
-                         apb, OK);
-  #endif
-    ...
-  }
-  ```
+    ```c
+    static void audio_dma_callback(struct dma_chan_s *chan,
+                                    void* arg, ssize_t len)
+    {
+        struct audio_dma_s *audio_dma = (struct audio_dma_s*)arg;
+        struct ap_buffer_s *apb;
+        bool final = false;
+
+        apb = (struct ap_buffer_s *)dq_remfirst(&audio_dma->pendq);
+        ...
+        // Trigger DEQUEUE callback
+    #ifdef CONFIG_AUDIO_MULTI_SESSION
+        audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
+                            apb, OK, NULL);
+    #else
+        audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
+                            apb, OK);
+    #endif
+        ...
+    }
+    ```
 
 ### Summary
 
@@ -847,7 +842,7 @@ By studying the `audio_dma` implementation, developers can follow its design as 
 
 Let me know if you'd like this section adapted for a specific audience (e.g., beginner-friendly, API reference, or internal SDK documentation).
 
-### 2. audio\_i2s
+### 2. audio_i2s
 
 `audio_i2s` is a built-in lower-half audio driver provided by OpenVela, mainly used for audio data transmission and control. Below is a detailed explanation of `audio_i2s`.
 
@@ -937,17 +932,17 @@ struct i2s_ops_s
 
 The `i2s_ops_s` interface is closely related to hardware and must be implemented by hardware vendors. The main functionalities include:
 
-* Configuring I2S data transmission format (channel count, data width, sample rate).
-* Sending and receiving PCM data.
-* Configuring master clock (MCLK).
-* Control interface (`ioctl`).
+- Configuring I2S data transmission format (channel count, data width, sample rate).
+- Sending and receiving PCM data.
+- Configuring master clock (MCLK).
+- Control interface (`ioctl`).
 
 #### 2.2 Code Location
 
 The code location for `audio_i2s` is as follows:
 
-* Implementation: `nuttx/drivers/audio/audio_i2s.c`
-* Header file: `nuttx/include/nuttx/audio/i2s.h`
+- Implementation: `nuttx/drivers/audio/audio_i2s.c`
+- Header file: `nuttx/include/nuttx/audio/i2s.h`
 
 #### 2.3 Control Interface
 
@@ -960,19 +955,19 @@ The control interface of `audio_i2s` invokes the `i2s_ops_s` interface to implem
 
 ##### Control Interfaces
 
-* Get device capabilities: `getcaps`
+- Get device capabilities: `getcaps`
 
 ```c
     I2S_IOCTL(i2s, AUDIOIOC_GETCAPS, (unsigned long)caps);
 ```
 
-* Start device: `start`
+- Start device: `start`
 
 ```c
     I2S_IOCTL(i2s, AUDIOIOC_START, audio_i2s->playback);
 ```
 
-* Allocate buffer: `allocbuffer`
+- Allocate buffer: `allocbuffer`
 
 ```c
     I2S_IOCTL(i2s, AUDIOIOC_ALLOCBUFFER, (unsigned long)bufdesc);
@@ -1028,18 +1023,18 @@ static int audio_i2s_configure(FAR struct audio_lowerhalf_s *dev,
 
 1. `AUDIOIOC_ALLOCBUFFER`
 
-   * Function: Calls `i2s_ops_s->ioctl()` to allocate memory buffers for I2S PCM transmission.
+    - Function: Calls `i2s_ops_s->ioctl()` to allocate memory buffers for I2S PCM transmission.
 
 2. `AUDIOIOC_FREEBUFFER`
 
-   * Function: Frees previously allocated memory buffers.
+    - Function: Frees previously allocated memory buffers.
 
 3. `AUDIOIOC_ENQUEUBUFFER`
 
-   * Function: Transfers audio data (playback path) or empty buffers (recording path) to `audio_i2s` via enqueue ioctl.
-   * Implementation:
+    - Function: Transfers audio data (playback path) or empty buffers (recording path) to `audio_i2s` via enqueue ioctl.
+    - Implementation:
 
-     * `audio_i2s` calls `i2s_ops_s->i2s_send()` or `i2s_ops_s->i2s_receive()` to complete PCM data transfer.
+        - `audio_i2s` calls `i2s_ops_s->i2s_send()` or `i2s_ops_s->i2s_receive()` to complete PCM data transfer.
 
 Below is an example implementation of `audio_i2s_enqueuebuffer`:
 
@@ -1104,8 +1099,8 @@ By implementing `audio_i2s`, developers can quickly adapt to different vendors' 
 
 The code location for `sim_alsa` is as follows:
 
-* `arch/sim/src/sim/posix/sim_alsa.c`
-* `arch/sim/src/sim/posix/sim_offload.c`
+- `arch/sim/src/sim/posix/sim_alsa.c`
+- `arch/sim/src/sim/posix/sim_offload.c`
 
 #### 3.2 Control and Data Interfaces
 
@@ -1136,15 +1131,15 @@ static const struct audio_ops_s g_sim_audio_ops =
 
 The main function of `sim_alsa` is to bridge the OpenVela audio driver with the host ALSA system, supporting the following scenarios:
 
-* Audio playback: Transfers audio data from the simulated platform to the host ALSA system for playback.
-* Audio recording: Acquires audio data from the host ALSA system and passes it to the simulated platform.
+- Audio playback: Transfers audio data from the simulated platform to the host ALSA system for playback.
+- Audio recording: Acquires audio data from the host ALSA system and passes it to the simulated platform.
 
 #### 3.4 Implementation Notes
 
 The `sim_alsa` interface implementation is similar to `audio_dma`, primarily including:
 
-* Control interface: such as `getcaps`, `configure`, `start`, `stop`, etc., used for controlling audio devices.
-* Data interface: such as `enqueuebuffer`, used for managing the flow of audio data.
+- Control interface: such as `getcaps`, `configure`, `start`, `stop`, etc., used for controlling audio devices.
+- Data interface: such as `enqueuebuffer`, used for managing the flow of audio data.
 
 Developers can refer to the code implementation in `sim_alsa.c` and `sim_offload.c` for details.
 
@@ -1156,8 +1151,8 @@ Similar to the compress nodes provided by ALSA, OpenVela audio drivers can also 
 
 For example, on certain platforms, if a dedicated DSP (Digital Signal Processor) exists for audio codec operations, the compress node abstraction in OpenVela can support the following features:
 
-* Applications pass compressed audio data to the compress node via the ENQUEUE interface.
-* The driver communicates with the DSP via RPC to complete decoding and playback of the audio data.
+- Applications pass compressed audio data to the compress node via the ENQUEUE interface.
+- The driver communicates with the DSP via RPC to complete decoding and playback of the audio data.
 
 ### 2. Overview
 
@@ -1167,6 +1162,5 @@ Compress capability refers to the OpenVela audio driver's ability to play and re
 
 On the OpenVela simulation platform, `pcm1p` and `pcm1c` nodes are registered to simulate compress node functionality. The following features are currently implemented:
 
-* Supported formats: MP3 audio playback and recording.
-* Implementation: Audio encoding and decoding for MP3 format is performed using `libmad` and `lame` libraries on the host.
-
+- Supported formats: MP3 audio playback and recording.
+- Implementation: Audio encoding and decoding for MP3 format is performed using `libmad` and `lame` libraries on the host.

@@ -40,11 +40,11 @@ adb produces the following status information for each device:
 
 - State: The connection state of the device can be one of the following:
 
-  - offline: The device is not connected to adb or is not responding.
+    - offline: The device is not connected to adb or is not responding.
 
-  - device: The device is connected to the adb server. However, this does not imply that the Guest system is fully booted and operational. The device can be connected to adb while the system is still booting.After boot-up, this is the normal operational state of a device.
+    - device: The device is connected to the adb server. However, this does not imply that the Guest system is fully booted and operational. The device can be connected to adb while the system is still booting.After boot-up, this is the normal operational state of a device.
 
-  - no device: There is no device connected.
+    - no device: There is no device connected.
 
 ### Emulators not listed
 

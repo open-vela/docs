@@ -145,11 +145,11 @@ Exit GDB:
 
 3. Open the openvela workspace.
 
-   To open the workspace, go to the “File” > “Open Folder”... menu, and select the folder where openvela is located.
+    To open the workspace, go to the “File” > “Open Folder”... menu, and select the folder where openvela is located.
 
-   Alternatively, if you launch Visual Studio Code using a terminal, you can use the source code path of openvela as the first parameter for a “code” command.
+    Alternatively, if you launch Visual Studio Code using a terminal, you can use the source code path of openvela as the first parameter for a “code” command.
 
-   For example, use the following command to open the current directory as a workspace for Visual Studio Code.
+    For example, use the following command to open the current directory as a workspace for Visual Studio Code.
 
     ```bash
     code .
@@ -157,13 +157,13 @@ Exit GDB:
 
 4. Add the startup configuration.
 
-   To debug or run the openvela source code in Visual Studio Code, select “Run and Debug” on the Debug view or press F5. Then, Visual Studio Code will run the current active file.
+    To debug or run the openvela source code in Visual Studio Code, select “Run and Debug” on the Debug view or press F5. Then, Visual Studio Code will run the current active file.
 
-   For most debugging scenarios, it is useful to create a startup configuration file that can be used to configure and save the debug settings. Save the debug configurations in a “launch.json” file located in a “.vscode” folder in the workspace (project’s root folder) or in the user settings or workspace settings.
+    For most debugging scenarios, it is useful to create a startup configuration file that can be used to configure and save the debug settings. Save the debug configurations in a “launch.json” file located in a “.vscode” folder in the workspace (project’s root folder) or in the user settings or workspace settings.
 
-   To create a “launch.json” file, select “create a launch.json file” in the Run start view.
+    To create a “launch.json” file, select “create a launch.json file” in the Run start view.
 
-   The following is the startup configurations for debugging openvela:
+    The following is the startup configurations for debugging openvela:
 
     ```bash
     {
@@ -186,7 +186,7 @@ Exit GDB:
     }
     ```
 
-   If you go back to the File Explorer view (Ctrl+Shift+E), you will see that Visual Studio Code has created a “.vscode” folder and added the “launch.json” file to the workspace.
+    If you go back to the File Explorer view (Ctrl+Shift+E), you will see that Visual Studio Code has created a “.vscode” folder and added the “launch.json” file to the workspace.
 
 5. Launch Emulator with the “-s” and “-S” options to use GDB.
 
@@ -196,7 +196,7 @@ Exit GDB:
 
 6. Start a debug session.
 
-   To start a debug session, use the “Configuration” drop-down list in the Run and Debug view and select the “Debug openvela” configuration.After setting the startup configuration, use `F5` to start a debug session.
+    To start a debug session, use the “Configuration” drop-down list in the Run and Debug view and select the “Debug openvela” configuration.After setting the startup configuration, use `F5` to start a debug session.
 
 ## Use Clion(Remote Debug)
 
@@ -204,43 +204,43 @@ Exit GDB:
 
 2. Config SSH Configurations
 
-   click `Customize | All Settings` to menu from Welcome page
-   (if you already open a project click `File | Close Project` back to welcome page)
+    click `Customize | All Settings` to menu from Welcome page
+    (if you already open a project click `File | Close Project` back to welcome page)
 
-   click the `+` button and fill the ssh info (then check) like this
-   ![003.png](images/003.png)
+    click the `+` button and fill the ssh info (then check) like this
+    ![003.png](images/003.png)
 
 3. Config and Choose Remote Project
 
-   On Welcome page select `Remote Development | SSH | New Project`
-   select the ssh connection we config before and click the button `Check Connection and Continute`
-   choose ide then select the project when we clone before
-   then click `Start IDE and Connect`
+    On Welcome page select `Remote Development | SSH | New Project`
+    select the ssh connection we config before and click the button `Check Connection and Continute`
+    choose ide then select the project when we clone before
+    then click `Start IDE and Connect`
 
-   ![004.png](images/004.png)
+    ![004.png](images/004.png)
 
-   wait for download finish and `Authenticate` like this
-   ![005.png](images/005.png)
+    wait for download finish and `Authenticate` like this
+    ![005.png](images/005.png)
 
 4. Create Debug Configuration
 
-   click `Add Configuration | Remote GDB Server` and config like this
-   ![006.png](images/006.png)
+    click `Add Configuration | Remote GDB Server` and config like this
+    ![006.png](images/006.png)
 
-   Target can be created with default(just a target)
-   ![007.png](images/007.png)
+    Target can be created with default(just a target)
+    ![007.png](images/007.png)
 
 5. Launch Emulator with the `-s` and `-S` options to use gdb.
 
-    ```
+    ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 
 6. Start a debug session.
 
-   click debug icon then we can debug
-   ![008.png](images/008.png)
+    click debug icon then we can debug
+    ![008.png](images/008.png)
 
-   (you would get the confirmation when you do the first debug)
-   ![009.png](images/009.png)
-   ![010.png](images/010.png)
+    (you would get the confirmation when you do the first debug)
+    ![009.png](images/009.png)
+    ![010.png](images/010.png)

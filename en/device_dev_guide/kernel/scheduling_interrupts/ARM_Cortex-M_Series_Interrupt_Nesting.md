@@ -13,17 +13,19 @@ This document introduces the support for interrupt nesting in the ARM Cortex-M s
 The system supports zero-latency interrupt nesting in the following two cases:
 
 - No interrupt stack, only process stack.
-     - Interrupt nesting is supported by default.
-     - Both normal operation and interrupt/exception triggering use the current process stack pointed to by the MSP (Main Stack Pointer).
-     - Note: This mode may require configuring a larger process stack.
+
+    - Interrupt nesting is supported by default.
+    - Both normal operation and interrupt/exception triggering use the current process stack pointed to by the MSP (Main Stack Pointer).
+    - Note: This mode may require configuring a larger process stack.
 
 - With interrupt stack.
-     - Requires configuring `CONFIG_ARCH_INTERRUPTSTACK` (for details, refer to [CONFIG Configuration](#1-config-configuration)).
-     - Handler mode (entered when an interrupt/exception is triggered): The hardware automatically switches to MSP. After system initialization, MSP always points to the interrupt stack, and interrupt/exception handling runs on the interrupt stack.
-     - Thread mode (entered during normal process execution): Uses PSP (Process Stack Pointer). After system initialization, PSP always points to the current process stack, and process execution runs on the process stack.
-     - After system reset (Reset):
-         - The system is in Thread mode, privileged level. The hardware uses MSP by default, which points to `IDLE_STACK` in the `_vectors` table (for details, refer to [System Initialization](#2-system-initialization)).
-         - During system initialization, MSP and PSP are adjusted: MSP points to the top of the interrupt stack, and PSP points to the current position of the IDLE process stack.
+
+    - Requires configuring `CONFIG_ARCH_INTERRUPTSTACK` (for details, refer to [CONFIG Configuration](#1-config-configuration)).
+    - Handler mode (entered when an interrupt/exception is triggered): The hardware automatically switches to MSP. After system initialization, MSP always points to the interrupt stack, and interrupt/exception handling runs on the interrupt stack.
+    - Thread mode (entered during normal process execution): Uses PSP (Process Stack Pointer). After system initialization, PSP always points to the current process stack, and process execution runs on the process stack.
+    - After system reset (Reset):
+        - The system is in Thread mode, privileged level. The hardware uses MSP by default, which points to `IDLE_STACK` in the `_vectors` table (for details, refer to [System Initialization](#2-system-initialization)).
+        - During system initialization, MSP and PSP are adjusted: MSP points to the top of the interrupt stack, and PSP points to the current position of the IDLE process stack.
 
 #### Zero-Latency Interrupt Priority Arrangement
 
@@ -45,9 +47,7 @@ up_enable_irq(NVIC_IRQ_PENDSV);
 up_trigger_irq(NVIC_IRQ_PENDSV, 0);
 ```
 
-> Note
->
-> Since context switching also triggers PendSV, it is necessary to determine in the PendSV's ISR whether it is triggered by the system or by the ISR itself.
+> **Note**: Since context switching also triggers PendSV, it is necessary to determine in the PendSV's ISR whether it is triggered by the system or by the ISR itself.
 
 ### 2. Maskable Interrupt Nesting
 
@@ -112,37 +112,51 @@ __start,
 When the interrupt stack is not enabled, new platform porting needs to meet the following requirements:
 
 1. State after hardware reset:
-     - `CONTROL.SELSP = 0`, using MSP by default, pointing to `IDLE_STACK`.
-     - The system is in Thread mode, privileged level.
+
+    - `CONTROL.SELSP = 0`, using MSP by default, pointing to `IDLE_STACK`.
+    - The system is in Thread mode, privileged level.
+
 2. Reset entry implementation:
-     - When implementing the Reset entry `__start` in vendor code, the above state should be maintained.
-     - Use MSP throughout system operation; do not use PSP (Process Stack Pointer).
+
+    - When implementing the Reset entry `__start` in vendor code, the above state should be maintained.
+    - Use MSP throughout system operation; do not use PSP (Process Stack Pointer).
 
 #### Case Where Interrupt Stack Is Enabled
 
 When the interrupt stack is enabled, new platform porting needs to meet the following requirements:
 
 1. State after hardware reset:
-     - `CONTROL.SELSP = 0`, using MSP by default, pointing to `IDLE_STACK`.
-     - The system is in Thread mode, privileged level.
+
+    - `CONTROL.SELSP = 0`, using MSP by default, pointing to `IDLE_STACK`.
+    - The system is in Thread mode, privileged level.
+
 2. Reset entry implementation:
-     - When implementing the Reset entry `__start` in vendor code, the above state should be maintained.
-     - During system initialization, `arm_initialize_stack` is called to switch stacks:
-         - MSP points to the top of the interrupt stack.
-         - PSP points to the current position of the `IDLE` process stack.
-         - Set `CONTROL.SELSP = 1` to enable PSP.
-         - ARMv8-M also requires setting PSPLIM and MSPLIM.
+
+    - When implementing the Reset entry `__start` in vendor code, the above state should be maintained.
+    - During system initialization, `arm_initialize_stack` is called to switch stacks:
+
+        - MSP points to the top of the interrupt stack.
+        - PSP points to the current position of the `IDLE` process stack.
+        - Set `CONTROL.SELSP = 1` to enable PSP.
+        - ARMv8-M also requires setting PSPLIM and MSPLIM.
+
 3. Case with OTA support: If OTA is supported, there may be multiple firmwares (such as `boot`, `ota`, `ap`, etc.). When `boot` jumps to `ap` for execution, pay attention to the following:
- - State before jumping:
-     - `CONTROL.SELSP = 1`, using PSP pointing to the `boot` process stack.
-     - MSP points to the `boot` interrupt stack.
-- Requirements for jumping to `ap`:
-     - Correctly set the stack pointer register to ensure the current stack pointer points to the `ap`'s `IDLE` process stack.
-     - The following are two common cases:
-         - `CONTROL.SELSP = 1`: Use PSP pointing to the `ap`'s `IDLE` stack. (ARMv8-M also requires setting PSPLIM).
-         - `CONTROL.SELSP = 0`: Use MSP pointing to the `ap`'s `IDLE` stack. (ARMv8-M also requires setting MSPLIM).
-- Notes on Reset entry implementation:
-     - Note that entering `__start` may not be in a hardware reset state, requiring additional handling.
+
+    - State before jumping:
+
+        - `CONTROL.SELSP = 1`, using PSP pointing to the `boot` process stack.
+        - MSP points to the `boot` interrupt stack.
+
+    - Requirements for jumping to `ap`:
+
+        - Correctly set the stack pointer register to ensure the current stack pointer points to the `ap`'s `IDLE` process stack.
+        - The following are two common cases:
+            - `CONTROL.SELSP = 1`: Use PSP pointing to the `ap`'s `IDLE` stack. (ARMv8-M also requires setting PSPLIM).
+            - `CONTROL.SELSP = 0`: Use MSP pointing to the `ap`'s `IDLE` stack. (ARMv8-M also requires setting MSPLIM).
+
+    - Notes on Reset entry implementation:
+
+        - Note that entering `__start` may not be in a hardware reset state, requiring additional handling.
 
 ### 4. Interrupt Priority Settings
 

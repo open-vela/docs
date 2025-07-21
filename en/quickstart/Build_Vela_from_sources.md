@@ -12,7 +12,7 @@ The first step is to initialize the openvela configuration for the target develo
 
 Select the configuration by passing “vendor/<vendor name>/boards/<board name>/configs/<board configuration>” as a parameter to build.sh
 
-```
+```bash
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
 ```
 

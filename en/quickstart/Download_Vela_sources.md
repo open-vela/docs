@@ -62,9 +62,7 @@ Run the following command to download the source code tree of openvela to your w
 repo sync -c -j8
 ```
 
-> Note
->
-> The openvela project uses **clang-format 14** version for code style checking. For more details, please see the [Code Style Checking Guide](../contribute/code_style_check_guide.md).
+> > **Note**: The generated trace log file is named trace.txt.: The openvela project uses **clang-format 14** version for code style checking. For more details, please see the [Code Style Checking Guide](../contribute/code_style_check_guide.md).
 
 ## Common Issues
 

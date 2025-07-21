@@ -15,49 +15,56 @@
 ### Audio Support
 
 - Function: Enable audio device driver.
-  - Required for all product categories except specific module types.
+
+    - Required for all product categories except specific module types.
 
 ### Support Audio Composition
 
 - Function: Support composite nodes.
-  - Detailed explanation of composite nodes can be found in [Audio Driver Principle Description]().
+
+    - Detailed explanation of composite nodes can be found in [Audio Driver Principle Description](./Audio_Driver_Prin_desc.md).
 
 ### Support Multiple Sessions
 
 - Function: Support multiple sessions.
-  - By default, this option is usually **disabled**.
+
+    - By default, this option is usually **disabled**.
 
 ### Audio Buffer Configuration
 
 - Function: Configure audio buffer.
-  - Buffers are used for data transfer between applications and the audio driver.
+
+    - Buffers are used for data transfer between applications and the audio driver.
 
 ### Support Audio Buffers with Greater Than 65K Samples
 
 ![img](./figures/002.png)
 
 - Function: Support buffers larger than 65K samples.
-  - By default, buffer size is defined using `uint16_t`, with a maximum of 32K samples. After enabling this option, buffer size is defined using `uint32_t`, supporting up to 65K samples.
 
-  Code example:
+    - By default, buffer size is defined using `uint16_t`, with a maximum of 32K samples. After enabling this option, buffer size is defined using `uint32_t`, supporting up to 65K samples.
 
-  ```C
-  #ifdef CONFIG_AUDIO_LARGE_BUFFERS
-  typedef uint32_t apb_samp_t;
-  #else
-  typedef uint16_t apb_samp_t;
-  #endif
-  ```
+    Code example:
+
+    ```C
+    #ifdef CONFIG_AUDIO_LARGE_BUFFERS
+    typedef uint32_t apb_samp_t;
+    #else
+    typedef uint16_t apb_samp_t;
+    #endif
+    ```
 
 ### Number of Buffers for Audio Processing
 
 - Function: Set the number of buffers for audio processing.
-  - Default value: 2.
+
+    - Default value: 2.
 
 ### Size of Each Audio Buffer for Audio Processing
 
 - Function: Set the size of each audio processing buffer.
-  - Default value: 8192.
+
+    - Default value: 8192.
 
 ### Support for Driver-Specified Buffer Sizes
 
@@ -68,9 +75,11 @@
 ![img](./figures/003.png)
 
 - Function: Configure audio formats supported by the device.
-  - Supported formats include:
-    - PCM Audio: Support for PCM format.
-    - MPEG 3 Layer 1: Support for audio compression devices; other formats can be selected based on device capabilities.
+
+    - Supported formats include:
+
+        - PCM Audio: Support for PCM format.
+        - MPEG 3 Layer 1: Support for audio compression devices; other formats can be selected based on device capabilities.
 
 ### Exclude Specific Audio Features
 
@@ -79,7 +88,8 @@
 ### Use Custom Device Path
 
 - Function: Customize the registration path of audio device nodes.
-  - Default registration path: `/dev/audio`.
+
+    - Default registration path: `/dev/audio`.
 
 ## III. Configuration Examples
 

@@ -191,10 +191,10 @@ int irq_attach(int irq, xcpt_t isr, FAR void *arg)
 
 #### 1. Working mechanism
 
- - When an interrupt is triggered, `isr` is called in the interrupt context.
- - The advantage of this method is high efficiency because interrupt handling is completed directly in the interrupt context.
- - All interrupt responses are masked during the execution of `isr`, which is not suitable for systems with high real-time requirements.
- - APIs that cause blocking (such as `sleep`, `wait`, etc.) cannot be called in `isr`.
+- When an interrupt is triggered, `isr` is called in the interrupt context.
+- The advantage of this method is high efficiency because interrupt handling is completed directly in the interrupt context.
+- All interrupt responses are masked during the execution of `isr`, which is not suitable for systems with high real-time requirements.
+- APIs that cause blocking (such as `sleep`, `wait`, etc.) cannot be called in `isr`.
 
 #### 2. Unbinding
 
@@ -204,8 +204,8 @@ irq_detach(irq)
 
 #### 3. Advantages and disadvantages
 
- - Advantage: High processing efficiency.
- - Disadvantage: All interrupts are masked during interrupt handling, affecting system real-time performance.
+- Advantage: High processing efficiency.
+- Disadvantage: All interrupts are masked during interrupt handling, affecting system real-time performance.
 
 ### 2. Using `irq_attach_thread`
 
@@ -215,25 +215,27 @@ int irq_attach_thread(int irq, xcpt_t isr, xcpt_t isrthread, FAR void *arg, int 
 
 #### 1. Working mechanism
 
- - Users need to provide 1 or 2 handling functions:
-     - `isr` is called in the interrupt context, typically used to mask the current interrupt and quickly wake up `isrthread`.
-     - `isrthread` is called in the thread context, used to handle remaining interrupt tasks.
- - If `isr` is `NULL`, `isrthread` will be called directly.
+- Users need to provide 1 or 2 handling functions:
+
+    - `isr` is called in the interrupt context, typically used to mask the current interrupt and quickly wake up `isrthread`.
+    - `isrthread` is called in the thread context, used to handle remaining interrupt tasks.
+
+- If `isr` is `NULL`, `isrthread` will be called directly.
 
 #### 2. Advantages
 
- - The execution time of `isr` is shortened as much as possible, thereby improving system real-time performance.
- - `isrthread` runs as a thread, supports priority scheduling, and can be preempted by other high-priority tasks.
+- The execution time of `isr` is shortened as much as possible, thereby improving system real-time performance.
+- `isrthread` runs as a thread, supports priority scheduling, and can be preempted by other high-priority tasks.
 
 #### 3. Disadvantages
 
- - Consumes more memory (independent thread stack and interrupt thread structure).
- - Increases a context switch, reducing efficiency.
- - There will be a certain delay in the completion time of interrupt handling (about 5 microseconds).
+- Consumes more memory (independent thread stack and interrupt thread structure).
+- Increases a context switch, reducing efficiency.
+- There will be a certain delay in the completion time of interrupt handling (about 5 microseconds).
 
 #### 4. Unbinding
 
- - Use the following method to unbind:
+- Use the following method to unbind:
 
     ```C
     irq_detach_thread(irq)
@@ -247,21 +249,23 @@ int irq_attach_wqueue(int irq, xcpt_t isr, xcpt_t isrwork, FAR void *arg, int pr
 
 #### 1. Working mechanism
 
- - Users need to provide 1 or 2 handling functions:
-     - `isr` is called in the interrupt context.
-     - `isrwork` is called in the work queue context.
- - The difference from `irq_attach_thread` is that `isrwork` is executed in the work queue instead of an independent thread.
+- Users need to provide 1 or 2 handling functions:
+
+    - `isr` is called in the interrupt context.
+    - `isrwork` is called in the work queue context.
+
+- The difference from `irq_attach_thread` is that `isrwork` is executed in the work queue instead of an independent thread.
 
 #### 2. Advantages
 
- - Multiple interrupts with the same priority can reuse the same work queue, thereby saving memory.
- - High-priority work queues can preempt low-priority queues.
- - If there are many interrupts, it saves more memory than `irq_attach_thread`.
+- Multiple interrupts with the same priority can reuse the same work queue, thereby saving memory.
+- High-priority work queues can preempt low-priority queues.
+- If there are many interrupts, it saves more memory than `irq_attach_thread`.
 
 #### 3. Disadvantages
 
- - If there is only one interrupt, creating a work queue will bring additional overhead.
- - In a multi-core system, the flexibility to control thread attributes and quantity is poor.
+- If there is only one interrupt, creating a work queue will bring additional overhead.
+- In a multi-core system, the flexibility to control thread attributes and quantity is poor.
 
 #### 4. Unbinding
 
@@ -271,11 +275,11 @@ irq_detach_wqueue(irq)
 
 ### Summary and comparison
 
-| Binding method        | Advantages                          | Disadvantages                                                | Usage scenarios                          |
-| :-------------------- | :---------------------------------- | :----------------------------------------------------------- | :--------------------------------------- |
-| irq_attach            | High efficiency, direct handling in the interrupt context. | All interrupts are masked during interrupt handling, not suitable for systems with high real-time requirements. | Scenarios with simple processing logic and low real-time requirements. |
-| irq_attach_thread     | Improves real-time performance, supports priority scheduling. | Consumes more memory, increases context switching, and there is a certain delay in processing completion. | Scenarios with high real-time requirements. |
-| irq_attach_wqueue     | Saves memory, supports work queue reuse. | Low efficiency in single interrupt scenarios, insufficient flexibility in multi-core scenarios. | Scenarios with many interrupts and limited memory resources. |
+| Binding method    | Advantages                                                    | Disadvantages                                                                                                   | Usage scenarios                                                        |
+| :---------------- | :------------------------------------------------------------ | :-------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------- |
+| irq_attach        | High efficiency, direct handling in the interrupt context.    | All interrupts are masked during interrupt handling, not suitable for systems with high real-time requirements. | Scenarios with simple processing logic and low real-time requirements. |
+| irq_attach_thread | Improves real-time performance, supports priority scheduling. | Consumes more memory, increases context switching, and there is a certain delay in processing completion.       | Scenarios with high real-time requirements.                            |
+| irq_attach_wqueue | Saves memory, supports work queue reuse.                      | Low efficiency in single interrupt scenarios, insufficient flexibility in multi-core scenarios.                 | Scenarios with many interrupts and limited memory resources.           |
 
 ## III. Implementation Examples of Interrupt Thread/Work Queue
 
