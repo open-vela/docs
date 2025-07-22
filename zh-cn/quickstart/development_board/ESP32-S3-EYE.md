@@ -1,6 +1,6 @@
 # 在 ESP32-S3-EYE 开发板上移植 openvela 并启用 Wi-Fi 功能
 
-\[ [English](../../../en/quickstart/development_board/) | 简体中文 \]
+\[ [English](../../../en/quickstart/development_board/ESP32-S3-EYE.md) | 简体中文 \]
 
 ## 一、概述
 
