@@ -1,5 +1,7 @@
 # 开发 openvela UI 应用
 
+\[ [English](../../../en/app_dev/system_apps/Dev_UI_App.md)  | 简体中文 \]
+
 ## 一、前提条件
 
 1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
