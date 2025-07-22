@@ -98,7 +98,7 @@ Audio control module, responsible for implementing audio-related functions, incl
 
 The goal is to create a music player interface like this.
 
-![img](../../demo/images/028.png)
+![img](../../demo/images/025.png)
 
 The user interface (UI) of the music player is organized into multiple modules in a grouped manner. Below is the complete hierarchy of the UI structure:
 
