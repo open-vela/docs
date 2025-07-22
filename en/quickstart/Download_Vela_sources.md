@@ -18,7 +18,7 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
     - Github (Public key registration is required. Refer to [Github documents](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account):
 
         ``` bash
-        repo init --partial-clone -u git@github.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+        repo init --partial-clone -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
 
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
@@ -31,8 +31,8 @@ The openvela source code is located in a Git repository hosted by [GitHub](https
     - Gitee (Public key registration is required. Refer to [Gitee document](https://gitee.com/help/articles/4191):
 
         ```bash
-        repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
-        
+        repo init --partial-clone -u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+
         # Install Git LFS (Large File Storage) for managing large files
         sudo apt install git-lfs
         cd .repo/manifests 

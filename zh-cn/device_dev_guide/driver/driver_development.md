@@ -1,6 +1,6 @@
 # 驱动开发
 
-\[ [English](../../../en/device_dev_guide/driver/driver_development.md) | 简体中文 \]
+\[ [English](../../../en/device_dev_guide/driver/driver-troubleshooting-guide.md) | 简体中文 \]
 
 ## 一、驱动内部结构
 
