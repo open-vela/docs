@@ -622,7 +622,7 @@ music_player &
 
 关闭模拟器退出 Demo，如下图所示：
 
-![img](images/026.png)
+![img](../../demo/images/026.png)
 
 ## 七、常见问题
 
