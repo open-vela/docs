@@ -1,4 +1,4 @@
-# Boot Process
+# System Boot Process
 
 \[ English | [简体中文](../../../zh-cn/device_dev_guide/kernel/boot_process.md) \]
 
