@@ -8,7 +8,7 @@
 2. Search for the keyword **audio**.
 3. Locate the **Audio Support** configuration item. The interface is shown in the figure below (UI color scheme may vary).
 
-   ![img](./figures/001.png)
+    ![img](./figures/001.png)
 
 ## II. Explanation of Configuration Items
 
@@ -44,15 +44,15 @@
 
     - By default, buffer size is defined using `uint16_t`, with a maximum of 32K samples. After enabling this option, buffer size is defined using `uint32_t`, supporting up to 65K samples.
 
-    Code example:
+    - Code example:
 
-    ```C
-    #ifdef CONFIG_AUDIO_LARGE_BUFFERS
-    typedef uint32_t apb_samp_t;
-    #else
-    typedef uint16_t apb_samp_t;
-    #endif
-    ```
+        ```C
+        #ifdef CONFIG_AUDIO_LARGE_BUFFERS
+        typedef uint32_t apb_samp_t;
+        #else
+        typedef uint16_t apb_samp_t;
+        #endif
+        ```
 
 ### Number of Buffers for Audio Processing
 
