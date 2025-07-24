@@ -2,7 +2,6 @@
 
 \[ English | [简体中文](../../../zh-cn/app_dev/system_apps/Dev_UI_App.md) \]
 
-
 ## I Prerequisites
 
 1. Set up the development environment. Please refer to [Setting Up the Development Environment](../quickstart/Set_up_the_development_environment_zh-cn.md).
@@ -622,7 +621,7 @@ music_player &
 
 Close the emulator to exit the demo, as shown below:
 
-![img](images/026.png)
+![img](../../demo/images/026.png)
 
 ## 7. FAQ
 
@@ -645,14 +644,14 @@ Close the emulator to exit the demo, as shown below:
     }
     ```
 
-| Parameter | Description |
-| :--- | :--- |
-| path | File path of the media to be played. |
-| name | Name of the media. |
-| artist | Name of the artist. |
-| cover | Path to the cover image. If not provided, a default cover will be displayed. |
-| total_time | The total duration of the media, in `milliseconds`. |
-| color | Theme color, currently not in use. |
+| Parameter  | Description                                                                  |
+| :--------- | :--------------------------------------------------------------------------- |
+| path       | File path of the media to be played.                                         |
+| name       | Name of the media.                                                           |
+| artist     | Name of the artist.                                                          |
+| cover      | Path to the cover image. If not provided, a default cover will be displayed. |
+| total_time | The total duration of the media, in `milliseconds`.                          |
+| color      | Theme color, currently not in use.                                           |
 
     Refer to this format to add the media you want to play to this configuration file.
 
