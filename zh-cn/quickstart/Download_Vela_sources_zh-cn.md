@@ -4,7 +4,7 @@
 
 `openvela` 源码托管在 [GitHub](https://github.com/open-Vela)、[Gitee](https://gitee.com/open-vela) 和 [GitCode](https://gitcode.com/open-vela) 平台的 Git 仓库中。本指南将引导您完成源码的下载。
 
-### 准备工作
+## 准备工作
 
 - 已安装 `repo` 工具。
 - 源码下载需要稳定的网络连接。

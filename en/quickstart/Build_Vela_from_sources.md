@@ -1,12 +1,12 @@
-# Compile the openvela source code
+# Compile the openvela Source Code
 
 \[ English | [简体中文](./../../zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md) \]
 
-## Use build.sh to build openvela
+## Use build.sh to Build openvela
 
 After installing the required packages for openvela and downloading the openvela source code, you can compile the openvela source code into a binary file to be run on the development board.
 
-### Initialize configuration
+### Initialize Configuration
 
 The first step is to initialize the openvela configuration for the target development board based on the existing configuration.
 
@@ -20,6 +20,6 @@ Select the configuration by passing “vendor/<vendor name>/boards/<board name>/
 
 - [Quick Start FAQ](../faq/QuickStart_FAQ.md)
 
-## Next steps
+## Next Steps
 
 For the next step, if you choose Emulator to run openvela, refer to [Run openvela on Emulator](./Run_Vela_on_Vela_Emulator.md).

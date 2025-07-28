@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](./../../zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md) \]
 
-## Hardware requirements
+## Hardware Requirements
 
 The development workstation should meet the following hardware requirements:
 
@@ -10,13 +10,13 @@ The development workstation should meet the following hardware requirements:
 - At least 80 GB of remaining hard disk space for downloading and compiling source codes.
 - At least 16 GB of RAM
 
-## Operating system requirements
+## Operating System Requirements
 
 **The development workstation must run a 64-bit Ubuntu 22.04 Linux distribution.**  
 
 > **Note**: **WSL** and **Docker** environments are not supported.  
 
-## Install required software packages
+## Install Required Software Packages
 
 Use Ubuntu 22.04 to compile openvela. Run the following command to install the required packages on Ubuntu 22.04:
 
@@ -43,7 +43,7 @@ sudo mv repo /usr/local/bin/
 
 The Repo Launcher provides a Python script that initializes a checkout and downloads the full Repo tool.
 
-## Install KConfig frontend
+## Install KConfig Frontend
 
 The configuration system of openvela uses [KConfig](https://www.kernel.org/doc/Documentation/kbuild/kconfig-language.txt). KConfig configures the system via a series of interactive menu-based frontends, part of the kconfig-frontends package.Whether to use a package or build it from source depends on the current operating system. The source code is available in [NuttX tools repository](https://bitbucket.org/nuttx/tools/src/master/kconfig-frontends/).
 
@@ -57,16 +57,16 @@ sudo apt install kconfig-frontends
 sudo apt install python3 python3-pip python-is-python3
 ```
 
-## Install Python package
+## Install Python Package
 
 ```bash
 sudo pip3 install kconfiglib pyelftools cxxfilt
 ```
 
-## Common Issues
+## FAQ
 
 - [Quick Start FAQ](../faq/QuickStart_FAQ.md)
 
-## Next steps
+## Next Steps
 
 Refer to [Download openvela code](./Download_Vela_sources.md).

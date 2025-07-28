@@ -30,7 +30,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
     Maintenance and testing tools include common utilities and diagnostic frameworks. In addition to standard tools like Logger and Debugger, they feature the Emulator — a high-fidelity device simulator that supports full functional emulation, including CPU instruction-set simulation.  The Emulator currently supports multiple product form factors, including smart panels, smartwatches, smart bands, and smart screen speakers. By leveraging the Emulator’s PC-based debugging tools, developers can perform application development and testing without physical devices, significantly reducing both development and debugging efforts.
 
-## Technical advantages
+## Technical Advantages
 
 - **Highly Scalable**: openvela has been designed to be modular and scalable, allowing it to easily adapt to a wide range of IoT applications. It can fit in a small BLE module with 32KB RAM, and scale up to a powerful smart display device with 512MB RAM, highly scalable!
 
@@ -44,13 +44,15 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Rich Developer Tools**: openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dumb, and log analysis tools.
 
-## Supported platforms
+## Hardware Support
 
 - openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS, CEVA, etc.) and platforms.
 - Please refer to the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page for a complete list.
-- For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/STM32H750.md).
+- For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/Development_Board.md).
 
 ## Quick start
+
+### Device Development
 
 If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform.For more information, refer to the following guide.
 
@@ -59,7 +61,11 @@ If you want to experience openvela, we provide a fully functional emulator that 
 3. [Compile openvela source code](./en/quickstart/Build_Vela_from_sources.md)
 4. [Run build artifacts on Emulator](./en/quickstart/Run_Vela_on_Vela_Emulator.md)
 
-## Sub-repository List  
+### Quick App Development
+
+[Quick App Quick Start](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
+
+## List of Sub-repositories
 
 | Sub-repository Link                            | Description                                                                                                                                                                                                                                                                                                                                                                                                         |
 | :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -75,15 +81,35 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 - [Documentation Center](https://doc.openvela.com/document)
 
-## Examples Tutorials
+## Application Example Center
 
-- [Music player](./en/demo/Music_Player_Example.md)
-- [Smart band](./en/demo/Smart_Band_Example.md)
-- [Bike computer](./en/demo/X_Track.md)
+A collection of native and Quick App examples for developers to learn from.
+
+### Native Apps
+
+Here are some typical native application examples demonstrating the usage of different modules and features.
+
+- [Music Player](./en/demo/Music_Player_Example.md): Demonstrates audio playback, playlist management, and background services.
+- [Smart Band](./en/demo/Smart_Band_Example.md): Demonstrates sleep monitoring, heart rate monitoring, music playback, and a stopwatch.
+- [Cycling Computer](./en/demo/X_Track.md): Demonstrates GPS positioning, real-time data display, and route tracking.
+- [Calculator](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md): A basic example of UI and logic interaction.
+- [Relation Calculator](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
+- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md): Demonstrates a game loop, random number generation, and animation effects.
+
+To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/dev/README_zh-cn.md).
+
+### Quick Apps
+
+- [Mi Band Weather App](../../.././packages_fe_examples/blob/dev/weather/README.md): Demonstrates audio playback, playlist management, and background services.
+- [Music Player](../../.././packages_fe_examples/blob/dev/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
+- [Calendar](../../.././packages_fe_examples/blob/dev/calendar/README.md): Demonstrates a basic calendar.
+
+More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
 
 ## Code contribution
 
-Contribute: [Code contribution guide](./CONTRIBUTING.md).
+- [Code Contribution Guide](./CONTRIBUTING.md)
+- [Documentation Contribution Guide](./en/contribute/process/doc_dev_process.md)
 
 ## License agreement
 

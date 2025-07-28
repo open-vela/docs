@@ -1,4 +1,4 @@
-# Porting openvela to the ESP32-S3-EYE Development Board and Enabling the Wi-Fi Feature
+# Porting openvela to the ESP32-S3-EYE Development Board
 
 \[ English | [简体中文](../../../zh-cn/quickstart/development_board/ESP32-S3-EYE.md) \]
 

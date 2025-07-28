@@ -1,4 +1,4 @@
-# openvela Driver Development: FAQ and Best Practices
+# FAQ and Best Practices
 
 \[ English | [简体中文](../../../zh-cn/device_dev_guide/driver/driver-troubleshooting-guide.md) \]
 
@@ -79,7 +79,7 @@ In resource-constrained embedded systems, using memory efficiently and prudently
 - **Cause:** Repeatedly allocating and freeing small chunks of memory in frequently called paths, such as I/O handlers, causes the system heap to be continuously fragmented and coalesced. This eventually leads to a large number of small, non-contiguous memory blocks, known as **external fragmentation**, which reduces effective memory utilization.
 - **Solution:** For such scenarios, you should adopt a **persistent** memory strategy. Allocate the required buffer once during driver initialization and reuse it throughout the driver's lifecycle.
 
-### ### 2. Use memalign to Meet Hardware Alignment Requirements
+### 2. Use memalign to Meet Hardware Alignment Requirements
 
 - **Symptom:** DMA (Direct Memory Access) transfers fail or data is corrupted; performance is poor when accessing certain memory regions.
 - **Cause:** Many hardware peripherals (especially DMA controllers) require the memory buffers they operate on to have a specific address alignment (e.g., 32-byte or 64-byte aligned). Memory allocated by standard interfaces like `kmm_malloc()` is not guaranteed to meet such alignment requirements.

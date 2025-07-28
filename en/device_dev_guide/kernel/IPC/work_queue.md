@@ -970,8 +970,10 @@ The openvela work queue is a powerful and flexible background task processing fr
 **From an architectural and implementation perspective, this mechanism has the following key features:**
 
 1. **Diversified queue types**: The system provides multiple preset work queues to meet different scenario requirements:
+
     - **Kernel high-priority queue (HPWORK)**: Processes time-sensitive, fast-response kernel-level tasks.
     - **Kernel low-priority queue (LPWORK)**: A general-purpose background task processing queue for most routine tasks that do not require immediate execution.
     - In addition, it supports **user-mode work queues**, offering great flexibility.
+
 2. **Feature-rich APIs**: Provides a complete set of APIs covering task scheduling (`work_queue`), cancellation (`work_cancel`), event subscription/publishing (`work_notifier_setup`/`signal`), and dynamic management (`work_queue_create`), capable of meeting complex application requirements.
 3. **Simple and consistent design**: In the openvela OS, despite different queue types, the underlying implementation follows a unified and simple design philosophy. Each queue consists of a task queue and a group of worker threads, scheduled uniformly by the kernel. This consistency reduces system complexity and the learning curve for developers.

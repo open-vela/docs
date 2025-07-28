@@ -1,4 +1,4 @@
-# openvela 驱动开发：常见问题与最佳实践
+# 常见问题与最佳实践
 
 \[ [English](../../../en/device_dev_guide/driver/driver-troubleshooting-guide.md) | 简体中文 \]
 

@@ -1,4 +1,4 @@
-# openvela 信号量：同步、互斥与优先级管理
+# openvela 信号量
 
 \[ [English](../../../../en/device_dev_guide/kernel/resource_sync/semaphore_mechanism.md) | 简体中文 \]
 

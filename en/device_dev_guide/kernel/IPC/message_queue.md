@@ -978,12 +978,14 @@ The execution flow of its internal implementation `file_mq_timedreceive_internal
     - Key wake-up: Check if `nmsgs` was equal to `maxmsgs` before decrementing (`if (msgq->nmsgs-- == msgq->maxmsgs)`). If so, it means the queue has just changed from a full state to a non-full state, and sending tasks that may be waiting must be woken up at this point.
     - Call `nxmq_notify_receive()`, which finds one (or more) waiting sending tasks from the `waitfornotfull` list and moves them back to the ready queue.
     - Simultaneously, issue a `POLLOUT` event via `nxmq_pollnotify(msgq, POLLOUT)` to notify `poll/select` watchers that the queue is now writable.
+
 4. Exit critical section: Call `leave_critical_section()` to resume scheduling.
 5. Data return and resource recovery:
+
     - Use `memcpy` to copy the data in the message node to the user-provided buffer.
     - Call `nxmq_free_msg()` to return the message node to the global memory pool.
 
-#### Scenario B: Queue is Empty
+#### Scenario B: Queue is EmptyRPMsg employs a layered architecture
 
 1. Check the non-blocking flag: If the queue is empty (`mqmsg == NULL`), first check whether the `O_NONBLOCK` flag was set when `mq_open` was called.
     - If set, immediately exit the critical section and return the `-EAGAIN` error.

@@ -4,7 +4,7 @@
 
 The `openvela` source code is hosted in Git repositories on multiple platforms, including [GitHub](https://github.com/open-Vela), [Gitee](https://gitee.com/open-vela), and [GitCode](https://gitcode.com/open-vela). This guide will walk you through the process of downloading the source code.
 
-### Prerequisites
+## Prerequisites
 
 - You have the `repo` tool installed.
 - A stable internet connection is required for downloading the source code.
