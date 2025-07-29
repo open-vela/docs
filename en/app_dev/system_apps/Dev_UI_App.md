@@ -2,13 +2,13 @@
 
 \[ English | [简体中文](../../../zh-cn/app_dev/system_apps/Dev_UI_App.md) \]
 
-## I Prerequisites
+## I. Prerequisites
 
 1. Set up the development environment. Please refer to [Setting Up the Development Environment](../quickstart/Set_up_the_development_environment_zh-cn.md).
 2. Download the source code. Please refer to [Downloading the Openvela Source Code](../quickstart/Download_Vela_sources_zh-cn.md).
 3. Before starting this tutorial, please obtain the example code from [music_player](https://github.com/open-vela/packages_demos/tree/dev/music_player).
 
-## II Preliminary Concepts
+## II. Preliminary Concepts
 
 Before starting the tutorial, it is recommended to familiarize yourself with the following basic knowledge and tools to successfully complete the related development tasks:
 
@@ -19,11 +19,11 @@ Before starting the tutorial, it is recommended to familiarize yourself with the
 3. **LVGL**: Learn to use the LVGL embedded graphics library. LVGL is an open-source embedded graphics library widely used for developing high-performance user interfaces. Relevant documentation can be found in the [LVGL Official Documentation](https://docs.lvgl.io/).
 Understanding these concepts will help you complete the development tasks in the tutorial more efficiently.
 
-## III Introduction
+## III. Introduction
 
 This article describes how to write a simple music player in Openvela.
 
-## IV Project Structure
+## IV. Project Structure
 
 The project's code and resources are neatly organized in various directories and modules for efficient management and development. Below is the directory structure and file composition description of the `music_player` project.
 
@@ -68,31 +68,37 @@ packages/demos/music_player
 The roles of each directory and file are as follows:
 
 1. `res`:
-Resource directory: containing the static resource files required for the project to run:
-- `fonts`: Font file directory, containing the fonts used by the application.
-- `icons`: Icon file directory, containing various icons for interface display.
-- `musics`: Music resource directory, containing audio files and their corresponding configuration information.
-- `config.json`: Global configuration file, which stores the project’s configuration parameters.
 
-2. `audio_ctl.c` / `audio_ctl.h`
+    Resource directory: containing the static resource files required for the project to run:
 
-Audio control module, responsible for implementing audio-related functions, including audio input, output, and volume adjustment operations.
+    - `fonts`: Font file directory, containing the fonts used by the application.
+    - `icons`: Icon file directory, containing various icons for interface display.
+    - `musics`: Music resource directory, containing audio files and their corresponding configuration information.
+    - `config.json`: Global configuration file, which stores the project’s configuration parameters.
 
-3. `wifi.c` / `wifi.h`Wi-Fi control module, responsible for implementing Wi-Fi connection management, initialization, and other functionalities.
+2. `audio_ctl.c`/`audio_ctl.h`
 
-4. `music_player.c` / `music_player.h`Core logic of the music player, defining and implementing the main functionalities of music playback.
+    Audio control module, responsible for implementing audio-related functions, including audio input, output, and volume adjustment operations.
 
-5. `music_player_main.c`Main entry file of the program, responsible for initializing the music player and starting the main operational logic.
+3. `wifi.c`/`wifi.h`
+
+    Wi-Fi control module, responsible for implementing Wi-Fi connection management, initialization, and other functionalities.
+
+4. `music_player.c`/`music_player.h`
+
+    Core logic of the music player, defining and implementing the main functionalities of music playback.
+
+5. `music_player_main.c`
+
+    Main entry file of the program, responsible for initializing the music player and starting the main operational logic.
 
 6. `Kconfig`, `Make.defs`, `Makefile` build system files:
 
-- `Kconfig`: Defines the configuration information and build options for the project.
+    - `Kconfig`: Defines the configuration information and build options for the project.
+    - `Make.defs`: Definitions of compilation-related variables and dependency rules.
+    - `Makefile`: Defines the build process and dependency management for the project.
 
-- `Make.defs`: Definitions of compilation-related variables and dependency rules.
-
-- `Makefile`: Defines the build process and dependency management for the project.
-
-## 5. UI Application Development
+## V. UI Application Development
 
 ### 1. Overview of UI Structure
 
@@ -141,10 +147,6 @@ TOP Layer:
 - TOP Layer: Top interface.
     - VOLUME BAR: Volume control bar.
     - PLAYLIST GROUP: Playlist area.
-
-Of course. Here is the translation of the provided document into English. The translation aims for accuracy and maintains a formal, official tone suitable for technical documentation.
-
-***
 
 ### 2. Data Structure Design
 
@@ -385,7 +387,7 @@ static void app_refresh_play_status(void)
 
 ### 4. API Design
 
-1.  **Initialization Functions**
+1. **Initialization Functions**
 
     Initialization functions are responsible for tasks such as resource configuration, UI creation, and loading configuration files when the application starts. The main function APIs are:
 
@@ -399,7 +401,7 @@ static void app_refresh_play_status(void)
     static void app_create_top_layer(void);
     ```
 
-2.  **Timer Start Functions**
+2. **Timer Start Functions**
 
     Timer control tasks are used to start background processes that support dynamic UI updates, such as time display and playback progress updates.
 
@@ -408,7 +410,7 @@ static void app_refresh_play_status(void)
     static void app_start_updating_date_time(void);
     ```
 
-3.  **Album Operation APIs**
+3. **Album Operation APIs**
 
     Album operations are a core feature of the music player, supporting album sorting, switching, and related playback handling.
 
@@ -418,7 +420,7 @@ static void app_refresh_play_status(void)
     static void app_switch_to_album(int index);
     ```
 
-4.  **Player Status APIs**
+4. **Player Status APIs**
 
     Player status APIs are used to set the player's runtime state, such as playing, pausing, changing volume, or adjusting playback time. The following APIs implement these features:
 
@@ -429,7 +431,7 @@ static void app_refresh_play_status(void)
     static void app_set_volume(uint16_t volume);
     ```
 
-5.  **UI Refresh Function APIs**
+5. **UI Refresh Function APIs**
 
     UI refresh APIs are responsible for dynamically updating UI components, such as the real-time display of album information, playback status, volume bar, and playback progress.
 
@@ -444,7 +446,7 @@ static void app_refresh_play_status(void)
     static void app_refresh_volume_countdown_timer(void);
     ```
 
-6.  **Event Handler APIs**
+6. **Event Handler APIs**
 
     Event handling is a crucial part of user interaction, responsible for processing events from buttons, playlists, the volume bar, and more.
 
@@ -459,7 +461,7 @@ static void app_refresh_play_status(void)
     static void app_playback_progress_bar_event_handler(lv_event_t* e);
     ```
 
-7.  **Timer Callback Function APIs**
+7. **Timer Callback Function APIs**
 
     Timer-related callback functions are used to trigger tasks at fixed time intervals.
 
@@ -472,9 +474,9 @@ static void app_refresh_play_status(void)
 
 ### 5. Writing Project Configuration Files
 
--   The purpose of configuring the build system files is to compile all source code in the directory into an executable product.
--   When a new application is added, it requires new configuration options to determine whether to enable it, how much stack to allocate, its process execution priority, and its name.
--   To add the music player, the build system configuration files, including Kconfig, Makefile, and Make.defs, must be updated.
+- The purpose of configuring the build system files is to compile all source code in the directory into an executable product.
+- When a new application is added, it requires new configuration options to determine whether to enable it, how much stack to allocate, its process execution priority, and its name.
+- To add the music player, the build system configuration files, including Kconfig, Makefile, and Make.defs, must be updated.
 
 #### Kconfig File
 
@@ -522,11 +524,11 @@ CONFIGURED_APPS += $(APPDIR)/packages/demos/music_player
 endif
 ```
 
-## 6. Compiling and Running
+## VI. Compiling and Running
 
 ### 1. Configure the Project
 
-1.  Navigate to the root directory of the openvela repository and execute the following command to configure the music player.
+1. Navigate to the root directory of the openvela repository and execute the following command to configure the music player.
 
     > The emulator's configuration file (defconfig) is located in `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/`. Use `build.sh` to configure and compile the board's code.
 
@@ -534,15 +536,15 @@ endif
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
     ```
 
-    -   `build.sh`: A build script used to configure and compile openvela code.
-    -   `vendor/openvela/boards/vela/configs/*`: The configuration path.
-    -   `menuconfig`: Opens the menuconfig interface to modify project code configurations.
+    - `build.sh`: A build script used to configure and compile openvela code.
+    - `vendor/openvela/boards/vela/configs/*`: The configuration path.
+    - `menuconfig`: Opens the menuconfig interface to modify project code configurations.
 
     After execution, the following interface will appear:
 
     ![img](../../demo/images/020.png)
 
-2.  Press the `/` key to search for and modify the following configurations one by one:
+2. Press the `/` key to search for and modify the following configurations one by one:
 
     ```Bash
     LVX_USE_DEMO_MUSIC_PLAYER=y
@@ -551,27 +553,27 @@ endif
 
     > The following steps use `LVX_USE_DEMO_MUSIC_PLAYER` as an example; the process for other configurations is the same.
 
-    1.  Enter the configuration to search for, `LVX_USE_DEMO_MUSIC_PLAYER`. Fuzzy search, e.g., `music_player`, is supported. Find the corresponding configuration and press Enter to navigate to it.
+    1. Enter the configuration to search for, `LVX_USE_DEMO_MUSIC_PLAYER`. Fuzzy search, e.g., `music_player`, is supported. Find the corresponding configuration and press Enter to navigate to it.
 
         ![img](../../demo/images/021.png)
 
-    2.  Press the Spacebar. An asterisk `*` appearing in `[ ]` indicates that the option is enabled.
+    2. Press the Spacebar. An asterisk `*` appearing in `[ ]` indicates that the option is enabled.
 
         ![img](../../demo/images/022.png)
 
-    3.  Set `LVX_MUSIC_PLAYER_DATA_ROOT` to `/data`. After modifying, press Enter to save the current configuration item.
+    3. Set `LVX_MUSIC_PLAYER_DATA_ROOT` to `/data`. After modifying, press Enter to save the current configuration item.
 
         ![img](../../demo/images/023.png)
 
-    4.  Press the `Q` key. The following save and exit prompt will appear.
+    4. Press the `Q` key. The following save and exit prompt will appear.
 
         ![img](../../demo/images/024.png)
 
-    5.  Press the `Y` key to save the configuration and exit the configuration interface.
+    5. Press the `Y` key to save the configuration and exit the configuration interface.
 
 ### 2. Compile the Project
 
-1.  Navigate to the root directory of the openvela repository and execute the following commands in the terminal:
+1. Navigate to the root directory of the openvela repository and execute the following commands in the terminal:
 
     ```Bash
     # Clean build artifacts
@@ -581,7 +583,7 @@ endif
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap -j8
     ```
 
-2.  After a successful build, the following files will be generated:
+2. After a successful build, the following files will be generated:
 
     ```Bash
     ./nuttx
@@ -593,13 +595,13 @@ endif
 
 The font and image resources used by the music player are located in `apps/packages/demos/music_player/res`. To push these resources to the corresponding file path mounted by the emulator, follow these steps.
 
-1.  Navigate to the root directory of the openvela repository and start the emulator:
+1. Navigate to the root directory of the openvela repository and start the emulator:
 
     ```Bash
     ./emulator.sh vela
     ```
 
-2.  Use the ADB tool supported by the emulator to push resources to the device. Open a new terminal in the root directory of the openvela repository and enter `adb push` followed by the file path to transfer the resources.
+2. Use the ADB tool supported by the emulator to push resources to the device. Open a new terminal in the root directory of the openvela repository and enter `adb push` followed by the file path to transfer the resources.
 
     ```Bash
     # Install adb
@@ -623,11 +625,11 @@ Close the emulator to exit the demo, as shown below:
 
 ![img](../../demo/images/026.png)
 
-## 7. FAQ
+## VII. FAQ
 
 ### 1. How to Customize the Music Player
 
-1.  Modify the relevant configurations under `apps/packages/demos/music_player/res`. Add new music media files to the `res/musics` directory. Currently, only the `*.wav` format is supported. You can convert media files from other formats like `*.mp3/aac/m4a` to `*.wav` format yourself. Then, modify the `res/musics/manifest.json` file in that directory:
+1. Modify the relevant configurations under `apps/packages/demos/music_player/res`. Add new music media files to the `res/musics` directory. Currently, only the `*.wav` format is supported. You can convert media files from other formats like `*.mp3/aac/m4a` to `*.wav` format yourself. Then, modify the `res/musics/manifest.json` file in that directory:
 
     ```JSON
     {
@@ -644,14 +646,14 @@ Close the emulator to exit the demo, as shown below:
     }
     ```
 
-| Parameter  | Description                                                                  |
-| :--------- | :--------------------------------------------------------------------------- |
-| path       | File path of the media to be played.                                         |
-| name       | Name of the media.                                                           |
-| artist     | Name of the artist.                                                          |
-| cover      | Path to the cover image. If not provided, a default cover will be displayed. |
-| total_time | The total duration of the media, in `milliseconds`.                          |
-| color      | Theme color, currently not in use.                                           |
+    | Parameter  | Description                                                                  |
+    | :--------- | :--------------------------------------------------------------------------- |
+    | path       | File path of the media to be played.                                         |
+    | name       | Name of the media.                                                           |
+    | artist     | Name of the artist.                                                          |
+    | cover      | Path to the cover image. If not provided, a default cover will be displayed. |
+    | total_time | The total duration of the media, in `milliseconds`.                          |
+    | color      | Theme color, currently not in use.                                           |
 
     Refer to this format to add the media you want to play to this configuration file.
 
@@ -687,6 +689,6 @@ Close the emulator to exit the demo, as shown below:
     adb push apps/packages/demos/music_player/res /data/
     ```
 
-2.  Exit the emulator.
+2. Exit the emulator.
 
-3.  Re-run the steps from [3. Start the Emulator and Push Resources](#3-start-the-emulator-and-push-resources) and [4. Start the Music Player](#4-start-the-music-player).
+3. Re-run the steps from [Start the Emulator and Push Resources](#3-start-the-emulator-and-push-resources) and [Start the Music Player](#4-start-the-music-player).
