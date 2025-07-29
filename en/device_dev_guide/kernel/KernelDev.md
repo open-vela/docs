@@ -525,7 +525,7 @@ Work queues are particularly well-suited for the following scenarios:
 
 #### References
 
-- For a detailed description of work queues, refer to the [Work Queues]().
+- For a detailed description of work queues, refer to the [Work Queues](./IPC/work_queue.md).
 - For the implementation code, see the [openvela wqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/wqueue).
 
 ### 2. Message Queues
@@ -551,7 +551,7 @@ Message queues are particularly well-suited for the following scenarios:
 
 #### References
 
-- For a detailed description of message queues, refer to the [Message Queues](./IPC/work_queue.md).
+- For a detailed description of message queues, refer to the [Message Queues](./IPC/message_queue.md).
 - For the implementation code, see the [openvela mqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/mqueue) source.
 
 ### 3. Choosing a Communication Scheme

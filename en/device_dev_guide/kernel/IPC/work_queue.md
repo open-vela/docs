@@ -869,6 +869,7 @@ This module implements a publish-subscribe pattern event notification system. It
 | `void work_notifier_signal(...)`   | Trigger/publish an event: <br> Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution.                     |
 | `static ... work_notifier_*`       | Internal helper functions like `work_notifier_key`, `work_notifier_find`, and `work_notifier_worker`, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
 
+
 ```C
 /*generate a unique key for a work notifier*/
 static uint32_t work_notifier_key(void)；
