@@ -1,4 +1,4 @@
-# 音频驱动原理
+# Audio Driver 原理
 
 [ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Prin_desc.md) | 简体中文 \]
 
