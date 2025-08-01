@@ -225,7 +225,7 @@ int codec_queue_event(FAR void *cookie, FAR struct v4l2_event *evt);
 
 ### 1、`nxcodec` 测试工具
 
-`nxcodec` 是一个命令行工具，专门用于直接测试 V4L2 Codec 驱动的 `ioctl` 接口和基本编解码功能。对于驱动开发初期的功能验证，此工具是首选。
+`nxcodec` 是一个命令行工具，专门用于直接测试 V4L2 Codec 驱动的 `ioctl` 接口和基本编解码功能。对于驱动开发初期的功能验证，此工具是首选。使用说明请参考 [nxcodec 测试说明](./nxcodec.md)。
 
 ### 2、FFmpeg 测试工具
 
