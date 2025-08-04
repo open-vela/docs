@@ -286,7 +286,7 @@ CONFIG_INPUT_MOUSE=y
 
 ### 2、功能验证
 
-要验证驱动的正确性，您可以使用 getevent tool 等标准测试工具读取设备节点，并观察输出的事件信息是否与硬件的实际操作一致。
+要验证驱动的正确性，您可以参考 [getevent 工具使用指南](./Getevent.md)等标准测试工具读取设备节点，并观察输出的事件信息是否与硬件的实际操作一致。
 
 将 `getevent` 工具输出的事件序列与硬件行为进行对比，可以有效调试坐标、按键值、事件标志等是否正确。
 
@@ -295,7 +295,3 @@ CONFIG_INPUT_MOUSE=y
 您可以参考 `goldfish_events.c` 驱动，它为 Goldfish 模拟器实现了一套完整的 Input 事件处理，是一个很好的学习范例。
 
 - **代码路径**: `nuttx/drivers/input/goldfish_events.c`
-
-## 八、课程考试
-
-Vela input 驱动考试题目.xls
