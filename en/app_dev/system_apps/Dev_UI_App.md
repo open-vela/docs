@@ -530,7 +530,7 @@ endif
 
 1. Navigate to the root directory of the openvela repository and execute the following command to configure the music player.
 
-    > The emulator's configuration file (defconfig) is located in `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/`. Use `build.sh` to configure and compile the board's code.
+    The emulator's configuration file (defconfig) is located in `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/`. Use `build.sh` to configure and compile the board's code.
 
     ```Bash
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
@@ -551,7 +551,7 @@ endif
     LVX_MUSIC_PLAYER_DATA_ROOT="/data"
     ```
 
-    > The following steps use `LVX_USE_DEMO_MUSIC_PLAYER` as an example; the process for other configurations is the same.
+    The following steps use `LVX_USE_DEMO_MUSIC_PLAYER` as an example; the process for other configurations is the same.
 
     1. Enter the configuration to search for, `LVX_USE_DEMO_MUSIC_PLAYER`. Fuzzy search, e.g., `music_player`, is supported. Find the corresponding configuration and press Enter to navigate to it.
 
@@ -646,6 +646,8 @@ Close the emulator to exit the demo, as shown below:
     }
     ```
 
+2. Add a new JSON object to the musics array for each song you want to add. Refer to the parameter escriptions below.
+
     | Parameter  | Description                                                                  |
     | :--------- | :--------------------------------------------------------------------------- |
     | path       | File path of the media to be played.                                         |
@@ -682,13 +684,13 @@ Close the emulator to exit the demo, as shown below:
     }
     ```
 
-    After modifying the configuration, you need to push the resources again. Execute the following command:
+3. After modifying the configuration, you need to push the resources again. Execute the following command:
 
     ```Bash
     # Push resources
     adb push apps/packages/demos/music_player/res /data/
     ```
 
-2. Exit the emulator.
+4. Exit the emulator.
 
-3. Re-run the steps from [Start the Emulator and Push Resources](#3-start-the-emulator-and-push-resources) and [Start the Music Player](#4-start-the-music-player).
+5. Re-run the steps from [Start the Emulator and Push Resources](#3-start-the-emulator-and-push-resources) and [Start the Music Player](#4-start-the-music-player).
