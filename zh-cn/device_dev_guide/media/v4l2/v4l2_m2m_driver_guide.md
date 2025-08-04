@@ -229,4 +229,4 @@ int codec_queue_event(FAR void *cookie, FAR struct v4l2_event *evt);
 
 ### 2、FFmpeg 测试工具
 
-在真实应用场景中，上层多媒体应用通常通过 `FFmpeg` 来调用 V4L2 M2M 驱动。因此，通过 `FFmpeg` 和 `mediatool` 进行集成测试是确保驱动稳定性和兼容性的关键一步。
+在真实应用场景中，上层多媒体应用通常通过 `FFmpeg` 来调用 V4L2 M2M 驱动。因此，通过 `FFmpeg` 和 `mediatool` 进行集成测试是确保驱动稳定性和兼容性的关键一步。使用说明请参考 [FFmpeg V4L2 M2M 使用指南](./ffmpeg_v4l2m2m_guide.md)。
