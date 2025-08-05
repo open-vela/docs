@@ -100,7 +100,7 @@ To see the full list of native apps, please visit the [Native App Examples Repos
 
 ### Quick Apps
 
-- [Mi Band Weather App](../../.././packages_fe_examples/blob/dev/weather/README.md): Demonstrates audio playback, playlist management, and background services.
+- [Mi Band Weather App](../../.././packages_fe_examples/blob/dev/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
 - [Music Player](../../.././packages_fe_examples/blob/dev/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
 - [Calendar](../../.././packages_fe_examples/blob/dev/calendar/README.md): Demonstrates a basic calendar.
 
