@@ -98,6 +98,4 @@ int pm_wakelock_staycount(FAR struct pm_wakelock_s *wakelock);
 
 如果开启了 Procfs (`CONFIG_FS_PROCFS`)，您可以通过访问 `/proc/pm/wakelock` 文件系统节点，实时查看系统中所有 `Wakelock` 的状态，包括其名称、持有计数以及累计维持时长，极大地简化了功耗问题的调试。
 
-如果开启了procfs, 可以有效的统计staylock的维持时长，以及当前的count
-
-更多详情请参见[PM procfs usage]()。
+更多详情请参见[PM procfs usage](./pm_procfs_debug.md)。

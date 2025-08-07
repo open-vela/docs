@@ -225,7 +225,7 @@ int pm_changestate(int domain, enum pm_state_e newstate);
 
 例如，`PM_IDLE_DOMAIN` 的状态切换由系统的 Idle 线程统一管理。
 
-- **进一步阅读**：[Idle thread 处理]()
+- **进一步阅读**：[Idle thread 处理](./pm_idle_impl.md)
 
 ## 四、电源管理策略
 
