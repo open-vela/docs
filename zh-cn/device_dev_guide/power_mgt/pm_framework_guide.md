@@ -1,5 +1,7 @@
 # 电源管理框架指南
 
+\[ [English](../../../en/device_dev_guide/power_mgt/pm_framework_guide.md) | 简体中文 \]
+
 本文档详细介绍了 openvela 电源管理 (Power Management, PM) 框架的核心概念、API 使用方法以及可用的电源管理策略 (Governors)。
 
 **目标读者**：需要为特定硬件平台开发或适配电源管理功能的嵌入式系统开发者。
@@ -128,7 +130,7 @@ int pm_domain_unregister(int domain, FAR struct pm_callback_s *cb);
 void pm_activity(int domain, int priority)
 ```
 
-- **参数** **`priority`**：表示活动等级。等级越高，阻止系统进入低功耗状态的时间越长。
+- **`priority`**：表示活动等级。等级越高，阻止系统进入低功耗状态的时间越长。
 
 #### pm_stay
 
@@ -225,7 +227,7 @@ int pm_changestate(int domain, enum pm_state_e newstate);
 
 例如，`PM_IDLE_DOMAIN` 的状态切换由系统的 Idle 线程统一管理。
 
-- **进一步阅读**：[Idle thread 处理](./pm_idle_impl.md)
+- **进一步阅读**：[在 IDLE 线程中实现电源管理](./pm_idle_impl.md)
 
 ## 四、电源管理策略
 
