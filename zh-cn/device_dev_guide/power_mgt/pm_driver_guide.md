@@ -1,5 +1,7 @@
 # 电源管理驱动开发指南
 
+\[ [English](../../../en/device_dev_guide/power_mgt/pm_driver_guide.md) | 简体中文 \]
+
 本文档指导嵌入式开发者如何为 openvela 系统编写能够参与电源管理 (PM) 的设备驱动程序。通过实现指定的 PM 回调接口，您的驱动可以响应系统的功耗状态变化，从而实现精细化的节能控制。
 
 **目标读者**：需要在特定硬件平台上为设备驱动添加 PM 功能的嵌入式系统开发者。
@@ -336,3 +338,7 @@ static void up_pm_setsuspend(bool suspend)
     - 停止数据传输（DMA和中断）。
     - 关闭模块时钟。
     - 关闭模块电源。
+
+## 四、相关文档
+
+- [在 IDLE 线程中实现电源管理](./pm_idle_impl.md)
