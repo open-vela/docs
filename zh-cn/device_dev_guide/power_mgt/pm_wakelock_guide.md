@@ -15,7 +15,7 @@
 
 `Wakelock` 机制通过**主动请求**的方式解决了这些问题。当一个任务开始时，它获取一个 `Wakelock`；当任务结束时，它释放该 `Wakelock`。只有当系统中不存在任何活动的 `Wakelock` 时，PM 框架才会尝试让系统进入更深的休眠状态。
 
-**简而言之，如果您能在业务逻辑层面预知何时需要阻止系统休眠，请优先使用** **`Wakelock`****。**
+**简而言之，如果您能在业务逻辑层面预知何时需要阻止系统休眠，请优先使用 `Wakelock`。**
 
 ## 二、API 参考
 
@@ -98,4 +98,4 @@ int pm_wakelock_staycount(FAR struct pm_wakelock_s *wakelock);
 
 如果开启了 Procfs (`CONFIG_FS_PROCFS`)，您可以通过访问 `/proc/pm/wakelock` 文件系统节点，实时查看系统中所有 `Wakelock` 的状态，包括其名称、持有计数以及累计维持时长，极大地简化了功耗问题的调试。
 
-更多详情请参见[PM procfs usage](./pm_procfs_debug.md)。
+更多详情请参见 [PM procfs usage](./pm_procfs_debug.md)。
