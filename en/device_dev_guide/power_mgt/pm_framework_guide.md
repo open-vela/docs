@@ -317,4 +317,4 @@ Governors are the core of the PM framework, implementing different power managem
 
 ## V. References
 
-- Apache NuttX Official Documentation - Power Management: https://nuttx.apache.org/docs/10.0.0/components/power.html
+- [Apache NuttX Official Documentation - Power Management](https://nuttx.apache.org/docs/10.0.0/components/power.html)

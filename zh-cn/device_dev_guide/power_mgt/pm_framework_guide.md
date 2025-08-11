@@ -323,4 +323,4 @@ Governor 是 PM 框架的核心，它实现了不同的电源管理策略。open
 
 ## 五、参考资料
 
-- Apache NuttX 官方文档 - Power Management: https://nuttx.apache.org/docs/10.0.0/components/power.html
+- [Apache NuttX 官方文档 - Power Management](https://nuttx.apache.org/docs/10.0.0/components/power.html)
