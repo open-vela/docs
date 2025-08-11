@@ -1,5 +1,7 @@
 # 使用 Dhrystone 评估 CPU 整数性能
 
+\[ [English](./../../../../en/debugging_tools/performance/Benchmark/Dhrystone.md) | 简体中文 \]
+
 ## 一、概述
 
 Dhrystone 是一个行业标准的基准测试程序，专门用于评估处理器的整数和逻辑运算性能。它通过执行一系列预定义的、不含浮点运算的计算密集型操作来模拟典型的程序行为。
