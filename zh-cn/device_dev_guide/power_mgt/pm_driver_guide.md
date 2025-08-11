@@ -12,7 +12,7 @@
 
 驱动程序通过 `pm.h` 中定义的回调结构体和注册函数与 PM 框架进行交互。
 
-**相关头文件**：[openvela include/nuttx/power/pm.h](../../../../../../nuttx/power/pm.h)
+**相关头文件**：[openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/dev/include/nuttx/power/pm.h)
 
 ### 1、`pm_state_e` 电源状态枚举
 
