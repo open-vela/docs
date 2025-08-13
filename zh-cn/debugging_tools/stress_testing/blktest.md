@@ -1,5 +1,7 @@
 # blktest 块设备 I/O 测试指南
 
+\[ [English](./../../../en/debugging_tools/stress_testing/blktest.md) | 简体中文 \]
+
 本文档为 openvela 系统的开发者和测试工程师提供 `blktest` 测试套件的详细使用指南。该测试套件通过执行一系列 I/O 操作，旨在验证块设备和 Flash 存储设备驱动的稳定性、数据完整性和基本性能。
 
 ## 一、概述
