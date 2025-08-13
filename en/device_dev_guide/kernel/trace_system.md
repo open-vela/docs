@@ -752,7 +752,7 @@ private:
 
 ## VII. Automatic Function Instrumentation
 
-#### 1. Principle Introduction
+### 1. Principle Introduction
 
 The functions `__cyg_profile_func_enter` and `__cyg_profile_func_exit` are used to automatically record the entry and exit of functions. Combined with compiler options, users can enable automatic instrumentation for specified modules while excluding specific files or functions. The following is the implementation code for the instrumentation functions:
 
@@ -778,7 +778,7 @@ __cyg_profile_func_exit(void *this_fn, void *call_site)
 }
 ```
 
-#### 2. How to Use
+### 2. How to Use
 
 1. Enable the Feature Option. 
   

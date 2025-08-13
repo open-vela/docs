@@ -756,7 +756,7 @@ private:
 
 ## 七、函数自动插桩
 
-#### 1、原理介绍
+### 1、原理介绍
 
 通过 `__cyg_profile_func_enter` 和 `__cyg_profile_func_exit` 函数，自动记录函数的开始和结束信息。结合编译选项，用户可以为指定模块启用自动插桩功能，同时排除特定文件或函数。以下是插桩函数的实现代码：
 
@@ -782,7 +782,7 @@ __cyg_profile_func_exit(void *this_fn, void *call_site)
 }
 ```
 
-#### 2、使用方法
+### 2、使用方法
 
 1. 启用功能选项。 在 `menuconfig` 中启用以下配置项：
 

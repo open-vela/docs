@@ -118,10 +118,18 @@ Vela 的命名源自拉丁語中船帆的含義，也是南方星空中船帆星
 
 openvela 引用三方開源軟體及許可證說明，參考[第三方開源軟體說明](Third_Party_and_Open_Source_Components_zh-cn.md)。
 
-## 聯繫方式
+## 社區與支援
 
-為了更好地管理和響應反饋和支援請求，建議通過以下方式聯繫我們：
+我們歡迎您通過多種渠道與 openvela 社區互動和貢獻。
 
-- **Issues**: 如果你有任何問題、建議或發現任何 Bug，請在 Issues 頁面提交一個新的 Issue。請盡量提供詳細的信息，以便我們更快地理解和解決問題。
-- **Pull Requests**: 如果你發現了問題並已經修復，歡迎提交 Pull Request。請確保遵循我們的[貢獻指南](./CONTRIBUTING_zh-cn.md)。
-- **Discussions**: 如果你有更廣泛的話題或討論，可以在 Discussions 頁面發起一個新的討論。
+### 微信公眾號
+
+掃描下方二維碼，關注 **openvela** 官方微信公眾號，獲取項目的第一手資訊、深度技術文章以及最新的社區活動信息。
+
+![img](./images/openvela_WeChat_Official_Account.png)
+
+### 技術討論與貢獻
+
+- **Issues**: 如果您有任何問題、建議或發現任何 Bug，請在 Issues 頁面提交一個新的 Issue。請盡量提供詳細的資訊，以便我們更快地理解和解決問題。
+- **Pull Requests**: 如果您發現了問題並已經修復，歡迎提交 Pull Request。請確保遵循我們的[貢獻指南](./CONTRIBUTING_zh-cn.md)。
+- **Discussions**: 如果您有更廣泛的話題或討論，可以在 Discussions 頁面發起一個新的討論。

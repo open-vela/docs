@@ -117,12 +117,18 @@ The code in this repository is licensed under the Apache 2.0 license. You can fi
 
 openvela uses third-party open source software and license description. Refer to [third-party open source software description](Third_Party_and_Open_Source_Components.md)
 
-## Contact
+## Community and Support
 
-In order to better manage and respond to feedback and support requests, we recommend contacting us by:
+We welcome you to interact with and contribute to the openvela community through our various channels.
+
+### WeChat Official Account
+
+Scan the QR code below to follow the **openvela** official WeChat account for the latest project news, in-depth technical articles, and updates on community events.
+
+![img](./images/openvela_WeChat_Official_Account.png)
+
+## Contact
 
 - **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page.Try to provide detailed information, so that we can understand and solve the problem faster.
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
 - **Discussions**: If you have a broader topic or discussion, you can start a new discussion on the Discussions page.
-
-We appreciate every user's feedback and support. Communicating through the GitHub/Gitee platform is helpful for us to maintain and improve the project.
