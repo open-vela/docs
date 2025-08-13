@@ -1,4 +1,4 @@
-# A Guide to Block Device I/O Testing with `blktest`
+# A Guide to Block Device I/O Testing with blktest
 
 \[ English | [简体中文](./../../../zh-cn/debugging_tools/stress_testing/blktest.md) \]
 
