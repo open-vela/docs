@@ -45,6 +45,16 @@ Follow these tips before making a pull request to speed up the review.
 - Lines that are not part of your change should not be edited (e.g. **don't format unchanged lines, don't reorder existing imports**).
 - Add the appropriate license headers to any new files.
 
+### Before Submitting Your Code
+
+Following these guidelines before creating a new pull request will help speed up the review and merge process.
+
+- **Follow the Code Style Guide**: Ensure your code submission conforms to the [openvela Code Style Check Guide](./en/contribute/code_style_check_guide.md). Running local checks before submitting can help prevent unnecessary failures in the Continuous Integration (CI) pipeline.
+- **Add License Headers**: Add the standard license header to all new files.
+- **Add Unit Tests**: Include appropriate unit tests for your code changes to verify their correctness.
+- **Add Integration Tests**: If your changes involve interactions between multiple modules, add corresponding integration tests.
+- **Keep Commits Atomic**: Do not modify code unrelated to your changes. A single submission should focus on an independent feature or fix, avoiding unrelated formatting adjustments or code refactoring.
+
 ### Submitting Your Changes
 
 1. Check current status.
