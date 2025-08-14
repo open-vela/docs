@@ -1,5 +1,7 @@
 # 使用 memstress 进行内存压力测试
 
+\[ [English](./../../../en/debugging_tools/stress_testing/memstress.md) | 简体中文 \]
+
 ## 一、概述
 
 memstress 是一个专门用于检测系统内存管理器稳定性和正确性的测试工具，特别适合在开发和调试阶段使用。在调试模式下，工具会输出每次内存分配和释放的详细日志，便于追踪内存相关的问题。
