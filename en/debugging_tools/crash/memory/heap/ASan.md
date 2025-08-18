@@ -66,8 +66,6 @@ if (k != 0 && ((Addr & 7) + AccessSize > k)) {
 }
 ```
 
-![alt text](./figures/003.png)
-
 ## III. How to Use ASan in openvela
 
 Enabling ASan on the `simulator` platform is a simple three-step process.
