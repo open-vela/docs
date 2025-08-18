@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](../../../../zh-cn/app_dev/system_apps/hello_world/Hello_World.md) \]
 
-## I Overview
+## I. Overview
 
 openvela is built based on the open-source operating system NuttX, which further provides a variety of complex system-level services. To make openvela more comprehensive and feature-rich, it is necessary to introduce a complete development framework or functional module. A complete development framework typically includes the following two components:
 
@@ -22,7 +22,7 @@ The directory structure for new features and frameworks is shown in the figure b
         └── libs_2
 ```
 
-## II Add Hello World Example
+## II. Add Hello World Example
 
 This section describes how to add a `Hello World` example application in openvela, including the main framework, file contents, and related build configurations.
 
@@ -241,7 +241,7 @@ CONFIGURED_APPS += $(APPDIR)/examples/hello_main
 endif
 ```
 
-## III Verification and Testing
+## III. Verification and Testing
 
 The newly added application must be cleaned and rebuilt before it can take effect. Follow these steps to verify:
 
