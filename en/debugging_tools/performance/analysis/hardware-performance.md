@@ -1,6 +1,6 @@
 # Evaluating Hardware Performance
 
-\[ English | [简体中文](./../../../../zh-cn/debugging_tools/performance/analysis/cpuload.md) \]
+\[ English | [简体中文](./../../../../zh-cn/debugging_tools/performance/analysis/hardware-performance.md) \]
 
 Before analyzing and optimizing software performance, you must first establish a hardware performance baseline. Hardware specifications define the upper limit of system performance (i.e., the "performance ceiling"). Confirming that the hardware capabilities meet project requirements is the starting point for all performance-related work.
 
