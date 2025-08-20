@@ -1,6 +1,6 @@
 # 评估硬件性能
 
-\[ [English](./../../../../en/debugging_tools/performance/analysis/cpuload.md) | 简体中文 \]
+\[ [English](./../../../../en/debugging_tools/performance/analysis/hardware-performance.md) | 简体中文 \]
 
 在着手分析和优化软件性能之前，您必须首先评估硬件的性能基准。硬件规格定义了系统性能的上限（即“性能天花板”），确认硬件能力能否满足项目需求，是所有性能工作的起点。
 
