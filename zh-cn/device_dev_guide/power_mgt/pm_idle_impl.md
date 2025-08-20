@@ -1,5 +1,7 @@
 # 在 IDLE 线程中实现电源管理
 
+\[ [English](../../../en/device_dev_guide/power_mgt/pm_idle_impl.md) | 简体中文 \]
+
 ## 一、概述
 
 本文档旨在介绍在 openvela 系统的 IDLE 线程中执行电源管理 (Power Management, PM) 操作的推荐方法。
