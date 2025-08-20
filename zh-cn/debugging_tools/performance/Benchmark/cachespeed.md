@@ -27,15 +27,10 @@
 对于基于 ARMv8-M 架构的平台，需要通过设置以下寄存器来使能周期计数器 (Cycle Counter)。通常，您可以在调试器或系统启动脚本中执行这些命令。
 
 ```Plain
-// 示例：使能 DWT 周期计数器（示例值，请按目标芯片确认）
-mw 0xe000edfc=0x01100000   // DEMCR：设置 TRCENA（使能跟踪）
-mw 0xe0001000=0x48000001   // DWT_CTRL：设置 CYCCNTENA（启用周期计数器）
+// 示例，请根据目标芯片确认
+mw 0xe000edfc=0x01100000
+mw 0xe0001000=0x48000001
 ```
-
-重要安全与准确性提示：
-
-- 上述寄存器地址与写入值为示例。不同处理器或厂商实现会有所差异。请先查阅目标芯片的 ARM 架构手册或厂商数据手册，核对位定义与寄存器地址后再执行写入。
-- 在生产或无法重启的设备上，请在受控环境中操作并保留恢复手段。
 
 ## 三、编译配置
 
@@ -47,7 +42,7 @@ DEBUG_CUSTOMOPT=y          # 启用自定义优化选项
 DEBUG_OPTLEVEL=-O3         # 设置编译器优化等级为 -O3，确保代码以最高效率运行
 
 # --- 关闭监控与安全检查 ---
-CONFIG_SCHED_INSTRUMENTATION=n # 关闭调度器插桩，避免计时开销
+CONFIG_SCHED_INSTRUMENTATION=n # 关闭调度器测量
 CONFIG_SCHED_IRQMONITOR=n      # 关闭中断监控
 CONFIG_SCHED_CRITMONITOR=n     # 关闭临界区监控
 CONFIG_STACK_CANARIES=n        # 关闭栈保护。此项对性能影响极大，尤其在短函数调用场景，
@@ -57,8 +52,6 @@ CONFIG_WATCHDOG=n              # 关闭看门狗，防止在长时间测试中�
 # --- 使能测试工具 ---
 CONFIG_BENCHMARK_CACHESPEED=y  # 编译 cachespeed 工具
 ```
-
-**注意**：关闭监控/保护选项会降低系统对异常的保护。仅在受控测试环境或短时测试中使用该配置，不要在未知或生产环境中长期使用。
 
 ## 四、运行测试
 

@@ -201,7 +201,7 @@ CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/external/libs/include
         
 # 如果添加内部开发的相应的源文件，需在这里添加相应的文件，如：
 # 其中路径的开始为当前路径，即当前 Makefile 所在的路径。
-CSRCS += device_example.c
+# CSRCS += device_example.c
 
 # 如果有 C++ 源文件，按需添加：  
 # CXXSRCS += hello_main.cxx   // c++ 相应的源文件

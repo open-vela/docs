@@ -202,7 +202,7 @@ CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/external/libs/include
 # CXXFLAGS
 
 # To include other internally developed source files, append them here:
-CSRCS += device_example.c
+# CSRCS += device_example.c
 
 # For C++ source files, similarly:
 # CXXSRCS += hello_main.cxx
