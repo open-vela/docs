@@ -39,7 +39,7 @@ You can use industry-standard benchmarking tools to quantify the key performance
 - **[Dhrystone]**: Evaluates processor performance for integer operations. For details, see [Using Dhrystone to Evaluate CPU Integer Performance](./../Benchmark/Dhrystone.md).
 - **[CoreMark]**: Comprehensively evaluates the computational performance of the CPU core. It is a widely used cross-platform benchmark. For details, see [Executing the CoreMark Benchmark](./../Benchmark/coremark.md).
 - **[CacheSpeed]**: Tests and quantifies the read/write speed of the cache and memory subsystem. For details, see [A Guide to the CacheSpeed Tool](./../Benchmark/cachespeed.md).
-- **[RAMSpeed]**: Specifically used to evaluate RAM data throughput and access latency. For details, see [ramspeed 内存性能测试指南](./../Benchmark/ramspeed.md).
+- **[RAMSpeed]**: Specifically used to evaluate RAM data throughput and access latency. For details, see [ramspeed Memory Performance Benchmarking Guide](./../Benchmark/ramspeed.md).
 
 ## III. Key Analysis and Optimization Strategies
 
