@@ -358,6 +358,9 @@ struct imgdata_ops_s
   CODE void *(*alloc)(FAR struct imgdata_s *data, uint32_t align_size, uint32_t size);
   CODE void (*free)(FAR struct imgdata_s *data, void *addr);
 };
+```
+
+```C++
 struct imgsensor_s
 {
   // 定义sensor相关的operation接口
@@ -727,3 +730,7 @@ static isx019_dev_t g_isx019_private =
 3. 静态能力定义 (Static Capability Definition)。
 
     - Sensor 支持的分辨率、帧率等固定能力，通常在 `imgsensor_s` 结构体中以静态数组的形式定义，供 V4L2 核心层在响应 `ioctl` 查询时使用。
+
+## 八、Driver测试
+
+摄像头驱动适配完毕后，可以使用 openvela 提供的 nxcamera 工具进行测试，详见 [Camera 功能测试指南](./Camera_Testing.md)。
