@@ -1,5 +1,7 @@
 # 电源管理 Wakelock 使用指南
 
+\[ [English](../../../en/device_dev_guide/power_mgt/pm_wakelock_guide.md) | 简体中文 \]
+
 本文档为 openvela 开发者详细介绍电源管理 (PM) 中的 `Wakelock` 机制。与在驱动层使用 `prepare` 回调的被动方式不同，`Wakelock` 允许应用层或中间件在预知系统需要保持活动状态时，**主动地**请求系统维持在指定的功耗水平，从而避免不必要的休眠。
 
 **前置阅读**： 在开始之前，我们强烈建议您首先阅读[电源管理框架指南](./pm_framework_guide.md)，以充分理解 PM 框架的核心概念。

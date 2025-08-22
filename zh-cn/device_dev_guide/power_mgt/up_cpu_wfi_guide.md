@@ -1,5 +1,7 @@
 # up_cpu_wfi 实现指南
 
+\[ [English](../../../en/device_dev_guide/power_mgt/up_cpu_wfi_guide.md) | 简体中文 \]
+
 函数 `up_cpu_wfi()` 是平台进入低功耗状态的核心，它由[使用 pm_idle 标准化 Idle 线程的功耗管理](./pm_idle_guide.md)示例代码中的 `up_pm_idle_handler` 调用。该函数的实现与 CPU 架构紧密相关。本章节提供主流架构 (Cortex-M 和 RISC-V) 的参考实现和关键技术点的解析。
 
 ## 一、Cortex-M 架构
