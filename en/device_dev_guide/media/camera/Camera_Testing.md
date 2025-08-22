@@ -35,7 +35,7 @@ Before starting the test, you must first prepare a camera device in the `openvel
     CONFIG_HOST_CAMERA_DEV_PATH="/dev/video0"
     ```
 
-### ### Option 2: Using a Virtual Camera
+### Option 2: Using a Virtual Camera
 
 If your development environment lacks a physical camera, `openvela` supports testing with a virtual camera. We recommend creating a V4L2 (Video4Linux2) virtual camera on your Linux host using one of the following two methods.
 
