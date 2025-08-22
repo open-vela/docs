@@ -1,5 +1,7 @@
 # 使用 pm_idle 标准化 Idle 线程的功耗管理
 
+\[ [English](../../../en/device_dev_guide/power_mgt/pm_idle_guide.md) | 简体中文 \]
+
 ## 一、概述
 
 本文档为嵌入式系统开发者提供在 openvela 实时操作系统中，使用 `pm_idle` 接口实现标准化空闲 (Idle) 线程功耗管理的方法。
