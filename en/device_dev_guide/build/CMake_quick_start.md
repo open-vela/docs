@@ -99,7 +99,7 @@ apps/
         ├── Kconfig
         ├── Make.defs
         ├── Makefile
-        └── CMakeLists.txt  <-- 新增此文件
+        └── CMakeLists.txt  <-- Add this file
 ```
 
 Example `CMakeLists.txt` content:
