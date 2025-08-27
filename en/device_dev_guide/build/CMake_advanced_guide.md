@@ -46,15 +46,15 @@ Example directory structure:
 │   ├── <chip_name>
 │   │   └── <board_name>
 │   │       ├── Kconfig       
-│   │       ├── CMakeList.txt        <-- 板级顶层 CMake 文件                
+│   │       ├── CMakeList.txt        <-- Top-level board CMake file              
 │   │       └── src
 │   │           ├── Make.defs
-│   │           └──  CMakeList.txt   <-- 板级源码 CMake 文件
+│   │           └──  CMakeList.txt   <-- Board source CMake file
 ├── chips
 │   └── chip_name
 │       ├── Kconfig
 │       ├── Make.defs
-│       └──  CMakeList.txt      <-- 芯片级 CMake 文件
+│       └──  CMakeList.txt      <-- Chip-level CMake file
 ```
 
 Example `CMakeLists.txt` content:
