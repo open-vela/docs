@@ -87,6 +87,9 @@ Makefile 示例：
 # properly configured.  The basic configuration steps include creation of the
 # the config.h and version.h header files in the include/nuttx directory and
 # the establishment of symbolic links to configured directories.
+```
+
+```Makefile
 ## tools/Unix.mk 核心Makefile文件
 
 %.context: include/nuttx/config.h .dirlinks

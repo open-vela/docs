@@ -20,7 +20,7 @@ In addition to the core build files, the following key files and configurations 
     - Location: `nuttx/Make.defs`.  
     - Source: Copied from the template file located at `nuttx/board/${arch}/${chip}/${board}/${config}/scripts/Make.defs`.  
 
-2. Conditional build configuration file. 
+2. Conditional build configuration file.
 
     - Location: `configs/defconfig` in the root directory.  
     - Function: Copied as `.config` and serves as the base configuration file for **openvela**, supporting highly customizable and modular configurations.  
@@ -88,7 +88,10 @@ Makefile Example:
 # properly configured.  The basic configuration steps include creation of the
 # the config.h and version.h header files in the include/nuttx directory and
 # the establishment of symbolic links to configured directories.
-## tools/Unix.mk 核心Makefile文件
+```
+
+```Makefile
+## tools/Unix.mk: Core Makefile
 
 %.context: include/nuttx/config.h .dirlinks
         $(Q) $(MAKE) -C $(patsubst %.context,%,$@) TOPDIR="$(TOPDIR)" context

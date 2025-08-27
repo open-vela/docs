@@ -1,5 +1,7 @@
 # CMake 快速入门
 
+\[ [English](../../../en/device_dev_guide/build/CMake_quick_start.md) | 简体中文 \]
+
 ## 前言
 
 本文档旨在完整阐述 openvela 项目从 GNU Make 迁移至 CMake 构建系统的背景、优势与具体实践，为开发者提供一套完整的迁移、使用与开发指引。

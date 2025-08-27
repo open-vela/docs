@@ -1,5 +1,7 @@
 # CMake 深度解析与维护手册
 
+\[ [English](../../../en/device_dev_guide/build/CMake_advanced_guide.md) | 简体中文 \]
+
 本文档旨在为 openvela 的构建系统维护者和资深开发者提供一份深入的技术参考。内容涵盖 CMake 构建系统的内部架构、高级开发实践，以及解决复杂问题的技巧与方案。
 
 在阅读本文前，建议您已熟悉 [CMake 快速入门](./CMake_quick_start.md)中的基础操作。

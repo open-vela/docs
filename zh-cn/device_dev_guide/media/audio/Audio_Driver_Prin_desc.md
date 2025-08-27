@@ -1,4 +1,4 @@
-# Audio Driver 原理
+# Audio Driver 原理说明
 
 [ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Prin_desc.md) | 简体中文 \]
 
@@ -71,14 +71,38 @@ openvela 音频驱动程序提供了一组标准化的接口，供应用程序�
 
 这些接口涵盖了音频设备的配置、启动、暂停、停止、缓冲区管理等功能，能够满足多种音频应用场景的需求。
 
-### 示例代码
+### Demo Code
 
 以下是一个使用 openvela 音频驱动程序接口的示例代码：
 
 ```C
-precorder->dev_fd = open("/dev/audio/pcm0c", O_RDWR | O_CLOEXEC);
-ioctl(precorder->dev_fd, AUDIOIOC_CONFIGURE, (unsigned long)&cap_desc);
-close(dev_fd);
+// 1. 打开节点，RESERVER, 注册消息回调MQ
+player->fd = open("/dev/audio/pcm0p", O_RDWR | O_CLOEXEC);
+ioctl(player->fd, AUDIOIOC_RESERVE, &compress->session);
+ioctl(player->fd, AUDIOIOC_REGISTERMQ, player->mq);
+
+// 2. 配置格式和buffer info，分配buffer info
+ioctl(player->fd, AUDIOIOC_GETCAPS, (unsigned long)&caps);
+ioctl(player->fd, AUDIOIOC_CONFIGURE, (unsigned long)&cap_desc);
+ioctl(player->fd, AUDIOIOC_SETBUFFERINFO, &buf_info);
+ioctl(player->fd, AUDIOIOC_GETBUFFERINFO, &buf_info);
+ioctl(player->fd, AUDIOIOC_ALLOCBUFFER, &buf_desc);
+
+// 3. start播放，循环enqueue buffer给driver播放，从MQ中回收播完的buffer
+ioctl(player->fd, AUDIOIOC_START, 0)
+ioctl(player->fd, AUDIOIOC_ENQUEUEBUFFER, &desc);
+mq_receive(player->mq) //收AUDIO_MSG_DEQUEUE上来的buffer
+
+// 4. 播放控制pause/resume
+ioctl(player->fd, AUDIOIOC_PAUSE, 0)
+ioctl(player->fd, AUDIOIOC_RESUME, 0)
+
+// 5. 结束播放，关闭节点
+ioctl(player->fd, AUDIOIOC_STOP, 0)
+ioctl(player->fd, AUDIOIOC_FREEBUFFER, &buf_desc) //所有的buffer全都要还回来
+ioctl(player->fd, AUDIOIOC_UNREGISTERMQ, 0);
+ioctl(player->fd, AUDIOIOC_RELEASE, 0);
+close(player->fd);
 ```
 
 以下示例展示了如何使用 openvela 音频驱动程序的接口实现音频设备的基本操作：

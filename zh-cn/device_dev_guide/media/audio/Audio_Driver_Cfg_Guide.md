@@ -1,4 +1,4 @@
-# Audio Driver 配置
+# Audio Driver 配置说明
 
 \[ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Cfg_Guide.md) | 简体中文 \]
 
