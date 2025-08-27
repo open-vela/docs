@@ -346,7 +346,7 @@ static int xx_audio_enqueuebuffer(FAR struct audio_lowerhalf_s *dev,
 }
 ```
 
-#### `start` - 启动音频流
+#### `start` - Start the Audio Stream
 
 The upper layer calls this function to instruct the driver to start the hardware and begin processing audio data.
 

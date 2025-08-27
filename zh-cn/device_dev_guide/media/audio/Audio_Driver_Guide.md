@@ -339,9 +339,9 @@ static int xx_audio_enqueuebuffer(FAR struct audio_lowerhalf_s *dev,
 }
 ```
 
+#### `start` - 启动音频流
 
 
-#### `start` - Start the Audio Stream
 
 上层调用此函数通知驱动启动硬件，开始处理音频数据。
 
