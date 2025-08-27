@@ -1143,7 +1143,7 @@ The `sim_alsa` interface implementation is similar to `audio_dma`, primarily inc
 
 Developers can refer to the code implementation in `sim_alsa.c` and `sim_offload.c` for details.
 
-## 8. Compress Capability
+## VIII. Compress Capability
 
 ### 1. Background
 

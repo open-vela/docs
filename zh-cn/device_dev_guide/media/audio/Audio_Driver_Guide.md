@@ -1,5 +1,7 @@
 # Audio Driver 适配说明
 
+\[ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Guide.md) | 简体中文 \]
+
 ## 一、概述
 
 本文档为嵌入式开发工程师提供在特定硬件平台上为 openvela 实时操作系统适配和实现音频 Lower-Half 驱动的详细步骤。遵循本指南，您可以将芯片的音频能力无缝集成到 openvela 的音频框架中。
@@ -13,7 +15,7 @@
 您必须全面了解目标芯片的音频特性，包括：
 
 - 音频接口（如 I2S, PCM）的控制逻辑和数据格式。
-- DMA (Direct Memory Access) 控制器的使用方法，包括通道配置、传输模式和中断处理。
+- DMA (Direct Memory Access) 控制器的使用方法，包括通道配置、传输模式和中断处理（若有）。
 - 音频编解码器 (Codec) 或功率放大器 (PA) 的控制方式（通常通过 I2C 或 SPI）。
 - 硬件支持的音频参数范围，如采样率、位深和声道数。
 
@@ -23,15 +25,12 @@ openvela 的音频框架为驱动开发提供了标准化的抽象层。您可�
 
 - **完整的测试应用**：框架自带验证程序。驱动适配完成后，您无需编写额外测试代码即可验证核心功能。
 - **统一的****驱动****接口**：openvela 定义了标准的 `audio_ops_s` 接口和 `ioctl` 命令。您必须遵循这些定义，在回调函数中实现与硬件对应的功能。
-- **标准化的调用流程**：框架处理了从应用层到底层驱动（Upper-Half）的完整调用逻辑。您只需聚焦于实现 Lower-Half 驱动，封装芯片相关的操作。
+- **标准化****的调用流程**：框架处理了从应用层到底层驱动（Upper-Half）的完整调用逻辑。您只需聚焦于实现 Lower-Half 驱动，封装芯片相关的操作。
 - **松耦合的组合节点**：您可以根据硬件架构。
-
     - 选择实现一个全新的、包含所有功能的音频设备节点。
     - 或仅替换现有组合节点中的某一个 Lower-Half 驱动（如独立的 PA 或 Codec 驱动）。
-
 - **内置的可复用组件**：openvela 提供了通用的 Lower-Half 驱动（如 DMA 控制驱动）。开发前，请评估并复用这些组件以加速开发进程。
 - **丰富的参考示例**：
-
     - `sim` 平台提供了 `sim_alsa.c` 作为基础参考。
     - 开源社区提供了多种芯片的实现，例如 [song-u1 的音频驱动](https://github.com/FishsemiCode/nuttx/tree/song-u1/drivers/audio)。
 
@@ -40,12 +39,9 @@ openvela 的音频框架为驱动开发提供了标准化的抽象层。您可�
 根据项目需求，适配任务通常分为以下两类：
 
 - **目标 1：从零实现完整的音频节点**
-
     - **场景**：为全新的平台或芯片适配音频功能。
     - **要求**：需要同时实现数据流接口（如 I2S/DMA）和控制流接口（如 I2C/SPI）。
-
-- **目标 2：替换或添加独立的 Lower-Half 驱动**
-
+- **目标 2：替换或添加独立的 Lower-Half** **驱动**
     - **场景**：在现有平台上更换部分硬件，如更新 PA。
     - **要求**：仅需实现该硬件的控制接口。
 
@@ -61,7 +57,7 @@ openvela 的音频框架为驱动开发提供了标准化的抽象层。您可�
 
 ## 四、Audio Lower-Half 驱动实现步骤
 
-本章节详细介绍一个全新 Audio Lower-Half 驱动的核心实现过程。
+本章节详细介绍一个全新 Audio Lower-Half 驱动核心实现过程。
 
 ### 步骤 1：定义私有数据结构
 
@@ -88,7 +84,7 @@ struct xx_audio_dev_s
 
 ```C
 /* 使用您的设备名替换 xx_audio_dev */
-struct audio_lowerhalf_s *xx_audio(dev)_initialize(...)
+struct audio_lowerhalf_s *xx_audio_initialize(...)
 {
   struct xx_audio(dev)_s *priv;
   int ret;
@@ -109,7 +105,16 @@ struct audio_lowerhalf_s *xx_audio(dev)_initialize(...)
 }
 ```
 
-### 步骤 3：定义 `audio_ops_s` 接口操作集
+### 步骤 3：注册设备节点
+
+选择合适的位置比如 `board_early_initialize` 注册设备节点。
+
+```C
+audio_register("pcm0c", *xx_audio(dev)_initialize(true, 0));
+audio_register("pcm0p", *xx_audio(dev)_initialize(false, 0));
+```
+
+### 步骤 4：定义 `audio_ops_s` 接口操作集
 
 定义一个静态常量 `audio_ops_s` 结构体，并填充您将要实现的函数指针。以下是最小功能集：
 
@@ -128,6 +133,8 @@ static const struct audio_ops_s g_xx_audio(dev)_ops =
   .pause         = xx_audio(dev)_pause,
   .resume        = xx_audio(dev)_resume,
 #endif
+  .allocbuffer   = xx_audio(dev)_allocbuffer,
+  .freebuffer    = xx_audio(dev)_freebuffer,
   .enqueuebuffer = xx_audio(dev)_enqueuebuffer,
   .ioctl         = xx_audio(dev)_ioctl,
   .reserve       = xx_audio(dev)_reserve,
@@ -135,7 +142,7 @@ static const struct audio_ops_s g_xx_audio(dev)_ops =
 };
 ```
 
-### 步骤 4：实现 `audio_ops_s` 各接口函数
+### 步骤 5：实现 `audio_ops_s` 各接口函数
 
 #### `getcaps` - 获取设备能力
 
@@ -145,9 +152,8 @@ static const struct audio_ops_s g_xx_audio(dev)_ops =
 
     - **上层查询**：`ac_type = AUDIO_TYPE_QUERY`, `ac_subtype = AUDIO_TYPE_QUERY`
     - **驱动返回**：在 `caps` 结构体中填充：
-
-        - 设备类型 (INPUT/OUTPUT) 到 `caps->ac_controls.b[0]`、
-        - 支持的声道数至 `caps->ac_channels` 
+        - 设备类型 (INPUT/OUTPUT) 到 `caps->ac_controls.b[0]`
+        - 支持的声道数至 `caps->ac_channels`
         - 主格式 (如 `AUDIO_FMT_PCM`) 至 `caps->ac_format.hw`。
 
 - **阶段 2：查询指定类型的详细能力**
@@ -194,6 +200,104 @@ static int xx_audio_configure(FAR struct audio_lowerhalf_s *dev,
  }
 ```
 
+#### `ioctl` - 扩展控制命令
+
+处理上层发送的 `ioctl` 命令。强烈建议支持以下标准命令：
+
+-  **`AUDIOIOC_SETBUFFERINFO`****/****`AUDIOIOC_GETBUFFERINFO`**: 设置或获取音频缓冲区信息（数量 `nbuffers` 和大小 `buffer_size`，单位字节）。驱动应根据硬件能力（如 DMA 描述符限制）来决定是否接受上层设置。
+- **`AUDIOIOC_GETLATENCY`**: 返回驱动内部当前缓存的音频帧数量，用于延迟计算。
+
+```C++
+static int xx_audio_ioctl(struct audio_lowerhalf_s *dev, int cmd,
+                          unsigned long arg)
+{
+  struct xx_audio_s *priv = (struct xx_audio_s *)dev;
+  int ret = 0;
+  switch (cmd)
+    {
+        case AUDIOIOC_SETBUFFERINFO:
+        {
+          struct ap_buffer_info_s *info =
+              (struct ap_buffer_info_s *)arg;
+
+          priv->nbuffers    = info->nbuffers;
+          priv->buffer_size = info->buffer_size;
+        }
+        break;
+        case AUDIOIOC_GETBUFFERINFO:
+        {
+          struct ap_buffer_info_s *info =
+              (struct ap_buffer_info_s *)arg;
+
+          info->nbuffers    = priv->nbuffers;
+          info->buffer_size = priv->buffer_size;
+        }
+        break;
+        case AUDIOIOC_GETLATENCY:
+        {
+          xxx;
+        }
+        break;
+     }
+ }
+```
+
+驱动应根据硬件特性，决定 `buffer_size` 和 `nbuffers` 是固定的还是可动态调整的。
+
+#### `allocbuffer` - 释放音频缓冲区（按需）
+
+针对 buffer 需要在 Lower-Half 分配的场景，如 DMA，需要实现内存分配接口。
+
+```C
+static int xx_audio_allocbuffer(struct audio_lowerhalf_s *dev,
+                                 struct audio_buf_desc_s *bufdesc)
+{
+  struct audio_dma_s *audio_dma = (struct audio_dma_s *)dev;
+  struct ap_buffer_s *apb;
+
+  apb = kumm_zalloc(sizeof(struct ap_buffer_s));
+  *bufdesc->u.pbuffer = apb;
+ 
+  /* Populate the buffer contents */
+
+  apb->i.channels = 2;
+  apb->crefs      = 1;
+  apb->nmaxbytes  = audio_dma->buffer_size;
+  apb->samp = audio_dma->alloc_addr +
+              audio_dma->alloc_index *
+              audio_dma->buffer_size;
+  audio_dma->alloc_index++;
+  nxmutex_init(&apb->lock);
+
+  return sizeof(struct audio_buf_desc_s);
+}
+```
+
+#### `freebuffer` - 入队音频缓冲区（按需）
+
+一般和 `allocbuffer` 成对存在。
+
+```C
+static int xx_audio_freebuffer(struct audio_lowerhalf_s *dev,
+                                struct audio_buf_desc_s *bufdesc)
+{
+  struct audio_dma_s *audio_dma = (struct audio_dma_s *)dev;
+  struct ap_buffer_s *apb;
+
+  apb = bufdesc->u.buffer;
+  audio_dma->alloc_index--;
+  kumm_free(apb);
+
+  if (audio_dma->alloc_index == 0)
+    {
+      kumm_free(audio_dma->alloc_addr);
+      audio_dma->alloc_addr = NULL;
+    }
+
+  return sizeof(struct audio_buf_desc_s);
+}
+```
+
 #### `enqueuebuffer` - 入队音频缓冲区
 
 上层通过此函数将包含音频数据的缓冲区（`ap_buffer_s`）传递给驱动。
@@ -235,15 +339,15 @@ static int xx_audio_enqueuebuffer(FAR struct audio_lowerhalf_s *dev,
 }
 ```
 
-#### `start`启动音频流
+#### `start` - 启动音频流
 
-上层调用此函数通知驱动启动硬件，开始处理音频数据。
+The upper layer calls this function to instruct the driver to start the hardware and begin processing audio data.
 
-**推荐实现流程**：
+**Recommended Implementation Flow**:
 
-1. **创建消息队列**：用于主任务与工作线程之间的通信。
-2. **创建工作线程**：该线程负责处理音频数据的实际传输。
-3. **启动硬件**：使能 DMA 或 I2S 等外设。
+1. **Create a message queue**: For communication between the main task and the worker thread.
+2. **Create a worker thread**: This thread is responsible for the actual transfer of audio data.
+3. **Start the hardware**: Enable peripherals like DMA or I2S.
 
 ```C
  static int xx_audio_start(FAR struct audio_lowerhalf_s *dev)
@@ -253,7 +357,7 @@ static int xx_audio_enqueuebuffer(FAR struct audio_lowerhalf_s *dev,
      struct mq_attr attr;
      pthread_attr_t tattr;
     
-      /* 1. 为工作线程创建消息队列 */
+      /* 1. Create a message queue for the worker thread */
       snprintf(priv->mqname, sizeof(priv->mqname), "/tmp/%" PRIXPTR,
               (uintptr_t)priv);
 
@@ -265,7 +369,7 @@ static int xx_audio_enqueuebuffer(FAR struct audio_lowerhalf_s *dev,
       ret = file_mq_open(&priv->mq, priv->mqname,
                          O_RDWR | O_CREAT, 0644, &attr);
       
-      /* 2. 创建并启动工作线程 */
+      /* 2. Create and start the worker thread */
       pthread_attr_init(&tattr);
       sparam.sched_priority = sched_get_priority_max(SCHED_FIFO) - 3;
       pthread_attr_setschedparam(&tattr, &sparam);
@@ -276,15 +380,15 @@ static int xx_audio_enqueuebuffer(FAR struct audio_lowerhalf_s *dev,
  }
 ```
 
-**工作线程 (****`xx_audio_dev_worker`****) 逻辑：**
+**Worker Thread (`xx_audio_dev_worker`) Logic:**
 
-- 循环监听消息队列，处理如 `AUDIO_MSG_ENQUEUE`, `AUDIO_MSG_STOP` 等消息。
-- 从待处理队列 (`pendq`) 中取出音频缓冲区进行处理（**播放**或**填充**）。
-- 在接收到 `AUDIO_MSG_STOP` 后，处理完所有剩余缓冲区，然后通过 `AUDIO_CALLBACK_COMPLETE` 回调通知上层，最后安全退出线程。
+- It loops, listening to the message queue and handling messages like `AUDIO_MSG_ENQUEUE` and `AUDIO_MSG_STOP`.
+- It takes audio buffers from the pending queue (`pendq`) for processing (**playback** or **filling**).
+- Upon receiving `AUDIO_MSG_STOP`, it processes all remaining buffers, notifies the upper layer via the `AUDIO_CALLBACK_COMPLETE` callback, and then safely exits the thread.
 
-#### `stop` - 停止音频流
+#### `stop` - Stop the Audio Stream
 
-上层调用此函数请求**优雅停止（graceful stop）音频流**，即驱动应等待所有已缓冲的数据处理完毕后再完全停止。
+The upper layer calls this function to request a **graceful stop** of the audio stream, meaning the driver should wait for all buffered data to be processed before completely stopping.
 
 ```C++
 static int xx_audio_stop(FAR struct audio_lowerhalf_s *dev)
@@ -294,13 +398,13 @@ static int xx_audio_stop(FAR struct audio_lowerhalf_s *dev)
   struct audio_msg_s term_msg;
   FAR void *value;
 
- /* 1. 向工作线程发送 STOP 消息 */
+ /* 1. Send a STOP message to the worker thread */
   term_msg.msg_id = AUDIO_MSG_STOP;
   term_msg.u.data = 0;
   file_mq_send(&priv->mq, (FAR const char *)&term_msg, sizeof(term_msg),
                CONFIG_CS4344_MSG_PRIO);
 
-  /* 2. 等待工作线程安全退出 */
+  /* 2. Wait for the worker thread to exit safely */
   pthread_join(priv->threadid, &value);
   priv->threadid = 0;
 
@@ -308,37 +412,37 @@ static int xx_audio_stop(FAR struct audio_lowerhalf_s *dev)
 }
 ```
 
-**工作线程对 `AUDIO_MSG_STOP` 的响应：**
+**Worker Thread Response to `AUDIO_MSG_STOP`:**
 
-> **注意**： `AUDIO_MSG_STOP` 并不是立即停止，而是等缓存的数据播放完再停止。
+> **Note**: `AUDIO_MSG_STOP` does not mean stop immediately; it means stop after all cached data has been played.
 
 ```C++
-/* 在工作线程中，收到 STOP 消息后执行 */
+/* Executed in the worker thread after receiving a STOP message */
 
-  /* 1. 返回所有在途的缓冲区 */
+  /* 1. Return all in-flight buffers */
   nxmutex_lock(&priv->pendlock);
   while ((apb = (FAR struct ap_buffer_s *)dq_remfirst(&priv->pendq)) != NULL)
     {
-      /* 释放对此缓冲区的引用 */
+      /* Release the reference to this buffer */
       apb_free(apb);
 
-      /* 将缓冲区通过 DEQUEUE 回调返回给上层 */
+      /* Return the buffer to the upper layer via the DEQUEUE callback */
       priv->dev.upper(priv->dev.priv, AUDIO_CALLBACK_DEQUEUE, apb, OK);
     }
 
   nxmutex_unlock(&priv->pendlock);
   
-  /* 2. 最后，通知上层停止流程已完成 */
+  /* 2. Finally, notify the upper layer that the stop process is complete */
   priv->dev.upper(priv->dev.priv, AUDIO_CALLBACK_COMPLETE, NULL, OK);
 ```
 
-#### `pause` - 暂停音频流
+#### `pause` - Pause the Audio Stream
 
-暂停处理音频数据。
+Pauses the processing of audio data.
 
-> **注意**：在暂停期间，驱动**不得**通过 `AUDIO_CALLBACK_DEQUEUE` 回调向上层返回缓冲区。
+> **Note**: During a pause, the driver **must not** return buffers to the upper layer via the `AUDIO_CALLBACK_DEQUEUE` callback.
 
-方式一：可以向 work thread 发 `AUDIO_MSG_PAUSE` 暂停播放/录制。
+Method 1: Send `AUDIO_MSG_PAUSE` to the worker thread to pause playback/recording.
 
 ```C++
 static int xx_audio_pause(FAR struct audio_lowerhalf_s *dev)
@@ -358,7 +462,7 @@ static int xx_audio_pause(FAR struct audio_lowerhalf_s *dev)
 }
 ```
 
-方式二：直接使用变量来同步状态：
+Method 2: Use a variable to synchronize state directly.
 
 ```C++
 static int xx_audio_pause(FAR struct audio_lowerhalf_s *dev)
@@ -375,11 +479,11 @@ static int xx_audio_pause(FAR struct audio_lowerhalf_s *dev)
 }
 ```
 
-#### `resume` - 恢复音频流
+#### `resume` - Resume the Audio Stream
 
-从暂停状态恢复。驱动可以继续处理音频数据，并恢复 `AUDIO_CALLBACK_DEQUEUE` 回调。
+Resumes from a paused state. The driver can continue processing audio data and resume `AUDIO_CALLBACK_DEQUEUE` callbacks.
 
-方式一：向 work thread 发 `AUDIO_MSG_RESUME` 恢复播放/录制。
+Method 1: Send `AUDIO_MSG_RESUME` to the worker thread to resume playback/recording.
 
 ```C++
 static int xx_audio_resume(FAR struct audio_lowerhalf_s *dev)
@@ -399,7 +503,7 @@ static int xx_audio_resume(FAR struct audio_lowerhalf_s *dev)
 }
 ```
 
-方式二：直接使用变量来同步状态。
+Method 2: Use a variable to synchronize state directly.
 
 ```C++
 static int xx_audio_resume(FAR struct audio_lowerhalf_s *dev)
@@ -417,114 +521,77 @@ static int xx_audio_resume(FAR struct audio_lowerhalf_s *dev)
 }
 ```
 
-驱动在执行 resume 之后可以继续音频播放/录音，并且调用回调向应用发送 DQUEUE 消息返回 `buffer`。
+After the driver executes `resume`, it can continue audio playback/recording and send a DEQUEUE message via callback to return the `buffer` to the application.
 
 ```C
 priv->dev.upper(priv->dev.priv, AUDIO_CALLBACK_DEQUEUE, apb, OK);
 ```
 
-#### `ioctl` - 自定义控制命令
+**`release`**: After audio playback/recording is complete, the application uses `release` to notify the driver to release associated resources.
 
-处理上层发送的 `ioctl` 命令。强烈建议支持以下标准命令：
+**`reserve`**: Hardware-independent; the driver must reserve and implement this interface.
 
-- **`AUDIOIOC_SETBUFFERINFO`/`AUDIOIOC_GETBUFFERINFO`**: 设置或获取音频缓冲区信息（数量 `nbuffers` 和大小 `buffer_size`，单位字节）。驱动应根据硬件能力（如 DMA 描述符限制）来决定是否接受上层设置。
-- **`AUDIOIOC_GETLATENCY`**: 返回驱动内部当前缓存的音频帧数量，用于延迟计算。
+**`shutdown`**: Called when the driver module is unloaded for final resource cleanup.
 
-```C++
-static int xx_audio_ioctl(struct audio_lowerhalf_s *dev, int cmd,
-                          unsigned long arg)
-{
-  struct xx_audio_s *priv = (struct xx_audio_s *)dev;
-  int ret = 0;
-  switch (cmd)
-    {
-        case AUDIOIOC_SETBUFFERINFO:
-        {
-          struct ap_buffer_info_s *info =
-              (struct ap_buffer_info_s *)arg;
+## V. Key Implementation Details
 
-          priv->nbuffers    = info->nbuffers;
-          priv->buffer_size = info->buffer_size;
-        }
-        break;
-        case AUDIOIOC_GETBUFFERINFO:
-        {
-          struct ap_buffer_info_s *info =
-              (struct ap_buffer_info_s *)arg;
+This section delves into the key implementation details of the `getcaps` function and specific `ioctl` commands, which are central to ensuring correct interaction between the driver and the upper-layer framework.
 
-          info->nbuffers    = priv->nbuffers;
-          info->buffer_size = priv->buffer_size;
-        }
-        break;
-     }
- }
-```
+### 1. `AUDIOIOC_SETPARAMETER` IOCTL
 
-驱动应根据厂商的硬件特性，决定 `buffer_size` 和 `nbuffers` 是固定的还是可动态调整的。
+This is a generic parameter-setting interface designed for passing non-standard, platform-specific configurations.
 
-- **`release`**： 音频播放/录制完成之后，应用通过 `release` 通知驱动释放相关资源。
-- **`reserve`**：驱动需要保留和实现该接口，与硬件无关。
-- **`shutdown`**: 在驱动模块卸载时调用，用于最终的资源清理。当前使用较少，但需要保留并正确实现。
-
-## 五、关键实现细节
-
-本章节将深入探讨 `getcaps` 函数和特定 `ioctl` 命令的关键实现细节，这些是确保驱动与上层框架正确交互的核心。
-
-### 1、`AUDIOIOC_SETPARAMETER` IOCTL
-
-这是一个通用的参数设置接口，专用于传递非标准的、平台特定的配置。
-
-- 用途：允许上层应用根据不同场景（如通话、音乐播放）向驱动传递定制化参数，以便驱动应用不同的音频效果或硬件配置。
-- 格式：参数 `arg` 是一个 `char*` 字符串，其格式严格遵循 `"key=value"`。
-- 示例：
+- **Purpose**: Allows upper-layer applications to pass custom parameters to the driver for different scenarios (e.g., phone calls, music playback), enabling the driver to apply different audio effects or hardware configurations.
+- **Format**: The `arg` parameter is a `char*` string that strictly follows the `"key=value"` format.
+- **Examples**:
 
     - `"scenario=phone"`
     - `"scenario=music"`
 
-### 2、`ac_channels` 声道数编码
+### 2. `ac_channels` Channel Count Encoding
 
-在 `getcaps` 函数的实现中，`struct audio_caps_s` 的 `ac_channels` 成员使用一种特定的格式进行编码，以同时表示支持的最小和最大声道数。
+In the implementation of the `getcaps` function, the `ac_channels` member of `struct audio_caps_s` uses a specific format to represent both the minimum and maximum supported number of channels.
 
-- **编码规则**：
+- **Encoding Rule**:
 
-    - **低 4 位**: 支持的**最大**通道数。
-    - **高 4 位**: 支持的**最小**通道数（如果无限制设为 0）。
+    - **Lower 4 bits**: Maximum supported number of channels.
+    - **Upper 4 bits**: Minimum supported number of channels (set to 0 if no limit).
 
-- **示例**：
+- **Examples**:
 
-    - 支持 1 到 2 通道（最小为 1，最大为 2）：`ac_channels = 0x12`
-    - 仅支持 2 通道（立体声，最小和最大均为 2）：`ac_channels = 0x22`
-    - 仅支持 1 通道（单声道，最小和最大均为 1）：`ac_channels = 0x11`
+    - Supports 1 to 2 channels (min 1, max 2): `ac_channels = 0x12`
+    - Supports only 2 channels (stereo, min and max are 2): `ac_channels = 0x22`
+    - Supports only 1 channel (mono, min and max are 1): `ac_channels = 0x11`
 
-### 3、`getcaps` 实现详解
+### 3. `getcaps` Implementation Details
 
-`getcaps` 是 `audio_ops_s` 操作集中的一个核心**函数**，而非 `ioctl` 命令。它负责向上层报告驱动所支持的各项能力。以下是其典型的实现逻辑：
+`getcaps` is a core **function** within the `audio_ops_s` operation set, not an `ioctl` command. It is responsible for reporting the driver's supported capabilities to the upper layer. The following is its typical implementation logic:
 
-#### 3.1 报告设备类型与主格式
+#### 3.1 Report Device Type and Main Format
 
-当上层以 `ac_type = AUDIO_TYPE_QUERY` 和 `ac_subtype = AUDIO_TYPE_QUERY` 查询时，驱动需要：
+When the upper layer queries with `ac_type = AUDIO_TYPE_QUERY` and `ac_subtype = AUDIO_TYPE_QUERY`, the driver must:
 
-1. 在 `caps->ac_controls.b[0]` 中设置设备是 `AUDIO_TYPE_INPUT` 还是 `AUDIO_TYPE_OUTPUT`。
-2. 在 `caps->ac_format.hw` 中以位掩码形式报告支持的主格式，例如 `(1 << (AUDIO_FMT_PCM - 1))` 表示支持 PCM 格式。
+1. Set whether the device is `AUDIO_TYPE_INPUT` or `AUDIO_TYPE_OUTPUT` in `caps->ac_controls.b[0]`.
+2. Report supported main formats as a bitmask in `caps->ac_format.hw`, for example, `(1 << (AUDIO_FMT_PCM - 1))` to indicate support for the PCM format.
 
-#### 3.2 报告 PCM 子格式
+#### 3.2 Report PCM Subformats
 
-当上层以 `ac_type = AUDIO_TYPE_QUERY` 和 `ac_subtype = AUDIO_FMT_PCM` 查询时，驱动需要：
+When the upper layer queries with `ac_type = AUDIO_TYPE_QUERY` and `ac_subtype = AUDIO_FMT_PCM`, the driver must:
 
-1. 在 `caps->ac_controls.b[0]` 中报告支持的具体 PCM 子格式，例如 `AUDIO_SUBFMT_PCM_S16_LE`。
-2. 如果支持多种子格式，可以继续填充 `caps->ac_controls.b[1]`，以此类推。
-3. 以 `AUDIO_SUBFMT_END` 结尾。
+1. Report the specific supported PCM subformats in `caps->ac_controls.b[0]`, for example, `AUDIO_SUBFMT_PCM_S16_LE`.
+2. If multiple subformats are supported, you can continue populating `caps->ac_controls.b[1]`, and so on.
+3. Terminate the list with `AUDIO_SUBFMT_END`.
 
-#### 3.3 报告指定类型的能力
+#### 3.3 Report Capabilities for a Specific Type
 
-当上层以 `ac_type = AUDIO_TYPE_OUTPUT` (或 `INPUT`) 和 `ac_subtype = AUDIO_TYPE_QUERY` 查询时，驱动需要：
+When the upper layer queries with `ac_type = AUDIO_TYPE_OUTPUT` (or `INPUT`) and `ac_subtype = AUDIO_TYPE_QUERY`, the driver must:
 
-1. 使用前述的编码规则填充 `caps->ac_channels`。
-2. 在 `caps->ac_controls.hw[0]` 中以位掩码形式报告支持的所有采样率，例如 `AUDIO_SAMP_RATE_8K | AUDIO_SAMP_RATE_16K | AUDIO_SAMP_RATE_48K`。
+1. Populate `caps->ac_channels` using the encoding rule described previously.
+2. Report all supported sample rates as a bitmask in `caps->ac_controls.hw[0]`, for example, `AUDIO_SAMP_RATE_8K | AUDIO_SAMP_RATE_16K | AUDIO_SAMP_RATE_48K`.
 
-#### 3.4 代码实现参考
+#### 3.4 Code Implementation Reference
 
-以下示例代码展示了 `getcaps` 函数的完整实现逻辑，覆盖了对不同类型查询的响应。
+The following example code demonstrates a complete implementation of the `getcaps` function, covering responses to various types of queries.
 
 ```C
 static int bes_rpmsg_aud_svr_getcaps(FAR struct audio_lowerhalf_s *dev,
@@ -713,14 +780,14 @@ static int bes_rpmsg_aud_svr_getcaps(FAR struct audio_lowerhalf_s *dev,
 }
 ```
 
-## 六、注意事项
+## VI. Important Considerations
 
-1. **接口调用耗时**
+1. **Interface Call Latency**
 
-    - **要求**：所有 `audio_ops_s` 接口的实现应避免长时间阻塞。建议将每个接口的执行时间控制在 **10ms** 以内。
-    - **风险**：过长的耗时（例如，在 `start` 中耗时 40ms）可能导致音频数据流（尤其是录音）出现溢出（overflow）错误。
+    - **Requirement**: All `audio_ops_s` interface implementations should avoid long blocking operations. It is recommended to keep the execution time of each interface under **10ms**.
+    - **Risk**: Excessive latency (e.g., 40ms in the `start` function) can cause overflow errors in the audio data stream, especially for recording.
 
-2. **缓冲区管理**
+2. **Buffer Management**
 
-    - **要求**：**绝不能丢失**任何从上层 `enqueuebuffer` 传入的 `ap_buffer_s` 缓冲区。
-    - **风险**：openvela 音频框架将缓冲区的生命周期管理委托给 Lower-Half 驱动。一旦驱动丢失了缓冲区的指针（例如，未能在所有代码路径中正确处理并返回），将直接导致**内存泄漏**。所有收到的缓冲区必须通过 `upper()` 回调返回或在 `stop` 流程中统一释放。
+    - **Requirement**: You **must never lose** any `ap_buffer_s` buffer passed from the upper layer via `enqueuebuffer`.
+    - **Risk**: The openvela audio framework delegates buffer lifecycle management to the Lower-Half driver. If the driver loses a buffer's pointer (e.g., by failing to handle and return it in all code paths), it will directly cause a **memory leak**. All received buffers must be returned via the `upper()` callback.
