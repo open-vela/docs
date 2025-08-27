@@ -24,13 +24,13 @@ The openvela CMake build process follows the standard NuttX framework, with `nut
 
 The build steps are illustrated in the figure below:
 
-![image](./figures/013.png)
+<img src="./figures/013.png" alt="" width="60%">
 
 ### 2. Build Dependency Relationships
 
 All modules are ultimately organized into different categories of library collections and linked to form the final product. The dependency relationship is shown in the figure below:
 
-![image](./figures/014.png)
+<img src="./figures/014.svg" alt="" width="100%">
 
 ## II. Advanced Development Practices Guide
 

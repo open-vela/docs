@@ -24,13 +24,13 @@ openvela 的 CMake 构建过程遵循 NuttX 的标准框架，其入口文件为
 
 其构建步骤如下图所示：
 
-![image](./figures/013.png)
+<img src="./figures/013.png" alt="" width="60%">
 
 ### 2、构建依赖关系
 
 所有模块最终被组织成不同类别的库集合，并链接成最终产物。其依赖关系如下图所示：
 
-![image](./figures/014.png)
+<img src="./figures/014.svg" alt="" width="100%">
 
 ## 二、高级开发实践指南
 
