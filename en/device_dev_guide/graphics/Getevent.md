@@ -1,5 +1,7 @@
 # getevent Tool Usage Guide
 
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/graphics/Getevent.md) \]
+
 `getevent` is a command-line tool that monitors and displays real-time events from input devices such as touchscreens, keyboards, and mice. It provides detailed event data to help you debug input device drivers and applications.
 
 ## I. Features
