@@ -73,7 +73,7 @@ struct sdio_dev_s {
 };
 ```
 
-#### 关键接口实现要点
+### 关键接口实现要点
 
 - **`capabilities`**: 返回您的 SDIO 控制器支持的特性，如是否支持 4-bit/8-bit 模式、是否支持 DMA 等。
 - **`status`**: 返回卡的状态，最重要的是 `SDIO_STATUS_PRESENT` (卡是否插入)。

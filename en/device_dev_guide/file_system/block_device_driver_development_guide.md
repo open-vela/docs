@@ -73,7 +73,7 @@ struct sdio_dev_s {
 };
 ```
 
-#### Key Interface Implementation Points
+### Key Interface Implementation Points
 
 - **`capabilities`**: Returns the features supported by your SDIO controller, such as support for 4-bit/8-bit mode, DMA support, etc.
 - **`status`**: Returns the card's status, most importantly `SDIO_STATUS_PRESENT` (whether the card is inserted).
