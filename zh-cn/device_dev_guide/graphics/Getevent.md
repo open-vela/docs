@@ -1,5 +1,7 @@
 # getevent 工具使用指南
 
+\[ [English](../../../en/device_dev_guide/graphics/Getevent.md) | 简体中文 \]
+
 `getevent` 是一个命令行工具，用于实时监控并显示来自触摸屏、键盘、鼠标等输入设备的事件。它通过提供详细的事件数据，帮助您调试输入设备驱动和应用程序。
 
 ## 一、功能特性
