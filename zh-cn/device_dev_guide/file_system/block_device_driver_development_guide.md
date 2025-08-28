@@ -1,8 +1,12 @@
 # 块设备驱动开发指南
 
+\[ [English](../../../en/device_dev_guide/file_system/block_device_driver_development_guide.md) | 简体中文 \]
+
 ## 一、概述
 
 本文档指导开发者如何为 `openvela` 系统适配块设备，重点以通过 SDIO 总线接口连接的 eMMC 或 SD 卡为例。您将学习如何实现 SDIO 驱动的下半部，并将其与通用的 `mmcsd` 块设备驱动上半部进行绑定。
+
+**说明**：`mmc/sd` 驱动路径为 `nuttx/drivers/mmcsd`
 
 ### 1、前提条件
 
@@ -35,11 +39,7 @@
 
 ## 三、实现 SDIO 下半部接口
 
-您需要提供一个 `struct sdio_dev_s` 的实例。软件分层如下：
-
-![img](./figures/008.png)
-
-以下是其中一些关键接口的说明：
+您需要提供一个 `struct sdio_dev_s` 的实例。以下是其中一些关键接口的说明：
 
 ```C
 // 定义于 nuttx/include/nuttx/sdio.h
@@ -73,12 +73,12 @@ struct sdio_dev_s {
 };
 ```
 
-#### **关键接口实现要点：**
+#### 关键接口实现要点
 
 - **`capabilities`**: 返回您的 SDIO 控制器支持的特性，如是否支持 4-bit/8-bit 模式、是否支持 DMA 等。
 - **`status`**: 返回卡的状态，最重要的是 `SDIO_STATUS_PRESENT` (卡是否插入)。
-- **`sendcmd`/`recv_r\*`**: 实现向卡发送命令和接收响应的底层逻辑。
-- **`*setup` 函数**: 这些函数用于准备数据传输。例如，`dmarecvsetup` 应该配置好 DMA 控制器，准备从 SDIO 接口接收数据到指定 `buffer`。实际的数据传输由 `mmcsd` 上半部通过 `sdio_io_rw_extended` 等接口触发。
+- **`sendcmd`/`recv_r*`**: 实现向卡发送命令和接收响应的底层逻辑。
+- **`setup`**: 这些函数用于准备数据传输。例如，`dmarecvsetup` 应该配置好 DMA 控制器，准备从 SDIO 接口接收数据到指定 `buffer`。实际的数据传输由 `mmcsd` 上半部通过 `sdio_io_rw_extended` 等接口触发。
 
 ## 四、绑定与注册
 
@@ -123,14 +123,169 @@ int my_board_mmcsd_init(void)
 - 获取卡的几何信息（扇区大小、数量等）。
 - 调用 `register_blockdriver()` 将其注册为块设备。
 
-## 五、测试与验证
+## 五、参考实现
 
-`openvela` 提供了丰富的测试工具来验证您的块设备驱动：
+`nuttx/boards/arm/at32/at32f437-mini/src/at32_mmcsd.c`
 
-- **fstest**：一个综合性的文件系统压力测试工具。您可以先在 `/dev/mmcsd0` 上创建文件系统（如 `mkfatfs`），然后将其挂载并使用 `fstest` 进行测试。
-- **cmocka_block_test**：可以直接对 `/dev/mmcsd0` 设备节点进行底层的块读写测试，用于验证 `read` 和 `write` 接口的正确性和性能。
+```C
+struct at32_dev_s g_sdiodev =
+{
+  .dev =
+  {
+#ifdef CONFIG_SDIO_MUXBUS
+    .lock             = at32_lock,
+#endif
+    .reset            = at32_reset,
+    .capabilities     = at32_capabilities,
+    .status           = at32_status,
+    .widebus          = at32_widebus,
+    .clock            = at32_clock,
+    .attach           = at32_attach,
+    .sendcmd          = at32_sendcmd,
+#ifdef CONFIG_SDIO_BLOCKSETUP
+    .blocksetup       = at32_blocksetup,
+#endif
+    .recvsetup        = at32_recvsetup,
+    .sendsetup        = at32_sendsetup,
+    .cancel           = at32_cancel,
+    .waitresponse     = at32_waitresponse,
+    .recv_r1          = at32_recvshortcrc,
+    .recv_r2          = at32_recvlong,
+    .recv_r3          = at32_recvshort,
+    .recv_r4          = at32_recvshort,
+    .recv_r5          = at32_recvshortcrc,
+    .recv_r6          = at32_recvshortcrc,
+    .recv_r7          = at32_recvshort,
+    .waitenable       = at32_waitenable,
+    .eventwait        = at32_eventwait,
+    .callbackenable   = at32_callbackenable,
+    .registercallback = at32_registercallback,
+#ifdef CONFIG_SDIO_DMA
+#ifdef CONFIG_AT32_SDIO_DMA
+#ifdef CONFIG_ARCH_HAVE_SDIO_PREFLIGHT
+    .dmapreflight     = at32_dmapreflight,
+#endif
+    .dmarecvsetup     = at32_dmarecvsetup,
+    .dmasendsetup     = at32_dmasendsetup,
+#else
+#ifdef CONFIG_ARCH_HAVE_SDIO_PREFLIGHT
+    .dmapreflight     = NULL,
+#endif
+    .dmarecvsetup     = at32_recvsetup,
+    .dmasendsetup     = at32_sendsetup,
+#endif
+#endif
+  },
+  .waitsem = SEM_INITIALIZER(0),
+};
 
-请参考相关测试工具的文档，对您的驱动进行充分验证。
+/****************************************************************************
+ * Name: sdio_initialize
+ *
+ * Description:
+ *   Initialize SDIO for operation.
+ *
+ * Input Parameters:
+ *   slotno - Not used.
+ *
+ * Returned Value:
+ *   A reference to an SDIO interface structure.  NULL is returned on
+ *   failures.
+ *
+ ****************************************************************************/
 
-- [fstest]()
-- [blktest]()
+struct sdio_dev_s *sdio_initialize(int slotno)
+{
+  /* There is only one slot */
+
+  struct at32_dev_s *priv = &g_sdiodev;
+
+  /* Allocate a DMA channel */
+
+#ifdef CONFIG_AT32_SDIO_DMA
+  priv->dma = at32_dmachannel(SDIO_DMACHAN);
+  DEBUGASSERT(priv->dma);
+#endif
+
+  /* Configure GPIOs for 4-bit, wide-bus operation (the chip is capable of
+   * 8-bit wide bus operation but D4-D7 are not configured).
+   *
+   * If bus is multiplexed then there is a custom bus configuration utility
+   * in the scope of the board support package.
+   */
+
+#ifndef CONFIG_SDIO_MUXBUS
+  at32_configgpio(GPIO_SDIO_D0 | SDIO_PULLUP_ENABLE);
+#ifndef CONFIG_AT32_SDIO_WIDTH_D1_ONLY
+  at32_configgpio(GPIO_SDIO_D1 | SDIO_PULLUP_ENABLE);
+  at32_configgpio(GPIO_SDIO_D2 | SDIO_PULLUP_ENABLE);
+  at32_configgpio(GPIO_SDIO_D3 | SDIO_PULLUP_ENABLE);
+#endif
+  at32_configgpio(GPIO_SDIO_CK | SDIO_PULLUP_ENABLE);
+  at32_configgpio(GPIO_SDIO_CMD | SDIO_PULLUP_ENABLE);
+#endif
+
+  /* Reset the card and assure that it is in the initial, unconfigured
+   * state.
+   */
+
+  at32_reset(&priv->dev);
+  return &g_sdiodev.dev;
+}
+
+/****************************************************************************
+ * Name: at32_sdinitialize
+ *
+ * Description:
+ *   Initialize the SPI-based SD card.  Requires CONFIG_DISABLE_MOUNTPOINT=n
+ *   and CONFIG_AT32_SDIO=y
+ *
+ ****************************************************************************/
+
+int at32_sdinitialize(int minor)
+{
+#ifdef HAVE_MMCSD
+  struct sdio_dev_s *sdio;
+  int ret;
+
+  /* First, get an instance of the SDIO interface */
+
+  sdio = sdio_initialize(AT32_MMCSDSLOTNO);
+  if (!sdio)
+    {
+      ferr("ERROR: Failed to initialize SDIO slot %d\n", AT32_MMCSDSLOTNO);
+      return -ENODEV;
+    }
+
+  finfo("Initialized SDIO slot %d\n", AT32_MMCSDSLOTNO);
+
+  /* Now bind the SDIO interface to the MMC/SD driver */
+
+  ret = mmcsd_slotinitialize(minor, sdio);
+  if (ret != OK)
+    {
+      ferr("ERROR:");
+      ferr(" Failed to bind SDIO slot %d to the MMC/SD driver, minor=%d\n",
+              AT32_MMCSDSLOTNO, minor);
+    }
+
+  finfo("Bound SDIO slot %d to the MMC/SD driver, minor=%d\n",
+         AT32_MMCSDSLOTNO, minor);
+
+  /* Then let's guess and say that there is a card in the slot.
+   * I need to check to see if the M3 Wildfire board supports a GPIO to
+   * detect if there is a card in the slot.
+   */
+
+  sdio_mediachange(sdio, true);
+#endif
+  return OK;
+}
+```
+
+## 六、测试与验证
+
+`openvela` 提供了测试工具来验证您的块设备驱动：
+
+- **fstest**：一个综合性的文件系统压力测试工具。您可以先在 `/dev/mmcsd0` 上创建文件系统（如 `mkfatfs`），然后将其挂载并使用 `fstest` 进行测试。详情请参见 [fstest 文件系统压力测试工具指南](./../../debugging_tools/stress_testing/fstest.md)。
+- **cmocka_block_test**：可以直接对 `/dev/mmcsd0` 设备节点进行底层的块读写测试，用于验证 `read` 和 `write` 接口的正确性和性能。详情请参见 [blktest 块设备 I/O 测试指南](./../../debugging_tools/stress_testing/blktest.md)。

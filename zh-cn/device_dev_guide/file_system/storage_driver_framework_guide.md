@@ -1,5 +1,7 @@
 # 存储驱动框架指南
 
+\[ [English](../../../en/device_dev_guide/file_system/storage_driver_framework_guide.md) | 简体中文 \]
+
 ## 一、概述
 
 本文档旨在为芯片和板卡供应商提供 `openvela` 存储驱动框架的整体介绍，帮助开发者理解其核心架构、驱动模型以及与系统的交互方式。掌握这些概念是进行具体驱动开发的基础。
@@ -10,10 +12,18 @@
 
 `openvela` 系统将设备驱动主要分为三类：字符设备、块设备和特殊设备。针对存储介质，系统主要采用以下两种驱动模型：
 
-- **块设备 (Block Device)** **驱动** 用于管理可按固定大小的块（扇区）进行寻址和读写的存储介质，如 eMMC 和 SD 卡。这类驱动是承载 FAT、LittleFS 等文件系统的理想选择。
+- **块设备 (Block Device)** **驱动**
+
+    用于管理可按固定大小的块（扇区）进行寻址和读写的存储介质，如 eMMC 和 SD 卡。这类驱动是承载 FAT、LittleFS 等文件系统的理想选择。
+
     - **字节流访问代理**：虽然块设备本身不支持字节流访问，但当应用层尝试以文件方式打开块设备节点时，`openvela` 内核会通过 **BCH(Block-to-Character)** 模块自动创建一个临时的字符设备代理。该代理负责将字节流请求转换为对底层块设备的块操作，从而对上层应用屏蔽了实现差异。
-- **MTD (Memory Technology Device)** **驱动** 专为各类闪存芯片（如 NOR/NAND Flash）及其他存储技术（如 EEPROM、RRAM）设计。MTD 模型充分考虑了闪存介质的特性，例如**先擦后写**和有限的擦写寿命。
+
+- **MTD (Memory Technology Device)** **驱动**
+
+    专为各类闪存芯片（如 NOR/NAND Flash）及其他存储技术（如 EEPROM、RRAM）设计。MTD 模型充分考虑了闪存介质的特性，例如**先擦后写**和有限的擦写寿命。
+
     - **字节流访问代理**：与块设备类似，MTD 设备也可以通过代理机制供上层进行字节流访问。当应用打开 MTD 设备节点时，内核会按需创建：
+
         - 一个临时的 **FTL(Flash Translation Layer)**，将 MTD 设备模拟成块设备。
         - 一个临时的 **BCH** 代理，完成从模拟块设备到字符设备的转换。
 
@@ -24,8 +34,10 @@
 ![img](./figures/002.png)
 
 - **上半部驱动 (Upper Half)**
+
     - **职责**：负责实现与平台无关的通用逻辑，为上层应用提供标准的 POSIX 接口（如 `open`、`read`、`write` 等）。
     - **特点**：由 `openvela` 系统提供，开发者通常无需修改。它通过一组标准的操作函数指针与下半部驱动交互。
+
 - **下半部驱动 (Lower Half)**
     - **职责**：负责实现与具体硬件平台相关的逻辑，直接操作芯片的寄存器和控制器。
     - **开发任务**：**芯片或板卡供应商 (Vendor) 的主要职责是编写下半部驱动**。您需要实现一套由上半部驱动定义的操作接口（`struct mtd_dev_s` 或 `struct block_operations`），并将硬件的特定行为封装在这些接口函数中。
@@ -56,5 +68,5 @@
 
 在理解了 `openvela` 的存储驱动框架后，您可以根据您的硬件类型，参考以下具体的开发指南来完成下半部驱动的适配工作：
 
-- [MTD 驱动开发指南](./mtd_driver_development_guide.md)
+- [MTD 驱动开发指南](./mtd_driver_development_guide.md)(适用于 NOR/NAND Flash 等设备)
 - [块设备驱动开发指南](./block_device_driver_development_guide.md)
