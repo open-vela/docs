@@ -734,3 +734,9 @@ static isx019_dev_t g_isx019_private =
 3. Static Capability Definition:
 
     - Fixed capabilities of the sensor, such as supported resolutions and frame rates, are typically defined as static arrays within the `imgsensor_s` structure. This allows the V4L2 core layer to use them when responding to `ioctl` queries.
+
+## VIII. Driver Testing
+
+Once the camera driver adaptation is complete, you can use the `nxcamera` tool provided by openvela for testing.
+
+For details, please see the [Camera Testing Guide](./Camera_Testing.md).
