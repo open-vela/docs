@@ -1,5 +1,7 @@
 # nxcodec 用户指南
 
+[[English](../../../../en/device_dev_guide/media/v4l2/nxcodec.md) | 简体中文]
+
 ## 一、概述
 
 `nxcodec` 是一个命令行测试工具，用于验证 V4L2 (Video4Linux2) M2M (Memory-to-Memory) Codec 驱动的功能。它支持对视频流进行编码 (Encode) 和解码 (Decode) 操作。

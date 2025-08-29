@@ -1,5 +1,7 @@
 # V4L2 M2M Codec 驱动开发指南
 
+[[English](../../../../en/device_dev_guide/media/v4l2/v4l2_m2m_driver_guide.md) | 简体中文]
+
 ## 一、概述
 
 ### 1、目标读者与范围
@@ -48,77 +50,133 @@ V4L2 Codec 驱动通常在系统启动阶段进行注册，其核心流程如下
 ```C
 struct codec_ops_s
 {
-  /* 设备实例生命周期 */
   CODE int (*open)(FAR void *cookie, FAR void **priv);
   CODE int (*close)(FAR void *priv);
 
-  /* 流控制 (Stream Control) */
   CODE int (*capture_streamon)(FAR void *priv);
   CODE int (*output_streamon)(FAR void *priv);
   CODE int (*capture_streamoff)(FAR void *priv);
   CODE int (*output_streamoff)(FAR void *priv);
 
-  /* 缓冲区可用性通知 */
   CODE int (*capture_available)(FAR void *priv);
   CODE int (*output_available)(FAR void *priv);
 
-  /* 标准 V4L2 ioctl 实现 */
-  CODE int (*querycap)(FAR void *priv, FAR struct v4l2_capability *cap);
-  // ... (其他 ioctl 处理器, 如 enum_fmt, g_fmt, s_fmt, try_fmt等)
-  // ...
+  /* VIDIOC_QUERYCAP handler */
 
-  /* 缓冲区属性 */
+  CODE int (*querycap)(FAR void *priv,
+                       FAR struct v4l2_capability *cap);
+
+  /* VIDIOC_ENUM_FMT handlers */
+
+  CODE int (*capture_enum_fmt)(FAR void *priv,
+                               FAR struct v4l2_fmtdesc *fmt);
+
+  CODE int (*output_enum_fmt)(FAR void *priv,
+                              FAR struct v4l2_fmtdesc *fmt);
+
+  /* VIDIOC_G_FMT handlers */
+
+  CODE int (*capture_g_fmt)(FAR void *priv,
+                            FAR struct v4l2_format *fmt);
+  CODE int (*output_g_fmt)(FAR void *priv,
+                           FAR struct v4l2_format *fmt);
+
+  /* VIDIOC_S_FMT handlers */
+
+  CODE int (*capture_s_fmt)(FAR void *priv,
+                            FAR struct v4l2_format *fmt);
+  CODE int (*output_s_fmt)(FAR void *priv,
+                           FAR struct v4l2_format *fmt);
+
+  /* VIDIOC_TRY_FMT handlers */
+
+  CODE int (*capture_try_fmt)(FAR void *priv,
+                              FAR struct v4l2_format *fmt);
+  CODE int (*output_try_fmt)(FAR void *priv,
+                             FAR struct v4l2_format *fmt);
+
+  /* Buffer handlers  */
+
   CODE size_t (*capture_g_bufsize)(FAR void *priv);
   CODE size_t (*output_g_bufsize)(FAR void *priv);
 
-  /* 自定义内存分配 (可选) */
-  CODE void *(*alloc_buf)(FAR void *priv, size_t size);
-  CODE void (*free_buf)(FAR void *priv, FAR void *addr);
-  
-  // ... (其他参数、控制、裁剪、事件和命令处理器)
-  // ...
+  /* Stream type-dependent parameter ioctls */
+
+  CODE int (*capture_g_parm)(FAR void *priv,
+                             FAR struct v4l2_streamparm *parm);
+  CODE int (*output_g_parm)(FAR void *priv,
+                            FAR struct v4l2_streamparm *parm);
+  CODE int (*capture_s_parm)(FAR void *priv,
+                             FAR struct v4l2_streamparm *parm);
+  CODE int (*output_s_parm)(FAR void *priv,
+                            FAR struct v4l2_streamparm *parm);
+
+  /* Control handlers */
+
+  CODE int (*g_ext_ctrls)(FAR void *priv,
+                          FAR struct v4l2_ext_controls *ctrls);
+  CODE int (*s_ext_ctrls)(FAR void *priv,
+                          FAR struct v4l2_ext_controls *ctrls);
+
+  /* Crop ioctls */
+
+  CODE int (*capture_g_selection)(FAR void *priv,
+                                  FAR struct v4l2_selection *clip);
+  CODE int (*output_g_selection)(FAR void *priv,
+                                 FAR struct v4l2_selection *clip);
+  CODE int (*capture_s_selection)(FAR void *priv,
+                                  FAR struct v4l2_selection *clip);
+  CODE int (*output_s_selection)(FAR void *priv,
+                                 FAR struct v4l2_selection *clip);
+  CODE int (*capture_cropcap)(FAR void *priv,
+                              FAR struct v4l2_cropcap *cropcap);
+  CODE int (*output_cropcap)(FAR void *priv,
+                             FAR struct v4l2_cropcap *cropcap);
+
+  /* Event handlers */
+
+  CODE int (*subscribe_event)(FAR void *priv,
+                              FAR struct v4l2_event_subscription *sub);
+
+  /* Command handlers */
+
+  CODE int (*decoder_cmd)(FAR void *priv,
+                          FAR struct v4l2_decoder_cmd *cmd);
+  CODE int (*encoder_cmd)(FAR void *priv,
+                          FAR struct v4l2_encoder_cmd *cmd);
 };
 ```
 
-### 1、`codec_ops_s` 关键回调函数详解
+下面将详细说明一下每个接口的核心功能：
 
-`codec_ops_s` 结构体是连接 V4L2 M2M 框架与底层硬件驱动的桥梁。为了帮助您更好地理解和实现，我们将这些回调函数按其核心职责分为两类：核心数据流与生命周期回调和标准 V4L2 命令处理回调。
+| **接口名称**                                   | **核心职责与调用时机**                                                                                                                                                                                                                                                                                            |
+| :--------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `open`                                         | 当应用层调用 `open()` 打开设备节点时，框架调用此函数。开发者应在此处完成单实例资源的初始化。<br>**参数说明：**<br>`cookie`: M2M 框架层维护的会话句柄，用于后续调用框架提供的 API (如 `codec_*_get_buf`)。<br>`priv`: 由驱动分配并返回的私有数据指针，用于存储该实例的上下文。框架会将其透传给后续的其他回调函数。 |
+| `close`                                        | 当应用层调用 `close()` 关闭设备节点时，框架调用此函数。<br> 开发者应在此处释放 `open` 时分配的私有资源。                                                                                                                                                                                                          |
+| `output_streamon`                              | 响应 `VIDIOC_STREAMON` (`OUTPUT` 队列)。 <br>此时输入格式已确定，驱动可以获取到解码图像格式，完成 Decoder 的初始化工作。                                                                                                                                                                                          |
+| `capture_streamon`                             | 响应 `VIDIOC_STREAMON` (`CAPTURE` 队列)。 <br>此时缓冲区已准备就绪，可以启动工作队列（`work_queue`）开始数据处理。                                                                                                                                                                                                |
+| `output_streamoff`                             | 响应 `VIDIOC_STREAMOFF` (`OUTPUT` 队列)。 <br>停止接收新的输入数据。                                                                                                                                                                                                                                              |
+| `capture_streamoff`                            | 响应 `VIDIOC_STREAMOFF` (`CAPTURE` 队列)。 <br>停止处理和输出数据，并确保硬件内部缓存的数据被清空（flush）。                                                                                                                                                                                                      |
+| `output_available`                             | 当应用层通过 `QBUF` 向 `OUTPUT` 队列提供一帧待处理数据（如H.264码流）时，框架调用此函数。 <br>通常在此触发一次工作队列以处理新数据，底层解码器可以准备解码。                                                                                                                                                      |
+| `capture_available`                            | 当应用层通过 `QBUF` 将一个空的 `CAPTURE` 缓冲区归还给驱动时，框架调用此函数。 <br>通常在此触发一次工作队列以填充此缓冲区。                                                                                                                                                                                        |
+| `querycap`                                     | 响应 `VIDIOC_QUERYCAP`。 <br>填充 `v4l2_capability` 结构体，向应用层报告驱动的能力，如设备类型、是否支持流控等。                                                                                                                                                                                                  |
+| `output_enum_fmt`                              | 响应 `VIDIOC_ENUM_FMT` (`OUTPUT` 队列)。 <br>枚举驱动支持的输入数据格式：<br>解码器：`V4L2_PIX_FMT_H264` 等。<br>编码器：`V4L2_PIX_FMT_YUV420` 等。                                                                                                                                                               |
+| `capture_enum_fmt`                             | 响应 `VIDIOC_ENUM_FMT` (`CAPTURE` 队列)。 <br>枚举驱动支持的输出数据格式：<br>解码器：`V4L2_PIX_FMT_YUV420` 等。<br>编码器：`V4L2_PIX_FMT_H264` 等。                                                                                                                                                              |
+| `output_s_fmt` / `capture_s_fmt`               | 响应 `VIDIOC_S_FMT`。 <br>设置输入/输出队列的像素格式、分辨率等参数。                                                                                                                                                                                                                                             |
+| `output_g_fmt` / `capture_g_fmt`               | 响应 `VIDIOC_G_FMT`。 <br>获取当前输入/输出队列的格式。                                                                                                                                                                                                                                                           |
+| `output_try_fmt` / `capture_try_fmt`           | 响应 `VIDIOC_TRY_FMT`。 <br>校验并调整应用层尝试设置的格式。                                                                                                                                                                                                                                                      |
+| `output_g_bufsize`                             | 返回 `OUTPUT` 队列中单个缓冲区的建议大小。<br>对于解码器，应设置为能容纳的最大压缩帧（如最大 I 帧）的 size。                                                                                                                                                                                                      |
+| `capture_g_bufsize`                            | 返回 `CAPTURE` 队列中单个缓冲区的建议大小。<br>对于解码器，这是一帧解码后原始图像（如 YUV）的大小 (w * h * 3 / 2)。<br>对于编码器，size 大小为编码后压缩数据的最大帧大小。                                                                                                                                        |
+| `alloc_buf`/`free_buf`                         | **可选。**<br>当前 M2M mmap buffer 模式内部使用 `kumm_memalign(align:32)` 内存分配接口分配内存。<br>若硬件对内存（如物理连续）有特殊要求，则实现这两个函数以覆盖框架默认的内存分配行为。                                                                                                                          |
+| `decoder_cmd`                                  | `VIDIOC_DECODER_CMD`：处理解码控制命令，如 `START`, `STOP`, `PAUSE`, `FLUSH`。                                                                                                                                                                                                                                    |
+| `encoder_cmd`                                  | `VIDIOC_ENCODER_CMD`：处理编码控制命令，如 `START`, `STOP`, `PAUSE`。                                                                                                                                                                                                                                             |
+| `g_ext_ctrls`/`s_ext_ctrls`                    | `VIDIOC_G_EXT_CTRLS` / `VIDIOC_S_EXT_CTRLS`：批量获取或设置扩展控制参数，如编码器的 GOP、码率、Profile 等。                                                                                                                                                                                                       |
+| `output_g/s_parm` `capture_g/s_parm`           | `VIDIOC_G_PARM` / `VIDIOC_S_PARM`：获取或设置流参数，如帧率和场格式。                                                                                                                                                                                                                                             |
+| `output_g/s_selection` `capture_g/s_selection` | 获取或设置输入/输出端处理的区域。                                                                                                                                                                                                                                                                                 |
+| `capture_cropcap`/`output_cropcap`             | `VIDIOC_CROPCAP`：获取输入/输出端裁剪参数。                                                                                                                                                                                                                                                                       |
+| `subscribe_event`                              | `VIDIOC_SUBSCRIBE_EVENT`：允许应用层订阅驱动事件，如 `V4L2_EVENT_EOS` 。                                                                                                                                                                                                                                          |
 
-#### 核心数据流与生命周期回调
 
-| **接口名称**                         | **核心职责与调用时机**                                                                                                                                                                                                                                                                                            |
-| :----------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `open`                               | 当应用层调用 `open()` 打开设备节点时，框架调用此函数。开发者应在此处完成单实例资源的初始化。<br>**参数说明：**<br>`cookie`: M2M 框架层维护的会话句柄，用于后续调用框架提供的 API (如 `codec_*_get_buf`)。<br>`priv`: 由驱动分配并返回的私有数据指针，用于存储该实例的上下文。框架会将其透传给后续的其他回调函数。 |
-| `close`                              | 当应用层调用 `close()` 关闭设备节点时，框架调用此函数。<br> 开发者应在此处释放 `open` 时分配的私有资源。                                                                                                                                                                                                          |
-| `output_streamon`                    | 响应 `VIDIOC_STREAMON` (`OUTPUT` 队列)。<br> 此时输入格式已确定，驱动可以获取到解码图像格式，完成 Decoder 的初始化工作。                                                                                                                                                                                          |
-| `capture_streamon`                   | 响应 `VIDIOC_STREAMON` (`CAPTURE` 队列)。 <br>此时缓冲区已准备就绪，可以启动工作队列（`work_queue`）开始数据处理。                                                                                                                                                                                                |
-| `output_streamoff`                   | 响应 `VIDIOC_STREAMOFF` (`OUTPUT` 队列)。 <br>停止接收新的输入数据。                                                                                                                                                                                                                                              |
-| `capture_streamoff`                  | 响应 `VIDIOC_STREAMOFF` (`CAPTURE` 队列)。 <br>停止处理和输出数据，并确保硬件内部缓存的数据被清空（flush）。                                                                                                                                                                                                      |
-| `output_available`                   | 当应用层通过 `QBUF` 向 `OUTPUT` 队列提供一帧待处理数据（如H.264码流）时，框架调用此函数。<br> 通常在此触发一次工作队列以处理新数据，底层解码器可以准备解码。                                                                                                                                                      |
-| `capture_available`                  | 当应用层通过 `QBUF` 将一个空的 `CAPTURE` 缓冲区归还给驱动时，框架调用此函数。 通常在此触发一次工作队列以填充此缓冲区。                                                                                                                                                                                            |
-| `querycap`                           | 响应 `VIDIOC_QUERYCAP`。<br> 填充 `v4l2_capability` 结构体，向应用层报告驱动的能力，如设备类型、是否支持流控等。                                                                                                                                                                                                  |
-| `output_enum_fmt`                    | 响应 `VIDIOC_ENUM_FMT` (`OUTPUT` 队列)。 <br>枚举驱动支持的输入数据格式：解码器：`V4L2_PIX_FMT_H264` 等。编码器：`V4L2_PIX_FMT_YUV420` 等。                                                                                                                                                                       |
-| `capture_enum_fmt`                   | 响应 `VIDIOC_ENUM_FMT` (`CAPTURE` 队列)。<br> 枚举驱动支持的输出数据格式：解码器：`V4L2_PIX_FMT_YUV420` 等。编码器：`V4L2_PIX_FMT_H264` 等。                                                                                                                                                                      |
-| `output_s_fmt` / `capture_s_fmt`     | 响应 `VIDIOC_S_FMT`。 <br>设置输入/输出队列的像素格式、分辨率等参数。                                                                                                                                                                                                                                             |
-| `output_g_fmt` / `capture_g_fmt`     | 响应 `VIDIOC_G_FMT`。<br> 获取当前输入/输出队列的格式。                                                                                                                                                                                                                                                           |
-| `output_try_fmt` / `capture_try_fmt` | 响应 `VIDIOC_TRY_FMT`。 <br>校验并调整应用层尝试设置的格式。                                                                                                                                                                                                                                                      |
-| `output_g_bufsize`                   | 返回 `OUTPUT` 队列中单个缓冲区的建议大小。<br>对于解码器，应设置为能容纳的最大压缩帧（如最大 I 帧）的 size。                                                                                                                                                                                                      |
-| `capture_g_bufsize`                  | 返回 `CAPTURE` 队列中单个缓冲区的建议大小。<br>对于解码器，这是一帧解码后原始图像（如 YUV）的大小 (w * h * 3 / 2)。对于编码器，size 大小为编码后压缩数据的最大帧大小。                                                                                                                                            |
-| `alloc_buf`/`free_buf`               | **可选。**<br>当前 M2M mmap buffer 模式内部使用 `kumm_memalign(align:32)` 内存分配接口分配内存。<br>若硬件对内存（如物理连续）有特殊要求，则实现这两个函数以覆盖框架默认的内存分配行为。                                                                                                                          |
-
-#### 标准 V4L2 命令处理回调
-
-下表中的回调函数直接映射到标准的 V4L2 `ioctl` 命令。您可以根据硬件的实际能力，选择性地实现它们，以向应用层提供更丰富的控制功能。
-
-| **回调函数**                                   | **对应的** **`ioctl`** **命令与功能**                                                                       |
-| :--------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
-| `decoder_cmd`                                  | `VIDIOC_DECODER_CMD`：处理解码控制命令，如 `START`, `STOP`, `PAUSE`, `FLUSH`。                              |
-| `encoder_cmd`                                  | `VIDIOC_ENCODER_CMD`：处理编码控制命令，如 `START`, `STOP`, `PAUSE`。                                       |
-| `g_ext_ctrls`/`s_ext_ctrls`                    | `VIDIOC_G_EXT_CTRLS` / `VIDIOC_S_EXT_CTRLS`：批量获取或设置扩展控制参数，如编码器的 GOP、码率、Profile 等。 |
-| `output_g/s_parm` `capture_g/s_parm`           | `VIDIOC_G_PARM` / `VIDIOC_S_PARM`：获取或设置流参数，如帧率和场格式。                                       |
-| `output_g/s_selection` `capture_g/s_selection` | 获取或设置输入/输出端处理的区域。                                                                           |
-| `capture_cropcap`/`output_cropcap`             | `VIDIOC_CROPCAP`：获取输入/输出端裁剪参数。                                                                 |
-| `subscribe_event`                              | `VIDIOC_SUBSCRIBE_EVENT`：允许应用层订阅驱动事件，如 `V4L2_EVENT_EOS` 。                                    |
 
 ## 四、M2M 框架辅助 API
 
@@ -213,11 +271,82 @@ int codec_queue_event(FAR void *cookie, FAR struct v4l2_event *evt);
 1. **实现接口**: 在 `codec_ops_s` 中提供 `alloc_buf` 和 `free_buf` 的具体实现，内部调用芯片平台专用的内存分配器。
 2. **数据流**: 缓冲区交互流程与默认模式完全相同，驱动依然通过 `get_buf`/`put_buf` API 与框架交互，实现了零拷贝。
 
-## 六、参考实现与示例
+## 六、实践案例：Simulator 驱动
+
+`openvela` 提供了一套基于 openH264 (解码) 和 x264 (编码) 的模拟器驱动。它们是学习和开发 V4L2 M2M 驱动的最佳参考。
+
+### 1、环境配置
+
+在 `menuconfig` 中启用以下配置项，即可在 i386 模拟器环境中使用编解码能力。
+
+#### Video Decoder 配置
+
+```Makefile
+CONFIG_SIM_VIDEO_DECODER=y
+CONFIG_SIM_VIDEO_DECODER_DEV_PATH="/dev/video1"
+CONFIG_VIDEOUTILS_OPENH264=y
+```
+
+#### Video Encoder 配置
+
+```Makefile
+CONFIG_SIM_VIDEO_ENCODER=y
+CONFIG_SIM_ENCODER_DEV_PATH="/dev/video2"
+CONFIG_VIDEOUTILS_LIBX264=y
+```
+
+#### 通用视频依赖项
+
+```C
+CONFIG_VIDEO=y
+CONFIG_DRIVERS_VIDEO=y
+CONFIG_VIDEO_STREAM=y
+```
+
+### 2、Simulator Decoder 详解
+
+#### 初始化流程
+
+`sim_decoder` 驱动在系统启动阶段通过 `sim_decoder_initialize` 函数调用 `codec_register`，从而在 VFS 中创建设备节点 `/dev/video1`。当应用层 `open` 该节点时，会触发 `codec_open` 函数，进而调用驱动的 `open` 回调，完成实例的创建和缓冲区初始化。
+
+![img](./figures/007.png)
+
+#### 缓冲区处理流程
+
+`sim_decoder` 的核心解码任务在一个工作队列 (`sim_decoder_work`) 中异步执行。该任务由 `sim_decoder_output_available` 和 `sim_decoder_capture_available` 回调触发。
+
+![img](./figures/008.png)
+
+#### Ops 实现解析 (`g_sim_decoder_ops`)
+
+`g_sim_decoder_ops` 是 `sim_decoder` 驱动对 `codec_ops_s` 接口的具体实现。实现的 API 如下：
+
+- **流控制接口 (`streamon`/`streamoff`)**
+
+    - `sim_decoder_output_streamon`: 此回调被触发时，初始化 openH264 解码器实例，并配置相关参数。
+    - `sim_decoder_capture_streamon`: 此回调被触发时，表明 M2M 层的缓冲区已准备就绪，此时调度工作队列开始解码。
+    - `sim_decoder_output_streamoff`: 设置 flush 状态，并启动工作队列，以处理解码器中所有剩余的缓冲帧。
+    - `sim_decoder_capture_streamoff`: 关闭并释放 openH264 解码器实例。
+
+- **数据可用性接口 (`available`)**
+
+    - `sim_decoder_output_available` / `sim_decoder_capture_available`: 当有新的输入数据或可用的输出缓冲区时，M2M 通用层调用这些回调。它们通常只做一件事：触发工作队列执行实际的解码工作。
+
+- **`g_bufsize` 接口(openvela 扩展)**
+
+    - `capture_g_bufsize` / `output_g_bufsize`: 这两个接口是 `openvela` 的特定扩展，用于让下层驱动根据当前格式（分辨率、像素格式等）计算并返回精确的缓冲区大小。M2M 通用层在分配内存时会使用这个返回值。这与 Linux V4L2 通过 `S_FMT` 协商大小的方式有所不同，是 `openvela` 实现的一个特点。
+
+- **格式协商接口 (`xxx_fmt`)**
+
+    - 这些接口（如 `capture_enum_fmt`, `output_g_fmt` 等）的实现与标准 Linux V4L2 驱动类似，负责查询和设置设备支持的像素格式、分辨率等。
+
+### 3、Simulator Encoder
+
+`sim_encoder` 的驱动实现与 `sim_decoder` 在结构上高度相似，主要区别在于数据流方向相反，并调用 x264 库进行编码。开发者可直接参考其源码进行学习。
 
 `openvela` 在 `arch/sim/src/sim/sim_decoder.c` 中提供了一个功能完整的解码器驱动范例。我们强烈建议开发者在开始适配前，详细研究此文件的实现。
 
-其处理逻辑和设计模式可以参考 [Simulator Decoder 详解](./v4l2_m2m_framework_internals.md#2simulator-decoder-详解)。
+其处理逻辑和设计模式可以参考[V4L2 M2M 框架介绍](./v4l2_m2m_framework.md)。
 
 ## 七、驱动调试与测试
 
@@ -225,7 +354,7 @@ int codec_queue_event(FAR void *cookie, FAR struct v4l2_event *evt);
 
 ### 1、`nxcodec` 测试工具
 
-`nxcodec` 是一个命令行工具，专门用于直接测试 V4L2 Codec 驱动的 `ioctl` 接口和基本编解码功能。对于驱动开发初期的功能验证，此工具是首选。使用说明请参考 [nxcodec 测试说明](./nxcodec.md)。
+`nxcodec` 是一个命令行工具，专门用于直接测试 V4L2 Codec 驱动的 `ioctl` 接口和基本编解码功能。对于驱动开发初期的功能验证，此工具是首选。使用说明请参考 [nxcodec 用户指南](./nxcodec.md)。
 
 ### 2、FFmpeg 测试工具
 

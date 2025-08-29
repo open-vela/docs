@@ -1,5 +1,7 @@
 # FFmpeg V4L2 M2M 使用指南
 
+[[English](../../../../en/device_dev_guide/media/v4l2/ffmpeg_v4l2m2m_guide.md) | 简体中文]
+
 ## 一、概述
 
 本文档为开发者提供在 openvela 平台上为 FFmpeg 启用 V4L2 M2M (Video4Linux2 Memory-to-Memory) 硬件加速功能的详细指南。
