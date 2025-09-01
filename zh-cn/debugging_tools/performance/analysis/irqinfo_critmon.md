@@ -1,5 +1,7 @@
 # 使用 irqinfo 和 critmon 进行中断与临界区监控
 
+\[ [English](./../../../../en/debugging_tools/performance/analysis/irqinfo_critmon.md) | 简体中文 \]
+
 本文档为嵌入式开发人员提供在 openvela 系统上使用 `irqinfo` 和 `critmon` 两个核心工具的详细指南。您将学会如何监控中断性能、分析临界区（Critical Section）耗时以及调度器锁（Scheduler Lock）的最长持有时间，从而定位系统性能瓶颈并优化实时行为。
 
 ## 一、概述
