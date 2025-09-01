@@ -1,5 +1,7 @@
 # whetstone CPU 性能基准测试指南
 
+\[ [English](./../../../../en/debugging_tools/performance/Benchmark/whetstone.md) | 简体中文 \]
+
 本文档为 openvela 系统的开发者和性能工程师提供 `whetstone` 基准测试工具的详细使用指南。`whetstone` 是一个经典的综合性基准测试程序，旨在通过执行一系列标准化的计算任务，精确评估系统的浮点与整数运算性能。
 
 ## 一、概述
