@@ -1,5 +1,7 @@
 # 使用 Tinymembench 分析内存性能
 
+\[ [English](./../../../../en/debugging_tools/performance/Benchmark/tinymembench.md) | 简体中文 \]
+
 ## 一、概述
 
 `tinymembench` 是一款轻量级的跨平台基准测试工具，您可以使用它来精确测量系统的内存带宽和随机存取延迟。此工具为分析和优化嵌入式系统的内存子系统性能提供了关键数据。
