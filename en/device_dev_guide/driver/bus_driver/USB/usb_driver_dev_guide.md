@@ -1,56 +1,57 @@
-# USB 设备驱动开发指南
+# USB Device Driver Development Guide
 
-\[ [English](../../../../../en/device_dev_guide/driver/bus_driver/USB/Device.md) | 简体中文 \]
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/USB/usb_driver_dev_guide.md) \]
 
-## 一、架构概览
+## I. Architecture Overview
 
-openvela USB 设备驱动框架采用分层架构，主要由 **USB 设备控制器驱动（usbdev_controller）** 和 **USB 设备类驱动（usbdev_class）** 两部分组成。
+The openvela USB device driver framework uses a layered architecture, mainly composed of the **USB Device Controller Driver (`usbdev_controller`)** and the **USB Device Class Driver (`usbdev_class`)**.
 
 ![img](./figures/001.png)
 
-- **USB 设备控制器驱动(`usbdev_controller`)**
+- **USB Device Controller Driver (`usbdev_controller`)**
 
-    这是与硬件相关的底层驱动，需由**芯片供应商**实现。它直接与 USB 设备控制器硬件交互，主要职责包括：
+    This is the hardware-related low-level driver, which must be implemented by the **chip vendor**. It interacts directly with the USB device controller hardware, and its main responsibilities include:
 
-    - **端点管理**：配置或禁用硬件端点。
-    - **资源管理**：申请和释放端点资源。
-    - **数据传输**：传输或停止传输请求报 IPR，即 `struct usbdev_req_s`。
-    - **状态管理**：挂起 (Stall) 或恢复 (Resume) 指定端点。
-    - **功耗管理**：处理自供电 (Self-powered) 和远程唤醒 (Wakeup) 等功能。
-    - **特定 I/O 控制**：处理特定于设备的 `ioctl` 命令。
-    - 其它特殊的IO命令的处理。
+    - **Endpoint Management**: Configure or disable hardware endpoints.
+    - **Resource Management**: Allocate and release endpoint resources.
+    - **Data Transfer**: Submit or cancel an I/O request, i.e., `struct usbdev_req_s`.
+    - **State Management**: Stall or Resume a specified endpoint.
+    - **Power Management**: Handle features like Self-powered and Wakeup.
+    - **Specific I/O Control**: Handle device-specific `ioctl` commands.
+    - Handling of other special I/O commands.
 
-- **USB 设备类驱动(`usbdev_class`)**
+- **USB Device Class Driver (`usbdev_class`)**
 
-    这是与硬件无关的上层驱动，通常由 openvela 提供，用于实现标准的 USB 类规范。其职责包括：
-  
-    - **配置功能**：负责将类驱动与 `usbdev_controller` 进行绑定和解绑。
-    - **I/O 资源管理**：申请 IPR 资源，供 `usbdev_ep` 使用。
-    - **描述符管理**：接收和发送描述符信息。
-    - **功耗管理**：响应来自 USB 主机的挂起或唤醒事件。
+    This is the hardware-agnostic upper-level driver, usually provided by openvela, used to implement standard USB class specifications. Its responsibilities include:
 
-目前，openvela 已支持以下 USB 设备类：
+    - **Configuration**: Responsible for binding and unbinding the class driver with the `usbdev_controller`.
+    - **I/O Resource Management**: Allocate I/O request resources for use by `usbdev_ep`.
+    - **I/O Resource Management**: Allocate IPR resources for use by USB endpoints.
+    - **Descriptor Management**: Receive and send descriptor information.
+    - **Power Management**: Respond to suspend or wakeup events from the USB host.
 
-- 安卓调试桥 (ADB, Android Debug Bridge)
-- 通信设备类 (CDC-ACM)
-- 通信设备类 (CDC-ECM)
-- 媒体传输协议 (MTP, Media Transfer Protocol)
-- PL2303 (USB 转串口)
-- 远程网络驱动接口规范 (RNDIS, Remote NDIS)
-- 大容量存储设备 (Mass Storage)
-- 复合设备 (Composite Device)
+Currently, openvela supports the following USB device classes:
 
-## 二、API 参考
+- Android Debug Bridge (ADB)
+- Communication Device Class (CDC-ACM)
+- Communication Device Class (CDC-ECM)
+- Media Transfer Protocol (MTP)
+- PL2303 (USB-to-Serial)
+- Remote Network Driver Interface Specification (RNDIS)
+- Mass Storage Device
+- Composite Device
 
-USB 设备驱动框架的所有核心结构体和接口函数均定义在头文件 `/include/nuttx/usb/usbdev.h` 中。本节将分两部分详细介绍这些接口。
+## II. API Reference
 
-### 1、USB 设备控制器驱动(`usbdev_controller`)-需要厂商实现
+All core structures and interface functions of the USB device driver framework are defined in the header file `/include/nuttx/usb/usbdev.h`. This section will detail these interfaces in two parts.
 
-供应商需要实现以下结构体及其关联的操作函数，以适配特定的 USB 控制器。
+### 1. USB Device Controller Driver (`usbdev_controller`) - To be Implemented by Vendor
+
+Vendors need to implement the following structures and their associated operation functions to adapt to a specific USB controller.
 
 #### `struct usbdev_s`
 
-每个 USB 设备控制器驱动都必须实例化一个 `struct usbdev_s` 对象，该结构体代表一个底层的 USB 设备。需要实现的接口信息如下：
+Each USB device controller driver must instantiate a `struct usbdev_s` object. This structure represents a low-level USB device. The interface information to be implemented is as follows:
 
 ```C++
 struct usbdev_s
@@ -62,9 +63,9 @@ struct usbdev_s
 };
 ```
 
-其核心逻辑通过 `struct usbdev_ops_s` 中的函数指针实现。
+Its core logic is implemented through the function pointers in `struct usbdev_ops_s`.
 
-- `allocep`：根据端点物理编号、方向和类型，申请一个硬件端点实例。
+- `allocep`: Allocates a hardware endpoint instance based on the physical endpoint number, direction, and type.
 
     ```C
     CODE FAR struct usbdev_ep_s *(*allocep)(FAR struct usbdev_s *dev,
@@ -72,37 +73,37 @@ struct usbdev_s
                                             uint8_t eptype);
     ```
 
-- `freeep`：释放一个先前申请的端点实例。
+- `freeep`: Releases a previously allocated endpoint instance.
 
     ```C
     CODE void (*freeep)(FAR struct usbdev_s *dev, FAR struct usbdev_ep_s *ep);
     ```
 
-- `getframe`：获取当前 USB 帧号。
+- `getframe`: Gets the current USB frame number.
 
     ```C
     CODE int (*getframe)(FAR struct usbdev_s *dev);
     ```
 
-- `wakeup`：唤醒 USB 设备。
+- `wakeup`: Wakes up the USB device.
 
     ```C
     CODE int (*wakeup)(FAR struct usbdev_s *dev);
     ```
 
-- `selfpowered`：配置设备是否支持自供电(selfpowered)。
+- `selfpowered`: Configures whether the device supports being self-powered.
 
     ```C
     CODE int (*selfpowered)(FAR struct usbdev_s *dev, bool selfpowered);
     ```
 
-- `pullup`：指示与 USB 主机 host 连接或断开。
+- `pullup`: Indicates a connection to or disconnection from the USB host.
 
     ```C
     CODE int (*pullup)(FAR struct usbdev_s *dev, bool enable);
     ```
 
-- `ioctl`：执行 USB 设备特有的 I/O 命令。
+- `ioctl`: Executes USB device-specific I/O commands.
 
     ```C
     CODE int (*ioctl)(FAR struct usbdev_s *dev, unsigned code,
@@ -111,7 +112,7 @@ struct usbdev_s
 
 #### `struct usbdev_ep_s`
 
-每个 USB 端口必须包含此实例，需要实现的接口信息如下：
+Each USB endpoint must include this instance. The interface information to be implemented is as follows:
 
 ```C++
 struct usbdev_ep_s
@@ -124,54 +125,54 @@ struct usbdev_ep_s
 };
 ```
 
-端点的特定操作在 `struct usbdev_epops_s` 中定义：
+The specific operations for an endpoint are defined in `struct usbdev_epops_s`:
 
-- `configure`：根据端点描述符信息配置端点，只有在端点成功配置后才能使用。
+- `configure`: Configures an endpoint based on its descriptor information. The endpoint can only be used after it has been successfully configured.
 
     ```C
     CODE int (*configure)(FAR struct usbdev_ep_s *ep,
                             FAR const struct usb_epdesc_s *desc, bool last);
     ```
 
-- `disable`：禁止指定端点，同时禁止该端点的所有传输。
+- `disable`: Disables the specified endpoint and all transfers on it.
 
     ```C
     CODE int (*disable)(FAR struct usbdev_ep_s *ep);
     ```
 
-- `allocreq`：为此端点申请一个 I/O 请求结构体 (`struct usbdev_req_s`)。
+- `allocreq`: Allocates an I/O request structure (`struct usbdev_req_s`) for this endpoint.
 
     ```C
     CODE FAR struct usbdev_req_s *(*allocreq)(FAR struct usbdev_ep_s *ep);
     ```
 
-- `freereq`：释放一个先前申请的 I/O 请求结构体。
+- `freereq`: Releases a previously allocated I/O request structure.
 
     ```C
     CODE void (*freereq)(FAR struct usbdev_ep_s *ep,
                            FAR struct usbdev_req_s *req);
     ```
 
-- `allocbuffer`：为 I/O 请求申请数据缓冲区。此接口通常用于支持 DMA 的硬件。
+- `allocbuffer`: Allocates a data buffer for an I/O request. This interface is typically used for hardware that supports DMA.
 
     ```C
     CODE FAR void *(*allocbuffer)(FAR struct usbdev_ep_s *ep, uint16_t nbytes);
     ```
 
-- `freebuffer`：释放一个先前申请的数据缓冲区，与 `allocbuffer` 配对使用。
+- `freebuffer`: Releases a previously allocated data buffer. Used in pair with `allocbuffer`.
 
     ```C
     CODE void (*freebuffer)(FAR struct usbdev_ep_s *ep, FAR void *buf);
     ```
 
-- `submit`：发送指定 I/O 请求。
+- `submit`: Submits the specified I/O request.
 
     ```C
     CODE int (*submit)(FAR struct usbdev_ep_s *ep,
                          FAR struct usbdev_req_s *req);
     ```
 
-- `cancel`：取消指定端点上当前正在传输的 I/O 请求。
+- `cancel`: Cancels an I/O request currently in progress on the specified endpoint.
 
     ```C
     CODE int (*cancel)(FAR struct usbdev_ep_s *ep,
@@ -180,16 +181,15 @@ struct usbdev_ep_s
 
 #### `usbdev register`
 
-此函数向系统注册一个 USB 设备类驱动，并通过调用类驱动的 `bind()` 方法，将其与底层的 USB 设备控制器驱动进行绑定。
+This function registers a USB device class driver with the system and binds it to the underlying USB device controller driver by calling the class driver's `bind()` method.
 
 ```C
 int usbdev_register(struct usbdevclass_driver_s *driver)
 ```
 
-参考实现：
+Reference Implementation:
 
-> **说明**：以下示例代码中的 `xxx_` 和 `g_xx_` 前缀是通用占位符。
-> 在实际开发中，厂商应将其替换为特定于芯片或平台的名称（如 `dwc_` 或 `stm32_`）。
+> **Note**: The `xxx_` and `g_xx_` prefixes in the following code examples are generic placeholders. In actual development, vendors should replace them with chip- or platform-specific names (e.g., `dwc_` or `stm32_`).
 
 ```C++
 ****************************************************************************
@@ -246,7 +246,7 @@ int usbdev_register(struct usbdevclass_driver_s *driver)
 
 #### `usbdev_unregister`
 
-此函数用于注销一个 USB 设备类驱动。如果设备正连接到主机，它会首先断开连接，然后调用类驱动的 `unbind()` 方法清理资源。
+This function unregisters a USB device class driver. If the device is connected to a host, it will first disconnect, then call the class driver's `unbind()` method to clean up resources.
 
 ```C++
 /****************************************************************************
@@ -313,13 +313,13 @@ int usbdev_unregister(struct usbdevclass_driver_s *driver)
 }
 ```
 
-### 2、USB 设备类驱动(`usbdev_class`)
+### 2. USB Device Class Driver (`usbdev_class`)
 
-USB 设备类驱动必须实现 `struct usbdevclass_driver_s` 接口，才能集成到 USB 设备栈中。
+A USB device class driver must implement the `struct usbdevclass_driver_s` interface to be integrated into the USB device stack.
 
 #### `struct usbdevclass_driver_s`
 
-该结构体定义了一个类驱动及其支持的最高速度。
+This structure defines a class driver and the highest speed it supports.
 
 ```C++
 struct usbdevclass_driver_s
@@ -329,23 +329,23 @@ struct usbdevclass_driver_s
 };
 ```
 
-类驱动的具体行为由 `struct usbdevclass_driverops_s` 中的函数指针定义，包含如下接口：
+The specific behavior of the class driver is defined by the function pointers in `struct usbdevclass_driverops_s`, which includes the following interfaces:
 
-- `bind`：将类驱动绑定到指定的 USB 设备控制器。
+- `bind`: Binds the class driver to a specified USB device controller.
 
     ```C
     CODE int  (*bind)(FAR struct usbdevclass_driver_s *driver,
                       FAR struct usbdev_s *dev);
     ```
 
-- `unbind`：将类驱动从 USB 设备控制器解绑，并释放相关资源。
+- `unbind`: Unbinds the class driver from the USB device controller and releases related resources.
 
     ```C
     CODE void (*unbind)(FAR struct usbdevclass_driver_s *driver,
                         FAR struct usbdev_s *dev);
     ```
 
-- `setup`：处理发送到端点 ep0 的标准请求和类特定请求。
+- `setup`: Handles standard and class-specific requests sent to endpoint EP0.
 
     ```C
     CODE int  (*setup)(FAR struct usbdevclass_driver_s *driver,
@@ -353,56 +353,56 @@ struct usbdevclass_driver_s
                        FAR uint8_t *dataout, size_t outlen);
     ```
 
-- `disconnect`：通知类驱动设备已从主机断开。
+- `disconnect`: Notifies the class driver that the device has disconnected from the host.
 
     ```C
     CODE void (*disconnect)(FAR struct usbdevclass_driver_s *driver,
                             FAR struct usbdev_s *dev);
     ```
 
-- `suspend`：通知类驱动 USB 总线已进入挂起状态。
+- `suspend`: Notifies the class driver that the USB bus has entered the suspend state.
 
     ```C
     CODE void (*suspend)(FAR struct usbdevclass_driver_s *driver,
                          FAR struct usbdev_s *dev);
     ```
 
-- `resume`：通知类驱动 USB 总线已从挂起状态恢复。
+- `resume`: Notifies the class driver that the USB bus has resumed from the suspend state.
 
     ```C
     CODE void (*resume)(FAR struct usbdevclass_driver_s *driver,
                         FAR struct usbdev_s *dev);
     ```
 
-## 三、主要工作流程
+## III. Main Workflows
 
-下面对 USB 设备的几个关键过程进行说明。
+The following sections describe several key processes for a USB device.
 
-### 1、初始化流程
+### 1. Initialization Flow
 
-系统初始化上电后，需要对 USB 设备进行初始化。包括设备硬件初始化、设备类驱动(`usbdev_class`)绑定和设备控制器驱动(`usbdev_controller`)注册等过程。
+After the system powers on, the USB device needs to be initialized. This includes device hardware initialization, binding the `usbdev_class` driver, and registering the `usbdev_controller` driver.
 
 ![img](./figures/002.png)
 
-### 2、端点 ep0 传输流程
+### 2. Endpoint ep0 Transfer Flow
 
-初始化完成后，USB 主机通过与端点 ep0 通信来枚举设备。此流程处理控制传输：
+After initialization, the USB host enumerates the device by communicating with endpoint ep0. This flow handles control transfers:
 
 ![img](./figures/003.png)
 
-### 3、数据端点 ep 传输流程
+### 3. Data Endpoint ep Transfer Flow
 
-设备枚举和配置完成后，数据端点即可用于通信。此流程展示了数据如何在类驱动和 USB 主机之间通过控制器驱动进行传输。
+Once the device is enumerated and configured, data endpoints can be used for communication. This flow shows how data is transferred between the class driver and the USB host through the controller driver.
 
 ![img](./figures/004.png)
 
-## 四、驱动适配指南：以 SIM 驱动为例
+## IV. Driver Adaptation Guide: SIM Driver Example
 
-本节以 openvela 的模拟（SIM）USB 驱动为例，演示如何适配一个 `usbdev_controller` 驱动。SIM 驱动是一个纯软件实现，它不涉及具体硬件，因此是理解驱动框架的绝佳参考。
+This section uses openvela's simulation (SIM) USB driver as an example to demonstrate how to adapt a `usbdev_controller` driver. The SIM driver is a pure software implementation that does not involve specific hardware, making it an excellent reference for understanding the driver framework.
 
-关于 SIM 驱动的详细配置和使用方法，请参考[Device]() 文档。
+For detailed configuration and usage of the SIM driver, please refer to the [USB Device Simulation (SIM) Driver Guide](./usb_sim_guide.md) documentation.
 
-要启用详细的 USB 日志输出，请在配置中设置以下选项：
+To enable detailed USB log output, set the following options in your configuration:
 
 ```Bash
 CONFIG_DEBUG_USB=y
@@ -411,14 +411,14 @@ CONFIG_DEBUG_USB_WARN=y
 CONFIG_DEBUG_USB_INFO=y
 ```
 
-### 1、初始化适配（厂商实现）
+### 1. Initialization Adaptation (Vendor Implementation)
 
-初始化过程有两个函数需要实现：
+Two functions need to be implemented for the initialization process:
 
-- `sim_usbdev_initialize()`： 在系统早期启动阶段（`up_initialize()` 过程）被调用，主要负责配置引脚、时钟以及 USB 设备控制器硬件的初始化，在 OS 调度启动之前调用。由于 SIM 驱动不操作实体硬件，该函数体为空。
-- `usbdev_register()`：在 OS 调度启动之后，由 `usbdev_class_initialize` 函数调用，主要负责初始化 `usbdev` 软件资源并绑定类驱动。
+- `sim_usbdev_initialize()`: Called during the early system startup phase (in the `up_initialize()` process) before the OS scheduler starts. It is mainly responsible for configuring pins, clocks, and initializing the USB device controller hardware. Since the SIM driver does not operate on physical hardware, this function body is empty.
+- `usbdev_register()`: Called by the `usbdev_class_initialize` function after the OS scheduler starts. It is responsible for initializing `usbdev` software resources and binding the class driver.
 
-以下是 SIM 驱动的实现示例：
+The following is the implementation example from the SIM driver:
 
 ```C
 /****************************************************************************
@@ -520,9 +520,9 @@ int usbdev_unregister(struct usbdevclass_driver_s *driver)
 }
 ```
 
-### 2、实现 `operations` 回调
+### 2. Implementing `operations` Callbacks
 
-控制器驱动的核心功能是通过实现 `usbdev_ops_s` 和 `usbdev_epops_s` 两个回调结构体来提供的。代码如下所示：
+The core functionality of the controller driver is provided by implementing the `usbdev_ops_s` and `usbdev_epops_s` callback structures. The code is as follows:
 
 ```C
 static const struct usbdev_epops_s g_epops =
@@ -547,18 +547,18 @@ static const struct usbdev_ops_s g_devops =
 };
 ```
 
-### 3、使用 `boardctl` 实现动态初始化
+### 3. Using `boardctl` for Dynamic Initialization
 
-如果需要实现动态初始化或者热插拔功能，可以通过 `boardctl` 命令。该功能目前支持 ADB、CDC-ACM、PL2303、MSC 和复合设备等类。下面以 ADB 为例进行说明：
+If you need to implement dynamic initialization or hot-plug functionality, you can use the `boardctl` command. This feature currently supports classes like ADB, CDC-ACM, PL2303, MSC, and Composite Device. The following example uses ADB for illustration:
 
-- 首先，在 Kconfig 中使能 `boardctl` 支持：
+- First, enable `boardctl` support in Kconfig:
 
     ```makefile
     CONFIG_BOARDCTL=y
     CONFIG_BOARDCTL_USBDEVCTRL=y
     ```
 
-- 设备初始化 (ADB 示例)
+- Device Initialization (ADB Example)
 
     ```C++
     #include <sys/boardctl.h>
@@ -589,7 +589,7 @@ static const struct usbdev_ops_s g_devops =
     }
     ```
 
-- 设备反初始化 (ADB 示例)
+- Device De-initialization (ADB Example)
 
     ```C++
     void adb_board_uninit(void)
@@ -605,3 +605,7 @@ static const struct usbdev_ops_s g_devops =
     boardctl(BOARDIOC_USBDEV_CONTROL, (uintptr_t)&ctrl);
     }
     ```
+
+## V. References
+
+- [USB Device Simulation (SIM) Driver Guide](./usb_sim_guide.md)
