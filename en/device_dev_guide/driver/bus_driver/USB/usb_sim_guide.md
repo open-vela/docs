@@ -1,5 +1,7 @@
 # USB Device Simulation (SIM) Driver Guide
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/USB/usb_sim_guide.md) \]
+
 This document provides a detailed introduction to the openvela USB Device Simulation (SIM) driver. This driver allows you to simulate a fully functional USB device in a development environment without physical USB hardware. This mechanism is crucial for the development, testing, and validation of USB functionalities on a host machine (currently, only Linux is supported).
 
 ## I. Architecture
