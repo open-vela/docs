@@ -8,7 +8,7 @@
 
 openvela OS 遵循 **POSIX** 标准，提供了一套完整的消息队列 API，允许任何任务（Task）或中断服务程序（ISR）安全地发送和接收数据。此标准化的接口确保了代码的良好可移植性。
 
-核心特性
+核心特性：
 
 - **命名队列**： 消息队列通过全局唯一的名称进行标识，允许多个不相关的任务访问同一个队列。
 - **优先级消息**： 任务可以为发送的消息指定优先级，高优先级的消息会优先被接收。
@@ -827,7 +827,7 @@ out:
 }
 ```
 
-`nxmq_wait_send`: 等待队列空间
+**`nxmq_wait_send`: 等待队列空间**
 
 `nxmq_wait_send` 的功能与 `nxmq_wait_receive` 相互呼应，它负责在队列满时阻塞发送任务。其机制与调度器紧密配合，确保了资源的有效利用。
 
@@ -963,9 +963,9 @@ int nxmq_wait_send(FAR struct mqueue_inode_s *msgq, int oflags)
 - 数据拷贝与资源释放：成功获取消息后，将其内容拷贝到用户缓冲区，并调用 `nxmq_free_msg()` 释放消息结构体。
 - 唤醒发送者：当接收操作使得一个满队列变为空闲时，通过 `nxmq_notify_receive()` 唤醒因队列满而阻塞的发送任务。
 
-其内部实现 `file_mq_timedreceive_internal` 的执行流程可分为两大场景：
+其内部实现 `file_mq_timedreceive_internal` 的执行流程可分为如下两大场景。
 
-#### 场景 A: 队列非空 
+#### 场景 A: 队列非空
 
 1. 进入临界区：调用 `enter_critical_section()` 锁住调度器，保证后续操作的原子性。
 2. 摘取消息：直接从消息链表 `msgq->msglist` 的头部移除一个消息节点 (`list_remove_head`)。由于 `mq_send` 是按优先级插入的，这里取出的总是队列中存在时间最长且优先级最高的消息。
@@ -1125,7 +1125,7 @@ ssize_t file_mq_timedreceive_internal(FAR struct file *mq, FAR char *msg,
 }
 ```
 
-`nxmq_wait_receive`: 任务的阻塞与唤醒
+**`nxmq_wait_receive`: 任务的阻塞与唤醒**
 
 `nxmq_wait_receive` 是接收机制中与调度器交互的核心，它精确地控制任务的阻塞与唤醒。
 

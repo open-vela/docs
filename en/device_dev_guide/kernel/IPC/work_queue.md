@@ -862,13 +862,6 @@ This module implements a publish-subscribe pattern event notification system. It
 
 #### Interface Description
 
-| Function                           | Description                                                                                                                                                                                                           |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `int work_notifier_setup(...)`     | Set up/subscribe to a notification: <br> Registers a notifier and returns a unique key for subsequent operations upon success.                                                                                        |
-| `void work_notifier_teardown(...)` | Deregister a notification: <br> Moves the notifier specified by the key from the pending queue to the idle queue.                                                                                                     |
-| `void work_notifier_signal(...)`   | Trigger/publish an event: <br> Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution.                     |
-| `static ... work_notifier_*`       | Internal helper functions like `work_notifier_key`, `work_notifier_find`, and `work_notifier_worker`, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
-
 ```C
 /*generate a unique key for a work notifier*/
 static uint32_t work_notifier_key(void)；
@@ -898,16 +891,16 @@ void work_notifier_teardown(int key)；
 void work_notifier_signal(enum work_evtype_e evtype, FAR void *qualifier)；
 ```
 
+| Function                           | Description                                                                                                                                                                                                           |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `int work_notifier_setup(...)`     | Set up/subscribe to a notification: <br> Registers a notifier and returns a unique key for subsequent operations upon success.                                                                                        |
+| `void work_notifier_teardown(...)` | Deregister a notification: <br> Moves the notifier specified by the key from the pending queue to the idle queue.                                                                                                     |
+| `void work_notifier_signal(...)`   | Trigger/publish an event: <br> Based on the event type evtype and qualifier (such as PID), notifies all matching subscribers and schedules their associated work to the work queue for execution.                     |
+| `static ... work_notifier_*`       | Internal helper functions like `work_notifier_key`, `work_notifier_find`, and `work_notifier_worker`, used for generating unique keys, finding notifiers, and encapsulating actual execution callbacks, respectively. |
+
 ### 4. Priority Inheritance (`kwork_inherit.c`)
 
 This module is specifically designed to solve the **priority inversion** problem, particularly in the low-priority work queue (LPWORK). When a high-priority task needs to wait for results processed by a low-priority worker thread, these interfaces can be used to temporarily elevate the worker thread's priority, ensuring the critical path is not blocked.
-
-| Function                              | Description                                                                                              |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| void lpwork_boostpriority(...)        | Elevates the priority of all low-priority worker threads to the specified level reqprio.                 |
-| void lpwork_restorepriority(...)      | Restores the original priority of all low-priority worker threads that have had their priority elevated. |
-| static void lpwork_boostworker(...)   | Internal function to elevate the priority of a specific worker thread.                                   |
-| static void lpwork_restoreworker(...) | Internal function to restore the original priority of a specific worker thread.                          |
 
 ```C
 /*Raise the priority of a specified low-priority worker thread*/
@@ -920,18 +913,16 @@ void lpwork_boostpriority(uint8_t reqprio);
 void lpwork_restorepriority(uint8_t reqprio);
 ```
 
+| Function                              | Description                                                                                              |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| void lpwork_boostpriority(...)        | Elevates the priority of all low-priority worker threads to the specified level reqprio.                 |
+| void lpwork_restorepriority(...)      | Restores the original priority of all low-priority worker threads that have had their priority elevated. |
+| static void lpwork_boostworker(...)   | Internal function to elevate the priority of a specific worker thread.                                   |
+| static void lpwork_restoreworker(...) | Internal function to restore the original priority of a specific worker thread.                          |
+
 ### 5. Thread and Queue Management (`kwork_thread.c`)
 
 This file is the **implementation core** of the work queue, responsible for worker thread creation, main loop logic, dynamic queue lifecycle management, and task traversal, among other low-level functions.
-
-| Function                           | Description                                                                                                                                                                                                                                         |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| work_queue_create(...)             | **Dynamically create a new work queue**: <br> Allows users to customize the queue name, number of worker threads, priority, and stack size. Internally calls work_thread_create to create worker threads.                                           |
-| int work_queue_free(...)           | **Free a dynamically created work queue**: <br> Stops and cleans up all associated worker threads, then frees the memory occupied by the queue itself.                                                                                              |
-| void work_foreach(...)             | **Traverse tasks in the queue**: <br> Executes a handler callback function for each work item in the queue specified by qid, commonly used for debugging or status checks.                                                                          |
-| static int work_thread(...)        | **Main function of the worker thread**: <br> Each worker thread runs this function, which waits for task signals in an infinite loop, then retrieves and executes tasks from the queue. This is the foundation for the work queue to consume tasks. |
-| static int work_thread_create(...) | Internal interface called by work_queue_create, responsible for creating and starting a specific worker thread using the specified parameters.                                                                                                      |
-| int work_queue_priority_wq(...)    | Gets the current scheduling priority of worker threads in the specified work queue wqueue.                                                                                                                                                          |
 
 ```C
 /*take out of the work from queue and execute it
@@ -957,6 +948,15 @@ void work_foreach(int qid,work_foreach_t handler,FAR void *arg)；
 int work_queue_period(int qid, FAR struct work_s *work, worker_t worker,
                       FAR void *arg, clock_t delay, clock_t period);
 ```
+
+| Function                           | Description                                                                                                                                                                                                                                         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| work_queue_create(...)             | **Dynamically create a new work queue**: <br> Allows users to customize the queue name, number of worker threads, priority, and stack size. Internally calls work_thread_create to create worker threads.                                           |
+| int work_queue_free(...)           | **Free a dynamically created work queue**: <br> Stops and cleans up all associated worker threads, then frees the memory occupied by the queue itself.                                                                                              |
+| void work_foreach(...)             | **Traverse tasks in the queue**: <br> Executes a handler callback function for each work item in the queue specified by qid, commonly used for debugging or status checks.                                                                          |
+| static int work_thread(...)        | **Main function of the worker thread**: <br> Each worker thread runs this function, which waits for task signals in an infinite loop, then retrieves and executes tasks from the queue. This is the foundation for the work queue to consume tasks. |
+| static int work_thread_create(...) | Internal interface called by work_queue_create, responsible for creating and starting a specific worker thread using the specified parameters.                                                                                                      |
+| int work_queue_priority_wq(...)    | Gets the current scheduling priority of worker threads in the specified work queue wqueue.                                                                                                                                                          |
 
 ## VI. Summary
 

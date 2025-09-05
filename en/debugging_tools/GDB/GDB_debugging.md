@@ -32,7 +32,7 @@ When compiling your code with GCC, you must add the `-g` flag. For the most deta
 gcc -g3 -o my_program my_program.c
 ```
 
-In the openvela build system, you can enable debugging options via Kconfig, and the system will automatically add the appropriate flags for the compiler.
+In the **openvela** build system, you can enable debugging options via Kconfig, and the system will automatically add the appropriate flags for the compiler.
 
 ### 2. Installing GDB
 
@@ -101,7 +101,7 @@ When the program is paused, these commands help you investigate the source of th
 | `info locals`            | Displays all **local variables** in the current stack frame.                                                                                                                                                                                                                                    |
 | `info args`              | Displays all **function arguments** in the current stack frame.                                                                                                                                                                                                                                 |
 | `info registers`         | Displays the current values of all CPU **registers**.                                                                                                                                                                                                                                           |
-| `info threads`           | In a multi-threaded program (like `openvela`), displays all threads and their IDs.                                                                                                                                                                                                              |
+| `info threads`           | In a multi-threaded program (like openvela), displays all threads and their IDs.                                                                                                                                                                                                                |
 | `thread <id>`            | Switches to the context of the specified thread ID.                                                                                                                                                                                                                                             |
 | `ptype <expr>`           | Displays the **data structure definition** of a variable or type. For example:<br> `ptype struct my_struct`.<br>The `ptype /o <type>` command displays the complete memory layout for a specified type, detailing the offset and size of each member.                                           |
 | `set var <name>=<value>` | **Modifies the value of a variable** at runtime. <br>For example, `set var i = 10`. When there is no ambiguity, you can use `set i = 10`                                                                                                                                                        |
@@ -133,14 +133,14 @@ This section applies theory to practice, showing how to use GDB to solve specifi
 
 #### Problem Description
 
-The program crashes unexpectedly on the sim environment or a development board, resulting in an ASan error, segmentation fault, or a hardware exception (such as a Data Abort or Prefetch Abort).
+The program crashes unexpectedly on the `sim` environment or a development board, resulting in an ASan error, segmentation fault, or a hardware exception (such as a Data Abort or Prefetch Abort).
 
 #### Debugging Strategy
 
-1. **Reproduce the Issue**: Start a debugging session with `gdb ./nuttx`, then type `r` to run the program until it crashes.
-2. **Locate the Crash Point**: GDB will automatically pause when the program crashes. Use the `bt` command to view the call stack. The top-most frame is usually the direct cause of the crash.
-3. **Analyze the Context**: Use `frame <num>` to switch to a suspicious stack frame. Then, use `p <var>` and `info locals` to inspect variable values at that time to determine the cause of the crash.
-4. **Analyze Hardware Exceptions**: For hardware exceptions, it is crucial to check the values of registers such as PC (Program Counter) and LR (Link Register) using `info registers`. Use `disassemble /m <PC_value>` to view the assembly instruction being executed at the time of the crash and its corresponding source code line.
+1. Reproduce the Issue: Start a debugging session with `gdb ./nuttx`, then type `r` to run the program until it crashes.
+2. Locate the Crash Point: GDB will automatically pause when the program crashes. Use the `bt` command to view the call stack. The top-most frame is usually the direct cause of the crash.
+3. Analyze the Context: Use `frame <num>` to switch to a suspicious stack frame. Then, use `p <var>` and `info locals` to inspect variable values at that time to determine the cause of the crash.
+4. Analyze Hardware Exceptions: For hardware exceptions, it is crucial to check the values of registers such as PC (Program Counter) and LR (Link Register) using `info registers`. Use `disassemble /m <PC_value>` to view the assembly instruction being executed at the time of the crash and its corresponding source code line.
 
 ### Scenario 2: Program Hangs or Deadlocks
 
@@ -150,14 +150,14 @@ The terminal becomes unresponsive after the program starts, and CPU usage is hig
 
 #### Debugging Strategy
 
-1. **Interrupt the Program**:
+1. Interrupt the Program:
 
     - If the program is running in the foreground, press `Ctrl + C` in GDB.
     - If the program is running in the background, find its PID with `ps`, then execute `sudo gdb attach <PID>`. The program will pause automatically upon attachment.
     - For the `sim` environment, you can also execute `pkill -SIGSTOP nuttx` in a new terminal to pause the process.
 
-2. **Check All Threads**: Enter `info threads` to view the status of all threads. Check if any threads are in an abnormal state or are all waiting for the same resource.
-3. **Analyze Each Thread**: Use `thread <id>` to switch to each thread one by one, then use `bt` to view its call stack to determine what task it is performing. This can often quickly pinpoint the location of the infinite loop or deadlock.
+2. Check All Threads: Enter `info threads` to view the status of all threads. Check if any threads are in an abnormal state or are all waiting for the same resource.
+3. Analyze Each Thread: Use `thread <id>` to switch to each thread one by one, then use `bt` to view its call stack to determine what task it is performing. This can often quickly pinpoint the location of the infinite loop or deadlock.
 
 ### Scenario 3: Tracking Unintended Variable Modifications
 
@@ -167,9 +167,9 @@ A global variable's value is being incorrectly modified at some point, but there
 
 #### Debugging Strategy
 
-1. **Set a Watchpoint**: After starting GDB, set a write watchpoint on the variable using `watch my_global_variable` or `watch *<address_of_variable>`.
-2. **Run and Wait**: Type `run` or `continue` to start or resume program execution. The program will pause immediately when the variable's value is modified.
-3. **Locate the Modifier**: GDB will report the old and new values of the variable and stop at the line of code that modified it. Use `bt` to view the call stack to find the code responsible for the change.
+1. Set a Watchpoint: After starting GDB, set a write watchpoint on the variable using `watch my_global_variable` or `watch *<address_of_variable>`.
+2. Run and Wait: Type `run` or `continue` to start or resume program execution. The program will pause immediately when the variable's value is modified.
+3. Locate the Modifier: GDB will report the old and new values of the variable and stop at the line of code that modified it. Use `bt` to view the call stack to find the code responsible for the change.
 
 ### Scenario 4: Analyzing Compiler-Optimized Variables
 
@@ -243,8 +243,8 @@ For more information, see [Debugging with GDB - Command Files (gnu.org)](https:/
 
 ### 2. Related Debugging Practices
 
-- **IDE Integration**: For instructions on how to configure GDB in VSCode to debug the `sim` environment, please refer to [Debugging the sim environment in VSCode]()
-- **Thread-Aware Debugging**: To better view `openvela` thread information in GDB, you can use J-Link's GDB plugin. For details, see [Enhancing openvela Thread Debugging with the J-Link GDB Plugin](../crash/JLINK/J_Link.md).
+- **IDE Integration**: For instructions on how to configure GDB in VSCode to debug the `sim` environment, please refer to [Debugging the sim environment in VSCode](./VSCODE_debugging.md)
+- **Thread-Aware Debugging**: To better view openvela thread information in GDB, you can use J-Link's GDB plugin. For details, see [Enhancing openvela Thread Debugging with the J-Link GDB Plugin](../crash/JLINK/J_Link.md).
 
 ## VII. Troubleshooting
 
@@ -256,9 +256,11 @@ This is typically caused by an incompatibility between the Python version GDB de
 
 #### Solution
 
-1. **Confirm the Python Version GDB Needs**: The error message often indicates the required version (for example, `python3.8`).
-2. **Install the Corresponding Version**: Ensure this version of Python is installed on your system. You can refer to guides such as [How to Install and Switch Python Versions](https://www.rosehosting.com/blog/how-to-install-and-switch-python-versions-on-ubuntu-20-04/).
-3. **Configure `PYTHONHOME`**: If the problem persists after installation, try setting the `PYTHONHOME` environment variable to force GDB to use the correct Python interpreter.
+1. Confirm the Python Version GDB Needs: The error message often indicates the required version (for example, `python3.8`).
+
+2. Install the Corresponding Version: Ensure this version of Python is installed on your system. You can refer to guides such as [How to Install and Switch Python Versions](https://www.rosehosting.com/blog/how-to-install-and-switch-python-versions-on-ubuntu-20-04/).
+
+3. Configure `PYTHONHOME`: If the problem persists after installation, try setting the `PYTHONHOME` environment variable to force GDB to use the correct Python interpreter.
 
 ## VIII. References
 

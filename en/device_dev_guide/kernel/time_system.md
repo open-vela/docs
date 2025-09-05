@@ -2,134 +2,135 @@
 
 \[ English | [简体中文](../../../zh-cn/device_dev_guide/kernel/time_system.md) \] 
 
-## I. Introduction  
+## I. Overview  
 
-This document provides an overview of the time system, including key time concepts, time types, APIs, and commands for managing time and time zones.  
+This document provides an overview of the time system, including key time concepts, data types, APIs, and commands for managing time and timezones.
 
-## II. Preliminary Concepts  
+## II. Prerequisite Concepts
 
-### 1. Coordinated Universal Time (UTC)  
+### 1. Coordinated Universal Time (UTC)
 
-- **Definition**: UTC is the global standard time reference.  
-- **Relationship with Beijing Time (CST)**: Beijing Time is **8 hours** ahead of UTC (**UTC+8**).  
+- **Definition**: UTC is the primary time standard by which the world regulates clocks and time.
+- **Relationship with China Standard Time (CST)**: CST is 8 hours ahead of UTC, denoted as UTC+8. 
 
 ### 2. Calendar Time  
 
-- **Definition**: Calendar time is a relative time representation, expressed as the number of seconds elapsed from a standard reference point to the current moment.  
-- **Key Features**:  
+- **Definition**: Calendar Time is a relative time value, representing the number of seconds that have elapsed since a standard reference point.
+- **Characteristics**:
 
-    - **Uniformity**: The calendar time for the same moment is consistent across all time zones relative to the same reference point.  
-    - **Reference Point**: Typically based on **UTC 1970-01-01 00:00:00**(Unix epoch).  
-    - **Representation**: Stored as a timestamp in seconds, widely used in computer systems.  
+    - **Uniformity**: At any given moment, the Calendar Time is consistent across all timezones relative to the same reference point.
+    - **Reference Point**: The standard reference point is typically 00:00:00 UTC on January 1, 1970 (also known as the Unix Epoch).
+    - **Representation**: It is represented as a number of seconds and is commonly used in computer systems as a timestamp.
 
-## III. Implementation of `localtime` in openvela  
+## III. `localtime` Implementation in openvela
 
-### Two Implementation Modes  
+### Two Implementation Methods
 
-- **When `CONFIG_LIBC_LOCALTIME` is enabled**:  
+- **With `CONFIG_LIBC_LOCALTIME` enabled**:
 
-    - `localtime` relies on `zoneinfo` to convert time correctly based on the time zone.  
-    - Advantages: Supports time zone conversion for complete functionality.  
-    - Disadvantages: Increases code size by approximately **6.4KB**.  
+    - The `localtime` implementation depends on `zoneinfo` data to correctly convert time based on the timezone.
+    - **Advantage**: Supports timezone conversions, providing more complete functionality.
+    - **Disadvantage**: Increases the code size by **approximately 6.4 KB**.
 
     ![img](./figures/001.png)  
 
-- **When `CONFIG_LIBC_LOCALTIME` is disabled**:  
+- **Without `CONFIG_LIBC_LOCALTIME` enabled**:
 
-    - `localtime` behaves the same as `gmtime`, returning UTC time without time zone conversion.  
-    - Advantages: Saves space with no extra overhead.  
-    - Disadvantages: Does not support time zone conversion.  
+    - `localtime` and `gmtime` have the same effect; they both return UTC time without performing any timezone conversion.
+    - **Advantage**: Saves space with no additional overhead.
+    - **Disadvantage**: Does not support timezone conversions.
 
-## IV. Time Zone Setup  
+## IV. Setting the Timezone
 
-### `tzset` Function  
+**`tzset` Function**
 
-- Obtains time zone information from the environment variable `TZ` and initializes:  
+This function retrieves timezone information from the `TZ` environment variable and initializes the following global variables:
 
-    - `timezone`: Offset (in seconds) of the current time zone from UTC.  
-    - `daylight`: Indicates if daylight saving time is enabled (non-zero value means enabled).  
+- `timezone`: The offset of the current timezone from UTC in seconds.
+- `daylight`: A non-zero value indicates that Daylight Saving Time (DST) rules apply. 
 
-### 1. Format of `TZ` Environment Variable  
+### 1. TZ Environment Variable Format
 
 #### String Format  
 
-The `TZ` environment variable supports the following format:  
+The `TZ` environment variable supports the following format:
 
 ```bash
 std offset[dst[offset][,start[/time],end[/time]]]
 ```  
 
-**Parameter Description**:  
+**Parameter Descriptions**:  
 
-1. `std`
+1. **std**
 
-    - Indicates a time zone abbreviation, consisting of three or more characters. For example:
-    - CST (China Standard Time).
-    - EST (Eastern Standard Time).  
+    Represents the standard timezone abbreviation, consisting of three or more characters. For example:
 
-2. offset
+    - `CST`: China Standard Time
+    - `EST`: Eastern Standard Time
 
-    - Offset from UTC
-    - formatted as `±hh:mm:ss`,(e.g., `+8:00:00` for UTC+8).  
+2. **offset**
 
-3. dst (optional)
+    - The offset of the standard timezone from UTC.
+    - The format is `±hh:mm:ss`. For example, `+8:00:00` represents UTC+8.
 
-    - Daylight saving time (DST) abbreviation.  
+3. **dst** (optional)
 
-4. offset (optional)
+    Represents the Daylight Saving Time timezone abbreviation.
 
-    - DST offset from UTC.
-    - defaults to +1 hour if omitted.  
+4. **offset** (optional)
 
-5. start[/time], end[/time] (optional)
+    - The offset of the DST timezone from UTC.
+    - If omitted, it defaults to one hour ahead of the standard time.
 
-    Indicates the start and end rules of daylight saving time
+5. **start[/time],end[/time]** (optional)
 
-    - formatted as `M<month>.<week>.<day>` 
-        - `M10.1.0` for the first Sunday in October.  
-        - `M3.3.0` for the third Sunday in March.
-    - `/time` indicates the specific time (optional).
+    Defines the rules for the start and end of DST:
+
+    - The format is `M<month>.<week>.<day>`:
+        - `M10.1.0`: The first Sunday of October.
+        - `M3.3.0`: The third Sunday of March.
+    - `/time` specifies the exact time of the change (optional).
 
 #### File Path Format  
 
-The `TZ` environment variable can specify time zone information via a file path:  
+The `TZ` environment variable also supports specifying timezone information via a file path in the following formats:
 
-1. Path formats: 
+1. **Path Formats**:
 
-    - `Asia/Shanghai`: Relative path (uses the system time zone directory specified by `CONFIG_LIBC_TZDIR`).  
-    - `/Asia/Shanghai`: Absolute path，Indicates the full path to the file in the specified time zone
-    - `:Asia/Shanghai`: Supports both absolute paths and relative paths in the system time zone directory.  
+    - `Asia/Shanghai`: A relative path to a file in the system timezone directory (specified by `CONFIG_LIBC_TZDIR`).
+    - `/Asia/Shanghai`: An absolute path directly specifying the full path to the timezone file.
+    - `:Asia/Shanghai`: Allows resolution using either an absolute path or a relative path within the system timezone directory.
 
-2. Parsing rule: After locating the time zone file, it is parsed in `tzfile` format to load time zone information.  
+2. **Parsing Rule**: Once the timezone file is located, its content is parsed according to the `tzfile` format to load the corresponding timezone information.
 
-### 2. `zoneinfo` Creation and Mounting Guide  
+### 2. Creating and Mounting `zoneinfo` Data
 
 #### `zoneinfo` Creation Process  
 
-1. `tzfile` format
+1. **`tzfile` Format**
 
-    `zoneinfo` uses the `tzfile` format; see [tzfile documentation](https://man7.org/linux/man-pages/man5/tzfile.5.html) for details.  
+    `zoneinfo` files use the `tzfile` format to store timezone information. For details, refer to the [tzfile documentation](https://man7.org/linux/man-pages/man5/tzfile.5.html).
 
-2. Database download
+2. **Database Download**
 
-    Obtain the latest time zone data from the [Time Zone Database](https://www.iana.org/time-zones).
+    Download the latest timezone data from the [Time Zone Database](https://www.iana.org/time-zones).
 
-3. Generate `tzbin` directory
+3. **Generate `tzbin` Directory**
 
-    Use the downloaded data to create a `tzbin` directory containing `zoneinfo` files (as shown below).  
+    Use the downloaded timezone data to generate a `tzbin` directory containing the `zoneinfo` files, as shown below:
 
-        ![img](./figures/002.png)  
+    ![img](./figures/002.png)
 
-4. Create `romfs` file
+4. **Generate `romfs` File**
 
-    - Package the `tzbin` directory into a `romfs` image using the Linux tool `genromfs`
-    - The image file can be mounted on the device for use by the program  
+    - Use the Linux tool `genromfs` to package the `tzbin` directory into a `romfs` image file.
+    - This image file can be mounted on the device for programs to use.
 
-#### Mounting Methods for Simulators and Boards  
+#### Mounting on a Simulator and a Board
 
 ##### Mounting in Simulator (sim)  
 
-1. Create a RAM disk.
+1. **Create a RAM Disk**
 
     ```bash
     mkrd -m 10 -s 512 102400
@@ -141,7 +142,7 @@ The `TZ` environment variable can specify time zone information via a file path:
 
 2. **Mount the `hostfs` file system**
 
-    - Store the romfs.img file in the current directory and mount it:
+    Store the romfs.img file in the current directory and mount it:
 
     ```bash
     mount -t hostfs fs=. /data
@@ -159,31 +160,29 @@ The `TZ` environment variable can specify time zone information via a file path:
     mount -t romfs /dev/ram10
     ```
 
-##### Mounting on Hardware Boards  
+##### Mounting on a Board
 
-1. Locate the file partition start address
+1. **Find the File Partition Start Address**
 
-    - Burn the `romfs` image to the corresponding physical partition using a download tool.  
+    - Use a flashing tool to write the `romfs` image file to the corresponding physical partition address.
 
-2. Mount the partition
+2. **Mount the Partition**
 
-    - Access time zone files after mounting.  
+    - The timezone files can be used after the partition is mounted.
 
 #### `zoneinfo` Creation Tools  
 
-1. Automatic generation
+1. **Automatic Generation**
 
-    - The `Makefile` in `libs/libc/zoneinfo/` can automatically download the time zone database and package it into a `romfs` image (corresponding to the `config` below).  
+    - The `Makefile` in the `libs/libc/zoneinfo/` directory can automatically download the timezone database and package it into a `romfs` image file. The corresponding configuration is shown below:
 
-    ![img](./figures/003.png)  
+        ![img](./figures/003.png)
 
-    - Running the `Makefile` generates `romfs_zoneinfo.img`.  
+    - After running the `Makefile`, a `romfs_zoneinfo.img` file is generated.
 
-    ![img](./figures/004.png)  
+2. **Mount the Generated Image File**
 
-2. Mount the generated image
-
-    - Mounting in the simulator  
+    To mount in the simulator:
 
     ```bash
     mkrd -m 10 -s 512 800  
@@ -191,19 +190,19 @@ The `TZ` environment variable can specify time zone information via a file path:
     mount -t romfs /dev/ram10 zoneinfo
     ```  
 
-#### **Specify `zoneinfo` Location**  
+#### Specifying the `zoneinfo` File Location
 
-To specify the `zoneinfo` location, set the macro:  
+To specify a custom location for `zoneinfo` files, set the following macro:
 
 ```makefile
 CONFIG_LIBC_TZDIR=/zoneinfo
 ```  
 
-### 3. Methods to Set Time Zones  
+### 3. Methods for Setting the Timezone
 
-#### Set Time Zone via Startup Script
+#### Setting via Startup Script
 
-In the `rcS` startup script, set environment variables (take effect after calling `tzset`):  
+Set the environment variable in the `rcS` startup script (takes effect after `tzset` is called):
 
 ```bash
 # Set to Shanghai time zone  
@@ -222,14 +221,19 @@ set TZ :Pacific/Chatham
 set TZ "NZST-12:00:00NZDT-13:00:00,M10.1.0,M3.3.0"
 ```  
 
-#### Dynamically Set Time Zone in Code  
+#### Setting Dynamically
 
-1. Call `setenv` to set the `TZ` environment variable (each task has independent environment variables, allowing different time zones).  
-2. Call `tzset` to synchronize time zone information.  
+Set the timezone dynamically in code:
 
-#### Set Time Zone via Command Line  
+1. Call `setenv`: Sets the `TZ` environment variable.
 
-Use command-line tools:  
+    Each task has its own independent environment variables and can therefore hold different timezone information.
+
+2. Call `tzset`: Synchronizes the timezone information.
+
+#### Setting from the Command Line
+
+Use a command-line tool to set the timezone:
 
 ```bash
 # Set to Tokyo time zone  
@@ -238,38 +242,38 @@ timedatectl set-timezone Asia/Tokyo
 
 ## V. Multi-Core Time Zone Setup  
 
-In multi-core systems, openvela recommends:  
+In a multi-core system, openvela recommends the following approach:
 
-1. **UI core**: Responsible for setting time zone information for local time display.  
-2. **Other cores**: Always use UTC time to avoid time zone setup.  
+1. **UI Core**: The core responsible for the UI display should handle timezone settings for local time display.
+2. **Other Cores**: Should always use UTC time and avoid setting a timezone.
 
-**Rationale**:  
+**Reasoning:**
 
-- `tzset` is independent per core and cannot be synchronized automatically.  
-- To maintain consistent time zones across cores, each core must call `tzset` individually.  
+- `tzset` is independent for each core and cannot be automatically synchronized.
+- If multiple cores need to maintain the same timezone, `tzset` must be called individually on each core.
 
-**Recommendations**:  
+**Recommendations:**
 
-- Except for the UI core, other cores should avoid using `localtime` and use UTC (`gmtime`) instead.  
-- Logging in multi-core systems should use UTC for consistency.  
+- Except for the UI core, other cores should avoid using `localtime` and use UTC time (`gmtime`) exclusively.
+- Logs in a multi-core system should consistently use UTC time.
 
-**Special Cases**:  
+**Special Case:**
 
-- If a multi-core needs access to the `zoneinfo` file:
+- If multiple cores need to access `zoneinfo` files:
 
-    - When the resource is stored in the eMMC, other cores need to go through `rpmsgfs` to access the `tzfile` information.
+    - When resources are stored on eMMC, other cores may need to use `rpmsgfs` to access `tzfile` information.
 
-## VI. Time Types  
+## VI. Time Data Types
 
-### `time_t`
+**`time_t`**
 
-- **Description**: Stores the number of seconds since 1970-01-01 00:00:00.  
-- **Implementation**: In openvela, `time_t` is implemented as `uint32_t` or `int64_t`.  
+- **Description**: Stores the number of seconds that have elapsed since 00:00:00 on January 1, 1970.
+- **Implementation**: In openvela, `time_t` is implemented as `uint32_t` or `int64_t`.
 
-### `struct timeval`
+**`struct timeval`**
 
-- Description: Provides seconds and microseconds with microsecond precision.  
-- Structure:  
+- **Description**: Provides time in seconds and microseconds, with microsecond precision.
+- **Structure**:
 
     ```c
     struct timeval {
@@ -278,10 +282,10 @@ In multi-core systems, openvela recommends:
     };
     ```  
 
-### `struct timespec`  
+**`struct timespec`**
 
-- Description: Provides seconds and nanoseconds with nanosecond precision.  
-- Structure:  
+- **Description**: Provides time in seconds and nanoseconds, with nanosecond precision.
+- **Structure**:
 
     ```c
     struct timespec {
@@ -290,10 +294,10 @@ In multi-core systems, openvela recommends:
     };
     ```
 
-### `struct tm`
+**`struct tm`**
 
-- Description: Provides detailed date and time information.  
-- Structure:  
+- **Description**: Provides a detailed breakdown of date and time information.
+- **Structure**:
 
     ```c
     struct tm {
@@ -315,29 +319,29 @@ In multi-core systems, openvela recommends:
 
 ### 1. Common Time APIs  
 
-#### `time_t time(FAR time_t *timep)`  
+`time_t time(FAR time_t *timep)`
 
-    - Description: Gets or sets the current calendar time.  
-    - Parameters: Pointer to store calendar time (if `NULL`, returns the current time).  
-    - Return Value: Current calendar time as `time_t`.  
-    - Example:  
-    
+- **Description**: Gets or sets the current calendar time.
+- **Parameters**: A pointer to a `time_t` variable to store the calendar time. If `NULL`, the function returns the current calendar time.
+- **Return Value**: Returns the current calendar time as a `time_t` value.
+- **Example**:
+
     ```c
     time_t current_time;  
     current_time = time(NULL); // Get current calendar time  
     printf("Current time: %ld\n", current_time);
     ```  
 
-#### `int clock_gettime(clockid_t clockid, FAR struct timespec *tp)`  
+`int clock_gettime(clockid_t clockid, FAR struct timespec *tp)`  
 
-- Description: Gets the current time of a specified clock.  
-- Parameters:  
+- **Description**: Gets the current time of a specified clock.
+- **Parameters**:
 
-    - `clockid`: Clock to query (e.g., `CLOCK_REALTIME`, `CLOCK_MONOTONIC`).  
-    - `tp`: Pointer to `struct timespec` for storing the result.  
+    - `clockid`: The clock to query. Common values are `CLOCK_REALTIME` and `CLOCK_MONOTONIC`.
+    - `tp`: A pointer to a `struct timespec` to store the retrieved time.
 
-- Return Value: `0` on success, `-1` on error.  
-- Example:
+- **Return Value**: Returns `0` on success, or `-1` on failure.
+- **Example**:
 
     ```c
     struct timespec ts;  
@@ -345,81 +349,82 @@ In multi-core systems, openvela recommends:
     printf("Seconds: %ld, Nanoseconds: %ld\n", ts.tv_sec, ts.tv_nsec);
     ```
 
-#### `int clock_settime(clockid_t clock_id, FAR const struct timespec *tp)`  
+`int clock_settime(clockid_t clock_id, FAR const struct timespec *tp)`
 
-- Description: Set the time of the specified clock. When `clockid` is `CLOCK_REALTIME`, it is used to set the UTC time.
+- **Description**: Sets the time of a specified clock. When `clockid` is `CLOCK_REALTIME`, it is used to set the system's UTC time.
 
-#### `int clock_getres(clockid_t clk_id, struct timespec *res)`  
+`int clock_getres(clockid_t clk_id, struct timespec *res)`
 
-- It is used to obtain clock accuracy, with the highest accuracy being nanoseconds 
+- **Description**: Gets the resolution (precision) of a clock, which can be as high as nanoseconds.
 
 ### 2. Time Conversion APIs  
 
-1. `time_t timegm(FAR struct tm *tmp)`  
+1. `time_t timegm(FAR struct tm *tmp)`
 
-    - Converts `struct tm` to seconds since `1970-01-01 00:00:00` (UTC).  
+    - **Description**: Converts a `struct tm` into the number of seconds since `1970-01-01 00:00:00` (UTC).
 
-2. `FAR struct tm *gmtime(FAR const time_t *timep)`  
+2. `FAR struct tm *gmtime(FAR const time_t *timep)`
 
-    - Convert the number of seconds from `1970-01-01 00:00:00` to the present to the time in `struct tm` format, and is represented by UTC time.  
-    - Note: `gmtime_r` is the thread-safe version.  
+    - **Description**: Converts the number of seconds since the epoch into a `struct tm` format, represented in UTC.
+    - **Note**: `gmtime_r` is the thread-safe version.
 
-3. `time_t mktime(FAR struct tm *tp)`  
+3. `time_t mktime(FAR struct tm *tp)`
 
-    - Converts `struct tm` to seconds based on the local time zone.  
+    - **Description**: Converts a `struct tm` into the number of seconds based on the local timezone.
 
-4. `FAR struct tm *localtime(FAR const time_t *timep)`  
+4. `FAR struct tm *localtime(FAR const time_t *timep)`
 
-    - Converts seconds since `1970-01-01 00:00:00` to `struct tm` in the local time zone.  
-    - Note: `localtime_r` is the thread-safe version.  
+    - **Description**: Converts the number of seconds since the epoch into a `struct tm` format, represented in the local timezone.
+    - **Note**: `localtime_r` is the thread-safe version.
 
 5. `FAR char *asctime(FAR const struct tm *tp)`
 
-    - Formats date and time as a string.  
-    - Note: `asctime_r` is the thread-safe version.  
+    - **Description**: Formats a date and time into a string and returns it.
+    - **Note**: `asctime_r` is the thread-safe version.
 
 6. `size_t strftime(FAR char *s, size_t max, FAR const char *format, FAR const struct tm *tm)`
 
-    - Formatting the data in the `struct tm` into the string `s` according to the given `format`, up to a maximum of `max` characters
+    - **Description**: Formats the data in a `struct tm` into a string `s` according to the `format` string, with a maximum length of `max`.
 
 7. `FAR char *strptime(FAR const char *s, FAR const char *format, FAR struct tm *tm)`
 
-    - Parses string `s` into `struct tm` based on `format`.  
+    - **Description**: Parses the string `s` according to the `format` string and initializes a `struct tm`.
 
 8. `FAR char *ctime(FAR const time_t *timep)`
 
-    - Returns a string representing `local time`.  
-    - Note: `ctime_r` is the thread-safe version.  
+    - **Description**: Returns a string representing the local time (`localtime`).
+    - **Note**: `ctime_r` is the thread-safe version.
 
-9. `double difftime(time_t time2, time_t time1)`  
+9. `double difftime(time_t time2, time_t time1)`
 
-    - Returns the difference (in seconds) between two times.  
+    - **Description**: Returns the difference between two times in seconds.
 
 ### 3. High-Precision Time APIs  
 
-1. `int gettimeofday(FAR struct timeval *tv, FAR struct timezone *tz)`  
+1. `int gettimeofday(FAR struct timeval *tv, FAR struct timezone *tz)`
 
-    - **Description**: Returns the current time with seconds and microseconds since `1970-01-01 00:00:00`.  
-    - **Parameters**:  
+    - **Description**: Returns the current time, including the number of seconds and microseconds since `1970-01-01 00:00:00`.
 
-        - `tv`: Pointer to `struct timeval` for seconds and microseconds.  
-        - `tz`: Time zone info (usually `NULL`).
+    - **Parameters**:
 
-    - **Example**:  
+        - `tv`: A pointer to a `struct timeval` to store the seconds and microseconds.
+        - `tz`: Timezone information, usually passed as `NULL`.
 
-        ```c
+    - **Example**:
+
+        ```C
         struct timeval tv;  
         gettimeofday(&tv, NULL);  
         printf("Seconds: %ld, Microseconds: %ld\n", tv.tv_sec, tv.tv_usec);
-        ```  
+        ```
 
 2. `int settimeofday(FAR const struct timeval *tv, FAR struct timezone *tz)`
 
-    - Sets the system time (UTC).  
+    - **Description**: Sets the system time (UTC).
 
 3. `int clock_systime_timespec(FAR struct timespec *ts)`
 
-    - Gets the system up time (kernel-level API).  
+    - **Description**: Gets the system's monotonic running time (a kernel-level API).
 
 ## VIII. Command Reference  
 
@@ -430,19 +435,19 @@ ap> uptime
 14:11:37 up 3 days, 16:49, load average: 0.07, 0.07, 0.07
 ```  
 
-### 2. Set Time Zone  
+### 2. Set Timezone  
 
 ```bash
 ap> timedatectl set-timezone Asia/Tokyo
 ```  
 
-### 3. Set System Time  
+### 3. Set Time  
 
 ```bash
 ap> date -s "May 11 11:11:21 2022"
 ```  
 
-### 4. View Local Time 
+### 4. View Local Time
 
 By default, local time is displayed, and UTC is displayed when there is no time zone. 
 
@@ -458,7 +463,7 @@ ap> date -u
 Wed, Oct 22 14:13:21 2104  # UTC time
 ```  
 
-### 6. View Time and Time Zone Info  
+### 6. View Time and Timezone Information
 
 ```bash
 ap> timedatectl

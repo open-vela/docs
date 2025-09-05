@@ -69,13 +69,17 @@ nxplayer> close
 
 以下以 `sim` 平台为例，演示如何播放 MP3 文件。
 
-1. 安装依赖。 在主机上安装必要的依赖库：
+1. 安装依赖。
+
+    在主机上安装必要的依赖库：
 
     ```Bash
     sudo apt install libmad0-dev:i386
     ```
 
-2. 运行 `nxplayer`。 播放 MP3 文件的具体命令如下：
+2. 运行 `nxplayer`。
+
+    播放 MP3 文件的具体命令如下：
 
     ```Bash
     nxplayer
@@ -83,7 +87,9 @@ nxplayer> close
     nxplayer> play /data/audio.mp3
     ```
 
-3. 停止播放。 播放结束后，使用以下命令停止播放并关闭设备：
+3. 停止播放。
+
+    播放结束后，使用以下命令停止播放并关闭设备：
 
     ```Bash
     nxplayer> stop
@@ -146,13 +152,17 @@ nxrecorder> close
 
 以下以 `sim` 平台为例，演示如何录制 MP3 文件。
 
-1. 安装依赖。 在主机上安装必要的依赖库：
+1. 安装依赖。
+
+    在主机上安装必要的依赖库：
 
     ```Bash
     sudo apt-get install libmp3lame-dev:i386
     ```
 
-2. 运行 nxrecorder。 录制 MP3 文件的具体命令如下：
+2. 运行 nxrecorder。
+
+    录制 MP3 文件的具体命令如下：
 
     ```Bash
     nxrecorder
@@ -160,7 +170,9 @@ nxrecorder> close
     nxrecorder> record /stream/100.mp3 2 16 44100
     ```
 
-3. 结束录制。 录制结束后，使用以下命令停止录制并关闭设备：
+3. 结束录制。
+
+    录制结束后，使用以下命令停止录制并关闭设备：
 
     ```Bash
     nxrecorder> stop
@@ -237,11 +249,12 @@ nxlooper> device pcm1c
 nxlooper> loopback 2 16 44100 8
 ```
 
-- 参数说明：
-    - `channels`：设置声道数为 2。
-    - `bpsamp`：设置采样精度为 16 位。
-    - `samprate`：设置采样率为 44100 Hz。
-    - `format`：设置格式为 `8`，表示 MP3 格式。
+参数说明：
+
+- `channels`：设置声道数为 2。
+- `bpsamp`：设置采样精度为 16 位。
+- `samprate`：设置采样率为 44100 Hz。
+- `format`：设置格式为 `8`，表示 MP3 格式。
 
 `format` 参数的值定义在 `nuttx/include/nuttx/audio/audio.h` 文件中。以下是部分格式的定义：
 
@@ -273,9 +286,7 @@ nxlooper> stop
 nxlooper> close
 ```
 
-> **说明**
->
-> `nxlooper` 工具默认处于启用状态。具体配置可参考各自目录下的 `Kconfig` 文件。
+**说明**：`nxlooper` 工具默认处于启用状态。具体配置可参考各自目录下的 `Kconfig` 文件。
 
 ## 四、CMocka 使用指南
 

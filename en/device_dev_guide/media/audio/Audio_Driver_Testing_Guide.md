@@ -69,13 +69,17 @@ nxplayer> close
 
 Take the `sim` platform as an example to demonstrate how to play MP3 files:
 
-1. **Install dependencies**: Install necessary libraries on the host machine:  
+1. Install dependencies.
+
+    Install necessary libraries on the host machine:  
 
     ```Bash
     sudo apt install libmad0-dev:i386
     ```
 
-2. **Run nxplayer**: Use the following command to play an MP3 file:  
+2. Run nxplayer.
+
+    Use the following command to play an MP3 file:  
 
     ```Bash
     nxplayer
@@ -83,7 +87,9 @@ Take the `sim` platform as an example to demonstrate how to play MP3 files:
     nxplayer> play /data/audio.mp3
     ```
 
-3. **Stop playback**: After playback ends, use the following commands to stop and close the device:  
+3. Stop playback.
+
+    After playback ends, use the following commands to stop and close the device:  
 
     ```Bash
     nxplayer> stop
@@ -146,13 +152,17 @@ nxrecorder> close
 
 Take the `sim` platform as an example to demonstrate how to record MP3 files:
 
-1. **Install dependencies**: Install necessary libraries on the host machine:  
+1. Install dependencies.
+
+    Install necessary libraries on the host machine.
 
     ```Bash
     sudo apt-get install libmp3lame-dev:i386
     ```
 
-2. **Run nxrecorder**: Use the following command to record an MP3 file:  
+2. Run nxrecorder.
+
+    Use the following command to record an MP3 file.
 
     ```Bash
     nxrecorder
@@ -160,7 +170,9 @@ Take the `sim` platform as an example to demonstrate how to record MP3 files:
     nxrecorder> record /stream/100.mp3 2 16 44100
     ```
 
-3. **End recording**: After recording ends, use the following commands to stop and close the device:  
+3. End recording.
+
+    After recording ends, use the following commands to stop and close the device:  
 
     ```Bash
     nxrecorder> stop
@@ -237,11 +249,12 @@ nxlooper> device pcm1c
 nxlooper> loopback 2 16 44100 8
 ```
 
-- **Parameter description**:  
-    - `channels`: Set the number of channels to 2.  
-    - `bpsamp`: Set the sample precision to 16 bits.  
-    - `samprate`: Set the sample rate to 44100 Hz.  
-    - `format`: Set the format to `8`, indicating MP3 format.  
+Parameter description:
+
+- `channels`: Set the number of channels to 2.  
+- `bpsamp`: Set the sample precision to 16 bits.  
+- `samprate`: Set the sample rate to 44100 Hz.  
+- `format`: Set the format to `8`, indicating MP3 format.  
 
 The values for the `format` parameter are defined in the `nuttx/include/nuttx/audio/audio.h` file. Below are definitions for some formats:
 
@@ -273,7 +286,7 @@ nxlooper> stop
 nxlooper> close
 ```
 
-> **Note**: The `nxlooper` tool is enabled by default. For specific configurations, refer to the `Kconfig` file in each respective directory.
+**Note**: The `nxlooper` tool is enabled by default. For specific configurations, refer to the `Kconfig` file in each respective directory.
 
 ## IV. CMocka Usage Guide
 

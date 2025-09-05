@@ -54,7 +54,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ### Device Development
 
-If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform.For more information, refer to the following guide.
+If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform. For more information, refer to the following guide.
 
 1. [Set up the development environment](./en/quickstart/Set_up_the_development_environment.md)
 2. [Download openvela source code](./en/quickstart/Download_Vela_sources.md)
@@ -129,6 +129,6 @@ Scan the QR code below to follow the **openvela** official WeChat account for th
 
 ## Contact
 
-- **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page.Try to provide detailed information, so that we can understand and solve the problem faster.
+- **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page. Try to provide detailed information, so that we can understand and solve the problem faster.
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
 - **Discussions**: If you have a broader topic or discussion, you can start a new discussion on the Discussions page.

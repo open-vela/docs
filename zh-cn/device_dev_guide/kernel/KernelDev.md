@@ -42,13 +42,13 @@ openvela 同时支持以下多处理器模式，旨在提供灵活的处理器�
 
 #### SMP（Symmetric Multiprocessing）
 
-拥有多个 CPU，每个 CPU 采用相同的架构，多个 CPU 共享同一内存空间。操作系统运行在这多个 CPU 上，并将工作负载分摊给各个 CPU。SMP架构相关详细内容，请参见 [SMP]()。
+拥有多个 CPU，每个 CPU 采用相同的架构，多个 CPU 共享同一内存空间。操作系统运行在这多个 CPU 上，并将工作负载分摊给各个 CPU。
 
 <img src="figures/010.png" alt="smp" width="75%">
 
 #### AMP（Asymmetric Multiprocessing）
 
-拥有多个 CPU，每个 CPU 可能采用不同的架构，每个 CPU 拥有独立内存空间。每个 CPU 上都运行一个独立的操作系统，CPU 之间通过核间通信实现协作。核间通讯相关内容，请参见[核间通讯框架]()。
+拥有多个 CPU，每个 CPU 可能采用不同的架构，每个 CPU 拥有独立内存空间。每个 CPU 上都运行一个独立的操作系统，CPU 之间通过核间通信实现协作。
 
 <img src="figures/011.png" alt="smp" width="75%">
 

@@ -862,13 +862,6 @@ int work_cancel_sync(int qid, FAR struct work_s *work);
 
 #### 接口说明
 
-| 函数 (Function)                  | 描述 (Description)                                                                                                                       |
-| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| int work_notifier_setup(...)     | 设置/订阅一个通知：<br> 注册一个通知器，成功后返回一个唯一的 key 用于后续操作。                                                          |
-| void work_notifier_teardown(...) | 注销一个通知：<br> 根据 key 将之前设置的通知器从待处理队列移动到空闲队列。                                                               |
-| void work_notifier_signal(...)   | 触发/发布一个事件：<br> 根据事件类型 evtype 和限定符 qualifier（如 PID），通知所有匹配的订阅者，并将其关联的 work 调度到工作队列执行。   |
-| static ... work_notifier_*       | work_notifier_key、work_notifier_find、work_notifier_worker 等均为内部辅助函数，分别用于生成唯一键、查找通知器和作为实际执行的回调封装。 |
-
 ```C
 /*generate a unique key for a work notifier*/
 static uint32_t work_notifier_key(void)；
@@ -898,16 +891,16 @@ void work_notifier_teardown(int key)；
 void work_notifier_signal(enum work_evtype_e evtype, FAR void *qualifier)；
 ```
 
+| 函数 (Function)                  | 描述 (Description)                                                                                                                       |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| int work_notifier_setup(...)     | 设置/订阅一个通知：<br> 注册一个通知器，成功后返回一个唯一的 key 用于后续操作。                                                          |
+| void work_notifier_teardown(...) | 注销一个通知：<br> 根据 key 将之前设置的通知器从待处理队列移动到空闲队列。                                                               |
+| void work_notifier_signal(...)   | 触发/发布一个事件：<br> 根据事件类型 evtype 和限定符 qualifier（如 PID），通知所有匹配的订阅者，并将其关联的 work 调度到工作队列执行。   |
+| static ... work_notifier_*       | work_notifier_key、work_notifier_find、work_notifier_worker 等均为内部辅助函数，分别用于生成唯一键、查找通知器和作为实际执行的回调封装。 |
+
 ### 4、优先级继承 (`kwork_inherit.c`)
 
 该模块专门用于解决**优先级反转**问题，尤其是在低优先级工作队列（LPWORK）中。当高优先级任务需要等待一个由低优先级工作线程处理的结果时，可以通过这些接口临时提升工作线程的优先级，确保关键路径不被阻塞。
-
-| 函数 (Function)                       | 描述 (Description)                                       |
-| ------------------------------------- | -------------------------------------------------------- |
-| void lpwork_boostpriority(...)        | 将所有低优先级工作线程的优先级提升到指定级别 reqprio。   |
-| void lpwork_restorepriority(...)      | 将所有被提升过优先级的低优先级工作线程恢复其原始优先级。 |
-| static void lpwork_boostworker(...)   | 内部函数，用于提升单个指定工作线程的优先级。             |
-| static void lpwork_restoreworker(...) | 内部函数，用于恢复单个指定工作线程的优先级。             |
 
 ```C
 /*Raise the priority of a specified low-priority worker thread*/
@@ -920,18 +913,16 @@ void lpwork_boostpriority(uint8_t reqprio);
 void lpwork_restorepriority(uint8_t reqprio);
 ```
 
+| 函数 (Function)                       | 描述 (Description)                                       |
+| ------------------------------------- | -------------------------------------------------------- |
+| void lpwork_boostpriority(...)        | 将所有低优先级工作线程的优先级提升到指定级别 reqprio。   |
+| void lpwork_restorepriority(...)      | 将所有被提升过优先级的低优先级工作线程恢复其原始优先级。 |
+| static void lpwork_boostworker(...)   | 内部函数，用于提升单个指定工作线程的优先级。             |
+| static void lpwork_restoreworker(...) | 内部函数，用于恢复单个指定工作线程的优先级。             |
+
 ### 5、线程与队列管理 (`kwork_thread.c`)
 
 此文件是工作队列的**实现核心**，负责工作线程的创建、主循环逻辑、动态队列的生命周期管理以及任务遍历等底层功能。
-
-| 函数 (Function)                    | 描述 (Description)                                                                                                                                  |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| work_queue_create(...)             | **动态创建一个新的工作队列**：<br> 允许用户自定义队列名称、工作线程数量、优先级和栈大小。内部会调用 work_thread_create 来创建工作线程。             |
-| int work_queue_free(...)           | **释放一个动态创建的工作队列**： <br> 会停止并清理所有关联的工作线程，然后释放队列本身占用的内存。                                                  |
-| void work_foreach(...)             | **遍历队列中的任务**：<br> 对指定 qid 队列中的每一个 work 项执行一次 handler 回调函数，常用于调试或状态检查。                                       |
-| static int work_thread(...)        | **工作线程的主函数**：<br> 每个工作线程都运行此函数，它在一个无限循环中等待任务信号，然后从队列中取出任务并执行它。这是工作队列能够消费任务的根本。 |
-| static int work_thread_create(...) | 内部接口，被 work_queue_create 调用，负责使用指定的参数来创建并启动一个具体的工作线程。                                                             |
-| int work_queue_priority_wq(...)    | 获取指定工作队列 wqueue 中工作线程的当前调度优先级。                                                                                                |
 
 ```C
 /*take out of the work from queue and execute it
@@ -957,6 +948,15 @@ void work_foreach(int qid,work_foreach_t handler,FAR void *arg)；
 int work_queue_period(int qid, FAR struct work_s *work, worker_t worker,
                       FAR void *arg, clock_t delay, clock_t period);
 ```
+
+| 函数 (Function)                    | 描述 (Description)                                                                                                                                  |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| work_queue_create(...)             | **动态创建一个新的工作队列**：<br> 允许用户自定义队列名称、工作线程数量、优先级和栈大小。内部会调用 work_thread_create 来创建工作线程。             |
+| int work_queue_free(...)           | **释放一个动态创建的工作队列**： <br> 会停止并清理所有关联的工作线程，然后释放队列本身占用的内存。                                                  |
+| void work_foreach(...)             | **遍历队列中的任务**：<br> 对指定 qid 队列中的每一个 work 项执行一次 handler 回调函数，常用于调试或状态检查。                                       |
+| static int work_thread(...)        | **工作线程的主函数**：<br> 每个工作线程都运行此函数，它在一个无限循环中等待任务信号，然后从队列中取出任务并执行它。这是工作队列能够消费任务的根本。 |
+| static int work_thread_create(...) | 内部接口，被 work_queue_create 调用，负责使用指定的参数来创建并启动一个具体的工作线程。                                                             |
+| int work_queue_priority_wq(...)    | 获取指定工作队列 wqueue 中工作线程的当前调度优先级。                                                                                                |
 
 ## 六、总结
 

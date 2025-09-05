@@ -246,5 +246,5 @@ The test results indicate that all atomic operations were executed correctly and
 
 ## V. References
 
-- [GCC Online Documentation: Atomic Builtins](https://gcc.gnu.org/onlinedocs/gcc/C11-Automics.html)
+- [GCC Online Documentation: Atomic Builtins](https://gcc.gnu.org/onlinedocs/gcc-12.3.0/gcc/_005f_005fatomic-Builtins.html)
 - [Stdatomic.h for Bare-metal Programming](https://blog.regehr.org/archives/28)

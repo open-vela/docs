@@ -4,47 +4,47 @@
 
 ## I. Overview
 
-This document introduces how to use POSIX (Portable Operating System Interface) message queues in the openvela operating system. Message queues are a key mechanism for implementing reliable, asynchronous communication between tasks.
+This document introduces how to use POSIX (Portable Operating System Interface) message queues in the openvela operating system. Message queues are a key mechanism for achieving reliable, asynchronous communication between tasks.
 
-openvela OS adheres to the **POSIX** standard and provides a complete set of message queue APIs, allowing any task or interrupt service routine (ISR) to safely send and receive data. This standardized interface ensures good portability of the code.
+The openvela OS adheres to the **POSIX** standard, providing a complete set of message queue APIs that allow any Task or Interrupt Service Routine (ISR) to safely send and receive data. This standardized interface ensures excellent code portability.
 
-Core features:
+Core Features:
 
-- **Named Queues**: Message queues are identified by a globally unique name, allowing multiple unrelated tasks to access the same queue.
-- **Priority Messages**: Tasks can specify priorities for sent messages, and higher-priority messages are received first.
-- **Blocking and Non-Blocking Operations**: The API supports three modes: blocking, non-blocking, and timeout, providing flexible synchronization strategies for different application scenarios.
-- **Interrupt Safety**: You can safely send messages in interrupt service routines.
+- **Named Queues**: Message queues are identified by globally unique names, allowing multiple unrelated tasks to access the same queue.
+- **Priority-Based Messages**: Tasks can assign priorities to messages they send, and higher-priority messages are received first.
+- **Blocking and Non-Blocking Operations**: The APIs support blocking, non-blocking, and timeout modes, offering flexible synchronization strategies for different application scenarios.
+- **Interrupt Safety**: You can safely send messages from within an Interrupt Service Routine.
 
-## II. Pre-requisite Concepts
+## II. Prerequisite Concepts
 
-In the source code, several groups of low-level macros/functions for synchronization and mutual exclusion frequently appear. Understanding them is crucial for in-depth analysis of kernel behavior.
+Several sets of low-level macros/functions for synchronization and mutual exclusion appear frequently in the source code. Understanding them is crucial for a deep analysis of kernel behavior.
 
 ### 1. `enter_critical_section/leave_critical_section`
 
-These two functions are used to create a **critical section** and are the strongest level of locks in the system.
+These two functions are used to create a **critical section**, which is the strongest level of lock in the system.
 
-- **Function**: In a single-core system, it is implemented by **disabling interrupts**. In a multi-core system, it is used in conjunction with a spinlock.
-- **Purpose**: It protects not only shared data between multiple tasks but, more importantly, shared data between tasks and interrupt service routines (ISRs). Since `mq_send` can be called in an interrupt, modifications to core data such as message linked lists and count values must be performed in an environment where concurrency (including interrupts) is completely prohibited.
-- **Usage Principle**: The critical section should be as short as possible because disabling interrupts increases the system's interrupt latency.
+- **Function**: In a single-core system, this is implemented by **disabling interrupts**. In a multi-core system, it is also used in conjunction with a Spinlock.
+- **Purpose**: It protects not only shared data between multiple tasks but, more importantly, shared data between tasks and Interrupt Service Routines (ISRs). Because `mq_send` can be called from an interrupt, modifications to core data like message lists and counters must be performed in an environment where all concurrency (including interrupts) is disabled.
+- **Usage Principle**: A critical section should be as short as possible, as disabling interrupts increases the system's interrupt latency.
 
 ### 2. `sched_lock/sched_unlock`
 
 This pair of functions is used to lock/unlock the **scheduler**.
 
-- **Function**: Prohibits task context switching, i.e., prohibits task preemption.
-- **Difference from Critical Section**: It does not disable interrupts. When the scheduler is locked, interrupts can still occur and be processed normally, but after interrupt handling, the system will not perform task switching and will continue to run the locked task.
-- **Purpose**: Used to protect the atomicity of a segment of logic, ensuring that it will not be interrupted by being preempted by a higher-priority task during execution. Its overhead is smaller than switching interrupts on and off.
+- **Function**: It prevents task context switching, i.e., it disables task preemption.
+- **Difference from a Critical Section**: It does not disable interrupts. While the scheduler is locked, interrupts can still occur and be processed normally. However, after the interrupt handling is complete, the system will not perform a task switch and will continue running the locked task.
+- **Purpose**: It is used to protect the atomicity of a block of logic, ensuring that it is not interrupted by a higher-priority task preemption during its execution. Its overhead is lower than that of enabling/disabling interrupts.
 
 ### 3. `enter_cancellation_point/leave_cancellation_point`
 
-This pair of functions is related to the POSIX thread cancellation mechanism.
+This pair of functions is related to the POSIX Thread Cancellation mechanism.
 
-- **Function**: Defines a cancellation point. According to the POSIX standard, functions that may block permanently, such as `mq_receive`, `read`, and `sleep`, must all be cancellation points.
-- **Purpose**: When a task (thread) is requested to be canceled by another task (e.g., via `pthread_cancel`), it does not terminate immediately but continues to run until it reaches the next cancellation point. At the cancellation point, the system checks whether the task has a pending cancellation request. If so, it performs the cancellation operation to make the task exit. This ensures that the task can be terminated in a safe and known state.
+- **Function**: Defines a cancellation point. According to the POSIX standard, functions that can block indefinitely, such as `mq_receive`, `read`, and `sleep`, must be cancellation points.
+- **Purpose**: When a task (thread) is requested to be canceled by another task (e.g., via `pthread_cancel`), it does not terminate immediately. Instead, it continues to run until it reaches the next cancellation point. At the cancellation point, the system checks if the task has a pending cancellation request. If it does, the cancellation operation is performed, causing the task to exit. This ensures that the task can be terminated in a safe and known state.
 
 ## III. Prerequisites
 
-Before starting development, include the header file in your code:
+Before you begin development, include the following header file in your code:
 
 ```c
 #include <mqueue.h>
@@ -52,15 +52,15 @@ Before starting development, include the header file in your code:
 
 ## IV. API Reference
 
-We classify the APIs based on their roles in the message queue lifecycle: **lifecycle management**, **data transmission**, and **attributes and notifications**.
+The APIs are categorized based on their role in the message queue lifecycle: **Lifecycle Management**, **Data Transfer**, and **Attributes and Notification**.
 
 ### 1. Lifecycle Management
 
-Manages the creation, opening, closing, and deletion of message queues.
+These APIs manage the creation, opening, closing, and deletion of message queues.
 
 #### `mq_open()` - Create or Open a Message Queue
 
-This function opens an existing message queue or creates a new queue based on the `oflags` parameter. Upon successful invocation, it returns a message queue descriptor (`mqd_t`) for use in subsequent functions.
+This function opens an existing message queue or creates a new one based on the `oflags` parameter. On a successful call, it returns a message queue descriptor (`mqd_t`) for use in subsequent functions.
 
 ```c
 mqd_t mq_open(FAR const char *mq_name, int oflags, ...)
@@ -68,23 +68,27 @@ mqd_t mq_open(FAR const char *mq_name, int oflags, ...)
 
 **Parameters**
 
-| Parameter | Description                                                           |
-| --------- | --------------------------------------------------------------------- |
-| mq_name   | Pointer to the message queue name string, e.g., "/my_queue".          |
-| oflags    | Operation flag bits, which can be combined using bitwise OR (&#124;). |
+| Parameter | Description                                                                   |
+| --------- | ----------------------------------------------------------------------------- |
+| `mq_name` | A pointer to a string representing the message queue name, e.g., "/my_queue". |
+| `oflags`  | Operation flags, which can be combined using a bitwise OR (`                  | `). |
 
 Common values for `oflags` include:
 
-- Access modes (choose one):
-    - `O_RDONLY`: Open for reading only.
-    - `O_WRONLY`: Open for writing only.
-    - `O_RDWR`: Open for reading and writing.
+- Access Modes (choose one):
 
-- Creation flags (optional):
-    - `O_CREAT`: Create the queue if it does not exist.
-        - When using this flag, `mq_open` requires two additional parameters: `mode_t mode` and `struct mq_attr *attr`.
-    - `O_EXCL`: Used in conjunction with `O_CREAT`; if the queue already exists, the call fails.
-    - `O_NONBLOCK`: Open in non-blocking mode, affecting subsequent `mq_send()` and `mq_receive()` calls.
+    - `O_RDONLY`: Open for read-only access.
+    - `O_WRONLY`: Open for write-only access.
+    - `O_RDWR`: Open for read-write access.
+
+- Creation Flags (optional):
+
+    - `O_CREAT`: If the queue does not exist, create it.
+
+        - When this flag is used, `mq_open` requires two additional arguments: `mode_t mode` and `struct mq_attr *attr`.
+
+    - `O_EXCL`: Used with `O_CREAT`. If the queue already exists, the call fails.
+    - `O_NONBLOCK`: Open in non-blocking mode. This affects subsequent `mq_send()` and `mq_receive()` calls.
 
 #### `mq_close()` - Close a Message Queue
 
@@ -96,7 +100,7 @@ int mq_close(mqd_t mqdes)
 
 **Notes**:
 
-- Calling `mq_close()` does not destroy the message queue itself but only releases the descriptor held by the current task.
+- Calling `mq_close()` does not destroy the message queue itself; it only releases the descriptor held by the current task.
 - Other tasks can still access the queue via `mq_open()`.
 
 #### `mq_unlink()` - Delete a Message Queue
@@ -107,16 +111,16 @@ This function removes a message queue from the system.
 int mq_unlink(FAR const char *mq_name)
 ```
 
-This interface deletes the message queue named `mq_name`. When one or more tasks have a message queue open, calling `mq_unlink` will wait until all tasks referencing the message queue have performed the close operation before deleting the message queue.
+This interface deletes the message queue named `mq_name`. If one or more tasks have a message queue open when `mq_unlink` is called, the queue will be deleted only after all tasks referencing it have performed a close operation.
 
 **Notes**:
 
-- If `mq_unlink()` is called while tasks still have the queue open, the system marks the queue as "to be deleted".
-- The system will wait until all tasks referencing the queue have called `mq_close()` before truly releasing the queue resources.
+- If there are still tasks that have the queue open when `mq_unlink()` is called, the system marks the queue as "pending deletion".
+- The system waits until all tasks referencing the queue have called `mq_close()` before it actually releases the queue's resources.
 
-### 2. Data Transmission
+### 2. Data Transfer
 
-Responsible for sending and receiving messages between tasks.
+These APIs are responsible for sending and receiving messages between tasks.
 
 #### `mq_send()`/`mq_timedsend()` - Send a Message
 
@@ -126,18 +130,22 @@ int mq_timedsend(mqd_t mqdes, const char *msg, size_t msglen, int prio,
                  const struct timespec *abstime);
 ```
 
-Behavioral characteristics:
+**Behavioral Characteristics**
 
-- Queue is full:
+- Queue Full:
+
     - If the queue is full and `O_NONBLOCK` is not set:
-        - `mq_send()` will block indefinitely until space is available in the queue.
-        - `mq_timedsend()` will block until the absolute time specified by `abstime` times out.
+
+        - `mq_send()` will block indefinitely until space becomes available in the queue.
+        - `mq_timedsend()` will block until the absolute time specified by `abstime` is reached.
+
     - If `O_NONBLOCK` is set, the function returns an error immediately without blocking.
-- Message length: `msglen` must not exceed the maximum message length (`mq_msgsize`) defined in the queue attributes.
+
+- Message Length: `msglen` cannot exceed the maximum message length (`mq_msgsize`) defined in the queue's attributes.
 
 #### `mq_receive()`/`mq_timedreceive()` - Receive a Message
 
-These two functions remove and return the highest-priority, longest-waiting message from the specified queue.
+These functions remove and return the highest-priority, longest-waiting message from the specified queue.
 
 ```c
 ssize_t mq_receive(mqd_t mqdes, void *msg, size_t msglen, int *prio);
@@ -145,23 +153,26 @@ ssize_t mq_timedreceive(mqd_t mqdes, void *msg, size_t msglen,
                         int *prio, const struct timespec *abstime);
 ```
 
-Behavioral characteristics:
+**Behavioral Characteristics**
 
-- Queue is empty:
+- Queue Empty:
+
     - If the queue is empty and `O_NONBLOCK` is not set:
         - `mq_receive()` will block indefinitely until a new message arrives.
-        - `mq_timedreceive()` will block until the absolute time specified by `abstime` times out.
+        - `mq_timedreceive()` will block until the absolute time specified by `abstime` is reached.
+  
     - If `O_NONBLOCK` is set, the function returns an error immediately.
-- Multiple tasks waiting: If multiple tasks are waiting for the same empty queue, when a new message arrives, the system wakes up the task that has been waiting the longest and has the highest priority.
-- Buffer size: `msglen` must be greater than or equal to the queue's maximum message length (`mq_msgsize`).
 
-### 3. Attributes and Notifications
+- Multiple Waiting Tasks: If multiple tasks are waiting on the same empty queue, the system will wake up the highest-priority task that has been waiting the longest when a new message arrives.
+- Buffer Size: `msglen` must be greater than or equal to the queue's maximum message size (`mq_msgsize`).
 
-Used to query and configure advanced features of message queues.
+### 3. Attributes and Notification
+
+These APIs are used to query and configure advanced features of a message queue.
 
 #### `mq_getattr()`/`mq_setattr()` - Get and Set Queue Attributes
 
-These two functions are used to query and modify the attributes of a message queue, respectively.
+These functions are used to query and modify the attributes of a message queue, respectively.
 
 ```c
 int mq_getattr(mqd_t mqdes, FAR struct mq_attr *mq_stat);
@@ -169,16 +180,16 @@ int mq_setattr(mqd_t mqdes, FAR const struct mq_attr *mq_stat,
                FAR struct mq_attr *oldstat);
 ```
 
-The `struct mq_attr` structure includes:
+The `struct mq_attr` structure contains:
 
-| Member     | Description                                                                 |
-| ---------- | --------------------------------------------------------------------------- |
-| mq_flags   | Queue flags (e.g., O_NONBLOCK).                                             |
-| mq_maxmsg  | Maximum number of messages the queue can hold.                              |
-| mq_msgsize | Maximum number of bytes per message.                                        |
-| mq_curmsgs | Current number of messages in the queue (only obtainable via mq_getattr()). |
+| Member       | Description                                                                       |
+| ------------ | --------------------------------------------------------------------------------- |
+| `mq_flags`   | Flags for the queue (e.g., `O_NONBLOCK`).                                         |
+| `mq_maxmsg`  | The maximum number of messages the queue can hold.                                |
+| `mq_msgsize` | The maximum size of each message in bytes.                                        |
+| `mq_curmsgs` | The number of messages currently in the queue (retrieved by `mq_getattr()` only). |
 
-#### `mq_notify()` - Register Asynchronous Notification
+#### `mq_notify()` - Register for Asynchronous Notification
 
 This function registers an asynchronous event notification for a message queue. When an empty queue receives its first message, the system sends a signal to the registered task.
 
@@ -186,53 +197,53 @@ This function registers an asynchronous event notification for a message queue. 
 int mq_notify(mqd_t mqdes, const struct sigevent *notification);
 ```
 
-Working mechanism:
+**Working Mechanism**
 
-1. When the input parameter `notification` is non-`NULL`, `mq_notify` establishes a notification association between the current task and the message queue.
-2. When a new message is put into the message queue, the system sends the signal defined in the `notification` to the task.
-3. One-shot notification: After the signal is delivered, the notification registration is automatically removed. You must call `mq_notify()` again to receive the next notification.
-4. When `notification` is `NULL`, the function removes the existing notification association.
+1. When the input parameter `notification` is not `NULL`, `mq_notify` establishes a notification association between the current task and the message queue.
+2. When a new message is placed into the message queue, the system sends the signal defined in `notification` to the task.
+3. One-Shot Notification: After the signal is sent, the registration is automatically removed. You must call `mq_notify()` again to receive the next notification.
+4. When `notification` is `NULL`, the function removes any existing notification association.
 
-**Note**:
+**Notes**
 
-- At any given time, only one task can successfully register for notifications of a particular message queue.
+- At any given time, only one task can successfully register for notification on a specific message queue.
 
 ## V. Data Structures
 
-To gain an in-depth understanding of the message queue's working mechanism, this section introduces its internal implementation in openvela OS, including core data structures and memory management strategies.
+To gain a deeper understanding of how message queues work, this section introduces their internal implementation in openvela OS, including core data structures and memory management strategies.
 
-openvela OS implements each POSIX message queue as an inode node of a pseudo-file system in its architecture. This design unifies the kernel resource model, allowing message queues to be named and accessed like files.
+Architecturally, openvela OS implements each POSIX message queue as an inode node in a pseudo-filesystem. This design unifies the kernel's resource model, allowing message queues to be named and accessed like files.
 
-Its core implementation includes two key components: the **message memory pool** and **core data structures**.
+The core implementation consists of two key parts: the **message memory pool** and the **core data structures**.
 
 ### 1. Message Memory Pool Management
 
-To ensure real-time performance and deterministic memory usage, openvela OS uses a pre-allocated memory pool to manage message entities. The system creates two dedicated global message pools at startup.
+To ensure real-time performance and deterministic memory usage, openvela OS uses pre-allocated memory pools to manage message entities. The system creates two dedicated global message pools at startup.
 
-- `g_msgfree`: General message pool, providing message storage space for ordinary tasks (Tasks).
+- `g_msgfree`: The general-purpose message pool. It provides message storage for regular tasks.
 
-    - Allocation strategy: When a task sends a message, the system first attempts to obtain a pre-allocated message block from this pool.
-    - Dynamic expansion: If this pool is exhausted, the system will attempt to dynamically allocate memory via `malloc()` to create new message blocks and mark them as `MQ_ALLOC_DYN`.
-    - Release: After a message is received, pre-allocated message blocks are returned to the `g_msgfree` pool; dynamically allocated message blocks are released via `free()` to prevent memory leaks.
+    - Allocation Strategy: When a task sends a message, the system first tries to get a pre-allocated message block from this pool.
+    - Dynamic Extension: If this pool is exhausted, the system attempts to dynamically allocate memory via `malloc()` to create a new message block, which is then marked as `MQ_ALLOC_DYN`.
+    - Deallocation: After a message is received, a pre-allocated message block is returned to the `g_msgfree` pool. A dynamically allocated block is released via `free()` to prevent memory leaks.
 
-- `g_msgfreeirq`: Interrupt-dedicated message pool, exclusively for interrupt service routines (ISRs).
+- `g_msgfreeirq`: The interrupt-dedicated message pool. It is exclusively for use by Interrupt Service Routines (ISRs).
 
-    - Allocation strategy: When an interrupt service routine sends a message, the system obtains a message block from this pool.
-    - No dynamic allocation: To ensure fast and deterministic interrupt handling, if this pool is exhausted, the system will directly return failure and never perform dynamic memory allocation.
-    - Release: After a message is received, the message block is returned to the `g_msgfreeirq` pool.
+    - Allocation Strategy: When an ISR sends a message, the system gets a message block from this pool.
+    - No Dynamic Allocation: To ensure that interrupt handling is fast and deterministic, if this pool is exhausted, the system will immediately return a failure and will never perform dynamic memory allocation.
+    - Deallocation: After a message is received, the message block is returned to the `g_msgfreeirq` pool.
 
-This separate design ensures that even if the general message pool is exhausted or memory is fragmented, critical communication in interrupt services can still be executed reliably.
+This separated design ensures that critical communication within ISRs can be executed reliably, even if the general-purpose message pool is exhausted or memory becomes fragmented.
 
 ### 2. Core Data Structures
 
-The functionality of the message queue is implemented by two core structures:
+The functionality of a message queue is achieved through the coordination of two core structures:
 
 - `struct mqueue_inode_s` defines the queue itself.
-- `struct mqueue_msg_s` defines the messages passed in the queue.
+- `struct mqueue_msg_s` defines the message being passed in the queue.
 
 #### Message Queue Definition
 
-`mqueue_inode_s` represents a complete message queue instance, including all its attributes and status.
+`mqueue_inode_s` represents a complete message queue instance, containing all its attributes and state.
 
 ```c
 /* Common prologue of all message queue structures. */
@@ -268,16 +279,16 @@ struct mqueue_inode_s
 };
 ```
 
-**Key member analysis**:
+**Key Member Descriptions:**
 
-| Member        | Description                                                                                                |
-| ------------- | ---------------------------------------------------------------------------------------------------------- |
-| msglist       | A priority-sorted linked list for storing all pending messages.                                            |
-| ntpid/ntevent | Used to implement the mq_notify() function, recording which task is waiting for asynchronous notification. |
+| Member            | Description                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `msglist`         | A list sorted by priority, used to store all pending messages.                               |
+| `ntpid`/`ntevent` | Used to implement `mq_notify()`, recording which task is awaiting asynchronous notification. |
 
 #### Message Entity
 
-`mqueue_msg_s` represents an independent message, which exists as a linked list node in the `msglist` of `mqueue_inode_s`.
+`mqueue_msg_s` represents an individual message and exists as a node in the `msglist` of `mqueue_inode_s`.
 
 ```c
 enum mqalloc_e
@@ -302,7 +313,7 @@ struct mqueue_msg_s
 };
 ```
 
-Key member analysis:
+**Key Member Descriptions:**
 
 | Member   | Description                                                                                                                            |
 | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
@@ -312,7 +323,7 @@ Key member analysis:
 
 #### System Initialization
 
-openvela OS calls `nxmq_initialize()` in the `nx_start()` function during system startup to complete the initialization of the message queue subsystem.
+openvela OS initializes the message queue subsystem by calling `nxmq_initialize()` during the system startup process in the `nx_start()` function.
 
 ```c
 /****************************************************************************
@@ -365,55 +376,56 @@ void nxmq_initialize(void)
 
 The main responsibilities of this function are:
 
-1. Initialize the linked list headers of `g_msgfree` and `g_msgfreeirq`.
-2. Call `mq_msgblockinit()` to split a specified number of message blocks from the system-reserved memory area (`g_msgpool`) and link them to the above two pools, respectively, to complete preallocation.
+1. Initialize the two list heads, `g_msgfree` and `g_msgfreeirq`.
+2. Call `mq_msgblockinit()` to carve out a specified number of message blocks from a pre-reserved memory region (`g_msgpool`) and link them to the respective pools, completing the pre-allocation.
 
-At this point, the message queue subsystem is ready and can respond to API calls from tasks and interrupts.
+At this point, the message queue subsystem is ready to respond to API calls from tasks and interrupts.
 
-## VI. Implementation Principles
+## VI. Implementation Details
 
-This section delves into the internal workflow of openvela OS message queues. The essence of the design lies in abstracting the message queue as an `inode` node in the virtual file system (VFS), thereby reusing the file system's naming, lookup, and permission management mechanisms.
+This section delves into the internal workflow of the openvela OS message queue. The essence of its design is to abstract a message queue as an `inode` node in the Virtual File System (VFS), thereby reusing the VFS's naming, lookup, and permission management mechanisms.
 
 <img src="./figures/003.png" alt="message_queue" width="100%">
 
-The core process of the entire lifecycle can be summarized as follows:
+The core workflow throughout the lifecycle can be summarized as follows:
 
-- Creation/Opening (`mq_open`): Tasks access message queues via a unique name. The system looks up or creates a corresponding `inode` in the VFS and associates it with a newly allocated `mqueue_inode_s` structure.
-- Sending/Receiving (`mq_send`/`mq_receive`): The core of data transmission is the `mqueue_msg_s` structure, which acts like a container. When sending, the system retrieves a container from the global memory pool (`g_msgfree` or `g_msgfreeirq`), loads the data, and hangs it into the target queue's `msglist`. The reverse occurs when receiving.
-- Closing/Deleting (`mq_close`/`mq_unlink`): `mq_close` decrements the `inode` reference count. When the count reaches zero, `mq_unlink` can truly release the resources occupied by `inode` and `mqueue_inode_s`.
+- **Create/Open (`mq_open`)**: A task accesses a message queue by a unique name. The system finds or creates a corresponding `inode` in the VFS and associates it with a newly allocated `mqueue_inode_s` structure.
+- **Send/Receive (`mq_send`/`mq_receive`)**: The `mqueue_msg_s` structure is the core of data transfer, acting like a container. When sending, the system takes a container from a global memory pool (`g_msgfree` or `g_msgfreeirq`), loads it with data, and links it into the target queue's `msglist`. Receiving is the reverse process.
+- **Close/Delete (`mq_close`/`mq_unlink`)**: `mq_close` decrements the `inode`'s reference count. Only when the count reaches zero can `mq_unlink` truly release the resources occupied by the `inode` and `mqueue_inode_s`.
 
-Below, we analyze the detailed implementation using key APIs as clues.
+Below, we analyze the detailed implementation, guided by the key APIs.
 
 ### 1. `mq_open`: Queue Creation and Connection
 
-`mq_open` is the entry point for all operations, responsible for parsing a string name and associating it with a kernel message queue object.
+`mq_open` is the entry point for all operations. It is responsible for resolving a string name and associating it with a kernel message queue object.
 
-The `mq_open` function performs the following tasks:
+The `mq_open` function completes the following tasks:
 
-Its internal implementation logic (mainly in the `file_mq_vopen` function) can be broken down into the following steps:
+Its internal logic (mainly in the `file_mq_vopen` function) can be broken down into these steps:
 
-1. Path resolution: Concatenate the user-provided `mq_name` (e.g., `"my_queue"`) with the system's preset mount point path (`CONFIG_FS_MQUEUE_VFS_PATH`, typically `"/var/mqueue"`) to form a complete VFS path, such as `"/var/mqueue/my_queue"`.
-2. Atomic lookup: Enter a critical section (`enter_critical_section`) to ensure atomicity of the operation, then call `inode_find()` to look up the path in the VFS for the corresponding `inode`.
-3. Branch processing:
+1. **Path Resolution**: The user-provided `mq_name` (e.g., `"my_queue"`) is concatenated with the system's pre-defined mount point path (`CONFIG_FS_MQUEUE_VFS_PATH`, typically `"/var/mqueue"`) to form a full VFS path, such as `"/var/mqueue/my_queue"`.
+2. **Atomic Lookup**: A critical section is entered (`enter_critical_section`) to ensure atomicity, and then `inode_find()` is called to look up the `inode` corresponding to this path in the VFS.
+3. **Branch Handling**:
 
-    - Case A: The message queue already exists (`inode_find` is successful)
+    - **Case A: Message queue already exists (`inode_find` succeeds)**
 
-        - Check that the found `inode` is indeed a message queue type.
-        - If the caller specifies both `O_CREAT` and `O_EXCL` flags, return an `EEXIST` error.
-        - Success, associate the returned file descriptor with this existing `inode`. Increment the `inode` reference count by one.
+        - Verify that the found `inode` is indeed of a message queue type.
+        - If the caller specified both `O_CREAT` and `O_EXCL` flags, return an `EEXIST` error.
+        - On success, the returned file descriptor is associated with this existing `inode`. The `inode`'s reference count is incremented.
 
-    - Case B: The message queue does not exist (`inode_find` fails)
+    - **Case B: Message queue does not exist (`inode_find` fails)**
 
-        - Check if the caller specified the `O_CREAT` flag; if not, return an `ENOENT` error.
+        - Check if the caller specified the `O_CREAT` flag. If not, return an `ENOENT` error.
         - Call `inode_reserve()` to create an `inode` node for the new queue in the VFS.
         - Call `nxmq_alloc_msgq()` to allocate and initialize an `mqueue_inode_s` structure.
-        - Bind the newly created `inode` to the `mqueue_inode_s`:
-            - `inode->i_private = msgq`
-            - `msgq->inode = inode`
+        - Bind the newly created `inode` with the `mqueue_inode_s`:
+
+            - `inode->i_private = msgq;`
+            - `msgq->inode = inode;`
 
         - Set the initial reference count of the `inode` to 1.
 
-Key code is as follows:
+The key code is as follows:
 
 ```c
 static int file_mq_vopen(FAR struct file *mq, FAR const char *mq_name,
@@ -605,9 +617,9 @@ errout:
 }
 ```
 
-#### `nxmq_alloc_msgq()`: Allocation of Message Queue Instances
+#### `nxmq_alloc_msgq()`: Message Queue Instance Allocation
 
-This function is responsible for creating the core data structure `mqueue_inode_s` of the message queue. Its implementation is relatively simple and straightforward:
+This function is responsible for creating the core `mqueue_inode_s` data structure for a message queue. Its implementation is relatively straightforward:
 
 ```c
 int nxmq_alloc_msgq(FAR struct mq_attr *attr,
@@ -663,40 +675,42 @@ int nxmq_alloc_msgq(FAR struct mq_attr *attr,
 } 
 ```
 
-Through this series of operations, `mq_open` skillfully integrates POSIX message queues into the system's VFS framework, laying the foundation for subsequent data sending and receiving.
+Through this series of operations, `mq_open` seamlessly integrates POSIX message queues into the system's VFS framework, laying the foundation for subsequent data transmission.
 
-### 2. `mq_send`: Message Sending and Blocking
+### 2. `mq_send`: Sending a Message and Blocking
 
-`mq_send` is responsible for delivering a prioritized message to the target queue. The core of its implementation is handling different strategies when the queue is full: return immediately, block and wait, or return on timeout.
+`mq_send` is responsible for delivering a prioritized message to a target queue. Its core implementation handles different strategies for when the queue is full: returning immediately, blocking, or timing out.
 
-Its main logic is implemented by the internal function `file_mq_timedsend_internal`, and the process can be divided into the following two scenarios:
+The main logic is implemented by the internal function `file_mq_timedsend_internal`, and the flow can be divided into two main scenarios:
 
 #### Scenario A: Queue is Not Full
 
-1. **Message preallocation**: Before entering the critical section, the system first calls `nxmq_alloc_msg()` to apply for an `mqueue_msg_s` structure from the global memory pool and uses `memcpy` to fill in the user data and priority. This preprocessing reduces work in the critical section and improves efficiency.
-2. **Enter critical section**: Call `enter_critical_section()` to ensure that modifications to the queue state are atomic.
-3. **Insert message**: Call `nxmq_add_queue()`, which inserts the message into the correct position in the `msgq->msglist` linked list based on the message's priority. This is a priority-sorted insertion operation to ensure that higher-priority messages are always at the front of the list.
-4. **Update queue status**:
+1. **Message Pre-allocation**: Before entering the critical section, the system first calls `nxmq_alloc_msg()` to request an `mqueue_msg_s` structure from the global memory pool and populates it with user data and priority using `memcpy`. This pre-processing reduces work inside the critical section, improving efficiency.
+2. **Enter Critical Section**: Call `enter_critical_section()` to ensure that modifications to the queue state are atomic.
+3. **Insert Message**: Call `nxmq_add_queue()`, which inserts the message into the `msgq->msglist` linked list at the correct position based on its priority. This is a priority-sorted insertion, ensuring high-priority messages are always at the front of the list.
+4. **Update Queue State**:
 
-    - Increment the queue's current message count `nmsgs` by one.
-    - **Wake up receivers**: If the queue was empty before (`nmsgs` changed from 0 to 1), it means there may be tasks blocked on `mq_receive` due to an empty queue. At this point, `nxmq_notify_send()` needs to be called to wake up these waiting receiver tasks.
+    - Increment the queue's current message count, `nmsgs`.
+    - **Wake Up Receivers**: If the queue was empty before this (`nmsgs` changed from 0 to 1), it implies that tasks may be blocked in `mq_receive`. In this case, `nxmq_notify_send()` must be called to wake up these waiting receiver tasks.
 
-5. Exit critical section: `leave_critical_section()`.
-6. Successful return.
+5. **Exit Critical Section**: `leave_critical_section()`.
+6. Return success.
 
 ##### Scenario B: Queue is Full
 
-1. **Check non-blocking condition**: When `msgq->nmsgs >= msgq->maxmsgs`, the system first determines whether blocking is allowed:
-    - Interrupt context: If currently in an interrupt (`up_interrupt_context()`), blocking is never allowed, and `-EAGAIN` is returned immediately.
-    - Non-blocking mode: If the queue is opened with the `O_NONBLOCK` flag, `-EAGAIN` is also returned immediately.
+1. **Check Non-blocking Conditions**: When `msgq->nmsgs >= msgq->maxmsgs`, the system first determines if blocking is allowed:
 
-2. **Transition to waiting**: If blocking is allowed, call the `nxmq_wait_send()` function, and the task will sleep here waiting for available space in the queue.
-3. **Wait for return**:
+    - **Interrupt Context**: If currently in an interrupt (`up_interrupt_context()`), blocking is never allowed, and `-EAGAIN` is returned immediately.
+    - **Non-blocking Mode**: If the queue was opened with the `O_NONBLOCK` flag, `-EAGAIN` is also returned immediately.
 
-    - If `nxmq_wait_send` returns successfully (i.e., the task is woken up and space is available in the queue), the process returns to step 3 of **Scenario A** to insert the preallocated message into the queue.
-    - If it fails due to timeout or signal interruption, call `nxmq_free_msg()` to release the previously preallocated message body and return an error code to the upper layer.
+2. **Enter Wait State**: If blocking is allowed, the `nxmq_wait_send()` function is called, and the task will sleep here, waiting for space to become available in the queue.
 
-Key code is as follows:
+3. **Return from Wait**:
+
+    - If `nxmq_wait_send` returns successfully (i.e., the task was woken up and there is space in the queue), the flow returns to step **3** of **Scenario A** to insert the pre-allocated message into the queue.
+    - If it fails due to a timeout or a signal, `nxmq_free_msg()` is called to release the previously pre-allocated message body, and an error code is returned to the upper layer.
+
+The key code is as follows:
 
 ```c
 /****************************************************************************
@@ -830,11 +844,11 @@ out:
 }
 ```
 
-`nxmq_wait_send`: Waiting for Queue Space
+**`nxmq_wait_send`: Waiting for Queue Space**
 
-`nxmq_wait_send` functions in concert with `nxmq_wait_receive`, responsible for blocking sending tasks when the queue is full. Its mechanism is closely integrated with the scheduler to ensure efficient resource utilization.
+The `nxmq_wait_send` function complements `nxmq_wait_receive` by blocking a sending task when the queue is full. Its mechanism works closely with the scheduler to ensure efficient resource utilization.
 
-Its core blocking logic is very similar to `nxmq_wait_receive`, with the difference being the waiting conditions and the lists used.
+Its core blocking logic is very similar to `nxmq_wait_receive`, with the difference being the waiting condition and the list used.
 
 ```c
 /****************************************************************************
@@ -956,43 +970,46 @@ int nxmq_wait_send(FAR struct mqueue_inode_s *msgq, int oflags)
 }
 ```
 
-### 3. `mq_receive`: Message Reception and Waiting
+### 3. `mq_receive`: Receiving a Message and Waiting
 
-The `mq_receive()` interface is the reverse operation of message sending, responsible for safely retrieving messages from the queue. Its core tasks include:
+The `mq_receive()` interface is the inverse operation of sending a message, responsible for safely retrieving a message from a queue. Its core tasks include:
 
-- **Parameter validation**: Call `nxmq_verify_receive()` to validate the incoming buffer, length, and other parameters.
-- **Message acquisition**: Attempt to obtain a message from the message queue.
-- **Blocking handling**: When the queue is empty, decide whether to immediately return an error or call `nxmq_wait_receive()` to block the current task until a new message arrives or a timeout occurs, based on the queue attributes (whether it is `O_NONBLOCK`).
-- **Data copying and resource release**: After successfully acquiring a message, copy its content to the user buffer and call `nxmq_free_msg()` to release the message structure.
-- **Wake up senders**: When the receive operation changes a full queue to idle, wake up sending tasks blocked due to a full queue via `nxmq_notify_receive()`.
+- **Parameter Validation**: Calls `nxmq_verify_receive()` to check the validity of incoming parameters like the buffer and length.
+- **Message Retrieval**: Attempts to get a message from the message queue.
+- **Blocking Handling**: When the queue is empty, it decides whether to return an error immediately or to call `nxmq_wait_receive()` to block the current task until a new message arrives or a timeout occurs, based on the queue's properties (whether it is `O_NONBLOCK`).
+- **Data Copying and Resource Release**: After successfully retrieving a message, its content is copied to the user's buffer, and `nxmq_free_msg()` is called to release the message structure.
+- **Waking Up Senders**: When a receive operation makes a full queue available, it wakes up sending tasks blocked due to a full queue by calling `nxmq_notify_receive()`.
 
-The execution flow of its internal implementation `file_mq_timedreceive_internal` can be divided into two scenarios:
+Its internal implementation, `file_mq_timedreceive_internal`, can be divided into two main scenarios.
 
 #### Scenario A: Queue is Not Empty
 
-1. Enter critical section: Call `enter_critical_section()` to lock the scheduler and ensure the atomicity of subsequent operations.
-2. Extract message: Directly remove a message node from the head of the message linked list `msgq->msglist` (`list_remove_head`). Since `mq_send` inserts messages by priority, what is taken out here is always the longest-waiting and highest-priority message in the queue.
-3. Update queue status and wake up senders:
+1. **Enter Critical Section**: Call `enter_critical_section()` to lock the scheduler and ensure the atomicity of subsequent operations.
+2. **Remove Message**: Directly remove a message node from the head of the `msgq->msglist` linked list (`list_remove_head`). Since `mq_send` performs a priority-based insertion, the message retrieved here is always the one that has been in the queue the longest and has the highest priority.
+3. **Update Queue State and Wake Up Senders**:
 
-    - After successfully acquiring the message, decrement the queue's current message count `nmsgs` by one.
-    - Key wake-up: Check if `nmsgs` was equal to `maxmsgs` before decrementing (`if (msgq->nmsgs-- == msgq->maxmsgs)`). If so, it means the queue has just changed from a full state to a non-full state, and sending tasks that may be waiting must be woken up at this point.
-    - Call `nxmq_notify_receive()`, which finds one (or more) waiting sending tasks from the `waitfornotfull` list and moves them back to the ready queue.
-    - Simultaneously, issue a `POLLOUT` event via `nxmq_pollnotify(msgq, POLLOUT)` to notify `poll/select` watchers that the queue is now writable.
+    - After successfully retrieving the message, decrement the queue's current message count, `nmsgs`.
+    - **Crucial Wake-up**: Check if `nmsgs` was equal to `maxmsgs` before being decremented (`if (msgq->nmsgs-- == msgq->maxmsgs)`). If so, it means the queue has just transitioned from a full to a non-full state, and any waiting sender tasks must be woken up.
+    - Call `nxmq_notify_receive()`, which finds one (or more) waiting sender tasks from the `waitfornotfull` list and moves them back to the ready-to-run queue.
+    - Simultaneously, a `POLLOUT` event is issued via `nxmq_pollnotify(msgq, POLLOUT)` to notify `poll/select` watchers that the queue is now writable.
 
-4. Exit critical section: Call `leave_critical_section()` to resume scheduling.
-5. Data return and resource recovery:
+4. **Exit Critical Section**: Call `leave_critical_section()` to resume scheduling.
+5. **Data Return and Resource Reclamation**:
 
-    - Use `memcpy` to copy the data in the message node to the user-provided buffer.
+    - Use `memcpy` to copy the data from the message node to the user-provided buffer.
     - Call `nxmq_free_msg()` to return the message node to the global memory pool.
 
-#### Scenario B: Queue is EmptyRPMsg employs a layered architecture
+#### Scenario B: Queue is Empty
 
-1. Check the non-blocking flag: If the queue is empty (`mqmsg == NULL`), first check whether the `O_NONBLOCK` flag was set when `mq_open` was called.
-    - If set, immediately exit the critical section and return the `-EAGAIN` error.
-2. Transition to waiting: If blocking is allowed, call the `nxmq_wait_receive()` function, and the task will sleep here.
-3. Wait for return: After `nxmq_wait_receive` returns:
-    - If a message is successfully acquired (`ret` is `OK`, and `mqmsg` points to the new message), the process returns to step 3 of **Scenario A** to continue execution.
-    - If it fails due to timeout or signal interruption (`ret` is negative), directly exit the critical section and return the corresponding error code.
+1. **Check Non-blocking Flag**: If the queue is empty (`mqmsg == NULL`), first check if the `O_NONBLOCK` flag was set during `mq_open`.
+
+    - If it was set, exit the critical section immediately and return an `-EAGAIN` error.
+
+2. **Enter Wait State**: If blocking is allowed, the `nxmq_wait_receive()` function is called, and the task will sleep here.
+3. **Return from Wait**: After `nxmq_wait_receive` returns:
+
+    - If a message is successfully retrieved (`ret` is `OK`, and `mqmsg` points to the new message), the flow returns to step **3** of **Scenario A** to continue execution.
+    - If it fails due to a timeout or a signal (`ret` is a negative value), exit the critical section directly and return the corresponding error code.
 
 Key code is as follows:
 
@@ -1126,11 +1143,11 @@ ssize_t file_mq_timedreceive_internal(FAR struct file *mq, FAR char *msg,
 }
 ```
 
-`nxmq_wait_receive`: Task Blocking and Wake-Up
+**`nxmq_wait_receive`: Task Blocking and Waking**
 
-`nxmq_wait_receive` is the core of the receive mechanism's interaction with the scheduler, precisely controlling task blocking and wake-up.
+`nxmq_wait_receive` is the core of the receive mechanism's interaction with the scheduler, precisely controlling task blocking and waking.
 
-```c
+```C
 /****************************************************************************
  * Name: nxmq_wait_receive
  *
@@ -1243,14 +1260,14 @@ int nxmq_wait_receive(FAR struct mqueue_inode_s *msgq,
 }
 ```
 
-Its blocking and wake-up process forms a perfect symmetry with `nxmq_wait_send`:
+Its blocking and waking flow forms a perfect symmetry with `nxmq_wait_send`:
 
-- Blocking: The task sets itself to the `TSTATE_WAIT_MQNOTEMPTY` state, hangs itself into the `waitfornotempty` linked list, and then goes to sleep.
-- Wake-up: When `mq_send` successfully delivers a message to an empty queue, it retrieves the waiting receiver task from the `waitfornotempty` linked list and puts it back into the scheduler's ready list, completing the wake-up.
+- **Blocking**: The task sets its state to `TSTATE_WAIT_MQNOTEMPTY`, adds itself to the `waitfornotempty` linked list, and then goes to sleep.
+- **Waking**: When `mq_send` successfully delivers a message to an empty queue, it retrieves the waiting receiver task from the `waitfornotempty` list and places it back into the scheduler's ready-to-run list, thus completing the wake-up.
 
 ### 4. `mq_close`: Close a Message Queue
 
-`mq_close()` is used to close an opened message queue descriptor and release resources related to the task.
+`mq_close()` is used to close an already opened message queue descriptor, releasing the resources associated with that task.
 
 ```c
 /****************************************************************************
@@ -1287,22 +1304,24 @@ int mq_close(mqd_t mqdes)
 }
 ```
 
-### 5. `mq_unlink`: Destroy a Message Queue
+### 5. `mq_unlink`: Destroying a Message Queue
 
-The role of `mq_unlink()` is to remove and destroy a message queue from the system. This is fundamentally different from `mq_close()`: `mq_close()` only closes a task's **connection** (file descriptor) to the queue, while `mq_unlink()` aims to delete the queue itself completely.
+`mq_unlink()` removes and destroys a message queue from the system. This is fundamentally different from `mq_close()`: `mq_close()` only closes a task's **connection** (file descriptor) to a queue, whereas `mq_unlink()` aims to delete the queue itself.
 
-Its implementation relies on the VFS (Virtual File System) `inode` reference count mechanism to ensure that resources are only released when no tasks are using the queue. This is an elegant deferred deletion mechanism.
+Its implementation relies on the VFS `inode` reference counting mechanism to ensure that the queue's resources are only released when no tasks are using it. This is an elegant Deferred Deletion mechanism.
 
-Its core logic is implemented by `file_mq_unlink`, and the process is as follows:
+The core logic is implemented by `file_mq_unlink`, with the following flow:
 
-1. **Find Inode**: Based on the incoming queue name, find the corresponding `inode` in the VFS's `mqueue` mount point (e.g., `/dev/mqueue/`). The `inode` is the core data structure used by the file system to describe a file or device, representing the entire message queue here.
-2. **Remove Naming**: Call `inode_remove()` to remove the `inode` from the VFS directory tree. This means the queue can no longer be `mq_open`ed by name.
-    - Key point: If tasks still have the queue open at this time (i.e., the `inode` reference count `i_crefs` > 1), `inode_remove()` will successfully unbind the name but return `-EBUSY`, indicating that the `inode` itself cannot be deleted immediately due to being referenced. This is an expected behavior.
-3. **Release References and Trigger Destruction**: Finally, call `mq_inode_release()`, which is where the decision to destroy the queue is truly made.
+1. **Find Inode**: Based on the provided queue name, it finds the corresponding `inode` under the `mqueue` mount point in the VFS (e.g., `/dev/mqueue/`). The `inode` is the core data structure used by the file system to describe a file or device; here, it represents the entire message queue.
+2. **Remove Name**: It calls `inode_remove()` to remove the `inode` from the VFS directory tree. This means the queue can no longer be opened by name using `mq_open`.
 
-Summary: `mq_unlink` marks a message queue as **to be deleted**. The system tracks its usage status through the `inode` reference count. When the last task using the queue calls `mq_close`, the reference count decrements to 1, at which point the condition in `mq_inode_release` is met, triggering `nxmq_free_msgq` to perform final resource recovery, including all unread messages in the queue.
+    - **Key Point**: If any tasks still have the queue open at this time (i.e., the `inode`'s reference count `i_crefs` > 1), `inode_remove()` will successfully unbind the name but return `-EBUSY`, indicating that the `inode` itself cannot be immediately deleted because it is still referenced. This is expected behavior.
 
-Main code is as follows:
+3. **Release Reference and Trigger Destruction**: Finally, it calls `mq_inode_release()`, which is where the decision to destroy the queue is actually made.
+
+In summary, `mq_unlink` marks a message queue for **pending deletion**. The system uses the `inode`'s reference count to track its usage status. When the last task using the queue calls `mq_close`, the reference count decrements to 1. At this point, the condition in `mq_inode_release` is met, triggering `nxmq_free_msgq` to perform the final resource reclamation, including all unread messages in the queue.
+
+The main code is as follows:
 
 ```c
 /****************************************************************************
@@ -1448,22 +1467,24 @@ static void mq_inode_release(FAR struct inode *inode)
 
 ### 6. `mq_timedsend`/`mq_timedreceive`: Timeout Mechanism
 
-These two interfaces with the `timed` suffix have exactly the same main logic as `mq_send` / `mq_receive`, with the only difference being the addition of a **timeout waiting** function. This function is implemented through the kernel's watchdog timer.
+These interfaces, with the `timed` suffix, have the same core logic as `mq_send` / `mq_receive`, with the only difference being the addition of a **timeout** feature. This functionality is implemented using the kernel's Watchdog Timer.
 
-Working principle:
+**How It Works:**
 
-1. Start the timer: When a task calls `mq_timedsend` or `mq_timedreceive` and needs to block due to a full/empty queue, before it goes to sleep (calls `up_switch_context`), it starts a one-time watchdog timer for itself.
-    - `wd_start()` adds a `watchdog` structure to the system's timer linked list and registers a timeout callback function.
-    - For receive timeouts, the callback function is `nxmq_rcvtimeout`; for send timeouts, the callback function is `nxmq_sndtimeout`.
-2. Task blocking: The task normally goes to sleep, waiting to be woken up.
-3. Two wake-up paths:
-    - Normal wake-up: Before the timer expires, the queue status changes (e.g., a new message is received), and another task normally wakes up the blocked task. After being woken up, the first thing the task does is call `wd_cancel()` to cancel the previously set watchdog timer, then sends and receives messages normally.
-    - Timeout wake-up: If the task is not normally woken up within the specified time, when the system timer interrupt scans the `watchdog` linked list, it will find that the task's timer has expired.
-        - The system will execute the preset callback function (`nxmq_rcvtimeout` or `nxmq_sndtimeout`).
-        - These callback functions only do one thing: call `nxmq_wait_irq()`.
-4. `nxmq_wait_irq`: Wake-up processor in interrupt context This function is specifically used to safely wake up a task blocked due to waiting for IPC in an interrupt context (such as a timer interrupt).
+1. **Start Timer**: When a task calls `mq_timedsend` or `mq_timedreceive` and needs to block because the queue is full/empty, it starts a one-shot watchdog timer for itself before it goes to sleep (by calling `up_switch_context`).
 
-Code is as follows:
+    - `wd_start()` adds a `watchdog` structure to the system's timer list and registers a timeout callback function.
+    - For receive timeouts, the callback is `nxmq_rcvtimeout`; for send timeouts, it is `nxmq_sndtimeout`.
+
+2. **Task Blocks**: The task goes to sleep as usual, waiting to be woken up.
+3. **Two Wake-up Paths**:
+    - **Normal Wake-up**: Before the timer expires, the queue state changes (e.g., a new message is received), and another task wakes up the blocked task. The first thing the woken task does is call `wd_cancel()` to cancel the previously set watchdog timer, and then it proceeds to send/receive the message normally.
+    - **Timeout Wake-up**: If the task is not woken up within the specified time, the system's timer interrupt, while scanning the `watchdog` list, will find that the task's timer has expired.
+        - The system executes the pre-defined callback function (`nxmq_rcvtimeout` or `nxmq_sndtimeout`).
+        - These callbacks do one thing: they call `nxmq_wait_irq()`.
+4. **`nxmq_wait_irq`**: Wake-up Handler in Interrupt Context. This function is specifically designed to safely wake up a task blocked on an IPC wait from within an interrupt context (such as a timer interrupt).
+
+The code is as follows:
 
 ```c
 /****************************************************************************

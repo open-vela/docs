@@ -93,7 +93,7 @@
 
 ## III. Configuration Examples
 
-Two typical audio configuration examples are provided below: Simulator Environment and a certain hardware platform. Users can refer to these configurations based on actual needs.
+Two typical audio configuration examples are provided below: **Simulator Environment** and **a certain hardware platform**. Users can refer to these configurations based on actual needs.
 
 ### 1. Simulator Environment
 

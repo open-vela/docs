@@ -305,8 +305,6 @@ nsh> setlogmask enable default
 
 - **注意**: 存储在 RAM 中的日志是易失的，设备断电或重启后将全部丢失。
 
-- 参考文档：[ramlog]()
-
 #### File Log 通道 (Persistent Storage)
 
 将日志保存到文件系统中，实现持久化存储。

@@ -38,7 +38,7 @@ After enabling **Allsyms**, you can utilize the symbol table for debugging in th
 
 This is the primary use case for **Allsyms**. When the system crashes or you manually call functions like `dumpstack` or `sched_dumpstack`, the printed backtrace will no longer show raw addresses. Instead, it will display the resolved function names, helping you to locate issues quickly.
 
-### 2. Format Symbol Output in printf
+### 2. Format Symbol Output in `printf`
 
 You can use the `%pS` format specifier in `printf-family` functions to directly print the symbol information corresponding to a specific address. If a matching symbol is not found, the system will print the original address.
 
@@ -146,7 +146,7 @@ FAR const struct symtab_s *allsyms_findbyvalue(FAR void *value,
 
 #### Cause Analysis
 
-This error occurs because the build process for the **Allsyms** feature relies on these two Python tools to process ELF files and extract symbol information.
+This error occurs because the build process for the **Allsyms** feature relies on these two Python tools to process **ELF** files and extract symbol information.
 
 #### Solution
 

@@ -42,13 +42,13 @@ openvela supports the following multiprocessor modes, aimed at providing flexibl
 
 #### SMP (Symmetric Multiprocessing)
 
-In a Symmetric Multiprocessing (SMP) architecture, multiple CPUs of the same type share a single memory space. The operating system runs on these CPUs and distributes the workload among them. For detailed information on SMP architecture, please refer to [SMP]().
+In a Symmetric Multiprocessing (SMP) architecture, multiple CPUs of the same type share a single memory space. The operating system runs on these CPUs and distributes the workload among them.
 
 <img src="figures/010.png" alt="smp" width="75%">
 
 #### AMP (Asymmetric Multiprocessing)
 
-In an Asymmetric Multiprocessing (AMP) architecture, multiple CPUs, which can have different underlying architectures, each possess their own independent memory space. A separate operating system runs on each CPU, and these CPUs collaborate through an inter-core communication framework. For information on inter-core communication, please refer to [Inter-core Communication Framework]().
+In an Asymmetric Multiprocessing (AMP) architecture, multiple CPUs, which can have different underlying architectures, each possess their own independent memory space. A separate operating system runs on each CPU, and these CPUs collaborate through an inter-core communication framework.
 
 <img src="figures/011.png" alt="smp" width="75%">
 
