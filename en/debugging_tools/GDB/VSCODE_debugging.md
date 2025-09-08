@@ -21,7 +21,7 @@ Before you begin debugging, ensure your development environment meets the follow
 
 - **Visual Studio Code**: Must be installed.
 - **C/C++ Extension**: The core plugin from Microsoft that provides C/C++ language support and debugging capabilities in VSCode.
-- **Compiled `sim` Target**: The `sim` version of o pen v e la must be successfully compiled, generating an executable (`nuttx`) that includes debugging information. The compilation must include the `-g` or `-g3` flag.
+- **Compiled `sim` Target**: The `sim` version of openvela must be successfully compiled, generating an executable (`nuttx`) that includes debugging information. The compilation must include the `-g` or `-g3` flag.
 
 ### 2. VSCode Environment Setup
 
