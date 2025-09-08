@@ -1,6 +1,6 @@
-# USB Host Driver Guide for the SIM Environment
+# USB Host Simulation (SIM) Driver Guide
 
-\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/USB/usb_host_sim_guide.md) \]
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/driver/bus_driver/USB/sim/usb_host_sim_guide.md) \]
 
 This document provides a detailed overview of the architecture and usage of the USB Host driver in the **openvela** simulation (SIM) environment.
 
@@ -13,7 +13,7 @@ The driver uses a layered design composed of two cooperating parts:
 
 This architecture decouples the openvela USB host protocol stack from the underlying hardware simulation, enhancing the driver's portability.
 
-![alt text](./figures/009.png)
+![alt text](./../figures/009.png)
 
 ### 1. SIM-Side Driver (SIM USB Host Driver)
 
@@ -119,7 +119,7 @@ In a separate terminal window, compile and run the USB Device simulation program
 sudo ./nuttx/nuttx
 ```
 
-For more details on the USB Device, please refer to the [USB Device Simulation (SIM) Driver Guide](./usb_sim_guide.md).
+For more details on the USB Device, please refer to the [USB Device Simulation (SIM) Driver Guide](./usb_device_sim_guide.md).
 
 #### Step 3: Establish the Connection and Enable the Device
 

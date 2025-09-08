@@ -1,6 +1,6 @@
 # USB Device Simulation (SIM) Driver Guide
 
-\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/USB/usb_sim_guide.md) \]
+\[ English | [简体中文](../../../../../../zh-cn/device_dev_guide/driver/bus_driver/USB/sim/usb_device_sim_guide.md) \]
 
 This document provides a detailed introduction to the openvela USB Device Simulation (SIM) driver. This driver allows you to simulate a fully functional USB device in a development environment without physical USB hardware. This mechanism is crucial for the development, testing, and validation of USB functionalities on a host machine (currently, only Linux is supported).
 
@@ -11,7 +11,7 @@ The architecture of the SIM USB driver is divided into two core parts:
 - The **SIM-side Driver (SIM USB Device Driver)**, which runs in the openvela simulator.
 - The **Host-side Driver (Host USB Device Driver)**, which runs on the Linux host machine.
 
-![img](./figures/005.png)
+![img](./../figures/005.png)
 
 ### 1. SIM-side Driver (SIM USB Device Driver)
 
@@ -37,7 +37,7 @@ By default, the USB device in the SIM environment exists as a composite device, 
 
 The host-side driver utilizes the Linux kernel's **USB Gadget** framework to simulate real USB hardware. It provides a standard set of APIs, which are implemented by a USB Device Controller (UDC) driver. The framework diagram is as follows:
 
-![img](./figures/006.png)
+![img](./../figures/006.png)
 
 Since the SIM environment does not have a real USB Device Controller (UDC), we use the following two kernel modules to build a pure software-based simulation solution:
 
@@ -124,7 +124,7 @@ The Linux kernel has natively included the Raw Gadget feature since version 5.7.
 
     You may need to adapt the code based on your host's kernel version.
 
-    ![img](./figures/007.png)
+    ![img](./../figures/007.png)
 
     - **Modification 1**: Adapt the Gadget driver registration interface for different kernel versions. Newer kernels use `usb_gadget_register_driver`, while older ones might use `usb_gadget_probe_driver`. If compilation fails, refer to this point.
 
@@ -146,7 +146,7 @@ The Linux kernel has natively included the Raw Gadget feature since version 5.7.
 
 - **Problem**: `insmod: ERROR: could not insert module ./dummy_hcd.ko: Operation not permitted`
   
-    ![img](./figures/008.png)
+    ![img](./../figures/008.png)
 
     **Solution**: This issue is typically caused by the **Secure Boot** option in BIOS/UEFI, which prohibits loading unsigned kernel modules. Please enter your BIOS/UEFI settings and temporarily disable Secure Boot.
 
@@ -477,6 +477,4 @@ eth0        Link encap:Ethernet HWaddr 42:00:d7:82:13:6b at RUNNING mtu 1500
 
 ## IV. References
 
-- For specific driver development details, you can refer to:
-
-    - [USB Device Driver Development Guide](./usb_driver_dev_guide.md)
+- For specific driver development details, you can refer to [USB Device Driver Development Guide](./../usb_driver_dev_guide.md).

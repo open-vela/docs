@@ -1,4 +1,4 @@
-# USB 设备驱动开发指南
+# USB Device 驱动开发指南
 
 \[ [English](../../../../../en/device_dev_guide/driver/bus_driver/USB/usb_driver_dev_guide.md) | 简体中文 \]
 

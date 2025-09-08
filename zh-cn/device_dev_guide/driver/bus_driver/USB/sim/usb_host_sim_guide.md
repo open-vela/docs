@@ -1,6 +1,6 @@
-# SIM 环境下 USB 主机驱动程序详解
+# USB 主机模拟 (SIM) 驱动程序指南
 
-\[ [English](../../../../../en/device_dev_guide/driver/bus_driver/USB/usb_host_sim_guide.md) | 简体中文 \]
+\[ [English](../../../../../../en/device_dev_guide/driver/bus_driver/USB/sim/usb_host_sim_guide.md) | 简体中文 \]
 
 本文档详细介绍在 openvela 仿真 (SIM) 环境中 USB 主机 (Host) 驱动程序的架构与使用方法。
 
@@ -13,7 +13,7 @@
 
 此架构解耦了 openvela USB 主机协议栈与底层硬件模拟，提高了驱动的可移植性。
 
-![alt text](./figures/009.png)
+![alt text](./../figures/009.png)
 
 ### 1、仿真侧驱动(SIM USB Host Driver)
 
@@ -119,7 +119,7 @@ sudo ./nuttx/nuttx
 sudo ./nuttx/nuttx
 ```
 
-关于 USB Device 的详细信息，请参考 [USB 设备模拟 (SIM) 驱动程序指南](./usb_sim_guide.md)。
+关于 USB Device 的详细信息，请参考 [USB 设备模拟 (SIM) 驱动程序指南](./usb_device_sim_guide.md)。
 
 #### 步骤 3：建立连接与设备使能
 

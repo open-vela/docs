@@ -1,8 +1,10 @@
 # USB CDC-ACM 类驱动程序指南
 
+\[ [English](../../../../../en/device_dev_guide/driver/bus_driver/USB/usb_cdcacm_driver_guide.md) | 简体中文 \]
+
 ## 一、概述
 
-本文档旨在为开发者提供在 openvela 系统中配置和使用 USB 通信设备类 (Communication Device Class, CDC) 的抽象控制模型 (Abstract Control Model, ACM) 驱动程序的详细指南。
+本文档旨在为开发者提供在 **openvela** 系统中配置和使用 USB 通信设备类 (Communication Device Class, CDC) 的抽象控制模型 (Abstract Control Model, ACM) 驱动程序的详细指南。
 
 CDC-ACM 是一种标准的 USB 协议，它能够在主机和设备之间模拟一个虚拟串口，广泛应用于调试、日志输出和数据传输等场景。该协议主要定义了两种通信端点 (Endpoint)：
 
@@ -11,7 +13,7 @@ CDC-ACM 是一种标准的 USB 协议，它能够在主机和设备之间模拟�
 
 ## 二、在 USB Device 模式下使用 CDC-ACM
 
-当您需要将 openvela 设备模拟成一个 USB 虚拟串口设备（如开发板连接 PC 后出现一个 COM 口）时，请参考本章节进行配置。驱动及相关接口的通用适配方法，请参考 [USB 设备模拟 (SIM) 驱动程序指南](https://mi.feishu.cn/wiki/ErMkwZcqKizZZ3k5PN2cfnmLn6d#doxcnXxNuCxQ5CQnxbaMEkcY6Ye)。
+当您需要将 openvela 设备模拟成一个 USB 虚拟串口设备（如开发板连接 PC 后出现一个 COM 口）时，请参考本章节进行配置。驱动及相关接口的通用适配方法，请参考 [USB Device 驱动开发指南](./usb_driver_dev_guide.md)。
 
 ### 1、单一设备模式
 
@@ -166,11 +168,11 @@ void *board_composite_connect(int port, int configid)
 
 ### 3、测试指南
 
-参考 [USB 设备模拟 (SIM) 驱动程序指南](./usb_sim_guide.md#三使用指南usb-功能测试)
+参考 [USB 设备模拟 (SIM) 驱动程序指南](./sim/usb_device_sim_guide.md#三使用指南usb-功能测试)
 
 ## 三、在 USB Host 模式下使用 CDC-ACM
 
-当您需要让 openvela 设备作为主机，去连接并控制一个外部的 CDC-ACM 设备（如 USB 转串口模块）时，请参考本章节进行配置。驱动及相关接口的通用适配方法，请参考 [Host]()。
+当您需要让 openvela 设备作为主机，去连接并控制一个外部的 CDC-ACM 设备（如 USB 转串口模块）时，请参考本章节进行配置。驱动及相关接口的通用适配方法，请参考 [USB Host 驱动程序开发指南](./usb_driver_host_guide.md)。
 
 ### 1、Kconfig 配置
 
@@ -212,10 +214,10 @@ int sim_usbhost_initialize(void)
 
 ### 3、测试指南
 
-初始化完成后，当您将一个外部 USB 虚拟串口设备连接到 openvela 主机时，系统 `/dev` 目录下应自动创建设备节点（如 `/dev/ttyACM0`）。您可以像操作普通串口一样，通过读写此设备节点与外部设备通信。详细测试方法请参考 [SIM 环境下 USB 主机驱动程序详解]()
+初始化完成后，当您将一个外部 USB 串口设备连接到 openvela 主机时，系统 `/dev` 目录下应自动创建设备节点（如 `/dev/ttyACM0`）。您可以像操作普通串口一样，通过读写此设备节点与外部设备通信。详细测试方法请参考 [USB Host 驱动程序开发指南](./usb_driver_host_guide.md)。
 
 ## 四、参考资料
 
-- [USB 设备模拟 (SIM) 驱动程序指南](./usb_sim_guide.md)
-- [USB Host 驱动程序开发指南]()
-- [SIM 环境下 USB 主机驱动程序详解]()
+- [USB 设备模拟 (SIM) 驱动程序指南](./sim/usb_device_sim_guide.md)
+- [USB 主机模拟 (SIM) 驱动程序指南](./sim/usb_host_sim_guide.md)
+- [USB Host 驱动程序开发指南](./usb_driver_host_guide.md)

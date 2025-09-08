@@ -1,6 +1,6 @@
 # USB 设备模拟 (SIM) 驱动程序指南
 
-\[ [English](../../../../../en/device_dev_guide/driver/bus_driver/USB/usb_sim_guide.md) | 简体中文 \]
+\[ [English](../../../../../../en/device_dev_guide/driver/bus_driver/USB/sim/usb_device_sim_guide.md) | 简体中文 \]
 
 本文档详细介绍 openvela 的 USB 设备模拟 (SIM) 驱动程序。该驱动程序允许您在没有真实 USB 硬件的开发环境中，通过软件模拟一个功能完备的 USB 设备。这套机制对于在主机（当前仅支持 Linux）上进行 USB 功能的开发、测试和验证至关重要。
 
@@ -11,7 +11,7 @@ SIM USB 驱动程序的体系架构分为两个核心部分：
 - 在 openvela 模拟器中运行的 **SIM 端驱动(SIM USB Device Driver)**。
 - 以及在 Linux 主机上运行的**主机端驱动(Host USB Device Driver)**。
 
-![img](./figures/005.png)
+![img](./../figures/005.png)
 
 ### 1、SIM 端驱动(SIM USB Device Driver)
 
@@ -37,7 +37,7 @@ SIM USB 驱动程序的体系架构分为两个核心部分：
 
 主机端驱动利用 Linux 内核的 **USB** **Gadget** 框架来模拟真实的 USB 硬件，它提供了一套标准的 API，由 USB 设备控制器 (USB Device Controller, UDC)驱动来实现这套 API。框架示意图如下图所示：
 
-![img](./figures/006.png)
+![img](./../figures/006.png)
 
 由于 SIM 环境没有真实的 USB 设备控制器 (USB Device Controller, UDC)，我们采用以下两个内核模块来构建一个纯软件的模拟方案：
 
@@ -124,7 +124,7 @@ Linux 内核自 5.7 版本起已原生包含 Raw Gadget 功能。如果您的内
 
     根据您主机的内核版本，可能需要对代码进行适配。
 
-    ![img](./figures/007.png)
+    ![img](./../figures/007.png)
 
     - **修改点 1**: 适配不同内核版本的 Gadget 驱动注册接口。新版本内核使用 `usb_gadget_register_driver`，旧版本可能使用 `usb_gadget_probe_driver`。如果编译失败，请参考此项进行修改。
     - **修改点 2**: 调整数据包大小限制。为了支持 NCM (Network Control Model) 等需要大数据包传输的 USB 类，建议移除或注释掉对 `PAGE_SIZE` 的检查，以避免通信异常。
@@ -145,7 +145,7 @@ Linux 内核自 5.7 版本起已原生包含 Raw Gadget 功能。如果您的内
 
 - **问题**: `insmod: ERROR: could not insert module ./dummy_hcd.ko: Operation not permitted`
   
-    ![img](./figures/008.png)
+    ![img](./../figures/008.png)
 
     **解决方案**: 此问题通常由 BIOS/UEFI 的**安全启动 (Secure Boot)** 选项导致，该选项禁止加载未签名的内核模块。请进入 BIOS/UEFI 设置，暂时禁用安全启动。
 
@@ -476,6 +476,4 @@ eth0        Link encap:Ethernet HWaddr 42:00:d7:82:13:6b at RUNNING mtu 1500
 
 ## 四、参考资料
 
-- 具体驱动开发可以参考：
-
-    - [USB 设备驱动开发指南](./usb_driver_dev_guide.md)
+- 具体驱动开发可以参考 [USB 设备驱动开发指南](./../usb_driver_dev_guide.md)
