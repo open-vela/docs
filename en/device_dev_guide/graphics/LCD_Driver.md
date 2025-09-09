@@ -364,6 +364,6 @@ In LCD Framebuffer mode, the following compilation options must be enabled:
 
 ## V Related code repository
 
-- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/dev/include/nuttx/lcd/lcd.h)
+- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/trunk/include/nuttx/lcd/lcd.h)
 
-- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)
+- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/trunk/drivers/lcd/lcd_framebuffer.c)

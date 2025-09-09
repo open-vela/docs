@@ -135,7 +135,7 @@ The core of libuv is based on [poll](https://man7.org/linux/man-pages/man2/poll.
 
 ![img](./figures/008.svg)
 
-The Framebuffer driver framework of openvela provides the [interface](../../../../../../nuttx/blob/dev/drivers/video/fb.c) needed for `poll`, to monitor whether the Framebuffer is in a writable state:
+The Framebuffer driver framework of openvela provides the [interface](../../../../../../nuttx/blob/trunk/drivers/video/fb.c) needed for `poll`, to monitor whether the Framebuffer is in a writable state:
 
 ```C
 /****************************************************************************
@@ -529,7 +529,7 @@ static void lcdc_te_irq(int irq, void *context, void *arg)
 
 ### 2. (Not Recommended) Blocking Mode
 
-Using semaphores for synchronization is equivalent to locking the Framebuffer. The renderer must acquire the lock each time it begins rendering; otherwise, it will remain in a blocked state. Please refer to this [link](../../../../../../nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c) for the code.
+Using semaphores for synchronization is equivalent to locking the Framebuffer. The renderer must acquire the lock each time it begins rendering; otherwise, it will remain in a blocked state. Please refer to this [link](../../../../../../nuttx/blob/trunk/arch/arm/src/stm32/stm32_ltdc.c) for the code.
 
 ## V Related Repositories
 

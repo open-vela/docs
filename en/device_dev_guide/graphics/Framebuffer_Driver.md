@@ -339,5 +339,5 @@ To prevent screen tearing and improve rendering performance, it is recommended t
 
 Here are the links to the code repository related to Framebuffer driver:
 
-- [fb.c](../../../../../../nuttx/blob/dev/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
-- [fb.h](../../../../../../nuttx/blob/dev/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.
+- [fb.c](../../../../../../nuttx/blob/trunk/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
+- [fb.h](../../../../../../nuttx/blob/trunk/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.

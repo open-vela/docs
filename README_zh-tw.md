@@ -64,9 +64,9 @@ Vela 這個名字源自於拉丁語【帆】，也是南方天空中形似船帆
 - [音樂播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)
 - [智慧手環](./zh-cn/demo/Smart_Band_Example_zh-cn.md)
 - [自行車碼錶](./zh-cn/demo/X_Track_zh-cn.md)
-- [計算器](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md)
-- [親戚計算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)
-- [打地鼠](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md)
+- [計算器](../../../../open-vela/packages_demos/blob/trunk/calculator/Readme.md)
+- [親戚計算器](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme_zh-cn.md)
+- [打地鼠](../../../../open-vela/packages_demos/blob/trunk/Whackmole/Readme.md)
 
 ## 貢獻
 

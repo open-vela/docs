@@ -135,7 +135,7 @@ libuv 的核心是基于 [poll](https://man7.org/linux/man-pages/man2/poll.2.htm
 
 ![img](./figures/008.svg)
 
-openvela 的 Framebuffer 驱动框架提供了 `poll` 所需要的[接口](../../../../../../nuttx/blob/dev/drivers/video/fb.c)，用于监控 Framebuffer 是否处于可写状态：
+openvela 的 Framebuffer 驱动框架提供了 `poll` 所需要的[接口](../../../../../../nuttx/blob/trunk/drivers/video/fb.c)，用于监控 Framebuffer 是否处于可写状态：
 
 ```C
 /****************************************************************************
@@ -531,7 +531,7 @@ static void lcdc_te_irq(int irq, void *context, void *arg)
 
 ### 2、（不推荐）阻塞方式
 
-使用信号量进行同步，相当于对 Framebuffer 进行加锁操作，渲染器每次开始渲染时都需要拿到锁才能进行绘制，否则就会处于阻塞状态，代码请参见此 [链接](../../../../../../nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c)。
+使用信号量进行同步，相当于对 Framebuffer 进行加锁操作，渲染器每次开始渲染时都需要拿到锁才能进行绘制，否则就会处于阻塞状态，代码请参见此 [链接](../../../../../../nuttx/blob/trunk/arch/arm/src/stm32/stm32_ltdc.c)。
 
 ## 五、相关仓库
 

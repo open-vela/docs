@@ -18,7 +18,7 @@ openvela 提供通用的 **oneshot** 驱动，即一次性（非周期性）定�
 - **Upper half**：面向应用，由 openvela 提供，无需芯片厂商修改。
 - **Lower half**：特定平台的硬件控制驱动，芯片厂商需适配提供。
 
-**oneshot** 驱动相关接口信息在 [oneshot.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/oneshot.h) 文件中，同样也分为了 **Upper half** 和 **Lower half** 两层接口。
+**oneshot** 驱动相关接口信息在 [oneshot.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/timers/oneshot.h) 文件中，同样也分为了 **Upper half** 和 **Lower half** 两层接口。
 
 ### 2、Arch_alarm 定时器简介
 
@@ -47,7 +47,7 @@ openvela 的 Upper half 部分中的 **`up_timer_initialize`** 函数，必须�
 
 ## 三、Arch_alarm API
 
-`arch_alarm` 提供一系列接口，以满足 sched 模块对定时器的需求。接口信息可在 [arch.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/arch.h) 头文件中查找。
+`arch_alarm` 提供一系列接口，以满足 sched 模块对定时器的需求。接口信息可在 [arch.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/arch.h) 头文件中查找。
 
 ### 1、接口分类
 
@@ -193,7 +193,7 @@ grep -rE "CONFIG_ONESHOT|CONFIG_ALARM_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH
 
 ##### 实例创建：调用 `oneshot_initialize`
 
-在板级初始化阶段，需调用**厂商自定义的初始化函数**，完成 [struct oneshot_lowerhalf_s](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/timers/oneshot.h#L226) 结构体的分配与初始化。该函数由 openvela 框架提供，原型如下：
+在板级初始化阶段，需调用**厂商自定义的初始化函数**，完成 [struct oneshot_lowerhalf_s](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/timers/oneshot.h#L226) 结构体的分配与初始化。该函数由 openvela 框架提供，原型如下：
 
 ```C
 /****************************************************************************
