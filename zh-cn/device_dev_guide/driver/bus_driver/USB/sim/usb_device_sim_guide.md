@@ -1,4 +1,4 @@
-# USB 设备模拟 (SIM) 驱动程序指南
+# USB Device 模拟 (SIM) 驱动程序指南
 
 \[ [English](../../../../../../en/device_dev_guide/driver/bus_driver/USB/sim/usb_device_sim_guide.md) | 简体中文 \]
 
