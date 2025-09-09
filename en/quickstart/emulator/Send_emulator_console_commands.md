@@ -4,7 +4,7 @@
 
 Each running virtual device provides a console that lets you query and control the emulated device environment.
 
-## Start and Stop a Console Session
+## I. Start and Stop a Console Session
 
 To access the console and enter commands, use `telnet` at a terminal window to connect to the console port and provide the authentication token.Whenever the console displays “OK”, it's ready to accept commands.A typical prompt is usually not displayed.
 
@@ -92,9 +92,9 @@ To connect to the console of a running virtual device, do the following:
     Connection closed by foreign host.
     ```
 
-## Emulator Command Reference
+## II. Emulator Command Reference
 
-### General Commands
+### 1. General Commands
 
 - `avd {stop|start|status|name}`
 
@@ -117,7 +117,7 @@ To connect to the console of a running virtual device, do the following:
 
     Rotate the AVD counterclockwise in 45 degree increments.
 
-### Port Redirection
+### 2. Port Redirection
 
 - `redir list`
 
@@ -138,7 +138,7 @@ To connect to the console of a running virtual device, do the following:
     - “protocol”: Must be either tcp or udp.
     - "host-port": The port number to open on the host.
 
-### Geographic Location
+### 3. Geographic Location
 
 Set the geographic location reported to the apps running inside an emulator by sending a GPS locator to the emulator.
 
@@ -154,7 +154,7 @@ Set the geographic location reported to the apps running inside an emulator by s
     geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
     ```
 
-### Fake Hardware Events
+### 4. Fake Hardware Events
 
 - `event types`
 
@@ -197,7 +197,7 @@ Set the geographic location reported to the apps running inside an emulator by s
 
     Send a string of characters that simulate keystrokes.The message must be a UTF-8 string. Unicode messages are reverse-mapped according to the current device keyboard, and unsupported characters are discarded silently.
 
-### Power State Control
+### 5. Power State Control
 
 - `power display`
 
@@ -223,7 +223,7 @@ Set the geographic location reported to the apps running inside an emulator by s
 
     Sets remaining battery capacity state as a percent from 0 to 100.
 
-### Manage Sensors on the Emulator
+### 6. Manage Sensors on the Emulator
 
 These commands relate to the sensors available in AVD. In addition to using the “sensor” command, you can see and adjust the settings in the “Accelerometer” and “Additional sensors” tabs on the emulator’s “Virtual sensors” screen.
 

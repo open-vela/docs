@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
 
-## Using GDB Console
+## I. Using GDB Console
 
 Use the following commands to install the required package on a Ubuntu 22.04 system:
 
@@ -133,7 +133,7 @@ Exit GDB:
 (gdb) q
 ```
 
-## Using Visual Studio Code
+## II. Using Visual Studio Code
 
 1. Visit https://code.visualstudio.com/ to install Visual Studio Code.
 
@@ -198,7 +198,7 @@ Exit GDB:
 
     To start a debug session, use the “Configuration” drop-down list in the Run and Debug view and select the “Debug openvela” configuration.After setting the startup configuration, use `F5` to start a debug session.
 
-## Use Clion(Remote Debug)
+## III. Use Clion(Remote Debug)
 
 1. download clion from here (recommend newer version) https://www.jetbrains.com/clion/
 
