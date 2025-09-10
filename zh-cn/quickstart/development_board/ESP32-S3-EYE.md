@@ -189,9 +189,8 @@ rm nuttx/Make.defs
 ## 六、参考文档
 
 - [esp32s3-eye](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye)
-- [defconfig](../../../../../../vendor/blob/dev/espressif/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
+- [defconfig](https://github.com/open-vela/vendor_espressif/blob/dev/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
 - [Managing esptool on virtual environment](https://nuttx.apache.org/docs/latest/platforms/xtensa/esp32s3/index.html#managing-esptool-on-virtual-environment)
-- [Config CheckList]()
 
 ## 附录 A: Wi-Fi 功能 defconfig
 
