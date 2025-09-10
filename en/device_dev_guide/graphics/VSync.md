@@ -224,6 +224,7 @@ From the perspective of the LCD controller, before each transmission, it first c
 ![img](./figures/009.svg)
 
 The renderer pushes data to the underlying panbuf queue by calling the `FBIOPAN_DISPLAY` ioctl interface.
+
 For LCD controllers that support FB overlay, the `FBIOPAN_OVERLAY` ioctl interface is used to push data to the overlay panbuf queue.
 
 ```C

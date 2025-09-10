@@ -10,9 +10,7 @@ This document describes how to use the **clang-format** tool for code style chec
 
 Different checking commands are executed depending on whether the `.clang-format` configuration file exists in the project.
 
-> Note
->
-> The openvela project uses **clang-format 14** version for code style checking.
+> **Note**: The openvela project uses **clang-format 14** version for code style checking.
 
 ### Scenario 1: Checking with Default Configuration File
 

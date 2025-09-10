@@ -71,14 +71,14 @@ int select(int nfds, FAR fd_set *readfds, FAR fd_set *writefds,
 
 ## 二、协议栈基础能力
 
-openvela 网络协议栈支持多种网络层和传输层协议，包括 IPv4、IPv6、TCP、UDP 和 ICMP，为开发者提供全面的网络通信能力。以下是各协议的功能简要介绍。 
+openvela 网络协议栈支持多种网络层和传输层协议，包括 IPv4、IPv6、TCP、UDP 和 ICMP，为开发者提供全面的网络通信能力。以下是各协议的功能简要介绍。
 
 ### 1、IPv4 / IPv6 能力
 
 openvela 网络协议栈同时支持 IPv4 和 IPv6 协议，并提供以下扩展功能：
 
 - ARP 和 NDP 协议。
-- DHCP / DHCPv6：支持 DHCP 客户端和服务器功能。
+- DHCP/DHCPv6：支持 DHCP 客户端和服务器功能。
 - 分片支持：支持 IPv4 分片和 IPv6 分片功能。
 - 6LoWPAN：支持低功耗无线个域网协议。
 - 多地址支持：单张网卡可配置多个 IPv6 地址。

@@ -76,7 +76,7 @@ The openvela network protocol stack supports multiple network and transport laye
 The openvela network protocol stack supports both IPv4 and IPv6 protocols and offers the following extended features:
 
 - ARP and NDP Protocols.
--DHCP / DHCPv6: Supports both DHCP client and server functionalities.
+- DHCP / DHCPv6: Supports both DHCP client and server functionalities.
 - Fragmentation Support: Supports fragmentation in both IPv4 and IPv6.
 - 6LoWPAN: Supports the Low-Power Wireless Personal Area Network protocol.
 - Multiple Address Support: A single network interface can be configured with multiple IPv6 addresses.

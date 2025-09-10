@@ -562,7 +562,7 @@ Below are links to related implementations in Linux for reference:
 - [wext-sme.c](https://elixir.bootlin.com/linux/latest/source/net/wireless/wext-sme.c#L43)（(Specific implementation)
 - [wext-compat.c](https://elixir.bootlin.com/linux/latest/source/net/wireless/wext-compat.c#L1463)（(Compatibility implementation)
 
-## VI.Testing Tools
+## VI. Testing Tools
 
 openvela provides multiple network testing tools for driver migration and network throughput debugging. Below are descriptions and usage of relevant tools.
 

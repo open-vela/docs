@@ -189,7 +189,7 @@ The recommended approach is to configure `sudo` to allow your user account to ru
 
 3. Modify `launch.json`.
 
-   Modify the `.vscode/launch.json` file by adding the `"miDebuggerPath"` property to your debug configuration, pointing it to the script we just created.
+    Modify the `.vscode/launch.json` file by adding the `"miDebuggerPath"` property to your debug configuration, pointing it to the script we just created.
 
     ```json
     {

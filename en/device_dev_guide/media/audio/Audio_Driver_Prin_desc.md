@@ -807,24 +807,25 @@ Below are the key `audio_dma` interfaces and their functions:
 - Implementation:
 
     ```c
+    /*DMA interrupt handling function*/
     static void audio_dma_callback(struct dma_chan_s *chan,
-                                    void* arg, ssize_t len)
+                                   void*arg, ssize_t len)
     {
-        struct audio_dma_s *audio_dma = (struct audio_dma_s*)arg;
-        struct ap_buffer_s *apb;
-        bool final = false;
+      struct audio_dma_s *audio_dma = (struct audio_dma_s*)arg;
+      struct ap_buffer_s *apb;
+      bool final = false;
 
-        apb = (struct ap_buffer_s *)dq_remfirst(&audio_dma->pendq);
-        ...
-        // Trigger DEQUEUE callback
+      apb = (struct ap_buffer_s *)dq_remfirst(&audio_dma->pendq);
+      ...
+      /* DEQUEUE callback */
     #ifdef CONFIG_AUDIO_MULTI_SESSION
         audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
-                            apb, OK, NULL);
+                             apb, OK, NULL);
     #else
         audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
-                            apb, OK);
+                             apb, OK);
     #endif
-        ...
+      ...
     }
     ```
 

@@ -92,9 +92,7 @@ iperf 支持以下参数设定：
 iperf -c <server IP> -i 1 [-u]
 ```
 
-> **说明**
->
-> iperf 的 UDP client 没有终止信息，因此 UDP server 不会自动停止。测试结束后需手动按 `Ctrl+C` 停止。
+> **说明**：iperf 的 UDP client 没有终止信息，因此 UDP server 不会自动停止。测试结束后需手动按 `Ctrl+C` 停止。
 
 #### 3.2 rpmsg socket client
 

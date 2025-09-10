@@ -91,9 +91,7 @@ Use the following command to set up a regular socket client and connect to the s
 iperf -c <server IP> -i 1 [-u]
 ```
 
-> **Note**
->
-> iperf's UDP client has no termination information, so the UDP server does not stop automatically.
+> **Note**: iperf's UDP client has no termination information, so the UDP server does not stop automatically.
 After the test, you need to manually press "Ctrl + C" to stop.
 
 #### 3.2 rpmsg socket client
