@@ -98,7 +98,7 @@ To connect to the console of a running virtual device, do the following:
 
 - `avd {stop|start|status|name}`
 
-  Query, control and manage the virtual device, as follows:
+    Query, control and manage the virtual device, as follows:
 
     - stop: Stop the execution of the device.
     - start: Start the execution of the device.
