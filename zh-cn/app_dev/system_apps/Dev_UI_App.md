@@ -4,9 +4,9 @@
 
 ## 一、前提条件
 
-1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
-2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
-3. 在开始本教程之前，请从 [music_player](https://github.com/open-vela/packages_demos/tree/dev/music_player) 获取示例代码。
+1. 搭建开发环境，请参见[环境搭建](./../../quickstart/Set_up_the_development_environment_zh-cn.md)。
+2. 下载源码，请参见[下载 openvela 源码](./../..//quickstart/Download_Vela_sources_zh-cn.md)。
+3. 在开始本教程之前，请从 [music_player](./../../../../../../packages_demos/tree/dev/music_player) 获取示例代码。
 
 ## 二、前置概念
 

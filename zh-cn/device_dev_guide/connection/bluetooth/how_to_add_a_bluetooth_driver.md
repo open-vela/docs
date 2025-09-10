@@ -24,7 +24,7 @@
 
 #### 操作步骤
 
-1. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/dev/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](https://github.com/open-vela/nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
+1. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](../../../../../../../nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
 
     ```C
     #include <nuttx/wireless/bluetooth/bt_driver.h> /* 添加bt_driver.h头文件引用 */

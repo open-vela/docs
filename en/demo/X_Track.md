@@ -1,4 +1,4 @@
-# Example of bike computer
+# Example of Bike Computer
 
 \[ English | [简体中文](../../zh-cn/demo/X_Track_zh-cn.md) \]
 

@@ -24,7 +24,7 @@ The implementation of these member functions depends on the actual operation of 
 
 #### Steps
 
-1. In [drivers_initialize.c](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c), add the `bt_driver.h` header include:
+1. In [drivers_initialize.c](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c), add the [bt_driver.h](../../../../../../../nuttx/blob/dev/include/nuttx/wireless/bluetooth/bt_driver.h) header include:
 
     ```C
     #include <nuttx/wireless/bluetooth/bt_driver.h> /* Add bt_driver.h header include */

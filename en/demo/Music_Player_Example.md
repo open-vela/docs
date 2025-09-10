@@ -1,4 +1,4 @@
-# Demo of music player
+# Demo of Music Player
 
 \[ English | [简体中文](../../zh-cn/demo/Music_Player_Example_zh-cn.md) \]
 
