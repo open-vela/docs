@@ -34,7 +34,7 @@
 
     请根据您的网络环境和偏好，从以下任一平台选择一种方式（推荐使用 HTTPS）来初始化仓库。
 
-    #### 选项 A：从 GitHub 下载
+    ### 选项 A：从 GitHub 下载
 
     - **方式一：HTTPS (推荐)**
 
@@ -52,7 +52,7 @@
         repo init --partial-clone -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
-    #### 选项 B：从 Gitee 下载
+    ### 选项 B：从 Gitee 下载
 
     - **方式一：HTTPS (推荐)**
 
@@ -70,7 +70,7 @@
         repo init --partial-clone -u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
-    #### 选项 C：从 GitCode 下载
+    ### 选项 C：从 GitCode 下载
 
     - **方式一：HTTPS (推荐)**
 

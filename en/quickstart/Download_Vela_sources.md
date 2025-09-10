@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](./../../zh-cn/quickstart/Download_Vela_sources_zh-cn.md) \]
 
-The `openvela` source code is hosted in Git repositories on multiple platforms, including [GitHub](https://github.com/open-Vela), [Gitee](https://gitee.com/open-vela), and [GitCode](https://gitcode.com/open-vela). This guide will walk you through the process of downloading the source code.
+The **openvela** source code is hosted in Git repositories on multiple platforms, including [GitHub](https://github.com/open-Vela), [Gitee](https://gitee.com/open-vela), and [GitCode](https://gitcode.com/open-vela). This guide will walk you through the process of downloading the source code.
 
 ## Prerequisites
 
@@ -22,19 +22,19 @@ The `openvela` source code is hosted in Git repositories on multiple platforms, 
 
 2. Install Git LFS (First-time setup only):
 
-   `openvela` uses Git LFS (Large File Storage) to manage large files in its repositories. Before proceeding, ensure that Git LFS is installed and enabled on your system.
+    openvela uses Git LFS (Large File Storage) to manage large files in its repositories. Before proceeding, ensure that Git LFS is installed and enabled on your system.
 
-   ```bash
-   # Install Git LFS on Ubuntu systems
-   sudo apt update
-   sudo apt install git-lfs
-   ```
+    ```bash
+    # Install Git LFS on Ubuntu systems
+    sudo apt update
+    sudo apt install git-lfs
+    ```
 
 3. Choose a Source and Initialize the Repository:
 
     Choose one of the following methods from any platform based on your network environment and preferences. Using HTTPS is recommended.
 
-    #### Option A: Download from GitHub
+    ### Option A: Download from GitHub
 
     - **Method 1: HTTPS (Recommended)**
 
@@ -52,7 +52,7 @@ The `openvela` source code is hosted in Git repositories on multiple platforms, 
         repo init --partial-clone -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
-    #### Option B: Download from Gitee
+    ### Option B: Download from Gitee
 
     - **Method 1: HTTPS (Recommended)**
 
@@ -70,7 +70,7 @@ The `openvela` source code is hosted in Git repositories on multiple platforms, 
         repo init --partial-clone -u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
-    #### Option C: Download from GitCode
+    ### Option C: Download from GitCode
 
     - **Method 1: HTTPS (Recommended)**
 
@@ -90,7 +90,7 @@ The `openvela` source code is hosted in Git repositories on multiple platforms, 
 
 ## Step 2: Sync the Source Code
 
-After the `repo` initialization is complete, run the following command to sync the full `openvela` source code to your local working directory.
+After the `repo` initialization is complete, run the following command to sync the full openvela source code to your local working directory.
 
 ```bash
 repo sync -c -j8
@@ -103,7 +103,7 @@ repo sync -c -j8
 
 ## Important Note
 
-The `openvela` project uses **clang-format version 14** for code style checking. If you plan to contribute code, please ensure your development environment is configured with the corresponding tool. For more details, see the [Code Style Check Guide](../contribute/code_style_check_guide.md).
+The openvela project uses **clang-format version 14** for code style checking. If you plan to contribute code, please ensure your development environment is configured with the corresponding tool. For more details, see the [Code Style Check Guide](../contribute/code_style_check_guide.md).
 
 ## FAQ
 

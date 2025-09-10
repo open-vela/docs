@@ -434,7 +434,7 @@ static const struct audio_ops_s g_audio_comp_ops =
   audio_comp_reserve,       /* reserve        */
   audio_comp_release        /* release        */
 };
-````
+```
 
 Core Functions:
 

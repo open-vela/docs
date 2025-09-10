@@ -20,7 +20,7 @@
 #### 说明
 
 - 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](../../../../../../../nuttx/blob/dev/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
-- 但在实际接入或使用时，建议在 [vendor](../../../../../../vendor_template/blob/dev/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
+- 但在实际接入或使用时，建议在 [vendor](../../../../../../../vendor_template/blob/dev/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
 
 #### 操作步骤
 

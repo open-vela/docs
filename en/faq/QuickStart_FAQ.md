@@ -62,6 +62,7 @@ Network restrictions, mirror source regional limitations, or DNS resolution issu
     ```Shell
     # Tsinghua mirror
     repo init xxxxxx  --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo
+    
     # USTC mirror (backup)
     repo init xxxxxx  --repo-url=https://mirrors.ustc.edu.cn/aosp/git-repo
     ```
