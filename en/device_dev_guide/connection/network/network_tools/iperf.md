@@ -92,7 +92,7 @@ iperf -c <server IP> -i 1 [-u]
 ```
 
 > **Note**: iperf's UDP client has no termination information, so the UDP server does not stop automatically.
-After the test, you need to manually press "Ctrl + C" to stop.
+After the test, you need to manually press `Ctrl + C` to stop.
 
 #### 3.2 rpmsg socket client
 
@@ -115,7 +115,7 @@ iperf -c <path> --local [-u]
 
 - `< path >`: Any string, as long as it matches the`path `specified by the server.
 - `-u`: Can be used with the `-u` parameter to test DGRAM mode, similar to UDP for ordinary sockets.
-- After the test, the server needs to manually press Ctrl + C to stop.
+- After the test, the server needs to manually press `Ctrl + C` to stop.
 
 ## IV. Interpretation of the results
 

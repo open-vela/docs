@@ -77,7 +77,7 @@ You need to prepare a dedicated cross-compilation toolchain and flashing tool fo
     pip install esptool
     ```
 
-    **Note:** All subsequent compilation and flashing operations should be performed within this activated `(myenv)` environment.
+    > **Note**: All subsequent compilation and flashing operations should be performed within this activated `(myenv)` environment.
 
     ![img](./figures/056.png)
 
@@ -89,7 +89,7 @@ This section guides you through creating a board-specific configuration file and
 
 Before proceeding with the configuration, familiarize yourself with the Board Support Package (BSP) [directory structure](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye) for the `esp32s3-eye`. This will help you understand the purpose of each file.
 
-```Plain
+```bash
 esp32s3-eye/
 ├── configs/                 # Board-level feature configuration center, containing defconfig files for various features
 │   ├── gpio/        

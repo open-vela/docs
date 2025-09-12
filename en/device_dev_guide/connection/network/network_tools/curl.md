@@ -154,7 +154,7 @@ Follow these steps to upload files from the device to a local PC using curl.
         ifconfig
         ```
 
-    - Ensure the device and PC are on the same network, and port 4321 is unblocked.
+    - Ensure the device and PC are on the same network, and port `4321` is unblocked.
 
 ### 3. Retrieving Web Content
 
