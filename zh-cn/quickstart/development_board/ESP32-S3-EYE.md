@@ -14,9 +14,7 @@
 
 在开始之前，请确保您已完成 `openvela` 的基础环境设置。如果尚未完成，请遵循如下官方文档：
 
-1. [设置开发环境](./../Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 源码](./../Download_Vela_sources_zh-cn.md)
-3. [编译 openvela 源码](./../Build_Vela_from_sources_zh-cn.md)
+1. [编译 openvela 源码](./../../quickstart/openvela_ubuntu_quick_start.md)
 
 ## 三、准备工作：搭建 ESP32-S3 开发环境
 
