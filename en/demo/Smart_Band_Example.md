@@ -10,9 +10,7 @@ This article describes how to run this example on Emulator.
 
 ## Prerequisites
 
-1. Set up the development environment. Refer to [Environment Setup](./../quickstart/Set_up_the_development_environment.md).
-
-2. Download the source code. Refer to [Download openvela source code](./../quickstart/Download_Vela_sources.md).
+To download the source code, see [Quick Start](./../quickstart/openvela_ubuntu_quick_start.md).
 
 ## Step 1: Configure the project
 

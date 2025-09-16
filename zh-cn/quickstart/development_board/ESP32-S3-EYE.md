@@ -12,9 +12,7 @@
 
 ## 二、前提条件
 
-在开始之前，请确保您已完成 `openvela` 的基础环境设置。如果尚未完成，请遵循如下官方文档：
-
-1. [编译 openvela 源码](./../../quickstart/openvela_ubuntu_quick_start.md)
+下载源码，请参见[快速入门](./../openvela_ubuntu_quick_start.md)。
 
 ## 三、准备工作：搭建 ESP32-S3 开发环境
 

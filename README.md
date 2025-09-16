@@ -54,10 +54,11 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform.For more information, refer to the following guide.
 
-1. [Set up the development environment](./en/quickstart/Set_up_the_development_environment.md)
-2. [Download openvela source code](./en/quickstart/Download_Vela_sources.md)
-3. [Compile openvela source code](./en/quickstart/Build_Vela_from_sources.md)
-4. [Run build artifacts on Emulator](./en/quickstart/Run_Vela_on_Vela_Emulator.md)
+[Quick Start (Ubuntu)](./quickstart/openvela_ubuntu_quick_start.md)
+
+### Quick App Development
+
+[Quick App Quick Start](https://iot.mi.com/vela/quickapp/en/guide/start/use-ide.html)
 
 ## Sub-repository List  
 
