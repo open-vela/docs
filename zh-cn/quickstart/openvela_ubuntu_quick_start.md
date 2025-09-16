@@ -62,11 +62,15 @@ sudo mv repo /usr/local/bin
     repo init -u https://github.com/open-vela/manifests.git -b trunk -m openvela.xml
     ```
 
+    ![alt text](./figures/003.png)
+
 3. 执行同步命令，repo 将根据清单文件 (`openvela.xml`) 下载所有相关的源代码仓库。
 
     ```bash
     repo sync -c -j8
     ```
+
+    ![alt text](./figures/004.png)
    
     > **操作提示**
     >
@@ -115,6 +119,8 @@ cmake \
   -DEXTRA_FLAGS="-Wno-cpp -Wno-deprecated-declarations"
 ```
 
+![alt text](./figures/005.png)
+
 ### 3. （可选）自定义内核配置
 
 您可以通过 `menuconfig` 命令打开图形化界面，以调整 NuttX 内核与组件的配置。
@@ -129,6 +135,8 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap -t menuconfig
 > - 按 `空格键` 可切换选中状态（启用/禁用/模块化）。
 > - 配置完成后，选择 "Save" 保存并退出。
 
+![alt text](./figures/006.png)
+
 ### 4. 执行编译
 
 执行以下命令，构建整个项目。
@@ -139,6 +147,8 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap
 
 编译成功后，您将在 `cmake_out/goldfish-arm64-v8a-ap` 目录下找到 `nuttx` 等编译产物。
 
+![alt text](./figures/007.png)
+
 ## 步骤四：运行模拟器
 
 在 openvela 根目录下，执行以下脚本启动 `Vela Emulator` 并加载您的编译产物。
@@ -147,7 +157,11 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap
 ./emulator.sh cmake_out/goldfish-arm64-v8a-ap
 ```
 
-模拟器启动后，您将看到 NuttX Shell (`nsh>`) 提示符，表明 openvela 已成功运行。
+模拟器启动后，您将看到 `goldfish-armv8a-ap>` 提示符，表明 openvela 已成功运行。
+
+![alt text](./figures/008.png)
+
+![alt text](./figures/009.png)
 
 ## 后续步骤
 

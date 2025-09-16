@@ -173,7 +173,7 @@ fatal: unable to access 'https://gerrit.googlesource.com/git-repo/': Failed to c
 
 3. 版本过低时更新 repo：
 
-    如果版本低于 v2.22，请重新安装 repo 命令。
+    如果版本低于 v2.22，请重新安装 repo。
 
 ## 6、Qt 平台插件初始化失败
 

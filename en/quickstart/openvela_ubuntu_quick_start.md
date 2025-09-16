@@ -16,7 +16,7 @@ Before you begin, please ensure your development environment meets the following
 
 ### 1. Hardware Requirements
 
-- **Disk Space:** At least 40 GB of free space for source code and build artifacts.
+- **Hard drive:** At least 40 GB of free space for the source code and build artifacts.
 - **Memory:** At least 16 GB of RAM.
 
 ### 2. Operating System Requirements
@@ -64,18 +64,22 @@ After installation, you can run `repo --version` to verify it.
     repo init -u https://github.com/open-vela/manifests.git -b trunk -m openvela.xml
     ```
 
+    ![alt text](./figures/003.png)
+
 3. Execute the sync command. `repo` will download all related source code repositories according to the manifest file (`openvela.xml`).
 
     ```bash
     repo sync -c -j8
     ```
 
+    ![alt text](./figures/004.png)
+
     > **Tip**
     >
     >  - The initial sync can be time-consuming, depending on your network connection and disk performance.
     >  - If the sync is interrupted due to network issues, you can run `repo sync` again to resume.
 
-## Step 3: Compile the Source Code
+## Step 3: Build the Source Code
 
 After downloading the source code, perform the following compilation steps in the openvela root directory.
 
@@ -117,6 +121,8 @@ cmake \
   -DEXTRA_FLAGS="-Wno-cpp -Wno-deprecated-declarations"
 ```
 
+![alt text](./figures/005.png)
+
 ### 3. (Optional) Customize Kernel Configuration
 
 You can use the `menuconfig` command to open a graphical interface to adjust the configuration of the NuttX kernel and its components.
@@ -131,7 +137,9 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap -t menuconfig
 > - Press the `Spacebar` to toggle the selection state (enable/disable/module).
 > - After configuring, select "Save" to save and exit.
 
-### 4. Run the Build
+![alt text](./figures/006.png)
+
+### 4. Start the Build
 
 Execute the following command to build the entire project.
 
@@ -141,6 +149,8 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap
 
 Upon successful compilation, you will find `nuttx` and other build artifacts in the `cmake_out/goldfish-arm64-v8a-ap` directory.
 
+![alt text](./figures/007.png)
+
 ## Step 4: Run the Emulator
 
 In the openvela root directory, run the following script to start the `Vela Emulator` and load your build artifacts.
@@ -149,7 +159,11 @@ In the openvela root directory, run the following script to start the `Vela Emul
 ./emulator.sh cmake_out/goldfish-arm64-v8a-ap
 ```
 
-After the emulator starts, you will see the NuttX Shell (`nsh>`) prompt, indicating that openvela is running successfully.
+After the emulator starts, you will see the `goldfish-armv8a-ap>` prompt, indicating that openvela is running successfully.
+
+![alt text](./figures/008.png)
+
+![alt text](./figures/009.png)
 
 ## Next Steps
 
