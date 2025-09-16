@@ -38,10 +38,7 @@ Vela 這個名字源自於拉丁語【帆】，也是南方天空中形似船帆
 
 如果您想要體驗 openvela，我們提供一個功能完整的模擬器，不需要硬體即可使用。詳細資訊請參考下方指南。
 
-1. [準備開發環境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 原始碼](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
-3. [編譯 openvela 原始碼](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
-4. [在模擬器上執行並編譯程式](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+[快速入門（Ubuntu）](./zh-cn/quickstart/openvela_ubuntu_quick_start.md)
 
 ## 子倉庫清單
 

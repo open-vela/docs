@@ -14,9 +14,7 @@
 
 ## 前提条件
 
-1. 搭建开发环境，请参见[环境搭建](../quickstart/Set_up_the_development_environment_zh-cn.md)。
-
-2. 下载源码，请参见[下载 openvela 源码](../quickstart/Download_Vela_sources_zh-cn.md)。
+下载源码，请参见[快速入门](./../quickstart/openvela_ubuntu_quick_start.md)。
 
 ## 步骤一 配置项目
 

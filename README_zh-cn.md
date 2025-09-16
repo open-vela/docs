@@ -57,10 +57,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 如果您想要体验 openvela，我们提供一个功能完备的模拟器，无需硬件平台即可使用。有关详细信息，请参阅如下指南。
 
-1. [准备开发环境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 源码](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
-3. [编译 openvela 源码](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
-4. [在模拟器上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+[快速入门（Ubuntu）](./zh-cn/quickstart/openvela_ubuntu_quick_start.md)
 
 ### 快应用开发
 
