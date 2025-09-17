@@ -1,4 +1,4 @@
-# Example of bike computer
+# Example of Bike Computer
 
 \[ English | [简体中文](../../zh-cn/demo/X_Track_zh-cn.md) \]
 
@@ -8,7 +8,7 @@
 
 It’s a bike computer with features like speed display, distance statistics and real-time track display, with a display resolution of 240x320 pixels, using touch screen interaction.
 
-The code directory is located at: “apps/packages/demos/x_track”
+The code directory is located at: `apps/packages/demos/x_track`
 
 This article describes how to run the example on Emulator.
 

@@ -47,14 +47,18 @@ RPMsg uses a modular, layered architecture inspired by network protocol stacks. 
 1. **Services Layer**
 
     This layer sits on top of the RPMsg framework, providing standardized, easy-to-use communication services for applications. It abstracts low-level message sending and receiving into higher-level application interfaces. For more details, refer to [RPMsg Services]().
+
     - **Key Services Include**:
+
         - **RPMsg Socket**: Provides a BSD Socket-like API, enabling network applications or those requiring stream-based communication to perform inter-core communication effortlessly.
         - **RPMsg FS**: Offers a file operation interface through a Virtual File System (VFS), allowing one core to access resources on another core as if they were local files.
 
 2. **Framework Layer**
 
     As the core of RPMsg, this layer manages communication endpoints, channels, and message routing. It integrates the standard OpenAMP implementation and exposes core APIs to the upper layers. For more details, refer to [RPMsg Framework]().
+
     - **Primary Responsibilities:**
+
         - Lifecycle management of endpoints and channels.
         - Service discovery and matching based on names or addresses.
         - Registering a character device with the VFS, allowing user-space applications to perform inter-core communication using standard file operations (e.g., `open`, `read`, `write`).
@@ -64,9 +68,12 @@ RPMsg uses a modular, layered architecture inspired by network protocol stacks. 
     This layer defines and implements the specific methods for message transport between processors. Developers can select or customize different transport layers based on system-specific physical connections and performance requirements. For more details, refer to [RPMsg Transport Layer]().
 
     - **Primary Implementations:**
+
         - **Rptun / RPMsg VirtIO**: An on-chip communication solution based on shared memory and interrupts, compliant with the VirtIO standard for high performance. It includes two versions:
+
             - **Rptun**: As an enhanced version of VirtIO, it supports more complex system features and is the recommended transport layer in the openvela system.
             - **RPMsg VirtIO**: A lightweight implementation suitable for resource-constrained devices or simpler communication scenarios.
+
         - **RPMsg UART**: Uses a Universal Asynchronous Receiver/Transmitter (UART) as the physical medium, suitable for low-speed, board-level, cross-chip communication.
         - **RPMsg SPI**: Uses the Serial Peripheral Interface (SPI) as the physical medium, offering higher bandwidth than UART, and also supports board-level, cross-chip communication.
         - **RPMsg Router**: A logical transport layer that does not perform physical data transfer itself. Its core function is to act as a message router, forwarding messages to other physical transport layers based on the destination address, thus enabling seamless routing across different communication domains.
@@ -199,11 +206,3 @@ This output clearly indicates that:
 - The AP core is communicating with three remote cores via the `rptun` (RPMsg over VirtIO) transport layer.
 - These three remote cores are `sensor`, `cp` (communications processor), and `audio` (audio DSP).
 - Each communication link has an independent RX thread responsible for processing its messages, which confirms the message handling model described in the previous section.
-
-## VI. Further Reading
-
-For more details on RPMsg, please refer to the following links:
-
-- [RPMsg Framework]()
-- [RPMsg Services]()
-- [RPMsg Transport Layer]()

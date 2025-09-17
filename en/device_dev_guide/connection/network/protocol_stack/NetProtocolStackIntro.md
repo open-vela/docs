@@ -8,15 +8,49 @@
 
 The OS network protocol stack mainly handles Layer 2, Layer 3, and Layer 4 protocols during network communication. Below is a comparison between the OSI seven-layer network model and the TCP/IP four-layer model, along with the corresponding network protocols used in network communications:
 
-| **OSI 7-Layer Model** | **TCP/IP 4-Layer Conceptual Model** | **Corresponding Network Protocols**     |
-| :-------------------- | :---------------------------------- | :-------------------------------------- |
-| Application Layer     | Application Layer                   | HTTP, TFTP, FTP, NFS, WAIS, SMTP        |
-| Presentation Layer    |                                     | Telnet, Rlogin, SNMP, Gopher            |
-| Session Layer         |                                     | SMTP, DNS                               |
-| Transport Layer       | Transport Layer                     | TCP, UDP                                |
-| Network Layer         | Network Layer                       | IP, ICMP, ARP, RARP, AKP, UUCP          |
-| Data Link Layer       | Data Link Layer                     | FDDI, Ethernet, Arpanet, PDN, SLIP, PPP |
-| Physical Layer        |                                     | IEEE 802.1A, IEEE 802.2–IEEE 802.11     |
+<table>
+  <thead>
+    <tr>
+      <th>TCP/IP 4-Layer Model</th>
+      <th>OSI 7-Layer Model</th>
+      <th>Protocol Examples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3"><b>Application Layer</b></td>
+      <td>Application Layer</td>
+      <td>HTTP, FTP, SMTP, DNS, Telnet</td>
+    </tr>
+    <tr>
+      <td>Presentation Layer</td>
+      <td>JPEG, ASCII, TLS, SSL</td>
+    </tr>
+    <tr>
+      <td>Session Layer</td>
+      <td>RPC, NetBIOS</td>
+    </tr>
+    <tr>
+      <td><b>Transport Layer</b></td>
+      <td>Transport Layer</td>
+      <td>TCP, UDP</td>
+    </tr>
+    <tr>
+      <td><b>Network Layer</b></td>
+      <td>Network Layer</td>
+      <td>IP, ICMP, ARP, RARP</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><b>Network Interface Layer</b></td>
+      <td>Data Link Layer</td>
+      <td>Ethernet, PPP, SLIP</td>
+    </tr>
+    <tr>
+      <td>Physical Layer</td>
+      <td>Cables, Hubs, Repeaters</td>
+    </tr>
+  </tbody>
+</table>
 
 ### 2. Capabilities of the openvela Network Protocol Stack
 
@@ -76,7 +110,7 @@ The openvela network protocol stack supports multiple network and transport laye
 The openvela network protocol stack supports both IPv4 and IPv6 protocols and offers the following extended features:
 
 - ARP and NDP Protocols.
--DHCP / DHCPv6: Supports both DHCP client and server functionalities.
+- DHCP / DHCPv6: Supports both DHCP client and server functionalities.
 - Fragmentation Support: Supports fragmentation in both IPv4 and IPv6.
 - 6LoWPAN: Supports the Low-Power Wireless Personal Area Network protocol.
 - Multiple Address Support: A single network interface can be configured with multiple IPv6 addresses.

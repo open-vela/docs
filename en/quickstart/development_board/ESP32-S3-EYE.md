@@ -1,4 +1,4 @@
-# Porting openvela to the ESP32-S3-EYE Development Board and Enabling the Wi-Fi Feature
+# Porting openvela to the ESP32-S3-EYE Development Board
 
 \[ English | [简体中文](../../../zh-cn/quickstart/development_board/ESP32-S3-EYE.md) \]
 
@@ -73,7 +73,7 @@ You need to prepare a dedicated cross-compilation toolchain and flashing tool fo
     pip install esptool
     ```
 
-    **Note:** All subsequent compilation and flashing operations should be performed within this activated `(myenv)` environment.
+    > **Note**: All subsequent compilation and flashing operations should be performed within this activated `(myenv)` environment.
 
     ![img](./figures/056.png)
 
@@ -83,9 +83,9 @@ This section guides you through creating a board-specific configuration file and
 
 ### 1. Understand the esp32s3-eye Board-Level Code Structure
 
-Before proceeding with the configuration, familiarize yourself with the Board Support Package (BSP) [directory structure](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye) for the `esp32s3-eye`. This will help you understand the purpose of each file.
+Before proceeding with the configuration, familiarize yourself with the Board Support Package (BSP) [directory structure](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye) for the `esp32s3-eye`. This will help you understand the purpose of each file.
 
-```Plain
+```bash
 esp32s3-eye/
 ├── configs/                 # Board-level feature configuration center, containing defconfig files for various features
 │   ├── gpio/        
@@ -184,10 +184,9 @@ This guide demonstrated how to port `openvela` to the ESP32-S3-EYE development b
 
 ## VII. References
 
-- [esp32s3-eye](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye)
+- [esp32s3-eye](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye)
 - [defconfig](../../../../../../vendor/blob/trunk/espressif/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
 - [Managing esptool on virtual environment](https://nuttx.apache.org/docs/latest/platforms/xtensa/esp32s3/index.html#managing-esptool-on-virtual-environment)
-- [Config CheckList]()
 
 ## Appendix A: Wi-Fi Feature defconfig
 

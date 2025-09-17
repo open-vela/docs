@@ -1,4 +1,4 @@
-# 启动流程
+# 系统启动流程
 
 \[ [English](../../../en/device_dev_guide/kernel/boot_process.md) | 简体中文 \]
 

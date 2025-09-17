@@ -57,7 +57,7 @@ The following sections describe common operating methods for the Mediatool, incl
 
 ### 1. Play Audio Files
 
-- **URL Mode Playback:**
+- URL Mode Playback:
 
     ```shell
     open Music
@@ -67,7 +67,7 @@ The following sections describe common operating methods for the Mediatool, incl
     close 0                            # Close playback
     ```
 
-- **Buffer Mode Playback:**
+- Buffer Mode Playback:
 
     ```shell
     open Music
@@ -79,7 +79,7 @@ The following sections describe common operating methods for the Mediatool, incl
 
 ### 2. Record Audio Files
 
-- **URL Mode Recording:**
+- URL Mode Recording:
 
     ```shell
     copen cap
@@ -89,7 +89,7 @@ The following sections describe common operating methods for the Mediatool, incl
     close 0                            # Close recording
     ```
 
-- **Buffer Mode Recording:**
+- Buffer Mode Recording:
 
     ```shell
     copen cap
@@ -101,19 +101,19 @@ The following sections describe common operating methods for the Mediatool, incl
 
 ### 3. Playback Control Commands
 
-- **Pause Playback:**
+- Pause Playback:
 
     ```shell
     pause 0                            # Pause playback
     ```
 
-- **Resume Playback:**
+- Resume Playback:
 
     ```shell
     resume 0                           # Resume playback
     ```
 
-- **Seek Playback:**
+- Seek Playback:
 
     ```shell
     seek 0 1000                        # Seek to 1000ms for playback
@@ -121,7 +121,7 @@ The following sections describe common operating methods for the Mediatool, incl
 
 ### 4. Volume Control Commands
 
-- **Set Volume Level:**
+- Set Volume Level:
 
     ```shell
     volume 0 50                        # Set volume to 50%

@@ -4,7 +4,7 @@
 
 This document provides guidance on enabling and using the **Allsyms** feature in the openvela system. By enabling this feature, you can compile a complete symbol table into the firmware image, enabling the system to resolve function addresses into human-readable function names during runtime. This enhances on-device debugging efficiency, especially for analyzing crash stacks.
 
-## Prerequisites
+## I. Prerequisites
 
 Before compiling firmware that includes the **Allsyms** feature, you must ensure the following Python packages are installed in your development environment. The build system uses these tools to parse **ELF** files and generate the symbol table.
 
@@ -14,7 +14,7 @@ Run the following command in your terminal to install them:
 pip3 install pyelftools cxxfilt
 ```
 
-## How to Enable Allsyms
+## II. How to Enable Allsyms
 
 > **Warning**
 >
@@ -30,15 +30,15 @@ The underlying implementation for this feature is located at the following path 
 
 `nuttx/libs/libc/symtab`
 
-## Usage
+## III. Usage
 
 After enabling **Allsyms**, you can utilize the symbol table for debugging in the following ways.
 
-### Automatically Display Function Names in Backtraces
+### 1. Automatically Display Function Names in Backtraces
 
 This is the primary use case for **Allsyms**. When the system crashes or you manually call functions like `dumpstack` or `sched_dumpstack`, the printed backtrace will no longer show raw addresses. Instead, it will display the resolved function names, helping you to locate issues quickly.
 
-### Format Symbol Output in printf
+### 2. Format Symbol Output in `printf`
 
 You can use the `%pS` format specifier in `printf-family` functions to directly print the symbol information corresponding to a specific address. If a matching symbol is not found, the system will print the original address.
 
@@ -54,18 +54,18 @@ void my_debug_function(void)
 }
 ```
 
-### Manually Query Symbols Using APIs
+### 3. Manually Query Symbols Using APIs
 
 openvela provides two core APIs that allow you to convert between function names and addresses in your code:
 
 - `allsyms_findbyname()`: Finds the address of a function based on its name.
 - `allsyms_findbyvalue()`: Finds the closest function name based on an address.
 
-## API Reference
+## IV. API Reference
 
 The following are the core data structures and function prototypes related to the **Allsyms** feature.
 
-### `struct symtab_s`
+### 1. `struct symtab_s`
 
 This structure defines a single entry in the symbol table.
 
@@ -91,7 +91,7 @@ struct symtab_s
 };
 ```
 
-### `allsyms_findbyname()`
+### 2. `allsyms_findbyname()`
 
 Finds a symbol table entry by its name.
 
@@ -112,7 +112,7 @@ FAR const struct symtab_s *allsyms_findbyname(FAR const char *name,
                                               FAR size_t *size);
 ```
 
-### `allsyms_findbyvalue()`
+### 3. `allsyms_findbyvalue()`
 
 Finds a symbol table entry by its value (address).
 
@@ -136,9 +136,9 @@ FAR const struct symtab_s *allsyms_findbyvalue(FAR void *value,
                                                FAR size_t *size);
 ```
 
-## FAQ
+## V. FAQ
 
-### Compile-time error indicates missing `elftools` or `cxxfilt` modules
+### 1. Compile-time error indicates missing `elftools` or `cxxfilt` modules
 
 #### Problem Description
 
@@ -146,12 +146,12 @@ FAR const struct symtab_s *allsyms_findbyvalue(FAR void *value,
 
 #### Cause Analysis
 
-This error occurs because the build process for the **Allsyms** feature relies on these two Python tools to process ELF files and extract symbol information.
+This error occurs because the build process for the **Allsyms** feature relies on these two Python tools to process **ELF** files and extract symbol information.
 
 #### Solution
 
 Please refer to the [Prerequisites](#prerequisites) section of this document and use the `pip3` command to install them.
 
-## Related Documents
+## VI. Related Documents
 
 - [Backtrace Usage Guide](./backtrace.md)

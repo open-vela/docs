@@ -17,9 +17,7 @@ CONFIG_LIB_CURL=y
 CONFIG_UTILS_CURL=y
 ```
 
-> **Note**
->
-> Ensure these options are properly configured to meet the dependencies required for the curl tool.
+> **Note**: Ensure these options are properly configured to meet the dependencies required for the curl tool.
 
 ## III. Common Use Cases
 
@@ -75,7 +73,7 @@ The openvela-equipped device and PC must connect to the same router (wired or wi
     curl -o /data/ota.zip http://<YOUR_FILE_SERVER_IP>:8000/ota.zip &
     ```
 
-### 2.Uploading Device Files
+### 2. Uploading Device Files
 
 Follow these steps to upload files from the device to a local PC using curl.
 
@@ -156,9 +154,9 @@ Follow these steps to upload files from the device to a local PC using curl.
         ifconfig
         ```
 
-    - Ensure the device and PC are on the same network, and port 4321 is unblocked.
+    - Ensure the device and PC are on the same network, and port `4321` is unblocked.
 
-### 3、Retrieving Web Content
+### 3. Retrieving Web Content
 
 Use `curl` to fetch and print webpage content:
 
@@ -207,7 +205,7 @@ curl -L -o /data/test.mp3 https://example.com
     | =            | %3D         |
     | #            | %23         |
 
-### 5.Network Performance Testing
+### 5. Network Performance Testing
 
 Measure TCP/SSL handshake times with -w.
 

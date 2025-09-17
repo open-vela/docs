@@ -2,7 +2,7 @@
 
 \[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
 
-## Using GDB Console
+## I. Using GDB Console
 
 Use the following commands to install the required package on a Ubuntu 22.04 system:
 
@@ -133,7 +133,7 @@ Exit GDB:
 (gdb) q
 ```
 
-## Using Visual Studio Code
+## II. Using Visual Studio Code
 
 1. Visit https://code.visualstudio.com/ to install Visual Studio Code.
 
@@ -198,7 +198,7 @@ Exit GDB:
 
     To start a debug session, use the “Configuration” drop-down list in the Run and Debug view and select the “Debug openvela” configuration.After setting the startup configuration, use `F5` to start a debug session.
 
-## Use Clion(Remote Debug)
+## III. Use Clion(Remote Debug)
 
 1. download clion from here (recommend newer version) https://www.jetbrains.com/clion/
 
@@ -208,7 +208,7 @@ Exit GDB:
     (if you already open a project click `File | Close Project` back to welcome page)
 
     click the `+` button and fill the ssh info (then check) like this
-    ![003.png](images/003.png)
+    ![003.png](figures/003.png)
 
 3. Config and Choose Remote Project
 
@@ -217,18 +217,18 @@ Exit GDB:
     choose ide then select the project when we clone before
     then click `Start IDE and Connect`
 
-    ![004.png](images/004.png)
+    ![004.png](figures/004.png)
 
     wait for download finish and `Authenticate` like this
-    ![005.png](images/005.png)
+    ![005.png](figures/005.png)
 
 4. Create Debug Configuration
 
     click `Add Configuration | Remote GDB Server` and config like this
-    ![006.png](images/006.png)
+    ![006.png](figures/006.png)
 
     Target can be created with default(just a target)
-    ![007.png](images/007.png)
+    ![007.png](figures/007.png)
 
 5. Launch Emulator with the `-s` and `-S` options to use gdb.
 
@@ -239,8 +239,8 @@ Exit GDB:
 6. Start a debug session.
 
     click debug icon then we can debug
-    ![008.png](images/008.png)
+    ![008.png](figures/008.png)
 
     (you would get the confirmation when you do the first debug)
-    ![009.png](images/009.png)
-    ![010.png](images/010.png)
+    ![009.png](figures/009.png)
+    ![010.png](figures/010.png)

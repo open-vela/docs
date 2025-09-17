@@ -4,7 +4,7 @@
 
 ## 一、概述
 
-本指南详细阐述了如何在 Visual Studio Code (VSCode) 中配置和使用 GDB，以实现对 openvela `sim` 仿真环境的图形化调试。通过 VSCode，您可以获得现代化的调试体验，包括设置断点、查看调用栈、监视变量和内存，从而显著提升开发与排错效率。
+本指南详细阐述了如何在 Visual Studio Code (VSCode) 中配置和使用 GDB，以实现对 **openvela** `sim` 仿真环境的图形化调试。通过 VSCode，您可以获得现代化的调试体验，包括设置断点、查看调用栈、监视变量和内存，从而显著提升开发与排错效率。
 
 **核心流程包括：**
 
@@ -21,7 +21,7 @@
 
 - **Visual Studio Code**：已安装。
 - **C/C++ 扩展**：这是 VSCode 提供 C/C++ 语言支持和调试能力的核心插件。
-- **已编译的 `sim` 目标**：已成功编译 `openvela` 的 `sim` 版本，并确保生成了包含调试信息的可执行文件 (`nuttx`)。编译时必须包含 `-g` 或 `-g3` 标志。
+- **已编译的 `sim` 目标**：已成功编译 openvela 的 `sim` 版本，并确保生成了包含调试信息的可执行文件 (`nuttx`)。编译时必须包含 `-g` 或 `-g3` 标志。
 
 ### 2、VSCode 环境设置
 
@@ -31,7 +31,7 @@
 
 #### 步骤 2：打开项目工作区
 
-启动 VSCode，通过菜单 `File > Add Folder to Workspace...`，将您的 `openvela` 项目根目录添加进来。这能确保 VSCode 正确解析 `launch.json` 中的 `${workspaceFolder}` 变量。
+启动 VSCode，通过菜单 `File > Add Folder to Workspace...`，将您的 openvela 项目根目录添加进来。这能确保 VSCode 正确解析 `launch.json` 中的 `${workspaceFolder}` 变量。
 
 ## 三、调试配置 (`launch.json`)
 
@@ -46,7 +46,7 @@
 
 ### 2、配置 launch.json
 
-将 `launch.json` 的内容替换为以下配置。此配置专门为调试 `openvela` `sim` 环境定制。
+将 `launch.json` 的内容替换为以下配置。此配置专门为调试 openvela `sim` 环境定制。
 
 ```JSON
 {
@@ -130,7 +130,7 @@ nsh> ping 127.0.0.1
 
 #### 问题现象
 
-如果您的 `openvela` 配置启用了对称多处理（SMP），在调试时程序可能会在启动后不久就因 `SIGUSR1` 信号而意外暂停。
+如果您的 openvela 配置启用了对称多处理（SMP），在调试时程序可能会在启动后不久就因 `SIGUSR1` 信号而意外暂停。
 
 #### 原因分析
 
@@ -171,7 +171,9 @@ openvela 在 SMP 模式下使用 `SIGUSR1` 信号进行核间任务调度和通�
     echo "your_username ALL=(ALL) NOPASSWD: /usr/bin/gdb" | sudo tee /etc/sudoers.d/gdb-nopasswd
     ```
 
-2. 在您的项目根目录下（例如 `openvela/`），创建一个名为 `sudo-gdb.sh` 的文件，并填入以下内容：
+2. 创建 GDB 脚本。
+
+    在您的项目根目录下（例如 `openvela/`），创建一个名为 `sudo-gdb.sh` 的文件，并填入以下内容：
 
     ```Bash
     #!/bin/bash

@@ -434,7 +434,7 @@ static const struct audio_ops_s g_audio_comp_ops =
   audio_comp_reserve,       /* reserve        */
   audio_comp_release        /* release        */
 };
-````
+```
 
 Core Functions:
 
@@ -526,9 +526,9 @@ Captured call stack information during debugging:
 
 This chapter summarizes the following points:
 
-1. **Audio Driver Registration Methods**: Introduced two methods for registering audio drivers in openvela, including `audio_register` and its derived function `audio_comp_initialize`, the latter supporting the combination of multiple audio lower-half drivers.
+1. Audio Driver Registration Methods: Introduced two methods for registering audio drivers in openvela, including `audio_register` and its derived function `audio_comp_initialize`, the latter supporting the combination of multiple audio lower-half drivers.
 
-2. **Function Call Flow**: Described the complete call path from the application (e.g., `nxplayer`) to the audio lower-half driver, i.e., `apps (nxplayer) → vfs → audio upper-half driver → audio lower-half driver`.
+2. Function Call Flow: Described the complete call path from the application (e.g., `nxplayer`) to the audio lower-half driver, i.e., `apps (nxplayer) → vfs → audio upper-half driver → audio lower-half driver`.
 
 ## VI. Introduction to Audio Lower-Half Drivers
 
@@ -536,14 +536,14 @@ In the previous chapter, we introduced the complete call path from the applicati
 
 Here are some common scenarios of differences:
 
-- **Capability Differences**: For example, different products may support different sampling rates or channel counts.
+- Capability Differences: For example, different products may support different sampling rates or channel counts.
 
-- **Data Processing Method Differences**:
+- Data Processing Method Differences:
 
     - Some platforms have a general-purpose DMA module, and the audio driver may need to reserve a specific DMA channel.
     - Other platforms may have DMA functionality as an internal auxiliary feature of the audio.
 
-- **External PA Support**:
+- External PA Support:
 
     - Some platforms support registering audio drivers through a combination of `i2s lower-half driver` and `pa lower-half driver`.
     - In specific projects, if the PA needs to be updated, simply re-implementing the `pa lower-half driver` can meet the requirements.
@@ -733,37 +733,37 @@ Below are the key `audio_dma` interfaces and their functions:
 
 1. `AUDIOIOC_GETBUFFERINFO`
 
-    - **Function**: Retrieves buffer size and count from the driver.
+    - Function: Retrieves buffer size and count from the driver.
 
 2. `AUDIOIOC_SETBUFFERINFO`
 
-    - **Function**: Sets buffer size and count.
+    - Function: Sets buffer size and count.
 
 3. `AUDIOIOC_ALLOCBUFFER`
 
-    - **Function**: Allocates an audio buffer.
+    - Function: Allocates an audio buffer.
 
-    - **Details**:
+    - Details:
 
         - Memory shared between the audio driver and the application is allocated by the driver.
         - The default allocator is `apb_alloc`, but custom implementations are allowed in the lower-half driver.
         - By default, `apb_alloc` allocates a contiguous block large enough to hold both the `ap_buffer_s` structure and the actual audio data (`apb->samp`).
         - `audio_dma_allocbuffer` ensures DMA compatibility by allocating a physically contiguous region for the buffer.
 
-    - **Optimization**:
+    - Optimization:
 
         - Using the default `apb_alloc` may involve an extra data copy.
         - `audio_dma` allows the application to write directly into the DMA buffer, reducing memory copy overhead.
 
 4. `AUDIOIOC_FREEBUFFER`
 
-    - **Function**: Frees an audio buffer.
+    - Function: Frees an audio buffer.
 
 5. `AUDIOIOC_ENQUEUBUFFER`
 
-    - **Function**: Passes an audio buffer to the driver for playback or receives an empty buffer for recording.
+    - Function: Passes an audio buffer to the driver for playback or receives an empty buffer for recording.
 
-    - **Implementation example**:
+    - Implementation example:
 
     ```c
     flags = enter_critical_section();
@@ -771,17 +771,17 @@ Below are the key `audio_dma` interfaces and their functions:
     leave_critical_section(flags);
     ```
 
-    - **Processing mechanism**:
+    - Processing mechanism:
 
-        - **Interrupt handler**: Functions like `audio_dma_callback` are invoked by DMA interrupts to trigger the `DEQUEUE` callback.
-        - **High-priority worker thread**: Waits for signals from hardware callbacks (e.g., DMA or I2S) to consume the next audio frame.
+        - Interrupt handler: Functions like `audio_dma_callback` are invoked by DMA interrupts to trigger the `DEQUEUE` callback.
+        - High-priority worker thread: Waits for signals from hardware callbacks (e.g., DMA or I2S) to consume the next audio frame.
 
 ### 1.5 Key Handler Functions
 
 #### `audio_dma_enqueuebuffer`
 
-- **Function**: Enqueues an audio buffer into the pending queue.
-- **Implementation**:
+- Function: Enqueues an audio buffer into the pending queue.
+- Implementation:
 
     ```c
     static int audio_dma_enqueuebuffer(struct audio_lowerhalf_s *dev,
@@ -802,29 +802,30 @@ Below are the key `audio_dma` interfaces and their functions:
 
 #### `audio_dma_callback`
 
-- **Function**: DMA interrupt handler that dequeues a buffer and triggers the `DEQUEUE` callback.
+- Function: DMA interrupt handler that dequeues a buffer and triggers the `DEQUEUE` callback.
 
-- **Implementation**:
+- Implementation:
 
     ```c
+    /*DMA interrupt handling function*/
     static void audio_dma_callback(struct dma_chan_s *chan,
-                                    void* arg, ssize_t len)
+                                   void*arg, ssize_t len)
     {
-        struct audio_dma_s *audio_dma = (struct audio_dma_s*)arg;
-        struct ap_buffer_s *apb;
-        bool final = false;
+      struct audio_dma_s *audio_dma = (struct audio_dma_s*)arg;
+      struct ap_buffer_s *apb;
+      bool final = false;
 
-        apb = (struct ap_buffer_s *)dq_remfirst(&audio_dma->pendq);
-        ...
-        // Trigger DEQUEUE callback
+      apb = (struct ap_buffer_s *)dq_remfirst(&audio_dma->pendq);
+      ...
+      /* DEQUEUE callback */
     #ifdef CONFIG_AUDIO_MULTI_SESSION
         audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
-                            apb, OK, NULL);
+                             apb, OK, NULL);
     #else
         audio_dma->dev.upper(audio_dma->dev.priv, AUDIO_CALLBACK_DEQUEUE,
-                            apb, OK);
+                             apb, OK);
     #endif
-        ...
+      ...
     }
     ```
 
@@ -832,9 +833,9 @@ Below are the key `audio_dma` interfaces and their functions:
 
 `audio_dma` provides a wrapper around general-purpose DMA functionality to fully implement the audio driver's data interface, while offloading control logic to the DMA module (`dma_ops_s`). Key features include:
 
-1. **Efficient data transfer**: By allocating DMA-compatible buffers, it avoids unnecessary memory copying.
-2. **Flexible interface**: Supports a range of control and data operations, suitable for varied use cases.
-3. **Modular design**: Uses interrupts and worker threads to manage data flow, enabling support across different hardware platforms.
+1. Efficient data transfer: By allocating DMA-compatible buffers, it avoids unnecessary memory copying.
+2. Flexible interface: Supports a range of control and data operations, suitable for varied use cases.
+3. Modular design: Uses interrupts and worker threads to manage data flow, enabling support across different hardware platforms.
 
 By studying the `audio_dma` implementation, developers can follow its design as a reference to quickly build their own custom audio lower-half drivers.
 
@@ -842,7 +843,7 @@ By studying the `audio_dma` implementation, developers can follow its design as 
 
 Let me know if you'd like this section adapted for a specific audience (e.g., beginner-friendly, API reference, or internal SDK documentation).
 
-### 2. audio_i2s
+### 2. `audio_i2s`
 
 `audio_i2s` is a built-in lower-half audio driver provided by OpenVela, mainly used for audio data transmission and control. Below is a detailed explanation of `audio_i2s`.
 
@@ -1143,7 +1144,7 @@ The `sim_alsa` interface implementation is similar to `audio_dma`, primarily inc
 
 Developers can refer to the code implementation in `sim_alsa.c` and `sim_offload.c` for details.
 
-## 8. Compress Capability
+## VIII. Compress Capability
 
 ### 1. Background
 

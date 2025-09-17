@@ -32,7 +32,7 @@ GDB 主要提供以下四项核心能力，赋予您完全控制程序执行的�
 gcc -g3 -o my_program my_program.c
 ```
 
-在 `openvela` 的构建系统中，您可以通过 Kconfig 开启调试选项，系统会自动为编译器添加合适的标志。
+在 **openvela** 的构建系统中，您可以通过 Kconfig 开启调试选项，系统会自动为编译器添加合适的标志。
 
 ### 2、安装 GDB
 
@@ -103,7 +103,7 @@ sudo apt install gdb-multiarch
 | `info registers`         | 显示所有 CPU **寄存器**的当前值。                                                                                                                                                                                                             |
 | `info threads`           | 在多线程程序（如 openvela）中，显示所有线程及其 ID。                                                                                                                                                                                          |
 | `thread <id>`            | 切换到指定 ID 的线程上下文。                                                                                                                                                                                                                  |
-| `ptype <expr>`           | 显示变量或类型的**数据结构定义**。 例如 <br>`ptype struct my_struct`。<br>                                                                                                                                                                    |
+| `ptype <expr>`           | 显示变量或类型的**数据结构定义**。 例如 <br>`ptype struct my_struct`。<br>ptype /o <type> 命令可以打印出指定类型的完整内存布局，清晰地展示每个成员的偏移量（offset）和大小（size）。                                                          |
 | `set var <name>=<value>` | 在运行时**修改变量的值**。 例如 `set var i = 10`。不引起歧义时，可使用 `set i = 10`。                                                                                                                                                         |
 
 ### 5、与源码和汇编交互
@@ -127,7 +127,7 @@ sudo apt install gdb-multiarch
 
 ## 四、openvela 典型调试场景
 
-本节将理论应用于实践，展示如何使用 GDB 解决在 `openvela`（尤其是 `sim` 和硬件）开发中遇到的具体问题。
+本节将理论应用于实践，展示如何使用 GDB 解决在 openvela（尤其是 `sim` 和硬件）开发中遇到的具体问题。
 
 ### 场景一：分析程序崩溃（Hard Fault, Crash）
 
@@ -243,8 +243,8 @@ source [-s] [-v] filename
 
 ### 2、相关调试实践
 
-- **IDE 集成**：关于如何在 VSCode 中配置 GDB 以调试 `sim` 环境，请参考[使用 VSCode 调试 SIM 环境](./VSCODE_debugging.md)
-- **线程感知调试**：为了在 GDB 中更好地查看 `openvela` 的线程信息，可以利用 J-Link 的 GDB 插件，详情请参见[使用 J-Link GDB 插件增强 openvela 线程调试](../crash/JLINK/J_Link.md)。
+- **IDE 集成**：关于如何在 VSCode 中配置 GDB 以调试 `sim` 环境，请参考[使用 VSCode 调试 SIM 环境](./VSCODE_debugging.md)。
+- **线程感知调试**：为了在 GDB 中更好地查看 openvela 的线程信息，可以利用 J-Link 的 GDB 插件，详情请参见[使用 J-Link GDB 插件增强 openvela 线程调试](../crash/JLINK/J_Link.md)。
 
 ## 七、故障排查 (Troubleshooting)
 
@@ -256,9 +256,11 @@ source [-s] [-v] filename
 
 #### 解决方案
 
-1. **确认 GDB 需要的** **Python** **版本**：错误信息通常会暗示所需的版本（例如 `python3.8`）。
-2. **安装对应版本**：确保您的系统中安装了该版本的 Python，可参考[安装多个 Python 版本](https://www.rosehosting.com/blog/how-to-install-and-switch-python-versions-on-ubuntu-20-04/)。
-3. **配置 `PYTHONHOME`**：如果安装后问题依旧，尝试设置 `PYTHONHOME` 环境变量，强制 GDB 使用正确的 Python 解释器。
+1. 确认 GDB 需要的 Python 版本：错误信息通常会暗示所需的版本（例如 `python3.8`）。
+
+2. 安装对应版本：确保您的系统中安装了该版本的 Python，可参考[安装多个 Python 版本](https://www.rosehosting.com/blog/how-to-install-and-switch-python-versions-on-ubuntu-20-04/)。
+
+3. 配置 `PYTHONHOME`：如果安装后问题依旧，尝试设置 `PYTHONHOME` 环境变量，强制 GDB 使用正确的 Python 解释器。
 
 ## 八、参考资料
 

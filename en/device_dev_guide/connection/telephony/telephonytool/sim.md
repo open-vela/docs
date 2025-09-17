@@ -358,9 +358,9 @@ The `lock-pin` command is used to activate the PIN lock feature on the SIM card 
 lock-pin [slot_id][pin_type, pin or pin2][pin]
 ```
 
-slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
-pin_type: Type of PIN code. Options are `pin` or `pin2`.
-pin: Value of the current PIN code.
+- slot_id: Specifies the slot to be monitored. Currently, only slot `0` is supported.
+- pin_type: Type of PIN code. Options are `pin` or `pin2`.
+- pin: Value of the current PIN code.
 
 #### Example
 

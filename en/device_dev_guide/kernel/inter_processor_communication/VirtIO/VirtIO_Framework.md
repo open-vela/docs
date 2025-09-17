@@ -4,57 +4,57 @@
 
 ## I. Introduction
 
-openvela has implemented a complete VirtIO framework based on OpenAMP. This framework supports the implementation of various VirtIO drivers compatible with the VirtIO standard at the upper layer, such as VirtIO-Net and VirtIO-Block; and supports different VirtIO transport layer implementations at the lower layer, including VirtIO-MMIO, VirtIO-PCI, etc.
+openvela implements a complete VirtIO framework based on OpenAMP. The framework's upper layer supports the implementation of various VirtIO drivers compliant with the VirtIO standard, such as VirtIO-Net and VirtIO-Block. Its lower layer supports different VirtIO transport layer implementations, including VirtIO-MMIO and VirtIO-PCI.
 
-## II. Architecture Diagram
+## II. Architecture
 
 ### 1. Framework Diagram
 
-The following figure shows the overall structure of the openvela VirtIO framework, which can be divided into the following three parts:
+The following diagram illustrates the overall structure of the openvela VirtIO framework, which can be divided into three parts:
 
 1. Driver Layer:
 
-    The driver layer is responsible for docking VirtIO with the openvela driver framework. The driver layer completes device initialization and data interaction by calling the unified interfaces provided by VirtIO.
+    This layer is responsible for interfacing VirtIO with the openvela driver framework. It initializes the device and handles data interaction by calling the unified interfaces provided by VirtIO.
 
 2. VirtIO Layer:
 
-    The VirtIO layer provides unified interfaces for drivers, supporting registration, uninstallation, and matching mechanisms for Drivers and Devices.
+    This layer provides a unified interface for drivers, supporting the registration, unregistration, and matching mechanism for Drivers and Devices.
 
 3. Transport Layer:
 
-    The transport layer supports various transport methods, including MMIO, RemoteProc, and PCI.
+    This layer provides support for different transport methods, including MMIO, RemoteProc, and PCI.
 
 ![img](./figures/011.svg)
 
-### 2. Flow Diagram
+### 2. Flowchart
 
 ![img](./figures/012.svg)
 
-The above figure shows the matching process and call relationship between VirtIO Device and VirtIO Driver:
+The diagram above shows the matching process and call sequence for a VirtIO Device and a VirtIO Driver:
 
-1. Driver Registration:
+1. Driver Registration.
 
-    During openvela initialization, call `virtio_register_drivers()` to register all supported VirtIO Drivers into the VirtIO bus.
+    During openvela initialization, `virtio_register_drivers()` is called to register all supported VirtIO Drivers with the VirtIO bus.
 
-2. Device Registration:
-
-    The registration process is initiated by the transport layer:
+2. Device Registration. The registration process is initiated by the transport layer:
 
     - The MMIO transport layer calls `virtio_register_mmio_device()`.
     - The REMOTEPROC transport layer calls `rptun_register_device()`.
-    - The PCI transport layer calls `virtio_pci_probe()`. After the transport layer completes initialization, call `virtio_register_device()` to register the VirtIO Device into the VirtIO bus.
+    - The PCI transport layer calls `virtio_pci_probe()`.
 
-3. Driver and Device Matching:
+    After the transport layer completes initialization, it calls `virtio_register_device()` to register the VirtIO Device with the VirtIO bus.
 
-    When the device is registered to the bus, the system attempts to match the Driver and Device. If the matching is successful, execute the `probe` function implemented by the Driver. In the `probe` function, the driver initializes, configures, and negotiates features (feature negotiation) for the VirtIO Device. Depending on the complexity and type of the device, it may also be necessary to initialize private structures or perform additional operations.
+3. Driver and Device Matching.
 
-4. Register openvela Driver:
+    When a device is registered on the bus, the system attempts to match a Driver with the Device. If a match is successful, the Driver's `probe` function is executed. Inside the `probe` function, the driver initializes and configures the VirtIO Device and performs operations like feature negotiation. Depending on the device's complexity and type, it may also need to initialize private structures or perform additional operations.
 
-    The driver is registered into the virtual file system (VFS) for user access via the API provided by the OpenVela driver framework.
+4. Registering the openvela Driver.
 
-5. Operation:
+    The driver is registered with the Virtual File System (VFS) by calling APIs provided by the openvela driver framework, making it available to users.
 
-    During operation, the Driver will call the general `virtqueue` interfaces provided by OpenAMP to exchange data and send notifications in the VirtIO standard format, thereby implementing driver functions.
+5. Runtime Operation.
+
+    During operation, the Driver uses the generic `virtqueue` interface provided by OpenAMP to exchange data and send notifications according to the VirtIO standard, thereby implementing the driver's functionality.
 
 ## III. Code Directory
 
@@ -62,7 +62,7 @@ The above figure shows the matching process and call relationship between VirtIO
 |--- nuttx
 |    |--- drivers
 |    |    |--- virtio
-|    |         |--- virtio.c       # Core implementation of the VirtIO framework
+|    |         |--- virtio.c       # VirtIO framework core implementation
 |    |--- include
 |    |    |--- nuttx
 |    |         |--- virtio
@@ -71,78 +71,81 @@ The above figure shows the matching process and call relationship between VirtIO
 |    |    |--- open-amp            # OpenAMP repository
 ```
 
-## IV. API Description
+## IV. API Reference
 
-This section describes the interfaces that need to be called during the adaptation of VirtIO drivers.
+This section describes the APIs that need to be called during VirtIO driver adaptation.
 
 ### 1. openvela Log Interfaces
 
 - `vrtinfo(...)`
 
-    Description: INFO-level log interface for the VirtIO system.
+    Description: VirtIO system log interface for the INFO level.
 
 - `vrtwarn(...)`
 
-    Description: WARNING-level log interface for the VirtIO system.
+    Description: VirtIO system log interface for the WARNING level.
 
 - `vrterr(...)`
 
-    Description: ERROR-level log interface for the VirtIO system.
+    Description: VirtIO system log interface for the ERROR level.
 
 ### 2. openvela VirtIO Framework Interfaces
 
-`int virtio_register_driver(FAR struct virtio_driver *driver)`
+- `int virtio_register_driver(FAR struct virtio_driver *driver)`
 
-Description: Register a VirtIO Driver to the VirtIO bus. When a corresponding device already exists in the bus, it will immediately match and call the `probe` function implemented by the driver. If there is no corresponding device in the bus, the driver's `probe` function will be called back to complete driver initialization after a corresponding VirtIO device is registered to the VirtIO bus.
+    Description: Registers a VirtIO Driver with the VirtIO bus. If a corresponding device already exists on the bus, it is matched immediately, and the driver's `probe` function is called. If no corresponding device is present, the driver's `probe` function is called back to complete driver initialization once a matching VirtIO device is registered on the bus.
 
 ### 3. OpenAMP Interfaces
 
-#### Preliminary Knowledge
+#### Prerequisites
 
 - Driver TX virtqueue:
 
-    The driver's transmission queue. Obtain buffers from the `used ring` of `txvq`, fill in the data to be sent, and then add them to the `avail ring` of `txvq` to complete the data transmission process.
+    The driver's transmit queue. To send data, a buffer is retrieved from the `used ring` of the `txvq`, populated with data, and then added to the `avail ring` of the `txvq`.
 
-- Driver RR virtqueue:
+- Driver RX virtqueue:
 
-    The driver's reception queue. Obtain buffers from the `used ring` of `rxvq`, read the data therein, and then return them to the `avail ring` of `rxvq` to complete the data reception process.
+    The driver's receive queue. To receive data, a buffer containing data is retrieved from the `used ring` of the `rxvq`. After the data is read, the buffer is returned to the `avail ring` of the `rxvq`.
 
-#### Interface Description
+#### API Description
 
 - `void *virtqueue_get_buffer(struct virtqueue *vq, uint32_t *len, uint16_t *idx)`
 
-    Description: Obtain a buffer from the `used ring` of the virtqueue.
+    Description: Gets a buffer from the `used ring` of a virtqueue.
 
     Parameters:
 
-    - `vq`: Pointer to the virtqueue.
-    - `len`: Length of the obtained buffer.
-    - `idx`: Index of the obtained buffer in the `used ring`.
+        - `vq`: A pointer to the virtqueue.
+        - `len`: The length of the retrieved buffer.
+        - `idx`: The index of the retrieved buffer in the `used ring`.
 
 - `int virtqueue_add_buffer(struct virtqueue *vq, struct virtqueue_buf *buf_list, int readable, int writable, void *cookie)`
 
-    Description: Add a buffer to the `avail ring` of the `virtqueue`.
+    Description: Adds a buffer to the `avail ring` of a `virtqueue`.
 
     Parameters:
-    - `vq`: Pointer to the virtqueue.
-    - `buf_list`: Array of buffers to be added.
-    - `readable`: Number of readable buffers in `buf_list`, indicating the part expected to be read by the device (Device).
-    - `writable`: Number of writable buffers in `buf_list`, indicating the part expected to be filled by the device (Device).
-    - `cookie`: Cache pointer, which will be returned when calling `virtqueue_get_buffer` to obtain the buffer.
+
+        - `vq`: A pointer to the virtqueue.
+        - `buf_list`: An array of buffers to be added.
+        - `readable`: The number of readable buffers in `buf_list`, representing the parts intended for the Device to read.
+        - `writable`: The number of writable buffers in `buf_list`, representing the parts intended for the Device to fill.
+        - `cookie`: A private pointer (cookie) that will be returned when the buffer is retrieved using `virtqueue_get_buffer`.
 
 - `void virtqueue_kick(struct virtqueue *vq)`
 
-    Description: Notify the device (Device). Typically, after sending data to the device or returning a buffer to the device, this function is called to notify the device to proceed with the next operation.
+    Description: Notifies the Device. This function is typically called after sending data to the device or returning a buffer to it, signaling that the device can proceed with the next operation.
 
     Parameters:
-    - `vq`: Pointer to the virtqueue.
+
+    - `vq`: A pointer to the virtqueue.
 
 - `virtqueue_enable_cb(struct virtqueue *vq)` and `virtqueue_disable_cb(struct virtqueue *vq)`
 
-    Description: Enable or disable interrupts for the virtqueue.
+    Description: Enables or disables interrupts for the virtqueue.
 
     Parameters:
-    - `vq`: Pointer to the virtqueue.
+
+    - `vq`: A pointer to the virtqueue.
 
 ## V. Related Documents
 

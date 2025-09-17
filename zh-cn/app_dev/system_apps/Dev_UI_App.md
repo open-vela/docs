@@ -1,9 +1,11 @@
 # 开发 openvela UI 应用
 
+\[ [English](../../../en/app_dev/system_apps/Dev_UI_App.md)  | 简体中文 \]
+
 ## 一、前提条件
 
 1. 下载源码，请参见[快速入门](./../../quickstart/openvela_ubuntu_quick_start.md)。
-2. 在开始本教程之前，请从 [music_player](https://github.com/open-vela/packages_demos/tree/dev/music_player) 获取示例代码。
+2. 在开始本教程之前，请从 [music_player](./../../../../../../packages_demos/tree/trunk/music_player) 获取示例代码。
 
 ## 二、前置概念
 
@@ -528,7 +530,7 @@ endif
 
 1. 切换到 openvela 仓库的根目录，执行如下命令来配置音乐播放器。
 
-    > 模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译开发板的代码。
+    模拟器配置文件（defconfig）在 `vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap/` 目录下，使用 `build.sh` 配置和编译开发板的代码。
 
     ```Bash
     ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap menuconfig
@@ -549,7 +551,7 @@ endif
     LVX_MUSIC_PLAYER_DATA_ROOT="/data"
     ```
 
-    > 以LVX_USE_DEMO_MUSIC_PLAYER为例进行操作，其余配置方式相同。
+    以 `LVX_USE_DEMO_MUSIC_PLAYER` 为例进行操作，其余配置方式相同。
 
     1. 输入待搜索的配置 `LVX_USE_DEMO_MUSIC_PLAYER`，支持模糊搜索，例如 `music_player`，找到对应的配置，按回车键进入该配置。
 
@@ -621,7 +623,7 @@ music_player &
 
 关闭模拟器退出 Demo，如下图所示：
 
-![img](images/026.png)
+![img](../../demo/images/026.png)
 
 ## 七、常见问题
 
@@ -644,6 +646,8 @@ music_player &
     }
     ```
 
+2. 将想要播放的媒体添加到该配置文件中，参考该格式：
+
     | 参数       | 参数说明                                 |
     | :--------- | :--------------------------------------- |
     | path       | 待播放媒体的文件路径                     |
@@ -652,8 +656,6 @@ music_player &
     | cover      | 封面路径，如果没有提供封面，会展示封面。 |
     | total_time | 该媒体的总播放时长，单位为 `毫秒`。      |
     | color      | 主题色，目前还没有使用。                 |
-
-    参考该格式，将想要播放的媒体添加到该配置文件中。
 
     例如：添加一个，`Happiness.wav` 播放时长为 `186,507 ms` 的音乐，可以按如下方式修改。
 
@@ -680,13 +682,13 @@ music_player &
     }
     ```
 
-    修改完配置后，需要重新推送资源，执行如下命令：
+3. 修改完配置后，需要重新推送资源，执行如下命令：
 
     ```Bash
     # 推送资源
     adb push apps/packages/demos/music_player/res /data/
     ```
 
-2. 退出模拟器。
+4. 退出模拟器。
 
-3. 重新执行[启动模拟器并推送资源](#3启动模拟器并推送资源)和[启动音乐播放器](#4启动音乐播放器)。
+5. 重新执行[启动模拟器并推送资源](#3启动模拟器并推送资源)和[启动音乐播放器](#4启动音乐播放器)。

@@ -310,8 +310,6 @@ Writes logs at high speed into a pre-allocated memory buffer.
 
 - **Note**: Logs stored in RAM are volatile and will be lost if the device is powered off or restarted.
 
-- **See Also**: [ramlog]()
-
 #### File Log Channel (Persistent Storage)
 
 Saves logs to the filesystem for persistent storage.

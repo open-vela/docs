@@ -42,13 +42,13 @@ openvela supports the following multiprocessor modes, aimed at providing flexibl
 
 #### SMP (Symmetric Multiprocessing)
 
-In a Symmetric Multiprocessing (SMP) architecture, multiple CPUs of the same type share a single memory space. The operating system runs on these CPUs and distributes the workload among them. For detailed information on SMP architecture, please refer to [SMP]().
+In a Symmetric Multiprocessing (SMP) architecture, multiple CPUs of the same type share a single memory space. The operating system runs on these CPUs and distributes the workload among them.
 
 <img src="figures/010.png" alt="smp" width="75%">
 
 #### AMP (Asymmetric Multiprocessing)
 
-In an Asymmetric Multiprocessing (AMP) architecture, multiple CPUs, which can have different underlying architectures, each possess their own independent memory space. A separate operating system runs on each CPU, and these CPUs collaborate through an inter-core communication framework. For information on inter-core communication, please refer to [Inter-core Communication Framework]().
+In an Asymmetric Multiprocessing (AMP) architecture, multiple CPUs, which can have different underlying architectures, each possess their own independent memory space. A separate operating system runs on each CPU, and these CPUs collaborate through an inter-core communication framework.
 
 <img src="figures/011.png" alt="smp" width="75%">
 
@@ -292,7 +292,7 @@ When a thread attempts to acquire an unavailable semaphore:
 #### References
 
 - For a detailed explanation of semaphores, see [Semaphore Mechanism](./resource_sync/semaphore_mechanism.md).
-- For the relevant implementation code, see [openvela Semaphore](../../../../../../../open-vela/nuttx/tree/dev/sched/semaphore).
+- For the relevant implementation code, see [openvela Semaphore](../../../../../../../open-vela/nuttx/tree/trunk/sched/semaphore).
 
 ### 2. Mutexes
 
@@ -311,7 +311,7 @@ A mutex (mutual exclusion) is a sleeping lock that enforces mutual exclusion. In
 
 #### References
 
-- The implementation code can be found at [openvela Mutex](../../../../../../../open-vela/nuttx/tree/dev/libs/libc/misc/lib_mutex.c).
+- The implementation code can be found at [openvela Mutex](../../../../../../../open-vela/nuttx/tree/trunk/libs/libc/misc/lib_mutex.c).
 
 ### 3. Spinlocks
 
@@ -331,7 +331,7 @@ A spinlock is a non-blocking lock. When a thread attempts to acquire a spinlock 
 
 #### References
 
-The implementation code can be found at [openvela Spinlock](../../../../../../../open-vela/nuttx/tree/dev/include/nuttx/spinlock.h).
+The implementation code can be found at [openvela Spinlock](../../../../../../../open-vela/nuttx/tree/trunk/include/nuttx/spinlock.h).
 
 ### 4. Atomic Operations
 
@@ -350,7 +350,7 @@ Atomic operations guarantee that instructions execute indivisibly, meaning their
 #### References
 
 - For a detailed description of atomic operations, see the [Atomic Operations API](./resource_sync/atomic_operation.md).
-- For related interface code, see [openvela atomic](../../../../../../../open-vela/nuttx/tree/dev/include/nuttx/atomic.h).
+- For related interface code, see [openvela atomic](../../../../../../../open-vela/nuttx/tree/trunk/include/nuttx/atomic.h).
 
 ### 5. IRQ Control
 
@@ -368,7 +368,7 @@ openvela implements interrupt masking for the local CPU via `up_irq_xxx()` funct
 #### References
 
 - For details on interrupt system adaptation, refer to the [Interrupt System Adaptation Guide](./../../chip_porting/Interrupt_System_Adaptation_Guide.md).
-- For the interface code, see the [openvela irq interface](../../../../../../../open-vela/nuttx/tree/dev/include/nuttx/irq.h).
+- For the interface code, see the [openvela irq interface](../../../../../../../open-vela/nuttx/tree/trunk/include/nuttx/irq.h).
 
 ### 6. Scheduler Control
 
@@ -448,7 +448,7 @@ int nsh_builtin(FAR struct nsh_vtbl_s *vtbl, FAR const char *cmd,
 
 #### References
 
-For the implementation code, see [openvela sched_lock.c](../../../../../../../open-vela/nuttx/tree/dev/sched/sched/sched_lock.c) and [openvela sched_unlock.c](../../../../../../../open-vela/nuttx/tree/dev/sched/sched/sched_unlock.c).
+For the implementation code, see [openvela sched_lock.c](../../../../../../../open-vela/nuttx/tree/trunk/sched/sched/sched_lock.c) and [openvela sched_unlock.c](../../../../../../../open-vela/nuttx/tree/trunk/sched/sched/sched_unlock.c).
 
 ### 7. Pthread Mutexes
 
@@ -464,7 +464,7 @@ A mutex mechanism provided by the POSIX threads (Pthread) standard, intended exc
 
 #### References
 
-For the implementation code, see [openvela pthread](../../../../../../../open-vela/nuttx/tree/dev/libs/libc/pthread).
+For the implementation code, see [openvela pthread](../../../../../../../open-vela/nuttx/tree/trunk/libs/libc/pthread).
 
 ### 8. Choosing a Synchronization Mechanism
 
@@ -525,8 +525,8 @@ Work queues are particularly well-suited for the following scenarios:
 
 #### References
 
-- For a detailed description of work queues, refer to the [Work Queues]().
-- For the implementation code, see the [openvela wqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/wqueue).
+- For a detailed description of work queues, refer to the [Work Queues](./IPC/work_queue.md).
+- For the implementation code, see the [openvela wqueue](../../../../../../../open-vela/nuttx/tree/trunk/sched/wqueue).
 
 ### 2. Message Queues
 
@@ -551,8 +551,8 @@ Message queues are particularly well-suited for the following scenarios:
 
 #### References
 
-- For a detailed description of message queues, refer to the [Message Queues](./IPC/work_queue.md).
-- For the implementation code, see the [openvela mqueue](../../../../../../../open-vela/nuttx/tree/dev/sched/mqueue) source.
+- For a detailed description of message queues, refer to the [Message Queues](./IPC/message_queue.md).
+- For the implementation code, see the [openvela mqueue](../../../../../../../open-vela/nuttx/tree/trunk/sched/mqueue) source.
 
 ### 3. Choosing a Communication Scheme
 

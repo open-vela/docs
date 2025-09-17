@@ -1,4 +1,4 @@
-# ADB commands
+# ADB Commands
 
 \[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Android_Debug_Bridge_commands_zh-cn.md) \]
 
@@ -10,7 +10,7 @@ ADB is a versatile command-line tool that lets you communicate with a device.Wit
 
 - A server: It manages communication between the client and the daemon. The server runs as a background process on your development workstation.
 
-## How ADB works
+## How ADB Works
 
 All adb clients use port 5037 to communicate with the adb server.When you start an adb client, the client first checks whether there is an adb server process already running.If there isn't, it starts the server process.When the server starts, it binds to local TCP port 5037 and listens for commands sent from adb clients.
 
@@ -26,7 +26,7 @@ And so on. The emulator connected to adb on port 5555 is the same as the emulato
 
 Once the server has set up connections to all devices, you can use adb commands to access these devices.As the server manages connections to devices and handles commands from multiple adb clients, you can control any device from any client or from a script.
 
-## Query for devices
+## Query for Devices
 
 Before issuing adb commands, it is necessary to know what device instances are connected to the adb server. Use the following command to generate a list of connected devices:
 
@@ -46,7 +46,7 @@ adb produces the following status information for each device:
 
     - no device: There is no device connected.
 
-### Emulators not listed
+### Emulators Not Listed
 
 The adb devices command has a corner-case command sequence that causes running emulators to not show up in the output of adb devices (even though the emulators are visible on your desktop).This happens when all of the following conditions are true:
 
@@ -58,7 +58,7 @@ The adb devices command has a corner-case command sequence that causes running e
 
 - You start the adb server after starting the emulator.
 
-## Send commands to a specific device
+## Send Commands to a Specific Device
 
 To specify the target when issuing an adb command, follow these steps:
 
@@ -66,7 +66,7 @@ To specify the target when issuing an adb command, follow these steps:
 
 2. Once you have the serial number, use the “-s” option and the adb command to specify the serial number.
 
-## Set up port forwarding
+## Set Up Port Forwarding
 
 Use the forward command to set up arbitrary port forwarding, which forwards requests on a specific host port to a different port on the device.Forwarding of host port 6100 to device port 7100 is set up as shown below:
 
@@ -82,7 +82,7 @@ adb forward tcp:6100 local:logd
 
 This could be useful if you are trying to determine what is being sent to a given port on the device.All received data will be written to the system-logging daemon and displayed in the device logs.
 
-## Push files to or pull files from a device
+## Push or Pull Files from a Device
 
 Use the “pull” and “push” commands to copy files to and from a device.
 
@@ -104,13 +104,13 @@ Replace local and remote with the paths to the target files/directory on your de
 adb push myfile.txt /sdcard/myfile.txt
 ```
 
-## Stop the adb server
+## Stop the ADB Server
 
 In some cases, you might need to terminate the adb server process and then restart it to resolve the problem. An example is that adb does not respond to a command.
 
 To stop the adb server, use the “adb kill-server” command. Then, restart the server by issuing any other adb command.
 
-## Issue adb commands
+## Issue ADB Commands
 
 Issue adb commands from a command line on your development workstation or from a script. For example:
 
@@ -126,7 +126,7 @@ You can see a detailed list of all supported adb commands with the following com
 adb --help
 ```
 
-## Issue shell commands
+## Issue Shell Commands
 
 You can use the shell command to issue device commands through adb or to start an interactive shell.To issue a single command, use the shell command shown below:
 

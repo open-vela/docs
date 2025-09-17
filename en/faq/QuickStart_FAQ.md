@@ -1,6 +1,8 @@
 # Quick Start FAQ
 
-## 1. Unable to Access Remote Repository
+\[ English | [简体中文](./../../zh-cn/faq/QuickStart_FAQ.md) \]
+
+## I. Unable to Access Remote Repository
 
 ### Problem Description
 
@@ -23,7 +25,7 @@ Refer to the official documentation to complete **SSH public key** generation an
 - [GitHub](https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 - [Gitee](https://gitee.com/help/articles/4191#article-header0)
 
-## 2. Unable to Access Google Source Code Repository
+## II. Unable to Access Google Source Code Repository
 
 ### Problem Description
 
@@ -60,11 +62,12 @@ Network restrictions, mirror source regional limitations, or DNS resolution issu
     ```Shell
     # Tsinghua mirror
     repo init xxxxxx  --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo
+    
     # USTC mirror (backup)
     repo init xxxxxx  --repo-url=https://mirrors.ustc.edu.cn/aosp/git-repo
     ```
 
-## 3. Repo Sync Fails Due to Network Interruption
+## III. Repo Sync Fails Due to Network Interruption
 
 ### Problem Description
 
@@ -109,7 +112,7 @@ Switch to **HTTPS** protocol for downloading.
     cd ../../
     ```
 
-## 4. Code Fetching Fails Due to Insufficient Memory
+## IV. Code Fetching Fails Due to Insufficient Memory
 
 ### Problem Description
 
@@ -139,7 +142,7 @@ The terminal is terminated during code synchronization; checking `/var/log/syslo
     sudo systemctl status systemd-oomd
     ```
 
-## 5. Git LFS File Download Issues
+## V. Git LFS File Download Issues
 
 ### Problem Description
 
@@ -175,7 +178,7 @@ This issue is typically caused by **Git Large File Storage (Git LFS)** files not
 
     If the version is below v2.22, it's recommended to reinstall the repo.
 
-## 6. Qt Platform Plugin Initialization Failure
+## VI. Qt Platform Plugin Initialization Failure
 
 ### Problem Description
 
@@ -201,7 +204,7 @@ The source code path contains Chinese characters, preventing the tool from corre
 
 Move the source code to a directory path without Chinese characters.
 
-## 7. How to Use build.sh to Compile NuttX-supported Development Boards
+## VII. How to Use build.sh to Compile NuttX-supported Development Boards
 
 Using **qemu-armv7a:nsh** as an example, two compilation methods are provided:
 

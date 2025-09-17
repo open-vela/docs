@@ -8,15 +8,49 @@
 
 OS 网络协议栈主要用于处理网络通信过程中涉及的二层、三层和四层协议。以下是 OSI 七层网络模型与 TCP/IP 四层模型的对比，以及它们在网络通信中的对应协议：
 
-| **OSI** **七层网络模型** | **TCP/IP** **四层概念模型**      | **对应网络协议**                        |
-| :----------------------- | :------------------------------- | :-------------------------------------- |
-| 应用层                   | 应用层                           | HTTP，TFTP FTP, NFS, WAIS, SMTP         |
-| 表示层                   | Telnet, Rlogin, SNMP, Gopher     |                                         |
-| 会话层                   | SMTP, DNS                        |                                         |
-| 传输层                   | 传输层                           | TCP, UDP                                |
-| 网络层                   | 网络层                           | IP, ICMP, ARP, RARP, AKP, UUCP          |
-| 数据链路层               | 数据链路层                       | FDDI, Ethernet, Arpanet, PDN, SLIP, PPP |
-| 物理层                   | IEEE802.1A, IEEE802.2~IEEE802.11 |                                         |
+<table>
+  <thead>
+    <tr>
+      <th>TCP/IP 四层模型</th>
+      <th>OSI 七层模型</th>
+      <th>对应网络协议举例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="3"><b>应用层</b></td>
+      <td>应用层</td>
+      <td>HTTP, FTP, SMTP, DNS, Telnet</td>
+    </tr>
+    <tr>
+      <td>表示层</td>
+      <td>JPEG, ASCII, TLS, SSL</td>
+    </tr>
+    <tr>
+      <td>会话层</td>
+      <td>RPC, NetBIOS</td>
+    </tr>
+    <tr>
+      <td><b>传输层</b></td>
+      <td>传输层</td>
+      <td>TCP, UDP</td>
+    </tr>
+    <tr>
+      <td><b>网络层</b></td>
+      <td>网络层</td>
+      <td>IP, ICMP, ARP, RARP</td>
+    </tr>
+    <tr>
+      <td rowspan="2"><b>网络接口层</b></td>
+      <td>数据链路层</td>
+      <td>Ethernet (以太网), PPP, SLIP</td>
+    </tr>
+    <tr>
+      <td>物理层</td>
+      <td>电缆, 集线器 (Hub), 中继器</td>
+    </tr>
+  </tbody>
+</table>
 
 ### 2、openvela 网络协议栈的能力
 
@@ -71,14 +105,14 @@ int select(int nfds, FAR fd_set *readfds, FAR fd_set *writefds,
 
 ## 二、协议栈基础能力
 
-openvela 网络协议栈支持多种网络层和传输层协议，包括 IPv4、IPv6、TCP、UDP 和 ICMP，为开发者提供全面的网络通信能力。以下是各协议的功能简要介绍。 
+openvela 网络协议栈支持多种网络层和传输层协议，包括 IPv4、IPv6、TCP、UDP 和 ICMP，为开发者提供全面的网络通信能力。以下是各协议的功能简要介绍。
 
 ### 1、IPv4 / IPv6 能力
 
 openvela 网络协议栈同时支持 IPv4 和 IPv6 协议，并提供以下扩展功能：
 
 - ARP 和 NDP 协议。
-- DHCP / DHCPv6：支持 DHCP 客户端和服务器功能。
+- DHCP/DHCPv6：支持 DHCP 客户端和服务器功能。
 - 分片支持：支持 IPv4 分片和 IPv6 分片功能。
 - 6LoWPAN：支持低功耗无线个域网协议。
 - 多地址支持：单张网卡可配置多个 IPv6 地址。

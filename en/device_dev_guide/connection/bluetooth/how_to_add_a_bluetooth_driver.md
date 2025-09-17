@@ -17,9 +17,12 @@ The implementation of these member functions depends on the actual operation of 
 
 ### Example
 
-- To quickly validate custom callbacks and driver registration in a QEMU environment, this example implements the `struct bt_driver_s` member functions directly within the [drivers_initialize](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) function and completes driver registration.  
-- In a real integration or production scenario, it is recommended to create a separate source file under the [vendor](../../../../../../vendor_template/blob/trunk/boards/chip_name/board_name/src) directory for maintainability and version control.
+#### Note
 
+- To quickly validate custom callbacks and driver registration in a QEMU environment, this example implements the `struct bt_driver_s` member functions directly within the [drivers_initialize](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) function and completes driver registration.  
+- In a real integration or production scenario, it is recommended to create a separate source file under the [vendor](../../../../../../../vendor_template/blob/trunk/boards/chip_name/board_name/src) directory for maintainability and version control.
+
+#### Steps
 1. In [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c), add the `bt_driver.h` header include:
 
     ```C

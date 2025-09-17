@@ -16,7 +16,7 @@ To modify configuration parameters during project setup, perform the following v
 
     You can examine the `.config` file to determine whether the configuration has been set and if its value meets the expected criteria. If it does, you may use it as is; otherwise, it is recommended to adjust the setting using the `menuconfig` tool. 
 
-    **Note:** Using the `menuconfig` tool ensures that all configuration dependencies are complete and correct.
+    > **Note:** Using the `menuconfig` tool ensures that all configuration dependencies are complete and correct.
 
 2. Example: Configuring the KVDB storage path.
 
@@ -105,7 +105,7 @@ The following diagram illustrates a typical build configuration workflow:
 
     In the `menuconfig` interface, you can enter `/` followed by a configuration keyword to search. For example, to search for `EXAMPLES_HELLO`:
 
-    **Note**: If the search results contain `depends on` dependencies, type `?` to continue searching for dependent configurations and enable them.
+    > **Note**: If the search results contain `depends on` dependencies, type `?` to continue searching for dependent configurations and enable them.
 
     ![img](./figures/008.png)
 

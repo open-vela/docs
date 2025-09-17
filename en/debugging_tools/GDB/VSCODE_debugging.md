@@ -4,7 +4,7 @@
 
 ## I. Overview
 
-This guide provides a detailed explanation of how to configure and use GDB in Visual Studio Code (VSCode) for graphical debugging of the openvela `sim` simulation environment. VSCode offers a modern debugging experience, including setting breakpoints, viewing the call stack, and monitoring variables and memory, which significantly enhances development and troubleshooting efficiency.
+This guide provides a detailed explanation of how to configure and use GDB in Visual Studio Code (VSCode) for graphical debugging of the **openvela** `sim` simulation environment. VSCode offers a modern debugging experience, including setting breakpoints, viewing the call stack, and monitoring variables and memory, which significantly enhances development and troubleshooting efficiency.
 
 **The core workflow includes:**
 
@@ -21,7 +21,7 @@ Before you begin debugging, ensure your development environment meets the follow
 
 - **Visual Studio Code**: Must be installed.
 - **C/C++ Extension**: The core plugin from Microsoft that provides C/C++ language support and debugging capabilities in VSCode.
-- **Compiled `sim` Target**: The `sim` version of `openvela` must be successfully compiled, generating an executable (`nuttx`) that includes debugging information. The compilation must include the `-g` or `-g3` flag.
+- **Compiled `sim` Target**: The `sim` version of openvela must be successfully compiled, generating an executable (`nuttx`) that includes debugging information. The compilation must include the `-g` or `-g3` flag.
 
 ### 2. VSCode Environment Setup
 
@@ -31,9 +31,9 @@ In the VSCode Marketplace, search for `C/C++` (published by Microsoft) and click
 
 #### Step 2: Open the Project Workspace
 
-Launch VSCode and use the menu `File > Add Folder to Workspace...` to add your `openvela` project root directory. This ensures that VSCode correctly resolves the `${workspaceFolder}` variable in `launch.json`.
+Launch VSCode and use the menu `File > Add Folder to Workspace...` to add your openvela project root directory. This ensures that VSCode correctly resolves the `${workspaceFolder}` variable in `launch.json`.
 
-## III. Debug Configuration (launch.json)
+## III. Debug Configuration (`launch.json`)
 
 The `launch.json` file is the core configuration file for VSCode's debugging functionality. It defines how to launch and attach to your program.
 
@@ -150,7 +150,7 @@ You can instruct GDB to ignore this signal by creating a global GDB initializati
 
 3. Save the file. GDB will automatically load and execute the commands in this file every time it starts, thus resolving the issue.
 
-### 2. Acquiring Root Privileges for sim
+### 2. Acquiring Root Privileges for `sim`
 
 #### Scenario
 
@@ -160,7 +160,7 @@ Certain advanced features of the `sim` environment, especially those related to 
 
 The recommended approach is to configure `sudo` to allow your user account to run gdb as root without a password.
 
-1. **Configure passwordless `sudo`**.
+1. Configure passwordless `sudo`.
 
     For security and best practice, we will create a dedicated configuration file in the `/etc/sudoers.d/` directory. This method is safer than directly modifying the main `sudoers` file.
 
@@ -171,7 +171,7 @@ The recommended approach is to configure `sudo` to allow your user account to ru
     echo "your_username ALL=(ALL) NOPASSWD: /usr/bin/gdb" | sudo tee /etc/sudoers.d/gdb-nopasswd
     ```
 
-2. **Create a GDB wrapper script**.
+2. Create a GDB wrapper script.
 
     In your project's root directory (for example, `openvela/`), create a file named `sudo-gdb.sh` and add the following content:
 
@@ -187,9 +187,9 @@ The recommended approach is to configure `sudo` to allow your user account to ru
     chmod +x sudo-gdb.sh
     ```
 
-3. **Modify `launch.json`**.
+3. Modify `launch.json`.
 
-   Modify the `.vscode/launch.json` file by adding the `"miDebuggerPath"` property to your debug configuration, pointing it to the script we just created.
+    Modify the `.vscode/launch.json` file by adding the `"miDebuggerPath"` property to your debug configuration, pointing it to the script we just created.
 
     ```json
     {

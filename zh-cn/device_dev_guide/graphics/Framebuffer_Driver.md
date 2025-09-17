@@ -50,12 +50,17 @@ openvela 的 Framebuffer 接口分为上层用户接口和下层驱动接口，�
 
 openvela 的 Framebuffer 用户接口类似于 Linux 系统，通过 VFS（虚拟文件系统）提供标准操作接口，包括 `open`、`close`、`read`、`write` 和 `ioctl` 等。用户可以通过操作 `/dev/fbx` 设备文件，完成以下功能：
 
-1. 映射 Framebuffer 到用户态： 使用 `mmap` 将 Framebuffer 映射到用户空间，便于直接对 Framebuffer 进行读写操作。
-2. 切换 Framebuffer： 用户可以通过 `ioctl` 接口切换不同的 Framebuffer 配置或模式。
+1. 映射 Framebuffer 到用户态：
+
+    使用 `mmap` 将 Framebuffer 映射到用户空间，便于直接对 Framebuffer 进行读写操作。
+
+2. 切换 Framebuffer：
+
+    用户可以通过 `ioctl` 接口切换不同的 Framebuffer 配置或模式。
 
 ### 2、下层驱动接口
 
-openvela 的 Framebuffer 驱动接口用于管理 LCD 设备，设计相对简单。开发者可以参考 [video/fb.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/video/fb.h) 和 [/drivers/video/fb.c](https://github.com/open-vela/nuttx/blob/trunk/drivers/video/fb.c) 文件中的实现。以下是 `fb_register()` 函数的源码，展示了与 Framebuffer 设备驱动相关的重要部分：
+openvela 的 Framebuffer 驱动接口用于管理 LCD 设备，设计相对简单。开发者可以参考 [video/fb.h](../../../../../../nuttx/blob/trunk/include/nuttx/video/fb.h) 和 [/drivers/video/fb.c](../../../../../../nuttx/blob/trunk/drivers/video/fb.c) 文件中的实现。以下是 `fb_register()` 函数的源码，展示了与 Framebuffer 设备驱动相关的重要部分：
 
 ```C
 int fb_register(int display, int plane)
@@ -100,27 +105,34 @@ errout_with_fb:
 从代码中可以看出，Framebuffer 针对 LCD 设备驱动程序提供了以下 3 个接口，驱动程序需要自行实现：
 
 1. `void up_fbinitialize(int display)`
+
     - 用于初始化硬件 LCD 控制器。
     - 例如，在 STM32 平台上，`up_fbinitialize` 函数需要初始化 LTDC（LCD-TFT 控制器）或 MIPI 接口，并完成 DSI 外设和 LCD IC 的初始化。
+
 2. `FAR struct fb_vtable_s *up_fbgetvplane(int display, int vplane)`
+
     - 获取 LCD 的 `fb_vtable_s` 结构体信息。
     - `fb_vtable_s` 是 Framebuffer 的核心结构，包含了 Framebuffer 的所有接口。通过实现该函数，LCD 控制器可以将自身信息注册到 Framebuffer 框架中。
     - 驱动程序可以参考以下示例实现：
+
         - `drivers/video/vnc/vnc_fbdev.c`
         - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
+
 3. `void up_fbuninitialize(int display)`
+
     - 执行与 `up_fbinitialize` 相反的操作，用于释放资源。通常可以实现为空，不执行任何操作。
 
 ### 3、`struct fb_vtable_s` 结构
 
 `fb_vtable_s` 是 Framebuffer 的核心结构，定义了与视频硬件交互的接口。以下是其主要功能模块：
 
-1. 核心功能
+1. 核心功能。
 
     - `getvideoinfo`：获取视频控制器配置和颜色平面信息。
     - `getplaneinfo`：获取指定颜色平面的信息。
 
-2. 可选功能（根据配置启用）
+2. 可选功能（根据配置启用）。
+
     - 颜色映射（`CONFIG_FB_CMAP`）：
         - `getcmap`：获取当前颜色映射表。
         - `putcmap`：更新颜色映射表。
@@ -142,7 +154,8 @@ errout_with_fb:
             - `blit`：在叠加层之间执行 Blit 操作。
             - `blend`：在叠加层之间执行 Blend 操作。
 
-3. 其他控制功能
+3. 其他控制功能。
+
     - 显示平移：
         - `pandisplay`：为多缓冲区显示执行平移操作。
     - 帧率控制：
@@ -327,5 +340,5 @@ CONFIG_VIDEO_FB
 
 以下是与 Framebuffer 驱动相关的代码仓库链接：
 
-- [fb.c](https://github.com/open-vela/nuttx/blob/trunk/drivers/video/fb.c)：Framebuffer 驱动的实现文件。
-- [fb.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/video/fb.h)：Framebuffer 驱动的接口定义。
+- [fb.c](../../../../../../nuttx/blob/trunk/drivers/video/fb.c)：Framebuffer 驱动的实现文件。
+- [fb.h](../../../../../../nuttx/blob/trunk/include/nuttx/video/fb.h)：Framebuffer 驱动的接口定义。

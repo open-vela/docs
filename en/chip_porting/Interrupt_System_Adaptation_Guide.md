@@ -361,7 +361,7 @@ struct irq_info_s g_irqvector[CONFIG_ARCH_NUSER_INTERRUPTS];
 
 Use `g_irqmap_count` to keep track of the number of interrupts currently in use, facilitating monitoring and debugging.  
 
-## 2. Configuration Example  
+### 2. Configuration Example  
 
 Enable the optimization with the following macros:
 

@@ -1,4 +1,4 @@
-# 音频驱动配置
+# Audio Driver 配置说明
 
 \[ [English](../../../../en/device_dev_guide/media/audio/Audio_Driver_Cfg_Guide.md) | 简体中文 \]
 
@@ -20,7 +20,7 @@
 ### Support audio composition
 
 - 功能：支持组合节点。
-    - 组合节点详细说明请参见 [Audio Driver 原理说明]()。
+    - 组合节点详细说明请参见 [Audio Driver 原理说明](./Audio_Driver_Prin_desc.md)。
 
 ### Support multiple sessions
 
@@ -40,15 +40,15 @@
 
     - 默认情况下，缓冲区大小通过 `uint16_t` 定义，最大支持 32K 样本。启用此选项后，缓冲区大小通过 `uint32_t` 定义，最大支持 65K 样本。
 
-    代码示例：
+    - 代码示例：
 
-    ```C
-    #ifdef CONFIG_AUDIO_LARGE_BUFFERS
-    typedef uint32_t apb_samp_t;
-    #else
-    typedef uint16_t apb_samp_t;
-    #endif
-    ```
+        ```C
+        #ifdef CONFIG_AUDIO_LARGE_BUFFERS
+        typedef uint32_t apb_samp_t;
+        #else
+        typedef uint16_t apb_samp_t;
+        #endif
+        ```
 
 ### Number of buffers for audio processing
 
@@ -84,7 +84,7 @@
 
 ## 三、示例配置
 
-以下提供了两种典型的音频配置示例：Simulator 环境 和 某硬件平台。用户可根据实际需求参考配置。
+以下提供了两种典型的音频配置示例：**Simulator 环境**和**某硬件平台**。用户可根据实际需求参考配置。
 
 ### 1、Simulator 环境
 
@@ -134,7 +134,7 @@ CONFIG_AUDIO_EXCLUDE_REWIND=y
 
 ### 2、某硬件平台
 
-以下是适用于 **某硬件平台** 的音频配置示例：
+以下是适用于**某硬件平台**的音频配置示例：
 
 ```Makefile
 #

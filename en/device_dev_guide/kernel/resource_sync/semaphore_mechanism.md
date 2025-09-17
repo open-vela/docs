@@ -1,4 +1,4 @@
-# openvela Semaphores: Synchronization, Mutual Exclusion, and Priority Management
+# openvela Semaphores
 
 \[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/resource_sync/semaphore_mechanism.md) \]
 
@@ -277,7 +277,7 @@ The core logic for timed waits (`sem_timedwait`) is implemented in `nxsem_clockw
     3. Remove the task from the `waitlist`.
     4. Add the task back to the ready-to-run list.
 
-## 7. Summary
+## VII. Summary
 
 The openvela semaphore mechanism is a cornerstone for building robust multitasking applications. Developers should fully understand its core features and choose the appropriate usage pattern for their application scenario:
 

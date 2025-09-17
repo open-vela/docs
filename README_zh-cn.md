@@ -4,9 +4,9 @@
 
 <h1 align="center">openvela</h1>
 
-\[ [English](README.md) | 简体中文 | [繁體中文](README_zh-tw.md) \]
-
 # openvela 开源项目
+
+\[ [English](README.md) | 简体中文 | [繁體中文](README_zh-tw.md) \]
 
 ## openvela 简介
 
@@ -115,9 +115,17 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 openvela 引用三方开源软件及许可证说明，参考[第三方开源软件说明](Third_Party_and_Open_Source_Components_zh-cn.md)。
 
-## 联系方式
+## 社区与支持
 
-为了更好地管理和响应反馈和支持请求，建议通过以下方式联系我们：
+我们欢迎您通过多种渠道与 openvela 社区互动和贡献。
+
+### 微信公众号
+
+扫描下方二维码，关注 **openvela** 官方微信公众号，获取项目的一手资讯、深度技术文章以及最新的社区活动信息。
+
+![img](./images/openvela_WeChat_Official_Account.png)
+
+### 技术讨论与贡献
 
 - **Issues**: 如果你有任何问题、建议或发现任何 Bug，请在 Issues 页面提交一个新的 Issue。请尽量提供详细的信息，以便我们更快地理解和解决问题。
 - **Pull Requests**: 如果你发现了问题并已经修复，欢迎提交 Pull Request。请确保遵循我们的[贡献指南](./CONTRIBUTING_zh-cn.md)。

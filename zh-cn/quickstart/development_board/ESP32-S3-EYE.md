@@ -73,7 +73,7 @@
     pip install esptool
     ```
 
-    **注意：** 后续所有编译和烧录操作，都应在此已激活的 `(myenv)` 环境中执行。
+    > **注意：** 后续所有编译和烧录操作，都应在此已激活的 `(myenv)` 环境中执行。
 
     ![img](./figures/056.png)
 
@@ -83,9 +83,9 @@
 
 ### 1、理解 `esp32s3-eye` 板级代码结构
 
-在进行配置之前，请先熟悉 `esp32s3-eye` 的板级支持包（BSP）[目录结构](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye)。这有助于您理解各个文件的作用。
+在进行配置之前，请先熟悉 `esp32s3-eye` 的板级支持包（BSP）[目录结构](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye)。这有助于您理解各个文件的作用。
 
-```Plain
+```bash
 esp32s3-eye/
 ├── configs/                 # 板级功能配置中心，包含不同功能的 defconfig
 │   ├── gpio/        
@@ -184,10 +184,9 @@ rm nuttx/Make.defs
 
 ## 六、参考文档
 
-- [esp32s3-eye](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye)
+- [esp32s3-eye](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye)
 - [defconfig](../../../../../../vendor/blob/trunk/espressif/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
 - [Managing esptool on virtual environment](https://nuttx.apache.org/docs/latest/platforms/xtensa/esp32s3/index.html#managing-esptool-on-virtual-environment)
-- [Config CheckList]()
 
 ## 附录 A: Wi-Fi 功能 defconfig
 

@@ -4,7 +4,7 @@
 
 Each running virtual device provides a console that lets you query and control the emulated device environment.
 
-## Start and stop a console session
+## I. Start and Stop a Console Session
 
 To access the console and enter commands, use `telnet` at a terminal window to connect to the console port and provide the authentication token.Whenever the console displays “OK”, it's ready to accept commands.A typical prompt is usually not displayed.
 
@@ -92,13 +92,13 @@ To connect to the console of a running virtual device, do the following:
     Connection closed by foreign host.
     ```
 
-## Emulator command reference
+## II. Emulator Command Reference
 
-### General commands
+### 1. General Commands
 
 - `avd {stop|start|status|name}`
 
-  Query, control and manage the virtual device, as follows:
+    Query, control and manage the virtual device, as follows:
 
     - stop: Stop the execution of the device.
     - start: Start the execution of the device.
@@ -117,7 +117,7 @@ To connect to the console of a running virtual device, do the following:
 
     Rotate the AVD counterclockwise in 45 degree increments.
 
-### Port redirection
+### 2. Port Redirection
 
 - `redir list`
 
@@ -138,23 +138,23 @@ To connect to the console of a running virtual device, do the following:
     - “protocol”: Must be either tcp or udp.
     - "host-port": The port number to open on the host.
 
-### Geographic location
+### 3. Geographic Location
 
 Set the geographic location reported to the apps running inside an emulator by sending a GPS locator to the emulator.
 
 - `geo fix longitude latitude [altitude] [satellites] [velocity]`
 
-  Send a simple GPS locator to the emulator. Specify “longitude” and “latitude” in decimal degrees.Use a number from 1 to 12 to specify the number of “satellites” used to determine the position, and specify “altitude” in meters and “velocity” in knots.
+    Send a simple GPS locator to the emulator. Specify “longitude” and “latitude” in decimal degrees.Use a number from 1 to 12 to specify the number of “satellites” used to determine the position, and specify “altitude” in meters and “velocity” in knots.
 
 - `geo nmea sentence`
 
-  Send an NMEA 0183 sentence to the emulated device as if it is sent from an emulated GPS modem.Start the sentence with "$GP". Only "$GPGGA" and "$GPRCM" sentences are currently supported.The following example is a GPGGA (Global Positioning System Fix Data) sentence that gets the time, position, and fix data for a GPS receiver:
+    Send an NMEA 0183 sentence to the emulated device as if it is sent from an emulated GPS modem.Start the sentence with "$GP". Only "$GPGGA" and "$GPRCM" sentences are currently supported.The following example is a GPGGA (Global Positioning System Fix Data) sentence that gets the time, position, and fix data for a GPS receiver:
   
-  ```bash
-  geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
-  ```
+    ```bash
+    geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
+    ```
 
-### Fake hardware events
+### 4. Fake Hardware Events
 
 - `event types`
 
@@ -197,7 +197,7 @@ Set the geographic location reported to the apps running inside an emulator by s
 
     Send a string of characters that simulate keystrokes.The message must be a UTF-8 string. Unicode messages are reverse-mapped according to the current device keyboard, and unsupported characters are discarded silently.
 
-### Power state control
+### 5. Power State Control
 
 - `power display`
 
@@ -223,7 +223,7 @@ Set the geographic location reported to the apps running inside an emulator by s
 
     Sets remaining battery capacity state as a percent from 0 to 100.
 
-### Manage sensors on the emulator
+### 6. Manage Sensors on the Emulator
 
 These commands relate to the sensors available in AVD. In addition to using the “sensor” command, you can see and adjust the settings in the “Accelerometer” and “Additional sensors” tabs on the emulator’s “Virtual sensors” screen.
 

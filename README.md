@@ -44,23 +44,25 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Rich Developer Tools**: openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dumb, and log analysis tools.
 
-## Supported platforms
+## Hardware Support
 
 - openvela supports a variety of architectures (ARM32, ARM64, RISC-V, Xtensa, MIPS, CEVA, etc.) and platforms.
 - Please refer to the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page for a complete list.
-- For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/STM32H750.md).
+- For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/Development_Board.md).
 
 ## Quick start
 
-If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform.For more information, refer to the following guide.
+### Device Development
+
+If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform. For more information, refer to the following guide.
 
 [Quick Start (Ubuntu)](./quickstart/openvela_ubuntu_quick_start.md)
 
 ### Quick App Development
 
-[Quick App Quick Start](https://iot.mi.com/vela/quickapp/en/guide/start/use-ide.html)
+[Quick App Quick Start](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
 
-## Sub-repository List  
+## List of Sub-repositories
 
 | Sub-repository Link                            | Description                                                                                                                                                                                                                                                                                                                                                                                                         |
 | :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -76,15 +78,35 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 - [Documentation Center](https://doc.openvela.com/document)
 
-## Examples Tutorials
+## Application Example Center
 
-- [Music player](./en/demo/Music_Player_Example.md)
-- [Smart band](./en/demo/Smart_Band_Example.md)
-- [Bike computer](./en/demo/X_Track.md)
+A collection of native and Quick App examples for developers to learn from.
+
+### Native Apps
+
+Here are some typical native application examples demonstrating the usage of different modules and features.
+
+- [Music Player](./en/demo/Music_Player_Example.md): Demonstrates audio playback, playlist management, and background services.
+- [Smart Band](./en/demo/Smart_Band_Example.md): Demonstrates sleep monitoring, heart rate monitoring, music playback, and a stopwatch.
+- [Cycling Computer](./en/demo/X_Track.md): Demonstrates GPS positioning, real-time data display, and route tracking.
+- [Calculator](../../../../open-vela/packages_demos/blob/trunk/calculator/Readme.md): A basic example of UI and logic interaction.
+- [Relation Calculator](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
+- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/trunk/Whackmole/Readme.md): Demonstrates a game loop, random number generation, and animation effects.
+
+To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/trunk/README_zh-cn.md).
+
+### Quick Apps
+
+- [Mi Band Weather App](../../.././packages_fe_examples/blob/trunk/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
+- [Music Player](../../.././packages_fe_examples/blob/trunk/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
+- [Calendar](../../.././packages_fe_examples/blob/trunk/calendar/README.md): Demonstrates a basic calendar.
+
+More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
 
 ## Code contribution
 
-Contribute: [Code contribution guide](./CONTRIBUTING.md).
+- [Code Contribution Guide](./CONTRIBUTING.md)
+- [Documentation Contribution Guide](./en/contribute/process/doc_dev_process.md)
 
 ## License agreement
 
@@ -92,12 +114,18 @@ The code in this repository is licensed under the Apache 2.0 license. You can fi
 
 openvela uses third-party open source software and license description. Refer to [third-party open source software description](Third_Party_and_Open_Source_Components.md)
 
+## Community and Support
+
+We welcome you to interact with and contribute to the openvela community through our various channels.
+
+### WeChat Official Account
+
+Scan the QR code below to follow the **openvela** official WeChat account for the latest project news, in-depth technical articles, and updates on community events.
+
+![img](./images/openvela_WeChat_Official_Account.png)
+
 ## Contact
 
-In order to better manage and respond to feedback and support requests, we recommend contacting us by:
-
-- **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page.Try to provide detailed information, so that we can understand and solve the problem faster.
+- **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page. Try to provide detailed information, so that we can understand and solve the problem faster.
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
 - **Discussions**: If you have a broader topic or discussion, you can start a new discussion on the Discussions page.
-
-We appreciate every user's feedback and support. Communicating through the GitHub/Gitee platform is helpful for us to maintain and improve the project.

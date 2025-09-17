@@ -1,5 +1,5 @@
 
-# **Media Framework**
+# Media Framework
 
 [English | [简体中文](../../../zh-cn/device_dev_guide/media/media_framework.md)]
 
