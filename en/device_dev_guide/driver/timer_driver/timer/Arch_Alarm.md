@@ -224,7 +224,7 @@ Operation Instructions:
 
 ##### Device Registration: Call `oneshot_register`
 
-Bind the instance returned by `oneshot_initialize` to the system device model, register the character device node (e.g., `/dev/oneshot`), and associate it with the file operation interface `struct file_operations g_oneshot_ops`. The prototype of the function [oneshot_register](../../../../../../../../nuttx/blob/master/drivers/timers/oneshot.c#L291) is as follows:
+Bind the instance returned by `oneshot_initialize` to the system device model, register the character device node (e.g., `/dev/oneshot`), and associate it with the file operation interface `struct file_operations g_oneshot_ops`. The prototype of the function [oneshot_register](../../../../../../../../nuttx/blob/dev/drivers/timers/oneshot.c#L291) is as follows:
 
 ```C
 /****************************************************************************
@@ -272,7 +272,7 @@ Key Role:
 
 #### 2.2 Reference Implementation and Debugging
 
-- Structure Definition: For details on the members of `struct oneshot_lowerhalf_s`, refer to [oneshot.h](../../../../../../../../nuttx/blob/master/include/nuttx/timers/oneshot.h#L226). Fill in function pointers such as interrupt triggering and timer startup according to hardware characteristics.
+- Structure Definition: For details on the members of `struct oneshot_lowerhalf_s`, refer to [oneshot.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h#L226). Fill in function pointers such as interrupt triggering and timer startup according to hardware characteristics.
 - Example Code: For specific driver adaptation examples, refer to the [Driver Adaptation Example - Initialization Section](#1-initialization-process), and adjust the hardware register operation logic according to the target platform (e.g., ARM Cortex-M/RISC-V).
 - Debugging Suggestions: If initialization fails, check whether `CONFIG_ONESHOT`/`CONFIG_ALARM_ARCH` are correctly enabled, and use serial port logs to print the return value of `oneshot_initialize`.
 

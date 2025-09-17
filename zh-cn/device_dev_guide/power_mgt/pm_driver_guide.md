@@ -115,7 +115,7 @@ int pm_domain_register(int domain, FAR struct pm_callback_s *cb)
 
 本节以 stm32f7 的串口驱动为例，展示如何一步步实现 PM 功能。
 
-**源码参考**：[arch/arm/src/stm32f7/stm32_serial.c](../../../../../../nuttx/blob/master/arch/arm/src/stm32f7/stm32_serial.c)
+**源码参考**：[arch/arm/src/stm32f7/stm32_serial.c](../../../../../../nuttx/blob/dev/arch/arm/src/stm32f7/stm32_serial.c)
 
 ### 步骤 1：定义回调结构体和状态变量
 

@@ -97,7 +97,7 @@ static struct my_nor_dev_s g_nor_dev = {
 
 #### 1.2. 实现 `ioctl` 接口
 
-`ioctl` 是一个关键接口，其中 `MTDIOC_GEOMETRY` 命令必须实现。您需要在此返回 Flash 的基本尺寸信息。
+`ioctl` 是一个关键接口，其中 `MTDIOC_GEOMETRY` 命令必须实现。您需要在此返回 Flash 的几何信息。
 
 ```C
 static int my_nor_ioctl(FAR struct mtd_dev_s *dev, int cmd, unsigned long arg) {

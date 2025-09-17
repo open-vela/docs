@@ -224,7 +224,7 @@ FAR struct oneshot_lowerhalf_s *oneshot_initialize(int chan, uint16_t resolution
 
 ##### 设备注册：调用 `oneshot_register`
 
-将 `oneshot_initialize` 返回的实例与系统设备模型绑定，注册字符设备节点（如 `/dev/oneshot`），并关联文件操作接口 `struct file_operations g_oneshot_ops`。函数 [oneshot_register](../../../../../../../../nuttx/blob/master/drivers/timers/oneshot.c#L291) 原型如下：
+将 `oneshot_initialize` 返回的实例与系统设备模型绑定，注册字符设备节点（如 `/dev/oneshot`），并关联文件操作接口 `struct file_operations g_oneshot_ops`。函数 [oneshot_register](../../../../../../../../nuttx/blob/dev/drivers/timers/oneshot.c#L291) 原型如下：
 
 ```C
 /****************************************************************************
@@ -272,7 +272,7 @@ int oneshot_register(FAR const char *devname,
 
 #### 2.2 参考实现与调试
 
-- 结构体定义：`struct oneshot_lowerhalf_s` 的成员说明详见 [oneshot.h](../../../../../../../../nuttx/blob/master/include/nuttx/timers/oneshot.h#L226)，需按硬件特性填充中断触发、定时器启动等函数指针。
+- 结构体定义：`struct oneshot_lowerhalf_s` 的成员说明详见 [oneshot.h](../../../../../../../../nuttx/blob/dev/include/nuttx/timers/oneshot.h#L226)，需按硬件特性填充中断触发、定时器启动等函数指针。
 - 实例代码：具体驱动适配示例可参考[驱动适配实例-初始化章节](#1初始化流程)，注意根据目标平台（如 ARM Cortex-M/RISC-V）调整硬件寄存器操作逻辑。
 - 调试建议：初始化失败时，检查 `CONFIG_ONESHOT`/`CONFIG_ALARM_ARCH` 是否正确使能，并利用串口日志打印 `oneshot_initialize` 的返回值。
 
