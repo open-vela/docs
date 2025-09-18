@@ -61,7 +61,7 @@ After installation, you can run `repo --version` to verify it.
 2. Use `repo` to initialize the project manifest, specifying the `trunk` branch.
 
     ```bash
-    repo init -u https://github.com/open-vela/manifests.git -b trunk -m tags/trunk-5.2.xml
+    repo init -u https://github.com/open-vela/manifests.git -b trunk -m openvela.xml
     ```
 
     ![alt text](./figures/003.png)
