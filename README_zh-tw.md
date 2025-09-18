@@ -90,17 +90,17 @@ Vela 的命名源自拉丁語中船帆的含義，也是南方星空中船帆星
 - [音樂播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)：演示音訊播放、列表管理和後台服務。
 - [智能手環](./zh-cn/demo/Smart_Band_Example_zh-cn.md)：演示睡眠監測、心率監測、音樂播放、秒表計時。
 - [自行車碼表](./zh-cn/demo/X_Track_zh-cn.md)：演示 GPS 定位、即時數據顯示和運動軌跡記錄。
-- [計算器](../../../../open-vela/packages_demos/blob/trunk-5.2/calculator/Readme.md)：一個基礎的 UI 與邏輯交互示例。
-- [親戚計算器](../../../../open-vela/packages_demos/blob/trunk-5.2/relation_calculator/Readme_zh-cn.md)：演示複雜的條件邏輯與算法實現。
-- [打地鼠](../../../../open-vela/packages_demos/blob/trunk-5.2/Whackmole/README_zh-cn.md)：演示遊戲循環、亂數生成和動畫效果。
+- [計算器](../../../../open-vela/packages_demos/blob/trunk/calculator/Readme.md)：一個基礎的 UI 與邏輯交互示例。
+- [親戚計算器](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme_zh-cn.md)：演示複雜的條件邏輯與算法實現。
+- [打地鼠](../../../../open-vela/packages_demos/blob/trunk/Whackmole/README_zh-cn.md)：演示遊戲循環、亂數生成和動畫效果。
 
 查看完整的原生應用列表，請訪問[原生應用示例倉庫](../../../packages_demos/blob/dev/README_zh-cn.md)。
 
 ### 快應用（Quick Apps）
 
-- [小米手環天氣預報應用](../../.././packages_fe_examples/blob/trunk-5.2/weather/README.md)：提供簡潔直觀的未來七日天氣信息展示。
-- [音樂播放器](../../.././packages_fe_examples/blob/trunk-5.2/player/README.md)：演示一個基礎的音樂播放器，包含音樂的播放，音量調節，歌單查看。
-- [日曆](../../.././packages_fe_examples/blob/trunk-5.2/calendar/README.md)：演示一個基礎的日曆。
+- [小米手環天氣預報應用](../../.././packages_fe_examples/blob/trunk/weather/README.md)：提供簡潔直觀的未來七日天氣信息展示。
+- [音樂播放器](../../.././packages_fe_examples/blob/trunk/player/README.md)：演示一個基礎的音樂播放器，包含音樂的播放，音量調節，歌單查看。
+- [日曆](../../.././packages_fe_examples/blob/trunk/calendar/README.md)：演示一個基礎的日曆。
 
 快應用相關示例正在持續豐富中。查看所有示例，請訪問[快應用示例倉庫](../../../packages_fe_examples)。
 

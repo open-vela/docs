@@ -6,7 +6,7 @@
 
 **目标读者**：需要为特定硬件平台开发或适配电源管理功能的嵌入式系统开发者。
 
-**相关头文件**：[openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/trunk-5.2/include/nuttx/power/pm.h)
+**相关头文件**：[openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/trunk/include/nuttx/power/pm.h)
 
 ## 一、核心概念
 
@@ -241,7 +241,7 @@ Governor 是 PM 框架的核心，它实现了不同的电源管理策略。open
 
 - **默认行为**：如果开启了选项，`pm_initialize` 会默认所有 domain 使用该策略。
 
-- **源码参考**：[openvela drivers/power/pm/greedy_governor.c](../../../../../../nuttx/blob/trunk-5.2/drivers/power/pm/greedy_governor.c)
+- **源码参考**：[openvela drivers/power/pm/greedy_governor.c](../../../../../../nuttx/blob/trunk/drivers/power/pm/greedy_governor.c)
 
 - **配置选项**：
 
@@ -260,7 +260,7 @@ Governor 是 PM 框架的核心，它实现了不同的电源管理策略。open
 
 - **默认行为**：若未启用 `greedy` 决策者但启用了 `activity` 决策者，则后者会成为所有域的默认选择。
 
-- **源码参考**：[openvela drivers/power/pm/activity_governor.c](../../../../../../nuttx/blob/trunk-5.2/drivers/power/pm/activity_governor.c)
+- **源码参考**：[openvela drivers/power/pm/activity_governor.c](../../../../../../nuttx/blob/trunk/drivers/power/pm/activity_governor.c)
 
 - **说明**：每种时间可配置，通过配置传入进入/退出某个功耗状态的时间数据，所有 domain 都会被配置成同样的数据。
 
@@ -298,7 +298,7 @@ Governor 是 PM 框架的核心，它实现了不同的电源管理策略。open
     pm_set_governor(PM_IDLE_DOMAIN, pm_stability_governor_initialize());
     ```
 
-- **源码参考**：[openvela drivers/power/pm/stability_governor.c](../../../../../../nuttx/blob/trunk-5.2/drivers/power/pm/stability_governor.c)
+- **源码参考**：[openvela drivers/power/pm/stability_governor.c](../../../../../../nuttx/blob/trunk/drivers/power/pm/stability_governor.c)
 
 - **关键实现细节**：当系统从 `SLEEP` 状态唤醒并返回 `IDLE` 时，无法利用 `last_state` 进行 `WFI` 维持时间检测。此时，它会从配置列表中选择一个阈值不为零的最深功耗级别（例如，如果 `SLEEP` 阈值为 0，`STANDBY` 阈值为 10，则会选择 `STANDBY`）作为新的检测基准。
 

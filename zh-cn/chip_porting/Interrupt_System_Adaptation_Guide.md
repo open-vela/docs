@@ -127,7 +127,7 @@
 
 ### 2、需要定义的中断相关宏
 
-除上面的函数实现，厂商还需定义一系列中断相关的宏，用于描述 NVIC（Nested vectored interrupt controller） 的配置，这些宏需定义在`chips/chip_name/include/irq.h` 文件中。可参考 [RTL8720C 示例](../../../../../nuttx/blob/trunk-5.2/arch/arm/src/rtl8720c/include/irq.h)。
+除上面的函数实现，厂商还需定义一系列中断相关的宏，用于描述 NVIC（Nested vectored interrupt controller） 的配置，这些宏需定义在`chips/chip_name/include/irq.h` 文件中。可参考 [RTL8720C 示例](../../../../../nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h)。
 
 以下是必须实现的宏及其功能说明：
 

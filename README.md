@@ -89,17 +89,17 @@ Here are some typical native application examples demonstrating the usage of dif
 - [Music Player](./en/demo/Music_Player_Example.md): Demonstrates audio playback, playlist management, and background services.
 - [Smart Band](./en/demo/Smart_Band_Example.md): Demonstrates sleep monitoring, heart rate monitoring, music playback, and a stopwatch.
 - [Cycling Computer](./en/demo/X_Track.md): Demonstrates GPS positioning, real-time data display, and route tracking.
-- [Calculator](../../../../open-vela/packages_demos/blob/trunk-5.2/calculator/Readme.md): A basic example of UI and logic interaction.
-- [Relation Calculator](../../../../open-vela/packages_demos/blob/trunk-5.2/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
-- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/trunk-5.2/Whackmole/Readme.md): Demonstrates a game loop, random number generation, and animation effects.
+- [Calculator](../../../../open-vela/packages_demos/blob/trunk/calculator/Readme.md): A basic example of UI and logic interaction.
+- [Relation Calculator](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
+- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/trunk/Whackmole/Readme.md): Demonstrates a game loop, random number generation, and animation effects.
 
-To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/trunk-5.2/README_zh-cn.md).
+To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/trunk/README_zh-cn.md).
 
 ### Quick Apps
 
-- [Mi Band Weather App](../../.././packages_fe_examples/blob/trunk-5.2/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
-- [Music Player](../../.././packages_fe_examples/blob/trunk-5.2/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
-- [Calendar](../../.././packages_fe_examples/blob/trunk-5.2/calendar/README.md): Demonstrates a basic calendar.
+- [Mi Band Weather App](../../.././packages_fe_examples/blob/trunk/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
+- [Music Player](../../.././packages_fe_examples/blob/trunk/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
+- [Calendar](../../.././packages_fe_examples/blob/trunk/calendar/README.md): Demonstrates a basic calendar.
 
 More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
 

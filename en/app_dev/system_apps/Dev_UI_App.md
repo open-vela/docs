@@ -5,7 +5,7 @@
 ## I. Prerequisites
 
 1. Download the source code. Please refer to [Quick Start](./../../quickstart/openvela_ubuntu_quick_start.md).
-2. Before starting this tutorial, please obtain the example code from [music_player](../../../../../../packages_demos/tree/trunk-5.2/music_player).
+2. Before starting this tutorial, please obtain the example code from [music_player](../../../../../../packages_demos/tree/trunk/music_player).
 
 ## II. Preliminary Concepts
 

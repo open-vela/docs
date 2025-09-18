@@ -1,4 +1,4 @@
-*Note: Please adhere to [Contributing Guidelines](https://github.com/open-vela/docs/blob/trunk-5.2/CONTRIBUTING.md).*
+*Note: Please adhere to [Contributing Guidelines](https://github.com/open-vela/docs/blob/trunk/CONTRIBUTING.md).*
 
 ## Summary
 
