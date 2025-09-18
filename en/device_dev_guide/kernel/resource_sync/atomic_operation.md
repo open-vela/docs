@@ -22,8 +22,8 @@ In cases where the compiler or target hardware lacks adequate support for atomic
 
 Developers can control this behavior using the kernel configuration option `CONFIG_LIBC_ARCH_ATOMIC`. If this option is enabled, the system will link against the software emulation functions defined in `arch_atomic.c` instead of using the compiler's built-in functions.
 
-- **Source Path**: [nuttx/libs/libc/machine/arch_atomic.c](../../../../../../../nuttx/blob/trunk/libs/libc/machine/arch_atomic.c)
-- **Related Build Configuration**: [nuttx/libs/libc/machine/Make.defs](../../../../../../../nuttx/blob/trunk/libs/libc/machine/Make.defs)
+- **Source Path**: [nuttx/libs/libc/machine/arch_atomic.c](../../../../../../../nuttx/blob/trunk-5.2/libs/libc/machine/arch_atomic.c)
+- **Related Build Configuration**: [nuttx/libs/libc/machine/Make.defs](../../../../../../../nuttx/blob/trunk-5.2/libs/libc/machine/Make.defs)
 
 ## II. Usage
 

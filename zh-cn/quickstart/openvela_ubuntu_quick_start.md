@@ -59,7 +59,7 @@ sudo mv repo /usr/local/bin
 2. 使用 `repo` 初始化项目清单，并指定 `trunk` 分支。
 
     ```bash
-    repo init -u https://github.com/open-vela/manifests.git -b trunk -m openvela.xml
+    repo init -u https://github.com/open-vela/manifests.git -b trunk -m tags/trunk-5.2.xml
     ```
 
     ![alt text](./figures/003.png)

@@ -164,15 +164,15 @@ grep -rE "CONFIG_TIMER|CONFIG_TIMER_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH_H
 
 During **board** initialization, the `***_timer_initialize` function implemented by the specific **Vendor** needs to be called to complete initialization. This function will perform the following operations:  
 
-1. Allocate and initialize an instance of [struct timer_lowerhalf_s](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h).  
-2. Register the `timer_lowerhalf_s` instance as a Timer driver using the [timer_register](../../../../../../../../nuttx/blob/trunk/drivers/timers/timer.c) function.  
+1. Allocate and initialize an instance of [struct timer_lowerhalf_s](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/timer.h).  
+2. Register the `timer_lowerhalf_s` instance as a Timer driver using the [timer_register](../../../../../../../../nuttx/blob/trunk-5.2/drivers/timers/timer.c) function.  
 
     - The registration process generates the `/dev/timer` device node.  
     - Simultaneously binds the `struct file_operations` and `g_timerops` instances to the `timer_lowerhalf_s` instance.  
 
 In the platform code, the `up_timer_initialize` function needs to be implemented to call the `up_timer_set_lowerhalf` function, binding the instance returned by `***_timer_initialize` to the system as the system timer.  
 
-Related interface definitions are in: [/include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h).  
+Related interface definitions are in: [/include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/timer.h).  
 
 #### `timer_register` Function Description  
 
@@ -244,7 +244,7 @@ The `lower-half` driver provides standardized `struct timer_ops_s` interfaces fo
 
 #### Interface Definitions  
 
-The following is the detailed definition of [struct timer_ops_s](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h):  
+The following is the detailed definition of [struct timer_ops_s](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/timer.h):  
 
 ```c
 struct timer_ops_s
@@ -486,7 +486,7 @@ The lower-half is the driver interface part that implements hardware functions, 
 
 In the ARMv7-M Arch Timer adaptation, the lower-half methods appear as follows:  
 
-File path: [arch/arm/src/armv7-m/arm_systick.c](../../../../../../../../nuttx/blob/trunk/arch/arm/src/armv7-m/arm_systick.c)  
+File path: [arch/arm/src/armv7-m/arm_systick.c](../../../../../../../../nuttx/blob/trunk-5.2/arch/arm/src/armv7-m/arm_systick.c)  
 
 ```c
 /* "Lower half" driver methods */
@@ -509,7 +509,7 @@ This chapter briefly introduces POSIX API interfaces related to timers and clock
 
 The following is a brief overview of timing-related POSIX APIs. For specific usage of these interfaces, please refer to the relevant `man` pages.  
 
-Header file location: [include/time.h](../../../../../../../../nuttx/blob/trunk/include/time.h)  
+Header file location: [include/time.h](../../../../../../../../nuttx/blob/trunk-5.2/include/time.h)  
 
 1. `timer_create`
 
@@ -584,7 +584,7 @@ Application-level programs can directly operate the timer through the `ioctl` fu
 
 #### Supported IOCTL Commands  
 
-The following are currently supported IOCTL commands, with related interface definitions in [include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h):  
+The following are currently supported IOCTL commands, with related interface definitions in [include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/timer.h):  
 
 - `TCIOC_START`: Start the timer.  
 - `TCIOC_STOP`: Stop the timer.  

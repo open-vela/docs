@@ -18,7 +18,7 @@ openvela 提供通用的 **oneshot** 驱动，即一次性（非周期性）定�
 - **Upper half**：面向应用，由 openvela 提供，无需芯片厂商修改。
 - **Lower half**：特定平台的硬件控制驱动，芯片厂商需适配提供。
 
-**oneshot** 驱动相关接口信息在 [oneshot.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/timers/oneshot.h) 文件中，同样也分为了 **Upper half** 和 **Lower half** 两层接口。
+**oneshot** 驱动相关接口信息在 [oneshot.h](https://github.com/open-vela/nuttx/blob/trunk-5.2/include/nuttx/timers/oneshot.h) 文件中，同样也分为了 **Upper half** 和 **Lower half** 两层接口。
 
 ### 2、Arch_alarm 定时器简介
 
@@ -47,7 +47,7 @@ openvela 的 Upper half 部分中的 **`up_timer_initialize`** 函数，必须�
 
 ## 三、Arch_alarm API
 
-`arch_alarm` 提供一系列接口，以满足 sched 模块对定时器的需求。接口信息可在 [arch.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/arch.h) 头文件中查找。
+`arch_alarm` 提供一系列接口，以满足 sched 模块对定时器的需求。接口信息可在 [arch.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/arch.h) 头文件中查找。
 
 ### 1、接口分类
 
@@ -193,7 +193,7 @@ grep -rE "CONFIG_ONESHOT|CONFIG_ALARM_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH
 
 ##### 实例创建：调用 `oneshot_initialize`
 
-在板级初始化阶段，需调用**厂商自定义的初始化函数**，完成 [struct oneshot_lowerhalf_s](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h#L226) 结构体的分配与初始化。该函数由 openvela 框架提供，原型如下：
+在板级初始化阶段，需调用**厂商自定义的初始化函数**，完成 [struct oneshot_lowerhalf_s](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/oneshot.h#L226) 结构体的分配与初始化。该函数由 openvela 框架提供，原型如下：
 
 ```C
 /****************************************************************************
@@ -224,7 +224,7 @@ FAR struct oneshot_lowerhalf_s *oneshot_initialize(int chan, uint16_t resolution
 
 ##### 设备注册：调用 `oneshot_register`
 
-将 `oneshot_initialize` 返回的实例与系统设备模型绑定，注册字符设备节点（如 `/dev/oneshot`），并关联文件操作接口 `struct file_operations g_oneshot_ops`。函数 [oneshot_register](../../../../../../../../nuttx/blob/trunk/drivers/timers/oneshot.c#L291) 原型如下：
+将 `oneshot_initialize` 返回的实例与系统设备模型绑定，注册字符设备节点（如 `/dev/oneshot`），并关联文件操作接口 `struct file_operations g_oneshot_ops`。函数 [oneshot_register](../../../../../../../../nuttx/blob/trunk-5.2/drivers/timers/oneshot.c#L291) 原型如下：
 
 ```C
 /****************************************************************************
@@ -272,7 +272,7 @@ int oneshot_register(FAR const char *devname,
 
 #### 2.2 参考实现与调试
 
-- 结构体定义：`struct oneshot_lowerhalf_s` 的成员说明详见 [oneshot.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h#L226)，需按硬件特性填充中断触发、定时器启动等函数指针。
+- 结构体定义：`struct oneshot_lowerhalf_s` 的成员说明详见 [oneshot.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/oneshot.h#L226)，需按硬件特性填充中断触发、定时器启动等函数指针。
 - 实例代码：具体驱动适配示例可参考[驱动适配实例-初始化章节](#1初始化流程)，注意根据目标平台（如 ARM Cortex-M/RISC-V）调整硬件寄存器操作逻辑。
 - 调试建议：初始化失败时，检查 `CONFIG_ONESHOT`/`CONFIG_ALARM_ARCH` 是否正确使能，并利用串口日志打印 `oneshot_initialize` 的返回值。
 
@@ -296,7 +296,7 @@ int oneshot_register(FAR const char *devname,
 
 #### 3.2 核心接口说明
 
-Upper-half 接口定义于 [arch.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/arch.h#L1460)，主要供调度器（Sched）调用。
+Upper-half 接口定义于 [arch.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/arch.h#L1460)，主要供调度器（Sched）调用。
 
 ### 4、Lower-half 接口
 
@@ -323,7 +323,7 @@ Upper-half 接口定义于 [arch.h](../../../../../../../../nuttx/blob/trunk/inc
 - 厂商选择
 
     - 根据硬件能力选择实现 `timespec` 或 `tick` 接口组。
-    - 未实现的接口组可通过 openvela 内置的[转换函数](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h)自动映射。
+    - 未实现的接口组可通过 openvela 内置的[转换函数](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/oneshot.h)自动映射。
 
 - 性能优化
   
@@ -331,7 +331,7 @@ Upper-half 接口定义于 [arch.h](../../../../../../../../nuttx/blob/trunk/inc
 
 #### 4.2 核心接口说明
 
-`struct oneshot_operations_s` 定义于 [oneshot.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h)，其成员函数如下。
+`struct oneshot_operations_s` 定义于 [oneshot.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/oneshot.h)，其成员函数如下。
 
 ##### 定时器控制接口
 
@@ -432,7 +432,7 @@ board_late_initialize (或 board_app_initialize)
 
 #### 1.2 关键代码实现
 
-- 硬件（Arch 层）定时器初始化，参考代码 [arch/risc-v/src/bl602/bl602_timerisr.c](../../../../../../../../nuttx/blob/trunk/arch/risc-v/src/bl602/bl602_timerisr.c#L57)。
+- 硬件（Arch 层）定时器初始化，参考代码 [arch/risc-v/src/bl602/bl602_timerisr.c](../../../../../../../../nuttx/blob/trunk-5.2/arch/risc-v/src/bl602/bl602_timerisr.c#L57)。
 
     ```C
     /****************************************************************************
@@ -456,7 +456,7 @@ board_late_initialize (或 board_app_initialize)
     }
     ```
 
-- Oneshot 驱动实例化，参考代码 [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](../../../../../../../../nuttx/blob/trunk/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L361)。
+- Oneshot 驱动实例化，参考代码 [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](../../../../../../../../nuttx/blob/trunk-5.2/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L361)。
 
     ```C
     struct oneshot_lowerhalf_s *oneshot_initialize(int      chan,
@@ -520,7 +520,7 @@ board_late_initialize (或 board_app_initialize)
 
 ### 2、Lower-half 接口实现
 
-操作接口绑定如下，详细代码请参考 [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](../../../../../../../../nuttx/blob/trunk/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L96)。
+操作接口绑定如下，详细代码请参考 [arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c](../../../../../../../../nuttx/blob/trunk-5.2/arch/risc-v/src/bl602/bl602_oneshot_lowerhalf.c#L96)。
 
 ```C
 /* "Lower half" driver methods */
@@ -545,7 +545,7 @@ openvela 提供标准定时器接口，支持高精度时间管理与设备控�
 man timer_create
 ```
 
-详细代码请参见 [include/time.h](../../../../../../../../nuttx/blob/trunk/include/time.h#L233)。
+详细代码请参见 [include/time.h](../../../../../../../../nuttx/blob/trunk-5.2/include/time.h#L233)。
 
 ```C
 /*
@@ -600,7 +600,7 @@ int timer_getoverrun(timer_t timerid);
 
 ### 2、IOCTL API
 
-应用程序可以通过 `ioctl` 函数直接操作 Oneshot 定时器。使用该功能之前，需在系统启动（bringup）过程中注册 `/dev/oneshot` 设备节点。请参考头文件 [include/nuttx/timers/oneshot.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h#L41) 获取当前支持的 `ioctl` 命令。命令简介如下：
+应用程序可以通过 `ioctl` 函数直接操作 Oneshot 定时器。使用该功能之前，需在系统启动（bringup）过程中注册 `/dev/oneshot` 设备节点。请参考头文件 [include/nuttx/timers/oneshot.h](../../../../../../../../nuttx/blob/trunk-5.2/include/nuttx/timers/oneshot.h#L41) 获取当前支持的 `ioctl` 命令。命令简介如下：
 
 - `OSIOC_START`
     - 功能：启动 Oneshot 定时器。

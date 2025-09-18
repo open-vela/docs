@@ -347,5 +347,5 @@ errout_with_state:
 
 ## 五、相关仓
 
-- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/trunk/include/nuttx/lcd/lcd.h)
-- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/trunk/drivers/lcd/lcd_framebuffer.c)
+- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/trunk-5.2/include/nuttx/lcd/lcd.h)
+- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/trunk-5.2/drivers/lcd/lcd_framebuffer.c)

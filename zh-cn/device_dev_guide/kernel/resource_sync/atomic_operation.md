@@ -22,8 +22,8 @@ openvela 的原子操作采用分层实现策略，优先利用硬件特性，�
 
 开发者可以通过内核配置项 `CONFIG_LIBC_ARCH_ATOMIC` 来控制此行为。若启用此选项，系统将链接 `arch_atomic.c` 文件中定义的软件模拟函数，而非编译器内建函数。
 
-- **源码路径**：[nuttx/libs/libc/machine/arch_atomic.c](../../../../../../../nuttx/blob/trunk/libs/libc/machine/arch_atomic.c)
-- **相关构建配置**：[nuttx/libs/libc/machine/Make.defs](../../../../../../../nuttx/blob/trunk/libs/libc/machine/Make.defs)
+- **源码路径**：[nuttx/libs/libc/machine/arch_atomic.c](../../../../../../../nuttx/blob/trunk-5.2/libs/libc/machine/arch_atomic.c)
+- **相关构建配置**：[nuttx/libs/libc/machine/Make.defs](../../../../../../../nuttx/blob/trunk-5.2/libs/libc/machine/Make.defs)
 
 ## 二、 使用方法
 
