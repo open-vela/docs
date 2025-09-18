@@ -47,7 +47,7 @@ The **`up_timer_initialize`** function in the Upper Half of openvela must be imp
 
 ## III. Arch_alarm API
 
-`arch_alarm` provides a series of interfaces to meet the timer requirements of the sched module. Interface information can be found in the [arch.h](../../../../../../../../nuttx/blob/trunk/5.2/include/nuttx/arch.h) header file.
+`arch_alarm` provides a series of interfaces to meet the timer requirements of the sched module. Interface information can be found in the [arch.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/arch.h) header file.
 
 ### 1. Interface Classification
 
@@ -193,7 +193,7 @@ In the openvela board adaptation, the initialization of the Oneshot timer requir
 
 ##### Instance Creation: Call `oneshot_initialize`
 
-During the board initialization phase, it is necessary to invoke the **vendor-customized initialization function** to complete the allocation and initialization of the [struct oneshot_lowerhalf_s](../../../../../../../../nuttx/blob/trunk/5.2/5.2/include/nuttx/timers/oneshot.h#L226) structure. This function is provided by the openvela framework, with the prototype as follows:
+During the board initialization phase, it is necessary to invoke the **vendor-customized initialization function** to complete the allocation and initialization of the [struct oneshot_lowerhalf_s](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h#L226) structure. This function is provided by the openvela framework, with the prototype as follows:
 
 ```C
 /****************************************************************************
@@ -224,7 +224,7 @@ Operation Instructions:
 
 ##### Device Registration: Call `oneshot_register`
 
-Bind the instance returned by `oneshot_initialize` to the system device model, register the character device node (e.g., `/dev/oneshot`), and associate it with the file operation interface `struct file_operations g_oneshot_ops`. The prototype of the function [oneshot_register](../../../../../../../../nuttx/blob/trunk/5.2/5.2/5.2/drivers/timers/oneshot.c#L291) is as follows:
+Bind the instance returned by `oneshot_initialize` to the system device model, register the character device node (e.g., `/dev/oneshot`), and associate it with the file operation interface `struct file_operations g_oneshot_ops`. The prototype of the function [oneshot_register](../../../../../../../../nuttx/blob/trunk/drivers/timers/oneshot.c#L291) is as follows:
 
 ```C
 /****************************************************************************
@@ -272,7 +272,7 @@ Key Role:
 
 #### 2.2 Reference Implementation and Debugging
 
-- Structure Definition: For details on the members of `struct oneshot_lowerhalf_s`, refer to [oneshot.h](../../../../../../../../nuttx/blob/trunk/5.2/5.2/5.2/5.2/include/nuttx/timers/oneshot.h#L226). Fill in function pointers such as interrupt triggering and timer startup according to hardware characteristics.
+- Structure Definition: For details on the members of `struct oneshot_lowerhalf_s`, refer to [oneshot.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h#L226). Fill in function pointers such as interrupt triggering and timer startup according to hardware characteristics.
 - Example Code: For specific driver adaptation examples, refer to the [Driver Adaptation Example - Initialization Section](#1-initialization-process), and adjust the hardware register operation logic according to the target platform (e.g., ARM Cortex-M/RISC-V).
 - Debugging Suggestions: If initialization fails, check whether `CONFIG_ONESHOT`/`CONFIG_ALARM_ARCH` are correctly enabled, and use serial port logs to print the return value of `oneshot_initialize`.
 
@@ -296,7 +296,7 @@ Design Principles:
 
 #### 3.2 Core Interface Description
 
-Upper-Half interfaces are defined in [arch.h](../../../../../../../../nuttx/blob/trunk/5.2/5.2/5.2/5.2/include/nuttx/arch.h#L1460), primarily for use by the scheduler (Sched).
+Upper-Half interfaces are defined in [arch.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/arch.h#L1460), primarily for use by the scheduler (Sched).
 
 ### 4. Lower-Half Interfaces
 

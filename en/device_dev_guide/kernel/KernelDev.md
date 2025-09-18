@@ -331,7 +331,7 @@ A spinlock is a non-blocking lock. When a thread attempts to acquire a spinlock 
 
 #### References
 
-The implementation code can be found at [openvela Spinlock](../../../../../../../open-vela/nuttx/tree/trunk/5.2/include/nuttx/spinlock.h).
+The implementation code can be found at [openvela Spinlock](../../../../../../../open-vela/nuttx/tree/trunk/include/nuttx/spinlock.h).
 
 ### 4. Atomic Operations
 
@@ -350,7 +350,7 @@ Atomic operations guarantee that instructions execute indivisibly, meaning their
 #### References
 
 - For a detailed description of atomic operations, see the [Atomic Operations API](./resource_sync/atomic_operation.md).
-- For related interface code, see [openvela atomic](../../../../../../../open-vela/nuttx/tree/trunk/5.2/5.2/include/nuttx/atomic.h).
+- For related interface code, see [openvela atomic](../../../../../../../open-vela/nuttx/tree/trunk/include/nuttx/atomic.h).
 
 ### 5. IRQ Control
 
@@ -368,7 +368,7 @@ openvela implements interrupt masking for the local CPU via `up_irq_xxx()` funct
 #### References
 
 - For details on interrupt system adaptation, refer to the [Interrupt System Adaptation Guide](./../../chip_porting/Interrupt_System_Adaptation_Guide.md).
-- For the interface code, see the [openvela irq interface](../../../../../../../open-vela/nuttx/tree/trunk/5.2/include/nuttx/irq.h).
+- For the interface code, see the [openvela irq interface](../../../../../../../open-vela/nuttx/tree/trunk/include/nuttx/irq.h).
 
 ### 6. Scheduler Control
 
@@ -448,7 +448,7 @@ int nsh_builtin(FAR struct nsh_vtbl_s *vtbl, FAR const char *cmd,
 
 #### References
 
-For the implementation code, see [openvela sched_lock.c](../../../../../../../open-vela/nuttx/tree/trunk/5.2/5.2/sched/sched/sched_lock.c) and [openvela sched_unlock.c](../../../../../../../open-vela/nu/trunk-5/trunk/unk/sched/sched/sched_unlock.c).
+For the implementation code, see [openvela sched_lock.c](../../../../../../../open-vela/nuttx/tree/trunk/sched/sched/sched_lock.c) and [openvela sched_unlock.c](../../../../../../../open-vela/nuttx/tree/trunk/sched/sched/sched_unlock.c).
 
 ### 7. Pthread Mutexes
 

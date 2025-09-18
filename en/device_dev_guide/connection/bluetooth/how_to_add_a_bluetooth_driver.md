@@ -67,7 +67,7 @@ The implementation of these member functions depends on the actual operation of 
     /* 4. The receive member function is assigned by openvela at registration time */
     ```
 
-3. In [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/5.2/drivers/drivers_initialize.c), define the `struct bt_driver_s` structure.
+3. In [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c), define the `struct bt_driver_s` structure.
 
     The following code shows a complete example of initializing a `struct bt_driver_s` instance, where the function pointers are assigned to the sample functions defined above:
 
