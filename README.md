@@ -56,7 +56,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform. For more information, refer to the following guide.
 
-[Quick Start (Ubuntu)](./quickstart/openvela_ubuntu_quick_start.md)
+[Quick Start (Ubuntu)](./en/quickstart/openvela_ubuntu_quick_start.md)
 
 ### Quick App Development
 

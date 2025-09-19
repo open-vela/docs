@@ -1,4 +1,4 @@
-# Development Board Application Cases
+# openvela Development Board Examples
 
 \[ English | [简体中文](../../zh-cn/dev_board/Development_Board.md) \]
 
