@@ -92,7 +92,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 - [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)：演示 GPS 定位、实时数据显示和运动轨迹记录。
 - [计算器](../../../../open-vela/packages_demos/blob/trunk/calculator/Readme.md)：一个基础的 UI 与逻辑交互示例。
 - [亲戚计算器](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
-- [打地鼠](../../../../open-vela/packages_demos/blob/trunk/Whackmole/Readme.md)：演示游戏循环、随机数生成和动画效果。
+- [打地鼠](../../../../open-vela/packages_demos/blob/trunk/Whackmole/README_zh-cn.md)：演示游戏循环、随机数生成和动画效果。
 
 查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/trunk/README_zh-cn.md)。
 

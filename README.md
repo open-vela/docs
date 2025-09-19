@@ -93,7 +93,7 @@ Here are some typical native application examples demonstrating the usage of dif
 - [Relation Calculator](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
 - [Whack-a-Mole](../../../../open-vela/packages_demos/blob/trunk/Whackmole/Readme.md): Demonstrates a game loop, random number generation, and animation effects.
 
-To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/trunk/README_zh-cn.md).
+To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/trunk/README.md).
 
 ### Quick Apps
 
