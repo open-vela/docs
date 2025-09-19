@@ -1,4 +1,4 @@
-# openvela 开发板支持列表
+# openvela 开发板案例
 
 \[ [English](../../en/dev_board/Development_Board.md) | 简体中文 \]
 

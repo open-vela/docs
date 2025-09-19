@@ -1,4 +1,4 @@
-# Bandx Demo
+# Smart Band
 
 \[ English | [简体中文](../../zh-cn/demo/Smart_Band_Example_zh-cn.md) \]
 
