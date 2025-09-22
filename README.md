@@ -100,7 +100,7 @@ Here are some typical native application examples demonstrating the usage of dif
 - [Cycling Computer](./en/demo/X_Track.md): Demonstrates GPS positioning, real-time data display, and route tracking.
 - [Calculator](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md): A basic example of UI and logic interaction.
 - [Relation Calculator](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
-- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev/Whackmole/Readme.md): Demonstrates a game loop, random number generation, and animation effects.
+- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev/Whackmole/README.md): Demonstrates a game loop, random number generation, and animation effects.
 
 To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/dev/README_zh-cn.md).
 
