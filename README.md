@@ -14,6 +14,12 @@ openvela is an operating system specifically crafted for the AIoT industry, with
 
 The name "Vela" is originated from the Latin term for "sail," which is also the name of the constellation resembling a sail in the southern sky. We aspire to partner with developers and set sail on a voyage through the AIoT landscape.
 
+## openvela Branch Descriptions
+
+- dev: Latest development version.
+- trunk: Stable version.
+- trunk-5.2 Release: See the [v5.2 Release Notes](./en/release_notes/v5.2.md) for details.
+
 ## Technical Architecture
 
 ![img](images/002.png)

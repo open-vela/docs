@@ -18,7 +18,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 - dev：最新开发版本。
 - trunk：稳定版本。
-- openvela 5.2 版本：点击[此处](./zh-cn/release_notes/openvela_5.0_Release.md)了解版本详情。
+- trunk-5.2 Release 版本：点击[此处](./zh-cn/release_notes/v5.2.md)了解版本详情。
 
 ## 技术架构
 
