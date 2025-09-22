@@ -14,6 +14,12 @@ openvela 操作系统专为 AIoT 领域量身定制，以轻量化、标准兼�
 
 Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星座的名字。我们选择这个名字的意义是希望与开发者一道携手，共同踏上星辰大海的征途。
 
+## openvela 版本分支说明
+
+- dev：最新开发版本。
+- trunk：稳定版本。
+- trunk-5.2 Release 版本：点击[此处](./zh-cn/release_notes/v5.2.md)了解版本详情。
+
 ## 技术架构
 
 ![img](images/001.png)
@@ -98,7 +104,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ### 快应用（Quick Apps）
 
-- [小米手环天气预报应用](../../.././packages_fe_examples/blob/trunk/weather/README.md)：演示音频播放、列表管理和后台服务。
+- [小米手环天气预报应用](../../.././packages_fe_examples/blob/trunk/weather/README.md)：提供简洁直观的未来七日天气信息展示。
 - [音乐播放器](../../.././packages_fe_examples/blob/trunk/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
 - [日历](../../.././packages_fe_examples/blob/trunk/calendar/README.md)：演示一个基础的日历。
 
