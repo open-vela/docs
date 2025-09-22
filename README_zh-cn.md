@@ -14,6 +14,12 @@ openvela 操作系统专为 AIoT 领域量身定制，以轻量化、标准兼�
 
 Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星座的名字。我们选择这个名字的意义是希望与开发者一道携手，共同踏上星辰大海的征途。
 
+## openvela 版本分支说明
+
+- dev：最新开发版本。
+- trunk：稳定版本。
+- openvela 5.2 版本：点击[此处](./zh-cn/release_notes/openvela_5.0_Release.md)了解版本详情。
+
 ## 技术架构
 
 ![img](images/001.png)
