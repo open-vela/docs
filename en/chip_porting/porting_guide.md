@@ -196,8 +196,9 @@ The chip usually contains multiple serial ports, and one serial port is usually 
 #### Code location
 
 - Reference implementation:
+
     - [stm32_serial.c](https://github.com/open-vela/nuttx/blob/41545a4ca98165813908e5fe25d3ecdbfc5ab19a/arch/arm/src/stm32f7/stm32_serial.c)
-    - [stm32_lowputc.c](https://github.com/open-vela/nuttx/blob/41545a4ca98165813908)
+    - [stm32_lowputc.c](https://github.com/open-vela/nuttx/blob/41545a4ca98165813908e5fe25d3ecdbfc5ab19a/arch/arm/src/stm32f7/stm32_lowputc.c)
 
 - Serial port related implementations are generally located in:
 
