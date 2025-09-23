@@ -2,26 +2,26 @@
 
 \[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Debugging_Vela_with_Vela_Emulator_zh-cn.md) \]
 
-## I. Using GDB Console
+## I. Using the GDB Console
 
-Use the following commands to install the required package on a Ubuntu 22.04 system:
+Use the following commands to install the required packages on an Ubuntu 22.04 system:
 
 ```bash
 sudo apt update
 sudo apt install gdb-multiarch
 ```
 
-Emulator supports working with GDB via its remote connection tool (gdbstub).You can debug openvela code as if the debugging is done on real hardware with low-level tools such as JTAG.You can stop and start the virtual machine, check the status of registers and memory, and set breakpoints and watchpoints.
+The emulator supports using GDB through the GDB remote connection tool (gdbstub). You can debug openvela code just as you would with low-level debugging tools like JTAG on real hardware. You can stop and start the virtual machine, inspect the state of registers and memory, and set breakpoints and watchpoints.
 
-In order to use GDB, launch Emulator with the “-s” and ”-S” options. The “-s” option lets Emulator listen for an incoming connection from GDB on TCP port 1234, whereas the “-S” lets Emulator not start the guest virtual machine until there is notification from GDB.
+Start the emulator with the `-s` and `-S` options to use GDB. The `-s` option will make the emulator listen for incoming connections from GDB on TCP port 1234, while the `-S` option will prevent the emulator from starting the guest virtual machine until it receives a notification from GDB.
 
-To enable the connection to the GDB server, you need to send the “-qemu -S –s” parameter to “emulator.sh”.
+To enable the connection with the GDB Server, you need to pass the `-qemu -S -s` arguments to `emulator.sh`.
 
 ```bash
 ./emulator.sh vela -qemu -S -s
 ```
 
-Open a new terminal and run “gdb-multiarch”:
+Open a new terminal and run `gdb-multiarch`:
 
 ```bash
 gdb-multiarch nuttx/nuttx
@@ -46,9 +46,9 @@ Type "apropos word" to search for commands related to "word"...
 Reading symbols from nuttx/nuttx...
 ```
 
-You need to create a remote connection, so that the host’s GDB will be connected to the GDB Server of Emulator.
+You need to create a remote connection to connect the host GDB to the emulator's GDB Server.
 
-Once connected, debugging can be done in a simulated environment, just like how other applications are debugged.
+After connecting, you can debug in the emulated environment just as you would with any other application.
 
 ```bash
 (gdb) target remote localhost:1234
@@ -70,7 +70,7 @@ Set a breakpoint:
 Breakpoint 1 at 0x601cdc: file init/nx_start.c, line 317.
 ```
 
-Continue to execute:
+Continue execution:
 
 ```bash
 (gdb) c
@@ -89,7 +89,7 @@ Display the source code:
 (gdb) l
 ```
 
-```
+```plaintext
 312	 *   Does not return.
 313	 *
 314	 ****************************************************************************/
@@ -102,7 +102,7 @@ Display the source code:
 321
 ```
 
-Display all the breakpoint information in the current GDB session:
+Display information about all breakpoints in the current GDB session:
 
 ```bash
 (gdb) info break
@@ -114,14 +114,14 @@ Num     Type           Disp Enb Address    What
 	breakpoint already hit 1 time
 ```
 
-Enable or disable breakpoints:
+Enable or disable a breakpoint:
 
 ```bash
 disable <breakpoint-number>
 enable <breakpoint-number>
 ```
 
-Delete breakpoints:
+Delete a breakpoint:
 
 ```bash
 d <breakpoint-number>
@@ -145,25 +145,25 @@ Exit GDB:
 
 3. Open the openvela workspace.
 
-    To open the workspace, go to the “File” > “Open Folder”... menu, and select the folder where openvela is located.
+    You can open the workspace by selecting the folder where openvela is located via the `File` > `Open Folder...` menu.
 
-    Alternatively, if you launch Visual Studio Code using a terminal, you can use the source code path of openvela as the first parameter for a “code” command.
+    Alternatively, if you start Visual Studio Code from the terminal, you can pass the path to the openvela source code as the first argument to the `code` command.
 
-    For example, use the following command to open the current directory as a workspace for Visual Studio Code.
+    For example, the following command opens the current directory as the workspace in Visual Studio Code.
 
     ```bash
     code .
     ```
 
-4. Add the startup configuration.
+4. Add a launch configuration.
 
-    To debug or run the openvela source code in Visual Studio Code, select “Run and Debug” on the Debug view or press F5. Then, Visual Studio Code will run the current active file.
+    To debug or run the openvela source code in Visual Studio Code, select `Run and Debug` in the Debug view or press the `F5` key. Visual Studio Code will then run the currently active file.
 
-    For most debugging scenarios, it is useful to create a startup configuration file that can be used to configure and save the debug settings. Save the debug configurations in a “launch.json” file located in a “.vscode” folder in the workspace (project’s root folder) or in the user settings or workspace settings.
+    In most debugging scenarios, it is very useful to create a launch configuration file. It allows you to configure and save detailed debugging settings. You can save this configuration information in the `launch.json` file in the `.vscode` folder of your workspace (the project's root folder), or directly in your user or workspace settings.
 
-    To create a “launch.json” file, select “create a launch.json file” in the Run start view.
+    To create a `launch.json` file, select `create a launch.json file` in the Run and Debug view.
 
-    The following is the startup configurations for debugging openvela:
+    The following is a launch configuration for debugging openvela:
 
     ```bash
     {
@@ -186,61 +186,63 @@ Exit GDB:
     }
     ```
 
-    If you go back to the File Explorer view (Ctrl+Shift+E), you will see that Visual Studio Code has created a “.vscode” folder and added the “launch.json” file to the workspace.
+    Return to the File Explorer view (Ctrl+Shift+E), and you will see that Visual Studio Code has created a `.vscode` folder and added the `launch.json` file to your workspace.
 
-5. Launch Emulator with the “-s” and “-S” options to use GDB.
+5. Start the emulator with the `-s` and `-S` options to use GDB.
 
     ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 
-6. Start a debug session.
+6. Start the debugging session.
 
-    To start a debug session, use the “Configuration” drop-down list in the Run and Debug view and select the “Debug openvela” configuration.After setting the startup configuration, use `F5` to start a debug session.
+    To start a debugging session, first select the `Debug openvela` configuration from the `Configuration` dropdown list in the `Run and Debug` view. After setting the launch configuration, use `F5` to start the debugging session.
 
-## III. Use Clion(Remote Debug)
+## III. Using CLion (Remote Debugging)
 
-1. download clion from here (recommend newer version) https://www.jetbrains.com/clion/
+1. Download and install [CLion (a recent version is recommended)](https://www.jetbrains.com/clion/).
 
-2. Config SSH Configurations
+2. Open the SSH Configurations menu.
 
-    click `Customize | All Settings` to menu from Welcome page
-    (if you already open a project click `File | Close Project` back to welcome page)
+    You can open the menu from the Welcome screen via `Customize | All Settings`. If you already have a project open, you can return to the Welcome screen by clicking `File | Close Project`.
 
-    click the `+` button and fill the ssh info (then check) like this
+    Click the `+` symbol, fill in the required information, test the connection, and then save it. For example:
+
     ![003.png](figures/003.png)
 
-3. Config and Choose Remote Project
+3. Configure and select the remote project.
 
-    On Welcome page select `Remote Development | SSH | New Project`
-    select the ssh connection we config before and click the button `Check Connection and Continute`
-    choose ide then select the project when we clone before
-    then click `Start IDE and Connect`
+    On the Welcome screen, select `Remote Development | SSH | New Project`, choose the SSH connection you just created, and click `Check Connection and Continue` in the bottom right corner. Select an IDE version, set the project path to the root directory of the cloned vela project, and then click `Start IDE and Connect`. For example:
 
     ![004.png](figures/004.png)
 
-    wait for download finish and `Authenticate` like this
+    Wait for the download to complete and click `Authenticate`:
+
     ![005.png](figures/005.png)
 
-4. Create Debug Configuration
+4. Create a debug configuration.
 
-    click `Add Configuration | Remote GDB Server` and config like this
+    Click `Add Configuration | Remote GDB Server` and configure it as shown in the example below:
+
     ![006.png](figures/006.png)
 
-    Target can be created with default(just a target)
+    An example of creating a Target:
+
     ![007.png](figures/007.png)
 
-5. Launch Emulator with the `-s` and `-S` options to use gdb.
+5. Start the emulator with the `-s` and `-S` options to use GDB.
 
     ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 
-6. Start a debug session.
+6. Start the debugging session.
 
-    click debug icon then we can debug
+    Click the debug button to start debugging:
+
     ![008.png](figures/008.png)
 
-    (you would get the confirmation when you do the first debug)
+    If an authentication dialog pops up, enter your password or select the configured SSH key:
+
     ![009.png](figures/009.png)
     ![010.png](figures/010.png)

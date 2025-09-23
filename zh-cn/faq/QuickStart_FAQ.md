@@ -71,7 +71,7 @@ fatal: unable to access 'https://gerrit.googlesource.com/git-repo/': Failed to c
 
 ### 问题描述
 
-执行 `repo sync` 命令时中断，出现 **fatal: early EOF** 错误。
+执行 `repo sync` 命令时中断，出现 `fatal: early EOF` 错误。
 ![img](./images/004.jpg)
 
 ### 问题原因

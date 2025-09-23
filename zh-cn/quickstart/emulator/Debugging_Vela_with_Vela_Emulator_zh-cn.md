@@ -232,7 +232,7 @@ d <breakpoint-number>
 
 5. 通过传递 `-s` 和 `-S` 选项启动模拟器来使用 GDB。
 
-    ```
+    ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 

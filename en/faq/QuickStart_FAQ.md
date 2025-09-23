@@ -71,7 +71,7 @@ Network restrictions, mirror source regional limitations, or DNS resolution issu
 
 ### Problem Description
 
-The `repo sync` command is interrupted with a fatal: **early EOF error**.
+The `repo sync` command is interrupted with a fatal: `fatal: early EOF`.
 
 ![img](./images/004.jpg)
 
