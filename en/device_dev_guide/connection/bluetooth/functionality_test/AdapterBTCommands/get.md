@@ -33,8 +33,8 @@ The `scanmode` command is used to get the current scanning status attribute of t
 
 #### Parameter Table
 
-| **Parameter** | **Description**                                                                                                                                                        |    **Type**     |
-| :-----------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: |
+| **Parameter** | **Description**                                                                                                                                                        | **Type**        |
+| :-----------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------- |
 |   scan mode   | Discoverability and connectivity state:<br>0: Not discoverable, not connectable.<br>1: Not discoverable but connectable.<br>2: (Default) Discoverable and connectable. | Decimal integer |
 
 #### Example
