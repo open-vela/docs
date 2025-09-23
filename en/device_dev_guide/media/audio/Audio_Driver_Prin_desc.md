@@ -277,8 +277,10 @@ On the Simulator platform, the lower-half driver uses the host’s ALSA capabili
  audio_register("pcm0p", sim_audio_initialize(true, false));
 ```
 
-- `"pcm0p"` is the registered node name.
+- `pcm0p` is the registered node name.
 - `sim_audio_initialize` initializes the lower-half driver.
+
+This code is located in the arch/sim/src/sim/posix/sim_alsa.c file. On the Simulator platform, pcm0p is registered by a single lower-half driver.
 
 #### 1.2 `audio_comp_initialize`
 
