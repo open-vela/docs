@@ -135,7 +135,7 @@ Exit GDB:
 
 ## II. Using Visual Studio Code
 
-1. Visit https://code.visualstudio.com/ to install Visual Studio Code.
+1. Click [here](https://code.visualstudio.com/) to download and install Visual Studio Code.
 
 2. Install the Visual Studio Code extension.
 
