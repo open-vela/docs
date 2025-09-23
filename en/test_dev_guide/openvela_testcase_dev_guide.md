@@ -11,11 +11,11 @@ OpenVela provides developers with a comprehensive development self-testing frame
 ```Bash
 ├─tests
 │    └──scripts
-│       ├── env                  # Automation framework environment requirements
-│       ├── script                                   # Test scripts executed by the automation framework
+│       ├── env          # Automation framework environment requirements
+│       ├── script       # Test scripts executed by the automation framework
 │       └── utils
-│    ├── testcases                                    # Test toolkit
-│    └── testsuites                                    # cmocka test toolkit
+│    ├── testcases       # Test toolkit
+│    └── testsuites      # cmocka test toolkit
 ```
 
 ## III. Developing Test Cases

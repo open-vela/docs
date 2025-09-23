@@ -21,11 +21,11 @@
     ```C
     void up_irqinitialize(void)
     {
-    // Disable all interrupts
-    // Set the NVIC vector location
-    // Set all interrupts (and exceptions) to the default priority
-    // Attach the SVCall and Hard Fault exception handlers
-    // enable interrupts
+        // Disable all interrupts
+        // Set the NVIC vector location
+        // Set all interrupts (and exceptions) to the default priority
+        // Attach the SVCall and Hard Fault exception handlers
+        // enable interrupts
     }
     ```
 
@@ -34,7 +34,7 @@
     ```C
     void up_enable_irq(int irq)
     {
-    //enable interrupt with irq
+        //enable interrupt with irq
     }
       ```
 
@@ -43,7 +43,7 @@
     ```C
     void up_disable_irq(int irq)
     {
-    //disable interrupt with irq
+        //disable interrupt with irq
     }
     ```
 
@@ -53,7 +53,7 @@
     #ifdef CONFIG_ARCH_IRQPRIO
     int up_prioritize_irq(int irq, int priority)
     {
-    // set irq priority
+        // set irq priority
     }
     #endif
     ```

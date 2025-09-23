@@ -255,7 +255,7 @@ void up_putc(int ch)
 
 为了使应用可以通过标准输入/输出（`stdin/out/err`）访问物理串口，必须注册串口驱动。
 
-- 每个架构提供 `<arm>_serialinit` 接口，又厂商实现。
+- 每个架构提供 `<arm>_serialinit` 接口，由厂商实现。
 
 - 内部调用 `uart_register` 注册控制台和其他串口设备节点。以下为 ARM 平台示例：
 
@@ -272,10 +272,10 @@ void up_putc(int ch)
 
     void arm_serialinit(void)
     {
-    #ifdef CONSOLE_DEV
-      uart_register("/dev/console", &CONSOLE_DEV);
-    #endif
-      ...
+        #ifdef CONSOLE_DEV
+        uart_register("/dev/console", &CONSOLE_DEV);
+        #endif
+        ...
     }
     ```
 
