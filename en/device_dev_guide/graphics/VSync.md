@@ -370,7 +370,7 @@ Under the new `panbuf` queue mechanism, the driver needs to use the following AP
  ****************************************************************************/
 
 int fb_peek_paninfo(FAR struct fb_vtable_s *vtable,
-                    FAR union fb_paninfo_u *info, int overlay)
+                    FAR union fb_paninfo_u *info, int overlay);
 /****************************************************************************
  * Name: fb_remove_paninfo
  * Description:
