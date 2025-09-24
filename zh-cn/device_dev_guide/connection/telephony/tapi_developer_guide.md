@@ -37,6 +37,7 @@ TAPI 采用异步、事件驱动的工作模式，通过 D-Bus 与系统底层�
 3. **释放**：应用在退出或不再需要通信功能时，调用 `tapi_close()` 释放句柄和相关资源。
 
 ![alt text](./figures/003.png)
+![alt text](image.png)
 
 ## 三、开发前置条件
 
