@@ -14,28 +14,6 @@ openvela is an operating system specifically crafted for the AIoT industry, with
 
 The name "Vela" is originated from the Latin term for "sail," which is also the name of the constellation resembling a sail in the southern sky. We aspire to partner with developers and set sail on a voyage through the AIoT landscape.
 
-## openvela Versioning Strategy
-
-- **dev (Development Branch)**
-
-    Contains the latest features and fixes, and may be unstable. Recommended for developers who wish to experience new features or contribute.
-
-- **trunk (Main Stable Branch)**
-
-    A comprehensively tested, stable version. Stable features from the `dev` branch are merged here. Recommended for most users seeking stability.
-
-- **Release Tags**
-
-    Permanent tags created from the `trunk` branch, representing an official, stable release. We strongly recommend using the latest release tag in **production environments** to ensure maximum stability.
-
-    - **List of Released Versions**:
-
-        - `trunk-5.2`: For detailed changes in this version, please refer to its [v5.2 Release Notes](./en/release_notes/v5.2.md).
-
-    - **Maintenance Policy**:
-
-        Critical bug fixes for a released version will be delivered by releasing a new patch tag (e.g., `trunk-5.2.1`).
-
 ## Technical Architecture
 
 ![img](images/002.png)
@@ -127,6 +105,28 @@ To see the full list of native apps, please visit the [Native App Examples Repos
 - [Calendar](../../.././packages_fe_examples/blob/dev/calendar/README.md): Demonstrates a basic calendar.
 
 More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
+
+## openvela Versioning Strategy
+
+- **dev (Development Branch)**
+
+    Contains the latest features and fixes, and may be unstable. Recommended for developers who wish to experience new features or contribute.
+
+- **trunk (Main Stable Branch)**
+
+    A comprehensively tested, stable version. Stable features from the `dev` branch are merged here. Recommended for most users seeking stability.
+
+- **Release Tags**
+
+    Permanent tags created from the `trunk` branch, representing an official, stable release. We strongly recommend using the latest release tag in **production environments** to ensure maximum stability.
+
+    - **List of Released Versions**:
+
+        - `trunk-5.2`: For detailed changes in this version, please refer to its [v5.2 Release Notes](./en/release_notes/v5.2.md).
+
+    - **Maintenance Policy**:
+
+        Critical bug fixes for a released version will be delivered by releasing a new patch tag (e.g., `trunk-5.2.1`).
 
 ## Code contribution
 
