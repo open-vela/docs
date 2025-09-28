@@ -50,11 +50,11 @@ openvela's Framebuffer interface consists of two layers: upper-level user interf
 
 openvela's Framebuffer user interface resembles Linux systems, offering standard operations via VFS (Virtual File System), including `open`, `close`, `read`, `write`, and `ioctl`. Users can access the following functions by operating `/dev/fbx` device files:
 
-1. Map Framebuffer to user space: 
+1. Map Framebuffer to user space:
 
     Use `mmap` to map Framebuffer into user space for direct read/write operations
 
-2. Switch Framebuffer: 
+2. Switch Framebuffer:
 
     Use `ioctl` interface to switch between different Framebuffer configurations or modes.
 
@@ -114,8 +114,9 @@ From the code, we can see the Framebuffer provides these 3 interfaces for LCD de
     - Retrieves `fb_vtable_s` structure information for LCD
     - `fb_vtable_s` is the core Framebuffer structure containing all interfaces. This function registers LCD controller information into the Framebuffer framework
     - Reference implementations:
-    - `drivers/video/vnc/vnc_fbdev.c`
-    - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
+
+        - `drivers/video/vnc/vnc_fbdev.c`
+        - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
 
 3. `void up_fbuninitialize(int display)`
 

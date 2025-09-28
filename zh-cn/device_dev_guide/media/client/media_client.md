@@ -40,7 +40,9 @@ Media Focus 模块实现了客户端对 Focus 信令的管理与请求操作。
     - `media_focus.c` 为 Client 提供了与 Server 交互以管理 Media Focus 的同步接口。
     - 该模块支持接收用户关于Focus的指令，如请求 Focus 的 **media_focus_request** 接口、释放 Media Focus 以及打印 Focus 日志信息的 **media_focus_dump** 接口。
     - 通过 **media_proxy** 接口将命令转发给 Server 端处理。
+
 - 异步接口：
+
     - `media_uv_focus.c` 提供 Client 异步请求和释放 Media Focus，通过 media_uv 与 Server 进行通信。
     - 在请求焦点时，会进行一系列的异步操作，包括连接服务器、发送 Ping 请求、开始监听、发送焦点请求等，最终调用用户定义的 Focus 回调函数返回。
     - 放弃焦点时，发送放弃请求并断开与服务器的连接，释放资源等。
