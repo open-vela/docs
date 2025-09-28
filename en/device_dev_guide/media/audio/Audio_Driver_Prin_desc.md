@@ -4,9 +4,9 @@
 
 ## I. Overview
 
-OpenVela provides an abstract audio device-node interface that enables applications to perform audio playback and recording. Applications interact with the audio driver via the standard `open`, `close`, and `ioctl` system calls.  
+openvela provides an abstract audio device-node interface that enables applications to perform audio playback and recording. Applications interact with the audio driver via the standard `open`, `close`, and `ioctl` system calls.  
 
-OpenVela’s audio driver uses a layered architecture consisting of two parts:
+openvela audio driver uses a layered architecture consisting of two parts:
 
 1. **Upper Half Driver**: Defines a unified external interface and common code, and provides default implementations for certain `ioctl` commands.  
 2. **Lower Half Driver**: Implements the hardware-specific interaction logic (e.g., controlling the audio hardware).  
@@ -15,9 +15,9 @@ This layered design modularizes audio functionality, decouples it from hardware,
 
 ## II. Software Layers
 
-OpenVela provides three built-in tools—`nxplayer`, `nxrecorder`, and `nxlooper`—to help developers verify the audio driver. These tools offer a convenient way to test and validate multimedia features such as playback and recording.
+openvela provides three built-in tools—`nxplayer`, `nxrecorder`, and `nxlooper`—to help developers verify the audio driver. These tools offer a convenient way to test and validate multimedia features such as playback and recording.
 
-The audio driver exposes its functionality through the audio interface, providing multimedia audio capabilities to application developers. The layer structure of the OpenVela audio driver is as follows:
+The audio driver exposes its functionality through the audio interface, providing multimedia audio capabilities to application developers. The layer structure of the openvela audio driver is as follows:
 
 - **Audio Applications**: For multimedia functionality development, e.g., music players.  
 - **Vela Audio Driver**: Provides audio interfaces to upper-level applications and encapsulates hardware-related details.  
@@ -26,7 +26,7 @@ The audio driver exposes its functionality through the audio interface, providin
 
 ## III. Code Directory
 
-The OpenVela audio driver source is located under the `nuttx/audio` directory. Its structure is:
+The openvela audio driver source is located under the `nuttx/audio` directory. Its structure is:
 
 ```bash
 user@user:~/vela/nuttx/audio$ tree
@@ -87,7 +87,7 @@ The example demonstrates how to:
 
 ## V. Audio Device Nodes
 
-On the OpenVela `sim` platform, after the system boots there are four audio device nodes under `/dev/audio/`:
+On the openvela `sim` platform, after the system boots there are four audio device nodes under `/dev/audio/`:
 
 ```Bash
 ap> ls /dev/audio
@@ -120,7 +120,8 @@ int audio_register(FAR const char *name, FAR struct audio_lowerhalf_s *dev)
 ##### Data Structures
 
 1. `audio_upperhalf_s`
-   The upper-half driver’s state structure, which maintains device status information.
+
+    The upper-half driver’s state structure, which maintains device status information.
 
     ```C
     struct audio_upperhalf_s
@@ -134,7 +135,8 @@ int audio_register(FAR const char *name, FAR struct audio_lowerhalf_s *dev)
     ```
 
 2. `audio_lowerhalf_s`
-   The lower-half driver’s structure for hardware adaptation.
+
+    The lower-half driver’s structure for hardware adaptation.
 
     ```C
     struct audio_lowerhalf_s
@@ -284,7 +286,7 @@ This code is located in the arch/sim/src/sim/posix/sim_alsa.c file. On the Simul
 
 #### 1.2 `audio_comp_initialize`
 
-`audio_comp_initialize` is a function used to register a composite audio device. Its functionality is similar to combining `platform`/`dai`/`codec` drivers in the Linux ASoC framework; however, in OpenVela all audio drivers are abstracted as `audio_lowerhalf`, with no distinction between `platform`, `dai`, and `codec`.  
+`audio_comp_initialize` is a function used to register a composite audio device. Its functionality is similar to combining `platform`/`dai`/`codec` drivers in the Linux ASoC framework; however, in openvela all audio drivers are abstracted as `audio_lowerhalf`, with no distinction between `platform`, `dai`, and `codec`.  
 
 ##### Function Definition
 
@@ -630,15 +632,11 @@ struct audio_lowerhalf_s
     - One of the more complex devices needs to implement the complete control and data interfaces.
     - The remaining simpler devices need to implement only a subset of the interfaces.
 
-Here's a formal English translation of the provided technical documentation section, tailored for inclusion in developer-facing documentation:
-
----
-
 ## Ⅶ. `audio_dma` Audio Lower-Half Driver Example
 
 ### 1. Overview of `audio_dma`
 
-`audio_dma` is a built-in audio lower-half driver provided by OpenVela, with its source code located at `drivers/audio/audio_dma.c`. This section explains its implementation in detail.
+`audio_dma` is a built-in audio lower-half driver provided by openvela, with its source code located at `drivers/audio/audio_dma.c`. This section explains its implementation in detail.
 
 ### 1.1 Data Structures
 
@@ -847,7 +845,7 @@ Let me know if you'd like this section adapted for a specific audience (e.g., be
 
 ### 2. `audio_i2s`
 
-`audio_i2s` is a built-in lower-half audio driver provided by OpenVela, mainly used for audio data transmission and control. Below is a detailed explanation of `audio_i2s`.
+`audio_i2s` is a built-in lower-half audio driver provided by openvela, mainly used for audio data transmission and control. Below is a detailed explanation of `audio_i2s`.
 
 #### 2.1 Data Structures
 
@@ -1096,7 +1094,7 @@ By implementing `audio_i2s`, developers can quickly adapt to different vendors' 
 
 ### 3. sim\_alsa
 
-`sim_alsa` is a built-in lower-half audio driver provided by OpenVela, primarily used to bridge the OpenVela audio driver with the host ALSA (Advanced Linux Sound Architecture) capabilities on a simulated platform, enabling audio playback and recording.
+`sim_alsa` is a built-in lower-half audio driver provided by openvela, primarily used to bridge the openvela audio driver with the host ALSA (Advanced Linux Sound Architecture) capabilities on a simulated platform, enabling audio playback and recording.
 
 #### 3.1 Code Location
 
@@ -1132,7 +1130,7 @@ static const struct audio_ops_s g_sim_audio_ops =
 
 #### 3.3 Function Overview
 
-The main function of `sim_alsa` is to bridge the OpenVela audio driver with the host ALSA system, supporting the following scenarios:
+The main function of `sim_alsa` is to bridge the openvela audio driver with the host ALSA system, supporting the following scenarios:
 
 - Audio playback: Transfers audio data from the simulated platform to the host ALSA system for playback.
 - Audio recording: Acquires audio data from the host ALSA system and passes it to the simulated platform.
@@ -1150,20 +1148,20 @@ Developers can refer to the code implementation in `sim_alsa.c` and `sim_offload
 
 ### 1. Background
 
-Similar to the compress nodes provided by ALSA, OpenVela audio drivers can also abstract similar compress nodes to support audio data decoding and output.
+Similar to the compress nodes provided by ALSA, openvela audio drivers can also abstract similar compress nodes to support audio data decoding and output.
 
-For example, on certain platforms, if a dedicated DSP (Digital Signal Processor) exists for audio codec operations, the compress node abstraction in OpenVela can support the following features:
+For example, on certain platforms, if a dedicated DSP (Digital Signal Processor) exists for audio codec operations, the compress node abstraction in openvela can support the following features:
 
 - Applications pass compressed audio data to the compress node via the ENQUEUE interface.
 - The driver communicates with the DSP via RPC to complete decoding and playback of the audio data.
 
 ### 2. Overview
 
-Compress capability refers to the OpenVela audio driver's ability to play and record compressed audio data. With compress nodes, the driver can process compressed audio formats and internally handle decoding or encoding.
+Compress capability refers to the openvela audio driver's ability to play and record compressed audio data. With compress nodes, the driver can process compressed audio formats and internally handle decoding or encoding.
 
 ### 3. Example
 
-On the OpenVela simulation platform, `pcm1p` and `pcm1c` nodes are registered to simulate compress node functionality. The following features are currently implemented:
+On the openvela simulation platform, `pcm1p` and `pcm1c` nodes are registered to simulate compress node functionality. The following features are currently implemented:
 
 - Supported formats: MP3 audio playback and recording.
 - Implementation: Audio encoding and decoding for MP3 format is performed using `libmad` and `lame` libraries on the host.

@@ -295,6 +295,7 @@ The `enter-pin` command is used to validate the PIN (Personal Identification Num
 ```Bash
 enter-pin [slot_id][pin_type][pin]
 ```
+
 - slot_id: Set the slot to query; currently, only `0` is supported.
 - pin_type: Type of the PIN code, either `pin` or `pin2`.
 - pin: The PIN code value to be validated.
@@ -504,7 +505,7 @@ The `transmit-apdu-logical-channel` command is used to send an APDU (Application
 transmit-apdu-logical-channel [slot_id][session_id][pdu][len]
 ```
 
-- lot_id: Specifies the slot to query, currently only supports `0`.
+- slot_id: Specifies the slot to query, currently only supports `0`.
 - session_id: The session identifier of the logical channel.
 - pdu: The APDU data content to send.
 - len: The byte length of the APDU data.
@@ -605,7 +606,7 @@ The `set-uicc-enablement` command is used to set the enablement or disablement s
 set-uicc-enablement [slot_id][[state]
 ```
 
-- slot_id: : Specifies the slot to query, currently only supports `0`.
+- slot_id: Specifies the slot to query, currently only supports `0`.
 - state: Specifies the target state of the UICC application:
     - `0`: Disable the UICC application.
     - `1`: Enable the UICC application.

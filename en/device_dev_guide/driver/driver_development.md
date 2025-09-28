@@ -356,7 +356,7 @@ I3C is more complex than I2C. In addition to hardware improvements, it is reflec
 - **Driver Model**
 
     - **Lower Half:** This layer is hardware-specific and interfaces directly with the RTC chip. The primary task for a driver developer is to implement the `struct rtc_ops_s`. This structure defines a standard set of operations (e.g., `initialize`, `read_time`, `set_time`) that abstract the underlying hardware behavior.
-    - **Upper Half:** This is the generic, hardware-agnostic logic layer provided by OpenVela. It is responsible for creating a standard character device node (e.g., `/dev/rtc0`) and translating user-space VFS (Virtual File System) file operations, such as `ioctl`, into calls to the lower-half `rtc_ops_s` interface.
+    - **Upper Half:** This is the generic, hardware-agnostic logic layer provided by openvela. It is responsible for creating a standard character device node (e.g., `/dev/rtc0`) and translating user-space VFS (Virtual File System) file operations, such as `ioctl`, into calls to the lower-half `rtc_ops_s` interface.
 
 - **Access Paths**
 

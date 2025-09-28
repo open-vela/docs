@@ -178,7 +178,7 @@ openvela 在 SMP 模式下使用 `SIGUSR1` 信号进行核间任务调度和通�
     ```Bash
     #!/bin/bash
     # This script acts as a wrapper to launch gdb with sudo.
-    sudo /usr/bin/gdb "$$@"
+    sudo /usr/bin/gdb "$@"
     ```
 
     然后，赋予此脚本可执行权限：

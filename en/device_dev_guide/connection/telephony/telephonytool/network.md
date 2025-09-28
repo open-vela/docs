@@ -4,7 +4,7 @@
 
 ## I. Overview
 
-In the NSH command line of OpenVela, you can perform all network-related operations by accessing the Console of the telephonytool command tool.
+In the NSH command line of openvela, you can perform all network-related operations by accessing the Console of the telephonytool command tool.
 
 ## II. Prerequisites
 
@@ -63,7 +63,7 @@ The `unlisten-network` command is used to cancel listening to network-related ev
 unlisten-network [watch_id]
 ```
 
-- watch_id： Corresponds to the return value of the `listen-network` command, used to identify the event to stop listening to.
+- watch_id：Corresponds to the return value of the `listen-network` command, used to identify the event to stop listening to.
 
 #### Example
 

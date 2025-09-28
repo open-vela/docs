@@ -333,16 +333,16 @@ CONFIG_TESTING_DRIVER_TEST=y
 ```Bash
 usage:
 
-1. cmocka_driver_audio requires two mandatory parameters:  
-   -a 2: Playback only  
-   -a 1: Capture only  
-   -a 3: First capture, then playback.  
-   -p  : Filename.  e.g: -p /data/1.pcm
+1.cmocka_driver_audio need two required parameters:
+   -a 2: only playback
+   -a 1: only capture
+   -a 3: first capture and then playback.
+   -p  : filename.  e.g: -p /data/1.pcm
 
-2. Default audio devices are /dev/audio/pcm0p (playback) and /dev/audio/pcm0c (capture).  
-   Use -i to change the recording device. e.g. -i /dev/audio/pcm1c.  
-   Use -o to change the playback device. e.g. -o /dev/audio/pcm1p.  
 
-3. Default format is AUDIO_FMT_PCM.  
-   Use -f to change the format. e.g. -f mp3
+2.default audio device is /dev/audio/pcm0p, /dev/audio/pcm0c.
+   use -i change record audio device. e.g. -i /dev/audio/pcm1c.
+   use -i change playback audio device. e.g. -i /dev/audio/pcm1p.
+3.default format is AUDIO_FMT_PCM
+   use -f change format. e.g -f mp3
 ```

@@ -59,7 +59,6 @@ listen-sim 0 28
 
 ```Bash
 unlisten-sim [watch_id]
-watch_id:对应listen-data的返回值
 ```
 
 - watch_id: 对应 `listen-sim` 命令返回的监听 ID，用于标识需要取消的监听事件。
@@ -296,9 +295,6 @@ telephonytool> [12840.160200] [21] [  INFO] [ap] [0,0081]> RIL_REQUEST_CHANGE_SI
 
 ```Bash
 enter-pin [slot_id][pin_type][pin]
-slot_id:设置要监听的slot,当前只支持0
-pin_type:pin码类型，pin or pin2
-pin:pin码值
 ```
 
 - slot_id: 设置要查询的插槽，目前仅支持 `0`。
@@ -330,10 +326,6 @@ telephonytool> enter-pin 0 pin 1234
 
 ```Bash
 reset-pin [slot_id][puk_type][puk][new_pin]
-slot_id:设置要监听的slot,当前只支持0
-puk_type：puk码类型,puk or puk2
-puk:puk码值
-new_pin:新的pin码值
 ```
 
 - slot_id: 设置要查询的插槽，目前仅支持 `0`。
@@ -366,9 +358,6 @@ telephonytool> reset-pin 0 puk 12345678 2345
 
 ```Bash
 lock-pin [slot_id][pin_type, pin or pin2][pin]
-slot_id:设置要监听的slot,当前只支持0
-pin_type:pin码类型，pin or pin2
-pin:pin码值
 ```
 
 - slot_id: 设置要查询的插槽，目前仅支持 `0`。

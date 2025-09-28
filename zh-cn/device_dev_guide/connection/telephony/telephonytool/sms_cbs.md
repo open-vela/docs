@@ -69,10 +69,6 @@ telephonytool> send-sms 0 10086 hello
 
 ```Bash
 send-sms [slot_id][number][text][port]
-slot_id:设置要监听的slot,当前只支持0
-number:目标电话号码
-text：短消息的内容
-port:发送数据短消息的port
 ```
 
 - slot_id: 设置要监听的插槽，目前仅支持 `0`。

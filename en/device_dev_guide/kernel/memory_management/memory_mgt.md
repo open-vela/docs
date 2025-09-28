@@ -4,7 +4,7 @@
 
 ## I. Introduction  
 
-The code for OpenVela's memory management module is located in the `nuttx/mm` directory, which contains memory management related modules. These modules provide features such as memory allocation, memory mapping, shared memory management, and more to support the memory requirements of systems and applications.
+The code for openvela's memory management module is located in the `nuttx/mm` directory, which contains memory management related modules. These modules provide features such as memory allocation, memory mapping, shared memory management, and more to support the memory requirements of systems and applications.
 
 ## II. Directory Structure  
 

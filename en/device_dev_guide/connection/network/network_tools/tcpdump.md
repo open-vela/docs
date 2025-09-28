@@ -42,7 +42,7 @@ CONFIG_SYSTEM_TCPDUMP_STACKSIZE=8192
     Before using `tcpdump `to capture packages, the following preparations need to be completed:
 
     - Prepare storage directories: Make sure there are available directories on the device for storing capture files, depending on the storage method of the device.
-    - Mount the host directory (for OpenVela SIM environment): The host directory can be mounted on the device for easy storage of capture files.
+    - Mount the host directory (for openvela SIM environment): The host directory can be mounted on the device for easy storage of capture files.
 
         ```Bash
         # Take the SIM as an example, mount the directory on the host to /data1

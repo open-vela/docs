@@ -137,7 +137,7 @@ The openvela network protocol stack supports the TCP protocol on both IPv4 and I
 
 ### 3. UDP / ICMP / ICMPv6 Capabilities
 
-In addition to the basic network communication capabilities, the OpenVela network stack also provides a series of advanced features for multi-core architectures, complex routing scenarios, and high-performance network requirements. The following is a detailed introduction to the advanced capabilities.
+In addition to the basic network communication capabilities, the openvela network stack also provides a series of advanced features for multi-core architectures, complex routing scenarios, and high-performance network requirements. The following is a detailed introduction to the advanced capabilities.
 
 #### UDP Capabilities
 

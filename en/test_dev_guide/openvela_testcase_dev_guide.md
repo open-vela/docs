@@ -1,10 +1,10 @@
-# OpenVela Test Case Development Guide
+# openvela Test Case Development Guide
 
 \[ English | [简体中文](../../zh-cn/test_dev_guide/openvela_testcase_dev_guide.md) \]
 
 ## I. Introduction
 
-OpenVela provides developers with a comprehensive development self-testing framework called cmocka. Developers can develop relevant test cases according to their needs, detect defects early during the development phase, and improve code quality. This document introduces how to use this framework to develop test cases.
+openvela provides developers with a comprehensive development self-testing framework called cmocka. Developers can develop relevant test cases according to their needs, detect defects early during the development phase, and improve code quality. This document introduces how to use this framework to develop test cases.
 
 ## II. Code Directory
 
