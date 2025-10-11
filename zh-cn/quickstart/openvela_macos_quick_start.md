@@ -174,7 +174,7 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap -t menuconfig
 >
 > - 按 `/` 键可搜索配置项。
 > - 按 `空格键` 可切换选中状态（启用/禁用/模块化）。
-> - 配置完成后，选择 "Save" 保存并退出。
+> - 配置完成后，选择 **Save** 保存并退出。
 
 ![alt text](./figures/006.png)
 
