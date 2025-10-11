@@ -1,5 +1,3 @@
-
-
 # Quick Start (Ubuntu)
 
 [ English | [简体中文](./../../zh-cn/quickstart/openvela_ubuntu_quick_start.md) ]
@@ -76,8 +74,8 @@ After installation, you can run `repo --version` to verify it.
 
     > **Tip**
     >
-    >  - The initial sync can be time-consuming, depending on your network connection and disk performance.
-    >  - If the sync is interrupted due to network issues, you can run `repo sync` again to resume.
+    > - The initial sync can be time-consuming, depending on your network connection and disk performance.
+    > - If the sync is interrupted due to network issues, you can run `repo sync` again to resume.
 
 ## Step 3: Build the Source Code
 
@@ -135,7 +133,7 @@ cmake --build cmake_out/goldfish-arm64-v8a-ap -t menuconfig
 >
 > - Press `/` to search for configuration options.
 > - Press the `Spacebar` to toggle the selection state (enable/disable/module).
-> - After configuring, select "Save" to save and exit.
+> - After configuring, select **Save** to save and exit.
 
 ![alt text](./figures/006.png)
 
