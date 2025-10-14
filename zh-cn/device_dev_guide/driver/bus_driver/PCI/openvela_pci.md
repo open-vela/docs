@@ -152,7 +152,7 @@ PCI 子系统初始化的核心就是注册 PCI 控制器：
 
 4. **中断配置**：
 
-    - **INT-x的Legacy 中断**：调用 `pci_get_irq()` 获取中断号，然后注册中断服务程序（ISR）并使能中断。
+    - **INT-x 的 Legacy 中断**：调用 `pci_get_irq()` 获取中断号，然后注册中断服务程序（ISR）并使能中断。
     - **消息信号中断 (MSI/MSI-X)**：调用 `pci_alloc_irq()` 申请中断资源，然后通过 `pci_connect_irq()` 配置中断能力（Capability）寄存器。同样，获取中断号后需注册 ISR 并使能。
 
 ### 1、核心数据结构
@@ -231,7 +231,7 @@ EDU (Educational) 设备是 QEMU 提供的一个虚拟 PCI 设备，非常适合
 
 **启动命令示例：**
 
-```Markdown
+```bash
 sudo qemu-system-aarch64 \
     -m 32g \
     -cpu cortex-a53 \
