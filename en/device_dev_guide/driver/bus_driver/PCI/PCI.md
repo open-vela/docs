@@ -1,5 +1,7 @@
 # openvela PCI Subsystem: A Technical Deep Dive
 
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/PCI/PCI.md) \]
+
 ## I. PCI Subsystem Framework Overview
 
 The PCI (Peripheral Component Interconnect) subsystem in the openvela operating system closely follows the mature model of the Linux PCI subsystem. Therefore, developers familiar with the Linux kernel can quickly grasp its core concepts.

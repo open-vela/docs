@@ -1,5 +1,7 @@
 # openvela PCI 子系统技术详解
 
+\[ [English](../../../../../en/device_dev_guide/driver/bus_driver/PCI/PCI.md) | 简体中文 \]
+
 ## 一、PCI 子系统框架概述
 
 openvela 操作系统中的 PCI (Peripheral Component Interconnect) 子系统，其核心设计在很大程度上遵循了 Linux PCI 子系统的成熟模型。因此，熟悉 Linux 内核的开发者可以快速掌握其核心概念。
