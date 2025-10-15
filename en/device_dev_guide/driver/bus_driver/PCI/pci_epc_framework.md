@@ -1,39 +1,41 @@
-# PCI Endpoint (EPC) 框架深度解析
+# In-Depth Analysis of the PCI Endpoint (EPC) Framework
 
-本文档旨在深度解析 openvela 操作系统中的 PCI Endpoint Controller (EPC) 框架。内容涵盖其架构设计、核心职责、工作流程、关键数据结构和 API，为开发者提供一个全面的开发与使用指南。
+\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/PCI/pci_epc_framework.md) \]
 
-## 一、术语表
+This document provides an in-depth analysis of the PCI Endpoint Controller (EPC) framework in the openvela operating system. It covers its architectural design, core responsibilities, workflow, key data structures, and APIs, offering a comprehensive guide for developers.
 
-| **术语/缩写** | **英文全称**        | **中文释义**                                                                                       |
-| :------------ | :------------------ | :------------------------------------------------------------------------------------------------- |
-| **EPC**       | Endpoint Controller | **Endpoint 控制器**。<br> 负责直接控制 PCI Endpoint 硬件的底层控制器。                             |
-| **EPF**       | Endpoint Function   | **Endpoint 功能**。 <br> 在 Endpoint 设备上实现的具体 PCI 功能，例如一个网卡功能或存储功能。       |
-| **BME**       | Bus Master Enable   | **总线主控使能**。<br> PCI 配置空间中的一个控制位，用于使能设备发起总线事务（如 DMA 读写）的能力。 |
+## I. Glossary
 
-## 二、架构设计与核心职责
+| **Term/Abbreviation** | **Full English Name** | **Definition**                                                                                                                                                 |
+| :-------------------- | :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **EPC**               | Endpoint Controller   | **Endpoint Controller**.<br> The low-level controller responsible for directly managing the PCI Endpoint hardware.                                             |
+| **EPF**               | Endpoint Function     | **Endpoint Function**.<br> A specific PCI function implemented on an Endpoint device, such as a network or storage function.                                   |
+| **BME**               | Bus Master Enable     | **Bus Master Enable**.<br> A control bit in the PCI configuration space that enables a device's ability to initiate bus transactions (e.g., DMA reads/writes). |
 
-openvela 的 PCI Endpoint 框架采用分层设计，主要包含 **Endpoint 控制器驱动(EPC Driver)**、**Endpoint 核心层 (Endpoint Core)** 和 **Endpoint 功能驱动 (EPF Driver)** 三个部分。
+## II. Architectural Design and Core Responsibilities
+
+The openvela PCI Endpoint framework uses a layered design, consisting of three main parts: the **Endpoint Controller Driver (EPC Driver)**, the **Endpoint Core Layer (Endpoint Core)**, and the **Endpoint Function Driver (EPF Driver)**.
 
 ![alt text](./figures/008.png)
 
-### PCI Endpoint 核心层
+### PCI Endpoint Core Layer
 
-Endpoint 核心层是整个框架的中枢，其核心职责是实现解耦和资源管理。
+The Endpoint Core Layer is the central hub of the entire framework, and its core responsibilities are to achieve decoupling and resource management.
 
-1. 解耦 Endpoint Device 和 Endpoint Controller。
+1. Decouple the Endpoint Device and the Endpoint Controller.
 
-    核心层通过两组标准化的回调函数接口，隔离了上层功能与底层硬件的直接依赖：
+    The core layer isolates the upper-level functions from direct dependencies on the underlying hardware through two standardized sets of callback function interfaces:
 
-    - Endpoint Controller 向 PCI Endpoint Core 注册回调函数 **`pci_epc_ops_s`**，Endpoint Device 通过该回调函数接口执行 Endpoint Controller 相关操作。
-    - Endpoint Device 向 PCI Endpoint Core 注册回调函数注册 **`pci_epc_event_ops_s`**，Endpoint Controller通过该回调函数接口执行 EPF 相关操作。
+    - The Endpoint Controller registers a callback function set, **`pci_epc_ops_s`**, with the PCI Endpoint Core. The Endpoint Device uses this interface to perform operations related to the Endpoint Controller.
+    - The Endpoint Device registers a callback function set, **`pci_epc_event_ops_s`**, with the PCI Endpoint Core. The Endpoint Controller uses this interface to perform operations related to the EPF.
 
-2. 管理 PCI 地址空间。
+2. Manage PCI address space.
 
-    核心层负责管理和分配由底层硬件驱动初始化的 PCI 地址空间。
+    The core layer is responsible for managing and allocating the PCI address space initialized by the low-level hardware driver.
 
-    - PCI 地址域空间通常由与具体 SoC 相关的 IP 驱动进行初始化。
+    - The PCI address domain is typically initialized by an IP driver specific to the SoC.
 
-    - 地址窗口 (`pci_epc_mem_window_s`) 的页面大小 (`page_size`) 通常设计为 4KB 的整数倍，以匹配系统内存管理单元 (MMU) 的页面大小。
+    - The page size (`page_size`) of an address window (`pci_epc_mem_window_s`) is usually designed to be a multiple of 4KB to match the page size of the system's Memory Management Unit (MMU).
 
         ```C++
         struct pci_epc_mem_window_s
@@ -44,88 +46,88 @@ Endpoint 核心层是整个框架的中枢，其核心职责是实现解耦和�
         };
         ```
 
-## 三、初始化与绑定流程
+## III. Initialization and Binding Process
 
-当系统配置为 PCI Endpoint 模式时，其初始化、驱动加载和功能绑定的流程遵循以下步骤：
+When the system is configured in PCI Endpoint mode, the initialization, driver loading, and function binding process follows these steps:
 
 ![alt text](./figures/009.png)
 
-1. **注册 Endpoint 控制器 (EPC)：**
+1. **Register the Endpoint Controller (EPC):**
 
-    EPC 驱动调用 `pci_epc_create()` 函数，向核心层注册一个 EPC 实例，并提供其底层操作函数集。
+    The EPC driver calls the `pci_epc_create()` function to register an EPC instance with the core layer and provide its set of low-level operation functions.
 
-2. **注册 Endpoint 功能驱动 (EPF Driver)：**
+2. **Register the Endpoint Function Driver (EPF Driver):**
 
-    实现具体设备功能的 EPF 驱动调用 `pci_epf_register_driver()` 向核心层注册自身。
+    The EPF driver, which implements a specific device function, calls `pci_epf_register_driver()` to register itself with the core layer.
 
-3. **注册 Endpoint 功能设备 (EPF Device)：**
+3. **Register the Endpoint Function Device (EPF Device):**
 
-    代表逻辑功能的 EPF 设备通过 `pci_epf_device_register()` 进行注册。
+    The EPF device, representing a logical function, is registered via `pci_epf_device_register()`.
 
-4. **匹配 EPF 设备与驱动：**
+4. **Match the EPF Device with its Driver:**
 
-    核心层根据 `id_table` 将已注册的 EPF 设备与兼容的 EPF 驱动进行匹配。
+    The core layer matches registered EPF devices with compatible EPF drivers based on the `id_table`.
 
-5. **执行 EPF 驱动 `probe`：**
+5. **Execute the EPF Driver's `probe`:**
 
-    匹配成功后，核心层调用 EPF 驱动的 `probe` 回调函数，进行初步的功能初始化。
+    After a successful match, the core layer calls the EPF driver's `probe` callback function to perform initial function-level initialization.
 
-6. **匹配 EPF 与 EPC：**
+6. **Match the EPF with the EPC:**
 
-    `probe` 函数中，EPF 会根据名称 (`name`) 寻找到对应的 EPC 实例。
+    Within the `probe` function, the EPF finds the corresponding EPC instance based on its `name`.
 
-7. **执行绑定 (Binding)：**
+7. **Perform Binding:**
 
-    EPF 与 EPC 匹配成功后，核心层开始执行绑定操作，并调用 EPF 驱动的 `bind` 回调函数，通知驱动其已与底层硬件控制器关联。
+    Once the EPF and EPC are matched, the core layer begins the binding process and calls the EPF driver's `bind` callback, notifying the driver that it has been associated with the underlying hardware controller.
 
-8. **启动 EPC：**
+8. **Start the EPC:**
 
-    绑定完成后，上层逻辑调用 `pci_epc_start()`。该调用会触发 EPC 驱动的 `start` 回调，完成硬件寄存器的最终配置并使能 PCI Link，使设备在 PCI 总线上对主机可见。
+    After binding is complete, the upper-level logic calls `pci_epc_start()`. This triggers the EPC driver's `start` callback, which completes the final hardware register configuration and enables the PCI Link, making the device visible to the host on the PCI bus.
 
-> **说明：** EPC 操作集中的 `dma_xfer` 回调提供了一个可选的系统级 DMA 传输能力。该功能也可以在具体的 EPF 驱动中独立实现。
+> **Note:** The `dma_xfer` callback in the EPC operations set provides an optional system-level DMA transfer capability. This functionality can also be implemented independently within a specific EPF driver.
 
-## 四、核心数据结构
+## IV. Core Data Structures
 
-### 1、`struct pci_epc_ctrl_s`: Endpoint 控制器
+### 1. `struct pci_epc_ctrl_s`: Endpoint Controller
 
-该结构代表一个物理上的 Endpoint 控制器硬件。
+This structure represents a physical Endpoint Controller hardware device.
 
 ```C
-/* 定义 PCI Endpoint 控制器 (EPC) 的数据结构 */
+/* Defines the data structure for a PCI Endpoint Controller (EPC) */
 struct pci_epc_ctrl_s
 {
-  FAR const char *name;                      /* EPC 实例的唯一名称，用于与 EPF 绑定 */
-  struct list_node pci_epf;                  /* 挂载到此 EPC 上的 EPF 链表 */
-  mutex_t list_lock;                         /* 用于保护 pci_epf 链表的互斥锁 */
-  FAR const struct pci_epc_ops_s *ops;       /* EPC 底层操作函数集 */
-  FAR struct pci_epc_mem_s **windows;        /* EPC 的地址空间窗口数组 */
-  FAR struct pci_epc_mem_s *mem;             /* 指向第一个地址空间窗口的便捷指针 */
-  unsigned int num_windows;                  /* 支持的地址窗口数量 */
-  uint8_t max_functions;                     /* 支持的最大 PCI Function 数量 */
-  struct list_node node;                     /* 用于挂载到全局 EPC 链表的节点 */
-  mutex_t lock;                              /* 用于保护 EPC 操作的互斥锁 */
-  unsigned long function_num_map;            /* 用于管理物理 Function 编号的位图 */
+  FAR const char *name;                      /* Unique name of the EPC instance, used for binding with an EPF */
+  struct list_node pci_epf;                  /* List of EPFs attached to this EPC */
+  mutex_t list_lock;                         /* Mutex to protect the pci_epf list */
+  FAR const struct pci_epc_ops_s *ops;       /* Set of low-level EPC operation functions */
+  FAR struct pci_epc_mem_s **windows;        /* Array of address space windows for the EPC */
+  FAR struct pci_epc_mem_s *mem;             /* Convenience pointer to the first address space window */
+  unsigned int num_windows;                  /* Number of supported address windows */
+  uint8_t max_functions;                     /* Maximum number of supported PCI Functions */
+  struct list_node node;                     /* Node for linking into the global EPC list */
+  mutex_t lock;                              /* Mutex to protect EPC operations */
+  unsigned long function_num_map;            /* Bitmap for managing physical Function numbers */
 };
 ```
 
-### 2、`struct pci_epc_ops_s`: EPC 操作回调
+### 2. `struct pci_epc_ops_s`: EPC Operation Callbacks
 
-该结构定义了由 EPC 驱动实现、供上层调用的底层硬件操作函数集。
+This structure defines the set of low-level hardware operation functions implemented by the EPC driver and called by upper layers.
 
 ```C
-/* 定义 EPC 的底层操作回调函数集 */
+/* Defines the set of low-level operation callbacks for the EPC */
 struct pci_epc_ops_s
 {
-  /* 配置空间与 BAR 操作 */
+  /* Configuration Space and BAR Operations */
   CODE int (*write_header)(...);
   CODE int (*set_bar)(...);
   CODE void (*clear_bar)(...);
 
-  /* 地址映射操作 */
+  /* Address Mapping Operations */
   CODE int (*map_addr)(...);
   CODE void (*unmap_addr)(...);
 
-  /* 中断操作 */
+  /* Interrupt Operations */
   CODE int (*raise_irq)(...);
   CODE int (*set_msi)(...);
   CODE int (*get_msi)(...);
@@ -133,51 +135,51 @@ struct pci_epc_ops_s
   CODE int (*get_msix)(...);
   CODE int (*map_msi_irq)(...);
   
-  /* Link 与特性管理 */
+  /* Link and Feature Management */
   CODE int (*start)(...);
   CODE void (*stop)(...);
   CODE FAR const struct pci_epc_features_s *(*get_features)(...);
 
-  /* DMA 操作 (可选) */
+  /* DMA Operation (Optional) */
   CODE int (*dma_xfer)(...);
 };
 ```
 
-**关键回调函数说明：**
+**Key Callback Function Descriptions:**
 
-| **回调函数**           | **功能描述**                                          |
-| :--------------------- | :---------------------------------------------------- |
-| `write_header`         | 填充指定 Function 的 PCI 配置空间头部。               |
-| `set_bar`              | 配置指定 Function 的 BAR (Base Address Register)。    |
-| `clear_bar`            | ops to reset the BAR                                  |
-| `map_addr`             | 将本地 CPU 地址映射到 PCI 总线地址。                  |
-| `unmap_addr`           | 解除 CPU 地址与 PCI 总线地址的映射。                  |
-| `set_msi` / `set_msix` | 在能力寄存器中设置请求的 MSI / MSI-X 中断数量。       |
-| `get_msi` / `get_msix` | 从能力寄存器中获取 RC 分配的 MSI / MSI-X 中断数量。   |
-| `raise_irq`            | 发起一个 Legacy、MSI 或 MSI-X 中断。                  |
-| `map_msi_irq`          | 将物理地址映射到 MSI 地址，并返回 MSI 数据。          |
-| `start`                | 启动 PCI Link，使设备在总线上可见。                   |
-| `stop`                 | 停止 PCI Link。                                       |
-| `get_features`         | 获取 EPC 硬件支持的特性（如中断模式、BAR 大小等）。   |
-| `dma_xfer`             | 使用系统级 DMA 在主机内存与设备本地内存之间传输数据。 |
+| **Callback Function**  | **Description**                                                                             |
+| :--------------------- | :------------------------------------------------------------------------------------------ |
+| `write_header`         | Populates the PCI configuration space header for a specified Function.                      |
+| `set_bar`              | Configures the BAR (Base Address Register) for a specified Function.                        |
+| `clear_bar`            | Operation to reset the BAR.                                                                 |
+| `map_addr`             | Maps a local CPU address to a PCI bus address.                                              |
+| `unmap_addr`           | Unmaps the mapping between a CPU address and a PCI bus address.                             |
+| `set_msi` / `set_msix` | Sets the requested number of MSI / MSI-X interrupts in the capability register.             |
+| `get_msi` / `get_msix` | Gets the number of MSI / MSI-X interrupts allocated by the RC from the capability register. |
+| `raise_irq`            | Raises a Legacy, MSI, or MSI-X interrupt.                                                   |
+| `map_msi_irq`          | Maps a physical address to an MSI address and returns the MSI data.                         |
+| `start`                | Starts the PCI Link, making the device visible on the bus.                                  |
+| `stop`                 | Stops the PCI Link.                                                                         |
+| `get_features`         | Gets the features supported by the EPC hardware (e.g., interrupt modes, BAR sizes).         |
+| `dma_xfer`             | Transfers data between host memory and local device memory using a system-level DMA.        |
 
-### 3、`struct pci_epf_driver_s`: Endpoint 功能驱动
+### 3. `struct pci_epf_driver_s`: Endpoint Function Driver
 
-该结构定义了一个 EPF 驱动，包含了匹配信息和核心回调函数。
+This structure defines an EPF driver, including matching information and core callback functions.
 
 ```C
-/* 定义 PCI Endpoint 功能 (EPF) 驱动的数据结构 */
+/* Defines the data structure for a PCI Endpoint Function (EPF) driver */
 struct pci_epf_driver_s
 {
   CODE int (*probe)(FAR struct pci_epf_device_s *epf);
   CODE void (*remove)(FAR struct pci_epf_device_s *epf);
 
   struct list_node node;
-  FAR struct pci_epf_ops_s *ops;                   /* EPF 操作回调 (如 bind/unbind) */
-  FAR const struct pci_epf_device_id_s *id_table;  /* EPF 设备 ID 表，用于设备-驱动匹配 */
+  FAR struct pci_epf_ops_s *ops;                   /* EPF operation callbacks (e.g., bind/unbind) */
+  FAR const struct pci_epf_device_id_s *id_table;  /* EPF device ID table for device-driver matching */
 };
 
-/* 定义 EPF 驱动的匹配 ID */
+/* Defines the matching ID for an EPF driver */
 struct pci_epf_device_id_s
 {
   char name[PCI_EPF_NAME_SIZE];
@@ -185,79 +187,78 @@ struct pci_epf_device_id_s
 };
 ```
 
-- **`id_table`**: 用于标识该驱动支持的 EPF 设备，核心层依据此表进行设备与驱动的匹配。
-- **`ops`**: EPF 驱动实现的回调函数集（如 `bind` 和 `unbind`），用于响应来自核心层的绑定/解绑事件。
+- **`id_table`**: Identifies the EPF devices supported by this driver. The core layer uses this table to match devices with drivers.
+- **`ops`**: A set of callback functions implemented by the EPF driver (e.g., `bind` and `unbind`) to respond to bind/unbind events from the core layer.
 
-### 4、`struct pci_epf_device_s`: Endpoint 功能设备
+### 4. `struct pci_epf_device_s`: Endpoint Function Device
 
-该结构代表一个逻辑上的 Endpoint 功能，定义了其资源需求和状态。
+This structure represents a logical Endpoint Function, defining its resource requirements and state.
 
 ```C
-/* 定义 PCI Endpoint 功能 (EPF) 设备的数据结构 */
+/* Defines the data structure for a PCI Endpoint Function (EPF) device */
 struct pci_epf_device_s
 {
-  FAR const char *name;                      /* EPF 设备的唯一名称 */
-  FAR struct pci_epf_header_s *header;       /* 指向标准配置空间头部的指针 */
-  struct pci_epf_bar_s bar[6];               /* EPF 所需的 BAR 配置 */
-  uint8_t msi_interrupts;                    /* 请求的 MSI 中断数量 */
-  uint16_t msix_interrupts;                  /* 请求的 MSI-X 中断数量 */
-  uint8_t func_no;                           /* 在 EPC 内唯一的物理 Function 编号 */
+  FAR const char *name;                      /* Unique name of the EPF device */
+  FAR struct pci_epf_header_s *header;       /* Pointer to the standard configuration space header */
+  struct pci_epf_bar_s bar[6];               /* BAR configuration required by the EPF */
+  uint8_t msi_interrupts;                    /* Number of requested MSI interrupts */
+  uint16_t msix_interrupts;                  /* Number of requested MSI-X interrupts */
+  uint8_t func_no;                           /* Unique physical Function number within the EPC */
 
-  FAR struct pci_epc_ctrl_s *epc;            /* 指向已绑定的 EPC */
-  FAR struct pci_epf_driver_s *driver;       /* 指向已绑定的 EPF 驱动 */
-  FAR const struct pci_epf_device_id_s *id;  /* 指向设备 ID */
-  struct list_node node;                     /* 用于挂载到 EPC 的 pci_epf 链表的节点 */
+  FAR struct pci_epc_ctrl_s *epc;            /* Pointer to the bound EPC */
+  FAR struct pci_epf_driver_s *driver;       /* Pointer to the bound EPF driver */
+  FAR const struct pci_epf_device_id_s *id;  /* Pointer to the device ID */
+  struct list_node node;                     /* Node for linking into the EPC's pci_epf list */
   
-  mutex_t lock;                              /* 用于保护 EPF 操作的互斥锁 */
-  unsigned int is_bound;                     /* 标记是否已调用 bind 回调 */
-  FAR const struct pci_epc_event_ops_s *event_ops; /* 用于接收 EPC 事件的回调函数集 */
+  mutex_t lock;                              /* Mutex to protect EPF operations */
+  unsigned int is_bound;                     /* Flag to indicate if the bind callback has been called */
+  FAR const struct pci_epc_event_ops_s *event_ops; /* Callback set for receiving EPC events */
 };
 ```
 
-## 五、核心 API 说明
+## V. Core API Descriptions
 
-### 1、EPC 核心层接口 (`pci-epc-core.c`, `pci-epc-mem.c`)
+### 1. EPC Core Layer Interfaces (`pci-epc-core.c`, `pci-epc-mem.c`)
 
-这些 API 主要由 EPC 驱动和 Endpoint 核心层内部调用。
+These APIs are primarily called by the EPC driver and internally by the Endpoint Core Layer.
 
-| **函数原型**               | **功能描述**                                                                                                  |
-| :------------------------- | :------------------------------------------------------------------------------------------------------------ |
-| `pci_epc_create()`         | 创建并初始化一个 EPC 设备实例，并将其注册到 EPC 核心层。                                                      |
-| `pci_epc_destroy()`        | 注销并销毁一个已创建的 EPC 设备实例。                                                                         |
-| `pci_epc_start()`          | 触发 EPC 硬件的启动流程，使能 PCI Link。                                                                      |
-| `pci_epc_raise_irq()`      | 当 EP 侧执行完 `write/read` 操作后，触发 Legacy、MSI 或 MSI-X 中断给 RC (Root Complex)， 通知其完成相关操作。 |
-| `pci_epc_add_epf()`        | 将一个 EPF 设备与指定的 EPC 进行关联（绑定）。                                                                |
-| `pci_epc_linkup()`         | 通知 EPF 设备 EPC 已经和 RC 建立 PCI Link。                                                                   |
-| `pci_epc_init_notify`      | 通知 EPC 已经初始化完成。                                                                                     |
-| `pci_epc_bme_notify()`     | EPC 设备接收到 BME（BUS Master Enable）事件后，以通知 EPF 设备。                                              |
-| `pci_epc_mem_init()`       | 初始化 PCI Endpoint Controller 设备的内存地址空间。                                                           |
-| `pci_epc_mem_alloc_addr()` | 从 EPC 的地址空间中分配一段内存， 用于 Memory 域地址到 PCI 域地址的映射。                                     |
-| `pci_epc_set_bar`          | 配置 Endpoint 设备中某个 BAR 的数据。                                                                         |
-| `pci_epc_map_addr`         | 映射 CPU 地址空间到 PCI 域地址空间，用于分配 BAR 的地址空间。                                                 |
-| `pci_epc_add_epf`          | 用于绑定 PCI EPF 到指定的 PCI EPC 上。                                                                        |
-| `pci_epc_map_msi_irq`      | 映射物理地址到 MSI 地址。                                                                                     |
+| **Function Prototype**     | **Description**                                                                                                                                         |
+| :------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pci_epc_create()`         | Creates, initializes, and registers an EPC device instance with the EPC core layer.                                                                     |
+| `pci_epc_destroy()`        | Unregisters and destroys a previously created EPC device instance.                                                                                      |
+| `pci_epc_start()`          | Triggers the startup sequence of the EPC hardware, enabling the PCI Link.                                                                               |
+| `pci_epc_raise_irq()`      | After the EP side completes a write/read operation, triggers a Legacy, MSI, or MSI-X interrupt to the RC (Root Complex) to notify it of the completion. |
+| `pci_epc_add_epf()`        | Associates (binds) an EPF device with a specified EPC.                                                                                                  |
+| `pci_epc_linkup()`         | Notifies the EPF device that the EPC has established a PCI Link with the RC.                                                                            |
+| `pci_epc_init_notify()`    | Notifies that the EPC has completed initialization.                                                                                                     |
+| `pci_epc_bme_notify()`     | Notifies the EPF device after the EPC device receives a BME (Bus Master Enable) event.                                                                  |
+| `pci_epc_mem_init()`       | Initializes the memory address space for a PCI Endpoint Controller device.                                                                              |
+| `pci_epc_mem_alloc_addr()` | Allocates a block of memory from the EPC's address space for mapping from the Memory domain to the PCI domain.                                          |
+| `pci_epc_set_bar()`        | Configures the data for a specific BAR in an Endpoint device.                                                                                           |
+| `pci_epc_map_addr()`       | Maps CPU address space to PCI domain address space, used for allocating BAR address space.                                                              |
+| `pci_epc_map_msi_irq()`    | Maps a physical address to an MSI address.                                                                                                              |
 
-### 2、EPF 核心层接口 (`pci-epf-core.c`)
+### 2. EPF Core Layer Interfaces (`pci-epf-core.c`)
 
-这些 API 主要由 EPF 驱动调用。
+These APIs are primarily called by EPF drivers.
 
-| **函数原型**                | **功能描述**                                                             |
-| :-------------------------- | :----------------------------------------------------------------------- |
-| `pci_epf_register_driver()` | 注册一个 EPF 驱动程序。                                                  |
-| `pci_epf_device_register()` | 注册一个 EPF 设备实例。                                                  |
-| `pci_epf_alloc_space()`     | 为 EPF 分配一块用于 BAR 映射的内存空间。                                 |
-| `pci_epf_bind()`            | 将 EPF 与一个匹配的 EPC 进行绑定，通常在 EPF 驱动的 `probe` 函数中调用。 |
+| **Function Prototype**      | **Description**                                                                              |
+| :-------------------------- | :------------------------------------------------------------------------------------------- |
+| `pci_epf_register_driver()` | Registers an EPF driver.                                                                     |
+| `pci_epf_device_register()` | Registers an EPF device instance.                                                            |
+| `pci_epf_alloc_space()`     | Allocates a memory region for an EPF to be used for BAR mapping.                             |
+| `pci_epf_bind()`            | Binds an EPF with a matching EPC, typically called within the EPF driver's `probe` function. |
 
-## 六、总结与关键特性
+## VI. Summary and Key Features
 
-1. **物理设备支持：**
+1. **Physical Device Support:**
 
-    当前框架专注于物理硬件，不支持虚拟化的 EPF (Virtual EPF) 与 EPC (Virtual EPC)。
+    The current framework focuses on physical hardware and does not support virtualized EPF (Virtual EPF) or EPC (Virtual EPC).
 
-2. **多功能设备 (Multi-Function)：**
+2. **Multi-Function Device Support:**
 
-    框架支持将多个不同的 EPF 绑定到同一个物理 EPC，从而实现多功能设备。
+    The framework supports binding multiple different EPFs to a single physical EPC, thereby enabling multi-function devices.
 
-3. **灵活的测试与验证：**
+3. **Flexible Testing and Verification:**
 
-    开发者可以通过 `pci_epf_device_register` API 注册多个 EPF 设备实例，以便捷地进行多功能设备的开发、测试与验证。
+    Developers can register multiple EPF device instances via the `pci_epf_device_register` API to facilitate the development, testing, and verification of multi-function devices.
