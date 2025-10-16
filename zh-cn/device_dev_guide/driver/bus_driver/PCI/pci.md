@@ -1,4 +1,4 @@
-# openvela PCI 子系统技术详解
+# PCI 子系统技术详解
 
 \[ [English](../../../../../en/device_dev_guide/driver/bus_driver/PCI/pci.md) | 简体中文 \]
 

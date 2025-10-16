@@ -1,4 +1,4 @@
-# openvela PCI Subsystem: A Technical Deep Dive
+# PCI Subsystem: A Technical Deep Dive
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/PCI/pci.md) \]
 
