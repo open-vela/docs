@@ -6,8 +6,6 @@ This document describes the core Kconfig configuration options for the uORB fram
 
 ### I. Core Framework
 
-以下是启用 uORB 核心功能所需的基本配置项。
-
 The following are the basic configuration options required to enable the core features of the uORB framework.
 
 - **`CONFIG_UORB`**: Enable uORB message middleware.
