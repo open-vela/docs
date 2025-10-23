@@ -1,6 +1,6 @@
 # uORB 主题定义指南
 
-[[English](../../../en/device_dev_guide/middleware/uorb-topic-def.md) | 简体中文]
+[[English](../../../en/device_dev_guide/middleware/uorb_topic_def.md) | 简体中文]
 
 ## 一、概述
 

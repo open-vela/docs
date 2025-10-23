@@ -1,6 +1,6 @@
 # uORB Topic Definition Guide
 
-[English | [简体中文](../../../zh-cn/device_dev_guide/middleware/uorb-topic-def.md)]
+[English | [简体中文](../../../zh-cn/device_dev_guide/middleware/uorb_topic_def.md)]
 
 ## I. Overview
 
