@@ -1,6 +1,6 @@
 # 从零开始的 RTOS 探索：从单任务循环到多线程抢占
 
-\[ [English](../../../../en/device_dev_guide/kernel/scheduling_interrupts/rtos_from_scratch.md) | 简体中文 \]
+\[ [English](../../../en/device_dev_guide/kernel/rtos_from_scratch.md) | 简体中文 \]
 
 本文面向操作系统初学者，旨在用最简单易懂的方式，带您探索计算机是如何从一次只能做一件事，演进到能够同时处理多个任务的。我们将一起揭开**多线程**、**中断**和**上下文切换**这些核心概念的神秘面纱。
 

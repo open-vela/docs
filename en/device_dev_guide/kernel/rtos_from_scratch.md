@@ -1,6 +1,6 @@
 # Exploring RTOS from Scratch: From Single-Task Loops to Preemptive Multithreading
 
-\[ English | [简体中文](../../../../zh-cn/device_dev_guide/kernel/scheduling_interrupts/rtos_from_scratch.md) \]
+\[ English | [简体中文](../../../zh-cn/device_dev_guide/kernel/scheduling_interrupts/rtos_from_scratch.md) \]
 
 This article is for beginners in operating systems. It aims to guide you through the evolution of computers from doing one thing at a time to handling multiple tasks simultaneously, all in the simplest way possible. Together, we will demystify the core concepts of **multithreading**, **interrupts**, and **context switching**.
 
