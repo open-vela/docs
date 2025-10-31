@@ -1,6 +1,6 @@
 # Sensor 框架指南
 
-\[ [English](../../../../../en/device_dev_guide/driver/peripheral_driver/sensor/sensor_framework_guide.md) | 简体中文 \]
+[ [English](../../../../../en/device_dev_guide/driver/peripheral_driver/sensor/sensor_framework_guide.md) | 简体中文 ]
 
 ## 一、概述
 

@@ -8,7 +8,7 @@ This document provides a comprehensive guide for driver developers on how to ada
 
 Before you begin, we recommend that you familiarize yourself with openvela's Sensor driver framework and the uORB messaging mechanism. For background information, please refer to:
 
-- **Sensor Driver Framework**: [Sensor Driver Framework]()
+- **Sensor Driver Framework**: [Sensor Driver Development Guide](./sensor_driver_development_guide.md.md)
 - **uORB Framework**: [uORB Framework Development Guide](../../../middleware/uorb_developer_guide.md)
 
 ### 1. Framework and Startup Flow

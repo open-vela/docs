@@ -8,7 +8,7 @@
 
 在开始之前，我们建议您先熟悉 openvela 的 Sensor 驱动框架和 uORB 消息机制。相关背景资料请参阅：
 
-- **Sensor 驱动框架**：[Sensor 驱动框架]()
+- **Sensor 驱动框架**：[Sensor 驱动开发指南](./sensor_driver_development_guide.md.md)
 - **uORB 框架**：[uORB 框架开发指南](../../../middleware/uorb_developer_guide.md)
 
 ### 1、框架与启动流程
