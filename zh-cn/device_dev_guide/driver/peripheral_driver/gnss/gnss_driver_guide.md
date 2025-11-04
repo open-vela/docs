@@ -1,6 +1,6 @@
 # GNSS 驱动框架开发指南
 
-\[ [English](../../../../en/device_dev_guide/driver/peripheral_driver/gnss_driver_guide.md) | 简体中文 \]
+[ [English](../../../../../en/device_dev_guide/driver/peripheral_driver/gnss/gnss_driver_guide.md) | 简体中文 ]
 
 本文档为在 openvela 操作系统中开发和使用全球导航卫星系统 (Global Navigation Satellite System, GNSS) 驱动提供了全面的技术指导。
 

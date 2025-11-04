@@ -1,6 +1,6 @@
 # GNSS Driver Framework Development Guide
 
-\[ English | [简体中文](../../../../zh-cn/device_dev_guide/driver/peripheral_driver/gnss_driver_guide.md) \]
+[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/peripheral_driver/gnss/gnss_driver_guide.md) ]
 
 This document provides comprehensive technical guidance for developing and using Global Navigation Satellite System (GNSS) drivers in the openvela operating system.
 
