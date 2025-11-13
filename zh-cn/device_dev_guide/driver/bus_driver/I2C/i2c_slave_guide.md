@@ -1,5 +1,7 @@
 # 适配 I2C Slave 驱动
 
+[ [English](../../../../../en/device_dev_guide/driver/bus_driver/I2C/i2c_slave_guide.md) | 简体中文 ]
+
 本文介绍如何将微控制器（MCU）的 I2C 控制器配置为从机（Slave）模式。这使得 MCU 可以在 I2C 总线上扮演一个外设的角色，响应来自主设备（Master）的读写请求。
 
 ## 一、Slave 驱动架构与 Master 的核心区别

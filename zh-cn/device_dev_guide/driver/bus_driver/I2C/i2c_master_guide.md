@@ -1,56 +1,64 @@
 # 适配 I2C Master 驱动
 
+[ [English](../../../../../en/device_dev_guide/driver/bus_driver/I2C/i2c_master_guide.md) | 简体中文 ]
+
 本文档介绍如何为 openvela 适配一个标准的 I2C Master 驱动，使其能够作为总线主设备工作。
 
 ## 一、驱动框架层级
 
 I2C Master 驱动的开发涉及驱动层、板级层和应用层，它们之间的协作关系如下：
 
-- **驱动层 (Driver)**：负责实现芯片相关的 I2C 底层硬件操作。此层需要封装硬件细节，并向上层提供一个标准化的 `i2c_master_s` 句柄。
+### 驱动层 (Driver)
 
-    ```C
-    /* 1. 定义底层操作函数集 */
-    static const struct i2c_ops_s bl602_i2c_ops =
-    {
-      .transfer = bl602_i2c_transfer,
-    #ifdef CONFIG_I2C_RESET
-      .reset = bl602_i2c_reset
-    #endif
-    };
+负责实现芯片相关的 I2C 底层硬件操作。此层需要封装硬件细节，并向上层提供一个标准化的 `i2c_master_s` 句柄。
+
+```C
+/* 1. 定义底层操作函数集 */
+static const struct i2c_ops_s bl602_i2c_ops =
+{
+    .transfer = bl602_i2c_transfer,
+#ifdef CONFIG_I2C_RESET
+    .reset = bl602_i2c_reset
+#endif
+};
+
+/* 2. 定义私有数据结构，包含操作函数集和配置信息 */
+static struct bl602_i2c_priv_s bl602_i2c0_priv =
+{
+    .ops      = &bl602_i2c_ops,
+    .config   = &bl602_i2c0_config,
+};
+
+/* 3. 实现初始化函数，返回标准的 I2C Master 句柄 */
+struct i2c_master_s *bl602_i2cbus_initialize(int port)
+{
+    priv = (struct bl602_i2c_priv_s *)&bl602_i2c0_priv;
     
-    /* 2. 定义私有数据结构，包含操作函数集和配置信息 */
-    static struct bl602_i2c_priv_s bl602_i2c0_priv =
-    {
-      .ops      = &bl602_i2c_ops,
-      .config   = &bl602_i2c0_config,
-    };
-    
-    /* 3. 实现初始化函数，返回标准的 I2C Master 句柄 */
-    struct i2c_master_s *bl602_i2cbus_initialize(int port)
-    {
-      priv = (struct bl602_i2c_priv_s *)&bl602_i2c0_priv;
-      
-      return (struct i2c_master_s *)priv;
-    }
-    ```
+    return (struct i2c_master_s *)priv;
+}
+```
 
-- **板级层 (Board)**：在系统启动阶段，调用驱动层的初始化函数获取 I2C 总线句柄。根据需求，可以选择性地将该总线注册为字符设备（如 `/dev/i2c-0`），或直接传递给其他内核驱动（如传感器驱动）使用。
+### 板级层 (Board)
 
-    ```C
-    /* 获取 I2C 总线句柄 */
-    i2c_bus = bl602_i2cbus_initialize(0);
-    
-    /* 将总线注册为 /dev/i2c0 */
-    i2c_register(i2c_bus, 0);
-    ```
+在系统启动阶段，调用驱动层的初始化函数获取 I2C 总线句柄。根据需求，可以选择性地将该总线注册为字符设备（如 `/dev/i2c-0`），或直接传递给其他内核驱动（如传感器驱动）使用。
 
-- **应用层 (Application)**：通过标准的 POSIX 文件接口（`open`, `ioctl` 等）访问已注册的 `/dev/i2c-N` 设备节点，从而与挂载在总线上的 I2C 从设备通信。
+```C
+/* 获取 I2C 总线句柄 */
+i2c_bus = bl602_i2cbus_initialize(0);
 
-    ```C
-    fd = open("/dev/i2c", O_RDWR);
-    ioctl(fd, );
-    ...
-    ```
+/* 将总线注册为 /dev/i2c0 */
+i2c_register(i2c_bus, 0);
+```
+
+### 应用层 (Application)
+
+通过标准的 POSIX 文件接口（`open`, `ioctl` 等）访问已注册的 `/dev/i2c-N` 设备节点，从而与挂载在总线上的 I2C 从设备通信。
+
+```C
+fd = open("/dev/i2c", O_RDWR);
+ioctl(fd, );
+...
+```
 
 ## 二、适配南向接口 (Lower Half)
 

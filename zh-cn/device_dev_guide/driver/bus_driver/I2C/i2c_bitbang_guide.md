@@ -1,5 +1,7 @@
 # 适配 I2C Bit-Banging 驱动
 
+[ [English](../../../../../en/device_dev_guide/driver/bus_driver/I2C/i2c_bitbang_guide.md) | 简体中文 ]
+
 Bit-banging 是一种使用通用输入输出（GPIO）引脚来模拟 I2C 协议时序的技术。当芯片的硬件 I2C 控制器数量不足，或需要使用非标准的引脚组合时，此方法非常有用。
 
 > **性能警告**：Bit-banging 完全由 CPU 通过软件循环来控制 GPIO 电平，为保证时序精确，通常需要在关键代码路径中**关闭中断**。这会增加系统中断延迟，可能影响系统的实时性能。因此，在有硬件 I2C 控制器可用的情况下，应优先使用硬件方式。

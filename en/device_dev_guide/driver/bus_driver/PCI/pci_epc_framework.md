@@ -1,6 +1,6 @@
 # In-Depth Analysis of the PCI Endpoint (EPC) Framework
 
-\[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/PCI/pci_epc_framework.md) \]
+[ English | [简体中文](../../../../../zh-cn/device_dev_guide/driver/bus_driver/PCI/pci_epc_framework.md) ]
 
 This document provides an in-depth analysis of the PCI Endpoint Controller (EPC) framework in the openvela operating system. It covers its architectural design, core responsibilities, workflow, key data structures, and APIs, offering a comprehensive guide for developers.
 

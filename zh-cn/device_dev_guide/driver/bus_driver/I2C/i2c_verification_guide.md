@@ -1,5 +1,7 @@
 # I2C 驱动的验证与调试
 
+[ [English](../../../../../en/device_dev_guide/driver/bus_driver/I2C/i2c_verification_guide.md) | 简体中文 ]
+
 ## 一、I2C 功能验证
 
 本章节说明如何通过与真实传感器通信来验证 I2C 驱动（无论是硬件驱动还是 Bit-bang 驱动）的正确性。
@@ -167,7 +169,7 @@ nsh> cmocka_driver_i2c_spi
 
 <img src="./figures/005.png" alt="" width="75%">
 
-### 3、Simulator 仿真支持
+### 2、Simulator 仿真支持
 
 openvela 仿真环境 (Simulator) 支持将宿主机（如 Linux PC）的物理 I2C 总线 (/dev/i2c-*) 映射到 openvela 仿真实例中，从而允许开发者在没有物理开发板的情况下，连接真实传感器进行驱动开发和调试。
 
@@ -184,7 +186,7 @@ openvela 仿真环境 (Simulator) 支持将宿主机（如 Linux PC）的物理 
     CONFIG_SIM_I2CBUS_ID=0      # 指定使用的 host I2C 总线号 (例如，对应 /dev/i2c-0)
     ```
 
-### 4、命令行调试工具：i2ctool
+### 3、命令行调试工具：i2ctool
 
 openvela 提供了强大的命令行工具 `i2ctool`，允许开发者在 NSH 终端下直接与 I2C 设备交互，是排查硬件问题和驱动问题的利器。
 
