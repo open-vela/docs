@@ -4,18 +4,18 @@
 
 ## I. Introduction
 
-Executed in the OpenVela NSH command line to enter the Bluetooth command tool console. Within this console, you can execute `bttool`’s built‑in sub-commands.
+Executed in the openvela NSH command line to enter the Bluetooth command tool console. Within this console, you can execute `bttool`’s built‑in sub-commands.
 
 ## II. Syntax
 
-| **Syntax Element**           | **Description**                                      | **Example**                                                                 |
-| :--------------------------- | :--------------------------------------------------- | :-------------------------------------------------------------------------- |
-| Text without brackets/braces | Items that must be typed exactly as shown.          | `cd` <br> The `cd` portion of the command must be typed verbatim.           |
-| <Text in angle brackets>     | Placeholders requiring value substitution.          | `mkdir <directory_name>` <br> Replace `<directory_name>` with an actual. |
-| [Text in square brackets]    | Optional items.                                      | `ls [-l]` <br> `[-l]` is optional to display files in long list format.     |
-| {Text in curly braces}       | Required group - exactly one item must be selected.  | `git reset { --soft \| --mixed \| --hard }` <br> Select one option, e.g., `git reset --soft`. |
-| Vertical bar \|              | Separator for mutually exclusive items.             | `git reset { --soft \| --mixed \| --hard }` <br> Choose only one of the options. |
-| Ellipsis …                   | Items that can be repeated multiple times.          | `cp <file1> <file2> … <destination>` <br> Copy multiple files to destination. |
+| **Syntax Element**           | **Description**                                     | **Example**                                                                                   |
+| :--------------------------- | :-------------------------------------------------- | :-------------------------------------------------------------------------------------------- |
+| Text without brackets/braces | Items that must be typed exactly as shown.          | `cd` <br> The `cd` portion of the command must be typed verbatim.                             |
+| \<Text in angle brackets\>   | Placeholders requiring value substitution.          | `mkdir <directory_name>` <br> Replace `<directory_name>` with an actual.                      |
+| [Text in square brackets]    | Optional items.                                     | `ls [-l]` <br> `[-l]` is optional to display files in long list format.                       |
+| {Text in curly braces}       | Required group - exactly one item must be selected. | `git reset { --soft \| --mixed \| --hard }` <br> Select one option, e.g., `git reset --soft`. |
+| Vertical bar \|              | Separator for mutually exclusive items.             | `git reset { --soft \| --mixed \| --hard }` <br> Choose only one of the options.              |
+| Ellipsis …                   | Items that can be repeated multiple times.          | `cp <file1> <file2> … <destination>` <br> Copy multiple files to destination.                 |
 
 ## III. Example
 

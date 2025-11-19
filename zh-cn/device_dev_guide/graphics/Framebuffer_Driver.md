@@ -261,7 +261,7 @@ struct fb_vtable_s
   int (*setarea)(FAR struct fb_vtable_s *vtable,
                  FAR const struct fb_overlayinfo_s *oinfo);
 
-# ifdef CONFIG_FB_OVERLAY_BLIT
+#ifdef CONFIG_FB_OVERLAY_BLIT
   /* The following are provided only if the video hardware supports
    * blit operation between overlays.
    */

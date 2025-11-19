@@ -58,7 +58,7 @@ During the initial build, openvela locates the corresponding project's defconfig
     - The `.config` file is the complete configuration generated from the `defconfig` file, incorporating all extended and combined configuration options.
     - The `menuconfig` interface reads the local `.config` file for user-customized configuration adjustments and automatically propagates validated changes back to the `defconfig` file upon completion.
 
-3. config.h
+3. `config.h`
 
     - The `config.h` file is generated from the `.config` file, containing all configuration information to support conditional compilation and runtime operations in the code.
 

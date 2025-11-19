@@ -71,7 +71,7 @@ Network restrictions, mirror source regional limitations, or DNS resolution issu
 
 ### Problem Description
 
-The `repo sync` command is interrupted with a fatal: **early EOF error**.
+The `repo sync` command is interrupted with a fatal: `fatal: early EOF`.
 
 ![img](./images/004.jpg)
 
@@ -168,11 +168,11 @@ This issue is typically caused by **Git Large File Storage (Git LFS)** files not
 
 2. Confirm repo version compatibility:
 
-   | **Version** | **Release Date** | **Support Status**                            |
-   | ----------- | ---------------- | --------------------------------------------- |
-   | v2.4        | 2021-01          | Experimental support, some features unstable. |
-   | v2.10       | 2022-03          | Officially supported                          |
-   | v2.22       | 2023-present     | Enabled by default, stable functionality.     |
+    | **Version** | **Release Date** | **Support Status**                                |
+    | ----------- | ---------------- | ------------------------------------------------- |
+    | v2.4        | 2021-01          | Experimental support; some features are unstable. |
+    | v2.10       | 2022-03          | Officially supported.                             |
+    | v2.22       | 2023-present     | Enabled by default; stable functionality.         |
 
 3. Update repo if version is too old:
 

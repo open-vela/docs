@@ -2,23 +2,23 @@
 
 \[ English | [简体中文](../../../zh-cn/device_dev_guide/graphics/LCD_Driver.md) \]
 
-## I. Introduction
+## I. Overview
 
-For devices with modest resolution requirements, Universal mode (SPI/I2C/UART) interface screens are often used to conserve memory. In such cases, the primary adaptation requirement is the LCD driver (LCD driver).
+For devices that do not require high resolution, screens with Universal mode (SPI/I2C/UART) interfaces are often used to save memory. In this case, the main component that needs to be adapted is the LCD driver.
 
 ## II. openvela LCD Interface
 
-openvela's LCD framework provides standard VFS file operation interfaces to upper layers. Users can operate /`dev/lcd0` device through these methods:
+The openvela LCD framework provides standard VFS file operation interfaces to upper-layer users, who can operate the `/dev/lcd0` device through the following:
 
-- `open`: Open the LCD device.
-- `ioctl`: Control the LCD device.
-- `close`: Close the LCD device.
+- `open`: Opens the LCD device.
+- `ioctl`: Executes LCD control commands.
+- `close`: Closes the LCD device.
 
-These interfaces enable users to perform graphic rendering and LCD control operations.
+Through these interfaces, users can perform graphics drawing and LCD control operations.
 
-### 1. LCD Driver Interface
+### 1. Driver-Layer Interface
 
-At the driver layer, openvela LCD framework provides three essential functions that developers must implement to adapt specific LCD hardware:
+At the driver layer, the openvela LCD framework provides the following three functions, which driver developers need to implement to adapt to specific LCD hardware:
 
 ```C
 #ifdef CONFIG_LCD
@@ -30,81 +30,69 @@ void board_lcd_uninitialize(void);
 #endif
 ```
 
-1. `board_lcd_initialize`
-
-    Used to initialize the LCD chip, including SPI initialization, LCD register configuration, etc.
-
-2. `board_lcd_uninitialize`
-
-    Used to destroy LCD related resources, such as power off and memory release.
-
-3. `board_lcd_getdev`
-
-    Get the LCD device instance and implement all the methods defined in `struct lcd_dev_s`. This is the core of the LCD driver. Developers must implement all the methods defined in `struct lcd_dev_s`.
+1. `board_lcd_initialize` is used to initialize the LCD chip, including SPI initialization, LCD register configuration, and other hardware-related operations.
+2. `board_lcd_uninitialize` is used to destroy LCD-related resources, such as turning off the power and freeing memory.
+3. `board_lcd_getdev` gets the LCD device instance and implements a series of methods defined by `struct lcd_dev_s`. This function is the core of the LCD driver, and developers need to implement all methods defined in `struct lcd_dev_s`.
 
 ### 2. `struct lcd_dev_s` Structure
 
-`struct lcd_dev_s` is the core structure of the LCD driver, which encapsulates the interface methods for interacting with the LCD controller. The following is an example of part of the definition of `struct lcd_dev_s`:
+`struct lcd_dev_s` is the core structure of the LCD driver, which encapsulates the interface methods for interacting with the LCD controller. The following is a partial definition of `struct lcd_dev_s`:
 
 ```C
 struct lcd_dev_s
 {
-  // Get the configuration information of the lcd controller
+  // Get the LCD controller's configuration information
   int (*getvideoinfo)(FAR struct lcd_dev_s *dev,
-          FAR struct fb_videoinfo_s *vinfo);
+         FAR struct fb_videoinfo_s *vinfo);
   int (*getplaneinfo)(FAR struct lcd_dev_s *dev, unsigned int planeno,
-          FAR struct lcd_planeinfo_s *pinfo);
+         FAR struct lcd_planeinfo_s *pinfo);
  
 #ifdef CONFIG_FB_CMAP
-  // Color table
+  // Color map
   int (*getcmap)(FAR struct lcd_dev_s *dev, FAR struct fb_cmap_s *cmap);
   int (*putcmap)(FAR struct lcd_dev_s *dev,
-          FAR const struct fb_cmap_s *cmap);
+         FAR const struct fb_cmap_s *cmap);
 #endif
  
 #ifdef CONFIG_FB_HWCURSOR
-  // Cursor
+  // Hardware cursor
   int (*getcursor)(FAR struct lcd_dev_s *dev,
-      FAR struct fb_cursorattrib_s *attrib);
-  int (*setcursor)(FAR struct lcd_dev_s *dev,   
-     FAR struct fb_setcursor_s *settings);
+        FAR struct fb_cursorattrib_s *attrib);
+  int (*setcursor)(FAR struct lcd_dev_s *dev,
+        FAR struct fb_setcursor_s *settings);
 #endif
- 
-  // The unique control interface of the LCD
-  // Get the power status of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the backlight brightness level.
-  int (*getpower)(struct lcd_dev_s *dev);  
-  
-  // Set the power state of the LCD (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlight, this value is generally the brightness value of the backlight.
-  int (*setpower)(struct lcd_dev_s *dev, int power);   
-  
-  // Get the current contrast (0-CONFIG_LCD_MAXCONTRAST)
-  int (*getcontrast)(struct lcd_dev_s *dev);  
-  
-  // Set the current contrast (0-CONFIG_LCD_MAXCONTRAST)
+  // LCD-specific control interfaces
+  // Get the LCD's power state (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlights, this value is typically the backlight brightness.
+  int (*getpower)(struct lcd_dev_s *dev);
+  // Set the LCD's power state (0: full off - CONFIG_LCD_MAXPOWER: full on). For LCDs with backlights, this value is typically the backlight brightness.
+  int (*setpower)(struct lcd_dev_s *dev, int power);
+  // Get the current contrast (0-CONFIG_LCD_MAXCONTRAST) 
+  int (*getcontrast)(struct lcd_dev_s *dev);
+  // Set the current contrast (0-CONFIG_LCD_MAXCONTRAST) 
   int (*setcontrast)(struct lcd_dev_s *dev, unsigned int contrast);
 };
 ```
 
-Reference Implementation:
+Developers can refer to the implementation in the following file:
 
 - `boards/arm/stm32/stm32f4discovery/src/stm32_st7789.c`
 
-Demonstrates full implementation of `struct lcd_dev_s` methods for specific LCD controllers.
+This file demonstrates how to implement the methods of `struct lcd_dev_s` and adapt it to a specific LCD controller.
 
-## III. Enable openvela LCD
+## III. Enabling openvela LCD
 
-When using the openvela LCD feature, it is necessary to enable related compilation options and complete initialization and registration during the system startup phase. The following are the specific steps:
+To use the openvela LCD functionality, you need to enable the relevant build options and perform initialization and registration during the system startup phase. Here are the specific steps:
 
-### 1. Enable the following compilation options
+### 1. Enable the following build options
 
-In the configuration file, ensure that the following options are enabled:
+In the configuration file, ensure the following options are enabled:
 
 - `CONFIG_LCD`: Enable LCD support.
 - `CONFIG_LCD_DEV`: Enable LCD device support.
 
-### 2. System startup phase call method
+### 2. System Startup Invocation
 
-In the system startup phase, call the following functions to complete the initialization and registration of the LCD:
+During the system startup phase, the following functions need to be called to complete the LCD initialization and registration:
 
 #### Example code
 
@@ -127,21 +115,21 @@ In the system startup phase, call the following functions to complete the initia
 #endif /* CONFIG_LCD */
 ```
 
-##### Code description
+##### Code Explanation
 
 1. `board_lcd_initialize`
 
-    -`Used to initialize the LCD chip, including SPI initialization, LCD register configuration, etc.`
-    - If initialization fails, it will return a negative value and record an error log.
+    - Initializes the LCD hardware, such as the SPI interface and LCD controller registers.
+    - If initialization fails, it returns a negative value and logs an error.
 
 2. `lcddev_register`
 
-    - Register the LCD device instance, which is usually used to mount the LCD device to `/dev/lcd0`.
-    - If registration fails, it will return a negative value and record an error log.
+    - Registers the LCD device instance, typically mounting it to `/dev/lcd0`.
+    - If registration fails, it returns a negative value and logs an error.
 
 ### 3. `struct lcd_planeinfo_s` Structure
 
-`struct lcd_planeinfo_s` is an important structure of the LCD driver, which defines the interface and attributes related to LCD data transmission and color.
+`struct lcd_planeinfo_s` is an important structure in the LCD driver, defining the interfaces and attributes related to LCD data transfer and color characteristics.
 
 #### Example code
 
@@ -149,29 +137,29 @@ In the system startup phase, call the following functions to complete the initia
 struct lcd_planeinfo_s
 {
   /* LCD Data Transfer */
-  /* Write npixels of data to a certain line.*/
+  /* Write npixels of data to a specific row */
   int (*putrun)(fb_coord_t row, fb_coord_t col, FAR const uint8_t *buffer,
                 size_t npixels);
-  /* Update rectangular area */
+  /* Update a rectangular area */
   int (*putarea)(fb_coord_t row_start, fb_coord_t row_end,
                  fb_coord_t col_start, fb_coord_t col_end,
                  FAR const uint8_t *buffer);
-  /* Read npixels data from a certain line. */
+  /* Read npixels of data from a specific row */
   int (*getrun)(fb_coord_t row, fb_coord_t col, FAR uint8_t *buffer,
                 size_t npixels);
-  /* Read the data of a rectangular area. */
+  /* Read data from a rectangular area */
   int (*getarea)(fb_coord_t row_start, fb_coord_t row_end,
                  fb_coord_t col_start, fb_coord_t col_end,
                  FAR uint8_t *buffer);
   /* Plane color characteristics */
-  /* Workspace, one LCD device for each, multiple layers share a buffer. It must store at least one line of data (bpp * xres / 8), and it needs to be aligned with the pixel format. */
+  /* Workspace buffer, one per LCD device, shared by multiple layers. It must store at least one row of data (bpp * xres / 8) and be aligned with the pixel format. */
   uint8_t *buffer;
-  /* The number of bits occupied by a pixel*/
+  /* Bits per pixel */
   uint8_t  bpp;
 };
 ```
 
-#### Code description
+#### Code Explanation
 
 **Data transfer interface**
 
@@ -204,11 +192,11 @@ struct lcd_planeinfo_s
 
 ## IV. LCD Framebuffer Mode
 
-LCD Framebuffer is a framebuffer wrapper for the LCD driver in openvela. After enabling the LCD Framebuffer mode, the application layer can access and control the LCD device through `/dev/fb0`. It is important to note that this mode will allocate a frame graphic buffer (Framebuffer), which will consume additional memory space.
+LCD Framebuffer is a framebuffer wrapper provided by openvela for the LCD driver. When LCD Framebuffer mode is enabled, the application layer can access and control the LCD device through `/dev/fb0`. It's important to note that this mode allocates a full graphics buffer (framebuffer), which consumes additional memory.
 
-reference: `drivers/lcd/lcd_framebuffer.c`
+Reference file: `drivers/lcd/lcd_framebuffer.c`
 
-### 1. Enable the following compilation options
+### 1. Core Interfaces for LCD Framebuffer Mode
 
 According to the description in [Framebuffer Driver](./Framebuffer_Driver.md), the LCD Framebuffer driver implements the following three core interfaces:
 
@@ -218,7 +206,7 @@ According to the description in [Framebuffer Driver](./Framebuffer_Driver.md), t
 
 In the `up_fbinitialize` function, the initialization call of the LCD driver is completed.
 
-### 2. `up_fbinitialize` function implementation
+### 2. `up_fbinitialize` Function Implementation
 
 The following is the implementation logic of the `up_fbinitialize` function.
 
@@ -354,15 +342,15 @@ errout_with_state:
 
 ### 3. Configuration Options
 
-In LCD Framebuffer mode, the following compilation options must be enabled:
+In LCD Framebuffer mode, you need to enable the following build options:
 
 - `CONFIG_LCD`: Enable LCD support.
-- `CONFIG_VIDEO_FB`: Enable Framebuffer support.
-- `CONFIG_LCD_FRAMEBUFFER`: Enable LCD Framebuffer support.
+- `CONFIG_VIDEO_FB`: Enable framebuffer support.
+- `CONFIG_LCD_FRAMEBUFFER`: Enable framebuffer support for the LCD.
 
-**Note**: The `CONFIG_LCD_EXTERNINIT` option is not enabled by default.
+**Note**: In this mode, you do not need to enable the `CONFIG_LCD_DEV` option.
 
-## V Related code repository
+## V. Related Repositories
 
 - [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/trunk/include/nuttx/lcd/lcd.h)
 

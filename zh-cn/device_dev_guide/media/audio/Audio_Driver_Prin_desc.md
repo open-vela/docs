@@ -37,7 +37,7 @@ user@user:~/vela/nuttx/audio$ tree
 ├── Makefile
 └── README.txt
 
-0 directories, 10 file
+0 directories, 10 files
 ```
 
 该目录包含音频驱动的核心实现文件、配置文件（`Kconfig`）、构建文件（`Makefile` 和 `Make.dep`），以及相关的说明文档（`README.txt`）。开发者可以根据需求在此基础上扩展或修改音频驱动功能。
@@ -700,7 +700,6 @@ static const struct audio_ops_s g_audio_dma_ops =
 ```C
 static int audio_dma_configure(struct audio_lowerhalf_s *dev,
                                const struct audio_caps_s *caps)
-#endif
 {
   struct audio_dma_s *audio_dma = (struct audio_dma_s *)dev;
   struct dma_config_s cfg;
@@ -996,7 +995,6 @@ struct i2s_ops_s
 ```C
 static int audio_i2s_configure(FAR struct audio_lowerhalf_s *dev,
                                FAR const struct audio_caps_s *caps)
-#endif
 {
   FAR struct audio_i2s_s *audio_i2s = (struct audio_i2s_s *)dev;
   FAR struct i2s_dev_s *i2s;

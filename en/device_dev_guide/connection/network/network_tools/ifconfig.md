@@ -44,15 +44,15 @@ To use the ifconfig command, enable network support and proc filesystem support 
 ifconfig interface [[inet|inet6] [<ip-address>|dhcp]] [dr|gw|gateway <dr-address>] [netmask <net-mask>|prefixlen <len>] [dns <dns-address>] [hw <hw-mac>]]
 ```
 
-| Parameter                             | Description                                                |
-| ------------------------------------- | ---------------------------------------------------------- |
-| interface                             | Interface name (e.g., eth0 for Ethernet, wlan0 for Wi-Fi). |
-| inet/inet6                            | Address family (IPv4/IPv6).                                |
-| \<ip-address>\|dhcp                   | Static IP assignment or DHCP-based dynamic address.        |
-| dr\|gw\|gateway \<dr-address>         | Configure gateway address.                                 |
-| netmask \<net-mask>\|prefixlen \<len> | Set IP netmask (default derived from IP class).            |
-| dns \<dns-address>                    | Configure DNS server.                                      |
-| hw \<hw-mac>                          | Set hardware MAC address (if supported by driver).         |
+| Parameter                               | Description                                                |
+| --------------------------------------- | ---------------------------------------------------------- |
+| interface                               | Interface name (e.g., eth0 for Ethernet, wlan0 for Wi-Fi). |
+| inet/inet6                              | Address family (IPv4/IPv6).                                |
+| \<ip-address\>\|dhcp                    | Static IP assignment or DHCP-based dynamic address.        |
+| dr\|gw\|gateway \<dr-address\>          | Configure gateway address.                                 |
+| netmask \<net-mask\>\|prefixlen \<len\> | Set IP netmask (default derived from IP class).            |
+| dns \<dns-address\>                     | Configure DNS server.                                      |
+| hw \<hw-mac\>                           | Set hardware MAC address (if supported by driver).         |
 
 ## IV. Common Commands
 

@@ -645,7 +645,7 @@ Close the emulator to exit the demo, as shown below:
     }
     ```
 
-2. Add a new JSON object to the musics array for each song you want to add. Refer to the parameter escriptions below.
+2. Add a new JSON object to the musics array for each song you want to add. Refer to the parameter descriptions below.
 
     | Parameter  | Description                                                                  |
     | :--------- | :--------------------------------------------------------------------------- |

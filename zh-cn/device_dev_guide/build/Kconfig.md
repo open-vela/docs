@@ -57,7 +57,7 @@ openvela 在首次启动编译时，通过指定的 `arch` 和 `board` 参数找
     - `.config` 文件是基于 `defconfig` 文件生成的完整配置，包含所有扩展和组合后的配置项。
     - `menuconfig` 的操作会读取本地的 `.config` 文件，允许用户根据需求修改配置。工具在完成配置调整后会自动将 `.config` 中的更改同步回 `defconfig` 文件。
 
-3. config.h
+3. `config.h`
 
     - `config.h` 文件从 `.config` 文件生成，包含所有配置信息，用于支持代码的条件编译和运行时操作。
 

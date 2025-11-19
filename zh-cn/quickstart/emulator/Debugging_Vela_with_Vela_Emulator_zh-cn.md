@@ -135,7 +135,7 @@ d <breakpoint-number>
 
 ## 二、使用 Visual Studio Code
 
-1. 单击 [此处](https://code.visualstudio.com/) 下载安装 Visual Studio Code。
+1. 单击[此处](https://code.visualstudio.com/)下载安装 Visual Studio Code。
 
 2. 安装 Visual Studio Code 扩展。
 
@@ -232,7 +232,7 @@ d <breakpoint-number>
 
 5. 通过传递 `-s` 和 `-S` 选项启动模拟器来使用 GDB。
 
-    ```
+    ```bash
     ./emulator.sh vela -qemu -S -s
     ```
 

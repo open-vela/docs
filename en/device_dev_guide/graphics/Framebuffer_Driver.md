@@ -114,8 +114,9 @@ From the code, we can see the Framebuffer provides these 3 interfaces for LCD de
     - Retrieves `fb_vtable_s` structure information for LCD
     - `fb_vtable_s` is the core Framebuffer structure containing all interfaces. This function registers LCD controller information into the Framebuffer framework
     - Reference implementations:
-    - `drivers/video/vnc/vnc_fbdev.c`
-    - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
+
+        - `drivers/video/vnc/vnc_fbdev.c`
+        - `boards/arm/stm32f7/stm32f746g-disco/stm32_lcd.c`
 
 3. `void up_fbuninitialize(int display)`
 
@@ -172,7 +173,7 @@ Here is a partial definition of `struct fb_vtable_s`:
 struct fb_vtable_s
 {
   /* Get information about the video controller configuration and the
-   * color planes.
+   * configuration of each color plane.
    */
 
   int (*getvideoinfo)(FAR struct fb_vtable_s *vtable,
@@ -260,7 +261,7 @@ struct fb_vtable_s
   int (*setarea)(FAR struct fb_vtable_s *vtable,
                  FAR const struct fb_overlayinfo_s *oinfo);
 
-# ifdef CONFIG_FB_OVERLAY_BLIT
+#ifdef CONFIG_FB_OVERLAY_BLIT
   /* The following are provided only if the video hardware supports
    * blit operation between overlays.
    */
