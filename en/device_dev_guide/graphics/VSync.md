@@ -57,7 +57,7 @@ There are two main types of screens on the market: Video-mode screens and Comman
 2. A transfer is only initiated when the framebuffer content is updated. It also supports transferring only the changed portions, reducing the amount of data sent and resulting in lower power consumption compared to Video-mode screens.
 3. Due to the additional LCD controller and RAM in the hardware, the cost is higher than that of Video-mode screens. They are often used in power-sensitive products, such as battery-powered wearable devices like wristbands and watches.
 
-### 3. ### Interrupt Service Routines
+### 3. Interrupt Service Routines
 
 > **Note:**
 >
@@ -127,7 +127,7 @@ In most application scenarios, development is based on [libuv](https://libuv.org
 
 The core of libuv is based on [poll](https://man7.org/linux/man-pages/man2/poll.2.html). Compared to traditional semaphores, the key advantage of `poll` is its ability to monitor multiple events simultaneously. `poll` exits its blocking state as soon as any one of the monitored events occurs. The principle of libuv is illustrated in the figure below:
 
-The openvela framebuffer driver framework provides the necessary [interface](https://github.com/open-vela/nuttx/blob/dev/drivers/video/fb.c) for `poll` to monitor whether the framebuffer is in a writable state:
+The openvela framebuffer driver framework provides the necessary [interface](../../../../../../nuttx/blob/dev/drivers/video/fb.c) for `poll` to monitor whether the framebuffer is in a writable state:
 
 ```C
 /****************************************************************************
