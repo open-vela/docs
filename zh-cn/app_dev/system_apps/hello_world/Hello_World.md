@@ -2,14 +2,18 @@
 
 \[ [English](../../../../en/app_dev/system_apps/hello_world/Hello_World.md) | 简体中文 \]
 
-## 一、概述
+## 概述
 
-openvela 基于开源操作系统 NuttX 构建，进一步提供多种系统级服务。为了使 openvela 更加完善和功能全面，需要引入完整的开发框架或功能模块。一个完整的开发框架通常包含以下两部分：
+本文档面向开发者，旨在详细介绍如何在 openvela 操作系统中添加、配置和运行一个新的用户应用程序。openvela 基于 NuttX RTOS 构建，其模块化的设计允许开发者方便地集成自定义功能或第三方库。
 
-- 系统应用：内部开发的系统应用，通常存放于 `apps/` 等文件夹中。
-- 第三方系统库：引入第三方库并完成适配，通常存放于 `external/` 等文件夹中。
+一个典型的功能模块包含以下部分：
 
-新功能和框架的目录结构如下图所示：
+- **系统应用 (System Application)**：作为系统内置功能的一部分，通常存放于 `apps/` 目录下。
+- **第三方库 (Third-Party Library)**：作为外部依赖引入，通常存放于 `external/` 目录下。
+
+本指南将以创建一个 `Hello, World!` 示例应用程序为引导，完整演示从代码编写到构建、运行和自启动的全过程。
+
+示例目录结构如下：
 
 ```Bash
 └── vela
@@ -22,7 +26,7 @@ openvela 基于开源操作系统 NuttX 构建，进一步提供多种系统级�
         └── libs_2
 ```
 
-## 二、添加 Hello World 示例
+## 步骤一：创建 Hello World 示例框架
 
 本节介绍如何在 openvela 中添加一个 `Hello World` 示例应用程序，包括主体框架、文件内容以及相关构建配置。
 
@@ -30,30 +34,24 @@ openvela 基于开源操作系统 NuttX 构建，进一步提供多种系统级�
 
 Hello World 示例应用程序需要包含以下核心文件：
 
-- `hello_main.c`：定义应用程序的主要逻辑。
-- `Kconfig`：定义条件编译宏，用于功能裁剪。
-- `CMakeLists.txt`：用于 openvela 中的 `CMake` 构建系统组织。
-- `Make.defs`：指示当前目录是否需要被编译，必须被上层目录包含。
-- `Makefile`：定义库的内部文件编译规则以及编译标志 (FLAGS)。
+- `hello_main.c`：应用程序的源代码，包含 `main` 函数入口。
+- `Kconfig`：构建系统的配置文件，用于在 `menuconfig` 中提供可裁剪的编译选项。
+- `CMakeLists.txt`：CMake 构建脚本，用于定义源码、依赖和编译规则。
 
 目录结构示例如下：
 
 ```Bash
 apps
  └── examples
-     └── hello_main
+     └── hello
          ├── hello_main.c
          ├── CMakeLists.txt
          ├── Kconfig
-         ├── Make.defs
-         └── Makefile
 ```
 
-### 2、文件内容
+### 2、编写源代码 (hello_main.c)
 
-#### hello_main.c
-
-文件 `hello_main.c` 应包含基本的 C 应用程序逻辑：
+创建 `hello_main.c` 文件，并添加以下 C 语言代码。这是应用程序的执行逻辑入口：
 
 ```C
 #include <stdio.h>
@@ -65,7 +63,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-如需添加 C++ 应用程序，入口函数（`main`）需要使用 `extern "C"` 声明，以确保与上层接口兼容：
+如果您需要使用 C++，请确保 `main` 函数使用 `extern "C"` 声明，以保证其 C 语言链接兼容性，从而能被系统正确调用：
 
 ```C++
 #include <iostream>
@@ -77,19 +75,21 @@ extern "C" int main(int argc, char *argv[])
 }
 ```
 
-#### Kconfig
+### 3、创建 Kconfig 配置文件
 
-以下是 `Kconfig` 文件的示例内容：
+创建 `Kconfig` 文件，用于定义应用程序的编译选项。这些选项将显示在 `menuconfig` 图形配置界面中，允许用户按需启用或配置您的应用：
 
-```plaintext
+```makefile
 config EXAMPLES_HELLO
         tristate "\"Hello, World!\" example"
         default n
         ---help---
                 Enable the \"Hello, World!\" example
 
+# 仅当 EXAMPLES_HELLO 启用时，以下选项才可见
 if EXAMPLES_HELLO
-# 下面 default "hello" 中的 hello 需要运行的指令
+
+# 定义应用程序在 openvela 中执行的命令名称
 config EXAMPLES_HELLO_PROGNAME
         string "Program name"
         default "hello"
@@ -97,10 +97,12 @@ config EXAMPLES_HELLO_PROGNAME
                 This is the name of the program that will be used when the NSH ELF
                 program is installed.
 
+# 定义应用程序任务的优先级
 config EXAMPLES_HELLO_PRIORITY
         int "Hello task priority"
         default 100
 
+# 定义应用程序任务的堆栈大小
 config EXAMPLES_HELLO_STACKSIZE
         int "Hello stack size"
         default DEFAULT_TASK_STACKSIZE
@@ -108,31 +110,35 @@ config EXAMPLES_HELLO_STACKSIZE
 endif
 ```
 
-#### CMakeLists.txt
+### 4、创建 CMake 构建脚本
 
-以下是 `CMakeLists.txt` 文件的内容示例，其中所有配置变量可以直接使用：
+创建 `CMakeLists.txt` 文件。openvela 的构建系统会自动加载 `.config` 文件中的所有宏定义作为 CMake 变量，因此您可以直接使用 `Kconfig` 中定义的配置。
 
 ```CMake
-# .config 中的所有配置已加载到 CMake 环境，因此可以直接使用变量  
-
-# Enable Config, 代替原Make.defs configured_apps的配置
-
+# 检查 'EXAMPLES_HELLO' 是否在 .config 中被启用
 if(CONFIG_EXAMPLES_HELLO) # 如果defconfig使能了该feature则加入编译
-
-  # call 添加应用module `nuttx_add_application` 将hello添加为一个builtin app.
+  
+  # 调用 nuttx_add_application 函数将应用注册为内置 (built-in) 程序
   nuttx_add_application(
-    NAME                                #参数标志：application唯一名称
-    ${CONFIG_EXAMPLES_HELLO_PROGNAME}   #参数值：  取hello Kconfig中的设置值为hello应用名称
-    SRCS                                #参数标志：源文件
-    hello_main.c                        #参数值：  传入应用的源文件，可以多个，main必须为第一个 
-    STACKSIZE                           #参数标志：栈大小
-    ${CONFIG_EXAMPLES_HELLO_STACKSIZE}  #参数值：  取Kconfig中的设置值，不传则为CONFIG_DEFAULT_TASK_STACKSIZE
-    PRIORITY                            #参数标志：任务优先级
-    ${CONFIG_EXAMPLES_HELLO_PRIORITY})  #参数值：  取Kconfig中的设置值，不传则为SCHED_PRIORITY_DEFAULT
+    # NAME: 指定应用的唯一名称，通常与 Kconfig 中的 PROGNAME 保持一致
+    NAME                                
+    ${CONFIG_EXAMPLES_HELLO_PROGNAME}   
+    
+    # SRCS: 指定源文件列表，main 函数所在文件应为第一个
+    SRCS                                
+    hello_main.c 
+    
+    # STACKSIZE: 指定任务堆栈大小                       
+    STACKSIZE                           
+    ${CONFIG_EXAMPLES_HELLO_STACKSIZE}  
+    
+    # PRIORITY: 指定任务优先级，不传则为SCHED_PRIORITY_DEFAULT
+    PRIORITY                            
+    ${CONFIG_EXAMPLES_HELLO_PRIORITY})  
 endif()
 ```
 
-`nuttx_add_application()` 的函数定义
+#### `nuttx_add_application()` 的函数定义
 
 该 CMake 函数位于 `nuttx/cmake/nuttx_add_application.cmake` 文件中，用于添加并配置应用程序。
 
@@ -159,229 +165,108 @@ nuttx/cmake/nuttx_add_application.cmake
    NO_MAIN_ALIAS       : do not add a main=<app>_main alias(*)
 ```
 
-#### Makefile
+## 步骤二：验证应用程序
 
-要在 openvela 中添加一个新的应用程序，其核心步骤包括将应用程序的入口文件添加到 `MAINSRC` 中，并正确定义以下三个必要参数：
+完成文件创建后，您需要通过以下步骤来配置、编译并运行您的应用程序。
 
-- `PROGNAME`：应用程序的名称，在 `nsh` 启动时使用。
-- `PRIORITY`：应用程序的运行优先级。
-- `STACKSIZE`：应用程序的栈大小。
+### 1、清理构建环境 (可选)
 
-以上三个参数是添加和运行一个应用程序的必备配置。
-
-以下是一个示例的 `Makefile` 配置内容：
-
-```Makefile
-include $(APPDIR)/Make.defs
-
-# 定义程序名称，可以从 Kconfig 值中获取，也可以直接定义  
-PROGNAME = $(CONFIG_EXAMPLES_HELLO_PROGNAME)
-# 或者 PROGNAME = hello
-
-# 定义应用程序的优先级  
-PRIORITY = $(CONFIG_EXAMPLES_HELLO_PRIORITY)
-# 或者 PRIORITY = 100   （大小根据需要指定）
-
-# 定义应用程序的栈大小  
-STACKSIZE = $(CONFIG_EXAMPLES_HELLO_STACKSIZE)
-# 或者 STACKSIZE = 4096 （大小根据需要指定） 
-
-# 模块设置  
-MODULE = $(CONFIG_EXAMPLES_HELLO)
-
-# 定义 main 函数所在的源文件 
-MAINSRC = hello_main.c
-
-# 如果引用了需要的头文件，可在此添加头文件路径，例如：  
-CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/external/libs/include
-# 等价于 CFLAGS += -I$(APPDIR)/external/libs/include
-
-# 如果是 C++ 项目，对应头文件的配置可添加到 CXXFLAGS 中 
-# CXXFLAGS // c++ 相应的头文件
-        
-# 如果添加内部开发的相应的源文件，需在这里添加相应的文件，如：
-# 其中路径的开始为当前路径，即当前 Makefile 所在的路径。
-CSRCS += device_example.c
-
-# 如果有 C++ 源文件，按需添加：  
-# CXXSRCS += hello_main.cxx   // c++ 相应的源文件
-
-# 包含 openvela 的应用配置  
-include $(APPDIR)/Application.mk
-```
-
-当项目拥有多个入口文件时，可以在 `Makefile` 中根据配置条件做出灵活调整，例如：
+如果您修改了 Kconfig 文件或希望进行全新编译，建议先执行清理操作：
 
 ```Bash
-ifeq ($(CONFIG_MAIN1),yes)
-  PROGNAME += main1
-  MAINSRC  += main1.c
-endif
-
-ifeq ($(CONFIG_MAIN2),yes)
-  PROGNAME += main2
-  MAINSRC  += main2.c
-endif
+# 使用 distclean 清理所有构建产物和配置
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  --cmake distclean -j$(nproc)
+# 或者直接删除cmake产物
+rm -rf cmake_out/vela_goldfish-armeabi-v7a-ap
 ```
 
-如果项目中 C++ 源文件的后缀不是 `.cxx`，需要在 `Makefile` 中通过 `CXXEXT` 参数指定后缀。例如：
+### 2、图形化配置 (menuconfig)
 
-```Makefile
-CXXEXT := .cpp
-```
-
-#### Make.defs
-
-在 `Make.defs` 文件中，需将应用的路径添加到 `CONFIGURED_APPS` 中，使 openvela 的编译系统能够正确找到所需路径：
-
-```Makefile
-ifneq ($(CONFIG_EXAMPLES_HELLO),)
-CONFIGURED_APPS += $(APPDIR)/examples/hello_main
-endif
-```
-
-## 三、验证测试
-
-新添加的应用需要通过清理并重新编译后才能生效。验证测试的步骤如下：
-
-### 1、清理代码
-
-使用以下命令执行清理操作：
-
-```Bash
-# 清理工程  
-./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  distclean -j8
-```
-
-### 2、配置 Menuconfig
-
-在 `menuconfig` 中启用对应的应用功能：
+启动 `menuconfig` 以在图形界面中启用您的新应用：
 
 ```Bash
 # 启动 menuconfig  
-./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  menuconfig -j8
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  --cmake menuconfig -j$(nproc)
 ```
 
-进入 `menuconfig` 后，启用 `hello_main`。
+在 `menuconfig` 界面中，通过以下路径找到并启用您的应用： `Application Configuration` ---> `Examples` ---> `[*] "Hello, World!" example`
 
 ![img](./figures/001.png)
 
 ### 3、编译和运行
 
-```Bash
-# Build: 
-./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  -j8
+保存 `menuconfig` 配置后，执行编译。
 
-# Run:
+```Bash
+# 编译固件 (-j`nproc` 使用所有 CPU 核心并行编译)
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  --cmake -j$(nproc)
+
+# 拷贝产物
+cp cmake_out/vela_goldfish-armeabi-v7a-ap/nuttx* nuttx/ && 
+cp cmake_out/vela_goldfish-armeabi-v7a-ap/vela_data.bin nuttx/ && 
+cp cmake_out/vela_goldfish-armeabi-v7a-ap/vela_system.bin nuttx/
+
+# 启动模拟器运行固件
 ./emulator.sh vela
 ```
 
-运行后，在串口中输入程序名称（*Program name*），程序名称已在文件 `Kconfig` 中定义。例如：`hello`，如下图所示：
+系统启动后，在 NSH 命令行中输入您在 `Kconfig` 中设置的程序名称（默认为 `hello`）并回车，即可看到程序输出：
 
 ![img](./figures/002.png)
 
-## 四、应用自启动
+## 步骤三：配置应用自启动
+
+openvela 支持在系统启动时自动运行指定脚本，您可以通过编辑启动脚本来实现应用的自启动。
+
+### 1、自启动机制与配置
 
 openvela 的启动脚本存放在 `/etc` 目录下，该目录以 `romfs` 的形式与 openvela 的二进制文件链接在一起。在系统启动后会自动被 `nshlib` 挂载，相关配置如下。
 
-### 1、配置项说明
-
-在 `Makefile` 中，需要配置以下选项来支持自启动功能：
+确保您的板级配置启用了以下 `Kconfig` 选项：
 
 ```Makefile
 CONFIG_FS_ROMFS=y
-CONFIG_NSH_ROMFSETC=y
-CONFIG_NSH_ROMFSMOUNTPT="/etc"
+CONFIG_ETC_ROMFS=y
+CONFIG_ETC_ROMFSMOUNTPT="/etc"
 CONFIG_NSH_SYSINITSCRIPT="init.d/rc.sysinit"
 CONFIG_NSH_INITSCRIPT="init.d/rcS"
 ```
 
 ### 2、启动脚本位置
 
-启动脚本的默认位置如下：
+默认的用户启动脚本位于板级配置目录中：
 
 ```Bash
 vendor/openvela/boards/vela/src/etc/init.d/rc.sysinit   # 系统初始化脚本 
-vendor/openvela/boards/vela/src/etc/init.d/rcS           # 用户脚本  
+vendor/openvela/boards/vela/src/etc/init.d/rcS          # 用户脚本  
 ```
 
-### 3、脚本文件示例
+### 3、编辑启动脚本
 
-以下是 `rcS` 文件的内容示例：
-
-```C++
-#include <nuttx/config.h>
-
-#ifdef CONFIG_FS_HOSTFS
-mount -t hostfs -o fs=. /data # 挂载 Host 文件系统到 /data  
-#endif
-
-hello    # 前台运行 hello
-hello &  # 后台运行 hello
-```
-
-## 四、实现应用程序自启动
-
-openvela 采用 NuttShell (NSH) 的启动脚本机制来实现应用程序的自启动。基本流程如下：
-
-1. 系统在启动过程中，会将一个预置的只读文件系统 (Read-Only File System, ROMFS) 挂载到 `/etc` 目录。
-2. 挂载完成后，NSH 会自动执行 `/etc/init.d/rcS` 脚本文件。
-3. 您只需将需要自启动的应用程序命令写入 `rcS` 脚本，即可实现开机自启。
-
-### 1、启用自启动功能
-
-要使用此功能，您需要通过 Kconfig 系统配置，在构建配置中启用以下选项。
-
-| **配置项**                 | **推荐值**            | **描述**                                           |
-| :------------------------- | :-------------------- | :------------------------------------------------- |
-| `CONFIG_FS_ROMFS`          | `y`                   | 启用 ROMFS 支持，这是存放启动脚本的基础。          |
-| `CONFIG_NSH_ROMFSETC`      | `y`                   | 启用在系统启动时自动挂载 ROMFS 到 `/etc` 目录。    |
-| `CONFIG_NSH_ROMFSMOUNTPT`  | `"/etc"`              | 指定 ROMFS 的挂载点路径。                          |
-| `CONFIG_NSH_SYSINITSCRIPT` | `"init.d/rc.sysinit"` | 指定系统级初始化脚本的路径。                       |
-| `CONFIG_NSH_INITSCRIPT`    | `"init.d/rcS"`        | 指定用户级初始化脚本的路径，这是您需要编辑的文件。 |
-
-### 2、编辑用户启动脚本
-
-#### 脚本位置
-
-您需要修改的文件是用户启动脚本 `rcS`。
-
-- 用户脚本 (推荐修改): `vendor/openvela/boards/vela/src/etc/init.d/rcS`
-- 系统脚本 (请勿修改): `vendor/openvela/boards/vela/src/etc/init.d/rc.sysinit` 此脚本负责核心的系统初始化，修改它可能导致系统无法启动。
-
-#### 脚本编写示例
-
-以下是 `rcS` 脚本的一个示例。NSH 脚本支持标准的 Shell 命令，并兼容 C 语言的预处理器指令（如 `#ifdef`）。
+打开 `rcS` 文件，在其中添加您应用的执行命令。
 
 ```Bash
-# NuttShell 脚本 (rcS)
-
 #include <nuttx/config.h>
 
-# 使用 C 预处理器指令，判断是否配置了主机文件系统 (Host FS)
 #ifdef CONFIG_FS_HOSTFS
-  # 如果已配置，则执行 mount 命令将主机目录挂载到 /data
-  mount -t hostfs -o fs=. /data
+mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host # 挂载 Host 文件系统到 /host
 #endif
 
-# 启动一个名为 "hello" 的应用程序在前台运行。
-# 脚本将在此处阻塞，直到 hello 程序执行完毕。
-hello
+# 在前台运行 hello 应用 (脚本将等待其执行完毕)
+hello    
 
-# 启动一个名为 "hello" 的应用程序在后台运行。
-# "&" 符号让程序在后台执行，脚本会立即继续执行下一行命令。
+# 在后台运行 hello 应用 (脚本会立即继续执行后续命令)
 hello &
 ```
 
-#### 注意事项
+**注意：**
 
-1. 任务创建方式。
+- **使用 POSIX 线程**：在应用程序内部，推荐使用 `pthread_create()` 创建和管理子线程，而不是直接调用底层的 `task_create()`。这能保证更好的可移植性和兼容性。
+- **守护主线程**：如果您的主线程创建了子线程，请确保主线程在所有子线程安全退出后才结束。否则，主线程的退出可能导致整个进程被回收，子线程被强制终止。
+- **创建后台服务**：对于需要长期运行的服务，可以在 `rcS` 脚本中使用 `&` 将其置于后台运行。应用内部通常会进入一个循环（如 `while(1)`）来处理事件或执行周期性任务。
 
-    对于需要在系统启动时运行的应用程序，我们推荐以下方式：
+## 参考资料
 
-    - 通过 NSH 脚本启动 (推荐)：对于大多数应用，在 `rcS` 脚本中使用 `&` 将其置于后台运行是最简单、最稳健的方法。
-    - 通过程序化接口启动：对于需要复杂初始化或动态创建任务的场景，您可以在应用程序内部使用 POSIX 标准的 `pthread_create()` 函数来创建新线程。
+为帮助您更好地理解和添加 `CMakeLists.txt`，下面是参考资料和工具信息：
 
-2. 线程管理。
-
-    如果您的主应用程序使用 `pthread_create()` 创建了子线程，请确保主线程在所有子线程安全退出后才终止。过早退出主线程可能导致子线程被意外终止，从而引发系统不稳定或资源泄漏等问题。
+- openvela CMake 编译系统请参考 [CMake 快速入门](../../../device_dev_guide/build/CMake_quick_start.md)。
