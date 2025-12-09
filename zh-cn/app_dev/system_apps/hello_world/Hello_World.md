@@ -1,4 +1,4 @@
-# 添加 Hello World 示例
+# 运行 Hello World 示例
 
 \[ [English](../../../../en/app_dev/system_apps/hello_world/Hello_World.md) | 简体中文 \]
 
@@ -10,8 +10,6 @@
 
 - **系统应用 (System Application)**：作为系统内置功能的一部分，通常存放于 `apps/` 目录下。
 - **第三方库 (Third-Party Library)**：作为外部依赖引入，通常存放于 `external/` 目录下。
-
-本指南将以创建一个 `Hello, World!` 示例应用程序为引导，完整演示从代码编写到构建、运行和自启动的全过程。
 
 示例目录结构如下：
 
@@ -26,9 +24,11 @@
         └── libs_2
 ```
 
-## 步骤一：创建 Hello World 示例框架
+本指南将以 `Hello, World!` 示例应用程序为引导，完整演示从代码编写到构建、运行和自启动的全过程。
 
-本节介绍如何在 openvela 中添加一个 `Hello World` 示例应用程序，包括主体框架、文件内容以及相关构建配置。
+## 步骤一：查看 Hello World 示例框架
+
+本节介绍如何在 openvela 中添加一个示例应用程序，包括主体框架、文件内容以及相关构建配置。
 
 ### 1、主体框架
 
@@ -38,7 +38,7 @@ Hello World 示例应用程序需要包含以下核心文件：
 - `Kconfig`：构建系统的配置文件，用于在 `menuconfig` 中提供可裁剪的编译选项。
 - `CMakeLists.txt`：CMake 构建脚本，用于定义源码、依赖和编译规则。
 
-目录结构示例如下：
+目录结构示例如下，当前 Hello World 已添加完毕：
 
 ```Bash
 apps
@@ -51,7 +51,7 @@ apps
 
 ### 2、编写源代码 (hello_main.c)
 
-创建 `hello_main.c` 文件，并添加以下 C 语言代码。这是应用程序的执行逻辑入口：
+查看 `hello_main.c` 文件，这是应用程序的执行逻辑入口：
 
 ```C
 #include <stdio.h>
@@ -77,7 +77,7 @@ extern "C" int main(int argc, char *argv[])
 
 ### 3、创建 Kconfig 配置文件
 
-创建 `Kconfig` 文件，用于定义应用程序的编译选项。这些选项将显示在 `menuconfig` 图形配置界面中，允许用户按需启用或配置您的应用：
+查看 `Kconfig` 文件，用于定义应用程序的编译选项。这些选项将显示在 `menuconfig` 图形配置界面中，允许用户按需启用或配置您的应用：
 
 ```makefile
 config EXAMPLES_HELLO
@@ -112,7 +112,7 @@ endif
 
 ### 4、创建 CMake 构建脚本
 
-创建 `CMakeLists.txt` 文件。openvela 的构建系统会自动加载 `.config` 文件中的所有宏定义作为 CMake 变量，因此您可以直接使用 `Kconfig` 中定义的配置。
+查看 `CMakeLists.txt` 文件。openvela 的构建系统会自动加载 `.config` 文件中的所有宏定义作为 CMake 变量，因此您可以直接使用 `Kconfig` 中定义的配置。
 
 ```CMake
 # 检查 'EXAMPLES_HELLO' 是否在 .config 中被启用
@@ -176,6 +176,7 @@ nuttx/cmake/nuttx_add_application.cmake
 ```Bash
 # 使用 distclean 清理所有构建产物和配置
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  --cmake distclean -j$(nproc)
+
 # 或者直接删除cmake产物
 rm -rf cmake_out/vela_goldfish-armeabi-v7a-ap
 ```
@@ -245,17 +246,11 @@ vendor/openvela/boards/vela/src/etc/init.d/rcS          # 用户脚本
 
 打开 `rcS` 文件，在其中添加您应用的执行命令。
 
-```Bash
-#include <nuttx/config.h>
-
+```C
 #ifdef CONFIG_FS_HOSTFS
-mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host # 挂载 Host 文件系统到 /host
+mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
 #endif
 
-# 在前台运行 hello 应用 (脚本将等待其执行完毕)
-hello    
-
-# 在后台运行 hello 应用 (脚本会立即继续执行后续命令)
 hello &
 ```
 
