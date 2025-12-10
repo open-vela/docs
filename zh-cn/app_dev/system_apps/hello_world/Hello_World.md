@@ -176,7 +176,11 @@ nuttx/cmake/nuttx_add_application.cmake
 ```Bash
 # 使用 distclean 清理所有构建产物和配置
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  --cmake distclean -j$(nproc)
+```
 
+或者直接删除cmake产物
+
+```Bash
 # 或者直接删除cmake产物
 rm -rf cmake_out/vela_goldfish-armeabi-v7a-ap
 ```
@@ -253,6 +257,28 @@ mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
 
 hello &
 ```
+
+添加后效果如下图所示：
+![alt text](./figures/003.png)
+
+### 4、重新编译和运行
+
+```Bash
+# 编译固件 (-j`nproc` 使用所有 CPU 核心并行编译)
+./build.sh vendor/openvela/boards/vela/configs/goldfish-armeabi-v7a-ap  --cmake -j$(nproc)
+
+# 拷贝产物
+cp cmake_out/vela_goldfish-armeabi-v7a-ap/nuttx* nuttx/ && 
+cp cmake_out/vela_goldfish-armeabi-v7a-ap/vela_data.bin nuttx/ && 
+cp cmake_out/vela_goldfish-armeabi-v7a-ap/vela_system.bin nuttx/
+
+# 启动模拟器运行固件
+./emulator.sh vela
+```
+
+启动后效果如下图所示：
+
+![alt text](./figures/004.png)
 
 **注意：**
 
