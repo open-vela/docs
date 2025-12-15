@@ -133,9 +133,19 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 许可协议
 
-这个代码库中的代码使用 Apache 2.0 许可证。你可以在[这里](https://www.apache.org/licenses/LICENSE-2.0.txt)找到更多关于 Apache 2.0 许可证的信息。
+openvela 项目由多个独立的仓库组成，其许可证策略如下：
 
-openvela 引用三方开源软件及许可证说明，参考[第三方开源软件说明](Third_Party_and_Open_Source_Components_zh-cn.md)。
+1. 基本原则
+
+    openvela 项目整体采用 Apache 2.0 作为主许可证，各代码库的许可证以各仓库根目录下 LICENSE 文件为准。
+
+2. Vendor 仓库
+
+    `vendor` 目录下的仓库由芯片厂商等第三方提供，它们遵循各自独立的许可证（如 MIT, BSD 等），不受 openvela 项目的 Apache 2.0 许可证约束。使用前请务必查阅并遵守其规定。
+
+3. 第三方依赖组件
+
+    项目代码中引用的第三方开源组件及其许可证信息，请参阅[第三方开源组件声明](Third_Party_and_Open_Source_Components_zh-cn.md)文件。
 
 ## 社区与支持
 
