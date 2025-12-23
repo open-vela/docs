@@ -23,7 +23,13 @@ TC4D9-EVB 基于英飞凌 AURIX™ TC4x 系列微控制器（TC4D9/TC4Z9/TC489�
 
 ### 2、编译主机准备 (Ubuntu)
 
-请在 Ubuntu 环境下，参照官方文档[快速入门（Ubuntu）](../../quickstart/openvela_ubuntu_quick_start.md)，完成 openvela 开发环境搭建和源代码下载。
+1. 请在 Ubuntu 环境下，参照官方文档[快速入门（Ubuntu）](../../quickstart/openvela_ubuntu_quick_start.md)，完成 openvela 开发环境搭建和源代码下载。
+2. 打开终端，执行以下命令，更新软件包列表并安装 srecord。
+
+    ```bash
+    sudo apt update
+    sudo apt install srecord
+    ```
 
 ### 3、烧录主机准备 (Windows)
 
