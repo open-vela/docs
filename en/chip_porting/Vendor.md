@@ -13,7 +13,7 @@ To ensure the isolation and privacy security of vendor code, a dedicated directo
 Upon completing the code download, the overall directory structure is as follows:
 
 ```Shell
-djz:vela$ tree -L 1
+$ tree -L 1
 .
 ├── apps
 ├── build.sh -> nuttx/tools/build.sh
@@ -40,7 +40,7 @@ seven directories, one file
 The vendor directory is used to store the relevant code and configurations for each vendor. The layout of its contents is as follows:
 
 ```Shell
-djz:vendor$ tree -L 1
+$ tree -L 1
 .
 ├── <vendor_name>
 ├── Make.defs
@@ -61,11 +61,11 @@ When a vendor initially acquires the code, the layout of the vendor_name directo
 
 ```C
 // Directory location
-djz:vendor_name$ pwd
-/home/djz/workspace/velaos/vendor/<vendor_name>
+$ pwd
+/home/{namepath}/workspace/velaos/vendor/<vendor_name>
 
 // Directory layout
-djz:vendor_name$ tree -l
+$ tree -l
 ├── boards
 │   └── <chip_name>
 │       └── <board_name>
