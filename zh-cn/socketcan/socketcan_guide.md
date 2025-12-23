@@ -1,5 +1,7 @@
 # SocketCAN 功能使用指南
 
+[ [English](../../en/socketcan/socketcan_guide.md) | 简体中文 ]
+
 ## 一、SocketCAN 简介
 
 **SocketCAN** 是 Linux 内核中为 CAN (Controller Area Network) 协议开发的一套开源驱动和网络栈。与传统的字符设备驱动不同，SocketCAN 使用 Berkeley Socket API 网络编程接口，将 CAN 总线抽象为网络接口（如 `can0`），这使得 CAN 协议的开发与以太网编程高度相似。
@@ -12,7 +14,7 @@
 
 本指南将引导您在 openvela 的 SIL (Software-in-the-Loop) 仿真环境中配置并使用这一强大的功能。
 
-## 二、概述与预期结果
+## 二、概述
 
 本实验旨在通过 QEMU 仿真器，在 Linux 宿主机与 openvela 实例之间建立虚拟 CAN 网络，验证双向数据通信的可行性。
 
@@ -20,12 +22,6 @@
 
 1. 成功构建并启动支持 SocketCAN 协议栈的 openvela 系统。
 2. 掌握在宿主机与 openvela 之间互发 CAN 数据帧的方法。
-
-**预期运行效果图示：**
-
-![alt text](./figures/001.png)
-
-![alt text](./figures/002.png)
 
 ## 三、前置准备
 

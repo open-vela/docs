@@ -1,5 +1,7 @@
 # SIL SocketCAN 功能测试指南
 
+[ [English](../../en/socketcan/sil_socketcan_test.md) | 简体中文 ]
+
 ## 一、概述
 
 本指南旨在演示如何在软件在环 (SIL) 环境下，使用 openvela 进行 SocketCAN 功能测试。
