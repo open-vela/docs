@@ -1,6 +1,6 @@
 # 为 openvela 做出贡献
 
-\[ [English](CONTRIBUTING.md) | 简体中文 | [繁體中文](CONTRIBUTING_zh-tw.md) \]
+[ [English](CONTRIBUTING.md) | 简体中文 ]
 
 openvela 由一支活跃的软件工程师和研究人员团队开发。欢迎你加入 openvela 开源社区，为改进此项目做出任何贡献！
 

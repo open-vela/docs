@@ -6,7 +6,7 @@
 
 # openvela 开源项目
 
-\[ [English](README.md) | 简体中文 | [繁體中文](README_zh-tw.md) \]
+[ [English](README.md) | 简体中文]
 
 ## openvela 简介
 
@@ -34,17 +34,29 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 技术优势
 
-- **高度可扩展**：openvela 的设计注重模块化与可扩展性，使其能够灵活适应多样的物联网应用场景。小到仅配备 32KB RAM 的微型 BLE 模组，大到拥有 512MB RAM 的智能有屏音箱，openvela 都能提供高度可扩展的支持。
+- **高度可扩展**
 
-- **一站式解决方案**：随着时间的推移，openvela 不断沉淀了各类 AIoT 应用的共性需求，成为一个功能完备的软件平台，为各类物联网解决方案提供了全面的支持。厂商采用 openvela，可以显著降低研发成本并加速产品的上市时间。
+    openvela 的设计注重模块化与可扩展性，使其能够灵活适应多样的物联网应用场景。小到仅配备 32KB RAM 的微型 BLE 模组，大到拥有 512MB RAM 的智能有屏音箱，openvela 都能提供高度可扩展的支持。
 
-- **成熟的异构计算支持**：openvela 为异构多核系统提供了强大的支持，实现了 MCU、MPU、DSP、GPU 以及 NPU 等不同处理单元间无缝的 IPC 通信机制。此外，openvela 还提供了一个高级的 RPC 框架，简化了 openvela 与 Android 和 Linux 系统的通信，使快速打造一个异构融合操作系统成为可能。
+- **一站式解决方案**
 
-- **标准兼容和高可移植性**：openvela 内核基于 Apache NuttX ，这个被称为 “Tiny Linux” 的系统为 openvela 提供了高标准的 POSIX 兼容性。通过持续提升其 POSIX 兼容性，openvela 当前已达到 88% 的兼容水平。这种高标准的兼容性意味着在其他标准操作系统（例如 Linux）上开发的软件可以轻松迁移到 openvela，几乎不需要额外的工作。
+    随着时间的推移，openvela 不断沉淀了各类 AIoT 应用的共性需求，成为一个功能完备的软件平台，为各类物联网解决方案提供了全面的支持。厂商采用 openvela，可以显著降低研发成本并加速产品的上市时间。
 
-- **全面的连接套件**：openvela 提供了广泛的协议支持，包括蓝牙 BR/EDR/LE、LE Mesh、WiFi、Matter、LTE Cat1、以太网、CAN/LIN 等。同时，它还能与小米的 HyperConnect 协议无缝集成，提供了强大的连接能力。
+- **成熟的异构计算支持**
 
-- **丰富的开发者工具**：openvela 提供了一系列完备的开发者工具，包括系统监控、性能分析、调试器、追踪、崩溃分析和日志分析工具，为开发者提供了强大的支持。
+    openvela 为异构多核系统提供了强大的支持，实现了 MCU、MPU、DSP、GPU 以及 NPU 等不同处理单元间无缝的 IPC 通信机制。此外，openvela 还提供了一个高级的 RPC 框架，简化了 openvela 与 Android 和 Linux 系统的通信，使快速打造一个异构融合操作系统成为可能。
+
+- **标准兼容和高可移植性**
+
+    openvela 内核基于 Apache NuttX ，这个被称为 “Tiny Linux” 的系统为 openvela 提供了高标准的 POSIX 兼容性。通过持续提升其 POSIX 兼容性，openvela 当前已达到 88% 的兼容水平。这种高标准的兼容性意味着在其他标准操作系统（例如 Linux）上开发的软件可以轻松迁移到 openvela，几乎不需要额外的工作。
+
+- **全面的连接套件**
+
+    openvela 提供了广泛的协议支持，包括蓝牙 BR/EDR/LE、LE Mesh、WiFi、Matter、LTE Cat1、以太网、CAN/LIN 等。同时，它还能与小米的 HyperConnect 协议无缝集成，提供了强大的连接能力。
+
+- **丰富的开发者工具**
+
+    openvela 提供了一系列完备的开发者工具，包括系统监控、性能分析、调试器、追踪、崩溃分析和日志分析工具，为开发者提供了强大的支持。
 
 ## 硬件支持
 
@@ -151,14 +163,17 @@ openvela 项目由多个独立的仓库组成，其许可证策略如下：
 
 我们欢迎您通过多种渠道与 openvela 社区互动和贡献。
 
-### 微信公众号
-
-扫描下方二维码，关注 **openvela** 官方微信公众号，获取项目的一手资讯、深度技术文章以及最新的社区活动信息。
-
-![img](./images/openvela_WeChat_Official_Account.png)
-
 ### 技术讨论与贡献
 
 - **Issues**: 如果你有任何问题、建议或发现任何 Bug，请在 Issues 页面提交一个新的 Issue。请尽量提供详细的信息，以便我们更快地理解和解决问题。
 - **Pull Requests**: 如果你发现了问题并已经修复，欢迎提交 Pull Request。请确保遵循我们的[贡献指南](./CONTRIBUTING_zh-cn.md)。
 - **Discussions**: 如果你有更广泛的话题或讨论，可以在 Discussions 页面发起一个新的讨论。
+
+### 微信社区
+
+欢迎加入 **openvela** 社区！扫描下方二维码关注公众号，或添加小助手入群。
+
+|                               官方公众号                                |                     技术交流群                      |
+| :---------------------------------------------------------------------: | :-------------------------------------------------: |
+| <img src="./images/openvela_WeChat_Official_Account.png" width="200" /> | <img src="./images/assistant_qr.jpg" width="200" /> |
+|               **关注我们**<br>获取一手资讯与深度技术文章                |            **加入群聊**<br>扫码添加好友             |
