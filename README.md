@@ -140,30 +140,26 @@ More Quick App examples are continuously being added. To see all examples, pleas
 
         Critical bug fixes for a released version will be delivered by releasing a new patch tag (e.g., `trunk-5.2.1`).
 
-## Contributing
+## Code contribution
 
 - [Code Contribution Guide](./CONTRIBUTING.md)
 - [Documentation Contribution Guide](./en/contribute/process/doc_dev_process.md)
 
-## License
+## Licensing
 
-The openvela project consists of multiple independent repositories, and its license policy is as follows:
+The openvela project consists of multiple independent repositories. Its licensing policy is as follows:
 
-1. Basic Principle
+1. Basic Principles
 
-    The project's overall guiding license is Apache 2.0, but the license for each individual repository is determined by the LICENSE file in its root directory.
+    The openvela project generally adopts the **Apache 2.0** license. However, the specific license for each code repository is determined by the `LICENSE` file located in its respective root directory.
 
-2. Core Repositories
+2. Vendor Repositories
 
-    Core repositories maintained by the openvela team (such as `frameworks`, `nuttx`), as well as the `docs` repository, are all licensed under Apache 2.0.
+    Repositories under the `vendor` directory are provided by third parties (such as chip manufacturers). These repositories follow their own independent licenses (e.g., MIT, BSD, etc.) and are **not** governed by the openvela project's Apache 2.0 license. Please ensure you review and comply with their respective terms before use.
 
-3. Vendor Repositories
+3. Third-Party Dependencies
 
-    Repositories under the vendor directory are provided by third parties, such as chip vendors. They follow their own separate licenses (e.g., MIT, BSD, etc.) and are not bound by the openvela project's Apache 2.0 license. Please be sure to review and comply with their terms before use.
-
-4. Third-Party Dependencies
-
-    For information on third-party open-source components referenced in the project code and their licenses, please refer to the [Third-Party Open Source Software Notice](./Third_Party_and_Open_Source_Components.md) file.
+    For information regarding third-party open source components referenced in the project code and their licenses, please refer to the [Third-Party Open Source Software Notice](./Third_Party_and_Open_Source_Components.md) file.
 
 ## Community and Support
 

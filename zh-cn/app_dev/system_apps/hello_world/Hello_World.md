@@ -41,7 +41,7 @@ Hello World 示例应用程序需要包含以下核心文件：
 ```Bash
 apps
  └── examples
-     └── hello_main
+     └── hello
          ├── hello_main.c
          ├── CMakeLists.txt
          ├── Kconfig

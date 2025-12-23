@@ -152,17 +152,13 @@ openvela 项目由多个独立的仓库组成，其许可证策略如下：
 
 1. 基本原则
 
-    项目整体以 Apache 2.0 为核心指导许可证，但每个独立仓库的授权以其根目录下的 `LICENSE` 文件为准。
+    openvela 项目整体采用 Apache 2.0 作为主许可证，各代码库的许可证以各仓库根目录下 LICENSE 文件为准。
 
-2. 核心仓库
-
-   由 openvela 团队维护的核心仓库（如 `frameworks`, `nuttx`）以及 `docs` 仓库，均采用 Apache 2.0 许可证。
-
-3. Vendor 仓库
+2. Vendor 仓库
 
     `vendor` 目录下的仓库由芯片厂商等第三方提供，它们遵循各自独立的许可证（如 MIT, BSD 等），不受 openvela 项目的 Apache 2.0 许可证约束。使用前请务必查阅并遵守其规定。
 
-4. 第三方依赖组件
+3. 第三方依赖组件
 
     项目代码中引用的第三方开源组件及其许可证信息，请参阅[第三方开源组件声明](Third_Party_and_Open_Source_Components_zh-cn.md)文件。
 
