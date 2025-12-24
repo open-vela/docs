@@ -1,5 +1,7 @@
 # FC7300F8M-EVB 开发板 openvela 运行指南
 
+[ [English](../../../en/quickstart/development_board/fc7300f8m_evb_guide.md) | 简体中文 ]
+
 ## 一、概述
 
 本指南将指导您在旗芯微 (Flagchip) FC7300F8M-EVB 开发板上，使用 protect 模式编译、构建并运行 openvela 操作系统。
@@ -34,9 +36,9 @@ FC7300F8M-EVB 是基于 FC7300F8MDT 芯片的高性能参考板，适用于域�
 
 获取 `JLink_Linux_V688a_x86_64.deb` 安装包，执行以下命令进行安装：
 
-[下载 JLink_Linux_V688a_x86_64.deb](./drivers/JLink_Linux_V688a_x86_64.deb)
+[下载 JLink_Linux_V688a_x86_64.deb](./jlink/JLink_Linux_V688a_x86_64.deb)
 
-```C
+```bash
  sudo dpkg -i ./JLink_Linux_V688a_x86_64.deb
 ```
 
@@ -44,7 +46,7 @@ FC7300F8M-EVB 是基于 FC7300F8MDT 芯片的高性能参考板，适用于域�
 
 获取设备补丁包 `JLink_Patch_v2.19.7z`，执行以下命令将补丁应用到 J-Link 安装目录。
 
-[下载 JLink_Patch_v2.19.7z](./drivers/JLink_Patch_v2.19.7z)
+[下载 JLink_Patch_v2.19.7z](./jlink/JLink_Patch_v2.19.7z)
 
 **注意**：请将 `<patch_path>` 替换为您存放补丁文件的实际路径。
 
@@ -59,7 +61,7 @@ sudo cp -rf <patch_path>/JLink_Patch_v2.19/Devices/* /opt/SEGGER/JLink/Devices/
 
 # 3. 更新设备配置文件 (JLinkDevices.xml)
 
-#  场景 A：如果 /opt/SEGGER/JLink/JLinkDevices.xml 文件不存在，执行如下复制命令
+# 场景 A：如果 /opt/SEGGER/JLink/JLinkDevices.xml 文件不存在，执行如下复制命令
 sudo cp -rp /home/mi/XXX/JLink_Patch_v2.19/JLinkDevices.xml  /opt/SEGGER/JLink/JLinkDevices.xml
 
 # 场景 B：如果配置文件已存在
@@ -158,5 +160,3 @@ echo "loadfile vela_core0_user.bin 0x011C0000" | sudo JLinkExe -if SWD -device F
 ```Bash
 sudo apt remove brltty
 ```
-
-更多详细信息，请参考技术博客：[解决 Ubuntu 无法识别 ttyUSB 问题](https://blog.csdn.net/weixin_49513223/article/details/127068065)。

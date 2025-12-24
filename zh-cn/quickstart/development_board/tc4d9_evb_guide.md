@@ -1,5 +1,7 @@
 # TC4D9-EVB 开发板 openvela 运行指南
 
+[ [English](../../../en/quickstart/development_board/tc4d9_evb_guide.md) | 简体中文 ]
+
 ## 一、概述
 
 本指南将指导您在英飞凌 (Infineon) TC4D9-EVB 开发板上完成 openvela 操作系统的编译构建、部署及运行验证。
@@ -50,7 +52,7 @@ TC4x 系列的烧录工具链依赖 Windows 环境，请安装以下软件。
 
     - 下载链接：[AURIX™ Flasher Software Tool](https://softwaretools.infineon.com/assets/com.ifx.tb.tool.aurixflashersoftwaretool)
     - **验证安装：**默认安装在`C:\Infineon\AURIXFlasherSoftwareTool-3.0.14`目录下，进入该目录查看是否已经安装，如下图所示：
-        
+
         ![alt text](./figures/062.png)
 
 3. 安装串口终端 MobaXterm。
@@ -147,7 +149,9 @@ openvela 支持在 NSH 中通过 `cu` (Call Utility) 命令连接到其他核心
 - **切换指令**：在 core0 中执行 `cu -l /dev/ttyCOREx` (x 代表核心编号)
 - **退出指令**：按下 `Ctrl + C` 返回 Core0。
 
-**示例：切换至 Core2** 输入命令：
+**示例：切换至 Core2** 
+
+输入命令：
 
 ```Bash
 cu -l /dev/ttyCORE2
