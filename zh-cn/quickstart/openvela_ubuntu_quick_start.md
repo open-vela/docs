@@ -1,6 +1,6 @@
 # 快速入门（Ubuntu）
 
-\[ [English](../../en/quickstart/openvela_ubuntu_quick_start.md) | 简体中文 \]
+[ [English](../../en/quickstart/openvela_ubuntu_quick_start.md) | 简体中文 ]
 
 本指南将指导您在 **Ubuntu 22.04** 操作系统上完成 openvela 的开发环境准备、源代码下载、编译构建，并最终通过 Vela Emulator 运行编译产物。
 
@@ -58,11 +58,55 @@ sudo mv repo /usr/local/bin
 
 2. 使用 `repo` 初始化项目清单，并指定 `trunk` 分支。
 
-    ```bash
-    repo init -u https://github.com/open-vela/manifests.git -b trunk -m openvela.xml
-    ```
+    请根据您的网络环境和偏好，从以下任一平台选择一种方式（推荐使用 SSH）来初始化仓库。
 
-    ![alt text](./figures/003.png)
+    #### 选项 A：从 GitHub 下载
+
+    - 方式一：SSH（推荐）
+
+        此方式需要您先将 SSH 公钥添加至您的 GitHub 账户，请参考 [GitHub 官方文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)。
+
+        ```bash
+        repo init -u ssh://git@github.com/open-vela/manifests.git -b trunk -m openvela.xml
+        ```
+
+    - 方式二：HTTPS
+
+        ```bash
+        repo init -u https://github.com/open-vela/manifests.git -b trunk -m openvela.xml
+        ```
+
+    #### 选项 B：从 Gitee 下载
+
+    - 方式一：SSH (推荐)
+
+        此方式需要您先将 SSH 公钥添加至您的 Gitee 账户，请参考 [Gitee 官方文档](https://gitee.com/help/articles/4191)。
+
+        ```bash
+        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b trunk -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        ```
+
+    - 方式二：HTTPS
+
+        ```bash
+        repo init -u https://gitee.com/open-vela/manifests.git -b trunk -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        ```
+
+    #### 选项 C：从 GitCode 下载
+
+    - 方式一：SSH (推荐)
+
+        此方式需要您先将 SSH 公钥添加至您的 GitCode 账户，请参考 [GitCode 官方文档](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)。
+
+        ```bash
+        repo init -u ssh://git@gitcode.com/open-vela/manifests.git -b trunk -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        ```
+
+    - 方式二：HTTPS
+
+        ```bash
+        repo init -u https://gitcode.com/open-vela/manifests.git -b trunk -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        ```
 
 3. 执行同步命令，repo 将根据清单文件 (`openvela.xml`) 下载所有相关的源代码仓库。
 
