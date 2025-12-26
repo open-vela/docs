@@ -13,7 +13,7 @@
 代码下载完成后，整体目录结构如下：
 
 ```Shell
-djz:vela$ tree -L 1
+$ tree -L 1
 .
 ├── apps
 ├── build.sh -> nuttx/tools/build.sh
@@ -40,7 +40,7 @@ djz:vela$ tree -L 1
 `vendor` 目录用于存放厂商的相关代码和配置。其目录内容布局如下：
 
 ```Shell
-djz:vendor$ tree -L 1
+$ tree -L 1
 .
 ├── <vendor_name>
 ├── Make.defs
@@ -61,11 +61,11 @@ djz:vendor$ tree -L 1
 
 ```C
 //目录位置
-djz:vendor_name$ pwd
-/home/djz/workspace/velaos/vendor/<vendor_name>
+$ pwd
+/home/{name_path}/workspace/velaos/vendor/<vendor_name>
 
 //目录layout
-djz:vendor_name$ tree -l
+$ tree -l
 ├── boards
 │   └── <chip_name>
 │       └── <board_name>

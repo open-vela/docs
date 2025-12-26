@@ -176,8 +176,7 @@ This issue is typically caused by **Git Large File Storage (Git LFS)** files not
 
 3. Update repo if version is too old:
 
-    If the version is below v2.22, it's recommended to reinstall the repo command by referring to  
-    [Setting Up the Development Environment](./../quickstart/Set_up_the_development_environment.md).
+    If the version is below v2.22, it's recommended to reinstall the repo.
 
 ## VI. Qt Platform Plugin Initialization Failure
 

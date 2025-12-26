@@ -68,16 +68,13 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 If you want to experience openvela, we provide a fully functional emulator that can be used without a hardware platform. For more information, refer to the following guide.
 
-1. [Set up the development environment](./en/quickstart/Set_up_the_development_environment.md)
-2. [Download openvela source code](./en/quickstart/Download_Vela_sources.md)
-3. [Compile openvela source code](./en/quickstart/Build_Vela_from_sources.md)
-4. [Run build artifacts on Emulator](./en/quickstart/Run_Vela_on_Vela_Emulator.md)
+[Quick Start (Ubuntu)](./en/quickstart/openvela_ubuntu_quick_start.md)
 
 ### Quick App Development
 
 [Quick App Quick Start](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
 
-## Sub-repository List
+## List of Sub-repositories
 
 | Sub-repository Link                            | Description                                                                                                                                                                                                                                                                                                                                                                                                         |
 | :--------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -171,8 +168,12 @@ We welcome you to interact with and contribute to the openvela community through
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
 - **Discussions**: If you have a broader topic or discussion, you can start a new discussion on the Discussions page.
 
-### WeChat Official Account
+### WeChat Community
 
-Scan the QR code below to follow the **openvela** official WeChat account for the latest project news, in-depth technical articles, and updates on community events.
+Welcome to the **OpenVela** community! Scan the QR codes below to follow our Official Account or add our assistant to join the group chat.
 
-![img](./images/openvela_WeChat_Official_Account.png)
+|                            Official Account                             |                   Developer Group                   |
+| :---------------------------------------------------------------------: | :-------------------------------------------------: |
+| <img src="./images/openvela_WeChat_Official_Account.png" width="200" /> | <img src="./images/assistant_qr.jpg" width="200" /> |
+|     **Follow Us**<br>Get the latest updates and technical articles      |     **Join the Group**<br>Scan to add assistant     |
+

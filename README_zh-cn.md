@@ -69,10 +69,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 如果您想要体验 openvela，我们提供一个功能完备的模拟器，无需硬件平台即可使用。有关详细信息，请参阅如下指南。
 
-1. [准备开发环境](./zh-cn/quickstart/Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 源码](./zh-cn/quickstart/Download_Vela_sources_zh-cn.md)
-3. [编译 openvela 源码](./zh-cn/quickstart/Build_Vela_from_sources_zh-cn.md)
-4. [在模拟器上运行编译产物](./zh-cn/quickstart/Run_Vela_on_Vela_Emulator_zh-cn.md)
+[快速入门（Ubuntu）](./zh-cn/quickstart/openvela_ubuntu_quick_start.md)
 
 ### 快应用开发
 
@@ -172,8 +169,11 @@ openvela 项目由多个独立的仓库组成，其许可证策略如下：
 - **Pull Requests**: 如果你发现了问题并已经修复，欢迎提交 Pull Request。请确保遵循我们的[贡献指南](./CONTRIBUTING_zh-cn.md)。
 - **Discussions**: 如果你有更广泛的话题或讨论，可以在 Discussions 页面发起一个新的讨论。
 
-### 微信公众号
+### 微信社区
 
-扫描下方二维码，关注 **openvela** 官方微信公众号，获取项目的一手资讯、深度技术文章以及最新的社区活动信息。
+欢迎加入 **openvela** 社区！扫描下方二维码关注公众号，或添加小助手入群。
 
-![img](./images/openvela_WeChat_Official_Account.png)
+|                               官方公众号                                |                     技术交流群                      |
+| :---------------------------------------------------------------------: | :-------------------------------------------------: |
+| <img src="./images/openvela_WeChat_Official_Account.png" width="200" /> | <img src="./images/assistant_qr.jpg" width="200" /> |
+|               **关注我们**<br>获取一手资讯与深度技术文章                |            **加入群聊**<br>扫码添加好友             |

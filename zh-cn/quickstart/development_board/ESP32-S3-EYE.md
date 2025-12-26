@@ -1,4 +1,4 @@
-# 在 ESP32-S3-EYE 开发板上移植 openvela
+# 在 ESP32-S3-EYE 开发板上移植 openvela 并启用 Wi-Fi 功能
 
 \[ [English](../../../en/quickstart/development_board/ESP32-S3-EYE.md) | 简体中文 \]
 
@@ -12,11 +12,7 @@
 
 ## 二、前提条件
 
-在开始之前，请确保您已完成 `openvela` 的基础环境设置。如果尚未完成，请遵循如下官方文档：
-
-1. [设置开发环境](./../Set_up_the_development_environment_zh-cn.md)
-2. [下载 openvela 源码](./../Download_Vela_sources_zh-cn.md)
-3. [编译 openvela 源码](./../Build_Vela_from_sources_zh-cn.md)
+下载源码，请参见[快速入门](./../openvela_ubuntu_quick_start.md)。
 
 ## 三、准备工作：搭建 ESP32-S3 开发环境
 

@@ -38,6 +38,7 @@ set
 | :------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------- |
 | scan mode     | Configures discoverability and connectability:<br>0: Not discoverable and not connectable.<br>1: Not discoverable but connectable.<br>2: (Default) Discoverable and connectable. | Decimal integer |
 
+
 #### Example
 
 Set the adapter to connectable but not discoverable:

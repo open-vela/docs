@@ -12,11 +12,7 @@ This guide details how to port the `openvela` system to the Espressif ESP32-S3-E
 
 ## II. Prerequisites
 
-Before you begin, ensure you have completed the basic environment setup for `openvela`. If not, please follow these official documents:
-
-1. [Set up the Development Environment](./../Set_up_the_development_environment.md)
-2. [Download openvela Source Code](./../Download_Vela_sources.md)
-3. [Build openvela from Source](./../Build_Vela_from_sources.md)
+To download the source code, see [Quick Start](./../openvela_ubuntu_quick_start.md).
 
 ## III. Preparation: Set Up the ESP32-S3 Development Environment
 

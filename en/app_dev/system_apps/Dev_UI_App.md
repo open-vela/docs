@@ -4,9 +4,8 @@
 
 ## I. Prerequisites
 
-1. Set up the development environment. Please refer to [Setting Up the Development Environment](./../../quickstart/Set_up_the_development_environment.md).
-2. Download the source code. Please refer to [Downloading the openvela Source Code](../../quickstart/Download_Vela_sources.md).
-3. Before starting this tutorial, please obtain the example code from [music_player](../../../../../../packages_demos/tree/dev/music_player).
+1. Download the source code. Please refer to [Quick Start](./../../quickstart/openvela_ubuntu_quick_start.md).
+2. Before starting this tutorial, please obtain the example code from [music_player](../../../../../../packages_demos/tree/dev/music_player).
 
 ## II. Preliminary Concepts
 
