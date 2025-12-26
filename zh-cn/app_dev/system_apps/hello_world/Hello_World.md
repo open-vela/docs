@@ -1,6 +1,6 @@
 # 运行 Hello World 示例
 
-\[ [English](../../../../en/app_dev/system_apps/hello_world/Hello_World.md) | 简体中文 \]
+[ [English](../../../../en/app_dev/system_apps/hello_world/Hello_World.md) | 简体中文 ]
 
 ## 概述
 
@@ -250,7 +250,7 @@ vendor/openvela/boards/vela/src/etc/init.d/rcS          # 用户脚本
 
 打开 `rcS` 文件，在其中添加您应用的执行命令。
 
-```C
+```bash
 #ifdef CONFIG_FS_HOSTFS
 mount -t hostfs -o fs=vendor/openvela/boards/vela/resource /host
 #endif
@@ -259,6 +259,7 @@ hello &
 ```
 
 添加后效果如下图所示：
+
 ![alt text](./figures/003.png)
 
 ### 4、重新编译和运行
