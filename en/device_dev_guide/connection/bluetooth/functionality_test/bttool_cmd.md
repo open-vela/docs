@@ -1,4 +1,4 @@
-# bttool Command Description
+# bttool Command
 
 \[ English | [简体中文](../../../../../zh-cn/device_dev_guide/connection/bluetooth/functionality_test/bttool_cmd.md) \]
 

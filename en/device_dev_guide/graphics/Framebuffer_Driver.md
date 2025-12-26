@@ -50,17 +50,17 @@ openvela's Framebuffer interface consists of two layers: upper-level user interf
 
 openvela's Framebuffer user interface resembles Linux systems, offering standard operations via VFS (Virtual File System), including `open`, `close`, `read`, `write`, and `ioctl`. Users can access the following functions by operating `/dev/fbx` device files:
 
-1. Map Framebuffer to user space: 
+1. Map Framebuffer to user space:
 
     Use `mmap` to map Framebuffer into user space for direct read/write operations
 
-2. Switch Framebuffer: 
+2. Switch Framebuffer:
 
     Use `ioctl` interface to switch between different Framebuffer configurations or modes.
 
 ### 2. Lower-level Driver Interface
 
-openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](../../../../nuttx/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](../../../../nuttx/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
+openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](../../../../../../nuttx/blob/trunk/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](../../../../../../nuttx/blob/trunk/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
 
 ```C
 int fb_register(int display, int plane)

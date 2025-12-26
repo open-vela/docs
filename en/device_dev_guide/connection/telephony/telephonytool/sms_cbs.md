@@ -28,7 +28,7 @@ The send-sms command is used to send short messages (SMS, Short Message Service)
 send-sms [slot_id][number][text]
 ```
 
-- slot_id: Specifies the slot to monitor， currently only `0` is supported.
+- slot_id: Specifies the slot to monitor，currently only `0` is supported.
 - number: The target phone number.
 - text: The content of the short message.
 

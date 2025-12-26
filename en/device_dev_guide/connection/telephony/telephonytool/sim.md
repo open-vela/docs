@@ -295,6 +295,7 @@ The `enter-pin` command is used to validate the PIN (Personal Identification Num
 ```Bash
 enter-pin [slot_id][pin_type][pin]
 ```
+
 - slot_id: Set the slot to query; currently, only `0` is supported.
 - pin_type: Type of the PIN code, either `pin` or `pin2`.
 - pin: The PIN code value to be validated.

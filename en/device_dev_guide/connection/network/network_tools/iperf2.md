@@ -24,7 +24,7 @@ CONFIG_UTILS_IPERF2=y
 
 #### common parameters
 
-Iperf2 supports a variety of parameter settings. The following are common parameters and their descriptions:
+iperf2 supports a variety of parameter settings. The following are common parameters and their descriptions:
 
 - `-f [k | m | K | M]`: Specifies the units in which the report is displayed.
     - `k` and`m `are displayed in Kbits and Mbits.
@@ -145,7 +145,7 @@ Iperf2 supports a variety of parameter settings. The following are common parame
 - `-F file`: Specifies the file to be transferred.
 - `-T ttl`: Specifies the TTL value.
 
-### 2. start the server level
+### 2. Start the server level
 
 Run the following command to set up a regular socket server:
 
@@ -175,7 +175,7 @@ When using iperf2, please note the following to avoid potential problems:
 
 - Avoid launching multiple iperf2 instances simultaneously.
 
-    Due to the particularity of RTOS, do not start two iperf2 in the same OpenVela instance at the same time, otherwise you may cause problems such as crashes.
+    Due to the particularity of RTOS, do not start two iperf2 in the same openvela instance at the same time, otherwise you may cause problems such as crashes.
 
 - Termination of the background startup process:
 

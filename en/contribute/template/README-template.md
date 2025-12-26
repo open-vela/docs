@@ -20,7 +20,7 @@
 
 _【Writing Requirement】**Required**_
 
-_**Content Introduction:** The role of this system/module in the entire OpenVela architecture, the functions it implements, usage scenarios, and supported devices._
+_**Content Introduction:** The role of this system/module in the entire openvela architecture, the functions it implements, usage scenarios, and supported devices._
 
 _**Notes:**_
 

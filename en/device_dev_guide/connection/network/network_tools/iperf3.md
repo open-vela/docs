@@ -125,7 +125,7 @@ The following are the commonly used parameters of iperf3 and their functional de
 - `-M size`: Sets the MSS (maximum segment size) of the TCP data packet.
 - `-N`: Enable TCP non-delay mode.
 
-### 2. start the server level
+### 2. Start the server level
 
 Run the following command to set up a regular socket server:
 
@@ -207,7 +207,7 @@ Connecting to host 192.0.2.1, port 5201
 
 - openvela compatible version:
 
-    The current OpenVela compatible version of iperf3 is 3.11.
+    The current openvela compatible version of iperf3 is 3.11.
 
 - Ubuntu Common Version:
 

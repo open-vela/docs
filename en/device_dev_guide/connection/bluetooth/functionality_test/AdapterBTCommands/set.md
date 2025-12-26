@@ -316,7 +316,7 @@ bttool> set leaddr 01:02:03:04:05:06
 The expected results are as follows:
 
 ```Plain
-[   80.646100] [49] [ DEBUG] [ap] [1362][adapter-svc]: adapter_on_le_addr_update
+bttool> [   80.646100] [49] [ DEBUG] [ap] [1362][adapter-svc]: adapter_on_le_addr_update
 ```
 
 ### 7. id

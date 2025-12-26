@@ -36,7 +36,7 @@ openvela Bluetooth also supports various open‑source and proprietary stacks, s
 
 - The openvela Bluetooth Framework provides a unified programming API for `Android Native`, wearables, speakers, IoT, and other applications.  
 - These APIs cover Bluetooth operations such as power on/off, scanning, connecting, and pairing, all implemented by a comprehensive set of Bluetooth service components.  
-- To support multiple stacks, the Bluetooth Framework defines a unified Stack Abstraction Layer interface (`SAL API`), allowing third‑party stacks to integrate easily with OpenVela. When integrating a new stack, in addition to adapting the `SAL API`, you must also adapt NuttX’s `POSIX APIs` so that the stack runs efficiently on `NuttX`.
+- To support multiple stacks, the Bluetooth Framework defines a unified Stack Abstraction Layer interface (`SAL API`), allowing third‑party stacks to integrate easily with openvela. When integrating a new stack, in addition to adapting the `SAL API`, you must also adapt NuttX’s `POSIX APIs` so that the stack runs efficiently on `NuttX`.
 
 ## III. Code Directory
 
@@ -89,7 +89,7 @@ Additionally, the Bluetooth Framework provides NDK interfaces to access all Blue
 
 ### 2. Bluetooth Driver Development
 
-OpenVela Bluetooth supports multiple driver architectures. Below is an example using the common BTH4 driver architecture to implement and register a Bluetooth driver.
+openvela Bluetooth supports multiple driver architectures. Below is an example using the common BTH4 driver architecture to implement and register a Bluetooth driver.
 
 #### Implementing the Driver
 
@@ -123,5 +123,5 @@ When HCI data arrives from the chip, simply call `bt_netdev_receive()`, which in
 ## V. Related Repositories
 
 - [frameworks_bluetooth](../../../../../../../frameworks_bluetooth): Provides rich Bluetooth application programming interfaces for developers, including API layers, service components, SAL abstraction, and HAL layers. The repo also includes tools like [bttool](../bluetooth/functionality_test/bttool_cmd.md) for testing Bluetooth features and sample API usage.  
-- [external_zblue](../../../../../../../external_zblue): Based on Zephyr’s stack, enhanced by OpenVela.  
+- [external_zblue](../../../../../../../external_zblue): Based on Zephyr’s stack, enhanced by openvela.  
 - [docs](../../../../../../../docs): Contains additional technical documentation for the Bluetooth module.

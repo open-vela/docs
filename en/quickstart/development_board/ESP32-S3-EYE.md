@@ -185,7 +185,7 @@ This guide demonstrated how to port `openvela` to the ESP32-S3-EYE development b
 ## VII. References
 
 - [esp32s3-eye](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye)
-- [defconfig](../../../../../../vendor/blob/trunk/espressif/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
+- [defconfig](../../../../../../vendor_espressif/blob/trunk/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
 - [Managing esptool on virtual environment](https://nuttx.apache.org/docs/latest/platforms/xtensa/esp32s3/index.html#managing-esptool-on-virtual-environment)
 
 ## Appendix A: Wi-Fi Feature defconfig

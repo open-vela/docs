@@ -2,11 +2,11 @@
 
 \[ English | [简体中文](./../../../zh-cn/quickstart/emulator/Send_emulator_console_commands_zh-cn.md) \]
 
-Each running virtual device provides a console that lets you query and control the emulated device environment.
+Each running virtual device provides a console that you can use to query and control the emulated device environment.
 
-## I. Start and Stop a Console Session
+## I. Starting and Stopping a Console Session
 
-To access the console and enter commands, use `telnet` at a terminal window to connect to the console port and provide the authentication token.Whenever the console displays “OK”, it's ready to accept commands.A typical prompt is usually not displayed.
+To access the console and enter commands, use `telnet` from a terminal window to connect to the console port and provide an authentication token. Whenever the console displays `OK`, it indicates that it is ready to accept commands. A common command prompt is usually not displayed.
 
 To connect to the console of a running virtual device, do the following:
 
@@ -20,13 +20,13 @@ To connect to the console of a running virtual device, do the following:
 
     Also, the `adb devices` command produces a list of running virtual devices and their console port numbers.
 
-2. After the console displays “OK”, enter the “auth auth_token” command.
+2. After the console displays `OK`, enter the `auth <auth_token>` command.
 
-    Before you can enter console commands, the emulator console requires authentication."auth_token” must match the contents of the “.emulator_console_auth_token” file in your Home directory.
+    The emulator console requires authentication before you can enter commands. The `<auth_token>` must match the contents of the `.emulator_console_auth_token` file in your `HOME` directory.
 
-    If that file doesn't exist, the `telnet localhost console-port` command creates the file, which contains a randomly generated authentication token.To disable authentication, delete the token from the `.emulator_console_auth_token` file or create an empty file (if that file doesn't exist).
+    If this file does not exist, the `telnet localhost <console-port>` command creates it with a randomly generated authentication token. To disable authentication, delete the token from the `.emulator_console_auth_token` file or create an empty file if it doesn't exist.
 
-3. After you're connected to the console, enter console commands.
+3. After connecting to the console, you can enter console commands.
 
     Enter `help`, `help command`, or `help-verbose` to see a list of console commands and learn about specific commands.
 
@@ -98,7 +98,7 @@ To connect to the console of a running virtual device, do the following:
 
 - `avd {stop|start|status|name}`
 
-    Query, control and manage the virtual device, as follows:
+    Queries, controls, and manages the virtual device as described below:
 
     - stop: Stop the execution of the device.
     - start: Start the execution of the device.
@@ -113,7 +113,7 @@ To connect to the console of a running virtual device, do the following:
 
     Check whether the virtual device is running.
 
-- rotate
+- `rotate`
 
     Rotate the AVD counterclockwise in 45 degree increments.
 
@@ -125,40 +125,40 @@ To connect to the console of a running virtual device, do the following:
 
 - `redir add protocol:host-port:guest-port`
 
-    Add a new port redirection, as follows:
+    Adds a new port redirection, as described below:
 
-    - “protocol”: Must be either tcp or udp.
-    - "host-port": The port number to open on the host.
-    - "guest-port": The port number to route data to on the emulator.
+    - `protocol`: Must be `tcp` or `udp`.
+    - `host-port`: The port number to open on the host.
+    - `guest-port`: The port number to which data is transferred on the emulator.
 
 - `redir del protocol:host-port`
 
     Delete a port redirection.
 
-    - “protocol”: Must be either tcp or udp.
-    - "host-port": The port number to open on the host.
+    - `protocol`: Must be `tcp` or `udp`.
+    - `host-port`: The port number to close on the host.
 
-### 3. Geographic Location
+### 3. Geolocation
 
-Set the geographic location reported to the apps running inside an emulator by sending a GPS locator to the emulator.
+Sets the geographic location reported to apps running inside the emulator by sending it a GPS fix.
 
 - `geo fix longitude latitude [altitude] [satellites] [velocity]`
 
-    Send a simple GPS locator to the emulator. Specify “longitude” and “latitude” in decimal degrees.Use a number from 1 to 12 to specify the number of “satellites” used to determine the position, and specify “altitude” in meters and “velocity” in knots.
+    Sends a simple GPS fix to the emulator. Specify `longitude` and `latitude` in decimal degrees. Specify the number of `satellites` used to determine the location with a number from 1 to 12. Specify `altitude` in meters and `velocity` in knots.
 
 - `geo nmea sentence`
 
-    Send an NMEA 0183 sentence to the emulated device as if it is sent from an emulated GPS modem.Start the sentence with "$GP". Only "$GPGGA" and "$GPRCM" sentences are currently supported.The following example is a GPGGA (Global Positioning System Fix Data) sentence that gets the time, position, and fix data for a GPS receiver:
+    Sends an `NMEA 0183` sentence to the emulated device, as if it were sent from a simulated GPS modem. The sentence must start with "$GP". Currently, only "$GPGGA" and "$GPRMC" sentences are supported. The following example is a GPGGA (Global Positioning System Fix Data) sentence, which describes the time, position, and fix data received by the GPS receiver:
   
     ```bash
     geo nmea $GPGGA ,hhmmss.ss,llll.ll,a,yyyyy.yy,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx
     ```
 
-### 4. Fake Hardware Events
+### 4. Simulated Hardware Events
 
 - `event types`
 
-    Lists all fake event types. For events that have codes, the number of codes is listed in parentheses on the right.
+    Lists all simulated event types. For events that include codes, the code aliases are listed in parentheses on the right.
 
     ```bash
     event types
@@ -181,55 +181,55 @@ Set the geographic location reported to the apps running inside an emulator by s
 
 - `event send types [types ...]`
 
-    Send one or more fake event types.
+    Sends one or more simulated event types.
 
 - `event codes type`
 
-    List the event codes for the specified fake event type.
+    Lists the event codes for a specified simulated event type.
 
 - `event send type[:code]:[value] [...]`
 
-    Send one or more fake events with optional codes and code values.
+    Sends one or more simulated events with optional codes and code values.
 
-    To discover exactly which event to send, you can use the adb command while manually pressing the buttons on the emulator.
+    To determine which event to send, you can use `adb` commands while manually pressing buttons on the emulator.
 
 - `event text message`
 
-    Send a string of characters that simulate keystrokes.The message must be a UTF-8 string. Unicode messages are reverse-mapped according to the current device keyboard, and unsupported characters are discarded silently.
+    Sends a string of characters to simulate key presses. The message must be a UTF-8 string. Unicode messages are reverse-mapped based on the current device keyboard, and unsupported characters are silently discarded.
 
 ### 5. Power State Control
 
 - `power display`
 
-    Display battery and charger state.
+    Displays the battery and charger status.
 
 - `power ac {on|off}`
 
-    Set AC charging state to on or off.
+    Sets the AC charging state to `on` or `off`.
 
 - `power status {unknown|charging|discharging|not-charging|full}`
 
-    Change battery status as specified.
+    Changes the battery status as specified.
 
 - `power present {true|false}`
 
-    Set battery presence state.
+    Sets the battery presence state.
 
 - `power health {unknown|good|overheat|dead|overvoltage|failure}`
 
-    Set battery health state.
+    Sets the battery health status.
 
 - `power capacity percent`
 
-    Sets remaining battery capacity state as a percent from 0 to 100.
+    Sets the remaining battery capacity as a percentage from 0 to 100.
 
-### 6. Manage Sensors on the Emulator
+### 6. Managing Sensors on the Emulator
 
-These commands relate to the sensors available in AVD. In addition to using the “sensor” command, you can see and adjust the settings in the “Accelerometer” and “Additional sensors” tabs on the emulator’s “Virtual sensors” screen.
+These commands relate to the sensors available in the AVD. In addition to using the `sensor` command, you can view and adjust settings in the `Accelerometer` and `Additional sensors` tabs on the emulator's `Virtual sensors` screen.
 
 - `sensor status`
 
-    List all sensors and their status.The following is an example of the “sensor status” command’s output:
+    Lists all sensors and their statuses. Below is an example output of the `sensor status` command:
 
     ```bash
     sensor status
@@ -255,18 +255,18 @@ These commands relate to the sensors available in AVD. In addition to using the 
 
 - `sensor get sensor-name`
 
-    Get the settings for "sensor-name". The following example gets the value for the acceleration sensor:
+    Gets the settings for a `sensor-name`. The following example gets the value for the accelerometer:
 
     ```bash
     sensor get acceleration
     acceleration = 2.23517e-07:9.77631:0.812348
     ```
 
-    The “acceleration” values separated by colons(:) refer to the x, y, and z coordinates for the virtual sensors.
+    The colon-separated (`:`) values for `acceleration` refer to the x, y, and z coordinates of the virtual sensor.
 
 - `sensor set sensor-name value-x:value-y:value-z`
 
-    Set the values for “sensor-name”.The following example set the acceleration sensor to the x, y, and z values separated by colons.
+    Sets the value for a `sensor-name`. The following example sets the accelerometer to the specified colon-separated x, y, and z values.
 
     ```bash
     sensor set acceleration 2.23517e-07:9.77631:0.812348

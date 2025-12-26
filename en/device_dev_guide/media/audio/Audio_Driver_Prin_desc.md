@@ -1094,7 +1094,7 @@ By implementing `audio_i2s`, developers can quickly adapt to different vendors' 
 
 ### 3. sim\_alsa
 
-`sim_alsa` is a built-in lower-half audio driver provided by OpenVela, primarily used to bridge the OpenVela audio driver with the host ALSA (Advanced Linux Sound Architecture) capabilities on a simulated platform, enabling audio playback and recording.
+`sim_alsa` is a built-in lower-half audio driver provided by openvela, primarily used to bridge the openvela audio driver with the host ALSA (Advanced Linux Sound Architecture) capabilities on a simulated platform, enabling audio playback and recording.
 
 #### 3.1 Code Location
 

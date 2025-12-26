@@ -166,15 +166,13 @@ void __start(void)
 ...
 
 #ifdef CONFIG_ARCH_PERF_EVENTS
-up_perf_init((void *)STM32_SYSCLK_FREQUENCY);
-
+    up_perf_init((void *)STM32_SYSCLK_FREQUENCY);
 #endif
 
 /* Perform early serial initialization */
 
 #ifdef USE_EARLYSERIALINIT
-arm_earlyserialinit();
-
+    arm_earlyserialinit();
 #endif
 
 /* Bring up NuttX */
@@ -196,8 +194,9 @@ The chip usually contains multiple serial ports, and one serial port is usually 
 #### Code location
 
 - Reference implementation:
+
     - [stm32_serial.c](https://github.com/open-vela/nuttx/blob/41545a4ca98165813908e5fe25d3ecdbfc5ab19a/arch/arm/src/stm32f7/stm32_serial.c)
-    - [stm32_lowputc.c](https://github.com/open-vela/nuttx/blob/41545a4ca98165813908)
+    - [stm32_lowputc.c](https://github.com/open-vela/nuttx/blob/41545a4ca98165813908e5fe25d3ecdbfc5ab19a/arch/arm/src/stm32f7/stm32_lowputc.c)
 
 - Serial port related implementations are generally located in:
 
@@ -327,9 +326,9 @@ Here is the reference implementation of the `up_timer_initialize` function, loca
 
 void up_timer_initialize(void)
 {
-struct oneshot_lowerhalf_s *lower = xxx_oneshot_initialize();
+    struct oneshot_lowerhalf_s *lower = xxx_oneshot_initialize();
 
-up_alarm_set_lowerhalf(lower);
+    up_alarm_set_lowerhalf(lower);
 }
 ```
 

@@ -18,7 +18,7 @@ openvela 提供通用的 **oneshot** 驱动，即一次性（非周期性）定�
 - **Upper half**：面向应用，由 openvela 提供，无需芯片厂商修改。
 - **Lower half**：特定平台的硬件控制驱动，芯片厂商需适配提供。
 
-**oneshot** 驱动相关接口信息在 [oneshot.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/timers/oneshot.h) 文件中，同样也分为了 **Upper half** 和 **Lower half** 两层接口。
+**oneshot** 驱动相关接口信息在 [oneshot.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/oneshot.h) 文件中，同样也分为了 **Upper half** 和 **Lower half** 两层接口。
 
 ### 2、Arch_alarm 定时器简介
 

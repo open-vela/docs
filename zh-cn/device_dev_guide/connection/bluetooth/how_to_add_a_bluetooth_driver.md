@@ -19,10 +19,11 @@
 
 #### 说明
 - 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
-- 但在实际接入或使用时，建议在 [vendor](../../../../../../vendor_template/blob/trunk/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
+- 但在实际接入或使用时，建议在 [vendor](../../../../../../../vendor_template/blob/trunk/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
 
 #### 操作步骤
-1. 在 [drivers_initialize.c](https://github.com/open-vela/nuttx/blob/trunk/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](https://github.com/open-vela/nuttx/blob/trunk/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
+
+1. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](../../../../../../../nuttx/blob/trunk/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
 
     ```C
     #include <nuttx/wireless/bluetooth/bt_driver.h> /* 添加bt_driver.h头文件引用 */
