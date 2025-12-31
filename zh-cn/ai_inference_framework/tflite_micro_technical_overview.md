@@ -1,5 +1,7 @@
 # TensorFlow Lite for Microcontrollers 技术综述
 
+[ [English](../../en/ai_inference_framework/tflite_micro_technical_overview.md) | 简体中文 ]
+
 TensorFlow Lite for Microcontrollers（以下简称 TFLite Micro）是 Google 专为资源受限的嵌入式设备设计的轻量级机器学习推理框架。作为 TensorFlow Lite 的精简版本，该框架针对微控制器（MCU）的特性进行了深度优化，支持在仅有数十 KB RAM 和数百 KB Flash 的设备上运行复杂的神经网络模型。
 
 本文档旨在介绍 TFLite Micro 的核心架构、技术挑战及其在 openvela 平台上的集成价值与应用场景。
@@ -415,4 +417,7 @@ NuttX 作为符合 POSIX 标准的实时操作系统，其轻量级与模块化�
 
 ## 五、总结
 
-TFLite Micro 与 openvela 平台的结合，为微控制器端的 AI 推理提供了一套完整的解决方案。它不仅在技术层面克服了资源、实时性和碎片化的挑战，更在业务层面实现了隐私保护、低成本和高可靠性。通过标准化的开发流程和系统级支持，开发者能够快速将智能算法部署到各类 IoT 设备中，推动边缘智能的规模化落地。接下来的章节将深入探讨如何在 openvela 平台上集成、部署和优化 TFLite Micro 应用。
+- TFLite Micro 与 openvela 平台的结合，为微控制器端的 AI 推理提供了一套完整的解决方案。
+- 它不仅在技术层面克服了资源、实时性和碎片化的挑战，更在业务层面实现了隐私保护、低成本和高可靠性。
+- 通过标准化的开发流程和系统级支持，开发者能够快速将智能算法部署到各类 IoT 设备中，推动边缘智能的规模化落地。
+- 接下来的章节将深入探讨如何在 openvela 平台上集成、部署和优化 TFLite Micro 应用。

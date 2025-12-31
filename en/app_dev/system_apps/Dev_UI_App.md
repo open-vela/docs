@@ -1,6 +1,6 @@
 # Developing an openvela UI Application
 
-\[ English | [简体中文](../../../zh-cn/app_dev/system_apps/Dev_UI_App.md) \]
+[ English | [简体中文](../../../zh-cn/app_dev/system_apps/Dev_UI_App.md) ]
 
 ## I. Prerequisites
 
