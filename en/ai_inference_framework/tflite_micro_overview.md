@@ -1,6 +1,6 @@
-# Technical Overview of TensorFlow Lite for Microcontrollers
+# TFLite Micro Overview
 
-[ English | [简体中文](../../zh-cn/ai_inference_framework/tflite_micro_technical_overview.md) ]
+[ English | [简体中文](../../zh-cn/ai_inference_framework/tflite_micro_overview.md) ]
 
 TensorFlow Lite for Microcontrollers (hereinafter referred to as TFLite Micro) is a lightweight machine learning inference framework designed by Google specifically for resource-constrained embedded devices. As a streamlined version of TensorFlow Lite, this framework is deeply optimized for the characteristics of microcontrollers (MCUs), supporting the execution of complex neural network models on devices with only tens of KB of RAM and hundreds of KB of Flash.
 
