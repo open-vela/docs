@@ -1,5 +1,7 @@
 # Configure TFLite Micro Development Environment
 
+[ English | [简体中文](../../zh-cn/edge_ai_dev/configure_tflite_micro_dev_env.md) ]
+
 Before developing TensorFlow Lite for Microcontrollers (TFLite Micro) applications on the openvela platform, the compilation environment and dependent libraries must be configured correctly. This section guides developers through source code confirmation, library dependency configuration, and memory strategy formulation.
 
 ## I. Prerequisites
