@@ -1,6 +1,6 @@
 # openvela 信号量
 
-\[ [English](../../../../en/device_dev_guide/kernel/resource_sync/semaphore_mechanism.md) | 简体中文 \]
+[ [English](../../../../en/device_dev_guide/kernel/resource_sync/semaphore_mechanism.md) | 简体中文 ]
 
 ## 一、概述
 
@@ -54,7 +54,7 @@
 - **特点**：
 
     - 获取（`wait`）和释放（`post`）信号量的操作由**不同的任务**（或任务与 ISR）完成。
-    - **必须禁用**优先级继承。否则，释放信号量的任务 B 可能会错误地继承等待任务 A 的优先级，引发意外的调度行为。
+    - 如果开启了优先级继承，任务 B 如果优先级比任务 A 低，此时任务 B 会优先级被临时提高到任务 A。
 
 **最佳实践**：在初始化信号量时，根据其用途通过 `sem_setprotocol()` 设置正确的优先级策略。
 

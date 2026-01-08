@@ -54,7 +54,7 @@ This mode is used for inter-task synchronization or communication.
 - **Characteristics**:
 
     - The operations to acquire (`wait`) and release (`post`) the semaphore are performed by **different tasks** (or a task and an ISR).
-    - **Priority inheritance must be disabled**. Otherwise, the task posting the semaphore (task B) might erroneously inherit the priority of the waiting task (task A), leading to unexpected scheduling behavior.
+    - If priority inheritance is enabled, and Task B has a lower priority than Task A, Task B's priority will be temporarily boosted to match that of Task A.
 
 **Best Practice**: When initializing a semaphore, set the appropriate priority protocol using `sem_setprotocol()` based on its intended use.
 
