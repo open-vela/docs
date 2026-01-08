@@ -1,5 +1,7 @@
 # 模型转换与代码集成
 
+[ [English](../../en/edge_ai_dev/model_integration.md) | 简体中文 ]
+
 在 openvela 开发中，由于微控制器 (MCU) 的 RAM 资源受限且文件系统支持可能被裁剪，直接读取 .tflite 文件通常不可行。标准做法是将训练好的 TensorFlow Lite 模型转换为 C 语言数组，作为只读数据 (RODATA) 编译到应用程序固件中，直接从 Flash 执行读取。
 
 本节将指导开发者如何将模型转换为 C 数组，并将其集成到 openvela 的 C++ 应用（如 helloxx）中。
@@ -159,7 +161,7 @@ static void test_inference(const void* file_data, size_t arenaSize) {
 编译并烧录固件后，运行 `helloxx` 命令，终端应输出如下推理结果：
 
 ```Plain
-Output value after inference:0.99999 (值接近 1.0 即为成功)
+Output value after inference:0.99999
 ```
 
 若输出值接近 1.0，表明模型已成功在 openvela 平台上加载并完成了一次正弦波推理计算。
