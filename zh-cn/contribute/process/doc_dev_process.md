@@ -1,10 +1,10 @@
 # openvela 文档开发流程
 
-\[ [English](../../../en/contribute/process/doc_dev_process.md) | 简体中文 \]
+[ [English](../../../en/contribute/process/doc_dev_process.md) | 简体中文 ]
 
 ## 流程图
 
-![documentation_development_process](./images/doc_dev_process.svg)
+![documentation_development_process](./figures/001.png)
 
 ## 一、开发工程师要做的
 
