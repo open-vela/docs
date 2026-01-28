@@ -29,9 +29,22 @@ Open a terminal and run the following commands to update the package list and in
 
 ```Bash
 sudo apt update
-sudo apt install git git-lfs cmake python3 build-essential
-git lfs install
+sudo apt install git cmake python3 build-essential
 ```
+
+### 4. Install Git LFS
+
+> **Note**: This project contains large binary files (e.g., model weights, datasets). You must configure **Git LFS**; **otherwise, the pulled files will be corrupted (appearing as mere text pointers of a few KB) and the project will fail to run.**
+
+Please run the following commands in your Ubuntu terminal to install and initialize:
+
+```bash
+# Step 1: Configure the official repo and install (ensures the latest version)
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+
+# Step 2: Initialize configuration (Important: You must run this, otherwise LFS will not work)
+git 
 
 ## Step 2: Download the Source Code
 
@@ -84,7 +97,7 @@ After installation, you can run `repo --version` to verify it.
         This method requires you to add your SSH public key to your Gitee account first. Please refer to the [official Gitee documentation](https://gitee.com/help/articles/4191).
 
         ```bash
-        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        repo init -u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
         ```
 
     - Method 2: HTTPS

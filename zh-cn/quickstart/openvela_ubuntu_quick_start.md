@@ -29,7 +29,21 @@
 
 ```Bash
 sudo apt update
-sudo apt install git git-lfs cmake python3 build-essential
+sudo apt install git cmake python3 build-essential
+```
+
+### 4. 安装 Git LFS 组件
+
+> **说明**：本项目包含大体积的二进制文件（如模型权重、数据集）。请务必配置 **Git LFS**，**否则拉取的文件将损坏（仅显示为几 KB 的指针文本）而无法运行**。
+
+请在 Ubuntu 终端中执行以下命令进行安装和初始化：
+
+```bash
+# 第一步：配置官方源并安装 (确保获取最新版)
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+
+# 第二步：初始化配置 (重要：必须执行此步，否则 LFS 不会生效)
 git lfs install
 ```
 
@@ -68,13 +82,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 GitHub 账户，请参考 [GitHub 官方文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)。
 
         ```bash
-        repo init -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml
+        repo init -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml
+        repo init -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
         ```
 
     #### 选项 B：从 Gitee 下载
@@ -84,13 +98,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 Gitee 账户，请参考 [Gitee 官方文档](https://gitee.com/help/articles/4191)。
 
         ```bash
-        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        repo init -u ssh://git@gitee.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://gitee.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        repo init -u https://gitee.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     #### 选项 C：从 GitCode 下载
@@ -100,13 +114,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 GitCode 账户，请参考 [GitCode 官方文档](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)。
 
         ```bash
-        repo init -u ssh://git@gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        repo init -u ssh://git@gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        repo init -u https://gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
 3. 执行同步命令，repo 将根据清单文件 (`openvela.xml`) 下载所有相关的源代码仓库。
