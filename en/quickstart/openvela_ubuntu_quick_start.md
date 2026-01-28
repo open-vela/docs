@@ -30,6 +30,7 @@ Open a terminal and run the following commands to update the package list and in
 ```Bash
 sudo apt update
 sudo apt install git git-lfs cmake python3 build-essential
+git lfs install
 ```
 
 ## Step 2: Download the Source Code

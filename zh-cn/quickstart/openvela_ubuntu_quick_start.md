@@ -30,6 +30,7 @@
 ```Bash
 sudo apt update
 sudo apt install git git-lfs cmake python3 build-essential
+git lfs install
 ```
 
 ## 步骤二：下载源代码
