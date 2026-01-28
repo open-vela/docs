@@ -29,8 +29,21 @@ Open a terminal and run the following commands to update the package list and in
 
 ```Bash
 sudo apt update
-sudo apt install git git-lfs cmake python3 build-essential
+sudo apt install git cmake python3 build-essential
+```
 
+### 4. Install Git LFS
+
+> **Note**: This project contains large binary files (e.g., model weights, datasets). You must configure **Git LFS**; **otherwise, the pulled files will be corrupted (appearing as mere text pointers of a few KB) and the project will fail to run.**
+
+Please run the following commands in your Ubuntu terminal to install and initialize:
+
+```bash
+# Step 1: Configure the official repo and install (ensures the latest version)
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+
+# Step 2: Initialize configuration (Important: You must run this, otherwise LFS will not work)
 git lfs install
 ```
 

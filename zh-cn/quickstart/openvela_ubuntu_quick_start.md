@@ -29,8 +29,21 @@
 
 ```Bash
 sudo apt update
-sudo apt install git git-lfs cmake python3 build-essential
+sudo apt install git cmake python3 build-essential
+```
 
+### 4. 安装 Git LFS 组件
+
+> **说明**：本项目包含大体积的二进制文件（如模型权重、数据集）。请务必配置 **Git LFS**，**否则拉取的文件将损坏（仅显示为几 KB 的指针文本）而无法运行**。
+
+请在 Ubuntu 终端中执行以下命令进行安装和初始化：
+
+```bash
+# 第一步：配置官方源并安装 (确保获取最新版)
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+sudo apt-get install git-lfs
+
+# 第二步：初始化配置 (重要：必须执行此步，否则 LFS 不会生效)
 git lfs install
 ```
 
