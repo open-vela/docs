@@ -98,7 +98,7 @@ After installation, you can run `repo --version` to verify it.
         This method requires you to add your SSH public key to your Gitee account first. Please refer to the [official Gitee documentation](https://gitee.com/help/articles/4191).
 
         ```bash
-        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b trunk -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b trunk -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - Method 2: HTTPS
