@@ -60,7 +60,7 @@ openvela's Framebuffer user interface resembles Linux systems, offering standard
 
 ### 2. Lower-level Driver Interface
 
-openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](../../../../../../nuttx/blob/trunk/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](../../../../../../nuttx/blob/trunk/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
+openvela's Framebuffer driver interface for managing LCD devices is designed with simplicity. Developers can refer to  [video/fb.h](../../../../../../nuttx/blob/trunk-5.4/include/nuttx/video/fb.h) and  [/drivers/video/fb.c](../../../../../../nuttx/blob/trunk-5.4/drivers/video/fb.c). Below is the `fb_register()` source code showing key parts of the Framebuffer device driver implementation:
 
 ```C
 int fb_register(int display, int plane)
@@ -340,5 +340,5 @@ To prevent screen tearing and improve rendering performance, it is recommended t
 
 Here are the links to the code repository related to Framebuffer driver:
 
-- [fb.c](../../../../../../nuttx/blob/trunk/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
-- [fb.h](../../../../../../nuttx/blob/trunk/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.
+- [fb.c](../../../../../../nuttx/blob/trunk-5.4/drivers/video/fb.c)：Framebuffer Implementation files of the driver.
+- [fb.h](../../../../../../nuttx/blob/trunk-5.4/include/nuttx/video/fb.h)：Framebuffer Interface definitions of the driver.

@@ -131,7 +131,7 @@ void up_trigger_irq(int irq, cpu_set_t cpuset)
 
 ### 2. Interrupt-Related Macros to be Defined
 
-In addition to the above function implementations, the manufacturer also needs to define a series of interrupt-related macros to describe the configuration of the NVIC (Nested Vectored Interrupt Controller). These macros need to be defined in the `chips/chip_name/include/irq.h` file. For reference, see the [RTL8720C example](../../../../../../../nuttx/blob/trunk/arch/arm/src/rtl8720c/include/irq.h).
+In addition to the above function implementations, the manufacturer also needs to define a series of interrupt-related macros to describe the configuration of the NVIC (Nested Vectored Interrupt Controller). These macros need to be defined in the `chips/chip_name/include/irq.h` file. For reference, see the [RTL8720C example](../../../../../../../nuttx/blob/trunk-5.4/arch/arm/src/rtl8720c/include/irq.h).
 
 The following are the macros that must be implemented and their functional descriptions:
 

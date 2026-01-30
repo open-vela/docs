@@ -164,15 +164,15 @@ grep -rE "CONFIG_TIMER|CONFIG_TIMER_ARCH|CONFIG_ARCH_HAVE_TICKLESS|CONFIG_ARCH_H
 
 在 **board** 初始化过程，需要调用具体 **Vendor** 实现的 `***_timer_initialize` 函数完成初始化。该函数会完成以下操作：
 
-1. 分配并初始化 [struct timer_lowerhalf_s](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h) 结构实例。
-2. 利用 [timer_register](../../../../../../../../nuttx/blob/trunk/drivers/timers/timer.c) 函数将 `timer_lowerhalf_s` 实例注册为 Timer 驱动。
+1. 分配并初始化 [struct timer_lowerhalf_s](../../../../../../../../nuttx/blob/trunk-5.4/include/nuttx/timers/timer.h) 结构实例。
+2. 利用 [timer_register](../../../../../../../../nuttx/blob/trunk-5.4/drivers/timers/timer.c) 函数将 `timer_lowerhalf_s` 实例注册为 Timer 驱动。
 
     - 注册过程会生成 `/dev/timer` 设备节点。
     - 同时将 `struct file_operations` 和 `g_timerops` 实例绑定到 `timer_lowerhalf_s` 实例。
 
 在平台代码中，需要实现 `up_timer_initialize` 函数，用于调用 `up_timer_set_lowerhalf` 函数，将 `***_timer_initialize` 返回的实例绑定到系统中，作为系统定时器。
 
-相关接口定义在：[/include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h)。
+相关接口定义在：[/include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk-5.4/include/nuttx/timers/timer.h)。
 
 #### `timer_register` 函数说明
 
@@ -244,7 +244,7 @@ FAR void *timer_register(FAR const char *path,
 
 #### 接口定义
 
-以下是 [struct timer_ops_s](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h) 的详细定义：
+以下是 [struct timer_ops_s](../../../../../../../../nuttx/blob/trunk-5.4/include/nuttx/timers/timer.h) 的详细定义：
 
 ```C
 struct timer_ops_s
@@ -487,7 +487,7 @@ struct timer_lowerhalf_s *systick_initialize(bool coreclk,
 
 在 ARMv7-M 的 Arch Timer 适配中，`lower-half` 方法的出现形式如下：
 
-文件路径： [arch/arm/src/armv7-m/arm_systick.c](../../../../../../../../nuttx/blob/trunk/arch/arm/src/armv7-m/arm_systick.c)
+文件路径： [arch/arm/src/armv7-m/arm_systick.c](../../../../../../../../nuttx/blob/trunk-5.4/arch/arm/src/armv7-m/arm_systick.c)
 
 ```C
 /* "Lower half" driver methods */
@@ -510,7 +510,7 @@ static const struct timer_ops_s g_systick_ops =
 
 以下是定时相关 POSIX API 的简要概述，这些接口的具体使用方法请参考相关的 `man` 页面。
 
-头文件位置：[include/time.h](../../../../../../../../nuttx/blob/trunk/include/time.h)
+头文件位置：[include/time.h](../../../../../../../../nuttx/blob/trunk-5.4/include/time.h)
 
 1. `timer_create`
 
@@ -586,7 +586,7 @@ static const struct timer_ops_s g_systick_ops =
 
 #### 支持的 IOCTL 命令
 
-以下是当前支持的 IOCTL 命令，相关接口定义在 [include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk/include/nuttx/timers/timer.h) 中：
+以下是当前支持的 IOCTL 命令，相关接口定义在 [include/nuttx/timers/timer.h](../../../../../../../../nuttx/blob/trunk-5.4/include/nuttx/timers/timer.h) 中：
 
 - `TCIOC_START`：启动定时器。
 - `TCIOC_STOP`：停止定时器。
