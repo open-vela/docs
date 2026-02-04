@@ -132,6 +132,7 @@ More Quick App examples are continuously being added. To see all examples, pleas
     - **List of Released Versions**:
 
         - `trunk-5.2`: For detailed changes in this version, please refer to its [v5.2 Release Notes](./en/release_notes/v5.2.md).
+        - `trunk-5.4`: For detailed changes in this version, please refer to its [v5.4 Release Notes](./en/release_notes/v5.4.md).
 
     - **Maintenance Policy**:
 
