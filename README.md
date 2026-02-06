@@ -62,6 +62,50 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 - Please refer to the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page for a complete list.
 - For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/Development_Board.md).
 
+## Version Strategy
+
+We manage releases based on the `trunk` branch, using Tags to track release history. This ensures traceability and stability for production environments.
+
+### Release Tags
+
+Release tags are immutable markers created on the `trunk` branch. Each tag represents an officially released version of openvela.
+
+- **Production Environment Recommendation**: To ensure maximum system stability and security, we **strongly recommend** using the latest release tags in production environments (Production Environment), rather than using branch code directly.
+
+### Released Versions
+
+Below are the currently released stable versions and their change logs:
+
+- **trunk-5.4**: Please refer to the [v5.4 Release Notes](./en/release_notes/v5.4.md) for detailed changes.
+
+- **trunk-5.2**: Please refer to the [v5.2 Release Notes](./en/release_notes/v5.2.md) for detailed changes.
+
+### Version Maintenance Strategy
+
+openvela follows a strict version maintenance lifecycle:
+
+- **Patch Updates**: For critical bugs or security vulnerabilities discovered in released versions, the team issues new patch release tags (Patch Release) to provide fixes.
+- **Naming Convention**: Patch versions increment based on the original version number, such as `trunk-5.2.1`.
+
+## Branch Strategy
+
+openvela adopts a dual-branch model to balance system innovation and stability. Please select the appropriate branch according to your development needs.
+
+### dev (Development Branch)
+
+- **Definition**: This is the cutting-edge development branch of openvela, aggregating the latest features and bug fixes.
+- **Status**: The code updates frequently and remains in a state of continuous integration and rapid iteration. It may contain features not yet fully verified, so potential instability exists.
+- **Target Audience**:
+
+    - Developers who wish to experience new features early.
+    - Contributors planning to submit code or participate in core function development.
+
+### trunk (Stable Trunk Branch)
+
+- **Definition**: This is the fully tested main branch, representing the current stable state of the system.
+- **Status**: Features from the `dev` branch are merged here only after they pass rigorous testing and verification.
+- **Target Audience**: Most users who require high system stability, and engineers developing standard applications.
+
 ## Quick start
 
 ### Device Development
@@ -114,29 +158,6 @@ To see the full list of native apps, please visit the [Native App Examples Repos
 - [Calendar](../../.././packages_fe_examples/blob/trunk/calendar/README.md): Demonstrates a basic calendar.
 
 More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
-
-## openvela Versioning Strategy
-
-- **dev (Development Branch)**
-
-    Contains the latest features and fixes, and may be unstable. Recommended for developers who wish to experience new features or contribute.
-
-- **trunk (Main Stable Branch)**
-
-    A comprehensively tested, stable version. Stable features from the `dev` branch are merged here. Recommended for most users seeking stability.
-
-- **Release Tags**
-
-    Permanent tags created from the `trunk` branch, representing an official, stable release. We strongly recommend using the latest release tag in **production environments** to ensure maximum stability.
-
-    - **List of Released Versions**:
-
-        - `trunk-5.2`: For detailed changes in this version, please refer to its [v5.2 Release Notes](./en/release_notes/v5.2.md).
-        - `trunk-5.4`: For detailed changes in this version, please refer to its [v5.4 Release Notes](./en/release_notes/v5.4.md).
-
-    - **Maintenance Policy**:
-
-        Critical bug fixes for a released version will be delivered by releasing a new patch tag (e.g., `trunk-5.2.1`).
 
 ## Code contribution
 

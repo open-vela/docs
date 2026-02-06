@@ -185,6 +185,7 @@ sudo mv repo /usr/local/bin
 - 常见问题
 
     - [快速入门常见问题](../faq/QuickStart_FAQ.md)
+    - [开发者常见问题解答](../faq/devoloper_tech_faq.md)
 
 - 进一步阅读
 

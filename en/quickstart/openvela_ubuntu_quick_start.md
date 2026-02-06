@@ -185,6 +185,7 @@ After the emulator starts, you will see the `goldfish-armv8a-ap>` prompt, indica
 - Frequently Asked Questions
 
     - [Quick Start FAQ](../faq/QuickStart_FAQ.md)
+    - [Developer FAQ](../faq/QuickStart_FAQ.md)
 
 - Further Reading
 
