@@ -158,106 +158,72 @@ After installation, you can run `repo --version` to verify it.
         repo init -u https://gitcode.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
-3. Run the sync command. `repo` will download all relevant source code repositories according to the manifest file (`openvela.xml`).
+3. Execute the sync command. `repo` will download all related source code repositories according to the manifest file (`openvela.xml`).
 
-    ```Bash
+    ```bash
     repo sync -c -j8
     ```
 
-## Step 3: Compile the Source Code
+    ![alt text](./figures/004.png)
 
-After downloading the source code, perform the following build steps in the openvela root directory.
+    > **Tip**
+    >
+    > - The initial sync can be time-consuming, depending on your network connection and disk performance.
+    > - If the sync is interrupted due to network issues, you can run `repo sync` again to resume.
 
-### 1. Set Up Environment Variables
+## Step 3: Compile Source Code
 
-Run the following commands to add the prebuilt toolchain paths to the environment variables for the current terminal session.
+After downloading the source code, execute the following compilation steps in the openvela root directory.
 
-```Bash
-uname_s=$(uname -s | tr '[A-Z]' '[a-z]')
-uname_m=$(uname -m | sed 's/arm64/aarch64/g')
-export PATH=$PWD/prebuilts/build-tools/${uname_s}-${uname_m}/bin:$PATH
-export PATH=$PWD/prebuilts/cmake/${uname_s}-${uname_m}/bin:$PATH
-export PATH=$PWD/prebuilts/python/${uname_s}-${uname_m}/bin:$PATH
-export PATH=$PWD/prebuilts/gcc/${uname_s}-${uname_m}/aarch64-none-elf/bin:$PATH
-export PATH=$PWD/prebuilts/gcc/${uname_s}-${uname_m}/arm-none-eabi/bin:$PATH
-export PYTHONPATH=$PWD/prebuilts/tools/python/dist-packages/cxxfilt
-export PYTHONPATH=$PWD/prebuilts/tools/python/dist-packages/kconfiglib:$PYTHONPATH
-export PYTHONPATH=$PWD/prebuilts/tools/python/dist-packages/pyelftools:$PYTHONPATH
-```
+### 1. (Optional) Custom Kernel Configuration
 
-> **Note**: This environment variable configuration is only valid for the current terminal window. If you open a new terminal, you must run this script again.
-
-### 2. Configure the CMake Project (Out-of-Tree)
-
-openvela uses an **Out-of-tree build** approach, which separates the build artifacts from the source code to keep the source directory clean.
-
-Run the following `cmake` command to configure the project. This command will:
-
-- Generate the build system files in the `cmake_out/goldfish-arm64-v8a-ap` directory.
-- Use Ninja as the build tool to improve compilation speed.
-- Specify the configuration file for the target board.
+You can use the `menuconfig` command to open a graphical interface to adjust the NuttX kernel and component configurations.
 
 ```Bash
-cmake \
-  -B cmake_out/goldfish-arm64-v8a-ap \
-  -S $PWD/nuttx \
-  -GNinja \
-  -DBOARD_CONFIG=../vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap \
-  -DEXTRA_FLAGS="-Wno-cpp -Wno-deprecated-declarations"
+./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/ --cmake menuconfig
 ```
 
-![alt text](./figures/005.png)
-
-### 3. (Optional) Customize Kernel Configuration
-
-You can use the `menuconfig` command to open a graphical interface for adjusting the NuttX kernel and component configurations.
-
-```Bash
-cmake --build cmake_out/goldfish-arm64-v8a-ap -t menuconfig
-```
-
-> **Tips**
+> **Operation Tricks**
 >
-> - Press `/` to search for a configuration item.
-> - Press the `Spacebar` to toggle the selection state (enable/disable/modularize).
-> - After configuring, select **Save** to save and exit.
+> - Press `/` to search for configuration items.
+> - Press `Space` to toggle selection status (Enable/Disable/Modularize).
+> - After configuration, select **Save** to save and exit.
 
-![alt text](./figures/006.png)
+<img src="./figures/006.png" alt="" width="75%">
 
-### 4. Run the Build
+### 2. Execute Compilation
 
-Run the following command to build the entire project.
-
-```Bash
-cmake --build cmake_out/goldfish-arm64-v8a-ap
-```
-
-After a successful build, you will find `nuttx` and other build artifacts in the `cmake_out/goldfish-arm64-v8a-ap` directory.
-
-![alt text](./figures/007.png)
-
-## Step 4: Run the Emulator
-
-In the openvela root directory, run the following script to start the `Vela Emulator` and load your build artifacts.
+Execute the following command to build the entire project.
 
 ```Bash
-./emulator.sh cmake_out/goldfish-arm64-v8a-ap
+./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/ --cmake -j$(nproc)
 ```
 
-After the emulator starts, you will see the `goldfish-armv8a-ap>` prompt, indicating that openvela is running successfully.
+Upon successful compilation, you will find build artifacts such as `nuttx` in the `cmake_out/vela_goldfish-arm64-v8a-ap` directory.
 
-![alt text](./figures/008.png)
+<img src="./figures/007.png" alt="" width="75%">
 
-![alt text](./figures/009.png)
+## Step 4: Run Emulator
+
+In the openvela root directory, execute the following script to start the `Vela Emulator` and load your build artifacts.
+
+```Bash
+./emulator.sh cmake_out/vela_goldfish-arm64-v8a-ap/
+```
+
+After the emulator starts, you will see the `goldfish-armv8a-ap>` prompt, indicating that openvela has run successfully.
+
+<img src="./figures/008.png" alt="" width="75%">
 
 ## Next Steps
 
 - Frequently Asked Questions
 
     - [Quick Start FAQ](../faq/QuickStart_FAQ.md)
+    - [Developer FAQ](../faq/QuickStart_FAQ.md)
 
 - Further Reading
 
-    - [Debugging with the Emulator](./emulator/Debugging_Vela_with_Vela_Emulator.md)
-    - [ADB Commands](./emulator/Android_Debug_Bridge_commands.md)
-    - [Sending Emulator Console Commands](./emulator/Send_emulator_console_commands.md)
+    - [Debugging Vela with the Vela Emulator](./emulator/Debugging_Vela_with_Vela_Emulator.md)
+    - [Android Debug Bridge commands](./emulator/Android_Debug_Bridge_commands.md)
+    - [Send emulator console commands](./emulator/Send_emulator_console_commands.md)

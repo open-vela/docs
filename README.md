@@ -86,6 +86,14 @@ Below are the currently released stable versions and their change logs:
 
 - **trunk-5.2**: Please refer to the [v5.2 Release Notes](./en/release_notes/v5.2.md) for detailed changes.
 
+### Hardware Adaptation Guide
+
+To maximize efficiency and ensure code stability, we offer the following recommendations for developers performing hardware porting:
+
+- **Recommended Baseline**: We strongly recommend **basing your development on the latest openvela release version** (i.e., Release Tags on the `trunk` branch).
+- **Risk Warning**: The current **`dev` branch** is undergoing rapid iteration with frequent code updates. It may be subject to underlying interface changes or temporary instability. Therefore, it is **NOT recommended** as a baseline for hardware adaptation.
+- **Get Support**: If you have adaptation requirements or encounter technical difficulties, please feel free to **submit an Issue** or contact us via the **WeChat Community**. The openvela team is ready to provide the necessary development support.
+
 ### Version Maintenance Strategy
 
 openvela follows a strict version maintenance lifecycle:
