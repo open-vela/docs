@@ -1,4 +1,6 @@
-# openvela 开发者常见问题解答 (FAQ)
+# 开发者常见问题解答
+
+[ [English](./../../en/faq/devoloper_tech_faq.md) | 简体中文 ]
 
 ### 一、社区与通用
 
