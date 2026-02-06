@@ -1,6 +1,6 @@
 # Quick Start FAQ
 
-\[ English | [简体中文](./../../zh-cn/faq/QuickStart_FAQ.md) \]
+[ English | [简体中文](./../../zh-cn/faq/QuickStart_FAQ.md) ]
 
 ## I. Unable to Access Remote Repository
 

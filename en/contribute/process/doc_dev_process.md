@@ -1,6 +1,10 @@
 # openvela Documentation Development Process
 
-\[ English | [简体中文](../../../zh-cn/contribute/process/doc_dev_process.md) \]
+[ English | [简体中文](../../../zh-cn/contribute/process/doc_dev_process.md) ]
+
+## Flowchart
+
+![documentation_development_process](./figures/001.png)
 
 ## I. What Development Engineers Should Do
 
