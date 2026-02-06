@@ -62,6 +62,12 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 - Please refer to the [Supported Architectures and Platforms](https://nuttx.apache.org/docs/latest/platforms/index.html) page for a complete list.
 - For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/Development_Board.md).
 
+## What's New
+
+- **Significant Hardware Ecosystem Expansion**: Added support for **Infineon AURIX™ TC4**, **Flagchip MCU**, and the **QEMU-R52 SIL** platform. (View [TC4 Guide](./en/quickstart/development_board/tc4d9_evb_guide.md) / [Flagchip Guide](./en/quickstart/development_board/fc7300f8m_evb_guide.md))
+
+- **Enhanced Ubuntu Development Experience**: The OpenVela VS Code plugin now **fully supports the Ubuntu environment**. Linux developers can enjoy a seamless, end-to-end workflow—from project creation and build to system debugging—significantly boosting development efficiency. Get started: [VS Code Plugin Guide](./en/quickstart/vscode_plugin_usage.md).
+
 ## Version Strategy
 
 We manage releases based on the `trunk` branch, using Tags to track release history. This ensures traceability and stability for production environments.

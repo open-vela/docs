@@ -63,6 +63,12 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 - openvela 支持各种不同的架构（ARM32、ARM64、RISC-V、Xtensa、MIPS、CEVA 等）和硬件平台。请在[硬件支持](https://nuttx.apache.org/docs/latest/platforms/index.html)页面上查看完整列表。
 - 关于**开发板**的适配案例，请参见[案例文档](./zh-cn/dev_board/Development_Board.md)。
 
+## 最新动态
+
+- 硬件生态大幅扩展：新增对 **英飞凌 AURIX™ TC4**、**旗芯微 (Flagchip) MCU** 以及 **QEMU-R52 SIL** 平台的适配支持。（查看 [TC4 指南](./zh-cn/quickstart/development_board/tc4d9_evb_guide.md) / [旗芯微指南](./zh-cn/quickstart/development_board/fc7300f8m_evb_guide.md)）
+
+- Ubuntu 开发体验升级：openvela VS Code 插件现已**完美支持 Ubuntu 环境**。Linux 开发者现在也可以享受从项目创建、编译构建到系统调试的一站式流畅体验，开发效率显著提升。即刻体验：[VS Code 插件使用指南](./zh-cn/quickstart/vscode_plugin_usage.md)。
+
 ## 版本发布管理 (Version Strategy)
 
 我们基于 `trunk` 分支进行版本发布，通过标签（Tags）管理发布历史，确保生产环境的可追溯性与稳定性。
