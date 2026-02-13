@@ -25,11 +25,11 @@ Before you begin, please ensure your development environment meets the following
 
 Before you start, you need to install the necessary packages for compiling openvela.
 
-Open a terminal and run the following commands to update the package list and install Git, CMake, Python 3, and the build-essential toolchain.
+Open a terminal and run the following commands to update the package list and install  Git, curl, CMake, Python 3, libc++abi-dev, and the build-essential toolchain.
 
 ```Bash
 sudo apt update
-sudo apt install git cmake python3 build-essential
+sudo apt install git curl cmake python3 libc++abi-dev build-essential
 ```
 
 ### 4. Install Git LFS

@@ -25,11 +25,11 @@
 
 在开始之前，您需要安装编译 openvela 所需的软件包。
 
-打开终端，执行以下命令，更新软件包列表并安装 Git、CMake、Python 3 和 build-essential 工具链。
+打开终端，执行以下命令，更新软件包列表并安装 Git、curl、CMake、Python 3、libc++abi-dev 和 build-essential 工具链。
 
 ```Bash
 sudo apt update
-sudo apt install git cmake python3 build-essential
+sudo apt install git curl cmake python3 libc++abi-dev build-essential
 ```
 
 ### 4. 安装 Git LFS 组件
