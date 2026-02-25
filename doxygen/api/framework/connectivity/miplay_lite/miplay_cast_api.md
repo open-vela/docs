@@ -1,10 +1,20 @@
-# MiPlay Cast API User Guide
+# MiPlay Cast 投屏服务 API 开发指南
 
-MiPlay Cast screen mirroring functionality interface, provides creating cast instances, starting/stopping cast, monitoring cast status and other functions.
+**MiPlay Cast 投屏服务 (Screen Mirroring Service)** 模块封装了多屏互动的核心逻辑，为设备提供稳定、低延迟的屏幕镜像能力。
 
-## 1 Interface Introduction
+该模块主要负责管理投屏业务的生命周期。开发者可以通过它创建投屏实例，控制投屏会话的启动与停止，并实时监控投屏过程中的连接状态。通过简化的接口设计，应用层可以快速集成投屏发送端（Source）或接收端（Sink）的功能，而无需深入关注底层的音视频流传输细节。
 
-### 1.1 MiPlay Cast Core Interface
+## 1. 接口概览
+
+本模块聚焦于投屏流程的控制，核心功能包括：
+
+- **实例管理**：创建与销毁 Cast 实例，初始化投屏所需的系统资源。
+- **会话控制**：提供标准化的启动（Start）和停止（Stop）接口，用于触发或终止镜像投屏任务。
+- **状态监控**：提供投屏状态（如：连接中、播放中、已断开、错误等）的查询与回调机制，便于上层应用实时更新 UI 或处理异常。
+
+### 1.1 投屏核心接口 (Core API)
+
+`miplay_cast_api.h` 定义了 MiPlay Cast 的对外主接口。包含实例的生命周期管理及运行时的状态控制函数。
 
 ```eval_rst
 
