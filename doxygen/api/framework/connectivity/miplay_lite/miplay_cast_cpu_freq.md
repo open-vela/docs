@@ -1,10 +1,10 @@
-# MiPlay Cast CPU Frequency Management User Guide
+# MiPlay Cast CPU 频率管理
 
-MiPlay Cast CPU frequency dynamic adjustment functionality, supports DVFS (Dynamic Voltage and Frequency Scaling) for different chip configurations.
+MiPlay Cast 提供 CPU 频率动态调整功能，支持针对不同芯片配置的 DVFS（Dynamic Voltage and Frequency Scaling，动态电压与频率调节）策略。
 
-## 1 Interface Introduction
+## 接口说明
 
-### 1.1 CPU Frequency Management Interface
+### CPU 频率管理接口
 
 ```eval_rst
 
