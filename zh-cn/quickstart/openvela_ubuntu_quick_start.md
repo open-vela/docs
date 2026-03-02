@@ -82,13 +82,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 GitHub 账户，请参考 [GitHub 官方文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)。
 
         ```bash
-        repo init -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+        repo init -u ssh://git@github.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+        repo init -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     #### 选项 B：从 Gitee 下载
