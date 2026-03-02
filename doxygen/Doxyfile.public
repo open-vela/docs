@@ -838,7 +838,8 @@ INPUT                  = ../../apps/system/uorb \
                          ../../frameworks/connectivity/bluetooth/framework/include \
                          ../../frameworks/connectivity/telephony \
 			 ../../frameworks/multimedia/media \
-             ../../frameworks/runtimes/services
+             ../../frameworks/runtimes/services \
+             ../../frameworks/runtimes/feature/include
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

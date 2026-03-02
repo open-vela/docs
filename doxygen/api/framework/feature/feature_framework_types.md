@@ -1,6 +1,6 @@
-## feature_framework_types API
+# feature_framework_types API
 
-Featurek框架提供了一系列数据类型，方便开发者使用。
+Feature 框架提供了一系列数据类型，方便开发者使用。
 
 ```eval_rst
 

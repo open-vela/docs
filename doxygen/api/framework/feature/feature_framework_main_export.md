@@ -1,8 +1,8 @@
-## feature_framework_main_export API
+# feature_framework_main_export API
 
-为feature框架管理者提供的一系列接口, 用于创建feature框架管理者，以及设置管理者的一些属性。
+为 Feature 框架管理者提供的一系列接口，用于创建 Feature 框架管理者以及设置管理者的属性。
 
-### sample code for quickapp framework
+## 快应用框架示例代码
 
 ```cpp
 #ifdef CONFIG_FEATURE_FRAMEWORK
@@ -20,7 +20,7 @@
 
 ```eval_rst
 
-.. doxygenfile:: feature_main_export.h
+.. doxygenfile:: feature_main_exports.h
   :project: doxygen
 
 ```
