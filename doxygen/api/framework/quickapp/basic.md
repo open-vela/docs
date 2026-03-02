@@ -10,7 +10,7 @@ openvela 快应用（QuickApp）框架（以下简称"应用框架"），是 ope
 
 ## 整体架构
 
-![快应用框架整体架构图](images/basic_structure.png)
+![快应用框架整体架构图](figures/basic_structure.png)
 
 ## 编译配置
 

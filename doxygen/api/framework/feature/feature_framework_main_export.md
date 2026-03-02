@@ -1,6 +1,6 @@
-# feature_framework_main_export API
+# Feature Main Export API
 
-为 Feature 框架管理者提供的一系列接口，用于创建 Feature 框架管理者以及设置管理者的属性。
+为 Feature 框架管理者（Feature Manager）提供的一系列接口，用于创建和配置 Feature 框架管理者。主要包括 `FeatureManagerCreateInfo` 结构体的初始化、管理者的创建、错误回调设置以及事件循环绑定等操作。
 
 ## 快应用框架示例代码
 
