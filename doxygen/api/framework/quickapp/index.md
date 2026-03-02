@@ -7,6 +7,6 @@ openvela 快应用（QuickApp）框架为开发者提供轻量级的应用运行
 .. toctree::
   :maxdepth: 2
 
-  basic.md
+  basic
 
 ```

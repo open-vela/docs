@@ -8,15 +8,15 @@ openvela 快应用（QuickApp）框架（以下简称"应用框架"），是 ope
 
 本文档介绍应用框架的整体设计、实现思路和技术要点，不聚焦应用开发本身。对快应用开发感兴趣的开发者，请参考[小米 openvela 快应用开发手册](https://iot.mi.com/vela/quickapp/zh/content/intro.html)。
 
-## 整体架构
+## 一、整体架构
 
 ![快应用框架整体架构图](figures/basic_structure.png)
 
-## 编译配置
+## 二、编译配置
 
 应用框架本身的配置项不多，但依赖项较多。依赖项中渲染器的依赖较多，具体配置请参考图形组提供的文档。
 
-### 主要配置
+### 1、主要配置
 
 ```kconfig
 CONFIG_QUICKAPP_VAPP=y                      # 快应用主配置
@@ -43,16 +43,16 @@ CONFIG_PROMPT_DIALOG_TITLE_FONT_SIZE=36
 CONFIG_PROMPT_DIALOG_MSG_FONT_SIZE=34
 ```
 
-### 调试配置
+### 2、调试配置
 
 ```kconfig
 CONFIG_DOM_TRACE_ENABLE=n                   # vdom 树打印
 CONFIG_JS_USE_SCHED_NOTE=n                  # 框架启动 trace
 CONFIG_QUICKAPP_MEMORY_STATUS=n             # 框架 JS 引擎内存信息打印
-CONFIG_WIDGET_LOG_ENANLE=y                  # LVGL widget log
+CONFIG_WIDGET_LOG_ENABLE=y                  # LVGL widget log
 CONFIG_WIDGET_LOG_LEVEL=1                   # widget log level，默认 warning
 CONFIG_WIDGET_ASSERT_ENABLE=n               # widget assert
-CONFIG_WIDGET_TRACE_ENABLE=n               # widget trace check
+CONFIG_WIDGET_TRACE_ENABLE=n                # widget trace check
 CONFIG_WIDGET_PERF_ENABLE=n                 # widget performance monitor
 CONFIG_WIDGET_DUMP_TREE_ENABLE=n            # dump LVGL widget tree
 CONFIG_WIDGET_DUMP_TREE_IN_LAYOUT=n         # dump widget tree in layout task
@@ -61,7 +61,7 @@ CONFIG_WIDGET_DEBUG_DRAW_OUTLINE=n          # widget draw outline for debug
 CONFIG_CSS_ATTR_LIST_ENABLE=n               # 启用 widget get css/attr function
 ```
 
-### 依赖项
+### 3、依赖项
 
 ```kconfig
 CONFIG_LIBUV=y
