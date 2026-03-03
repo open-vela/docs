@@ -19,8 +19,8 @@ Digital Key API 主要涵盖以下功能领域的接口：
 ```eval_rst
 
 .. toctree::
-  :maxdepth: 2
+    :maxdepth: 2
 
-  dkf_iccoa_api.md
+    dkf_iccoa_api
 
 ```

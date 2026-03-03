@@ -5,9 +5,9 @@ MiPlay Lite 提供轻量级的多屏互动能力，包含投屏服务核心接�
 ```eval_rst
 
 .. toctree::
-  :maxdepth: 2
+    :maxdepth: 2
 
-  miplay_cast_api.md
-  miplay_cast_cpu_freq.md
+    miplay_cast_api
+    miplay_cast_cpu_freq
 
 ```

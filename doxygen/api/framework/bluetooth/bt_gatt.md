@@ -29,7 +29,7 @@ GATT 使用层级结构来组织数据：
 ```eval_rst
 
 .. doxygenfile:: bt_gattc.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ### 1.2 GATT Server 接口 (GATTS)
@@ -47,5 +47,5 @@ GATT 使用层级结构来组织数据：
 ```eval_rst
 
 .. doxygenfile:: bt_gatts.h
-  :project: doxygen
+    :project: doxygen
 ```

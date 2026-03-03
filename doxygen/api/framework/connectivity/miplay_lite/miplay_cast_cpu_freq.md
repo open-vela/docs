@@ -9,5 +9,5 @@ MiPlay Cast 提供 CPU 频率动态调整功能，支持针对不同芯片配置
 ```eval_rst
 
 .. doxygenfile:: miplay_cast_cpu_freq.h
-  :project: doxygen
+    :project: doxygen
 ```

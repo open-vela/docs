@@ -41,7 +41,7 @@
 
 状态变化如下图所示：
 
-![img](./a2dp.png)  
+![img](figures/a2dp.png)
 
 ### 2.2 连接与流状态
 
@@ -67,7 +67,7 @@
 ```eval_rst
 
 .. doxygenfile:: bt_a2dp.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ### 4.2 A2DP 接收端 (Sink)
@@ -84,7 +84,7 @@ A2DP Sink 设备负责接收音频流。A2DP Sink 定义了一些特定行为：
 ```eval_rst
 
 .. doxygenfile:: bt_a2dp_sink.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ### 4.3 A2DP 源端 (Source)
@@ -102,5 +102,5 @@ A2DP Source 设备负责发送音频流。A2DP Source 定义了一些特定行�
 ```eval_rst
 
 .. doxygenfile:: bt_a2dp_source.h
-  :project: doxygen
+    :project: doxygen
 ```

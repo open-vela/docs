@@ -19,5 +19,5 @@
 ```eval_rst
 
 .. doxygenfile:: miplay_cast_api.h
-  :project: doxygen
+    :project: doxygen
 ```

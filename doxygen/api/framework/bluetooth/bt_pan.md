@@ -32,5 +32,5 @@
 ```eval_rst
 
 .. doxygenfile:: bt_pan.h
-  :project: doxygen
+    :project: doxygen
 ```

@@ -23,5 +23,5 @@
 ```eval_rst
 
 .. doxygenfile:: bt_hid_device.h
-  :project: doxygen
+    :project: doxygen
 ```

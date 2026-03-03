@@ -1,6 +1,6 @@
 # 蓝牙 API 开发指南
 
-本手册旨在指导开发者在 **openvela** 系统上进行蓝牙协议栈的配置与应用开发。文档体系涵盖了从底层的连接管理（GAP/GATT）到经典蓝牙的上层应用规范（Profiles），支持构建音频流传输、语音通话、人机交互及数据透传等多种应用场景。
+本手册旨在指导开发者在 openvela 系统上进行蓝牙协议栈的配置与应用开发。文档体系涵盖了从底层的连接管理（GAP/GATT）到经典蓝牙的上层应用规范（Profiles），支持构建音频流传输、语音通话、人机交互及数据透传等多种应用场景。
 
 ## 1. 协议栈模块索引
 
@@ -36,15 +36,15 @@
 ```eval_rst
 
 .. toctree::
-  :maxdepth: 2
+    :maxdepth: 2
 
-  bt_a2dp.md
-  bt_avrcp.md
-  bt_gap.md
-  bt_gatt.md
-  bt_hfp.md
-  bt_hid.md
-  bt_spp.md
-  bt_pan.md
+    bt_a2dp
+    bt_avrcp
+    bt_gap
+    bt_gatt
+    bt_hfp
+    bt_hid
+    bt_spp
+    bt_pan
 
 ```

@@ -38,5 +38,5 @@
 ```eval_rst
 
 .. doxygenfile:: bt_adapter.h
-  :project: doxygen
+    :project: doxygen
 ```

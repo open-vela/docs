@@ -19,10 +19,10 @@ XPC 框架由以下三个主要部分组成：
 ```eval_rst
 
 .. toctree::
-  :maxdepth: 2
+    :maxdepth: 2
 
-  conn_xpc_api.md
-  conn_xpc_client.md
-  conn_xpc_server.md
+    conn_xpc_api
+    conn_xpc_client
+    conn_xpc_server
 
 ```

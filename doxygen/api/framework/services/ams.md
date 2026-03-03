@@ -1,155 +1,167 @@
 # AMS API
 
-Activity Manager Service (AMS) module in Vela's XMS system. This module is responsible for managing the lifecycle of applications, as well as scheduling tasks and activities.
+Activity Manager Service（AMS）是 openvela XMS 系统中的活动管理服务模块，负责管理应用的生命周期，以及任务和活动的调度。
 
-## Table of Contents
+## 功能特性
 
-- [Features](#features)
-- [Examples](#examples)
+- **Activity 生命周期管理**：AMS 负责管理应用内 Activity 的生命周期，包括创建、启动、暂停、恢复和销毁。
 
-## Features
+- **任务管理**：AMS 管理应用任务和任务栈，包括任务切换和调度，确保流畅的用户体验。
 
-- **Activity Lifecycle Management**: AMS is responsible for managing the lifecycle of activities within applications, including creating, starting, pausing, resuming, and destroying activities.
+- **进程管理**：AMS 负责启动、停止和监控应用进程，确保系统资源的有效利用。
 
-- **Task Management**: AMS manages application tasks and stacks, including task switching and scheduling, ensuring a smooth user experience.
+- **Intent 处理**：AMS 处理应用间的 Intent 通信，允许不同应用启动 Activity 和 Service。
 
-- **Process Management**: AMS is responsible for starting, stopping, and monitoring application processes, ensuring effective utilization of system resources.
+- **权限管理**：AMS 参与权限检查，确保应用在启动 Activity 时满足系统安全要求。
 
-- **Intent Handling**: AMS handles Intent communication between applications, allowing different applications to launch activities and services.
+- **应用状态跟踪**：AMS 跟踪应用状态（如前台、后台、已停止），并据此分配资源。
 
-- **Permission Management**: AMS participates in permission checks to ensure that applications meet system security requirements when launching activities.
+- **多窗口支持**：AMS 提供多窗口模式下的 Activity 管理，允许多个应用同时显示。
 
-- **Application State Tracking**: AMS tracks the state of applications, such as foreground, background, and stopped, and allocates resources accordingly.
+- **后台任务限制**：AMS 对后台任务和服务施加限制，以优化系统性能和电池使用。
 
-- **Multi-Window Support**: AMS provides activity management in multi-window mode, allowing multiple applications to be displayed simultaneously.
-
-- **Background Task Restrictions**: AMS enforces restrictions on background tasks and services to optimize system performance and battery usage.
-
-- **Service and Broadcast Management**: AMS is also responsible for managing the lifecycle of services and broadcast receivers, ensuring system responsiveness and stability.
+- **Service 和 Broadcast 管理**：AMS 还负责管理 Service 和 BroadcastReceiver 的生命周期，确保系统的响应性和稳定性。
 
 
-## Examples
+## 示例
 
-Example code using the Vela Activity Manager Service (AMS) module typically involves managing activities and controlling tasks through the ActivityManager class. Here are some common examples:
+以下是使用 openvela AMS 模块的示例代码，通常通过 ActivityManager 类来管理 Activity 和控制任务：
 
-- **Starting a New Activity**
+- **启动新 Activity**
 
-```c++
+    ```c++
     Intent intent;
     makeIntent(intent);
     intent.setFlag(intent.mFlag | Intent::FLAG_ACTIVITY_NEW_TASK);
     android::sp<android::IBinder> token = new android::BBinder();
     ActivityManager am;
     am.startActivity(token, intent, -1);
-```
+    ```
 
-- **Stopping an Activity**
+- **停止 Activity**
 
-```c++
+    ```c++
     Intent intent;
     makeIntent(intent);
     ActivityManager am;
     am.stopActivity(intent, intent.mFlag);
-```
+    ```
 
-# ActivityManagerService.h
-```c++
+## ActivityManagerService.h
+
+```eval_rst
 .. doxygenfile:: ActivityManagerService.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Activity.h
-```c++
+## Activity.h
+
+```eval_rst
 .. doxygenfile:: Activity.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# ActivityManager.h
-```c++
+## ActivityManager.h
+
+```eval_rst
 .. doxygenfile:: ActivityManager.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Application.h
-```c++
+## Application.h
+
+```eval_rst
 .. doxygenfile:: Application.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# ApplicationThread.h
-```c++
+## ApplicationThread.h
+
+```eval_rst
 .. doxygenfile:: ApplicationThread.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# AppMain.h
-```c++
+## AppMain.h
+
+```eval_rst
 .. doxygenfile:: AppMain.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# BroadcastReceiver.h
-```c++
+## BroadcastReceiver.h
+
+```eval_rst
 .. doxygenfile:: BroadcastReceiver.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Context.h
-```c++
+## Context.h
+
+```eval_rst
 .. doxygenfile:: Context.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# ContextImpl.h
-```c++
+## ContextImpl.h
+
+```eval_rst
 .. doxygenfile:: ContextImpl.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Dialog.h
-```c++
+## Dialog.h
+
+```eval_rst
 .. doxygenfile:: Dialog.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Intent.h
-```c++
+## Intent.h
+
+```eval_rst
 .. doxygenfile:: Intent.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Logger.h
-```c++
+## Logger.h
+
+```eval_rst
 .. doxygenfile:: Logger.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# MessageService.h
-```c++
+## MessageService.h
+
+```eval_rst
 .. doxygenfile:: MessageService.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# ServiceConnection.h
-```c++
+## ServiceConnection.h
+
+```eval_rst
 .. doxygenfile:: ServiceConnection.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# Service.h
-```c++
+## Service.h
+
+```eval_rst
 .. doxygenfile:: Service.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# UvLoop.h
-```c++
+## UvLoop.h
+
+```eval_rst
 .. doxygenfile:: UvLoop.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# ActivityTrace.h
-```c++
+## ActivityTrace.h
+
+```eval_rst
 .. doxygenfile:: ActivityTrace.h
-  :project: doxygen
+    :project: doxygen
 ```

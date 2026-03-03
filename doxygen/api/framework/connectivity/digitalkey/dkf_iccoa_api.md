@@ -27,5 +27,5 @@
 ```eval_rst
 
 .. doxygenfile:: dkf_iccoa_api.h
-  :project: doxygen
+    :project: doxygen
 ```

@@ -1,39 +1,34 @@
 # PMS API
 
-Package Management Module for Vela's XMS Module
+Package Manager Service（PMS）是 openvela XMS 系统中的包管理模块。
 
-## Table of Contents
+## 功能特性
 
-- [Features](#features)
-- [Examples](#examples)
+- 提供包安装功能
+- 提供包信息查询能力
+- 提供包卸载能力
 
-## Features
+## 示例
 
-- Provides package installation functionality
-- Provides package information querying capability
-- Provides package uninstallation capability
+- 通过命令行进行包管理
 
-## Examples
-
-- Package management can be done through the command line
-
-    Install a package:
+    安装包：
 
     ```
     pm install [packagename]
     ```
 
-    Query which packages are installed:
+    查询已安装的包：
 
     ```
     pm list
     ```
 
-- Use the package management tool through source code
+- 通过源码使用包管理工具
 
-    Install a package using the following format:
+    安装包：
 
-    ```
+    ```c++
     #include "pm/PackageManager.h"
 
     PackageManager pm;
@@ -41,9 +36,9 @@ Package Management Module for Vela's XMS Module
     pm.installPackage(parms);
     ```
 
-    Retrieve all package-related information with:
+    获取所有包信息：
 
-    ```
+    ```c++
     #include "pm/PackageManager.h"
 
     PackageManager pm;
@@ -51,9 +46,9 @@ Package Management Module for Vela's XMS Module
     pm.getAllPackageInfo(&pgInfos);
     ```
 
-    Uninstall a package using:
+    卸载包：
 
-    ```
+    ```c++
     #include "pm/PackageManager.h"
 
     PackageManager pm;
@@ -61,26 +56,30 @@ Package Management Module for Vela's XMS Module
     pm.uninstallPackage(parms);
     ```
 
-# PackageInfo.h
-```c++
+## PackageInfo.h
+
+```eval_rst
 .. doxygenfile:: PackageInfo.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# PackageManager.h
-```c++
+## PackageManager.h
+
+```eval_rst
 .. doxygenfile:: PackageManager.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# PackageManagerService.h
-```c++
+## PackageManagerService.h
+
+```eval_rst
 .. doxygenfile:: PackageManagerService.h
-  :project: doxygen
+    :project: doxygen
 ```
 
-# PackageTrace.h
-```c++
+## PackageTrace.h
+
+```eval_rst
 .. doxygenfile:: PackageTrace.h
-  :project: doxygen
+    :project: doxygen
 ```

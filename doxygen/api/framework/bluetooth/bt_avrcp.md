@@ -30,7 +30,7 @@ AVRCP 定义了两种设备角色：
 ```eval_rst
 
 .. doxygenfile:: bt_avrcp.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ## 2. AVRCP 控制端 (Controller)
@@ -48,7 +48,7 @@ AVRCP Controller 应用程序主要用于向目标设备发送控制指令并获
 ```eval_rst
 
 .. doxygenfile:: bt_avrcp_control.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ## 3. AVRCP 目标端 (Target)
@@ -89,5 +89,5 @@ AVRCP Target 应用程序主要用于响应控制指令并上报播放器状态�
 ```eval_rst
 
 .. doxygenfile:: bt_avrcp_target.h
-  :project: doxygen
+    :project: doxygen
 ```

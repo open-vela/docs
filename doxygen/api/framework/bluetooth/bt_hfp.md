@@ -26,7 +26,7 @@
 ```eval_rst
 
 .. doxygenfile:: bt_hfp.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ### 1.2 HFP HF 角色 API (Hands-Free)
@@ -45,7 +45,7 @@
 ```eval_rst
 
 .. doxygenfile:: bt_hfp_hf.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ### 1.3 HFP AG 角色 API (Audio Gateway)
@@ -64,5 +64,5 @@
 ```eval_rst
 
 .. doxygenfile:: bt_hfp_ag.h
-  :project: doxygen
+    :project: doxygen
 ```

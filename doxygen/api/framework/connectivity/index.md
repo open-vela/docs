@@ -1,12 +1,12 @@
-# Connectivety
+# 连接服务 (Connectivity)
 
 ```eval_rst
 
 .. toctree::
-  :maxdepth: 2
+    :maxdepth: 2
 
-  miplay_lite/index.md
-  digitalkey/index.md
-  common/xpc/index.md
+    miplay_lite/index
+    digitalkey/index
+    common/xpc/index
 
 ```

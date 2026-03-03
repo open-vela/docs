@@ -1,12 +1,12 @@
 # 调度管理
 
-`Vela` 提供了符合 `POSIX` 标准的任务调度接口，支持多种调度策略和任务管理功能。调度器负责决定哪个任务在何时运行，是操作系统内核的核心组件之一。
+openvela 提供了符合 POSIX 标准的任务调度接口，支持多种调度策略和任务管理功能。调度器负责决定哪个任务在何时运行，是操作系统内核的核心组件之一。
 
-## 调度策略概述
+## 一、调度策略概述
 
-`Vela` 支持以下调度策略：
+openvela 支持以下调度策略：
 
-### SCHED_FIFO（先进先出）
+### 1、SCHED_FIFO（先进先出）
 实时调度策略，不使用时间片。任务一旦获得 CPU 就会持续运行，直到：
 - 主动让出 CPU（`sched_yield()`）
 - 被更高优先级任务抢占
@@ -15,31 +15,31 @@
 
 同优先级任务按 FIFO 顺序排队等待。这是确定性最强的调度策略，适合硬实时任务。
 
-### SCHED_RR（轮转调度）
+### 2、SCHED_RR（轮转调度）
 实时调度策略，使用时间片。类似 SCHED_FIFO，但同优先级任务会轮流使用 CPU，每个任务运行一个时间片后轮转到队列末尾。时间片长度可通过 `sched_rr_get_interval()` 查询。
 
 适合需要公平性的实时任务，如多个等优先级的实时线程。
 
-### SCHED_SPORADIC（零星调度）
+### 3、SCHED_SPORADIC（零星调度）
 POSIX.1b 实时扩展定义的调度策略，用于零星服务器。任务有正常优先级和低优先级两个级别，有预算时以正常优先级运行，预算耗尽后降为低优先级。预算会周期性补充。
 
 适合周期性或零星的实时任务，可以限制 CPU 使用率同时保证响应性。
 
-### SCHED_OTHER/SCHED_NORMAL
-默认的分时调度策略，在 Vela 中映射到 SCHED_FIFO 或 SCHED_RR。这是非实时任务的标准策略。
+### 4、SCHED_OTHER/SCHED_NORMAL
+默认的分时调度策略，在 openvela 中映射到 SCHED_FIFO 或 SCHED_RR。这是非实时任务的标准策略。
 
-### 优先级范围
+### 5、优先级范围
 
 - 实时优先级（SCHED_FIFO/RR）：由配置决定，通常 1-255
 - 最小优先级：`sched_get_priority_min(policy)`
 - 最大优先级：`sched_get_priority_max(policy)`
 - 数值越大，优先级越高
 
-## SMP 支持
+## 二、SMP 支持
 
-在多核系统上（启用 `CONFIG_SMP`），Vela 支持 CPU 亲和性（affinity）设置，可以将任务绑定到特定 CPU 或 CPU 集合运行，用于负载均衡、缓存优化或隔离关键任务。
+在多核系统上（启用 `CONFIG_SMP`），openvela 支持 CPU 亲和性（affinity）设置，可以将任务绑定到特定 CPU 或 CPU 集合运行，用于负载均衡、缓存优化或隔离关键任务。
 
-`Vela` 调度管理支持以下 API：
+openvela 调度管理支持以下 API：
 
 - `task_create()`
 - `task_create_with_stack()`
@@ -60,7 +60,7 @@ POSIX.1b 实时扩展定义的调度策略，用于零星服务器。任务有�
 - `sched_setaffinity()`
 - `sched_getaffinity()`
 
-## task_create
+## 1、task_create
 
 ```c
 int task_create(const char *name, int priority, int stack_size,
@@ -69,9 +69,9 @@ int task_create(const char *name, int priority, int stack_size,
 
 创建一个新任务并使其就绪。新任务从 `entry` 函数开始执行，可以接收参数数组 `argv`。任务创建后立即处于就绪状态，根据优先级和调度策略决定何时运行。
 
-与 `pthread_create()` 不同，`task_create()` 是 Vela 特有的轻量级任务创建接口，创建的任务不是 POSIX 线程，而是 Vela 原生任务。任务栈由系统自动分配和管理。
+与 `pthread_create()` 不同，`task_create()` 是 openvela 特有的轻量级任务创建接口，创建的任务不是 POSIX 线程，而是 openvela 原生任务。任务栈由系统自动分配和管理。
 
-*参数*：
+**参数**：
 
 - `name` 任务名称（字符串），用于调试和识别。最大长度由 `CONFIG_TASK_NAME_SIZE` 配置决定。名称可以为 `NULL`，但建议提供有意义的名称以便调试。
 - `priority` 任务优先级（整数）。有效范围取决于调度策略：
@@ -83,7 +83,7 @@ int task_create(const char *name, int priority, int stack_size,
 - `entry` 任务入口函数，类型为 `main_t`，签名为 `int (*)(int argc, char *argv[])`。函数返回时任务终止，返回值作为任务退出状态。
 - `argv` 传递给任务的参数数组（字符串指针数组），必须以 `NULL` 结尾。类似于 `main()` 函数的 `argv`。参数字符串会被复制，原字符串可以在调用后释放。如果不需要参数，可以传递 `NULL` 或空数组 `{NULL}`。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回新任务的 PID（进程 ID，正整数）。可用于后续的任务控制操作（如 `task_delete()`、`sched_setparam()` 等）。
 - 失败：返回负的错误码：
@@ -91,9 +91,9 @@ int task_create(const char *name, int priority, int stack_size,
   - `-ENOMEM`：内存不足，无法分配任务控制块或栈
   - `-EAGAIN`：系统资源不足，达到任务数量限制
 
-*注意*：
+**注意**：
 
-- **任务 vs 线程**：`task_create()` 创建的是 Vela 原生任务，不是 POSIX 线程。任务比线程更轻量，但不支持某些 pthread 特性（如线程局部存储、线程清理函数等）。对于 POSIX 兼容性，应使用 `pthread_create()`。
+- **任务 vs 线程**：`task_create()` 创建的是 openvela 原生任务，不是 POSIX 线程。任务比线程更轻量，但不支持某些 pthread 特性（如线程局部存储、线程清理函数等）。对于 POSIX 兼容性，应使用 `pthread_create()`。
 - **栈分配**：栈由系统自动分配（通常从堆中），任务终止时自动释放。如果需要使用预分配的栈，使用 `task_create_with_stack()`。
 - **参数传递**：`argv` 数组及其字符串会被复制到任务的上下文中，因此调用者可以在函数返回后释放或修改原参数。但要注意，参数是浅拷贝（指针本身复制，指针指向的数据不复制）。
 - **任务调度**：任务创建后立即处于就绪状态。如果新任务优先级高于当前任务，会立即抢占当前任务（抢占式调度）。
@@ -110,9 +110,9 @@ int task_create(const char *name, int priority, int stack_size,
   ```
 - **与 fork() 的区别**：不同于 `fork()`，`task_create()` 不复制父任务的地址空间，新任务从指定入口函数开始执行，不共享父任务的代码段以外的资源。
 
-*`POSIX` 兼容性*：Vela 扩展接口（非 POSIX 标准）。
+**POSIX 兼容性**：openvela 扩展接口（非 POSIX 标准）。
 
-## task_create_with_stack
+## 2、task_create_with_stack
 
 ```c
 int task_create_with_stack(const char *name, int priority,
@@ -124,7 +124,7 @@ int task_create_with_stack(const char *name, int priority,
 
 预分配栈给予程序员更多控制权，但也带来了更多责任（如栈大小验证、内存对齐、生命周期管理）。
 
-*参数*：
+**参数**：
 
 - `name` 任务名称，用于调试和标识。字符串会被复制，因此可以是临时缓冲区。最大长度通常由 `CONFIG_TASK_NAME_SIZE` 定义（如 31 字符 + NULL）。如果为 `NULL`，任务将有一个自动生成的名称。
 - `priority` 任务优先级，数值越大优先级越高。有效范围通常为 1 到 255，可以通过 `sched_get_priority_min()` / `sched_get_priority_max()` 查询。优先级决定任务的调度顺序。
@@ -141,7 +141,7 @@ int task_create_with_stack(const char *name, int priority,
 - `entry` 任务入口函数，签名为 `int main(int argc, char *argv[])`。不能为 `NULL`，否则返回错误。
 - `argv` 传递给任务的参数数组（类似 `main()` 的 `argv`）。数组必须以 `NULL` 指针结尾。可以为 `NULL`，表示无参数（等同于空数组）。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回新任务的 PID（正整数）
 - 失败：返回负的错误码：
@@ -149,7 +149,7 @@ int task_create_with_stack(const char *name, int priority,
   - `-ENOMEM`：内存不足（虽然栈已提供，但任务控制块等仍需分配）
   - `-EAGAIN`：系统任务数已达上限（`CONFIG_MAX_TASKS`）
 
-*注意*：
+**注意**：
 
 - **与 task_create 的区别**：
   - **task_create**：系统自动分配和释放栈
@@ -185,7 +185,7 @@ int task_create_with_stack(const char *name, int priority,
   int pid = task_create_with_stack("worker", 100, worker_stack,
                                    sizeof(worker_stack), worker_func, NULL);
   ```
-- **栈方向**：某些架构栈向下增长，某些向上增长。Vela OS 会自动处理栈方向，调用者只需提供起始地址和大小。
+- **栈方向**：某些架构栈向下增长，某些向上增长。openvela 会自动处理栈方向，调用者只需提供起始地址和大小。
 - **栈对齐**：确保栈地址正确对齐（通常 8 字节或 16 字节），否则可能导致未定义行为或性能下降：
   ```c
   void *stack = aligned_alloc(16, 8192);  // 16 字节对齐
@@ -221,23 +221,23 @@ int task_create_with_stack(const char *name, int priority,
   - 栈未对齐可能导致未定义行为（某些架构会崩溃，某些只是性能下降）
   - 在任务仍在运行时释放栈会导致严重错误
 
-*`POSIX` 兼容性*：Vela 扩展接口（非 POSIX 标准，类似于某些 RTOS 的接口）。
+**POSIX 兼容性**：openvela 扩展接口（非 POSIX 标准，类似于某些 RTOS 的接口）。
 
-## task_delete
+## 3、task_delete
 
 ```c
 int task_delete(pid_t pid);
 ```
 
-删除（终止）指定的任务，释放其占用的系统资源。与 `pthread_cancel()` 或 `kill(pid, SIGKILL)` 类似，但这是 Vela OS 的原生接口，更直接和高效。
+删除（终止）指定的任务，释放其占用的系统资源。与 `pthread_cancel()` 或 `kill(pid, SIGKILL)` 类似，但这是 openvela 的原生接口，更直接和高效。
 
 任务删除是强制性的，不经过正常的清理流程（如 `atexit` 处理程序），应谨慎使用。通常应优先使用协作式终止机制（如设置退出标志，让任务自行退出）。
 
-*参数*：
+**参数**：
 
 - `pid` 要删除的任务 PID。特殊值 0 表示删除调用任务自身（等同于 `exit()`）。必须是有效的任务 PID。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`）
 - 失败：返回负的错误码：
@@ -245,7 +245,7 @@ int task_delete(pid_t pid);
   - `-ESRCH`：指定的任务不存在（PID 无效或任务已终止）
   - `-EPERM`：调用者没有权限删除目标任务（取决于系统配置）
 
-*注意*：
+**注意**：
 
 - **强制终止**：任务被立即终止，不会执行清理代码（如 `pthread_cleanup_push` 注册的处理程序、`atexit` 回调等）。这可能导致资源泄漏（如未释放的内存、未关闭的文件、未解锁的互斥锁）。
 - **资源清理**：内核会自动回收任务的核心资源（如栈内存、任务控制块），但应用层资源（如堆内存、打开的文件）可能不会自动清理。
@@ -257,7 +257,7 @@ int task_delete(pid_t pid);
 - **与 pthread_cancel 的区别**：
   - `task_delete()` 立即强制终止，无取消点概念
   - `pthread_cancel()` 在下一个取消点才生效，允许清理
-  - `task_delete()` 是 Vela 扩展，`pthread_cancel()` 是 POSIX 标准
+  - `task_delete()` 是 openvela 扩展，`pthread_cancel()` 是 POSIX 标准
 - **典型用法**：
   ```c
   int pid = task_create("worker", 100, 2048, worker_func, NULL);
@@ -280,9 +280,9 @@ int task_delete(pid_t pid);
 - **调试建议**：在调试阶段，可以在任务入口和退出点添加日志，帮助跟踪任务生命周期。
 - **批量删除**：如果需要删除多个任务，应按依赖顺序删除（先删除子任务，后删除父任务），避免悬空引用。
 
-*`POSIX` 兼容性*：Vela 扩展接口（非 POSIX 标准）。
+**POSIX 兼容性**：openvela 扩展接口（非 POSIX 标准）。
 
-## task_restart
+## 4、task_restart
 
 ```c
 int task_restart(pid_t pid);
@@ -292,11 +292,11 @@ int task_restart(pid_t pid);
 
 任务重启是一种特殊的恢复机制，用于处理任务异常或需要重置任务状态的场景。与删除后重新创建相比，重启保留了原始任务的配置信息。
 
-*参数*：
+**参数**：
 
 - `pid` 要重启的任务 PID。必须是有效的任务 PID（不能为 0，因为不能重启自己）。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`）
 - 失败：返回负的错误码：
@@ -305,7 +305,7 @@ int task_restart(pid_t pid);
   - `-EPERM`：调用者没有权限重启目标任务（取决于系统配置）
   - `-ENOMEM`：内存不足，无法重启任务
 
-*注意*：
+**注意**：
 
 - **不能重启自己**：不能用 `task_restart(0)` 或 `task_restart(getpid())` 重启自己，因为重启会销毁当前执行上下文。如果尝试这样做，通常会返回 `-EINVAL`。
 - **任务状态重置**：重启后，任务的所有状态（包括局部变量、堆栈内容、寄存器）都会重置，就像刚刚创建一样。任务会从入口函数开始执行。
@@ -363,9 +363,9 @@ int task_restart(pid_t pid);
 - **调试建议**：在任务入口函数中添加日志，记录每次启动时间和原因，有助于分析重启历史。
 - **实时系统影响**：频繁重启任务可能影响系统的实时性和可预测性，应通过改进任务健壮性来减少重启需求。
 
-*`POSIX` 兼容性*：Vela 扩展接口（非 POSIX 标准）。
+**POSIX 兼容性**：openvela 扩展接口（非 POSIX 标准）。
 
-## task_setcancelstate
+## 5、task_setcancelstate
 
 ```c
 int task_setcancelstate(int state, int *oldstate);
@@ -375,20 +375,20 @@ int task_setcancelstate(int state, int *oldstate);
 
 取消状态是任务取消机制的一部分，允许任务临时禁止取消，保护关键代码段不被中断。
 
-*参数*：
+**参数**：
 
 - `state` 新的取消状态，有效值：
   - `TASK_CANCEL_ENABLE` (0)：允许取消（默认），任务可以响应取消请求
   - `TASK_CANCEL_DISABLE` (1)：禁止取消，任务忽略取消请求（请求被推迟）
 - `oldstate` 如果非 `NULL`，用于接收之前的取消状态。如果不关心旧值，可以传 `NULL`。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`）
 - 失败：返回负的错误码：
   - `-EINVAL`：`state` 参数无效（不是 `TASK_CANCEL_ENABLE` 或 `TASK_CANCEL_DISABLE`）
 
-*注意*：
+**注意**：
 
 - **保护关键区域**：在执行不可中断的关键操作时（如更新共享数据结构、持有互斥锁），应禁用取消：
   ```c
@@ -436,9 +436,9 @@ int task_setcancelstate(int state, int *oldstate);
 - **清理处理程序**：即使禁用了取消，清理处理程序（`pthread_cleanup_push`）仍然会在任务正常退出时执行。
 - **性能考虑**：设置取消状态是轻量操作，但应避免在紧密循环中频繁切换，以免影响性能。
 
-*`POSIX` 兼容性*：类似 `pthread_setcancelstate()`，但适用于所有任务类型。
+**POSIX 兼容性**：类似 `pthread_setcancelstate()`，但适用于所有任务类型。
 
-## task_setcanceltype
+## 6、task_setcanceltype
 
 ```c
 int task_setcanceltype(int type, int *oldtype);
@@ -448,20 +448,20 @@ int task_setcanceltype(int type, int *oldtype);
 
 取消类型决定了任务响应取消请求的时机，影响任务取消的安全性和响应性。
 
-*参数*：
+**参数**：
 
 - `type` 新的取消类型，有效值：
   - `TASK_CANCEL_DEFERRED` (0)：延迟取消（默认），仅在取消点（cancellation point）才响应取消请求，如 `pthread_testcancel()`、`sleep()`、`read()` 等阻塞调用
   - `TASK_CANCEL_ASYNCHRONOUS` (1)：异步取消，任务可以在任意时刻被取消（危险，可能导致资源泄漏或数据不一致）
 - `oldtype` 如果非 `NULL`，用于接收之前的取消类型。如果不关心旧值，可以传 `NULL`。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`）
 - 失败：返回负的错误码：
   - `-EINVAL`：`type` 参数无效（不是 `TASK_CANCEL_DEFERRED` 或 `TASK_CANCEL_ASYNCHRONOUS`）
 
-*注意*：
+**注意**：
 
 - **默认类型（DEFERRED）最安全**：延迟取消是默认且推荐的类型，它只在明确定义的取消点才生效，允许任务在取消前完成当前操作并清理资源。
 - **异步取消的危险性**：`TASK_CANCEL_ASYNCHRONOUS` 极其危险，因为任务可能在任何时刻被取消：
@@ -505,9 +505,9 @@ int task_setcanceltype(int type, int *oldtype);
   - 不访问共享数据（或使用原子操作）
   - 不持有任何锁
 
-*`POSIX` 兼容性*：类似 `pthread_setcanceltype()`，但适用于所有任务类型。
+**POSIX 兼容性**：类似 `pthread_setcanceltype()`，但适用于所有任务类型。
 
-## task_testcancel
+## 7、task_testcancel
 
 ```c
 void task_testcancel(void);
@@ -517,16 +517,16 @@ void task_testcancel(void);
 
 这是延迟取消机制的核心，允许任务在安全的位置响应取消请求，确保资源正确释放和状态一致性。
 
-*参数*：
+**参数**：
 
 无参数。
 
-*返回值*：
+**返回值**：
 
 - 无返回值（如果任务被取消，函数永不返回）
 - 如果没有待处理的取消请求，或取消状态为禁止，函数正常返回
 
-*注意*：
+**注意**：
 
 - **显式取消点**：此函数是程序员主动创建的取消点，与隐式取消点（如 `sleep()`、`read()`）不同。显式取消点提供了更精确的控制，允许任务在安全的位置检查取消请求。
 - **典型用法（长时间循环）**：
@@ -586,9 +586,9 @@ void task_testcancel(void);
   ```
 - **无操作返回**：如果没有取消请求，函数立即返回，几乎无开销（只是检查一个标志位）。
 
-*`POSIX` 兼容性*：类似 `pthread_testcancel()`，但适用于所有任务类型。
+**POSIX 兼容性**：类似 `pthread_testcancel()`，但适用于所有任务类型。
 
-## sched_setparam
+## 8、sched_setparam
 
 ```c
 int sched_setparam(pid_t pid, const struct sched_param *param);
@@ -598,14 +598,14 @@ int sched_setparam(pid_t pid, const struct sched_param *param);
 
 优先级是调度系统中最重要的参数，决定了任务在同一策略下的执行顺序。动态调整优先级是实时系统中常见的需求，例如实现优先级继承或优先级天花板协议。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示修改调用任务自身的参数。必须是有效的任务 PID。
 - `param` 指向 `struct sched_param` 结构的指针，包含新的调度参数。主要字段：
   - `sched_priority`：新的优先级值（必需），必须在当前调度策略的有效范围内
   - 对于 SCHED_SPORADIC 策略，还包括 `sched_ss_low_priority`、`sched_ss_repl_period`、`sched_ss_init_budget`、`sched_ss_max_repl` 等零星服务器参数
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0
 - 失败：返回 -1 并设置 `errno`：
@@ -614,7 +614,7 @@ int sched_setparam(pid_t pid, const struct sched_param *param);
   - `EPERM`：调用者没有权限修改目标任务的调度参数（通常需要超级用户权限或同一用户）
   - `EFAULT`：`param` 指向无效内存
 
-*注意*：
+**注意**：
 
 - **保持策略不变**：此函数只修改调度参数，不改变调度策略。如果需要同时修改策略和参数，使用 `sched_setscheduler()`。
 - **优先级范围**：每种调度策略有其有效的优先级范围，可以通过 `sched_get_priority_min()` 和 `sched_get_priority_max()` 查询。超出范围会导致 `EINVAL` 错误。
@@ -640,9 +640,9 @@ int sched_setparam(pid_t pid, const struct sched_param *param);
 - **对运行任务的影响**：修改当前运行任务（pid=0）的优先级可能立即触发重新调度，如果系统中有更高优先级的就绪任务。
 - **SCHED_SPORADIC 参数**：对于零星调度任务，`param` 中的其他字段（如 `sched_ss_low_priority`）也可以通过此函数修改，实现动态调整零星服务器行为。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_getparam
+## 9、sched_getparam
 
 ```c
 int sched_getparam(pid_t pid, struct sched_param *param);
@@ -652,7 +652,7 @@ int sched_getparam(pid_t pid, struct sched_param *param);
 
 调度参数包括基本优先级以及特定策略相关的参数（如零星调度的补充周期），了解这些参数有助于理解任务的调度行为。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示查询调用任务自身的参数。必须是有效的任务 PID。
 - `param` 指向 `struct sched_param` 结构的指针，用于接收查询结果。函数会填充此结构：
@@ -660,7 +660,7 @@ int sched_getparam(pid_t pid, struct sched_param *param);
   - 对于 SCHED_SPORADIC 策略，还包括 `sched_ss_low_priority`、`sched_ss_repl_period`、`sched_ss_init_budget`、`sched_ss_max_repl` 等零星服务器参数
   - 其他策略（SCHED_FIFO、SCHED_RR、SCHED_OTHER）通常只设置 `sched_priority`
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0，并在 `param` 中填充任务的调度参数
 - 失败：返回 -1 并设置 `errno`：
@@ -668,7 +668,7 @@ int sched_getparam(pid_t pid, struct sched_param *param);
   - `EINVAL`：参数 `pid` 为负值
   - `EFAULT`：`param` 指向无效内存（NULL 或不可写）
 
-*注意*：
+**注意**：
 
 - **只读查询**：此函数不修改任务状态，是纯查询操作，开销很小。
 - **完整调度信息**：通常与 `sched_getscheduler()` 配合使用，获取完整的调度信息（策略 + 参数）：
@@ -694,9 +694,9 @@ int sched_getparam(pid_t pid, struct sched_param *param);
 - **任务诊断**：在调试实时系统时，可以定期查询关键任务的优先级，验证优先级继承等机制是否正常工作。
 - **原子性**：查询操作是原子的，返回的参数是一致的快照，不会出现部分更新的情况。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_setscheduler
+## 10、sched_setscheduler
 
 ```c
 int sched_setscheduler(pid_t pid, int policy, const struct sched_param *param);
@@ -706,7 +706,7 @@ int sched_setscheduler(pid_t pid, int policy, const struct sched_param *param);
 
 调度策略决定了任务如何竞争 CPU 时间，不同策略适用于不同类型的任务（实时、批处理、交互等）。修改调度策略通常需要适当的权限。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示调用任务自身。必须是有效的任务 PID。
 - `policy` 新的调度策略，有效值包括：
@@ -719,7 +719,7 @@ int sched_setscheduler(pid_t pid, int policy, const struct sched_param *param);
   - `SCHED_IDLE` (5)：空闲调度，最低优先级（如果支持）
 - `param` 指向 `struct sched_param` 结构的指针，包含调度参数。至少需要设置 `sched_priority` 字段（基本优先级）。对于 SCHED_SPORADIC，还需要设置零星服务器参数（低优先级、补充周期、初始预算、最大补充次数）。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回任务之前的调度策略（`SCHED_FIFO`、`SCHED_RR` 等）
 - 失败：返回 -1 并设置 `errno`：
@@ -728,7 +728,7 @@ int sched_setscheduler(pid_t pid, int policy, const struct sched_param *param);
   - `EPERM`：调用者没有权限修改目标任务的调度策略（通常需要超级用户权限或同一用户）
   - `EFAULT`：`param` 指向无效内存
 
-*注意*：
+**注意**：
 
 - **优先级范围**：不同调度策略有不同的有效优先级范围，可以通过 `sched_get_priority_min(policy)` 和 `sched_get_priority_max(policy)` 查询。设置超出范围的优先级会导致 `EINVAL` 错误。
 - **策略切换影响**：
@@ -759,9 +759,9 @@ int sched_setscheduler(pid_t pid, int policy, const struct sched_param *param);
 - **原子性**：策略和参数的修改是原子的，不会出现中间状态。
 - **对运行任务的影响**：如果修改当前正在运行的任务（pid=0），调度器会立即重新评估任务优先级，可能导致任务被抢占。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_getscheduler
+## 11、sched_getscheduler
 
 ```c
 int sched_getscheduler(pid_t pid);
@@ -771,11 +771,11 @@ int sched_getscheduler(pid_t pid);
 
 调度策略决定了任务的调度行为，了解当前策略有助于调试和监控任务的实时特性。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示查询调用任务自身的调度策略。必须是有效的任务 PID。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回任务当前的调度策略（非负整数）：
   - `SCHED_FIFO` (0)：先进先出实时调度
@@ -788,7 +788,7 @@ int sched_getscheduler(pid_t pid);
   - `ESRCH`：指定的任务不存在（PID 无效或任务已终止）
   - `EINVAL`：参数 `pid` 为负值
 
-*注意*：
+**注意**：
 
 - **只读查询**：此函数不修改任务状态，是纯查询操作，开销很小。
 - **配合使用**：通常与 `sched_getparam()` 配合使用，以获取完整的调度信息（策略 + 参数）。
@@ -807,9 +807,9 @@ int sched_getscheduler(pid_t pid);
 - **修改策略**：如果需要修改调度策略，使用 `sched_setscheduler()`。
 - **策略名称映射**：可以使用 switch 或数组将返回的整数值映射为策略名称，提高可读性。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_yield
+## 12、sched_yield
 
 ```c
 int sched_yield(void);
@@ -819,16 +819,16 @@ int sched_yield(void);
 
 对于 SCHED_FIFO 策略，任务会被移到其优先级队列的末尾；对于 SCHED_RR 策略，效果类似于时间片到期。这允许相同优先级的任务有机会运行。
 
-*参数*：
+**参数**：
 
 无参数。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`）
 - 失败：返回 -1 并设置 `errno`（通常总是成功）
 
-*注意*：
+**注意**：
 
 - **协作式调度**：此函数是协作式多任务的关键，允许任务主动让出 CPU，提高系统整体响应性。
 - **不降低优先级**：`sched_yield()` 不改变任务优先级，只是暂时放弃执行权。任务仍然在相同优先级的就绪队列中。
@@ -862,9 +862,9 @@ int sched_yield(void);
 - **时间片重置**：对于 SCHED_RR 策略，`sched_yield()` 会重置时间片，相当于任务自愿放弃当前时间片。
 - **不可中断**：即使调用 `sched_yield()` 后立即返回，也会发生上下文切换检查，调度器会重新评估调度决策。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_get_priority_max
+## 13、sched_get_priority_max
 
 ```c
 int sched_get_priority_max(int policy);
@@ -872,9 +872,9 @@ int sched_get_priority_max(int policy);
 
 查询指定调度策略允许的最大（highest）优先级值。不同调度策略有不同的优先级范围，此函数用于获取有效的优先级上限，确保设置的优先级值在合法范围内。
 
-在 Vela OS 中，数值越大表示优先级越高（与 Linux 相同，但与某些 RTOS 相反）。了解优先级范围对于正确配置实时任务至关重要。
+在 openvela 中，数值越大表示优先级越高（与 Linux 相同，但与某些 RTOS 相反）。了解优先级范围对于正确配置实时任务至关重要。
 
-*参数*：
+**参数**：
 
 - `policy` 调度策略，有效值包括：
   - `SCHED_FIFO` (0)：先进先出实时调度
@@ -883,13 +883,13 @@ int sched_get_priority_max(int policy);
   - `SCHED_OTHER` (3)：标准分时调度
   - 其他系统支持的策略
 
-*返回值*：
+**返回值**：
 
 - 成功：返回指定策略的最大优先级值（正整数，通常为 255）
 - 失败：返回 -1 并设置 `errno`：
   - `EINVAL`：`policy` 参数无效或不支持
 
-*注意*：
+**注意**：
 
 - **配合使用**：通常与 `sched_get_priority_min()` 配合使用，获取完整的优先级范围：
   ```c
@@ -897,11 +897,11 @@ int sched_get_priority_max(int policy);
   int max_prio = sched_get_priority_max(SCHED_FIFO);
   printf("SCHED_FIFO priority range: %d to %d\n", min_prio, max_prio);
   ```
-- **Vela OS 默认范围**：在 Vela OS 中，大多数策略的优先级范围通常为 1 到 255，其中：
+- **openvela 默认范围**：在 openvela 中，大多数策略的优先级范围通常为 1 到 255，其中：
   - 1：最低优先级（通常是 IDLE 任务）
   - 255：最高优先级（紧急实时任务）
   - 100-200：典型应用任务优先级范围
-- **策略无关性**：在 Vela OS 中，通常所有实时策略（SCHED_FIFO、SCHED_RR、SCHED_SPORADIC）共享相同的优先级空间，因此最大值相同。
+- **策略无关性**：在 openvela 中，通常所有实时策略（SCHED_FIFO、SCHED_RR、SCHED_SPORADIC）共享相同的优先级空间，因此最大值相同。
 - **参数验证**：在调用 `sched_setparam()` 或 `sched_setscheduler()` 前，使用此函数验证优先级是否在有效范围内，避免 `EINVAL` 错误：
   ```c
   int new_priority = 200;
@@ -923,9 +923,9 @@ int sched_get_priority_max(int policy);
 - **实时任务配置**：在配置关键实时任务时，通常使用接近最大值的优先级，以确保任务能抢占其他任务。
 - **优先级分层**：在复杂系统中，可以将优先级范围分为几个层次（如系统层、驱动层、应用层），每层使用不同的优先级子范围。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_get_priority_min
+## 14、sched_get_priority_min
 
 ```c
 int sched_get_priority_min(int policy);
@@ -933,9 +933,9 @@ int sched_get_priority_min(int policy);
 
 查询指定调度策略允许的最小（lowest）优先级值。不同调度策略有不同的优先级范围，此函数用于获取有效的优先级下限，确保设置的优先级值在合法范围内。
 
-在 Vela OS 中，数值越小表示优先级越低。最小优先级通常留给后台任务或空闲任务使用。
+在 openvela 中，数值越小表示优先级越低。最小优先级通常留给后台任务或空闲任务使用。
 
-*参数*：
+**参数**：
 
 - `policy` 调度策略，有效值包括：
   - `SCHED_FIFO` (0)：先进先出实时调度
@@ -944,13 +944,13 @@ int sched_get_priority_min(int policy);
   - `SCHED_OTHER` (3)：标准分时调度
   - 其他系统支持的策略
 
-*返回值*：
+**返回值**：
 
 - 成功：返回指定策略的最小优先级值（正整数，通常为 1）
 - 失败：返回 -1 并设置 `errno`：
   - `EINVAL`：`policy` 参数无效或不支持
 
-*注意*：
+**注意**：
 
 - **配合使用**：通常与 `sched_get_priority_max()` 配合使用，获取完整的优先级范围：
   ```c
@@ -958,7 +958,7 @@ int sched_get_priority_min(int policy);
   int max_prio = sched_get_priority_max(SCHED_RR);
   printf("SCHED_RR priority range: [%d, %d]\n", min_prio, max_prio);
   ```
-- **Vela OS 默认值**：在 Vela OS 中，最小优先级通常为 1（优先级 0 有时保留给系统或特殊用途）。
+- **openvela 默认值**：在 openvela 中，最小优先级通常为 1（优先级 0 有时保留给系统或特殊用途）。
 - **IDLE 任务**：系统空闲任务（IDLE task）通常运行在最小优先级，仅在没有其他任务就绪时运行。
 - **后台任务**：低优先级后台任务（如日志记录、统计）通常使用接近最小值的优先级，避免影响前台任务。
 - **参数验证**：在设置优先级前，使用此函数验证优先级是否在有效范围内：
@@ -981,18 +981,18 @@ int sched_get_priority_min(int policy);
   }
   ```
 - **优先级分配策略**：在设计系统时，应避免使用最小优先级（除非是真正的后台任务），以免任务长时间得不到 CPU 时间。
-- **策略无关性**：在 Vela OS 中，通常所有实时策略共享相同的优先级空间，因此最小值也相同。
+- **策略无关性**：在 openvela 中，通常所有实时策略共享相同的优先级空间，因此最小值也相同。
 - **调试工具**：使用这些函数可以编写通用的优先级检查工具，验证系统中所有任务的优先级配置是否合理。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-*返回值*：
+**返回值**：
 
 返回指定调度策略的最小优先级值，失败时返回 -1 并设置 `errno`。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_rr_get_interval
+## 15、sched_rr_get_interval
 
 ```c
 int sched_rr_get_interval(pid_t pid, struct timespec *interval);
@@ -1002,14 +1002,14 @@ int sched_rr_get_interval(pid_t pid, struct timespec *interval);
 
 此函数用于了解系统的调度时间粒度，有助于调优实时应用的性能和响应性。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示查询调用任务自身的时间片。必须是有效的任务 PID。
 - `interval` 指向 `struct timespec` 结构的指针，用于接收时间片长度。函数会填充此结构：
   - `tv_sec`：秒部分（通常为 0，因为时间片通常小于 1 秒）
   - `tv_nsec`：纳秒部分（例如 10,000,000 纳秒 = 10 毫秒）
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`），并在 `interval` 中填充时间片长度
 - 失败：返回 -1 并设置 `errno`：
@@ -1018,11 +1018,11 @@ int sched_rr_get_interval(pid_t pid, struct timespec *interval);
   - `EFAULT`：`interval` 指向无效内存（NULL 或不可写）
   - `ENOSYS`：系统不支持此功能（SCHED_RR 未启用）
 
-*注意*：
+**注意**：
 
 - **仅适用于 SCHED_RR**：时间片概念仅对 SCHED_RR 策略有意义。对于 SCHED_FIFO，任务运行直到阻塞或被更高优先级任务抢占，没有时间片限制。
 - **系统级配置**：时间片长度通常是系统级配置（编译时或启动时设置），不能针对单个任务修改。查询不同任务的时间片通常返回相同的值。
-- **典型值**：在 Vela OS 中，默认时间片通常为 10 毫秒（10,000,000 纳秒），但可以通过配置选项调整（如 `CONFIG_RR_INTERVAL`）。
+- **典型值**：在 openvela 中，默认时间片通常为 10 毫秒（10,000,000 纳秒），但可以通过配置选项调整（如 `CONFIG_RR_INTERVAL`）。
 - **典型用法**：
   ```c
   struct timespec ts;
@@ -1041,9 +1041,9 @@ int sched_rr_get_interval(pid_t pid, struct timespec *interval);
 - **调用 sched_yield()**：对于 SCHED_RR 任务，调用 `sched_yield()` 会重置时间片计数器。
 - **非 SCHED_RR 任务**：即使任务当前不是 SCHED_RR 策略，此函数通常也会成功返回系统默认的时间片值，但此值对非 SCHED_RR 任务无实际意义。
 
-*`POSIX` 兼容性*：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
 
-## sched_getcpu
+## 16、sched_getcpu
 
 ```c
 int sched_getcpu(void);
@@ -1053,11 +1053,11 @@ int sched_getcpu(void);
 
 在多核系统中，了解任务运行在哪个 CPU 上，有助于性能分析、调试和优化 CPU 亲和性策略。
 
-*参数*：
+**参数**：
 
 无参数。
 
-*返回值*：
+**返回值**：
 
 - 成功：返回当前运行的 CPU 编号（非负整数，从 0 开始编号）
   - 0：第一个 CPU 核心
@@ -1066,7 +1066,7 @@ int sched_getcpu(void);
 - 失败：返回 -1 并设置 `errno`（通常不会失败）
   - `ENOSYS`：系统不支持 SMP（未启用 `CONFIG_SMP`）
 
-*注意*：
+**注意**：
 
 - **SMP 系统专用**：此函数仅在启用 `CONFIG_SMP` 配置的多核系统中有效。在单核系统中，通常总是返回 0。
 - **瞬时值**：返回的 CPU 编号是查询时的瞬时值。在抢占式多任务系统中，任务可能在函数返回后立即被迁移到其他 CPU。
@@ -1097,9 +1097,9 @@ int sched_getcpu(void);
 - **中断上下文**：此函数也可以在中断处理程序中调用，查询中断在哪个 CPU 上被处理。
 - **与线程绑定**：在多线程应用中，可以将不同线程绑定到不同 CPU，然后用此函数验证绑定效果。
 
-*`POSIX` 兼容性*：兼容 Linux 扩展接口（非 POSIX 标准，但广泛支持）。
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准，但广泛支持）。
 
-## sched_setaffinity
+## 17、sched_setaffinity
 
 ```c
 int sched_setaffinity(pid_t pid, size_t cpusetsize, const cpu_set_t *mask);
@@ -1109,7 +1109,7 @@ int sched_setaffinity(pid_t pid, size_t cpusetsize, const cpu_set_t *mask);
 
 CPU 亲和性允许将任务绑定到特定的 CPU 核心，这在优化缓存局部性、减少上下文切换开销、隔离关键任务等场景中非常有用。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示设置调用任务自身的亲和性。必须是有效的任务 PID。
 - `cpusetsize` `mask` 指向的 CPU 集合的大小（字节）。通常使用 `sizeof(cpu_set_t)`。此参数允许未来扩展支持更多 CPU。
@@ -1118,7 +1118,7 @@ CPU 亲和性允许将任务绑定到特定的 CPU 核心，这在优化缓存�
   - 位为 0：任务不允许在该 CPU 上运行
   使用 `CPU_ZERO()`、`CPU_SET()`、`CPU_CLR()` 等宏操作此掩码
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`）
 - 失败：返回 -1 并设置 `errno`：
@@ -1128,7 +1128,7 @@ CPU 亲和性允许将任务绑定到特定的 CPU 核心，这在优化缓存�
   - `EPERM`：调用者没有权限修改目标任务的亲和性（通常需要超级用户权限或同一用户）
   - `ENOSYS`：系统不支持 SMP（未启用 `CONFIG_SMP`）
 
-*注意*：
+**注意**：
 
 - **SMP 系统专用**：此函数仅在多核系统（`CONFIG_SMP` 启用）中有效。单核系统通常返回 `ENOSYS`。
 - **立即生效**：亲和性修改立即生效。如果任务当前运行在不在新掩码中的 CPU 上，调度器会立即将其迁移到允许的 CPU 之一。
@@ -1173,9 +1173,9 @@ CPU 亲和性允许将任务绑定到特定的 CPU 核心，这在优化缓存�
   - 过度绑定可能导致负载不均衡，某些 CPU 过载而其他 CPU 空闲
 - **动态调整**：在运行时根据系统负载动态调整亲和性，可以实现灵活的负载均衡策略。
 
-*`POSIX` 兼容性*：兼容 Linux 扩展接口（非 POSIX 标准，但广泛支持）。
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准，但广泛支持）。
 
-## sched_getaffinity
+## 18、sched_getaffinity
 
 ```c
 int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
@@ -1185,7 +1185,7 @@ int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
 
 通过查询 CPU 亲和性，可以了解任务的 CPU 绑定策略，用于监控、调试和动态调整亲和性。
 
-*参数*：
+**参数**：
 
 - `pid` 目标任务的 PID。特殊值 0 表示查询调用任务自身的亲和性。必须是有效的任务 PID。
 - `cpusetsize` `mask` 指向的 CPU 集合的大小（字节）。通常使用 `sizeof(cpu_set_t)`。
@@ -1193,7 +1193,7 @@ int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
   - 位为 1：任务允许在该 CPU 上运行
   - 位为 0：任务不允许在该 CPU 上运行
 
-*返回值*：
+**返回值**：
 
 - 成功：返回 0（`OK`），并在 `mask` 中填充任务的 CPU 亲和性掩码
 - 失败：返回 -1 并设置 `errno`：
@@ -1202,7 +1202,7 @@ int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
   - `EFAULT`：`mask` 指向无效内存（NULL 或不可写）
   - `ENOSYS`：系统不支持 SMP（未启用 `CONFIG_SMP`）
 
-*注意*：
+**注意**：
 
 - **SMP 系统专用**：此函数仅在多核系统（`CONFIG_SMP` 启用）中有效。单核系统通常返回 `ENOSYS`。
 - **只读查询**：此函数不修改任务状态，是纯查询操作，开销很小。
@@ -1263,5 +1263,5 @@ int sched_getaffinity(pid_t pid, size_t cpusetsize, cpu_set_t *mask);
   assert(CPU_ISSET(cpu, &set));  // 当前 CPU 应该在亲和性集合中
   ```
 
-*`POSIX` 兼容性*：兼容 Linux 扩展接口（非 POSIX 标准，但广泛支持）。
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准，但广泛支持）。
 

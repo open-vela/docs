@@ -1,13 +1,13 @@
 # Telephony SIM API
 
-Telephony SIM TAPI提供Vela Telephony处理SIM卡(包括STK)相关业务。APP无需关心SIM卡模块的内部业务细节，仅需调用API获取SIM信息或者监听SIM相关消息即可完成APP开发。
+Telephony SIM TAPI 提供 openvela Telephony 处理 SIM 卡（包括 STK）相关业务。APP 无需关心 SIM 卡模块的内部业务细节，仅需调用 API 获取 SIM 信息或者监听 SIM 相关消息即可完成 APP 开发。
 
 ## tapi_sim.h
 
 ```eval_rst
 
 .. doxygenfile:: tapi_sim.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ## tapi_stk.h
@@ -15,7 +15,7 @@ Telephony SIM TAPI提供Vela Telephony处理SIM卡(包括STK)相关业务。APP�
 ```eval_rst
 
 .. doxygenfile:: tapi_stk.h
-  :project: doxygen
+    :project: doxygen
 ```
 
 ## tapi_phonebook.h
@@ -23,5 +23,5 @@ Telephony SIM TAPI提供Vela Telephony处理SIM卡(包括STK)相关业务。APP�
 ```eval_rst
 
 .. doxygenfile:: tapi_phonebook.h
-  :project: doxygen
+    :project: doxygen
 ```

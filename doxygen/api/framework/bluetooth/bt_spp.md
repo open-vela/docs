@@ -33,5 +33,5 @@ SPP 是传统蓝牙（Classic Bluetooth）中最常用的数据传输方式，�
 ```eval_rst
 
 .. doxygenfile:: bt_spp.h
-  :project: doxygen
+    :project: doxygen
 ```

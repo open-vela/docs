@@ -34,7 +34,7 @@ CONFIG_LIBUV                   # 使能 libuv 支持
 
 进行 Binder 通信前，必须先启动 ServiceManager 守护进程：
 
-```kconfig
+```bash
 nsh> servicemanager &
 ```
 
@@ -78,8 +78,6 @@ AIDL 工具将根据上述定义生成以下 C++ 文件，包含客户端代理�
 根据应用场景的不同，Binder 服务端主要有三种实现模式。
 
 ### 模式一：基于 Binder 线程池 (标准模式)
-
-此模式适用于标准的阻塞式服务调用。
 
 此模式适用于标准的阻塞式服务调用。
 
@@ -194,7 +192,9 @@ AIDL 工具将根据上述定义生成以下 C++ 文件，包含客户端代理�
 
 - **创建并注册服务**：
 
-    // ... 参考模式一创建 Bn 类实例并注册 ...
+    ```cpp
+    // 参考模式一创建 Bn 类实例并注册
+    ```
 
 - **创建 Epoll 实例**：
 
@@ -204,8 +204,10 @@ AIDL 工具将根据上述定义生成以下 C++ 文件，包含客户端代理�
 
 - **配置 Binder 轮询**：
 
-    // 获取 binder fd (假设变量名为 fd)
-    // IPCThreadState::self()->setupPolling(&fd);
+    ```cpp
+    int fd;
+    IPCThreadState::self()->setupPolling(&fd);
+    ```
 
 - **注册 Epoll 事件**：
 
