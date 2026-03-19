@@ -213,3 +213,6 @@ Welcome to the **OpenVela** community! Scan the QR codes below to follow our Off
 | <img src="./images/openvela_WeChat_Official_Account.png" width="200" /> | <img src="./images/assistant_qr.jpg" width="200" /> |
 |     **Follow Us**<br>Get the latest updates and technical articles      |     **Join the Group**<br>Scan to add assistant     |
 
+
+
+
