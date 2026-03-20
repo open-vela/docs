@@ -2,10 +2,10 @@ name: 'Close stale issues and PR'
 on:
   schedule:
     - cron: '30 1 * * *'
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch: # Manual triggering is allowed.
 
 jobs:
   stale:
-    uses: open-vela/public-actions/.github/workflows/stale.yml@trunk
+    uses: open-vela/public-actions/.github/workflows/stale.yml@dev
     secrets: inherit
 
