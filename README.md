@@ -28,7 +28,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Maintenance and Testing Tools**
 
-    Maintenance and testing tools include common utilities and diagnostic frameworks. In addition to standard tools like Logger and Debugger, they feature the Emulator — a high-fidelity device simulator that supports full functional emulation, including CPU instruction-set simulation.  The Emulator currently supports multiple product form factors, including smart panels, smartwatches, smart bands, and smart screen speakers. By leveraging the Emulator’s PC-based debugging tools, developers can perform application development and testing without physical devices, significantly reducing both development and debugging efforts.
+    Maintenance and testing tools include common utilities and diagnostic frameworks. In addition to standard tools like Logger and Debugger, they feature the Emulator — a high-fidelity device simulator that supports full functional emulation, including CPU instruction-set simulation.  The Emulator currently supports multiple product form factors, including smart panels, smartwatches, smart bands, and smart screen speakers. By leveraging the Emulator's PC-based debugging tools, developers can perform application development and testing without physical devices, significantly reducing both development and debugging efforts.
 
 ## Technical Advantages
 
@@ -63,6 +63,10 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 - For adaptation cases regarding development boards, please refer to the [Case Documentation](./en/dev_board/Development_Board.md).
 
 ## What's New
+
+- **openvela Official Website Launched**: openvela now has its own official website, providing developers with a more convenient channel for accessing project information, documentation, community updates, and more. Visit the [openvela Official Website](https://openvela.com).
+
+- **First openvela Officially Certified Development Board**: The **Gemini-S1** development board, independently developed by Runxinwei Intelligent Technology Co., Ltd., has become the first development board to pass the openvela official compatibility certification, marking a significant milestone in the openvela ecosystem.
 
 - **Significant Hardware Ecosystem Expansion**: Added support for **Infineon AURIX™ TC4**, **Flagchip MCU**, and the **QEMU-R52 SIL** platform. (View [TC4 Guide](./en/quickstart/development_board/tc4d9_evb_guide.md) / [Flagchip Guide](./en/quickstart/development_board/fc7300f8m_evb_guide.md))
 
@@ -212,4 +216,3 @@ Welcome to the **OpenVela** community! Scan the QR codes below to follow our Off
 | :---------------------------------------------------------------------: | :-------------------------------------------------: |
 | <img src="./images/openvela_WeChat_Official_Account.png" width="200" /> | <img src="./images/assistant_qr.jpg" width="200" /> |
 |     **Follow Us**<br>Get the latest updates and technical articles      |     **Join the Group**<br>Scan to add assistant     |
-
