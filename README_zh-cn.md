@@ -48,7 +48,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 - **标准兼容和高可移植性**
 
-    openvela 内核基于 Apache NuttX ，这个被称为 \u201cTiny Linux\u201d 的系统为 openvela 提供了高标准的 POSIX 兼容性。通过持续提升其 POSIX 兼容性，openvela 当前已达到 88% 的兼容水平。这种高标准的兼容性意味着在其他标准操作系统（例如 Linux）上开发的软件可以轻松迁移到 openvela，几乎不需要额外的工作。
+    openvela 内核基于 Apache NuttX ，这个被称为 “Tiny Linux” 的系统为 openvela 提供了高标准的 POSIX 兼容性。通过持续提升其 POSIX 兼容性，openvela 当前已达到 88% 的兼容水平。这种高标准的兼容性意味着在其他标准操作系统（例如 Linux）上开发的软件可以轻松迁移到 openvela，几乎不需要额外的工作。
 
 - **全面的连接套件**
 
