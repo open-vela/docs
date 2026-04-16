@@ -54,7 +54,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Rich Developer Tools**
 
-    openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dumb, and log analysis tools.
+    openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dump, and log analysis tools.
 
 ## Hardware Support
 
@@ -202,7 +202,7 @@ The openvela project consists of multiple independent repositories. Its licensin
 
 We welcome you to interact with and contribute to the openvela community through our various channels.
 
-## Technical Discussions and Contributions
+### Technical Discussions and Contributions
 
 - **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page. Try to provide detailed information, so that we can understand and solve the problem faster.
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
