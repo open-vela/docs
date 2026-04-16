@@ -128,6 +128,8 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 [Quick Start (Ubuntu)](./en/quickstart/openvela_ubuntu_quick_start.md)
 
+> **AI-Assisted Setup**: If you use an AI coding assistant, simply run `git clone https://github.com/open-vela/.claude.git .claude`, then tell the AI "Help me set up the openvela development environment" to automate the entire setup process. See [openvela AI Skills](https://github.com/open-vela/.claude) for details.
+
 ### Quick App Development
 
 [Quick App Quick Start](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
