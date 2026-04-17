@@ -66,7 +66,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **openvela Official Website Launched**: openvela now has its own official website, providing developers with a more convenient channel for accessing project information, documentation, community updates, and more. Visit the [openvela Official Website](https://openvela.com).
 
-- **First openvela Officially Certified Development Board**: The **Gemini-S1** development board, independently developed by Runxinwei Intelligent Technology Co., Ltd., has become the first development board to pass the openvela official compatibility certification, marking a significant milestone in the openvela ecosystem.
+- **First openvela Officially Certified Development Board**: The **[Gemini-S1](https://rivotek.feishu.cn/wiki/Onndw4lmniFBnEk0Rb7cDbwOnTc)** development board, independently developed by Runxinwei Intelligent Technology Co., Ltd., has become the first development board to pass the openvela official compatibility certification, marking a significant milestone in the openvela ecosystem.
 
 - **Significant Hardware Ecosystem Expansion**: Added support for **Infineon AURIX™ TC4**, **Flagchip MCU**, and the **QEMU-R52 SIL** platform. (View [TC4 Guide](./en/quickstart/development_board/tc4d9_evb_guide.md) / [Flagchip Guide](./en/quickstart/development_board/fc7300f8m_evb_guide.md))
 
