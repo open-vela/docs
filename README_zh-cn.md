@@ -48,7 +48,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 - **标准兼容和高可移植性**
 
-    openvela 内核基于 Apache NuttX ，这个被称为 “Tiny Linux” 的系统为 openvela 提供了高标准的 POSIX 兼容性。通过持续提升其 POSIX 兼容性，openvela 当前已达到 88% 的兼容水平。这种高标准的兼容性意味着在其他标准操作系统（例如 Linux）上开发的软件可以轻松迁移到 openvela，几乎不需要额外的工作。
+    openvela 内核基于 Apache NuttX ，这个被称为 "Tiny Linux" 的系统为 openvela 提供了高标准的 POSIX 兼容性。通过持续提升其 POSIX 兼容性，openvela 当前已达到 88% 的兼容水平。这种高标准的兼容性意味着在其他标准操作系统（例如 Linux）上开发的软件可以轻松迁移到 openvela，几乎不需要额外的工作。
 
 - **全面的连接套件**
 
@@ -64,6 +64,10 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 - 关于**开发板**的适配案例，请参见[案例文档](./zh-cn/dev_board/Development_Board.md)。
 
 ## 最新动态
+
+- openvela 官方网站正式上线：openvela 现已拥有独立的官方网站，为开发者提供更加便捷的信息获取渠道，包括项目介绍、文档中心、社区动态等。欢迎访问 [openvela 官网](https://openvela.com)。
+
+- openvela 生态迎来重要里程碑：润芯微智能科技股份有限公司自主研发的 **Gemini-S1** 开发板成为首款通过 openvela 官方兼容性认证的开发板，标志着 openvela 生态建设迈出了坚实的一步。
 
 - 硬件生态大幅扩展：新增对 **英飞凌 AURIX™ TC4**、**旗芯微 (Flagchip) MCU** 以及 **QEMU-R52 SIL** 平台的适配支持。（查看 [TC4 指南](./zh-cn/quickstart/development_board/tc4d9_evb_guide.md) / [旗芯微指南](./zh-cn/quickstart/development_board/fc7300f8m_evb_guide.md)）
 
