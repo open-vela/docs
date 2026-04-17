@@ -28,7 +28,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Maintenance and Testing Tools**
 
-    Maintenance and testing tools include common utilities and diagnostic frameworks. In addition to standard tools like Logger and Debugger, they feature the Emulator — a high-fidelity device simulator that supports full functional emulation, including CPU instruction-set simulation.  The Emulator currently supports multiple product form factors, including smart panels, smartwatches, smart bands, and smart screen speakers. By leveraging the Emulator’s PC-based debugging tools, developers can perform application development and testing without physical devices, significantly reducing both development and debugging efforts.
+    Maintenance and testing tools include common utilities and diagnostic frameworks. In addition to standard tools like Logger and Debugger, they feature the Emulator — a high-fidelity device simulator that supports full functional emulation, including CPU instruction-set simulation.  The Emulator currently supports multiple product form factors, including smart panels, smartwatches, smart bands, and smart screen speakers. By leveraging the Emulator's PC-based debugging tools, developers can perform application development and testing without physical devices, significantly reducing both development and debugging efforts.
 
 ## Technical Advantages
 
@@ -54,7 +54,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 - **Rich Developer Tools**
 
-    openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dumb, and log analysis tools.
+    openvela offers a comprehensive suite of developer tools, including system monitoring, performance analysis, debugger, trace, crash dump, and log analysis tools.
 
 ## Hardware Support
 
@@ -128,6 +128,8 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 [Quick Start (Ubuntu)](./en/quickstart/openvela_ubuntu_quick_start.md)
 
+> **AI-Assisted Setup**: If you use an AI coding assistant, simply run `git clone https://github.com/open-vela/.claude.git .claude`, then tell the AI "Help me set up the openvela development environment" to automate the entire setup process. See [openvela AI Skills](https://github.com/open-vela/.claude) for details.
+
 ### Quick App Development
 
 [Quick App Quick Start](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
@@ -198,7 +200,7 @@ The openvela project consists of multiple independent repositories. Its licensin
 
 We welcome you to interact with and contribute to the openvela community through our various channels.
 
-## Technical Discussions and Contributions
+### Technical Discussions and Contributions
 
 - **Issues**: If you have any questions, suggestions, or find any bugs, submit a new issue on the Issues page. Try to provide detailed information, so that we can understand and solve the problem faster.
 - **Pull Requests**: If you find an issue and have fixed it, you are welcome to submit a Pull Request. Please make sure to follow our [Contribution Guide](./CONTRIBUTING.md).
@@ -212,4 +214,3 @@ Welcome to the **OpenVela** community! Scan the QR codes below to follow our Off
 | :---------------------------------------------------------------------: | :-------------------------------------------------: |
 | <img src="./images/openvela_WeChat_Official_Account.png" width="200" /> | <img src="./images/assistant_qr.jpg" width="200" /> |
 |     **Follow Us**<br>Get the latest updates and technical articles      |     **Join the Group**<br>Scan to add assistant     |
-

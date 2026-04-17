@@ -8,6 +8,20 @@
 >
 > 本文仅适配 **Ubuntu 22.04**。不支持在 Windows Subsystem for Linux (WSL) 或 Docker 容器环境中进行编译。
 
+> **AI 辅助搭建（可选）**
+>
+> 如果您使用 AI 编程助手（如 [Claude Code](https://docs.anthropic.com/en/docs/claude-code)），可以通过 openvela AI Skills 自动完成以下全部搭建流程：
+>
+> ```bash
+> git clone https://github.com/open-vela/.claude.git .claude
+> ```
+>
+> 然后告诉 AI 助手："帮我搭建 openvela 开发环境"。
+>
+> AI 将自动完成环境检测、依赖安装、代码源选择、源码下载、编译和模拟器启动，并在遇到问题时提供针对性的解决方案。
+>
+> 如需手动搭建，请继续阅读以下步骤。
+
 ## 步骤一：准备工作
 
 在开始之前，请确保您的开发环境满足以下要求。

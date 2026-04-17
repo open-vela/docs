@@ -133,6 +133,8 @@ openvela 采用双分支模型来平衡系统的创新性与稳定性。请根�
 
 [快速入门（Ubuntu）](./zh-cn/quickstart/openvela_ubuntu_quick_start.md)
 
+> **AI 辅助搭建**：如果您使用 AI 编程助手，只需 `git clone https://github.com/open-vela/.claude.git .claude`，然后告诉 AI "帮我搭建 openvela 开发环境"，即可自动完成全部搭建流程。详见 [openvela AI Skills](https://github.com/open-vela/.claude)。
+
 ### 快应用开发
 
 [快应用快速入门](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
