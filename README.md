@@ -64,6 +64,10 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## What's New
 
+- **openvela Official Website Launched**: openvela now has its own official website, providing developers with a more convenient channel for accessing project information, documentation, community updates, and more. Visit the [openvela Official Website](https://openvela.com).
+
+- **First openvela Officially Certified Development Board**: The **Gemini-S1** development board, independently developed by Runxinwei Intelligent Technology Co., Ltd., has become the first development board to pass the openvela official compatibility certification, marking a significant milestone in the openvela ecosystem.
+
 - **Significant Hardware Ecosystem Expansion**: Added support for **Infineon AURIX™ TC4**, **Flagchip MCU**, and the **QEMU-R52 SIL** platform. (View [TC4 Guide](./en/quickstart/development_board/tc4d9_evb_guide.md) / [Flagchip Guide](./en/quickstart/development_board/fc7300f8m_evb_guide.md))
 
 - **Enhanced Ubuntu Development Experience**: The OpenVela VS Code plugin now **fully supports the Ubuntu environment**. Linux developers can enjoy a seamless, end-to-end workflow—from project creation and build to system debugging—significantly boosting development efficiency. Get started: [VS Code Plugin Guide](./en/quickstart/vscode_plugin_usage.md).

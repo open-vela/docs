@@ -65,6 +65,10 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 最新动态
 
+- openvela 官方网站正式上线：openvela 现已拥有独立的官方网站，为开发者提供更加便捷的信息获取渠道，包括项目介绍、文档中心、社区动态等。欢迎访问 [openvela 官网](https://openvela.com)。
+
+- openvela 生态迎来重要里程碑：润芯微智能科技股份有限公司自主研发的 **Gemini-S1** 开发板成为首款通过 openvela 官方兼容性认证的开发板，标志着 openvela 生态建设迈出了坚实的一步。
+
 - 硬件生态大幅扩展：新增对 **英飞凌 AURIX™ TC4**、**旗芯微 (Flagchip) MCU** 以及 **QEMU-R52 SIL** 平台的适配支持。（查看 [TC4 指南](./zh-cn/quickstart/development_board/tc4d9_evb_guide.md) / [旗芯微指南](./zh-cn/quickstart/development_board/fc7300f8m_evb_guide.md)）
 
 - Ubuntu 开发体验升级：openvela VS Code 插件现已**完美支持 Ubuntu 环境**。Linux 开发者现在也可以享受从项目创建、编译构建到系统调试的一站式流畅体验，开发效率显著提升。即刻体验：[VS Code 插件使用指南](./zh-cn/quickstart/vscode_plugin_usage.md)。
