@@ -1,145 +1,36 @@
-# 进程 线程
+# 线程 API
 
 openvela 提供 POSIX 兼容的线程（pthread）接口，支持线程创建、同步、属性管理等功能。
 
-## 一、线程 API
+头文件：`#include <pthread.h>`
 
-- `pthread_create()`
-- `pthread_exit()`
-- `pthread_join()`
-- `pthread_detach()`
-- `pthread_cancel()`
-- `pthread_setcancelstate()`
-- `pthread_setcanceltype()`
-- `pthread_testcancel()`
-- `pthread_self()`
-- `pthread_equal()`
-- `pthread_yield()`
-- `pthread_once()`
-- `pthread_atfork()`
+## openvela 实现说明
 
-## 二、线程属性 API
+openvela 的 pthread 实现基于 NuttX RTOS 内核，与标准 Linux 实现存在以下差异：
 
-- `pthread_attr_init()`
-- `pthread_attr_destroy()`
-- `pthread_attr_setschedpolicy()`
-- `pthread_attr_getschedpolicy()`
-- `pthread_attr_setschedparam()`
-- `pthread_attr_getschedparam()`
-- `pthread_attr_setinheritsched()`
-- `pthread_attr_getinheritsched()`
-- `pthread_attr_setdetachstate()`
-- `pthread_attr_getdetachstate()`
-- `pthread_attr_setstacksize()`
-- `pthread_attr_getstacksize()`
-- `pthread_attr_setstackaddr()`
-- `pthread_attr_getstackaddr()`
-- `pthread_attr_setstack()`
-- `pthread_attr_getstack()`
-- `pthread_attr_setguardsize()`
-- `pthread_attr_getguardsize()`
-- `pthread_attr_setscope()`
-- `pthread_attr_getscope()`
+- **`pthread_t` 即 `pid_t`**：在 openvela 中，线程 ID 的底层类型是 `pid_t`（进程 ID），可以直接用于 `kill()` 等系统调用。
+- **无进程隔离**：openvela 不支持 Linux 意义上的进程，所有线程运行在同一地址空间。`PTHREAD_PROCESS_SHARED` 属性可设置但行为与 `PTHREAD_PROCESS_PRIVATE` 相同。
+- **竞争范围固定**：仅支持 `PTHREAD_SCOPE_SYSTEM`，`PTHREAD_SCOPE_PROCESS` 返回 `ENOTSUP`。
+- **`fork()` 支持有限**：`pthread_atfork()` 接口存在但 `fork()` 在 RTOS 环境中可能不可用，主要用于 POSIX 兼容性。
+- **条件编译依赖**：部分功能需要特定配置项：
+  - `CONFIG_SMP`：CPU 亲和性接口（`pthread_setaffinity_np` 等）
+  - `CONFIG_PRIORITY_INHERITANCE`：优先级继承协议（`PTHREAD_PRIO_INHERIT`）
+  - `CONFIG_PRIORITY_PROTECT`：优先级上限保护（`PTHREAD_PRIO_PROTECT`、`prioceiling` 相关接口）
+  - `CONFIG_RR_INTERVAL > 0`：`SCHED_RR` 调度策略
+  - `CONFIG_SCHED_SPORADIC`：`SCHED_SPORADIC` 调度策略
 
-## 三、线程调度 API
 
-- `pthread_getschedparam()`
-- `pthread_setschedparam()`
-- `pthread_setschedprio()`
-- `pthread_setaffinity_np()`
-- `pthread_getaffinity_np()`
-- `pthread_setconcurrency()`
-- `pthread_getconcurrency()`
+## 线程创建与管理
 
-## 四、互斥锁 API
 
-- `pthread_mutex_init()`
-- `pthread_mutex_destroy()`
-- `pthread_mutex_lock()`
-- `pthread_mutex_trylock()`
-- `pthread_mutex_timedlock()`
-- `pthread_mutex_unlock()`
-- `pthread_mutex_consistent()`
-- `pthread_mutexattr_init()`
-- `pthread_mutexattr_destroy()`
-- `pthread_mutexattr_gettype()`
-- `pthread_mutexattr_settype()`
-- `pthread_mutexattr_getpshared()`
-- `pthread_mutexattr_setpshared()`
-- `pthread_mutexattr_getprotocol()`
-- `pthread_mutexattr_setprotocol()`
-- `pthread_mutexattr_getrobust()`
-- `pthread_mutexattr_setrobust()`
-- `pthread_mutexattr_getprioceiling()`
-- `pthread_mutexattr_setprioceiling()`
-
-## 五、条件变量 API
-
-- `pthread_cond_init()`
-- `pthread_cond_destroy()`
-- `pthread_cond_wait()`
-- `pthread_cond_timedwait()`
-- `pthread_cond_clockwait()`
-- `pthread_cond_signal()`
-- `pthread_cond_broadcast()`
-- `pthread_condattr_init()`
-- `pthread_condattr_destroy()`
-- `pthread_condattr_getpshared()`
-- `pthread_condattr_setpshared()`
-- `pthread_condattr_getclock()`
-- `pthread_condattr_setclock()`
-
-## 六、读写锁 API
-
-- `pthread_rwlock_init()`
-- `pthread_rwlock_destroy()`
-- `pthread_rwlock_rdlock()`
-- `pthread_rwlock_tryrdlock()`
-- `pthread_rwlock_timedrdlock()`
-- `pthread_rwlock_clockrdlock()`
-- `pthread_rwlock_wrlock()`
-- `pthread_rwlock_trywrlock()`
-- `pthread_rwlock_timedwrlock()`
-- `pthread_rwlock_clockwrlock()`
-- `pthread_rwlock_unlock()`
-- `pthread_rwlockattr_init()`
-- `pthread_rwlockattr_destroy()`
-- `pthread_rwlockattr_getpshared()`
-- `pthread_rwlockattr_setpshared()`
-
-## 七、屏障 API
-
-- `pthread_barrier_init()`
-- `pthread_barrier_destroy()`
-- `pthread_barrier_wait()`
-- `pthread_barrierattr_init()`
-- `pthread_barrierattr_destroy()`
-- `pthread_barrierattr_getpshared()`
-- `pthread_barrierattr_setpshared()`
-
-## 八、自旋锁 API
-
-- `pthread_spin_init()`
-- `pthread_spin_destroy()`
-- `pthread_spin_lock()`
-- `pthread_spin_trylock()`
-- `pthread_spin_unlock()`
-
-## 九、线程特定数据 API
-
-- `pthread_key_create()`
-- `pthread_key_delete()`
-- `pthread_setspecific()`
-- `pthread_getspecific()`
-
----
-
-## 1、pthread_create
+### pthread_create
 
 ```c
 int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
                    pthread_startroutine_t start_routine, pthread_addr_t arg);
 ```
+
+> **类型说明**：`pthread_startroutine_t` 等价于 `void *(*)(void *)`，`pthread_addr_t` 等价于 `void *`，均为 NuttX 的类型别名。
 
 创建一个新线程并使其可运行。新线程从 `start_routine` 函数开始执行，该函数接收 `arg` 作为唯一参数。线程属性对象 `attr` 指定了新线程的各种属性，如栈大小、调度策略、优先级等。
 
@@ -168,9 +59,10 @@ int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
 - 线程的返回值可以通过 `pthread_join()` 获取，或通过 `pthread_exit()` 显式返回。
 - 确保传递给线程的参数在线程执行期间保持有效，避免传递栈上的局部变量地址。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 2、pthread_exit
+
+### pthread_exit
 
 ```c
 void pthread_exit(void *exit_value);
@@ -187,7 +79,7 @@ void pthread_exit(void *exit_value);
 
 **参数**：
 
-- `value` 线程返回值，这是一个无类型指针，可以传递任何数据的地址。等待此线程的 `pthread_join()` 调用可以获取此值。如果线程被取消，返回值为 `PTHREAD_CANCELED`。
+- `exit_value` 线程返回值，这是一个无类型指针，可以传递任何数据的地址。等待此线程的 `pthread_join()` 调用可以获取此值。如果线程被取消，返回值为 `PTHREAD_CANCELED`。
 
 **返回值**：
 
@@ -196,18 +88,21 @@ void pthread_exit(void *exit_value);
 **注意**：
 
 - 不要在 `main()` 函数中调用 `pthread_exit()`，这会终止主线程但不终止进程，可能导致其他线程成为孤儿。
-- 如果线程已分离，`value` 将被忽略，因为没有线程可以通过 `pthread_join()` 获取返回值。
+- 如果线程已分离，`exit_value` 将被忽略，因为没有线程可以通过 `pthread_join()` 获取返回值。
 - 线程终止时，不会自动关闭打开的文件描述符或释放分配的内存，这些资源由整个进程共享。
 - 从线程入口函数返回隐式调用 `pthread_exit()`，返回值作为线程的退出值。
 - 如果线程持有互斥锁，在调用 `pthread_exit()` 前应释放，否则可能导致死锁。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 3、pthread_join
+
+### pthread_join
 
 ```c
 int pthread_join(pthread_t thread, pthread_addr_t *value);
 ```
+
+> **类型说明**：`pthread_addr_t` 等价于 `void *`，为 NuttX 的类型别名。
 
 阻塞调用线程，直到指定的线程 `thread` 终止。如果该线程已经终止，`pthread_join()` 立即返回。成功返回后，目标线程被"连接"（joined），其资源被回收。
 
@@ -235,9 +130,10 @@ int pthread_join(pthread_t thread, pthread_addr_t *value);
 - 对于不需要获取返回值的线程，建议在创建时设置为分离状态，或创建后调用 `pthread_detach()`。
 - 在 openvela 中，线程 ID 实际上是进程 ID（`pid_t`），可以用于其他系统调用。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 4、pthread_detach
+
+### pthread_detach
 
 ```c
 int pthread_detach(pthread_t thread);
@@ -271,9 +167,10 @@ int pthread_detach(pthread_t thread);
 - 如果对已分离的线程再次调用 `pthread_detach()`，会返回 `EINVAL` 错误。
 - 主线程可以是分离的，但这通常不是好的做法，因为主线程终止会导致整个进程终止。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 5、pthread_cancel
+
+### pthread_cancel
 
 ```c
 int pthread_cancel(pthread_t thread);
@@ -306,9 +203,10 @@ int pthread_cancel(pthread_t thread);
 - 取消线程时，会执行清理处理程序（通过 `pthread_cleanup_push()` 注册）和线程特定数据析构函数。
 - 如果线程持有锁或其他资源，应通过清理处理程序确保资源被正确释放。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 6、pthread_setcancelstate
+
+### pthread_setcancelstate
 
 ```c
 int pthread_setcancelstate(int state, int *oldstate);
@@ -337,9 +235,10 @@ int pthread_setcancelstate(int state, int *oldstate);
 - 在执行关键代码段（如资源分配和初始化）时，应临时禁用取消，完成后再启用。
 - 取消状态是线程局部的，每个线程有自己独立的取消状态。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 7、pthread_setcanceltype
+
+### pthread_setcanceltype
 
 ```c
 int pthread_setcanceltype(int type, int *oldtype);
@@ -369,9 +268,10 @@ int pthread_setcanceltype(int type, int *oldtype);
 - 取消类型是线程局部的，每个线程有自己独立的取消类型。
 - 即使设置了异步取消，实现也可能将其视为延迟取消。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 8、pthread_testcancel
+
+### pthread_testcancel
 
 ```c
 void pthread_testcancel(void);
@@ -397,9 +297,10 @@ void pthread_testcancel(void);
 - 如果线程被取消，会执行清理处理程序和线程特定数据析构函数。
 - 过于频繁地调用 `pthread_testcancel()` 可能影响性能；应在逻辑上合理的位置调用。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 9、pthread_self
+
+### pthread_self
 
 ```c
 pthread_t pthread_self(void);
@@ -425,9 +326,10 @@ pthread_t pthread_self(void);
 - 可以用 `pthread_self()` 获取的 ID 调用 `pthread_detach(pthread_self())` 来分离当前线程。
 - 在 openvela 中，可以将线程 ID 用于系统调用，如信号发送等。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 10、pthread_equal
+
+### pthread_equal
 
 ```c
 int pthread_equal(pthread_t t1, pthread_t t2);
@@ -450,9 +352,10 @@ int pthread_equal(pthread_t t1, pthread_t t2);
 - 终止的线程 ID 可能被重用，因此不应假设 ID 的唯一性跨越线程生命周期。
 - 常用于判断某个线程 ID 是否是当前线程：`pthread_equal(thread_id, pthread_self())`。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 11、pthread_yield
+
+### pthread_yield
 
 ```c
 void pthread_yield(void);
@@ -481,7 +384,8 @@ void pthread_yield(void);
 
 **POSIX 兼容性**：兼容扩展接口（非 POSIX 标准，但广泛支持）。
 
-## 12、pthread_once
+
+### pthread_once
 
 ```c
 int pthread_once(pthread_once_t *once_control, void (*init_routine)(void));
@@ -511,9 +415,10 @@ int pthread_once(pthread_once_t *once_control, void (*init_routine)(void));
 - 常用于单例模式、全局资源初始化等场景。
 - `once_control` 变量不应被直接修改，只能通过 `pthread_once()` 操作。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 13、pthread_atfork
+
+### pthread_atfork
 
 ```c
 int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(void));
@@ -548,9 +453,13 @@ int pthread_atfork(void (*prepare)(void), void (*parent)(void), void (*child)(vo
 - 在子进程中，只应调用异步信号安全的函数（如 `exec()` 系列函数）。
 - openvela 作为 RTOS，`fork()` 支持可能有限或不存在，此接口主要用于兼容性。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 14、pthread_attr_init
+
+## 线程属性
+
+
+### pthread_attr_init
 
 ```c
 int pthread_attr_init(pthread_attr_t *attr);
@@ -583,9 +492,10 @@ int pthread_attr_init(pthread_attr_t *attr);
 - 属性对象的修改不影响已创建的线程，只影响后续使用该属性对象创建的线程。
 - 在 openvela 中，属性对象是简单的结构体，不涉及动态内存分配。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 15、pthread_attr_destroy
+
+### pthread_attr_destroy
 
 ```c
 int pthread_attr_destroy(pthread_attr_t *attr);
@@ -610,258 +520,700 @@ int pthread_attr_destroy(pthread_attr_t *attr);
 - 在 openvela 中，属性对象通常不涉及动态内存，此函数主要用于 POSIX 兼容性。
 - 应始终配对调用 `pthread_attr_init()` 和 `pthread_attr_destroy()`，遵循资源管理的最佳实践。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 16、pthread_attr_setdetachstate
+
+### pthread_attr_setdetachstate
 
 ```c
 int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate);
 ```
 
-设置线程的分离状态属性。
+设置线程属性对象中的分离状态。分离状态决定线程终止后资源的回收方式。
 
 **参数**：
 
-- `attr` 属性对象。
-- `detachstate` 分离状态：`PTHREAD_CREATE_JOINABLE` 或 `PTHREAD_CREATE_DETACHED`。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `detachstate` 分离状态，有效值为：
+  - `PTHREAD_CREATE_JOINABLE` 可连接（默认），需要其他线程调用 `pthread_join()` 回收资源。
+  - `PTHREAD_CREATE_DETACHED` 分离状态，线程终止后自动释放资源。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `detachstate` 不是有效值。
 
-## 17、pthread_attr_getdetachstate
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getdetachstate
 
 ```c
 int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate);
 ```
 
-获取线程的分离状态属性。
+获取线程属性对象中的分离状态。
 
 **参数**：
 
-- `attr` 属性对象。
-- `detachstate` 返回分离状态。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `detachstate` 指向整型变量，用于存储分离状态。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `detachstate` 为 `NULL`。
 
-## 18、pthread_attr_setstacksize
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setstacksize
 
 ```c
 int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);
 ```
 
-设置线程栈大小。
+设置线程属性对象中的栈大小。
 
 **参数**：
 
-- `attr` 属性对象。
-- `stacksize` 栈大小（字节）。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `stacksize` 栈大小（字节）。不能小于 `PTHREAD_STACK_MIN`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `stacksize` 小于 `PTHREAD_STACK_MIN`。
 
-## 19、pthread_attr_getstacksize
+**注意**：
+
+- 栈大小应根据线程的实际需求设置，过小可能导致栈溢出。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getstacksize
 
 ```c
 int pthread_attr_getstacksize(const pthread_attr_t *attr, size_t *stacksize);
 ```
 
-获取线程栈大小。
+获取线程属性对象中的栈大小。
 
 **参数**：
 
-- `attr` 属性对象。
-- `stacksize` 返回栈大小。
+- `attr` 指向线程属性对象。
+- `stacksize` 指向 `size_t` 变量，用于存储栈大小。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `stacksize` 为 `NULL`。
 
-## 20、pthread_attr_setschedpolicy
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setstackaddr
+
+```c
+int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stackaddr);
+```
+
+设置线程属性对象中的栈地址。允许应用程序为线程指定预分配的栈内存。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `stackaddr` 栈内存的起始地址。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `stackaddr` 为 `NULL`。
+
+**注意**：
+
+- 此接口已被 POSIX 标记为废弃（obsolete），建议使用 `pthread_attr_setstack()` 替代，后者可同时设置栈地址和栈大小。
+- 使用自定义栈时，应用程序负责栈内存的分配和释放。
+- 栈内存必须在线程生命周期内保持有效。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口（已废弃）。
+
+
+### pthread_attr_getstackaddr
+
+```c
+int pthread_attr_getstackaddr(const pthread_attr_t *attr, void **stackaddr);
+```
+
+获取线程属性对象中的栈地址。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `stackaddr` 指向指针变量，用于存储栈地址。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `stackaddr` 为 `NULL`。
+
+**注意**：
+
+- 此接口已被 POSIX 标记为废弃，建议使用 `pthread_attr_getstack()` 替代。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口（已废弃）。
+
+
+### pthread_attr_setstack
+
+```c
+int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr, size_t stacksize);
+```
+
+同时设置线程属性对象中的栈地址和栈大小。这是 `pthread_attr_setstackaddr()` 和 `pthread_attr_setstacksize()` 的组合替代接口。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `stackaddr` 栈内存的起始地址。不能为 `NULL`。
+- `stacksize` 栈大小（字节）。不能小于 `PTHREAD_STACK_MIN`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `stackaddr` 为 `NULL`，或 `stacksize` 小于 `PTHREAD_STACK_MIN`。
+
+**注意**：
+
+- 使用自定义栈时，应用程序负责栈内存的分配和释放，且内存必须在线程生命周期内有效。
+- 栈大小应考虑线程的实际需求，包括局部变量、函数调用深度等。
+- 在 openvela 中，`PTHREAD_STACK_MIN` 的值取决于系统配置。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getstack
+
+```c
+int pthread_attr_getstack(const pthread_attr_t *attr, void **stackaddr, size_t *stacksize);
+```
+
+同时获取线程属性对象中的栈地址和栈大小。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `stackaddr` 指向指针变量，用于存储栈地址。不能为 `NULL`。
+- `stacksize` 指向 `size_t` 变量，用于存储栈大小。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr`、`stackaddr` 或 `stacksize` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setguardsize
+
+```c
+int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize);
+```
+
+设置线程属性对象中的栈保护区大小。保护区是栈末尾的一段不可访问内存，用于检测栈溢出。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `guardsize` 保护区大小（字节）。设置为 0 表示禁用栈保护。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**注意**：
+
+- 如果使用 `pthread_attr_setstack()` 指定了自定义栈，保护区设置可能被忽略。
+- 实际保护区大小可能被系统向上取整到页大小的整数倍。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getguardsize
+
+```c
+int pthread_attr_getguardsize(const pthread_attr_t *attr, size_t *guardsize);
+```
+
+获取线程属性对象中的栈保护区大小。
+
+**参数**：
+
+- `attr` 指向线程属性对象。
+- `guardsize` 指向 `size_t` 变量，用于存储保护区大小。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `guardsize` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setschedpolicy
 
 ```c
 int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy);
 ```
 
-设置线程调度策略。
+设置线程属性对象中的调度策略。
 
 **参数**：
 
-- `attr` 属性对象。
-- `policy` 调度策略：`SCHED_FIFO`、`SCHED_RR` 或 `SCHED_OTHER`。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `policy` 调度策略，有效值为：
+  - `SCHED_OTHER` 默认调度策略。
+  - `SCHED_FIFO` 先进先出实时调度。
+  - `SCHED_RR` 时间片轮转实时调度（需 `CONFIG_RR_INTERVAL > 0`）。
+  - `SCHED_SPORADIC` 偶发调度（需 `CONFIG_SCHED_SPORADIC`）。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `policy` 不是有效的调度策略。
 
-## 21、pthread_attr_getschedpolicy
+**注意**：
+
+- `SCHED_RR` 和 `SCHED_SPORADIC` 的可用性取决于系统配置。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getschedpolicy
 
 ```c
 int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy);
 ```
 
-获取线程调度策略。
+获取线程属性对象中的调度策略。
 
 **参数**：
 
-- `attr` 属性对象。
-- `policy` 返回调度策略。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `policy` 指向整型变量，用于存储调度策略。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `policy` 为 `NULL`。
 
-## 22、pthread_attr_setschedparam
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setschedparam
 
 ```c
 int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *param);
 ```
 
-设置线程调度参数。
+设置线程属性对象中的调度参数。
 
 **参数**：
 
-- `attr` 属性对象。
-- `param` 调度参数（包含优先级）。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `param` 指向调度参数结构体。不能为 `NULL`。主要字段：
+  - `sched_priority` 线程优先级。
+  - `sched_ss_low_priority` 偶发调度低优先级（需 `CONFIG_SCHED_SPORADIC`）。
+  - `sched_ss_repl_period` 偶发调度补充周期。
+  - `sched_ss_init_budget` 偶发调度初始预算。
+  - `sched_ss_max_repl` 偶发调度最大补充次数。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `param` 为 `NULL`。
 
-## 23、pthread_attr_getschedparam
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getschedparam
 
 ```c
 int pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *param);
 ```
 
-获取线程调度参数。
+获取线程属性对象中的调度参数。
 
 **参数**：
 
-- `attr` 属性对象。
-- `param` 返回调度参数。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `param` 指向调度参数结构体，用于存储结果。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `param` 为 `NULL`。
 
-## 24、pthread_attr_setinheritsched
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setinheritsched
 
 ```c
 int pthread_attr_setinheritsched(pthread_attr_t *attr, int inheritsched);
 ```
 
-设置调度属性继承方式。
+设置线程属性对象中的调度继承方式。决定新线程是继承创建者的调度属性，还是使用属性对象中显式指定的值。
 
 **参数**：
 
-- `attr` 属性对象。
-- `inheritsched` 继承方式：`PTHREAD_INHERIT_SCHED` 或 `PTHREAD_EXPLICIT_SCHED`。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `inheritsched` 继承方式，有效值为：
+  - `PTHREAD_INHERIT_SCHED` 继承创建线程的调度策略和参数（默认）。
+  - `PTHREAD_EXPLICIT_SCHED` 使用属性对象中设置的调度策略和参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `inheritsched` 不是有效值。
 
-## 25、pthread_attr_getinheritsched
+**注意**：
+
+- 如果设置为 `PTHREAD_EXPLICIT_SCHED`，需要同时通过 `pthread_attr_setschedpolicy()` 和 `pthread_attr_setschedparam()` 设置调度策略和参数。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getinheritsched
 
 ```c
 int pthread_attr_getinheritsched(const pthread_attr_t *attr, int *inheritsched);
 ```
 
-获取调度属性继承方式。
+获取线程属性对象中的调度继承方式。
 
 **参数**：
 
-- `attr` 属性对象。
-- `inheritsched` 返回继承方式。
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `inheritsched` 指向整型变量，用于存储继承方式。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `inheritsched` 为 `NULL`。
 
-## 26、pthread_getschedparam
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setscope
+
+```c
+int pthread_attr_setscope(pthread_attr_t *attr, int scope);
+```
+
+设置线程属性对象中的竞争范围。竞争范围定义了线程与哪些线程竞争 CPU 等资源。
+
+**参数**：
+
+- `attr` 指向线程属性对象。
+- `scope` 竞争范围，有效值为：
+  - `PTHREAD_SCOPE_SYSTEM` 系统级竞争，线程与系统中所有线程竞争资源。
+  - `PTHREAD_SCOPE_PROCESS` 进程级竞争，线程仅与同一进程内的线程竞争。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `scope` 不是有效值。
+- `ENOTSUP` 不支持请求的竞争范围。在 openvela 中，`PTHREAD_SCOPE_PROCESS` 不受支持。
+
+**注意**：
+
+- openvela 仅支持 `PTHREAD_SCOPE_SYSTEM`，这也是默认值。传入 `PTHREAD_SCOPE_PROCESS` 会返回 `ENOTSUP`。
+- 在 RTOS 环境中，所有线程天然在系统级别竞争资源。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_getscope
+
+```c
+int pthread_attr_getscope(const pthread_attr_t *attr, int *scope);
+```
+
+获取线程属性对象中的竞争范围。
+
+**参数**：
+
+- `attr` 指向线程属性对象。
+- `scope` 指向整型变量，用于存储竞争范围。
+
+**返回值**：
+
+成功时返回 0。
+
+**注意**：
+
+- 在 openvela 中，始终返回 `PTHREAD_SCOPE_SYSTEM`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_attr_setaffinity_np
+
+```c
+int pthread_attr_setaffinity_np(pthread_attr_t *attr, size_t cpusetsize, const cpu_set_t *cpuset);
+```
+
+设置线程属性对象中的 CPU 亲和性掩码。使用该属性创建的线程将被限制在指定的 CPU 集合上运行。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `cpusetsize` `cpuset` 缓冲区的大小（字节），必须为 `sizeof(cpu_set_t)`。
+- `cpuset` 指向 CPU 集合，指定线程可运行的 CPU。不能为 `NULL`，且集合不能为空。
+
+**返回值**：
+
+成功时返回 0。
+
+**注意**：
+
+- 仅在启用 SMP（`CONFIG_SMP`）时可用。
+- 与 `pthread_setaffinity_np()` 不同，此函数设置的是属性对象中的亲和性，在 `pthread_create()` 时生效。
+- 使用 `CPU_ZERO()`、`CPU_SET()` 等宏操作 `cpu_set_t`。
+
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准）。
+
+
+### pthread_attr_getaffinity_np
+
+```c
+int pthread_attr_getaffinity_np(const pthread_attr_t *attr, size_t cpusetsize, cpu_set_t *cpuset);
+```
+
+获取线程属性对象中的 CPU 亲和性掩码。
+
+**参数**：
+
+- `attr` 指向线程属性对象。不能为 `NULL`。
+- `cpusetsize` `cpuset` 缓冲区的大小（字节），必须为 `sizeof(cpu_set_t)`。
+- `cpuset` 指向 CPU 集合，用于存储亲和性掩码。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0。
+
+**注意**：
+
+- 仅在启用 SMP（`CONFIG_SMP`）时可用。
+
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准）。
+
+
+## 线程调度
+
+
+### pthread_getschedparam
 
 ```c
 int pthread_getschedparam(pthread_t thread, int *policy, struct sched_param *param);
 ```
 
-获取线程的调度策略和参数。
+获取指定线程的调度策略和调度参数。
 
 **参数**：
 
 - `thread` 线程 ID。
-- `policy` 返回调度策略。
-- `param` 返回调度参数。
+- `policy` 指向整型变量，用于存储调度策略。不能为 `NULL`。
+- `param` 指向调度参数结构体，用于存储结果。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `policy` 或 `param` 为 `NULL`。
+- `ESRCH` 找不到指定线程。
 
-## 27、pthread_setschedparam
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_setschedparam
 
 ```c
 int pthread_setschedparam(pthread_t thread, int policy, const struct sched_param *param);
 ```
 
-设置线程的调度策略和参数。
+设置指定线程的调度策略和调度参数。
 
 **参数**：
 
 - `thread` 线程 ID。
-- `policy` 调度策略。
-- `param` 调度参数。
+- `policy` 调度策略：`SCHED_FIFO`、`SCHED_RR`、`SCHED_OTHER` 或 `SCHED_SPORADIC`。
+- `param` 指向调度参数结构体。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` 参数无效。
+- `ESRCH` 找不到指定线程。
+- `EPERM` 没有权限修改调度参数。
 
-## 28、pthread_setschedprio
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_setschedprio
 
 ```c
 int pthread_setschedprio(pthread_t thread, int prio);
 ```
 
-设置线程优先级。
+设置指定线程的优先级，不改变调度策略。
 
 **参数**：
 
 - `thread` 线程 ID。
-- `prio` 新的优先级。
+- `prio` 新的优先级值。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` 优先级值无效。
+- `ESRCH` 找不到指定线程。
 
-## 29、pthread_mutex_init
+**注意**：
+
+- 此函数仅修改优先级，保留当前调度策略和其他调度参数（如偶发调度参数）不变。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_setaffinity_np
+
+```c
+int pthread_setaffinity_np(pthread_t thread, size_t cpusetsize, const cpu_set_t *cpuset);
+```
+
+设置线程的 CPU 亲和性掩码。如果线程当前未运行在 `cpuset` 指定的 CPU 上，将被迁移到其中一个 CPU。
+
+**参数**：
+
+- `thread` 线程 ID。
+- `cpusetsize` `cpuset` 缓冲区的大小（字节），通常为 `sizeof(cpu_set_t)`。
+- `cpuset` 指向 CPU 集合，指定线程可以运行的 CPU。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` 参数无效。
+- `ESRCH` 找不到指定线程。
+
+**注意**：
+
+- 仅在启用 SMP（`CONFIG_SMP`）时可用。
+- 使用 `CPU_ZERO()`、`CPU_SET()` 等宏操作 `cpu_set_t`。
+
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准）。
+
+
+### pthread_getaffinity_np
+
+```c
+int pthread_getaffinity_np(pthread_t thread, size_t cpusetsize, cpu_set_t *cpuset);
+```
+
+获取线程的 CPU 亲和性掩码。
+
+**参数**：
+
+- `thread` 线程 ID。
+- `cpusetsize` `cpuset` 缓冲区的大小（字节），通常为 `sizeof(cpu_set_t)`。
+- `cpuset` 指向 CPU 集合，用于存储线程的亲和性掩码。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` 参数无效。
+- `ESRCH` 找不到指定线程。
+
+**注意**：
+
+- 仅在启用 SMP（`CONFIG_SMP`）时可用。
+
+**POSIX 兼容性**：兼容 Linux 扩展接口（非 POSIX 标准）。
+
+
+### pthread_setconcurrency
+
+```c
+int pthread_setconcurrency(int new_level);
+```
+
+设置并发级别提示。此函数向系统提示应用程序期望的并发线程数，系统可以据此优化线程调度。
+
+**参数**：
+
+- `new_level` 期望的并发级别。值为 0 表示由系统自行决定。不能为负数。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `new_level` 为负数。
+
+**注意**：
+
+- 此函数仅为提示，系统不保证实际并发级别与设置值一致。
+- 在 openvela 中，此值存储在全局变量中，不影响实际调度行为。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_getconcurrency
+
+```c
+int pthread_getconcurrency(void);
+```
+
+获取当前的并发级别提示值。
+
+**参数**：
+
+无参数。
+
+**返回值**：
+
+返回之前通过 `pthread_setconcurrency()` 设置的值。如果从未设置，返回 0。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 互斥锁
+
+
+### pthread_mutex_init
 
 ```c
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);
@@ -901,27 +1253,37 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
   - `PTHREAD_MUTEX_ERRORCHECK`：检测死锁和错误，性能略低。
   - `PTHREAD_MUTEX_RECURSIVE`：允许同一线程多次加锁，需要相同次数的解锁。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 30、pthread_mutex_destroy
+
+### pthread_mutex_destroy
 
 ```c
 int pthread_mutex_destroy(pthread_mutex_t *mutex);
 ```
 
-销毁互斥锁。
+销毁互斥锁，释放其占用的资源。
 
 **参数**：
 
-- `mutex` 要销毁的互斥锁。
+- `mutex` 指向要销毁的互斥锁。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `mutex` 为 `NULL` 或未正确初始化。
+- `EBUSY` 互斥锁当前被锁定，无法销毁。
 
-## 31、pthread_mutex_lock
+**注意**：
+
+- 不能销毁正在被使用（锁定）的互斥锁。
+- 销毁后的互斥锁不能再使用，除非重新初始化。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutex_lock
 
 ```c
 int pthread_mutex_lock(pthread_mutex_t *mutex);
@@ -956,9 +1318,10 @@ int pthread_mutex_lock(pthread_mutex_t *mutex);
 - 如果线程被取消，应通过清理处理程序（`pthread_cleanup_push/pop`）确保锁被释放。
 - 优先级反转问题：如果启用优先级继承协议，低优先级线程持有锁时，其优先级临时提升到等待线程的最高优先级。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 32、pthread_mutex_trylock
+
+### pthread_mutex_trylock
 
 ```c
 int pthread_mutex_trylock(pthread_mutex_t *mutex);
@@ -990,28 +1353,39 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex);
 - 不应在循环中持续调用 `pthread_mutex_trylock()`（忙等待），这会浪费 CPU 资源。
 - 适用于实现非阻塞算法或超时机制。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 33、pthread_mutex_timedlock
+
+### pthread_mutex_timedlock
 
 ```c
 int pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *abstime);
 ```
 
-带超时的加锁互斥锁。
+带超时的锁定互斥锁。如果互斥锁不能立即获取，阻塞等待直到锁可用或超时。
 
 **参数**：
 
-- `mutex` 互斥锁。
-- `abstime` 绝对超时时间。
+- `mutex` 指向要锁定的互斥锁。不能为 `NULL`。
+- `abstime` 绝对超时时间（基于 `CLOCK_REALTIME`）。
 
 **返回值**：
 
-成功时返回 0，超时返回 `ETIMEDOUT`。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `ETIMEDOUT` 在超时时间内未能获取锁。
+- `EINVAL` `mutex` 为 `NULL` 或未正确初始化。
+- `EDEADLK` 互斥锁类型为 `PTHREAD_MUTEX_ERRORCHECK`，且当前线程已持有该锁。
 
-## 34、pthread_mutex_unlock
+**注意**：
+
+- 对于递归互斥锁，如果当前线程已持有锁，会成功并递增锁计数，不受超时影响。
+- 超时时间是绝对时间，不是相对时间。应基于 `clock_gettime(CLOCK_REALTIME, ...)` 计算。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutex_unlock
 
 ```c
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
@@ -1041,45 +1415,116 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex);
 - 解锁操作应尽可能快，避免在锁保护的临界区外调用 unlock。
 - 对于优先级继承互斥锁，解锁时会恢复线程的原始优先级。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 35、pthread_mutex_consistent
+
+### pthread_mutex_consistent
 
 ```c
 int pthread_mutex_consistent(pthread_mutex_t *mutex);
 ```
 
-将健壮互斥锁标记为一致状态。
+将健壮互斥锁标记为一致状态。当健壮互斥锁的前一个持有者终止时未释放锁，`pthread_mutex_lock()` 会返回 `EOWNERDEAD`，此时新的持有者应调用此函数使互斥锁恢复一致。
 
 **参数**：
 
-- `mutex` 互斥锁。
+- `mutex` 指向处于不一致状态的健壮互斥锁。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `mutex` 为 `NULL`，或互斥锁不是健壮互斥锁，或不处于不一致状态。
 
-## 36、pthread_mutexattr_init
+**注意**：
+
+- 需要互斥锁属性中设置了 `PTHREAD_MUTEX_ROBUST`。
+- 如果不调用此函数而直接解锁，互斥锁将进入不可恢复状态，后续 `pthread_mutex_lock()` 会返回 `ENOTRECOVERABLE`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutex_setprioceiling
+
+```c
+int pthread_mutex_setprioceiling(pthread_mutex_t *mutex, int prioceiling, int *old_ceiling);
+```
+
+动态修改互斥锁的优先级上限。此函数会先锁定互斥锁，修改优先级上限后再解锁，确保操作的原子性。
+
+**参数**：
+
+- `mutex` 指向互斥锁。
+- `prioceiling` 新的优先级上限值。
+- `old_ceiling` 如果非 `NULL`，用于存储之前的优先级上限值。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` 参数无效，或未启用 `CONFIG_PRIORITY_PROTECT`。
+- `EPERM` 无法锁定互斥锁。
+
+**注意**：
+
+- 需要启用 `CONFIG_PRIORITY_PROTECT` 配置项。未启用时始终返回 `EINVAL`。
+- 互斥锁的协议必须为 `PTHREAD_PRIO_PROTECT` 才有意义。
+- 此函数内部会执行 lock/unlock 操作，调用时不应持有该互斥锁。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutex_getprioceiling
+
+```c
+int pthread_mutex_getprioceiling(const pthread_mutex_t *mutex, int *prioceiling);
+```
+
+获取互斥锁当前的优先级上限。
+
+**参数**：
+
+- `mutex` 指向互斥锁。
+- `prioceiling` 指向整型变量，用于存储优先级上限值。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` 参数无效，或未启用 `CONFIG_PRIORITY_PROTECT`。
+
+**注意**：
+
+- 需要启用 `CONFIG_PRIORITY_PROTECT` 配置项。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 互斥锁属性
+
+
+### pthread_mutexattr_init
 
 ```c
 int pthread_mutexattr_init(pthread_mutexattr_t *attr);
 ```
 
-初始化互斥锁属性对象。
+初始化互斥锁属性对象为默认值。默认属性：类型 `PTHREAD_MUTEX_NORMAL`，协议 `PTHREAD_PRIO_NONE`，进程私有，非健壮。
 
 **参数**：
 
-- `attr` 要初始化的属性对象。
+- `attr` 指向要初始化的互斥锁属性对象。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`。
 
-## 37、pthread_mutexattr_destroy
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_destroy
 
 ```c
 int pthread_mutexattr_destroy(pthread_mutexattr_t *attr);
@@ -1089,34 +1534,43 @@ int pthread_mutexattr_destroy(pthread_mutexattr_t *attr);
 
 **参数**：
 
-- `attr` 要销毁的属性对象。
+- `attr` 指向要销毁的互斥锁属性对象。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`。
 
-## 38、pthread_mutexattr_settype
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_settype
 
 ```c
 int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
 ```
 
-设置互斥锁类型。
+设置互斥锁类型。类型决定了重复加锁和错误检测的行为。
 
 **参数**：
 
-- `attr` 属性对象。
-- `type` 互斥锁类型：`PTHREAD_MUTEX_NORMAL`、`PTHREAD_MUTEX_ERRORCHECK`、`PTHREAD_MUTEX_RECURSIVE`。
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `type` 互斥锁类型：
+  - `PTHREAD_MUTEX_NORMAL` 不检测死锁，重复加锁导致死锁（默认）。
+  - `PTHREAD_MUTEX_ERRORCHECK` 检测死锁，重复加锁返回 `EDEADLK`。
+  - `PTHREAD_MUTEX_RECURSIVE` 允许同一线程多次加锁，需相同次数解锁。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `type` 不是有效值。
 
-## 39、pthread_mutexattr_gettype
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_gettype
 
 ```c
 int pthread_mutexattr_gettype(const pthread_mutexattr_t *attr, int *type);
@@ -1126,35 +1580,90 @@ int pthread_mutexattr_gettype(const pthread_mutexattr_t *attr, int *type);
 
 **参数**：
 
-- `attr` 属性对象。
-- `type` 返回互斥锁类型。
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `type` 指向整型变量，用于存储互斥锁类型。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `type` 为 `NULL`。
 
-## 40、pthread_mutexattr_setprotocol
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_setpshared
+
+```c
+int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared);
+```
+
+设置互斥锁属性对象中的进程共享属性。
+
+**参数**：
+
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `pshared` 进程共享属性值：
+  - `PTHREAD_PROCESS_PRIVATE`（0）进程私有（默认）。
+  - `PTHREAD_PROCESS_SHARED`（1）进程间共享。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`，或 `pshared` 不是 0 或 1。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_getpshared
+
+```c
+int pthread_mutexattr_getpshared(const pthread_mutexattr_t *attr, int *pshared);
+```
+
+获取互斥锁属性对象中的进程共享属性。
+
+**参数**：
+
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `pshared` 指向整型变量，用于存储进程共享属性值。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `pshared` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_setprotocol
 
 ```c
 int pthread_mutexattr_setprotocol(pthread_mutexattr_t *attr, int protocol);
 ```
 
-设置互斥锁优先级协议。
+设置互斥锁优先级协议。协议决定了持有锁的线程如何处理优先级反转问题。
 
 **参数**：
 
-- `attr` 属性对象。
-- `protocol` 协议：`PTHREAD_PRIO_NONE`、`PTHREAD_PRIO_INHERIT`、`PTHREAD_PRIO_PROTECT`。
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `protocol` 优先级协议：
+  - `PTHREAD_PRIO_NONE` 不使用优先级协议（默认）。
+  - `PTHREAD_PRIO_INHERIT` 优先级继承，持有锁的低优先级线程临时提升到等待线程的最高优先级（需 `CONFIG_PRIORITY_INHERITANCE`）。
+  - `PTHREAD_PRIO_PROTECT` 优先级上限保护（需 `CONFIG_PRIORITY_PROTECT`）。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `protocol` 不是有效值或不受支持。
 
-## 41、pthread_mutexattr_getprotocol
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_getprotocol
 
 ```c
 int pthread_mutexattr_getprotocol(const pthread_mutexattr_t *attr, int *protocol);
@@ -1164,35 +1673,43 @@ int pthread_mutexattr_getprotocol(const pthread_mutexattr_t *attr, int *protocol
 
 **参数**：
 
-- `attr` 属性对象。
-- `protocol` 返回协议。
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `protocol` 指向整型变量，用于存储协议值。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `protocol` 为 `NULL`。
 
-## 42、pthread_mutexattr_setrobust
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_setrobust
 
 ```c
 int pthread_mutexattr_setrobust(pthread_mutexattr_t *attr, int robust);
 ```
 
-设置互斥锁健壮性属性。
+设置互斥锁健壮性属性。健壮互斥锁在持有者异常终止时不会永久锁死。
 
 **参数**：
 
-- `attr` 属性对象。
-- `robust` 健壮性：`PTHREAD_MUTEX_STALLED` 或 `PTHREAD_MUTEX_ROBUST`。
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `robust` 健壮性属性：
+  - `PTHREAD_MUTEX_STALLED` 非健壮（默认），持有者终止后锁永久不可用。
+  - `PTHREAD_MUTEX_ROBUST` 健壮，持有者终止后下一个加锁者收到 `EOWNERDEAD`，可通过 `pthread_mutex_consistent()` 恢复。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 为 `NULL`，或 `robust` 不是有效值。
 
-## 43、pthread_mutexattr_getrobust
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_getrobust
 
 ```c
 int pthread_mutexattr_getrobust(const pthread_mutexattr_t *attr, int *robust);
@@ -1202,35 +1719,94 @@ int pthread_mutexattr_getrobust(const pthread_mutexattr_t *attr, int *robust);
 
 **参数**：
 
-- `attr` 属性对象。
-- `robust` 返回健壮性。
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `robust` 指向整型变量，用于存储健壮性属性。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `attr` 或 `robust` 为 `NULL`。
 
-## 44、pthread_cond_init
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_setprioceiling
+
+```c
+int pthread_mutexattr_setprioceiling(pthread_mutexattr_t *attr, int prioceiling);
+```
+
+设置互斥锁属性对象中的优先级上限。当互斥锁协议为 `PTHREAD_PRIO_PROTECT` 时，持有锁的线程优先级会被提升到此上限值，以避免优先级反转。
+
+**参数**：
+
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `prioceiling` 优先级上限值，必须在 `sched_get_priority_min(SCHED_FIFO)` 和 `sched_get_priority_max(SCHED_FIFO)` 之间。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`，或 `prioceiling` 超出有效优先级范围。
+
+**注意**：
+
+- 需要启用 `CONFIG_PRIORITY_PROTECT` 配置项。未启用时，此函数始终返回 `EINVAL`。
+- 应与 `pthread_mutexattr_setprotocol(attr, PTHREAD_PRIO_PROTECT)` 配合使用。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_mutexattr_getprioceiling
+
+```c
+int pthread_mutexattr_getprioceiling(const pthread_mutexattr_t *attr, int *prioceiling);
+```
+
+获取互斥锁属性对象中的优先级上限。
+
+**参数**：
+
+- `attr` 指向互斥锁属性对象。不能为 `NULL`。
+- `prioceiling` 指向整型变量，用于存储优先级上限值。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `prioceiling` 为 `NULL`，或未启用 `CONFIG_PRIORITY_PROTECT`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 条件变量
+
+
+### pthread_cond_init
 
 ```c
 int pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr);
 ```
 
-初始化条件变量。
+初始化条件变量。也可使用 `PTHREAD_COND_INITIALIZER` 静态初始化。
 
 **参数**：
 
-- `cond` 要初始化的条件变量。
-- `attr` 条件变量属性。如果为 `NULL`，使用默认属性。
+- `cond` 指向要初始化的条件变量。不能为 `NULL`。
+- `attr` 条件变量属性。如果为 `NULL`，使用默认属性（`CLOCK_REALTIME`，进程私有）。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `cond` 为 `NULL`。
+- `ENOMEM` 内存不足。
 
-## 45、pthread_cond_destroy
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_cond_destroy
 
 ```c
 int pthread_cond_destroy(pthread_cond_t *cond);
@@ -1240,15 +1816,19 @@ int pthread_cond_destroy(pthread_cond_t *cond);
 
 **参数**：
 
-- `cond` 要销毁的条件变量。
+- `cond` 指向要销毁的条件变量。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `cond` 为 `NULL` 或未正确初始化。
+- `EBUSY` 有线程正在等待该条件变量。
 
-## 46、pthread_cond_wait
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_cond_wait
 
 ```c
 int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
@@ -1289,52 +1869,66 @@ pthread_mutex_unlock(&mutex);
 - 如果线程被取消，互斥锁会被重新锁定，然后清理处理程序被调用。应在清理处理程序中释放锁。
 - 多个线程可以同时等待同一个条件变量。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 47、pthread_cond_timedwait
+
+### pthread_cond_timedwait
 
 ```c
 int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
                            const struct timespec *abstime);
 ```
 
-带超时的等待条件变量。
+带超时的等待条件变量。行为与 `pthread_cond_wait()` 相同，但在超时后自动返回。
 
 **参数**：
 
-- `cond` 条件变量。
-- `mutex` 关联的互斥锁。
-- `abstime` 绝对超时时间。
+- `cond` 指向条件变量。
+- `mutex` 指向关联的互斥锁，调用前必须已锁定。
+- `abstime` 绝对超时时间。时钟源取决于条件变量属性中的时钟设置（默认 `CLOCK_REALTIME`）。
 
 **返回值**：
 
-成功时返回 0，超时返回 `ETIMEDOUT`。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `ETIMEDOUT` 在超时时间内未收到通知。
+- `EINVAL` 参数无效。
 
-## 48、pthread_cond_clockwait
+**注意**：
+
+- 即使超时返回，互斥锁也会被重新锁定。
+- 仍需在循环中检查条件，因为可能存在虚假唤醒。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_cond_clockwait
 
 ```c
 int pthread_cond_clockwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
                            clockid_t clockid, const struct timespec *abstime);
 ```
 
-使用指定时钟等待条件变量。
+使用指定时钟等待条件变量。允许在等待时直接指定时钟源，而不依赖属性对象中的设置。
 
 **参数**：
 
-- `cond` 条件变量。
-- `mutex` 关联的互斥锁。
-- `clockid` 时钟 ID。
-- `abstime` 绝对超时时间。
+- `cond` 指向条件变量。
+- `mutex` 指向关联的互斥锁，调用前必须已锁定。
+- `clockid` 时钟 ID，如 `CLOCK_REALTIME` 或 `CLOCK_MONOTONIC`。
+- `abstime` 基于指定时钟的绝对超时时间。
 
 **返回值**：
 
-成功时返回 0，超时返回 `ETIMEDOUT`。
+成功时返回 0，失败时返回错误码：
+
+- `ETIMEDOUT` 在超时时间内未收到通知。
+- `EINVAL` 参数无效。
 
 **POSIX 兼容性**：兼容扩展接口。
 
-## 49、pthread_cond_signal
+
+### pthread_cond_signal
 
 ```c
 int pthread_cond_signal(pthread_cond_t *cond);
@@ -1370,9 +1964,10 @@ int pthread_cond_signal(pthread_cond_t *cond);
 - 如果条件可能满足多个等待线程的需求，应使用 `pthread_cond_broadcast()`。
 - POSIX 不保证信号的公平性，可能出现线程饥饿。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 50、pthread_cond_broadcast
+
+### pthread_cond_broadcast
 
 ```c
 int pthread_cond_broadcast(pthread_cond_t *cond);
@@ -1411,28 +2006,224 @@ int pthread_cond_broadcast(pthread_cond_t *cond);
   ```
 - 如果只需要唤醒一个线程，优先使用 `pthread_cond_signal()` 以提高效率。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 51、pthread_rwlock_init
+
+## 条件变量属性
+
+
+### pthread_condattr_init
+
+```c
+int pthread_condattr_init(pthread_condattr_t *attr);
+```
+
+初始化条件变量属性对象为默认值。初始化后的属性对象包含以下默认值：
+
+- 进程共享属性：`PTHREAD_PROCESS_PRIVATE`（进程私有）
+- 时钟属性：`CLOCK_REALTIME`（系统实时时钟）
+
+属性对象用于在调用 `pthread_cond_init()` 时指定条件变量的行为特性。同一个属性对象可以用于初始化多个条件变量。
+
+**参数**：
+
+- `attr` 指向要初始化的条件变量属性对象。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**注意**：
+
+- 使用完毕后应调用 `pthread_condattr_destroy()` 销毁属性对象。
+- 属性对象的修改不影响已使用该对象创建的条件变量。
+- 如果需要使用 `CLOCK_MONOTONIC` 作为超时时钟（避免系统时间调整的影响），应在初始化后调用 `pthread_condattr_setclock()` 修改时钟属性。
+- 在 openvela 中，属性对象是简单的结构体（包含 `pshared` 和 `clockid` 两个字段），不涉及动态内存分配。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_condattr_destroy
+
+```c
+int pthread_condattr_destroy(pthread_condattr_t *attr);
+```
+
+销毁条件变量属性对象，释放其占用的资源。销毁后的属性对象不能再使用，除非重新调用 `pthread_condattr_init()` 初始化。
+
+**参数**：
+
+- `attr` 指向要销毁的条件变量属性对象。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL` 或不是有效的属性对象。
+
+**注意**：
+
+- 销毁属性对象不影响已使用该对象创建的条件变量。
+- 在 openvela 中，属性对象不涉及动态内存分配，此函数主要用于 POSIX 兼容性。
+- 应始终配对调用 `pthread_condattr_init()` 和 `pthread_condattr_destroy()`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_condattr_getpshared
+
+```c
+int pthread_condattr_getpshared(const pthread_condattr_t *attr, int *pshared);
+```
+
+获取条件变量属性对象中的进程共享属性。进程共享属性决定了条件变量是否可以被多个进程中的线程访问。
+
+**参数**：
+
+- `attr` 指向条件变量属性对象。不能为 `NULL`。
+- `pshared` 指向整型变量的指针，用于存储当前的进程共享属性值。不能为 `NULL`。返回值为以下之一：
+  - `PTHREAD_PROCESS_PRIVATE` 条件变量只能被同一进程内的线程使用（默认值）。
+  - `PTHREAD_PROCESS_SHARED` 条件变量可以被多个进程中的线程使用，前提是条件变量分配在共享内存中。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `pshared` 为 `NULL`。
+
+**注意**：
+
+- 在 openvela 中，由于 RTOS 的内存模型，`PTHREAD_PROCESS_SHARED` 的行为可能与 Linux 等系统不同。
+- 默认值为 `PTHREAD_PROCESS_PRIVATE`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_condattr_setpshared
+
+```c
+int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared);
+```
+
+设置条件变量属性对象中的进程共享属性。该属性决定条件变量是否可以被不同进程中的线程操作。
+
+如果设置为 `PTHREAD_PROCESS_SHARED`，任何能够访问条件变量所在内存的线程都可以操作该条件变量。如果设置为 `PTHREAD_PROCESS_PRIVATE`，只有与初始化条件变量的线程在同一进程内的线程才能操作。不同进程的线程尝试操作私有条件变量的行为是未定义的。
+
+**参数**：
+
+- `attr` 指向条件变量属性对象。不能为 `NULL`。
+- `pshared` 进程共享属性值，必须为以下之一：
+  - `PTHREAD_PROCESS_PRIVATE` 进程私有（默认）。
+  - `PTHREAD_PROCESS_SHARED` 进程间共享。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`，或 `pshared` 不是 `PTHREAD_PROCESS_SHARED` 或 `PTHREAD_PROCESS_PRIVATE`。
+
+**注意**：
+
+- 使用 `PTHREAD_PROCESS_SHARED` 时，条件变量必须分配在所有相关进程都能访问的共享内存区域中。
+- 与条件变量关联的互斥锁也应设置为进程共享。
+- 修改属性对象不影响已创建的条件变量。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_condattr_getclock
+
+```c
+int pthread_condattr_getclock(const pthread_condattr_t *attr, clockid_t *clock_id);
+```
+
+获取条件变量属性对象中的时钟属性。时钟属性决定了 `pthread_cond_timedwait()` 使用哪个时钟来计算超时时间。
+
+**参数**：
+
+- `attr` 指向条件变量属性对象。不能为 `NULL`。
+- `clock_id` 指向 `clockid_t` 变量的指针，用于存储当前的时钟属性值。返回值为以下之一：
+  - `CLOCK_REALTIME` 系统实时时钟（默认值）。受系统时间调整（如 NTP）影响。
+  - `CLOCK_MONOTONIC` 单调递增时钟。不受系统时间调整影响。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**注意**：
+
+- 默认时钟为 `CLOCK_REALTIME`。
+- 如果应用程序对超时精度有要求，或系统时间可能被调整，建议使用 `CLOCK_MONOTONIC`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_condattr_setclock
+
+```c
+int pthread_condattr_setclock(pthread_condattr_t *attr, clockid_t clock_id);
+```
+
+设置条件变量属性对象中的时钟属性。该属性指定 `pthread_cond_timedwait()` 用于计算超时的时钟源。
+
+选择合适的时钟对于超时行为至关重要：
+- `CLOCK_REALTIME`：使用系统实时时钟，超时时间是绝对时间点。如果系统时间被向前调整，可能导致提前超时；向后调整则可能导致超时延迟。
+- `CLOCK_MONOTONIC`：使用单调递增时钟，不受系统时间调整影响，适合需要精确超时控制的场景。
+
+**参数**：
+
+- `attr` 指向条件变量属性对象。不能为 `NULL`。
+- `clock_id` 时钟 ID，必须为以下之一：
+  - `CLOCK_REALTIME` 系统实时时钟（默认）。
+  - `CLOCK_MONOTONIC` 单调递增时钟。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`，或 `clock_id` 不是 `CLOCK_REALTIME` 或 `CLOCK_MONOTONIC`。
+
+**注意**：
+
+- 在 openvela 中，仅支持 `CLOCK_REALTIME` 和 `CLOCK_MONOTONIC` 两种时钟，传入其他时钟 ID（如 `CLOCK_PROCESS_CPUTIME_ID`）会返回 `EINVAL`。
+- 修改时钟属性不影响已创建的条件变量，仅影响后续使用该属性对象创建的条件变量。
+- 如果使用 `CLOCK_MONOTONIC`，传递给 `pthread_cond_timedwait()` 的 `abstime` 应基于 `clock_gettime(CLOCK_MONOTONIC, ...)` 获取的时间计算。
+- 也可以使用 `pthread_cond_clockwait()` 在等待时直接指定时钟，而不依赖属性对象中的设置。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 读写锁
+
+
+### pthread_rwlock_init
 
 ```c
 int pthread_rwlock_init(pthread_rwlock_t *rwlock, const pthread_rwlockattr_t *attr);
 ```
 
-初始化读写锁。
+初始化读写锁。读写锁允许多个线程同时持有读锁，但写锁是排他的。
 
 **参数**：
 
-- `rwlock` 要初始化的读写锁。
+- `rwlock` 指向要初始化的读写锁。不能为 `NULL`。
 - `attr` 读写锁属性。如果为 `NULL`，使用默认属性。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `rwlock` 为 `NULL`。
+- `ENOMEM` 内存不足。
 
-## 52、pthread_rwlock_destroy
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_destroy
 
 ```c
 int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
@@ -1442,69 +2233,40 @@ int pthread_rwlock_destroy(pthread_rwlock_t *rwlock);
 
 **参数**：
 
-- `rwlock` 要销毁的读写锁。
+- `rwlock` 指向要销毁的读写锁。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `rwlock` 为 `NULL`。
+- `EBUSY` 读写锁当前被锁定。
 
-## 53、pthread_rwlock_rdlock
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_rdlock
 
 ```c
 int pthread_rwlock_rdlock(pthread_rwlock_t *rwlock);
 ```
 
-获取读锁。
+获取读锁。如果当前没有写锁被持有，立即获取成功；否则阻塞等待。多个线程可同时持有读锁。
 
 **参数**：
 
-- `rwlock` 读写锁。
+- `rwlock` 指向读写锁。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `rwlock` 未正确初始化。
 
-## 54、pthread_rwlock_wrlock
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-```c
-int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);
-```
 
-获取写锁。
-
-**参数**：
-
-- `rwlock` 读写锁。
-
-**返回值**：
-
-成功时返回 0，失败时返回错误码。
-
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
-
-## 55、pthread_rwlock_unlock
-
-```c
-int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);
-```
-
-释放读写锁。
-
-**参数**：
-
-- `rwlock` 读写锁。
-
-**返回值**：
-
-成功时返回 0，失败时返回错误码。
-
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
-
-## 56、pthread_rwlock_tryrdlock
+### pthread_rwlock_tryrdlock
 
 ```c
 int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);
@@ -1514,15 +2276,94 @@ int pthread_rwlock_tryrdlock(pthread_rwlock_t *rwlock);
 
 **参数**：
 
-- `rwlock` 读写锁。
+- `rwlock` 指向读写锁。
 
 **返回值**：
 
-成功时返回 0，如果无法获取返回 `EBUSY`。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EBUSY` 有写锁被持有，无法获取读锁。
 
-## 57、pthread_rwlock_trywrlock
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_timedrdlock
+
+```c
+int pthread_rwlock_timedrdlock(pthread_rwlock_t *rwlock, const struct timespec *abstime);
+```
+
+带超时的获取读锁。如果读锁不能立即获取，阻塞等待直到锁可用或超时。超时基于 `CLOCK_REALTIME`。
+
+**参数**：
+
+- `rwlock` 指向读写锁。
+- `abstime` 绝对超时时间（基于 `CLOCK_REALTIME`）。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `ETIMEDOUT` 在超时时间内未能获取读锁。
+- `EBUSY` 读锁不可用。
+- `EINVAL` 参数无效。
+
+**注意**：
+
+- 内部调用 `pthread_rwlock_clockrdlock()` 并使用 `CLOCK_REALTIME` 作为时钟源。
+- 如果需要使用 `CLOCK_MONOTONIC`，请使用 `pthread_rwlock_clockrdlock()`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_clockrdlock
+
+```c
+int pthread_rwlock_clockrdlock(pthread_rwlock_t *rwlock, clockid_t clockid,
+                               const struct timespec *abstime);
+```
+
+使用指定时钟带超时获取读锁。
+
+**参数**：
+
+- `rwlock` 指向读写锁。
+- `clockid` 时钟 ID，如 `CLOCK_REALTIME` 或 `CLOCK_MONOTONIC`。
+- `abstime` 基于指定时钟的绝对超时时间。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `ETIMEDOUT` 在超时时间内未能获取读锁。
+- `EINVAL` 参数无效。
+
+**POSIX 兼容性**：兼容扩展接口。
+
+
+### pthread_rwlock_wrlock
+
+```c
+int pthread_rwlock_wrlock(pthread_rwlock_t *rwlock);
+```
+
+获取写锁。写锁是排他的，必须等待所有读锁和写锁释放后才能获取。
+
+**参数**：
+
+- `rwlock` 指向读写锁。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `rwlock` 未正确初始化。
+- `EAGAIN` 写者数量已达上限。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_trywrlock
 
 ```c
 int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);
@@ -1532,36 +2373,211 @@ int pthread_rwlock_trywrlock(pthread_rwlock_t *rwlock);
 
 **参数**：
 
-- `rwlock` 读写锁。
+- `rwlock` 指向读写锁。
 
 **返回值**：
 
-成功时返回 0，如果无法获取返回 `EBUSY`。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EBUSY` 有读锁或写锁被持有，无法获取写锁。
 
-## 58、pthread_barrier_init
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_timedwrlock
+
+```c
+int pthread_rwlock_timedwrlock(pthread_rwlock_t *rwlock, const struct timespec *abstime);
+```
+
+带超时的获取写锁。如果写锁不能立即获取，阻塞等待直到锁可用或超时。超时基于 `CLOCK_REALTIME`。
+
+**参数**：
+
+- `rwlock` 指向读写锁。
+- `abstime` 绝对超时时间（基于 `CLOCK_REALTIME`）。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `ETIMEDOUT` 在超时时间内未能获取写锁。
+- `EAGAIN` 写者数量已达上限。
+- `EINVAL` 参数无效。
+
+**注意**：
+
+- 内部调用 `pthread_rwlock_clockwrlock()` 并使用 `CLOCK_REALTIME` 作为时钟源。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlock_clockwrlock
+
+```c
+int pthread_rwlock_clockwrlock(pthread_rwlock_t *rwlock, clockid_t clockid,
+                               const struct timespec *abstime);
+```
+
+使用指定时钟带超时获取写锁。
+
+**参数**：
+
+- `rwlock` 指向读写锁。
+- `clockid` 时钟 ID，如 `CLOCK_REALTIME` 或 `CLOCK_MONOTONIC`。
+- `abstime` 基于指定时钟的绝对超时时间。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `ETIMEDOUT` 在超时时间内未能获取写锁。
+- `EAGAIN` 写者数量已达上限。
+- `EINVAL` 参数无效。
+
+**POSIX 兼容性**：兼容扩展接口。
+
+
+### pthread_rwlock_unlock
+
+```c
+int pthread_rwlock_unlock(pthread_rwlock_t *rwlock);
+```
+
+释放读写锁（读锁或写锁）。
+
+**参数**：
+
+- `rwlock` 指向读写锁。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `rwlock` 未正确初始化。
+- `EPERM` 当前线程未持有该锁。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 读写锁属性
+
+
+### pthread_rwlockattr_init
+
+```c
+int pthread_rwlockattr_init(pthread_rwlockattr_t *attr);
+```
+
+初始化读写锁属性对象为默认值。默认进程共享属性为 `PTHREAD_PROCESS_PRIVATE`。
+
+**参数**：
+
+- `attr` 指向要初始化的读写锁属性对象。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlockattr_destroy
+
+```c
+int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr);
+```
+
+销毁读写锁属性对象。
+
+**参数**：
+
+- `attr` 指向要销毁的读写锁属性对象。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlockattr_setpshared
+
+```c
+int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr, int pshared);
+```
+
+设置读写锁属性对象中的进程共享属性。
+
+**参数**：
+
+- `attr` 指向读写锁属性对象。不能为 `NULL`。
+- `pshared` 进程共享属性值：`PTHREAD_PROCESS_PRIVATE` 或 `PTHREAD_PROCESS_SHARED`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`，或 `pshared` 不是有效值。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_rwlockattr_getpshared
+
+```c
+int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t *attr, int *pshared);
+```
+
+获取读写锁属性对象中的进程共享属性。
+
+**参数**：
+
+- `attr` 指向读写锁属性对象。不能为 `NULL`。
+- `pshared` 指向整型变量，用于存储进程共享属性值。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `pshared` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 屏障
+
+
+### pthread_barrier_init
 
 ```c
 int pthread_barrier_init(pthread_barrier_t *barrier,
                          const pthread_barrierattr_t *attr, unsigned int count);
 ```
 
-初始化屏障。
+初始化屏障。屏障用于同步多个线程，所有线程到达屏障后才能继续执行。
 
 **参数**：
 
-- `barrier` 要初始化的屏障。
+- `barrier` 指向要初始化的屏障。不能为 `NULL`。
 - `attr` 屏障属性。如果为 `NULL`，使用默认属性。
-- `count` 需要等待的线程数。
+- `count` 需要到达屏障的线程数。必须大于 0。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `barrier` 为 `NULL`，或 `count` 为 0。
+- `ENOMEM` 内存不足。
 
-## 59、pthread_barrier_destroy
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_barrier_destroy
 
 ```c
 int pthread_barrier_destroy(pthread_barrier_t *barrier);
@@ -1571,52 +2587,157 @@ int pthread_barrier_destroy(pthread_barrier_t *barrier);
 
 **参数**：
 
-- `barrier` 要销毁的屏障。
+- `barrier` 指向要销毁的屏障。不能为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `barrier` 为 `NULL`。
+- `EBUSY` 有线程正在等待该屏障。
 
-## 60、pthread_barrier_wait
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_barrier_wait
 
 ```c
 int pthread_barrier_wait(pthread_barrier_t *barrier);
 ```
 
-在屏障处等待。
+在屏障处等待。当所有线程（数量由 `pthread_barrier_init` 的 `count` 参数指定）都调用此函数后，所有线程同时被释放继续执行。
 
 **参数**：
 
-- `barrier` 屏障。
+- `barrier` 指向屏障。
 
 **返回值**：
 
-一个线程返回 `PTHREAD_BARRIER_SERIAL_THREAD`，其他线程返回 0。
+其中一个线程返回 `PTHREAD_BARRIER_SERIAL_THREAD`（该线程可用于执行清理工作），其他线程返回 0。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 61、pthread_spin_init
+
+## 屏障属性
+
+
+### pthread_barrierattr_init
+
+```c
+int pthread_barrierattr_init(pthread_barrierattr_t *attr);
+```
+
+初始化屏障属性对象为默认值。默认进程共享属性为 `PTHREAD_PROCESS_PRIVATE`。
+
+**参数**：
+
+- `attr` 指向要初始化的屏障属性对象。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_barrierattr_destroy
+
+```c
+int pthread_barrierattr_destroy(pthread_barrierattr_t *attr);
+```
+
+销毁屏障属性对象。
+
+**参数**：
+
+- `attr` 指向要销毁的屏障属性对象。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_barrierattr_setpshared
+
+```c
+int pthread_barrierattr_setpshared(pthread_barrierattr_t *attr, int pshared);
+```
+
+设置屏障属性对象中的进程共享属性。
+
+**参数**：
+
+- `attr` 指向屏障属性对象。不能为 `NULL`。
+- `pshared` 进程共享属性值：`PTHREAD_PROCESS_PRIVATE` 或 `PTHREAD_PROCESS_SHARED`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 为 `NULL`，或 `pshared` 不是有效值。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_barrierattr_getpshared
+
+```c
+int pthread_barrierattr_getpshared(const pthread_barrierattr_t *attr, int *pshared);
+```
+
+获取屏障属性对象中的进程共享属性。
+
+**参数**：
+
+- `attr` 指向屏障属性对象。不能为 `NULL`。
+- `pshared` 指向整型变量，用于存储进程共享属性值。不能为 `NULL`。
+
+**返回值**：
+
+成功时返回 0，失败时返回错误码：
+
+- `EINVAL` `attr` 或 `pshared` 为 `NULL`。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 自旋锁
+
+
+### pthread_spin_init
 
 ```c
 int pthread_spin_init(pthread_spinlock_t *lock, int pshared);
 ```
 
-初始化自旋锁。
+初始化自旋锁。自旋锁使用忙等待方式获取锁，适用于锁持有时间极短的场景。
 
 **参数**：
 
-- `lock` 要初始化的自旋锁。
+- `lock` 指向要初始化的自旋锁。不能为 `NULL`。
 - `pshared` 共享属性：`PTHREAD_PROCESS_PRIVATE` 或 `PTHREAD_PROCESS_SHARED`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `lock` 为 `NULL`。
 
-## 62、pthread_spin_destroy
+**注意**：
+
+- 自旋锁不应在持有时间较长的场景使用，会浪费 CPU 资源。
+- 持有自旋锁时不应调用可能阻塞的函数。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_spin_destroy
 
 ```c
 int pthread_spin_destroy(pthread_spinlock_t *lock);
@@ -1626,33 +2747,41 @@ int pthread_spin_destroy(pthread_spinlock_t *lock);
 
 **参数**：
 
-- `lock` 要销毁的自旋锁。
+- `lock` 指向要销毁的自旋锁。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `lock` 未正确初始化。
+- `EBUSY` 自旋锁当前被锁定。
 
-## 63、pthread_spin_lock
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_spin_lock
 
 ```c
 int pthread_spin_lock(pthread_spinlock_t *lock);
 ```
 
-获取自旋锁（忙等待）。
+获取自旋锁。如果锁已被持有，调用线程忙等待直到锁可用。
 
 **参数**：
 
-- `lock` 自旋锁。
+- `lock` 指向自旋锁。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `lock` 未正确初始化。
+- `EDEADLK` 当前线程已持有该锁（实现相关）。
 
-## 64、pthread_spin_trylock
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_spin_trylock
 
 ```c
 int pthread_spin_trylock(pthread_spinlock_t *lock);
@@ -1662,15 +2791,18 @@ int pthread_spin_trylock(pthread_spinlock_t *lock);
 
 **参数**：
 
-- `lock` 自旋锁。
+- `lock` 指向自旋锁。
 
 **返回值**：
 
-成功时返回 0，如果已被锁定返回 `EBUSY`。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EBUSY` 自旋锁已被锁定。
 
-## 65、pthread_spin_unlock
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_spin_unlock
 
 ```c
 int pthread_spin_unlock(pthread_spinlock_t *lock);
@@ -1680,40 +2812,51 @@ int pthread_spin_unlock(pthread_spinlock_t *lock);
 
 **参数**：
 
-- `lock` 自旋锁。
+- `lock` 指向自旋锁。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `lock` 未正确初始化。
+- `EPERM` 当前线程未持有该锁。
 
-## 66、pthread_key_create
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 线程特定数据
+
+
+### pthread_key_create
 
 ```c
 int pthread_key_create(pthread_key_t *key, void (*destructor)(void *));
 ```
 
-创建线程特定数据键。
+创建线程特定数据键。每个线程可以通过该键存储和获取自己的私有数据。
 
 **参数**：
 
-- `key` 返回创建的键。
-- `destructor` 析构函数，线程退出时自动调用。可以为 `NULL`。
+- `key` 指向 `pthread_key_t` 变量，用于存储创建的键。不能为 `NULL`。
+- `destructor` 析构函数，线程退出时对非 `NULL` 的数据自动调用。可以为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EAGAIN` 已达系统键数量上限（`PTHREAD_KEYS_MAX`）。
+- `ENOMEM` 内存不足。
 
-## 67、pthread_key_delete
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_key_delete
 
 ```c
 int pthread_key_delete(pthread_key_t key);
 ```
 
-删除线程特定数据键。
+删除线程特定数据键。不会调用析构函数，也不会释放各线程关联的数据。
 
 **参数**：
 
@@ -1721,36 +2864,47 @@ int pthread_key_delete(pthread_key_t key);
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `key` 无效。
 
-## 68、pthread_setspecific
+**注意**：
+
+- 删除键后，各线程应自行释放关联的数据，否则会导致内存泄漏。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_setspecific
 
 ```c
 int pthread_setspecific(pthread_key_t key, const void *value);
 ```
 
-设置线程特定数据。
+设置调用线程的线程特定数据。
 
 **参数**：
 
-- `key` 数据键。
-- `value` 要存储的值。
+- `key` 数据键，必须是通过 `pthread_key_create()` 创建的有效键。
+- `value` 要存储的值。可以为 `NULL`。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `EINVAL` `key` 无效。
+- `ENOMEM` 内存不足。
 
-## 69、pthread_getspecific
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_getspecific
 
 ```c
 void *pthread_getspecific(pthread_key_t key);
 ```
 
-获取线程特定数据。
+获取调用线程的线程特定数据。
 
 **参数**：
 
@@ -1758,30 +2912,95 @@ void *pthread_getspecific(pthread_key_t key);
 
 **返回值**：
 
-返回与键关联的值，如果未设置返回 `NULL`。
+返回与键关联的值。如果键无效或未设置过值，返回 `NULL`。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**注意**：
 
-## 70、pthread_setname_np
+- 此函数不返回错误码，无法区分"未设置"和"设置为 NULL"两种情况。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 线程清理
+
+
+### pthread_cleanup_push
+
+```c
+void pthread_cleanup_push(void (*routine)(void *), void *arg);
+```
+
+注册线程清理函数。清理函数在线程被取消、调用 `pthread_exit()` 或调用 `pthread_cleanup_pop(1)` 时执行。
+
+**参数**：
+
+- `routine` 清理函数。不能为 `NULL`。
+- `arg` 传递给清理函数的参数。
+
+**返回值**：
+
+无返回值。
+
+**注意**：
+
+- 必须与 `pthread_cleanup_pop()` 配对使用，且在同一函数作用域内。
+- 清理函数按注册顺序的逆序执行（后注册先执行）。
+- 常用于确保互斥锁在线程取消时被释放。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+### pthread_cleanup_pop
+
+```c
+void pthread_cleanup_pop(int execute);
+```
+
+移除最近注册的清理函数，并可选择执行它。
+
+**参数**：
+
+- `execute` 如果非零，移除并执行清理函数；如果为零，仅移除不执行。
+
+**返回值**：
+
+无返回值。
+
+**注意**：
+
+- 必须与 `pthread_cleanup_push()` 配对使用。
+- 即使 `execute` 为 0，清理函数也会从栈中移除。
+
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
+
+
+## 扩展接口
+
+
+### pthread_setname_np
 
 ```c
 int pthread_setname_np(pthread_t thread, const char *name);
 ```
 
-设置线程名称。
+设置线程名称。线程名称用于调试和日志，可通过 `ps` 命令或调试器查看。
 
 **参数**：
 
 - `thread` 线程 ID。
-- `name` 线程名称。
+- `name` 线程名称字符串。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
+
+- `ESRCH` 找不到指定线程。
+- `EINVAL` `name` 为 `NULL`。
 
 **POSIX 兼容性**：兼容 Linux 扩展接口。
 
-## 71、pthread_getname_np
+
+### pthread_getname_np
 
 ```c
 int pthread_getname_np(pthread_t thread, char *name, size_t len);
@@ -1797,17 +3016,21 @@ int pthread_getname_np(pthread_t thread, char *name, size_t len);
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
+
+- `ESRCH` 找不到指定线程。
+- `EINVAL` `name` 为 `NULL`。
 
 **POSIX 兼容性**：兼容 Linux 扩展接口。
 
-## 72、pthread_gettid_np
+
+### pthread_gettid_np
 
 ```c
 pid_t pthread_gettid_np(pthread_t thread);
 ```
 
-获取线程的内核线程 ID。
+获取线程的内核线程 ID（`pid_t`）。
 
 **参数**：
 
@@ -1817,60 +3040,31 @@ pid_t pthread_gettid_np(pthread_t thread);
 
 返回内核线程 ID。
 
+**注意**：
+
+- 在 openvela 中，`pthread_t` 本身就是 `pid_t`，因此此函数直接返回输入值。
+
 **POSIX 兼容性**：兼容扩展接口。
 
-## 73、pthread_getcpuclockid
+
+### pthread_getcpuclockid
 
 ```c
 int pthread_getcpuclockid(pthread_t thread, clockid_t *clockid);
 ```
 
-获取线程的 CPU 时钟 ID。
+获取线程的 CPU 时钟 ID。该时钟测量指定线程消耗的 CPU 时间。
 
 **参数**：
 
 - `thread` 线程 ID。
-- `clockid` 返回时钟 ID。
+- `clockid` 指向 `clockid_t` 变量，用于存储时钟 ID。
 
 **返回值**：
 
-成功时返回 0，失败时返回错误码。
+成功时返回 0，失败时返回错误码：
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+- `ESRCH` 找不到指定线程。
+- `EINVAL` `clockid` 为 `NULL`。
 
-## 74、pthread_cleanup_push
-
-```c
-void pthread_cleanup_push(void (*routine)(void *), void *arg);
-```
-
-注册线程清理函数。
-
-**参数**：
-
-- `routine` 清理函数。
-- `arg` 传递给清理函数的参数。
-
-**返回值**：
-
-无返回值。
-
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
-
-## 75、pthread_cleanup_pop
-
-```c
-void pthread_cleanup_pop(int execute);
-```
-
-移除最近注册的清理函数。
-
-**参数**：
-
-- `execute` 如果非零，执行清理函数；否则只移除不执行。
-
-**返回值**：
-
-无返回值。
-
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
