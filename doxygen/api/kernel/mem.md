@@ -1,60 +1,25 @@
-# 内存管理
+# 内存管理 API
 
-openvela 提供了灵活的内存管理系统，支持标准的 POSIX 内存分配接口以及扩展的内存管理功能。内存管理系统支持多种构建模式：
+openvela 提供灵活的内存管理系统，支持标准 POSIX 内存分配接口以及扩展的内存管理功能。
 
-- **Flat Build**：只有一个用户堆，通过标准的 `malloc/free` 访问。
-- **Protected Build**：有两个堆，一个内核堆和一个用户堆，通过 MPU 保护。
-- **Kernel Build**：一个内核堆和多个用户堆（每个任务组一个）。
+头文件：`#include <stdlib.h>`（标准分配）、`#include <nuttx/mm/mm.h>`（内核堆/堆管理）
 
-openvela 内存管理支持以下 API：
+## openvela 实现说明
 
-**标准内存分配接口**：
-- `malloc()`
-- `free()`
-- `calloc()`
-- `realloc()`
-- `reallocarray()`
-- `memalign()`
-- `posix_memalign()`
-- `aligned_alloc()`
-- `valloc()`
-- `zalloc()`
+- **构建模式影响**：
+  - **Flat Build**：只有一个用户堆，`malloc/free` 直接操作
+  - **Protected Build**：内核堆 + 用户堆，通过 MPU 保护隔离
+  - **Kernel Build**：内核堆 + 多个用户堆（每个任务组一个）
+- **对齐保证**：`malloc()` 返回的内存按 `MM_ALIGN`（默认 8 或 16 字节）对齐
+- **线程安全**：所有标准分配接口（malloc/free/calloc 等）在多任务环境中是线程安全的
+- **延迟释放**：`*_delayfree()` 系列接口用于中断上下文中无法立即释放内存的场景
+- **已知不兼容**：`posix_memalign()` 当前不检查 `alignment` 参数有效性，不返回 `EINVAL`
 
-**内存信息查询接口**：
-- `mallinfo()`
-- `mallinfo_task()`
-- `malloc_size()` / `malloc_usable_size()`
-- `mallopt()`
 
-**内核堆接口**（需要 `CONFIG_MM_KERNEL_HEAP`）：
-- `kmm_malloc()`
-- `kmm_free()`
-- `kmm_calloc()`
-- `kmm_realloc()`
-- `kmm_zalloc()`
-- `kmm_memalign()`
-- `kmm_mallinfo()`
-- `kmm_heapmember()`
-- `kmm_initialize()`
-- `kmm_checkcorruption()`
+## 标准内存分配
 
-**堆管理接口**：
-- `mm_initialize()`
-- `mm_uninitialize()`
-- `mm_addregion()`
-- `mm_extend()`
-- `mm_brkaddr()`
-- `mm_heapmember()`
-- `umm_initialize()`
-- `umm_heapmember()`
 
-**调试接口**：
-- `mm_memdump()`
-- `mm_checkcorruption()`
-- `umm_checkcorruption()`
-- `kmm_checkcorruption()`
-
-## 1、malloc
+### malloc
 
 ```c
 void *malloc(size_t size);
@@ -80,9 +45,10 @@ void *malloc(size_t size);
 - 返回的指针可以传递给 `free()`、`realloc()` 等函数。
 - 在多任务环境中，`malloc()` 是线程安全的。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 2、free
+
+### free
 
 ```c
 void free(void *ptr);
@@ -107,9 +73,10 @@ void free(void *ptr);
 - 不要释放非动态分配的内存（如栈上的变量或全局变量）。
 - 释放内存后，该内存可能不会立即返回给系统，而是保留在堆中供后续分配使用。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 3、calloc
+
+### calloc
 
 ```c
 void *calloc(size_t n, size_t elem_size);
@@ -136,9 +103,10 @@ void *calloc(size_t n, size_t elem_size);
 - 返回的内存所有字节都被设置为 0。
 - 对于需要零初始化的数据结构，推荐使用 `calloc()` 而不是 `malloc()` + `memset()`。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 4、realloc
+
+### realloc
 
 ```c
 void *realloc(void *ptr, size_t size);
@@ -166,9 +134,10 @@ void *realloc(void *ptr, size_t size);
 - 返回的指针可能与原指针不同，成功调用后原指针不应再使用。
 - 如果 `realloc()` 失败，原内存块不会被释放，调用者仍需负责释放它。
 
-**POSIX 兼容性**：完美兼容 `POSIX` 同名接口。
+**POSIX 兼容性**：兼容 `POSIX` 同名接口。
 
-## 5、reallocarray
+
+### reallocarray
 
 ```c
 void *reallocarray(void *ptr, size_t n, size_t elem_size);
@@ -197,7 +166,42 @@ void *reallocarray(void *ptr, size_t n, size_t elem_size);
 
 **POSIX 兼容性**：兼容 BSD/glibc 扩展接口。
 
-## 6、memalign
+
+### zalloc
+
+```c
+void *zalloc(size_t size);
+```
+
+分配指定大小的内存块并将所有字节初始化为零。这是 openvela 提供的便捷函数，功能等同于 `calloc(1, size)`，但语义更清晰。
+
+**参数**：
+
+- `size` 要分配的内存大小（字节）。
+
+**返回值**：
+
+成功时返回指向分配并清零的内存的指针，失败时返回 `NULL` 并设置 `errno`：
+
+- `ENOMEM` 可用内存不足。
+
+**注意**：
+
+- 与 `malloc()` 不同，返回的内存已被清零。
+- 与 `calloc(1, size)` 功能相同，但调用更简洁。
+
+**POSIX 兼容性**：openvela 扩展接口。
+
+---
+
+
+以下接口用于查询堆的使用情况和内存分配统计信息，对于调试和监控内存使用非常有用。
+
+
+## 对齐内存分配
+
+
+### memalign
 
 ```c
 void *memalign(size_t alignment, size_t size);
@@ -224,7 +228,8 @@ void *memalign(size_t alignment, size_t size);
 
 **POSIX 兼容性**：兼容 `POSIX` 同名接口（已过时，推荐使用 `posix_memalign()`）。
 
-## 7、posix_memalign
+
+### posix_memalign
 
 ```c
 int posix_memalign(void **memptr, size_t alignment, size_t size);
@@ -253,7 +258,8 @@ int posix_memalign(void **memptr, size_t alignment, size_t size);
 
 **POSIX 兼容性**：部分兼容 `POSIX` 同名接口（不返回 `EINVAL`）。
 
-## 8、aligned_alloc
+
+### aligned_alloc
 
 ```c
 void *aligned_alloc(size_t alignment, size_t size);
@@ -275,9 +281,10 @@ void *aligned_alloc(size_t alignment, size_t size);
 - 分配的内存可以使用 `free()` 正常释放。
 - 此函数是 C11 标准的一部分，比 `memalign()` 更具可移植性。
 
-**POSIX 兼容性**：完美兼容 C11 标准接口。
+**POSIX 兼容性**：兼容 C11 标准接口。
 
-## 9、valloc
+
+### valloc
 
 ```c
 void *valloc(size_t size);
@@ -303,38 +310,11 @@ void *valloc(size_t size);
 
 **POSIX 兼容性**：兼容 BSD 扩展接口（已过时，推荐使用 `posix_memalign()`）。
 
-## 10、zalloc
 
-```c
-void *zalloc(size_t size);
-```
+## 内存信息查询
 
-分配指定大小的内存块并将所有字节初始化为零。这是 openvela 提供的便捷函数，功能等同于 `calloc(1, size)`，但语义更清晰。
 
-**参数**：
-
-- `size` 要分配的内存大小（字节）。
-
-**返回值**：
-
-成功时返回指向分配并清零的内存的指针，失败时返回 `NULL` 并设置 `errno`：
-
-- `ENOMEM` 可用内存不足。
-
-**注意**：
-
-- 与 `malloc()` 不同，返回的内存已被清零。
-- 与 `calloc(1, size)` 功能相同，但调用更简洁。
-
-**POSIX 兼容性**：openvela 扩展接口。
-
----
-
-## 一、内存信息查询接口
-
-以下接口用于查询堆的使用情况和内存分配统计信息，对于调试和监控内存使用非常有用。
-
-## 1、mallinfo
+### mallinfo
 
 ```c
 struct mallinfo mallinfo(void);
@@ -365,7 +345,8 @@ struct mallinfo mallinfo(void);
 
 **POSIX 兼容性**：兼容 glibc 扩展接口。
 
-## 2、mallinfo_task
+
+### mallinfo_task
 
 ```c
 struct mallinfo_task mallinfo_task(FAR const struct malltask *task);
@@ -400,7 +381,8 @@ struct mallinfo_task mallinfo_task(FAR const struct malltask *task);
 
 **POSIX 兼容性**：openvela 扩展接口。
 
-## 3、malloc_size
+
+### malloc_size
 
 ```c
 size_t malloc_size(void *ptr);
@@ -424,7 +406,8 @@ size_t malloc_size(void *ptr);
 
 **POSIX 兼容性**：兼容 glibc/macOS 扩展接口。
 
-## 4、mallopt
+
+### mallopt
 
 ```c
 int mallopt(int param, int value);
@@ -458,13 +441,14 @@ int mallopt(int param, int value);
 
 ---
 
-## 二、内核堆接口
 
-当启用 `CONFIG_MM_KERNEL_HEAP` 时，openvela 提供独立的内核堆接口。内核堆用于内核态的内存分配，与用户堆完全隔离，确保内核数据的安全性。
 
-在 Protected Build 和 Kernel Build 模式下，内核堆和用户堆使用不同的内存区域，由 MPU 或 MMU 保护。用户态代码无法直接访问内核堆内存。
 
-### 1、kmm_initialize
+
+## 内核堆接口
+
+
+### kmm_initialize
 
 ```c
 void kmm_initialize(void *heap_start, size_t heap_size);
@@ -486,7 +470,8 @@ void kmm_initialize(void *heap_start, size_t heap_size);
 - 此函数只应调用一次，重复调用会导致未定义行为。
 - 需要启用 `CONFIG_MM_KERNEL_HEAP` 配置。
 
-### 2、kmm_malloc
+
+### kmm_malloc
 
 ```c
 void *kmm_malloc(size_t size);
@@ -507,7 +492,8 @@ void *kmm_malloc(size_t size);
 - 分配的内存只能使用 `kmm_free()` 释放。
 - 内核堆分配的内存不应传递给用户态代码。
 
-### 3、kmm_free
+
+### kmm_free
 
 ```c
 void kmm_free(void *mem);
@@ -528,7 +514,8 @@ void kmm_free(void *mem);
 - 只能释放内核堆分配的内存，不能用于释放用户堆内存。
 - 可以使用 `kmm_heapmember()` 检查指针是否属于内核堆。
 
-### 4、kmm_calloc
+
+### kmm_calloc
 
 ```c
 void *kmm_calloc(size_t n, size_t elem_size);
@@ -545,7 +532,8 @@ void *kmm_calloc(size_t n, size_t elem_size);
 
 成功时返回指向分配并清零的内存的指针，失败时返回 `NULL`。
 
-### 5、kmm_realloc
+
+### kmm_realloc
 
 ```c
 void *kmm_realloc(void *oldmem, size_t newsize);
@@ -562,7 +550,8 @@ void *kmm_realloc(void *oldmem, size_t newsize);
 
 成功时返回指向重新分配内存的指针（可能与原指针不同），失败时返回 `NULL`（原内存块保持不变）。
 
-### 6、kmm_zalloc
+
+### kmm_zalloc
 
 ```c
 void *kmm_zalloc(size_t size);
@@ -578,7 +567,8 @@ void *kmm_zalloc(size_t size);
 
 成功时返回指向分配并清零的内存的指针，失败时返回 `NULL`。
 
-### 7、kmm_memalign
+
+### kmm_memalign
 
 ```c
 void *kmm_memalign(size_t alignment, size_t size);
@@ -599,7 +589,27 @@ void *kmm_memalign(size_t alignment, size_t size);
 
 - 用于内核需要对齐内存的场景，如 DMA 缓冲区。
 
-### 8、kmm_mallinfo
+
+### kmm_malloc_size
+
+```c
+size_t kmm_malloc_size(void *mem);
+```
+
+获取内核堆中已分配内存块的实际可用大小。
+
+**参数**：
+
+- `mem` 指向内核堆中已分配的内存块。
+
+**返回值**：
+
+返回内存块的实际可用大小（字节）。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### kmm_mallinfo
 
 ```c
 struct mallinfo kmm_mallinfo(void);
@@ -625,7 +635,8 @@ struct mallinfo kmm_mallinfo(void);
 
 - 可用于监控内核内存使用情况。
 
-### 9、kmm_heapmember
+
+### kmm_heapmember
 
 ```c
 bool kmm_heapmember(void *mem);
@@ -646,7 +657,100 @@ bool kmm_heapmember(void *mem);
 - 可用于确定内存块应该使用 `kmm_free()` 还是 `free()` 释放。
 - 在内存管理代码中用于路由释放请求到正确的堆。
 
-### 10、kmm_checkcorruption
+
+### kmm_addregion
+
+```c
+void kmm_addregion(void *heapstart, size_t heapsize);
+```
+
+向内核堆添加一个新的内存区域。允许内核堆使用非连续的内存区域。
+
+**参数**：
+
+- `heapstart` 新内存区域的起始地址。
+- `heapsize` 新内存区域的大小（字节）。
+
+**返回值**：
+
+无返回值。
+
+**注意**：
+
+- 需要启用 `CONFIG_MM_KERNEL_HEAP`。
+- 最大区域数量由 `CONFIG_MM_REGIONS` 配置。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### kmm_extend
+
+```c
+void kmm_extend(void *mem, size_t size, int region);
+```
+
+扩展内核堆的指定内存区域。新增内存必须与现有区域在物理地址上相邻。
+
+**参数**：
+
+- `mem` 新增内存的起始地址。
+- `size` 新增内存的大小（字节）。
+- `region` 区域索引（从 0 开始）。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### kmm_delayfree
+
+```c
+void kmm_delayfree(void *mem);
+```
+
+延迟释放内核堆内存。将释放操作推迟到安全的时机执行，适用于中断上下文或持有自旋锁时无法立即释放内存的场景。
+
+**参数**：
+
+- `mem` 指向要释放的内核堆内存。
+
+**返回值**：
+
+无返回值。
+
+**注意**：
+
+- 在中断处理程序中释放内存时应使用此函数，而非 `kmm_free()`。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### kmm_memdump
+
+```c
+void kmm_memdump(const struct mm_memdump_s *dump);
+```
+
+转储内核堆的内存分配信息到系统日志，用于调试内存泄漏。
+
+**参数**：
+
+- `dump` 指向转储条件结构体，指定过滤条件（PID、序列号范围等）。
+
+**返回值**：
+
+无返回值。
+
+**注意**：
+
+- 需要启用 `CONFIG_MM_BACKTRACE` 以获取分配调用栈信息。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### kmm_checkcorruption
 
 ```c
 void kmm_checkcorruption(void);
@@ -669,11 +773,13 @@ void kmm_checkcorruption(void);
 
 ---
 
-## 三、堆管理接口
 
-以下接口用于堆的初始化、扩展和管理，通常由系统启动代码或驱动程序使用。这些函数操作 `struct mm_heap_s` 堆结构，提供了对多个独立堆的管理能力。
 
-### 1、mm_initialize
+
+## 堆管理接口
+
+
+### mm_initialize
 
 ```c
 struct mm_heap_s *mm_initialize(const char *name, void *heapstart, size_t heapsize);
@@ -696,7 +802,8 @@ struct mm_heap_s *mm_initialize(const char *name, void *heapstart, size_t heapsi
 - 堆大小必须足够大以容纳堆管理开销。
 - 系统可以有多个独立的堆，如用户堆、内核堆、图形堆等。
 
-### 2、mm_uninitialize
+
+### mm_uninitialize
 
 ```c
 void mm_uninitialize(struct mm_heap_s *heap);
@@ -716,7 +823,8 @@ void mm_uninitialize(struct mm_heap_s *heap);
 
 - 销毁前应确保堆中没有活动的分配。
 
-### 3、mm_addregion
+
+### mm_addregion
 
 ```c
 void mm_addregion(struct mm_heap_s *heap, void *heapstart, size_t heapsize);
@@ -739,7 +847,8 @@ void mm_addregion(struct mm_heap_s *heap, void *heapstart, size_t heapsize);
 - 新增区域可以在物理上与已有区域不连续。
 - 最大区域数量由 `CONFIG_MM_REGIONS` 配置。
 
-### 4、mm_extend
+
+### mm_extend
 
 ```c
 void mm_extend(struct mm_heap_s *heap, void *mem, size_t size, int region);
@@ -763,7 +872,8 @@ void mm_extend(struct mm_heap_s *heap, void *mem, size_t size, int region);
 - 新增的内存区域必须与现有区域在物理地址上相邻。
 - 与 `mm_addregion()` 不同，此函数用于扩展已有区域而非添加新区域。
 
-### 5、mm_brkaddr
+
+### mm_brkaddr
 
 ```c
 void *mm_brkaddr(struct mm_heap_s *heap, int region);
@@ -784,7 +894,29 @@ void *mm_brkaddr(struct mm_heap_s *heap, int region);
 
 - 用于确定可以扩展的内存位置。
 
-### 6、mm_heapmember
+
+### mm_sbrk
+
+```c
+int mm_sbrk(struct mm_heap_s *heap, intptr_t incr, void **mem);
+```
+
+扩展或收缩堆的 break 地址（类似 UNIX sbrk 语义）。
+
+**参数**：
+
+- `heap` 堆结构指针。
+- `incr` 增量（正值扩展，负值收缩）。
+- `mem` 输出参数，返回之前的 break 地址。
+
+**返回值**：
+
+成功返回 0，失败返回 -1。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### mm_heapmember
 
 ```c
 bool mm_heapmember(struct mm_heap_s *heap, void *mem);
@@ -805,7 +937,129 @@ bool mm_heapmember(struct mm_heap_s *heap, void *mem);
 
 - 用于确定内存分配来源，以便使用正确的接口释放。
 
-### 7、umm_initialize
+
+### mm_free
+
+```c
+void mm_free(struct mm_heap_s *heap, void *mem);
+```
+
+从指定堆释放内存。这是底层堆释放接口，`free()` 和 `kmm_free()` 内部调用此函数。
+
+**参数**：
+
+- `heap` 堆结构指针。
+- `mem` 指向要释放的内存块。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### mm_malloc_size
+
+```c
+size_t mm_malloc_size(struct mm_heap_s *heap, void *mem);
+```
+
+获取指定堆中已分配内存块的实际可用大小。
+
+**参数**：
+
+- `heap` 堆结构指针。
+- `mem` 指向已分配的内存块。
+
+**返回值**：
+
+返回内存块的实际可用大小（字节）。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### mm_delayfree
+
+```c
+void mm_delayfree(struct mm_heap_s *heap, void *mem);
+```
+
+延迟释放指定堆的内存。适用于中断上下文或持有自旋锁时无法立即释放的场景。
+
+**参数**：
+
+- `heap` 堆结构指针。
+- `mem` 指向要释放的内存块。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### mm_heapfree
+
+```c
+size_t mm_heapfree(struct mm_heap_s *heap);
+```
+
+查询指定堆的空闲内存总量。
+
+**参数**：
+
+- `heap` 堆结构指针。
+
+**返回值**：
+
+返回堆中空闲内存的总大小（字节）。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### mm_heapfree_largest
+
+```c
+size_t mm_heapfree_largest(struct mm_heap_s *heap);
+```
+
+查询指定堆中最大的连续空闲块大小。这决定了单次分配可用的最大内存。
+
+**参数**：
+
+- `heap` 堆结构指针。
+
+**返回值**：
+
+返回最大连续空闲块的大小（字节）。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### mm_notify_pressure
+
+```c
+void mm_notify_pressure(size_t remaining, size_t largest);
+```
+
+发送内存压力通知。当堆空闲内存低于阈值时，通知注册的监听者释放缓存等可回收内存。
+
+**参数**：
+
+- `remaining` 当前剩余空闲内存（字节）。
+- `largest` 当前最大连续空闲块（字节）。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+## 用户堆接口
+
+
+### umm_initialize
 
 ```c
 void umm_initialize(void *heap_start, size_t heap_size);
@@ -827,7 +1081,8 @@ void umm_initialize(void *heap_start, size_t heap_size);
 - 此函数只应调用一次。
 - 用户堆是 `malloc()` 等标准接口的默认堆。
 
-### 8、umm_heapmember
+
+### umm_heapmember
 
 ```c
 bool umm_heapmember(void *mem);
@@ -849,11 +1104,73 @@ bool umm_heapmember(void *mem);
 
 ---
 
-## 四、调试接口
 
-以下接口用于内存调试和问题诊断。这些功能对于检测内存泄漏、内存损坏和优化内存使用非常有用。
 
-### 1、mm_memdump
+
+### umm_addregion
+
+```c
+void umm_addregion(void *heapstart, size_t heapsize);
+```
+
+向用户堆添加一个新的内存区域。
+
+**参数**：
+
+- `heapstart` 新内存区域的起始地址。
+- `heapsize` 新内存区域的大小（字节）。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### umm_extend
+
+```c
+void umm_extend(void *mem, size_t size, int region);
+```
+
+扩展用户堆的指定内存区域。新增内存必须与现有区域相邻。
+
+**参数**：
+
+- `mem` 新增内存的起始地址。
+- `size` 新增内存的大小（字节）。
+- `region` 区域索引。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+### umm_delayfree
+
+```c
+void umm_delayfree(void *mem);
+```
+
+延迟释放用户堆内存。适用于中断上下文。
+
+**参数**：
+
+- `mem` 指向要释放的用户堆内存。
+
+**返回值**：
+
+无返回值。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
+
+
+## 调试与诊断
+
+
+### mm_memdump
 
 ```c
 void mm_memdump(struct mm_heap_s *heap, const struct mm_memdump_s *dump);
@@ -876,7 +1193,8 @@ void mm_memdump(struct mm_heap_s *heap, const struct mm_memdump_s *dump);
 - 输出信息包括每个分配块的地址、大小、分配者 PID 和分配时的调用栈（如果启用了 `CONFIG_MM_BACKTRACE`）。
 - 常用于诊断内存泄漏，找出哪些代码分配了内存但未释放。
 
-### 2、mm_checkcorruption
+
+### mm_checkcorruption
 
 ```c
 void mm_checkcorruption(struct mm_heap_s *heap);
@@ -898,7 +1216,8 @@ void mm_checkcorruption(struct mm_heap_s *heap);
 - 检测的问题包括：块头损坏、双重释放、越界写入等。
 - 此函数会遍历整个堆，对性能有影响，主要用于调试。
 
-### 3、umm_checkcorruption
+
+### umm_checkcorruption
 
 ```c
 void umm_checkcorruption(void);
@@ -918,3 +1237,26 @@ void umm_checkcorruption(void);
 
 - 需要启用 `CONFIG_DEBUG_MM` 配置。
 - 可以在怀疑有内存问题时调用此函数进行检查。
+
+
+### umm_memdump
+
+```c
+void umm_memdump(const struct mm_memdump_s *dump);
+```
+
+转储用户堆的内存分配信息到系统日志。
+
+**参数**：
+
+- `dump` 指向转储条件结构体。
+
+**返回值**：
+
+无返回值。
+
+**注意**：
+
+- 需要启用 `CONFIG_MM_BACKTRACE` 以获取调用栈。
+
+**POSIX 兼容性**：openvela/NuttX 扩展接口。
