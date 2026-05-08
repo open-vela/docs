@@ -1,24 +1,23 @@
-# Media
+# 多媒体 API
 
-openvela 多媒体（Media）框架为应用提供统一的音视频播放、录制、音频焦点管理、音频策略控制和媒体会话能力。
+openvela 多媒体框架提供统一的音视频播放、录制、音频焦点管理、策略控制和媒体会话能力，同时包含语音唤醒与工具类接口。
 
-本章节包含以下 API 模块：
+## 核心能力
 
-- Media Focus：音频焦点管理，协调多音频流的播放优先级
-- Media Policy：音频策略控制，管理音频路由、音量和设备选择
-- Media Player：媒体播放器，支持本地文件和网络资源的音视频播放
-- Media Recorder：媒体录制器，支持音频录制
-- Media Session：媒体会话，实现控制者与受控者之间的媒体控制通信
+- **[播放器](media_player.md)** — 音视频播放（本地/网络流/字节流）
+- **[录制器](media_recorder.md)** — 音视频录制与图片捕获
+- **[媒体会话](media_session.md)** — 控制器-被控端模式的播放控制与状态同步
 
-```eval_rst
+## 音频策略
 
-.. toctree::
-  :maxdepth: 2
+- **[音频焦点](media_focus.md)** — 多应用音频播放优先级协调
+- **[音频策略](media_policy.md)** — 音频路由、设备管理、音量和模式切换
 
-  media_focus
-  media_policy
-  media_player
-  media_recorder
-  media_session
+## 语音唤醒
 
-```
+- **[媒体触发器](media_trigger.md)** — 语音唤醒高层接口（声学模型加载 + 识别控制）
+- **[声学模型](media_trigger_model.md)** — 底层声学模型操作（加载/属性/热词检测）
+
+## 工具与调试
+
+- **[媒体工具](media_utils.md)** — DTMF 信号生成、事件名查询、dump、自定义命令
