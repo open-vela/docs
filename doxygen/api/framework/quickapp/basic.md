@@ -6,17 +6,22 @@ openvela 快应用（QuickApp）框架（以下简称"应用框架"），是 ope
 - 适配实时操作系统（RTOS），注重运行时性能，在低内存消耗下具有较高的执行性能。
 - 易于开发和部署，有效缩短应用开发周期。
 
-本文档介绍应用框架的整体设计、实现思路和技术要点，不聚焦应用开发本身。对快应用开发感兴趣的开发者，请参考[小米 openvela 快应用开发手册](https://iot.mi.com/vela/quickapp/zh/content/intro.html)。
+本文档介绍应用框架的整体设计、实现思路和技术要点，不聚焦应用开发本身。
 
-## 一、整体架构
+## 相关文档
+
+- [小米 openvela 快应用开发手册](https://iot.mi.com/vela/quickapp/zh/content/intro.html) — 面向应用开发者的完整开发指南
+- [Feature 框架 API](../feature/index.md) — 快应用的 Native 扩展 API（JS 与 C/C++ 互调）
+
+## 整体架构
 
 ![快应用框架整体架构图](figures/basic_structure.png)
 
-## 二、编译配置
+## 编译配置
 
 应用框架本身的配置项不多，但依赖项较多。依赖项中渲染器的依赖较多，具体配置请参考图形组提供的文档。
 
-### 1、主要配置
+### 主要配置
 
 ```kconfig
 CONFIG_QUICKAPP_VAPP=y                      # 快应用主配置
@@ -43,7 +48,7 @@ CONFIG_PROMPT_DIALOG_TITLE_FONT_SIZE=36
 CONFIG_PROMPT_DIALOG_MSG_FONT_SIZE=34
 ```
 
-### 2、调试配置
+### 调试配置
 
 ```kconfig
 CONFIG_DOM_TRACE_ENABLE=n                   # vdom 树打印
@@ -61,7 +66,7 @@ CONFIG_WIDGET_DEBUG_DRAW_OUTLINE=n          # widget draw outline for debug
 CONFIG_CSS_ATTR_LIST_ENABLE=n               # 启用 widget get css/attr function
 ```
 
-### 3、依赖项
+### 依赖项
 
 ```kconfig
 CONFIG_LIBUV=y
