@@ -18,20 +18,20 @@
 ### 示例
 
 #### 说明
-- 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
-- 但在实际接入或使用时，建议在 [vendor](../../../../../../../vendor_template/blob/trunk/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
+- 为了便于在 QEMU 环境中快速验证自定义的成员函数与驱动注册功能，本示例将直接在 [drivers_initialize](../../../../../../../nuttx/blob/trunk-5.5/drivers/drivers_initialize.c) 函数中实现 `struct bt_driver_s` 的成员函数，并完成驱动注册。
+- 但在实际接入或使用时，建议在 [vendor](../../../../../../../vendor_template/blob/trunk-5.5/boards/chip_name/board_name/src) 目录下创建一个独立的文件进行代码编写，以便于维护和版本管理。
 
 #### 操作步骤
 
-1. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](../../../../../../../nuttx/blob/trunk/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
+1. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk-5.5/drivers/drivers_initialize.c) 文件中添加 [bt_driver.h](../../../../../../../nuttx/blob/trunk-5.5/include/nuttx/wireless/bluetooth/bt_driver.h) 头文件引用：
 
     ```C
     #include <nuttx/wireless/bluetooth/bt_driver.h> /* 添加bt_driver.h头文件引用 */
     ```
 
-2. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 文件中完成成员函数的实现编写。
+2. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk-5.5/drivers/drivers_initialize.c) 文件中完成成员函数的实现编写。
 
-    在 openvela 中，`struct bt_driver_s` 的 `receive` 成员函数已经在 [uart_bth4.c](../../../../../../../nuttx/blob/trunk/drivers/serial/uart_bth4.c) 文件中提供了默认实现。因此，开发者或厂商无需重新定义或实现此方法。
+    在 openvela 中，`struct bt_driver_s` 的 `receive` 成员函数已经在 [uart_bth4.c](../../../../../../../nuttx/blob/trunk-5.5/drivers/serial/uart_bth4.c) 文件中提供了默认实现。因此，开发者或厂商无需重新定义或实现此方法。
 
     ```C
     /* 以下为示例实现，仅做示范。
@@ -67,7 +67,7 @@
     /* 4. receive成员函数在驱动注册时由openvela指定 */
     ```
 
-3. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 文件中，完成 `struct bt_driver_s` 结构体的定义。
+3. 在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk-5.5/drivers/drivers_initialize.c) 文件中，完成 `struct bt_driver_s` 结构体的定义。
 
     以下代码展示了一个完整的 `struct bt_driver_s` 结构体初始化示例，其中函数指针被赋值为上面定义的示例函数：
 
@@ -93,13 +93,13 @@
 
 - `bt_driver_register_with_id(FAR struct bt_driver_s *driver, int id)`：注册指定 id 编号。
 
-`int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](../../../../../../../nuttx/blob/trunk/include/nuttx/wireless/bluetooth/bt_driver.h)。对于 `receive()` 成员函数，厂商或开发者无需定义，BTH4 驱动会为其初始化。调用关系如下图所示：
+`int bt_driver_register(FAR struct bt_driver_s *drv)` 类型定义可参考头文件 [bt_driver.h](../../../../../../../nuttx/blob/trunk-5.5/include/nuttx/wireless/bluetooth/bt_driver.h)。对于 `receive()` 成员函数，厂商或开发者无需定义，BTH4 驱动会为其初始化。调用关系如下图所示：
 
 ![img](img/bt_driver.png)
 
 ### 示例
 
-完成上述实现驱动示例代码编写后，需要在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk/drivers/drivers_initialize.c) 文件内的 `drivers_initialize()` 函数末尾，调用驱动注册 API 完成驱动的注册操作：
+完成上述实现驱动示例代码编写后，需要在 [drivers_initialize.c](../../../../../../../nuttx/blob/trunk-5.5/drivers/drivers_initialize.c) 文件内的 `drivers_initialize()` 函数末尾，调用驱动注册 API 完成驱动的注册操作：
 
 ```C
 void drivers_initialize(void)

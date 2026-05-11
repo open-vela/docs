@@ -85,7 +85,7 @@ openvela 的设备驱动依赖于 Pseudo Root File System，类似于 Linux 的 
 
 **系统调用 -> VFS（Virtual File System）-> 驱动**。
 
-为了理解驱动如何注册到文件系统中，需要先了解相关的数据结构。这些数据结构的定义位于 [`include/nuttx/fs/fs.h`](../../../../../../nuttx/blob/trunk/include/nuttx/fs/fs.h)文件中。
+为了理解驱动如何注册到文件系统中，需要先了解相关的数据结构。这些数据结构的定义位于 [`include/nuttx/fs/fs.h`](../../../../../../nuttx/blob/trunk-5.5/include/nuttx/fs/fs.h)文件中。
 
 #### 驱动注册与`inode`
 

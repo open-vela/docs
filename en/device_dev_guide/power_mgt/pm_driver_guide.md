@@ -12,7 +12,7 @@ This document guides embedded developers on how to write device drivers for the 
 
 A driver interacts with the PM framework through callback structures and registration functions defined in `pm.h`.
 
-**Related Header File**: [openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/trunk/include/nuttx/power/pm.h)
+**Related Header File**: [openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/trunk-5.5/include/nuttx/power/pm.h)
 
 ### 1. `pm_state_e` Power State Enumeration
 
@@ -113,7 +113,7 @@ This is a convenience macro that registers a callback to the default `PM_IDLE_DO
 
 This section uses the stm32f7 serial driver as an example to demonstrate how to implement PM functionality step-by-step.
 
-**Source Code Reference**: [arch/arm/src/stm32f7/stm32_serial.c](../../../../../../nuttx/blob/trunk/arch/arm/src/stm32f7/stm32_serial.c)
+**Source Code Reference**: [arch/arm/src/stm32f7/stm32_serial.c](../../../../../../nuttx/blob/trunk-5.5/arch/arm/src/stm32f7/stm32_serial.c)
 
 ### Step 1: Define the Callback Structure and State Variables
 

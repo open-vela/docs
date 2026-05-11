@@ -12,7 +12,7 @@
 
 驱动程序通过 `pm.h` 中定义的回调结构体和注册函数与 PM 框架进行交互。
 
-**相关头文件**：[openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/trunk/include/nuttx/power/pm.h)
+**相关头文件**：[openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/trunk-5.5/include/nuttx/power/pm.h)
 
 ### 1、`pm_state_e` 电源状态枚举
 
@@ -115,7 +115,7 @@ int pm_domain_register(int domain, FAR struct pm_callback_s *cb)
 
 本节以 stm32f7 的串口驱动为例，展示如何一步步实现 PM 功能。
 
-**源码参考**：[arch/arm/src/stm32f7/stm32_serial.c](../../../../../../nuttx/blob/trunk/arch/arm/src/stm32f7/stm32_serial.c)
+**源码参考**：[arch/arm/src/stm32f7/stm32_serial.c](../../../../../../nuttx/blob/trunk-5.5/arch/arm/src/stm32f7/stm32_serial.c)
 
 ### 步骤 1：定义回调结构体和状态变量
 

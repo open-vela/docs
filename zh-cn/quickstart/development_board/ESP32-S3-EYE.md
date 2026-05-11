@@ -83,7 +83,7 @@
 
 ### 1、理解 `esp32s3-eye` 板级代码结构
 
-在进行配置之前，请先熟悉 `esp32s3-eye` 的板级支持包（BSP）[目录结构](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye)。这有助于您理解各个文件的作用。
+在进行配置之前，请先熟悉 `esp32s3-eye` 的板级支持包（BSP）[目录结构](../../../../../../nuttx/tree/trunk-5.5/boards/xtensa/esp32s3/esp32s3-eye)。这有助于您理解各个文件的作用。
 
 ```bash
 esp32s3-eye/
@@ -184,8 +184,8 @@ rm nuttx/Make.defs
 
 ## 六、参考文档
 
-- [esp32s3-eye](../../../../../../nuttx/tree/trunk/boards/xtensa/esp32s3/esp32s3-eye)
-- [defconfig](../../../../../../vendor_espressif/blob/trunk/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
+- [esp32s3-eye](../../../../../../nuttx/tree/trunk-5.5/boards/xtensa/esp32s3/esp32s3-eye)
+- [defconfig](../../../../../../vendor_espressif/blob/trunk-5.5/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
 - [Managing esptool on virtual environment](https://nuttx.apache.org/docs/latest/platforms/xtensa/esp32s3/index.html#managing-esptool-on-virtual-environment)
 
 ## 附录 A: Wi-Fi 功能 defconfig

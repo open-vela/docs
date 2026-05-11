@@ -102,7 +102,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 openvela 遵循严格的版本维护生命周期：
 
 - **补丁更新**：针对已发布版本中发现的关键缺陷（Critical Bugs）或安全漏洞，团队将发布新的补丁版本标签（Patch Release）进行修复。
-- **命名规则**：补丁版本将在原版本号基础上递增，例如 `trunk-5.2.1`。
+- **命名规则**：补丁版本将在原版本号基础上递增，例如 `trunk-5.5.1`。
 
 ## 代码分支管理 (Branch Strategy)
 
@@ -162,17 +162,17 @@ openvela 采用双分支模型来平衡系统的创新性与稳定性。请根�
 - [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)：演示音频播放、列表管理和后台服务。
 - [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)：演示睡眠监测、心率监测、音乐播放、秒表计时。
 - [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)：演示 GPS 定位、实时数据显示和运动轨迹记录。
-- [计算器](../../../../open-vela/packages_demos/blob/trunk/calculator/Readme.md)：一个基础的 UI 与逻辑交互示例。
-- [亲戚计算器](../../../../open-vela/packages_demos/blob/trunk/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
-- [打地鼠](../../../../open-vela/packages_demos/blob/trunk/Whackmole/README_zh-cn.md)：演示游戏循环、随机数生成和动画效果。
+- [计算器](../../../../open-vela/packages_demos/blob/trunk-5.5/calculator/Readme.md)：一个基础的 UI 与逻辑交互示例。
+- [亲戚计算器](../../../../open-vela/packages_demos/blob/trunk-5.5/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
+- [打地鼠](../../../../open-vela/packages_demos/blob/trunk-5.5/Whackmole/README_zh-cn.md)：演示游戏循环、随机数生成和动画效果。
 
-查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/trunk/README_zh-cn.md)。
+查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/trunk-5.5/README_zh-cn.md)。
 
 ### 快应用（Quick Apps）
 
-- [小米手环天气预报应用](../../.././packages_fe_examples/blob/trunk/weather/README.md)：提供简洁直观的未来七日天气信息展示。
-- [音乐播放器](../../.././packages_fe_examples/blob/trunk/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
-- [日历](../../.././packages_fe_examples/blob/trunk/calendar/README.md)：演示一个基础的日历。
+- [小米手环天气预报应用](../../.././packages_fe_examples/blob/trunk-5.5/weather/README.md)：提供简洁直观的未来七日天气信息展示。
+- [音乐播放器](../../.././packages_fe_examples/blob/trunk-5.5/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
+- [日历](../../.././packages_fe_examples/blob/trunk-5.5/calendar/README.md)：演示一个基础的日历。
 
 快应用相关示例正在持续丰富中。查看所有示例，请访问[快应用示例仓库](../../../packages_fe_examples)。
 

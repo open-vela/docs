@@ -352,6 +352,6 @@ In LCD Framebuffer mode, you need to enable the following build options:
 
 ## V. Related Repositories
 
-- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/trunk/include/nuttx/lcd/lcd.h)
+- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/trunk-5.5/include/nuttx/lcd/lcd.h)
 
-- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/trunk/drivers/lcd/lcd_framebuffer.c)
+- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/trunk-5.5/drivers/lcd/lcd_framebuffer.c)
