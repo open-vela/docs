@@ -82,6 +82,8 @@ Release tags are immutable markers created on the `trunk` branch. Each tag repre
 
 Below are the currently released stable versions and their change logs:
 
+- **trunk-5.5**: Please refer to the [v5.5 Release Notes](./en/release_notes/v5.5.md) for detailed changes.
+
 - **trunk-5.4**: Please refer to the [v5.4 Release Notes](./en/release_notes/v5.4.md) for detailed changes.
 
 - **trunk-5.2**: Please refer to the [v5.2 Release Notes](./en/release_notes/v5.2.md) for detailed changes.
