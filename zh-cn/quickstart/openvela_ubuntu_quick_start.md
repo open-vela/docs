@@ -71,7 +71,7 @@ sudo mv repo /usr/local/bin
     mkdir openvela && cd openvela
     ```
 
-2. 使用 `repo` 初始化项目清单，并指定 `trunk-5.5` 分支。
+2. 使用 `repo` 初始化项目清单，并指定 `trunk-5.5` 版本标签。
 
     请根据您的网络环境和偏好，从以下任一平台选择一种方式（推荐使用 SSH）来初始化仓库。
 
@@ -82,13 +82,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 GitHub 账户，请参考 [GitHub 官方文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)。
 
         ```bash
-        repo init -u ssh://git@github.com/open-vela/manifests.git -b trunk-5.5 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+        repo init -u ssh://git@github.com/open-vela/manifests.git -b trunk -m tags/trunk-5.5.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://github.com/open-vela/manifests.git -b trunk-5.5 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+        repo init -u https://github.com/open-vela/manifests.git -b trunk -m tags/trunk-5.5.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     #### 选项 B：从 Gitee 下载
@@ -98,13 +98,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 Gitee 账户，请参考 [Gitee 官方文档](https://gitee.com/help/articles/4191)。
 
         ```bash
-        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b trunk-5.5 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+        repo init --u ssh://git@gitee.com/open-vela/manifests.git -b trunk -m tags/trunk-5.5.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://gitee.com/open-vela/manifests.git -b trunk-5.5 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+        repo init -u https://gitee.com/open-vela/manifests.git -b trunk -m tags/trunk-5.5.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     #### 选项 C：从 GitCode 下载
@@ -114,13 +114,13 @@ sudo mv repo /usr/local/bin
         此方式需要您先将 SSH 公钥添加至您的 GitCode 账户，请参考 [GitCode 官方文档](https://docs.gitcode.com/docs/help/home/user_center/security_management/ssh)。
 
         ```bash
-        repo init -u ssh://git@gitcode.com/open-vela/manifests.git -b trunk-5.5 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+        repo init -u ssh://git@gitcode.com/open-vela/manifests.git -b trunk -m tags/trunk-5.5.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
     - 方式二：HTTPS
 
         ```bash
-        repo init -u https://gitcode.com/open-vela/manifests.git -b trunk-5.5 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+        repo init -u https://gitcode.com/open-vela/manifests.git -b trunk -m tags/trunk-5.5.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
         ```
 
 3. 执行同步命令，repo 将根据清单文件 (`openvela.xml`) 下载所有相关的源代码仓库。
