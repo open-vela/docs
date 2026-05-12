@@ -168,17 +168,17 @@ openvela 采用双分支模型来平衡系统的创新性与稳定性。请根�
 - [音乐播放器](./zh-cn/demo/Music_Player_Example_zh-cn.md)：演示音频播放、列表管理和后台服务。
 - [智能手环](./zh-cn/demo/Smart_Band_Example_zh-cn.md)：演示睡眠监测、心率监测、音乐播放、秒表计时。
 - [自行车码表](./zh-cn/demo/X_Track_zh-cn.md)：演示 GPS 定位、实时数据显示和运动轨迹记录。
-- [计算器](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md)：一个基础的 UI 与逻辑交互示例。
-- [亲戚计算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
-- [打地鼠](../../../../open-vela/packages_demos/blob/dev/Whackmole/README_zh-cn.md)：演示游戏循环、随机数生成和动画效果。
+- [计算器](../../../../open-vela/packages_demos/blob/dev-ai-contest-2026/calculator/Readme.md)：一个基础的 UI 与逻辑交互示例。
+- [亲戚计算器](../../../../open-vela/packages_demos/blob/dev-ai-contest-2026/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
+- [打地鼠](../../../../open-vela/packages_demos/blob/dev-ai-contest-2026/Whackmole/README_zh-cn.md)：演示游戏循环、随机数生成和动画效果。
 
-查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/dev/README_zh-cn.md)。
+查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/dev-ai-contest-2026/README_zh-cn.md)。
 
 ### 快应用（Quick Apps）
 
-- [小米手环天气预报应用](../../.././packages_fe_examples/blob/dev/weather/README.md)：提供简洁直观的未来七日天气信息展示。
-- [音乐播放器](../../.././packages_fe_examples/blob/dev/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
-- [日历](../../.././packages_fe_examples/blob/dev/calendar/README.md)：演示一个基础的日历。
+- [小米手环天气预报应用](../../.././packages_fe_examples/blob/dev-ai-contest-2026/weather/README.md)：提供简洁直观的未来七日天气信息展示。
+- [音乐播放器](../../.././packages_fe_examples/blob/dev-ai-contest-2026/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
+- [日历](../../.././packages_fe_examples/blob/dev-ai-contest-2026/calendar/README.md)：演示一个基础的日历。
 
 快应用相关示例正在持续丰富中。查看所有示例，请访问[快应用示例仓库](../../../packages_fe_examples)。
 

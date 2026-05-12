@@ -83,7 +83,7 @@ This section guides you through creating a board-specific configuration file and
 
 ### 1. Understand the esp32s3-eye Board-Level Code Structure
 
-Before proceeding with the configuration, familiarize yourself with the Board Support Package (BSP) [directory structure](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye) for the `esp32s3-eye`. This will help you understand the purpose of each file.
+Before proceeding with the configuration, familiarize yourself with the Board Support Package (BSP) [directory structure](../../../../../../nuttx/tree/dev-ai-contest-2026/boards/xtensa/esp32s3/esp32s3-eye) for the `esp32s3-eye`. This will help you understand the purpose of each file.
 
 ```bash
 esp32s3-eye/
@@ -184,8 +184,8 @@ This guide demonstrated how to port `openvela` to the ESP32-S3-EYE development b
 
 ## VII. References
 
-- [esp32s3-eye](../../../../../../nuttx/tree/dev/boards/xtensa/esp32s3/esp32s3-eye)
-- [defconfig](../../../../../../vendor_espressif/blob/dev/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
+- [esp32s3-eye](../../../../../../nuttx/tree/dev-ai-contest-2026/boards/xtensa/esp32s3/esp32s3-eye)
+- [defconfig](../../../../../../vendor_espressif/blob/dev-ai-contest-2026/boards/esp32s3/esp32s3-eye/configs/openvela/defconfig)
 - [Managing esptool on virtual environment](https://nuttx.apache.org/docs/latest/platforms/xtensa/esp32s3/index.html#managing-esptool-on-virtual-environment)
 
 ## Appendix A: Wi-Fi Feature defconfig

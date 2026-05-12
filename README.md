@@ -167,17 +167,17 @@ Here are some typical native application examples demonstrating the usage of dif
 - [Music Player](./en/demo/Music_Player_Example.md): Demonstrates audio playback, playlist management, and background services.
 - [Smart Band](./en/demo/Smart_Band_Example.md): Demonstrates sleep monitoring, heart rate monitoring, music playback, and a stopwatch.
 - [Cycling Computer](./en/demo/X_Track.md): Demonstrates GPS positioning, real-time data display, and route tracking.
-- [Calculator](../../../../open-vela/packages_demos/blob/dev/calculator/Readme.md): A basic example of UI and logic interaction.
-- [Relation Calculator](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
-- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev/Whackmole/README.md): Demonstrates a game loop, random number generation, and animation effects.
+- [Calculator](../../../../open-vela/packages_demos/blob/dev-ai-contest-2026/calculator/Readme.md): A basic example of UI and logic interaction.
+- [Relation Calculator](../../../../open-vela/packages_demos/blob/dev-ai-contest-2026/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
+- [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev-ai-contest-2026/Whackmole/README.md): Demonstrates a game loop, random number generation, and animation effects.
 
-To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/dev/README_zh-cn.md).
+To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/dev-ai-contest-2026/README_zh-cn.md).
 
 ### Quick Apps
 
-- [Mi Band Weather App](../../.././packages_fe_examples/blob/dev/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
-- [Music Player](../../.././packages_fe_examples/blob/dev/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
-- [Calendar](../../.././packages_fe_examples/blob/dev/calendar/README.md): Demonstrates a basic calendar.
+- [Mi Band Weather App](../../.././packages_fe_examples/blob/dev-ai-contest-2026/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
+- [Music Player](../../.././packages_fe_examples/blob/dev-ai-contest-2026/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
+- [Calendar](../../.././packages_fe_examples/blob/dev-ai-contest-2026/calendar/README.md): Demonstrates a basic calendar.
 
 More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
 

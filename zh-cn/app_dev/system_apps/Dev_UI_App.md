@@ -5,7 +5,7 @@
 ## 一、前提条件
 
 1. 下载源码，请参见[快速入门](./../../quickstart/openvela_ubuntu_quick_start.md)。
-2. 在开始本教程之前，请从 [music_player](./../../../../../../packages_demos/tree/dev/music_player) 获取示例代码。
+2. 在开始本教程之前，请从 [music_player](./../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player) 获取示例代码。
 
 ## 二、前置概念
 

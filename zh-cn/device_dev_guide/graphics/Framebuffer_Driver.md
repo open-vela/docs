@@ -60,7 +60,7 @@ openvela 的 Framebuffer 用户接口类似于 Linux 系统，通过 VFS（虚�
 
 ### 2、下层驱动接口
 
-openvela 的 Framebuffer 驱动接口用于管理 LCD 设备，设计相对简单。开发者可以参考 [video/fb.h](../../../../../../nuttx/blob/dev/include/nuttx/video/fb.h) 和 [/drivers/video/fb.c](../../../../../../nuttx/blob/dev/drivers/video/fb.c) 文件中的实现。以下是 `fb_register()` 函数的源码，展示了与 Framebuffer 设备驱动相关的重要部分：
+openvela 的 Framebuffer 驱动接口用于管理 LCD 设备，设计相对简单。开发者可以参考 [video/fb.h](../../../../../../nuttx/blob/dev-ai-contest-2026/include/nuttx/video/fb.h) 和 [/drivers/video/fb.c](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/video/fb.c) 文件中的实现。以下是 `fb_register()` 函数的源码，展示了与 Framebuffer 设备驱动相关的重要部分：
 
 ```C
 int fb_register(int display, int plane)
@@ -340,5 +340,5 @@ CONFIG_VIDEO_FB
 
 以下是与 Framebuffer 驱动相关的代码仓库链接：
 
-- [fb.c](../../../../../../nuttx/blob/dev/drivers/video/fb.c)：Framebuffer 驱动的实现文件。
-- [fb.h](../../../../../../nuttx/blob/dev/include/nuttx/video/fb.h)：Framebuffer 驱动的接口定义。
+- [fb.c](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/video/fb.c)：Framebuffer 驱动的实现文件。
+- [fb.h](../../../../../../nuttx/blob/dev-ai-contest-2026/include/nuttx/video/fb.h)：Framebuffer 驱动的接口定义。

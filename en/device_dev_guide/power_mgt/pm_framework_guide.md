@@ -6,7 +6,7 @@ This document details the core concepts, API usage, and available power manageme
 
 **Target Audience**: Embedded systems developers who need to develop or adapt power management features for a specific hardware platform.
 
-**Related Header Files**: [openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/dev/include/nuttx/power/pm.h)
+**Related Header Files**: [openvela include/nuttx/power/pm.h](../../../../../../nuttx/blob/dev-ai-contest-2026/include/nuttx/power/pm.h)
 
 ## I. Core Concepts
 
@@ -238,7 +238,7 @@ Governors are the core of the PM framework, implementing different power managem
 - **How it Works**: The simplest policy. It selects the lowest available power level that is not locked.
 - **Use Cases**: Suitable for domains with simple requirements. It is recommended to start PM adaptation with this governor.
 - **Default Behavior**: If this option is enabled, `pm_initialize` will set this governor as the default for all domains.
-- **Source Code Reference**: [openvela drivers/power/pm/greedy_governor.c](../../../../../../nuttx/blob/dev/drivers/power/pm/greedy_governor.c)
+- **Source Code Reference**: [openvela drivers/power/pm/greedy_governor.c](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/power/pm/greedy_governor.c)
 
 - **Configuration Options**:
 
@@ -254,7 +254,7 @@ Governors are the core of the PM framework, implementing different power managem
 - **How it Works**: Dynamically determines the most appropriate power state by analyzing driver activity time, the expected time to enter the next power state, and the expected time to exit the current power state.
 - **Use Cases**: Suitable for complex scenarios that require dynamic power adjustment based on system load.
 - **Default Behavior**: If the `greedy` governor is not enabled but the `activity` governor is, the latter becomes the default for all domains.
-- **Source Code Reference**: [openvela drivers/power/pm/activity_governor.c](../../../../../../nuttx/blob/dev/drivers/power/pm/activity_governor.c)
+- **Source Code Reference**: [openvela drivers/power/pm/activity_governor.c](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/power/pm/activity_governor.c)
 
 - **Note**: The timing for each state is configurable. The time data for entering/exiting a power state is passed in via configuration, and all domains will be configured with the same data.
 
@@ -292,7 +292,7 @@ Governors are the core of the PM framework, implementing different power managem
     pm_set_governor(PM_IDLE_DOMAIN, pm_stability_governor_initialize());
     ```
 
-- **Source Code Reference**: [openvela drivers/power/pm/stability_governor.c](../../../../../../nuttx/blob/dev/drivers/power/pm/stability_governor.c)
+- **Source Code Reference**: [openvela drivers/power/pm/stability_governor.c](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/power/pm/stability_governor.c)
 
 - **Key Implementation Detail**: When the system wakes from `SLEEP` and returns to `IDLE`, it cannot use `last_state` to check the `WFI` hold time. Instead, it selects the deepest power level with a non-zero threshold from the configuration list (e.g., if the `SLEEP` threshold is 0 and the `STANDBY` threshold is 10, it will select `STANDBY`) as the new baseline for checking.
 

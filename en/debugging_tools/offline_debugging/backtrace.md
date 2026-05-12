@@ -96,7 +96,7 @@ CONFIG_FRAME_POINTER=y
 CONFIG_SCHED_BACKTRACE=y 
 ```
 
- For more information, refer to: [RISC-V Backtrace Implementation](../../../../../../nuttx/blob/dev/arch/risc-v/src/common/riscv_backtrace.c).
+ For more information, refer to: [RISC-V Backtrace Implementation](../../../../../../nuttx/blob/dev-ai-contest-2026/arch/risc-v/src/common/riscv_backtrace.c).
 
 ### 4. Xtensa
   

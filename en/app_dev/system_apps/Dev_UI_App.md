@@ -5,7 +5,7 @@
 ## I. Prerequisites
 
 1. Download the source code. Please refer to [Quick Start](./../../quickstart/openvela_ubuntu_quick_start.md).
-2. Before starting this tutorial, please obtain the example code from [music_player](../../../../../../packages_demos/tree/dev/music_player).
+2. Before starting this tutorial, please obtain the example code from [music_player](../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player).
 
 ## II. Preliminary Concepts
 

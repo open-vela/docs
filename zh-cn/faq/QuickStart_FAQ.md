@@ -9,7 +9,7 @@
 初始化 openvela 仓库时出现以下错误：
 
 ```Bash
-repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
 ```
 
 ![img](./images/003.png)
@@ -86,7 +86,7 @@ fatal: unable to access 'https://gerrit.googlesource.com/git-repo/': Failed to c
 - Github：
 
     ```Bash
-    repo init --partial-clone -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+    repo init --partial-clone -u https://github.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
     
     
     # Install Git LFS (Large File Storage) for managing large files
@@ -100,7 +100,7 @@ fatal: unable to access 'https://gerrit.googlesource.com/git-repo/': Failed to c
 - Gitee：
 
     ```Bash
-    repo init --partial-clone -u https://gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+    repo init --partial-clone -u https://gitee.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
     
     
     # Install Git LFS (Large File Storage) for managing large files

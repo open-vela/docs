@@ -127,7 +127,7 @@ In most application scenarios, development is based on [libuv](https://libuv.org
 
 The core of libuv is based on [poll](https://man7.org/linux/man-pages/man2/poll.2.html). Compared to traditional semaphores, the key advantage of `poll` is its ability to monitor multiple events simultaneously. `poll` exits its blocking state as soon as any one of the monitored events occurs. The principle of libuv is illustrated in the figure below:
 
-The openvela framebuffer driver framework provides the necessary [interface](../../../../../../nuttx/blob/dev/drivers/video/fb.c) for `poll` to monitor whether the framebuffer is in a writable state:
+The openvela framebuffer driver framework provides the necessary [interface](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/video/fb.c) for `poll` to monitor whether the framebuffer is in a writable state:
 
 ```C
 /****************************************************************************
@@ -520,7 +520,7 @@ static void lcdc_te_irq(int irq, void *context, void *arg)
 
 ### 2. (Not Recommended) Blocking Mode
 
-Using semaphores for synchronization is equivalent to locking the framebuffer. The renderer must acquire the lock before each rendering operation; otherwise, it will be blocked. For the code, see this [link](../../../../../../nuttx/blob/dev/arch/arm/src/stm32/stm32_ltdc.c).
+Using semaphores for synchronization is equivalent to locking the framebuffer. The renderer must acquire the lock before each rendering operation; otherwise, it will be blocked. For the code, see this [link](../../../../../../nuttx/blob/dev-ai-contest-2026/arch/arm/src/stm32/stm32_ltdc.c).
 
 ## V Related Repositories
 

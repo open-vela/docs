@@ -347,5 +347,5 @@ errout_with_state:
 
 ## 五、相关仓
 
-- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/dev/include/nuttx/lcd/lcd.h)
-- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/dev/drivers/lcd/lcd_framebuffer.c)
+- [nuttx/include/nuttx/lcd/lcd.h](../../../../../../nuttx/blob/dev-ai-contest-2026/include/nuttx/lcd/lcd.h)
+- [nuttx/drivers/lcd/lcd_framebuffer.c](../../../../../../nuttx/blob/dev-ai-contest-2026/drivers/lcd/lcd_framebuffer.c)

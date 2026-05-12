@@ -9,7 +9,7 @@
 The following error occurs when initializing the openvela repository:
 
 ```Bash
-repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+repo init --partial-clone -u git@gitee.com:open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
 ```
 
 ![img](./images/003.png)
@@ -87,7 +87,7 @@ Switch to **HTTPS** protocol for downloading.
 - Github：
 
     ```Bash
-    repo init --partial-clone -u https://github.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+    repo init --partial-clone -u https://github.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
     
     
     # Install Git LFS (Large File Storage) for managing large files
@@ -101,7 +101,7 @@ Switch to **HTTPS** protocol for downloading.
 - Gitee：
 
     ```Bash
-    repo init --partial-clone -u https://gitee.com/open-vela/manifests.git -b dev -m openvela.xml --git-lfs
+    repo init --partial-clone -u https://gitee.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
     
     
     # Install Git LFS (Large File Storage) for managing large files
