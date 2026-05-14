@@ -10,16 +10,14 @@ The openvela Bluetooth framework provides a complete Bluetooth stack interface, 
 - **[GATT](bt_gatt.md)** (Generic Attribute Profile) — BLE data attribute read/write and notifications
 - **[Device Management](bt_device.md)** — Remote device pairing, connection, and property queries
 
-## BLE Interfaces
-
-- **[BLE Scanning](bt_le_scan.md)** — BLE device discovery and broadcast data reception
-- **[BLE Advertising](bt_le_advertiser.md)** — BLE advertising data transmission and management
-
 ## Audio and Media
 
 - **[A2DP](bt_a2dp.md)** (Advanced Audio Distribution Profile) — High-quality stereo music streaming
-- **[AVRCP](bt_avrcp.md)** (Audio/Video Remote Control Profile) — Playback control, track change, volume adjustment
 - **[HFP](bt_hfp.md)** (Hands-Free Profile) — Bluetooth call functionality
+
+## Positioning and Ranging
+
+- **[CS](bt_cs.md)** (Channel Sounding) — Bluetooth channel sounding for distance measurement and positioning
 
 ## Data and Peripherals
 
