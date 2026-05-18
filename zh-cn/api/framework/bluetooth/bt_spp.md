@@ -21,16 +21,16 @@ openvela 蓝牙 SPP（串口仿真）接口，用于替代物理串口进行数�
 bt_status_t bt_spp_unregister_app(bt_instance_t* ins, void* handle);
 ```
 
-取消注册操作。
+取消注册 SPP 应用。
 
 **参数**：
 
-- `handle` 句柄。
 - `ins` 蓝牙客户端实例。
+- `handle` 句柄。
 
 **返回值**：
 
-bt_spp_unregister_app 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_spp_server_start
@@ -102,7 +102,7 @@ bt_status_t bt_spp_connect(bt_instance_t* ins, void* handle, bt_address_t* addr,
 bt_status_t bt_spp_insecure_connect(bt_instance_t* ins, void* handle, bt_address_t* addr, int16_t scn, bt_uuid_t* uuid, uint16_t* port);
 ```
 
-发起与远程设备的连接。
+发起与远程设备的非安全连接（不要求加密）。
 
 **参数**：
 
@@ -112,6 +112,10 @@ bt_status_t bt_spp_insecure_connect(bt_instance_t* ins, void* handle, bt_address
 - `scn` 服务器通道号。
 - `uuid` 服务 UUID。
 - `port` 端口号。
+
+**返回值**：
+
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_spp_disconnect
@@ -126,7 +130,7 @@ bt_status_t bt_spp_disconnect(bt_instance_t* ins, void* handle, bt_address_t* ad
 
 - `ins` 蓝牙客户端实例。
 - `handle` 句柄。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 - `port` 端口号。
 
 **返回值**：

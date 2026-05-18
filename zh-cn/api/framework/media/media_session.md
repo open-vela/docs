@@ -28,11 +28,11 @@ void* media_session_open(const char* params);
 
 **参数**：
 
-- `params` NULL, 暂未使用.
+- `params` 暂未使用，传 `NULL`。
 
 **返回值**：
 
-void*    控制器句柄, 失败时返回 NULL。
+成功时返回控制器句柄，失败时返回 `NULL`。
 
 
 ### media_session_close
@@ -45,7 +45,7 @@ int media_session_close(void* handle);
 
 **参数**：
 
-- `handle` 控制器句柄
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -62,13 +62,13 @@ int media_session_set_event_callback(void* handle, void* cookie, media_event_cal
 
 **参数**：
 
-- `handle` 控制器句柄
-- `cookie` 回调参数 for `on_event`.
+- `handle` 控制器句柄。
+- `cookie` 回调上下文参数。
 - `on_event` 事件回调函数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ## 控制器接口 - 播放控制
@@ -83,7 +83,7 @@ int media_session_start(void* handle);
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -100,7 +100,7 @@ int media_session_stop(void* handle);
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -117,7 +117,7 @@ int media_session_pause(void* handle);
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -134,8 +134,8 @@ int media_session_seek(void* handle, unsigned position);
 
 **参数**：
 
-- `handle` 控制器句柄.
-- `position` 起始位置，单位为毫秒。
+- `handle` 控制器句柄。
+- `position` 目标位置，单位为毫秒。
 
 **返回值**：
 
@@ -152,7 +152,7 @@ int media_session_prev_song(void* handle);
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -169,15 +169,14 @@ int media_session_next_song(void* handle);
 
 **参数**：
 
-- `handle` 控制器句柄.
-
-
-## 控制器接口 - 音量控制
+- `handle` 控制器句柄。
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
 
+
+## 控制器接口 - 音量控制
 
 ### media_session_increase_volume
 
@@ -185,11 +184,11 @@ int media_session_next_song(void* handle);
 int media_session_increase_volume(void* handle);
 ```
 
-请求 increase 音量。
+请求增大音量。
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -202,11 +201,11 @@ int media_session_increase_volume(void* handle);
 int media_session_decrease_volume(void* handle);
 ```
 
-请求 decrease 音量。
+请求减小音量。
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 
 **返回值**：
 
@@ -219,16 +218,20 @@ int media_session_decrease_volume(void* handle);
 int media_session_set_volume(void* handle, int volume);
 ```
 
-Rquest set 音量。
+请求设置音量。
 
 **参数**：
 
-- `handle` 控制器句柄.
+- `handle` 控制器句柄。
 - `volume` 音量档位。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
+
+**注意**：
+
+- 此接口尚未实现。
 
 
 ## 控制器接口 - 状态查询
@@ -239,16 +242,16 @@ Rquest set 音量。
 int media_session_query(void* handle, const media_metadata_t** data);
 ```
 
-Query 元数据 from most 活跃状态 controllee。
+查询当前最活跃被控端的元数据。
 
 **参数**：
 
-- `handle` 控制器句柄.
-- `data` 用于接收元数据指针的输出指针。
+- `handle` 控制器句柄。
+- `data` 用于接收元数据指针的输出参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_session_get_state
@@ -257,16 +260,16 @@ Query 元数据 from most 活跃状态 controllee。
 int media_session_get_state(void* handle, int* state);
 ```
 
-获取 all status。
+获取当前播放状态。
 
 **参数**：
 
-- `handle` 控制器句柄.
-- `state` 当前状态。
+- `handle` 控制器句柄。
+- `state` 输出参数，当前播放状态。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_session_get_position
@@ -275,16 +278,16 @@ int media_session_get_state(void* handle, int* state);
 int media_session_get_position(void* handle, unsigned* position);
 ```
 
-获取 msec 位置。
+获取当前播放位置。
 
 **参数**：
 
-- `handle` 控制器句柄.
-- `position` 当前位置，单位为毫秒。
+- `handle` 控制器句柄。
+- `position` 输出参数，当前位置，单位为毫秒。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_session_get_duration
@@ -293,16 +296,16 @@ int media_session_get_position(void* handle, unsigned* position);
 int media_session_get_duration(void* handle, unsigned* duration);
 ```
 
-获取 msec 时长。
+获取当前音频源的总时长。
 
 **参数**：
 
-- `handle` 控制器句柄.
-- `duration` 当前总时长，单位为毫秒。
+- `handle` 控制器句柄。
+- `duration` 输出参数，总时长，单位为毫秒。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_session_get_volume
@@ -311,16 +314,16 @@ int media_session_get_duration(void* handle, unsigned* duration);
 int media_session_get_volume(void* handle, int* volume);
 ```
 
-获取 current 音量 index。
+获取当前音量。
 
 **参数**：
 
-- `handle` 控制器句柄.
-- `volume` 音量档位。
+- `handle` 控制器句柄。
+- `volume` 输出参数，当前音量档位。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ## 被控端接口
@@ -331,16 +334,16 @@ int media_session_get_volume(void* handle, int* volume);
 void* media_session_register(void* cookie, media_event_callback on_event);
 ```
 
-注册 as a session controllee。
+注册为媒体会话被控端。
 
 **参数**：
 
-- `cookie` Callback arguemnt of `on_event`.
-- `on_event` 事件回调函数。.
+- `cookie` 回调上下文参数。
+- `on_event` 事件回调函数，用于接收控制命令。
 
 **返回值**：
 
-成功时返回被控端句柄，失败时返回 NULL。
+成功时返回被控端句柄，失败时返回 `NULL`。
 
 
 ### media_session_unregister
@@ -349,7 +352,7 @@ void* media_session_register(void* cookie, media_event_callback on_event);
 int media_session_unregister(void* handle);
 ```
 
-取消注册 会话 controllee。
+取消注册被控端。
 
 **参数**：
 
@@ -366,14 +369,14 @@ int media_session_unregister(void* handle);
 int media_session_notify(void* handle, int event, int result, const char* extra);
 ```
 
-通知 the result of control message. * After receive MEDIA_EVENT_* from `on_事件`, as controllee you should do something to handle the control message, after you acknowledge the control message, you should call this api to send response to 控制器。
+通知控制器控制命令的处理结果。被控端收到 `MEDIA_EVENT_*` 事件后，完成相应处理，再调用此接口向控制器发送响应。
 
 **参数**：
 
 - `handle` 被控端句柄。
-- `event` MEDIA_EVENT_*
+- `event` 要响应的事件类型（`MEDIA_EVENT_*`）。
 - `result` 操作结果，成功时为 `0`，失败时为负的 errno。
-- `extra` 附加消息。
+- `extra` 附加消息字符串，不需要时传 `NULL`。
 
 **返回值**：
 
@@ -386,22 +389,21 @@ int media_session_notify(void* handle, int event, int result, const char* extra)
 int media_session_update(void* handle, const media_metadata_t* data);
 ```
 
-Update 元数据 to session。
+向会话更新元数据。
 
 **参数**：
 
 - `handle` 被控端句柄。
 - `data` 要更新的元数据。
 
-
-## 异步接口（基于 libuv）
-
-以下接口仅在启用 `CONFIG_LIBUV` 时可用，控制器与被控端均有对应异步版本。
-
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
 
+
+## 异步接口（基于 libuv）
+
+以下接口仅在启用 `CONFIG_LIBUV` 时可用，控制器与被控端均有对应异步版本。
 
 ### media_uv_session_open
 
@@ -409,18 +411,18 @@ Update 元数据 to session。
 void* media_uv_session_open(void* loop, char* params, media_uv_callback on_open, void* cookie);
 ```
 
-打开 an async session controller。
+打开异步会话控制器。
 
 **参数**：
 
 - `loop` 当前线程的 `uv_loop_t*` 事件循环句柄。
-- `params` 暂未使用.
+- `params` 暂未使用，传 `NULL`。
 - `on_open` 打开完成后触发的回调函数。
 - `cookie` 回调上下文，供 `on_open`、`on_event`、`on_close` 共用。
 
 **返回值**：
 
-成功时返回异步控制器句柄。
+成功时返回异步控制器句柄，失败时返回 `NULL`。
 
 
 ### media_uv_session_close
@@ -429,16 +431,16 @@ void* media_uv_session_open(void* loop, char* params, media_uv_callback on_open,
 int media_uv_session_close(void* handle, media_uv_callback on_close);
 ```
 
-关闭 the async controller handle。
+关闭异步控制器。
 
 **参数**：
 
-- `handle` 待销毁的异步控制器句柄。
+- `handle` 异步控制器句柄。
 - `on_close` 关闭完成后触发的回调函数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_uv_session_listen
@@ -447,16 +449,16 @@ int media_uv_session_close(void* handle, media_uv_callback on_close);
 int media_uv_session_listen(void* handle, media_event_callback on_event);
 ```
 
-Listen to the 事件s from controllee。
+注册事件监听回调，接收被控端状态变化通知。
 
 **参数**：
 
-- `handle` Async 控制器句柄.
-- `on_event` 事件回调函数。.
+- `handle` 异步控制器句柄。
+- `on_event` 事件回调函数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_uv_session_start
@@ -469,9 +471,9 @@ int media_uv_session_start(void* handle, media_uv_callback on_start, void* cooki
 
 **参数**：
 
-- `handle` Async 控制器句柄.
+- `handle` 异步控制器句柄。
 - `on_start` 结果回调函数。
-- `cookie` 回调参数 of `on_start`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -488,9 +490,9 @@ int media_uv_session_stop(void* handle, media_uv_callback on_stop, void* cookie)
 
 **参数**：
 
-- `handle` Async 控制器句柄.
+- `handle` 异步控制器句柄。
 - `on_stop` 结果回调函数。
-- `cookie` 回调参数 of `on_stop`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -507,9 +509,9 @@ int media_uv_session_pause(void* handle, media_uv_callback on_pause, void* cooki
 
 **参数**：
 
-- `handle` Async 控制器句柄.
+- `handle` 异步控制器句柄。
 - `on_pause` 结果回调函数。
-- `cookie` 回调参数 of `on_pause`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -526,10 +528,10 @@ int media_uv_session_seek(void* handle, unsigned position, media_uv_callback on_
 
 **参数**：
 
-- `handle` 播放器句柄。
-- `position` 起始位置，单位为毫秒。
+- `handle` 异步控制器句柄。
+- `position` 目标位置，单位为毫秒。
 - `on_seek` 结果回调函数。
-- `cookie` 回调参数 of `on_seek`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -546,9 +548,9 @@ int media_uv_session_prev_song(void* handle, media_uv_callback on_pre_song, void
 
 **参数**：
 
-- `handle` Async 控制器句柄.
-- `on_prev` 结果回调函数。
-- `cookie` 回调参数 of `on_prev`
+- `handle` 异步控制器句柄。
+- `on_pre_song` 结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -565,9 +567,9 @@ int media_uv_session_next_song(void* handle, media_uv_callback on_next, void* co
 
 **参数**：
 
-- `handle` Async 控制器句柄.
+- `handle` 异步控制器句柄。
 - `on_next` 结果回调函数。
-- `cookie` 回调参数 of `on_next`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -580,13 +582,13 @@ int media_uv_session_next_song(void* handle, media_uv_callback on_next, void* co
 int media_uv_session_increase_volume(void* handle, media_uv_callback on_increase, void* cookie);
 ```
 
-请求 increase 音量。
+请求增大音量。
 
 **参数**：
 
 - `handle` 异步控制器句柄。
 - `on_increase` 结果回调函数。
-- `cookie` 回调参数 of `on_increase`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -599,13 +601,13 @@ int media_uv_session_increase_volume(void* handle, media_uv_callback on_increase
 int media_uv_session_decrease_volume(void* handle, media_uv_callback on_decrease, void* cookie);
 ```
 
-请求 decrease 音量。
+请求减小音量。
 
 **参数**：
 
 - `handle` 异步控制器句柄。
 - `on_decrease` 结果回调函数。
-- `cookie` 回调参数 of `on_decrease`
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -623,13 +625,17 @@ int media_uv_session_set_volume(void* handle, int volume, media_uv_callback on_s
 **参数**：
 
 - `handle` 异步控制器句柄。
-- `Volume` 音量档位。
-- `on_volume` 结果回调函数。
-- `cookie` 回调参数 of `on_volume`
+- `volume` 音量档位。
+- `on_set_volume` 结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
+
+**注意**：
+
+- 此接口尚未实现。
 
 
 ### media_uv_session_query
@@ -643,12 +649,12 @@ int media_uv_session_query(void* handle, media_uv_object_callback on_query, void
 **参数**：
 
 - `handle` 异步控制器句柄。
-- `on_query` 接收元数据指针的回调函数。
-- `cookie` 回调参数.
+- `on_query` 结果回调函数，回调参数为元数据指针。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_uv_session_get_state
@@ -657,17 +663,21 @@ int media_uv_session_query(void* handle, media_uv_object_callback on_query, void
 int media_uv_session_get_state(void* handle, media_uv_int_callback on_state, void* cookie);
 ```
 
-获取 current state。
+获取当前播放状态。
 
 **参数**：
 
-- `handle` Async 控制器句柄.
-- `on_state` 结果回调函数。
-- `cookie` 回调参数 of `on_state`
+- `handle` 异步控制器句柄。
+- `on_state` 结果回调函数，回调参数为当前状态。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
+
+**注意**：
+
+- 此接口尚未实现，请使用 `media_uv_session_query` 替代。
 
 
 ### media_uv_session_get_position
@@ -681,12 +691,16 @@ int media_uv_session_get_position(void* handle, media_uv_unsigned_callback on_po
 **参数**：
 
 - `handle` 异步控制器句柄。
-- `on_position` 结果回调函数。
-- `cookie` 回调参数 of `on_position`
+- `on_position` 结果回调函数，回调参数为当前位置（毫秒）。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
+
+**注意**：
+
+- 此接口尚未实现，请使用 `media_uv_session_query` 替代。
 
 
 ### media_uv_session_get_duration
@@ -695,17 +709,21 @@ int media_uv_session_get_position(void* handle, media_uv_unsigned_callback on_po
 int media_uv_session_get_duration(void* handle, media_uv_unsigned_callback on_duration, void* cookie);
 ```
 
-获取 current 时长。
+获取当前音频源的总时长。
 
 **参数**：
 
 - `handle` 异步控制器句柄。
-- `on_duration` 结果回调函数。
-- `cookie` 回调参数 of `on_duration`
+- `on_duration` 结果回调函数，回调参数为总时长（毫秒）。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
+
+**注意**：
+
+- 此接口尚未实现，请使用 `media_uv_session_query` 替代。
 
 
 ### media_uv_session_get_volume
@@ -714,17 +732,21 @@ int media_uv_session_get_duration(void* handle, media_uv_unsigned_callback on_du
 int media_uv_session_get_volume(void* handle, media_uv_int_callback on_get_volume, void* cookie);
 ```
 
-获取 current 音量。
+获取当前音量。
 
 **参数**：
 
 - `handle` 异步控制器句柄。
-- `on_volume` 结果回调函数。
-- `cookie` 回调参数 of `on_volume`
+- `on_get_volume` 结果回调函数，回调参数为当前音量档位。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
+
+**注意**：
+
+- 此接口尚未实现，请使用 `media_uv_session_query` 替代。
 
 
 ### media_uv_session_register
@@ -733,18 +755,18 @@ int media_uv_session_get_volume(void* handle, media_uv_int_callback on_get_volum
 void* media_uv_session_register(void* loop, const char* params, media_event_callback on_event, void* cookie);
 ```
 
-注册 as a session controllee to receive control message。
+注册为异步会话被控端，接收控制命令。
 
 **参数**：
 
 - `loop` 当前线程的 `uv_loop_t*` 事件循环句柄。
-- `params` 未使用，请传 `NULL`。
+- `params` 暂未使用，传 `NULL`。
 - `on_event` 接收控制消息的回调函数。
-- `cookie` 回调参数.
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-void*    Async controlee handle, 失败时返回 NULL。
+成功时返回异步被控端句柄，失败时返回 `NULL`。
 
 
 ### media_uv_session_unregister
@@ -753,12 +775,12 @@ void*    Async controlee handle, 失败时返回 NULL。
 int media_uv_session_unregister(void* handle, media_uv_callback on_release);
 ```
 
-取消注册 self。
+取消注册被控端。
 
 **参数**：
 
 - `handle` 异步被控端句柄。
-- `on_release` 调用方资源释放回调函数。
+- `on_release` 资源释放完成后的回调函数。
 
 **返回值**：
 
@@ -771,16 +793,16 @@ int media_uv_session_unregister(void* handle, media_uv_callback on_release);
 int media_uv_session_notify(void* handle, int event, int result, const char* extra, media_uv_callback on_notify, void* cookie);
 ```
 
-通知 the result of control message. * After receive MEDIA_EVENT_* from `on_事件`, as controllee you should do something to handle the control message, after you acknowledge the control message, you should call this api to send response to 控制器。
+通知控制器控制命令的处理结果。被控端收到 `MEDIA_EVENT_*` 事件后，完成相应处理，再调用此接口向控制器发送响应。
 
 **参数**：
 
 - `handle` 异步被控端句柄。
-- `event` 要通知的事件。
-- `result` 事件结果，成功时通常为 `0`，失败时为负的 errno。
-- `extra` 事件的附加字符串消息，不需要时传 `NULL`。
+- `event` 要响应的事件类型。
+- `result` 操作结果，成功时为 `0`，失败时为负的 errno。
+- `extra` 附加消息字符串，不需要时传 `NULL`。
 - `on_notify` 通知确认回调函数。
-- `cookie` 回调参数.
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -793,17 +815,15 @@ int media_uv_session_notify(void* handle, int event, int result, const char* ext
 int media_uv_session_update(void* handle, const media_metadata_t* data, media_uv_callback on_update, void* cookie);
 ```
 
-Update 元数据 to session。
+向会话更新元数据。
 
 **参数**：
 
 - `handle` 异步被控端句柄。
 - `data` 要更新的元数据。
 - `on_update` 更新确认回调函数。
-- `cookie` 回调参数.
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
-
-

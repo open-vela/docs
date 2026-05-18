@@ -30,11 +30,11 @@ void* media_player_open(const char* stream);
 
 **参数**：
 
-- `stream` 流类型常量。 不同流类型有不同的路由逻辑.
+- `stream` 流类型常量，不同流类型有不同的路由逻辑。
 
 **返回值**：
 
-void*    播放器句柄, NULL on failure。
+成功时返回播放器句柄，失败时返回 `NULL`。
 
 
 ### media_player_close
@@ -47,7 +47,7 @@ int media_player_close(void* handle, int pending_stop);
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 - `pending_stop` 关闭前是否等待停止完成：0 表示立即停止并关闭，1 表示等待当前曲目播放完成再关闭。此参数仅对音频播放器有效；视频播放器设置为 1 时不产生等待效果。
 
 **返回值**：
@@ -65,13 +65,13 @@ int media_player_set_event_callback(void* handle, void* event_cookie, media_even
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `event_cookie` 回调参数.
+- `handle` 播放器句柄。
+- `event_cookie` 回调上下文参数。
 - `on_event` 事件回调函数，用于接收流状态变化通知。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_prepare
@@ -84,13 +84,13 @@ int media_player_prepare(void* handle, const char* url, const char* options);
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 - `url` 资源路径，支持两种模式：1. URL 模式：`url` 为本地文件路径或网络地址，框架会读取并播放；2. BUFFER 模式：`url` 为 `NULL`，调用方需通过 `media_player_write_data()` 或 `media_player_get_socket()` + `write()` 持续推送数据。
 - `options` 资源的额外配置参数，通常为描述资源格式的键值对（例如 `"format=s16le,sample_rate=44100,channels=2"`）。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_reset
@@ -99,16 +99,15 @@ int media_player_prepare(void* handle, const char* url, const char* options);
 int media_player_reset(void* handle);
 ```
 
-重置指定类型的播放器。
+重置播放器到初始状态。
 
 **参数**：
 
 - `handle` 播放器句柄，由 `media_player_open` 返回。
-- `handle` 播放器句柄.
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ## 同步接口 - 数据流
@@ -123,13 +122,13 @@ ssize_t media_player_write_data(void* handle, const void* data, size_t len);
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `data` 缓冲区地址.
-- `len` 缓冲区长度 to write.
+- `handle` 播放器句柄。
+- `data` 数据缓冲区地址。
+- `len` 要写入的数据长度（字节）。
 
 **返回值**：
 
-成功时返回发送的字节数，失败时返回负的错误码。
+成功时返回实际写入的字节数，失败时返回负的错误码。
 
 
 ### media_player_get_sockaddr
@@ -142,8 +141,8 @@ int media_player_get_sockaddr(void* handle, struct sockaddr_storage* addr);
 
 **参数**：
 
-- `handle` 播放器句柄
-- `addr` Socket 地址信息。
+- `handle` 播放器句柄。
+- `addr` 用于存储 Socket 地址信息的输出参数。
 
 **返回值**：
 
@@ -160,7 +159,7 @@ int media_player_get_socket(void* handle);
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 **返回值**：
 
@@ -177,7 +176,7 @@ void media_player_close_socket(void* handle);
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 
 ## 同步接口 - 播放控制
@@ -188,15 +187,15 @@ void media_player_close_socket(void* handle);
 int media_player_start(void* handle);
 ```
 
-开始/resume playing the re音频源。
+开始或恢复播放音频源。
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_stop
@@ -205,15 +204,15 @@ int media_player_start(void* handle);
 int media_player_stop(void* handle);
 ```
 
-停止 and clear the re音频源。
+停止播放并清除已准备的音频源。
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_pause
@@ -222,15 +221,15 @@ int media_player_stop(void* handle);
 int media_player_pause(void* handle);
 ```
 
-暂停。
+暂停播放。
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_seek
@@ -239,16 +238,16 @@ int media_player_pause(void* handle);
 int media_player_seek(void* handle, unsigned int position);
 ```
 
-跳转 to msec 位置 from begining。
+跳转到指定的播放位置。
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `position` 位置，单位为毫秒。
+- `handle` 播放器句柄。
+- `position` 目标位置，单位为毫秒，从起始位置计算。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_set_looping
@@ -257,20 +256,19 @@ int media_player_seek(void* handle, unsigned int position);
 int media_player_set_looping(void* handle, int loop);
 ```
 
-设置 loop times。
+设置循环播放次数。
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 - `loop` 循环次数，`-1` 表示无限循环。
-
-
-## 同步接口 - 状态查询
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
 
+
+## 同步接口 - 状态查询
 
 ### media_player_is_playing
 
@@ -278,15 +276,15 @@ int media_player_set_looping(void* handle, int loop);
 int media_player_is_playing(void* handle);
 ```
 
-检查 playing status。
+查询当前是否正在播放。
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 **返回值**：
 
-int  Positive on playing, zero on in活跃状态, negative on error。
+正在播放时返回正值，未播放时返回 `0`，出错时返回负的错误码。
 
 
 ### media_player_get_position
@@ -295,12 +293,12 @@ int  Positive on playing, zero on in活跃状态, negative on error。
 int media_player_get_position(void* handle, unsigned int* position);
 ```
 
-Gert current msec 位置 of re音频源。
+获取当前播放位置。
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `position` 位置，单位为毫秒。
+- `handle` 播放器句柄。
+- `position` 输出参数，当前播放位置，单位为毫秒。
 
 **返回值**：
 
@@ -313,12 +311,12 @@ Gert current msec 位置 of re音频源。
 int media_player_get_duration(void* handle, unsigned int* duration);
 ```
 
-Gert msec 时长 of current re音频源。
+获取当前音频源的总时长。
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `duration` 位置，单位为毫秒。
+- `handle` 播放器句柄。
+- `duration` 输出参数，音频源总时长，单位为毫秒。
 
 **返回值**：
 
@@ -331,20 +329,19 @@ Gert msec 时长 of current re音频源。
 int media_player_get_latency(void* handle, unsigned int* latency);
 ```
 
-Gert latency of current re音频源。
+获取当前音频源的播放延迟。
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `latency` 延迟帧数。
-
-
-## 同步接口 - 音量与属性
+- `handle` 播放器句柄。
+- `latency` 输出参数，延迟帧数。
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
 
+
+## 同步接口 - 音量与属性
 
 ### media_player_set_volume
 
@@ -352,16 +349,16 @@ Gert latency of current re音频源。
 int media_player_set_volume(void* handle, float volume);
 ```
 
-设置音量。
+设置播放音量。
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 - `volume` 音量值，取值范围 `[0.0, 1.0]`。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_player_get_volume
@@ -370,12 +367,12 @@ int media_player_set_volume(void* handle, float volume);
 int media_player_get_volume(void* handle, float* volume);
 ```
 
-获取音量。
+获取当前播放音量。
 
 **参数**：
 
-- `handle` 播放器句柄.
-- `volume` 音量值，取值范围 `[0.0, 1.0]`。
+- `handle` 播放器句柄。
+- `volume` 输出参数，当前音量值，取值范围 `[0.0, 1.0]`。
 
 **返回值**：
 
@@ -388,14 +385,14 @@ int media_player_get_volume(void* handle, float* volume);
 int media_player_set_property(void* handle, const char* target, const char* key, const char* value);
 ```
 
-设置 properties。
+设置播放器属性。
 
 **参数**：
 
 - `handle` 播放器句柄。
 - `target` 目标 filter 名称。
-- `key` Key
-- `value` Value
+- `key` 属性键名。
+- `value` 属性值。
 
 **返回值**：
 
@@ -408,25 +405,24 @@ int media_player_set_property(void* handle, const char* target, const char* key,
 int media_player_get_property(void* handle, const char* target, const char* key, char* value, int value_len);
 ```
 
-获取 properties。
+获取播放器属性。
 
 **参数**：
 
 - `handle` 播放器句柄。
 - `target` 目标 filter 名称。
-- `key` Key
-- `value` 输出缓冲区。
-- `value_len` 缓冲区长度 of value
-
-
-## 异步接口（基于 libuv）
-
-以下接口仅在启用 `CONFIG_LIBUV` 时可用，回调在 `uv_loop` 上执行，避免阻塞调用线程。
+- `key` 属性键名。
+- `value` 输出缓冲区，用于存储属性值。
+- `value_len` 输出缓冲区长度。
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
 
+
+## 异步接口（基于 libuv）
+
+以下接口仅在启用 `CONFIG_LIBUV` 时可用，回调在 `uv_loop` 上执行，避免阻塞调用线程。
 
 ### media_uv_player_open
 
@@ -434,18 +430,18 @@ int media_player_get_property(void* handle, const char* target, const char* key,
 void* media_uv_player_open(void* loop, const char* stream, media_uv_callback on_open, void* cookie);
 ```
 
-打开 an async player with given 流 type。
+打开异步播放器。
 
 **参数**：
 
 - `loop` 当前线程的 `uv_loop_t*` 事件循环句柄。
-- `stream` 流类型常量。 . 不同流类型有不同的路由逻辑.
+- `stream` 流类型常量，不同流类型有不同的路由逻辑。
 - `on_open` 打开完成后触发的回调函数。
 - `cookie` 回调上下文，供 `on_open`、`on_event`、`on_connection`、`on_close` 共用。
 
 **返回值**：
 
-void*    Handle of player, 失败时返回 NULL。
+成功时返回播放器句柄，失败时返回 `NULL`。
 
 
 ### media_uv_player_listen
@@ -454,7 +450,7 @@ void*    Handle of player, 失败时返回 NULL。
 int media_uv_player_listen(void* handle, media_event_callback on_event);
 ```
 
-Listen to status change 事件 by setting 回调。
+注册事件监听回调，接收播放状态变化通知。
 
 **参数**：
 
@@ -472,17 +468,17 @@ Listen to status change 事件 by setting 回调。
 int media_uv_player_close(void* handle, int pending, media_uv_callback on_close);
 ```
 
-关闭 the async player。
+关闭异步播放器。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `pending` 是否以 pending 方式关闭。
+- `pending` 是否以 pending 方式关闭（等待当前播放完成）。
 - `on_close` 资源释放完成后触发的回调函数。
 
 **返回值**：
 
-成功时返回 0，无效句柄时返回负的错误码。
+成功时返回 `0`，无效句柄时返回负的错误码。
 
 
 ### media_uv_player_prepare
@@ -491,7 +487,7 @@ int media_uv_player_close(void* handle, int pending, media_uv_callback on_close)
 int media_uv_player_prepare(void* handle, const char* url, const char* options, media_uv_object_callback on_connection, media_uv_callback on_prepare, void* cookie);
 ```
 
-准备 re音频源 for playing。
+准备音频源以供播放。
 
 **参数**：
 
@@ -499,12 +495,12 @@ int media_uv_player_prepare(void* handle, const char* url, const char* options, 
 - `url` 资源路径，支持两种模式：1. URL 模式：`url` 为本地文件路径或网络地址，框架会读取并播放；2. BUFFER 模式：`url` 为 `NULL`，调用方需通过 `media_player_write_data()` 或 `media_player_get_socket()` + `write()` 持续推送数据。
 - `options` 资源的额外配置参数，通常为描述资源格式的键值对（例如 `"format=s16le,sample_rate=44100,channels=2"`）。
 - `on_connection` BUFFER 模式下接收 `uv_pipe_t` 的回调函数。
-- `on_prepare` 结果回调函数。
-- `cookie` 回调参数 for `on_prepare`.
+- `on_prepare` 准备完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_uv_player_reset
@@ -513,13 +509,13 @@ int media_uv_player_prepare(void* handle, const char* url, const char* options, 
 int media_uv_player_reset(void* handle, media_uv_callback on_reset, void* cookie);
 ```
 
-重置 player。
+重置播放器到初始状态。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_reset` 结果回调函数。
-- `cookie` 回调参数 for `on_reset`.
+- `on_reset` 重置完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -532,14 +528,14 @@ int media_uv_player_reset(void* handle, media_uv_callback on_reset, void* cookie
 int media_uv_player_start_auto(void* handle, const char* scenario, media_uv_callback on_start, void* cookie);
 ```
 
-Play or resume the prepared 音频源 with auto 焦点 request。
+播放或恢复已准备的音频源，并自动请求音频焦点。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
 - `scenario` 场景常量，不同场景对应不同的焦点优先级。
-- `on_play` 结果确认回调（用于 request/start 操作）。
-- `cookie` 回调参数 for `on_play`.
+- `on_start` 播放开始后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -557,8 +553,8 @@ int media_uv_player_start(void* handle, media_uv_callback on_start, void* cookie
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_start` 结果回调函数。
-- `cookie` 回调参数 for `on_start`.
+- `on_start` 播放开始后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -571,13 +567,13 @@ int media_uv_player_start(void* handle, media_uv_callback on_start, void* cookie
 int media_uv_player_pause(void* handle, media_uv_callback on_pause, void* cookie);
 ```
 
-暂停 the playing。
+暂停播放。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_pause` 结果回调函数。
-- `cookie` 回调参数 for `on_pause`.
+- `on_pause` 暂停完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -590,13 +586,13 @@ int media_uv_player_pause(void* handle, media_uv_callback on_pause, void* cookie
 int media_uv_player_stop(void* handle, media_uv_callback on_stop, void* cookie);
 ```
 
-停止 the playing, clear the prepared re音频源 file。
+停止播放并清除已准备的音频源。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_stop` 结果回调函数。
-- `cookie` 回调参数 for `on_stop`.
+- `on_stop` 停止完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -609,18 +605,18 @@ int media_uv_player_stop(void* handle, media_uv_callback on_stop, void* cookie);
 int media_uv_player_set_volume(void* handle, float volume, media_uv_callback on_volume, void* cookie);
 ```
 
-设置 player 音量。
+设置播放音量。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `volume` Volume in [0.0, 1.0].
-- `on_volume` 结果回调函数。
-- `cookie` 回调参数 for `on_volume`.
+- `volume` 音量值，取值范围 `[0.0, 1.0]`。
+- `on_volume` 设置完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_uv_player_get_volume
@@ -629,14 +625,13 @@ int media_uv_player_set_volume(void* handle, float volume, media_uv_callback on_
 int media_uv_player_get_volume(void* handle, media_uv_float_callback on_volume, void* cookie);
 ```
 
-获取 播放器 handle 音量。
+获取当前播放音量。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `volume` 音量值，取值范围 `0.0 - 1.0`。
-- `on_volume` 结果回调函数。
-- `cookie` 回调参数 for `on_volume`.
+- `on_volume` 结果回调函数，回调参数为当前音量值（范围 `0.0 - 1.0`）。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -649,13 +644,13 @@ int media_uv_player_get_volume(void* handle, media_uv_float_callback on_volume, 
 int media_uv_player_get_playing(void* handle, media_uv_int_callback on_playing, void* cookie);
 ```
 
-获取 current playing status。
+获取当前播放状态。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_playing` 结果回调函数。
-- `cookie` 回调参数 for `on_playing`.
+- `on_playing` 结果回调函数，回调参数为播放状态。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -668,13 +663,13 @@ int media_uv_player_get_playing(void* handle, media_uv_int_callback on_playing, 
 int media_uv_player_get_position(void* handle, media_uv_unsigned_callback on_position, void* cookie);
 ```
 
-获取 current playing 位置。
+获取当前播放位置。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_position` 结果回调函数。
-- `cookie` 回调参数 for `on_position`.
+- `on_position` 结果回调函数，回调参数为当前位置（毫秒）。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -687,13 +682,13 @@ int media_uv_player_get_position(void* handle, media_uv_unsigned_callback on_pos
 int media_uv_player_get_duration(void* handle, media_uv_unsigned_callback on_duration, void* cookie);
 ```
 
-获取 时长 of current playing re音频源。
+获取当前音频源的总时长。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_duration` 结果回调函数。
-- `cookie` 回调参数 for `on_duration`.
+- `on_duration` 结果回调函数，回调参数为总时长（毫秒）。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -706,13 +701,13 @@ int media_uv_player_get_duration(void* handle, media_uv_unsigned_callback on_dur
 int media_uv_player_get_latency(void* handle, media_uv_unsigned_callback cb, void* cookie);
 ```
 
-获取 latency of current playing re音频源。
+获取当前音频源的播放延迟。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `cb` 结果回调函数。
-- `cookie` 回调参数 for `on_latency`.
+- `cb` 结果回调函数，回调参数为延迟帧数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -725,14 +720,14 @@ int media_uv_player_get_latency(void* handle, media_uv_unsigned_callback cb, voi
 int media_uv_player_set_looping(void* handle, int loop, media_uv_callback on_looping, void* cookie);
 ```
 
-设置 the loop times。
+设置循环播放次数。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
 - `loop` 循环次数，`-1` 表示无限循环。
-- `on_looping` 结果回调函数。
-- `cookie` 回调参数 for `on_looping`.
+- `on_looping` 设置完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -745,14 +740,14 @@ int media_uv_player_set_looping(void* handle, int loop, media_uv_callback on_loo
 int media_uv_player_seek(void* handle, unsigned int position, media_uv_callback on_seek, void* cookie);
 ```
 
-跳转 to msec 位置 from begining。
+跳转到指定的播放位置。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `position` 起始位置，单位为毫秒。
-- `on_seek` 结果回调函数。
-- `cookie` 回调参数 for `on_seek`.
+- `position` 目标位置，单位为毫秒，从起始位置计算。
+- `on_seek` 跳转完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -765,16 +760,16 @@ int media_uv_player_seek(void* handle, unsigned int position, media_uv_callback 
 int media_uv_player_set_property(void* handle, const char* target, const char* key, const char* value, media_uv_callback on_setprop, void* cookie);
 ```
 
-设置 properties of 播放器 handle。
+设置播放器属性。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
 - `target` 目标 filter 名称。
-- `key` Key
-- `value` Value
-- `on_setprop` 结果回调函数。
-- `cookie` 回调参数 for `on_setprop`.
+- `key` 属性键名。
+- `value` 属性值。
+- `on_setprop` 设置完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -787,15 +782,15 @@ int media_uv_player_set_property(void* handle, const char* target, const char* k
 int media_uv_player_get_property(void* handle, const char* target, const char* key, media_uv_string_callback on_getprop, void* cookie);
 ```
 
-获取 properties of 播放器 handle。
+获取播放器属性。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
 - `target` 目标 filter 名称。
-- `key` Key
-- `on_getprop` 结果回调函数。
-- `cookie` 回调参数 for `on_getprop`.
+- `key` 属性键名。
+- `on_getprop` 结果回调函数，回调参数为属性值字符串。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -808,17 +803,17 @@ int media_uv_player_get_property(void* handle, const char* target, const char* k
 int media_uv_player_query(void* handle, media_uv_object_callback on_query, void* cookie);
 ```
 
-Query 元数据 of 播放器 handle。
+查询播放器元数据。
 
 **参数**：
 
 - `handle` 异步播放器句柄。
-- `on_query` 接收元数据指针的回调函数。
-- `cookie` 回调参数 for `on_query`.
+- `on_query` 结果回调函数，回调参数为元数据指针。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_uv_player_close_socket
@@ -831,8 +826,8 @@ int media_uv_player_close_socket(void* handle);
 
 **参数**：
 
-- `handle` 播放器句柄.
+- `handle` 播放器句柄。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。

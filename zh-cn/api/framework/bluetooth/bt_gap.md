@@ -31,7 +31,7 @@ bt_adapter_state_t bt_adapter_get_state(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_get_state 操作。
+返回当前适配器状态枚举值，参见 `bt_adapter_state_t`。
 
 
 #### bt_adapter_is_support_le
@@ -49,7 +49,7 @@ bool bt_adapter_is_support_le(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_is_support_le 操作。
+支持时返回 `true`，不支持时返回 `false`。
 
 
 #### bt_adapter_is_support_leaudio
@@ -67,7 +67,7 @@ bool bt_adapter_is_support_leaudio(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_is_support_leaudio 操作。
+支持时返回 `true`，不支持时返回 `false`。
 
 
 ## 设备发现
@@ -101,7 +101,7 @@ bt_status_t bt_adapter_start_discovery(bt_instance_t* ins, uint32_t timeout);
 
 **返回值**：
 
-bt_adapter_start_discovery 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 #### bt_adapter_cancel_discovery
@@ -118,7 +118,7 @@ bt_status_t bt_adapter_cancel_discovery(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_cancel_discovery 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 #### bt_adapter_is_discovering
@@ -136,7 +136,7 @@ bool bt_adapter_is_discovering(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_is_discovering 操作。
+正在发现时返回 `true`，否则返回 `false`。
 
 
 ## 属性管理
@@ -171,7 +171,7 @@ bt_status_t bt_adapter_set_name(bt_instance_t* ins, const char* name);
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回负的错误码。。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 #### bt_adapter_get_name
@@ -200,15 +200,13 @@ bt_status_t bt_adapter_set_scan_mode(bt_instance_t* ins, bt_scan_mode_t mode, bo
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `mode` 模式。
+- `mode` 扫描模式。
 - `bondable` 是否可配对。
-- `name` 输出参数，存储适配器名称。
-- `length` 缓冲区长度。
 
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回负的错误码。。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 #### bt_adapter_get_scan_mode
@@ -226,9 +224,7 @@ bt_scan_mode_t bt_adapter_get_scan_mode(bt_instance_t* ins);
 
 **返回值**：
 
-
-
-#### bt_adapter_set_device_class
+返回扫描模式枚举值，参见 `bt_scan_mode_t`。
 
 ```c
 bt_status_t bt_adapter_set_device_class(bt_instance_t* ins, uint32_t cod);
@@ -262,9 +258,7 @@ uint32_t bt_adapter_get_device_class(bt_instance_t* ins);
 
 **返回值**：
 
-
-
-#### bt_adapter_set_debug_mode
+返回 24 位 Class of Device 值。
 
 ```c
 bt_status_t bt_adapter_set_debug_mode(bt_instance_t* ins, bt_debug_mode_t mode, uint8_t operation);
@@ -290,7 +284,7 @@ bt_status_t bt_adapter_set_le_address(bt_instance_t* ins, bt_address_t* addr);
 **参数**：
 
 - `ins` 蓝牙客户端实例, 参见 bt_instance_t.
-- `addr` 指向 the BLE identity address.
+- `addr` BLE 身份地址。
 
 
 #### bt_adapter_set_le_appearance
@@ -379,18 +373,11 @@ uint32_t bt_adapter_get_le_io_capability(bt_instance_t* ins);
 
 **参数**：
 
-- `ins` 蓝牙客户端实例, 参见 bt_instance_t.- `mode` 调试模式。
-- `operation` 调试操作。
-- `appearance` BLE 外观值。
-- `addr` 设备地址。
-- `type` 地址类型。
-- `cap` IO 能力值。
-- `num` 输出参数，存储设备数量。
-
+- `ins` 蓝牙客户端实例。
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+返回 BLE IO 能力值。
 
 
 ## BLE 管理
@@ -411,7 +398,7 @@ bt_status_t bt_adapter_enable(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_enable 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 #### bt_adapter_disable
@@ -428,7 +415,7 @@ bt_status_t bt_adapter_disable(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_disable 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 #### bt_adapter_disable_safe
@@ -472,7 +459,7 @@ bool bt_adapter_is_le_enabled(bt_instance_t* ins);
 
 **返回值**：
 
-bt_adapter_is_le_enabled 操作。
+已启用时返回 `true`，未启用时返回 `false`。
 
 
 #### bt_adapter_le_enable_key_derivation
@@ -675,7 +662,7 @@ bt_status_t bt_adapter_get_type_async(bt_instance_t* ins, bt_device_type_cb_t ge
 bt_status_t bt_adapter_set_discovery_filter_async(bt_instance_t* ins, bt_status_cb_t cb, void* userdata);
 ```
 
-Set the discovery filter（异步版本）。
+设置发现过滤器（异步版本）。
 
 **参数**：
 
@@ -872,7 +859,7 @@ bt_status_t bt_adapter_get_device_class_async(bt_instance_t* ins, bt_u32_cb_t ge
 bt_status_t bt_adapter_set_io_capability_async(bt_instance_t* ins, bt_io_capability_t cap, bt_status_cb_t cb, void* userdata);
 ```
 
-Set the BR/EDR adapter IO capability（异步版本）。
+设置 BR/EDR 适配器 IO 能力（异步版本）。
 
 **参数**：
 
@@ -889,7 +876,7 @@ Set the BR/EDR adapter IO capability（异步版本）。
 bt_status_t bt_adapter_get_io_capability_async(bt_instance_t* ins, bt_adapter_get_io_capability_cb_t get_ioc_cb, void* userdata);
 ```
 
-Get the BR/EDR adapter IO capability（异步版本）。
+获取 BR/EDR 适配器 IO 能力（异步版本）。
 
 **参数**：
 
@@ -943,7 +930,7 @@ bt_status_t bt_adapter_set_page_scan_parameters_async(bt_instance_t* ins, bt_sca
 bt_status_t bt_adapter_set_le_io_capability_async(bt_instance_t* ins, uint32_t le_io_cap, bt_status_cb_t cb, void* userdata);
 ```
 
-Set the BLE adapter IO capability（异步版本）。
+设置 BLE 适配器 IO 能力（异步版本）。
 
 **参数**：
 
@@ -960,7 +947,7 @@ Set the BLE adapter IO capability（异步版本）。
 bt_status_t bt_adapter_get_le_io_capability_async(bt_instance_t* ins, bt_u32_cb_t get_le_ioc_cb, void* userdata);
 ```
 
-Get the BLE adapter IO capability（异步版本）。
+获取 BLE 适配器 IO 能力（异步版本）。
 
 **参数**：
 
@@ -976,7 +963,7 @@ Get the BLE adapter IO capability（异步版本）。
 bt_status_t bt_adapter_get_le_address_async(bt_instance_t* ins, bt_adapter_get_le_address_cb_t cb, void* userdata);
 ```
 
-Get the BLE adapter address（异步版本）。
+获取 BLE 适配器地址（异步版本）。
 
 **参数**：
 
@@ -992,7 +979,7 @@ Get the BLE adapter address（异步版本）。
 bt_status_t bt_adapter_set_le_address_async(bt_instance_t* ins, bt_address_t* addr, bt_status_cb_t cb, void* userdata);
 ```
 
-Set the BLE private address（异步版本）。
+设置 BLE 私有地址（异步版本）。
 
 **参数**：
 
@@ -1009,7 +996,7 @@ Set the BLE private address（异步版本）。
 bt_status_t bt_adapter_set_le_identity_address_async(bt_instance_t* ins, bt_address_t* addr, bool is_public, bt_status_cb_t cb, void* userdata);
 ```
 
-Set the BLE identity address（异步版本）。
+设置 BLE 身份地址（异步版本）。
 
 **参数**：
 
@@ -1027,7 +1014,7 @@ Set the BLE identity address（异步版本）。
 bt_status_t bt_adapter_set_le_appearance_async(bt_instance_t* ins, uint16_t appearance, bt_status_cb_t cb, void* userdata);
 ```
 
-Set the BLE adapter appearance（异步版本）。
+设置 BLE 适配器外观值（异步版本）。
 
 **参数**：
 
@@ -1044,7 +1031,7 @@ Set the BLE adapter appearance（异步版本）。
 bt_status_t bt_adapter_get_le_appearance_async(bt_instance_t* ins, bt_u16_cb_t cb, void* userdata);
 ```
 
-Get the BLE adapter appearance（异步版本）。
+获取 BLE 适配器外观值（异步版本）。
 
 **参数**：
 
@@ -1078,7 +1065,7 @@ bt_status_t bt_adapter_le_enable_key_derivation_async(bt_instance_t* ins, bool b
 bt_status_t bt_adapter_le_add_whitelist_async(bt_instance_t* ins, bt_address_t* addr, bt_status_cb_t cb, void* userdata);
 ```
 
-Add a device to the BLE whitelist（异步版本）。
+添加设备到 BLE 白名单（异步版本）。
 
 **参数**：
 

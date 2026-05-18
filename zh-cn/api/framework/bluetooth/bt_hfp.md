@@ -26,12 +26,12 @@ bool bt_hfp_hf_unregister_callbacks(bt_instance_t* ins, void* cookie);
 
 **参数**：
 
-- `cookie` 用户上下文。
 - `ins` 蓝牙客户端实例。
+- `cookie` 用户上下文。
 
 **返回值**：
 
-取消注册回调函数。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_hfp_hf_is_connected
@@ -40,7 +40,7 @@ bool bt_hfp_hf_unregister_callbacks(bt_instance_t* ins, void* cookie);
 bool bt_hfp_hf_is_connected(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+查询与远程设备的 HFP HF 是否已连接。
 
 **参数**：
 
@@ -50,7 +50,7 @@ bool bt_hfp_hf_is_connected(bt_instance_t* ins, bt_address_t* addr);
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_hfp_hf_is_audio_connected
@@ -59,7 +59,7 @@ bool bt_hfp_hf_is_connected(bt_instance_t* ins, bt_address_t* addr);
 bool bt_hfp_hf_is_audio_connected(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+查询与远程设备的 HFP 音频通道是否已连接。
 
 **参数**：
 
@@ -69,7 +69,7 @@ bool bt_hfp_hf_is_audio_connected(bt_instance_t* ins, bt_address_t* addr);
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+音频已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_hfp_hf_get_connection_state
@@ -78,7 +78,7 @@ bool bt_hfp_hf_is_audio_connected(bt_instance_t* ins, bt_address_t* addr);
 profile_connection_state_t bt_hfp_hf_get_connection_state(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+获取与远程设备的 HFP HF 连接状态。
 
 **参数**：
 
@@ -88,6 +88,7 @@ profile_connection_state_t bt_hfp_hf_get_connection_state(bt_instance_t* ins, bt
 
 **返回值**：
 
+返回当前连接状态枚举值，参见 `profile_connection_state_t`。
 
 
 ### bt_hfp_hf_connect
@@ -96,16 +97,16 @@ profile_connection_state_t bt_hfp_hf_get_connection_state(bt_instance_t* ins, bt
 bt_status_t bt_hfp_hf_connect(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+发起与远程设备的 HFP HF 连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-建立连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_hfp_hf_disconnect
@@ -391,7 +392,7 @@ bt_status_t bt_hfp_hf_query_current_calls(bt_instance_t* ins, bt_address_t* addr
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 - `allocator` 内存分配函数。- `calls` 输出参数，存储通话信息数组。
 - `num` 输出参数，存储通话数量。
 
@@ -502,16 +503,16 @@ bt_status_t bt_hfp_hf_get_subscriber_number(bt_instance_t* ins, bt_address_t* ad
 bt_status_t bt_hfp_hf_query_current_calls_with_callback(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-查询当前所有通话的状态信息（CLCC）。
+查询当前所有通话的状态信息（CLCC），结果通过回调异步返回。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
 - `addr` 远程设备蓝牙地址。
 
+**返回值**：
 
-
-- `ins` 蓝牙客户端实例。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_hfp_ag_unregister_callbacks
@@ -524,12 +525,12 @@ bool bt_hfp_ag_unregister_callbacks(bt_instance_t* ins, void* cookie);
 
 **参数**：
 
-- `cookie` 用户上下文。
 - `ins` 蓝牙客户端实例。
+- `cookie` 用户上下文。
 
 **返回值**：
 
-取消注册回调函数。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_hfp_ag_is_connected
@@ -538,7 +539,7 @@ bool bt_hfp_ag_unregister_callbacks(bt_instance_t* ins, void* cookie);
 bool bt_hfp_ag_is_connected(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+查询与远程设备的 HFP AG 是否已连接。
 
 **参数**：
 
@@ -548,7 +549,7 @@ bool bt_hfp_ag_is_connected(bt_instance_t* ins, bt_address_t* addr);
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_hfp_ag_is_audio_connected
@@ -557,7 +558,7 @@ bool bt_hfp_ag_is_connected(bt_instance_t* ins, bt_address_t* addr);
 bool bt_hfp_ag_is_audio_connected(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+查询与远程设备的 HFP AG 音频通道是否已连接。
 
 **参数**：
 
@@ -567,7 +568,7 @@ bool bt_hfp_ag_is_audio_connected(bt_instance_t* ins, bt_address_t* addr);
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+音频已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_hfp_ag_get_connection_state
@@ -576,7 +577,7 @@ bool bt_hfp_ag_is_audio_connected(bt_instance_t* ins, bt_address_t* addr);
 profile_connection_state_t bt_hfp_ag_get_connection_state(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+获取与远程设备的 HFP AG 连接状态。
 
 **参数**：
 
@@ -586,6 +587,7 @@ profile_connection_state_t bt_hfp_ag_get_connection_state(bt_instance_t* ins, bt
 
 **返回值**：
 
+返回当前连接状态枚举值，参见 `profile_connection_state_t`。
 
 
 ### bt_hfp_ag_connect
@@ -594,16 +596,16 @@ profile_connection_state_t bt_hfp_ag_get_connection_state(bt_instance_t* ins, bt
 bt_status_t bt_hfp_ag_connect(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+发起与远程设备的 HFP AG 连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-建立连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_hfp_ag_disconnect
@@ -865,9 +867,9 @@ bt_status_t bt_hfp_ag_send_clcc_response(bt_instance_t* ins, bt_address_t* addr,
 - `dir` 方向（呼入/呼出）。
 - `state` 状态。
 - `mode` 模式。
-- `mpty` 是否 the call is multi party.
+- `mpty` 是否为多方通话。
 - `type` 类型。
-- `number` phone 数量 the call.
+- `number` 通话号码。
 
 **返回值**：
 

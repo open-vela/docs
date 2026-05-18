@@ -27,11 +27,11 @@ void* media_recorder_open(const char* params);
 
 **参数**：
 
-- `params` 源类型常量。 Usually MEDIA_SOURCE_MIC.
+- `params` 源类型常量，通常为 `MEDIA_SOURCE_MIC`。
 
 **返回值**：
 
-void*    录制器句柄 on success; NULL on failure。
+成功时返回录制器句柄，失败时返回 `NULL`。
 
 
 ### media_recorder_close
@@ -44,7 +44,7 @@ int media_recorder_close(void* handle);
 
 **参数**：
 
-- `handle` 录制器句柄
+- `handle` 录制器句柄。
 
 **返回值**：
 
@@ -57,13 +57,13 @@ int media_recorder_close(void* handle);
 int media_recorder_set_event_callback(void* handle, void* cookie, media_event_callback event_cb);
 ```
 
-设置录制器事件回调, the callback will be called when state changed or something user cares。
+设置录制器事件回调，当状态变化或发生用户关注的事件时触发回调。
 
 **参数**：
 
 - `handle` 录制器句柄。
-- `cookie` 用户数据，在 `event_cb` 触发时回传给用户，通常会被修改。
-- `on_event` 事件回调函数。
+- `cookie` 用户数据，在 `event_cb` 触发时回传给用户。
+- `event_cb` 事件回调函数。
 
 **返回值**：
 
@@ -80,7 +80,7 @@ int media_recorder_prepare(void* handle, const char* url, const char* options);
 
 **参数**：
 
-- `handle` 录制器句柄
+- `handle` 录制器句柄。
 - `url` 资源路径，支持两种模式：1. URL 模式：`url` 为本地文件路径，框架会打开并录制到该路径；2. BUFFER 模式：`url` 为 `NULL`，调用方需通过 `media_recorder_read_data()` 或 `media_recorder_get_socket()` + `read()` 持续接收数据。
 - `options` 额外配置参数，字段包括：format（封装格式，如 opus/wav）、sample_rate（采样率）、ch_layout（声道布局）、b（比特率，如 `"23900"`）、vbr（0=固定码率，1=可变码率）、level（编码复杂度，0-10，默认 10）。示例：`"format=opusraw:sample_rate=16000:ch_layout=mono:b=32000:vbr=0:level=1"`。
 
@@ -95,15 +95,15 @@ int media_recorder_prepare(void* handle, const char* url, const char* options);
 int media_recorder_reset(void* handle);
 ```
 
-重置录制器。
+重置录制器到初始状态。
 
 **参数**：
 
-- `handle` 录制器句柄.
+- `handle` 录制器句柄。
 
 **返回值**：
 
-int 成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ## 同步接口 - 数据流
@@ -118,9 +118,9 @@ ssize_t media_recorder_read_data(void* handle, void* data, size_t len);
 
 **参数**：
 
-- `handle` 录制器句柄.
-- `data` 缓冲区地址.
-- `len` 缓冲区长度 to read.
+- `handle` 录制器句柄。
+- `data` 数据缓冲区地址。
+- `len` 要读取的数据长度（字节）。
 
 **返回值**：
 
@@ -137,12 +137,12 @@ int media_recorder_get_sockaddr(void* handle, struct sockaddr_storage* addr);
 
 **参数**：
 
-- `handle` 录制器句柄.
-- `addr` Socket 地址信息。
+- `handle` 录制器句柄。
+- `addr` 用于存储 Socket 地址信息的输出参数。
 
 **返回值**：
 
-int 成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_recorder_get_socket
@@ -155,11 +155,11 @@ int media_recorder_get_socket(void* handle);
 
 **参数**：
 
-- `handle` 录制器句柄.
+- `handle` 录制器句柄。
 
 **返回值**：
 
-成功时返回 `0`，失败时返回负的 errno。
+成功时返回 Socket 文件描述符，失败时返回负的错误码。
 
 
 ### media_recorder_close_socket
@@ -168,11 +168,11 @@ int media_recorder_get_socket(void* handle);
 void media_recorder_close_socket(void* handle);
 ```
 
-关闭 Socket fd when recorder finish recving data。
+关闭录制器数据接收完成后的 Socket 文件描述符。
 
 **参数**：
 
-- `handle` 录制器句柄.
+- `handle` 录制器句柄。
 
 
 ## 同步接口 - 录制控制
@@ -183,15 +183,15 @@ void media_recorder_close_socket(void* handle);
 int media_recorder_start(void* handle);
 ```
 
-开始/resume the recording the re音频源。
+开始或恢复录制。
 
 **参数**：
 
-- `handle` 录制器句柄.
+- `handle` 录制器句柄。
 
 **返回值**：
 
-int 成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_recorder_pause
@@ -200,15 +200,15 @@ int 成功时返回 0，失败时返回负的错误码。
 int media_recorder_pause(void* handle);
 ```
 
-暂停 录制器 after capturing start。
+暂停录制。
 
 **参数**：
 
-- `handle` 录制器句柄.
+- `handle` 录制器句柄。
 
 **返回值**：
 
-int 成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ### media_recorder_stop
@@ -221,11 +221,11 @@ int media_recorder_stop(void* handle);
 
 **参数**：
 
-- `handle` 录制器句柄.
+- `handle` 录制器句柄。
 
 **返回值**：
 
-int 成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ## 同步接口 - 属性
@@ -236,14 +236,14 @@ int 成功时返回 0，失败时返回负的错误码。
 int media_recorder_set_property(void* handle, const char* target, const char* key, const char* value);
 ```
 
-设置 properties of 录制器 path。
+设置录制器属性。
 
 **参数**：
 
 - `handle` 录制器句柄。
-- `target` 目标 filter 名称。.
-- `key` 要设置的键名。
-- `value` 要设置的值。
+- `target` 目标 filter 名称。
+- `key` 属性键名。
+- `value` 属性值。
 
 **返回值**：
 
@@ -256,23 +256,22 @@ int media_recorder_set_property(void* handle, const char* target, const char* ke
 int media_recorder_get_property(void* handle, const char* target, const char* key, char* value, int value_len);
 ```
 
-获取 properties of 录制器 path。
+获取录制器属性。
 
 **参数**：
 
 - `handle` 录制器句柄。
-- `target` 目标 filter 名称。.
-- `key` 要设置的键名。
-- `value` 输出缓冲区。.
-- `value_len` 缓冲区长度 of value.
-
-
-## 同步接口 - 图片捕获
+- `target` 目标 filter 名称。
+- `key` 属性键名。
+- `value` 输出缓冲区，用于存储属性值。
+- `value_len` 输出缓冲区长度。
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
 
+
+## 同步接口 - 图片捕获
 
 ### media_recorder_take_picture
 
@@ -299,7 +298,7 @@ int media_recorder_take_picture(char* params, char* filename, size_t number);
 void* media_recorder_start_picture(char* params, char* filename, size_t number, media_event_callback event_cb, void* cookie);
 ```
 
-开始 taking picture, including open, set_事件_回调, prepare, and start operations。
+开始拍照，内部依次执行打开、设置事件回调、准备和启动操作。
 
 **参数**：
 
@@ -320,7 +319,7 @@ void* media_recorder_start_picture(char* params, char* filename, size_t number, 
 int media_recorder_finish_picture(void* handle);
 ```
 
-关闭 录制器 when taking picture finished。
+拍照完成后关闭录制器。
 
 **参数**：
 
@@ -328,7 +327,7 @@ int media_recorder_finish_picture(void* handle);
 
 **返回值**：
 
-int 成功时返回 0，失败时返回负的错误码。
+成功时返回 `0`，失败时返回负的错误码。
 
 
 ## 异步接口（基于 libuv）
@@ -341,7 +340,7 @@ int 成功时返回 0，失败时返回负的错误码。
 void* media_uv_recorder_open(void* loop, const char* source, media_uv_callback on_open, void* cookie);
 ```
 
-打开 an async recorder。
+打开异步录制器。
 
 **参数**：
 
@@ -352,7 +351,7 @@ void* media_uv_recorder_open(void* loop, const char* source, media_uv_callback o
 
 **返回值**：
 
-成功时返回录制器句柄。
+成功时返回录制器句柄，失败时返回 `NULL`。
 
 
 ### media_uv_recorder_listen
@@ -361,7 +360,7 @@ void* media_uv_recorder_open(void* loop, const char* source, media_uv_callback o
 int media_uv_recorder_listen(void* handle, media_event_callback on_event);
 ```
 
-Listen to status change 事件 by setting 回调。
+注册事件监听回调，接收录制状态变化通知。
 
 **参数**：
 
@@ -379,7 +378,7 @@ Listen to status change 事件 by setting 回调。
 int media_uv_recorder_close(void* handle, media_uv_callback on_close);
 ```
 
-关闭 the async recorder。
+关闭异步录制器。
 
 **参数**：
 
@@ -397,15 +396,16 @@ int media_uv_recorder_close(void* handle, media_uv_callback on_close);
 int media_uv_recorder_prepare(void* handle, const char* url, const char* options, media_uv_object_callback on_connection, media_uv_callback on_prepare, void* cookie);
 ```
 
-准备 destination file。
+准备录制目标文件。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
 - `url` 目标路径。
 - `options` 目标配置参数，详见 `media_recorder_prepare`。
-- `on_connection` * @param[in] on_prepare    结果回调，在 BUFFER 模式下会携带可写入数据的 `uv_pipe_t`。
-- `cookie` 一次性回调上下文。
+- `on_connection` BUFFER 模式下接收可写入数据的 `uv_pipe_t` 的回调函数。
+- `on_prepare` 准备完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -418,14 +418,14 @@ int media_uv_recorder_prepare(void* handle, const char* url, const char* options
 int media_uv_recorder_start_auto(void* handle, const char* stream, media_uv_callback on_start, void* cookie);
 ```
 
-开始 or resume the capturing with auto 焦点 request。
+开始或恢复录制，并自动请求音频焦点。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `scenario` 场景常量。 in media_defs.h.
-- `on_start` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `scenario` 场景常量（定义在 `media_defs.h` 中）。
+- `on_start` 录制开始后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -438,13 +438,13 @@ int media_uv_recorder_start_auto(void* handle, const char* stream, media_uv_call
 int media_uv_recorder_start(void* handle, media_uv_callback on_start, void* cookie);
 ```
 
-开始 or resume the capturing。
+开始或恢复录制。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `on_start` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `on_start` 录制开始后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -457,13 +457,13 @@ int media_uv_recorder_start(void* handle, media_uv_callback on_start, void* cook
 int media_uv_recorder_pause(void* handle, media_uv_callback on_pause, void* cookie);
 ```
 
-暂停 the capturing。
+暂停录制。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `on_pause` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `on_pause` 暂停完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -476,13 +476,13 @@ int media_uv_recorder_pause(void* handle, media_uv_callback on_pause, void* cook
 int media_uv_recorder_stop(void* handle, media_uv_callback on_stop, void* cookie);
 ```
 
-停止 the capturing, finish the destination file。
+停止录制并完成目标文件写入。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `on_stop` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `on_stop` 停止完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -495,16 +495,16 @@ int media_uv_recorder_stop(void* handle, media_uv_callback on_stop, void* cookie
 int media_uv_recorder_set_property(void* handle, const char* target, const char* key, const char* value, media_uv_callback cb, void* cookie);
 ```
 
-设置 properties of 录制器。
+设置录制器属性。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `target` 目标 filter 名称。.
-- `key` Key.
-- `value` Value.
-- `cb` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `target` 目标 filter 名称。
+- `key` 属性键名。
+- `value` 属性值。
+- `cb` 设置完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -517,17 +517,15 @@ int media_uv_recorder_set_property(void* handle, const char* target, const char*
 int media_uv_recorder_get_property(void* handle, const char* target, const char* key, media_uv_string_callback cb, void* cookie);
 ```
 
-获取 properties of 录制器。
+获取录制器属性。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `target` 目标 filter 名称。.
-- `key` Key.
-- `value` 输出缓冲区。.
-- `value_len` 缓冲区长度 of value.
-- `cb` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `target` 目标 filter 名称。
+- `key` 属性键名。
+- `cb` 结果回调函数，回调参数为属性值字符串。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -540,13 +538,13 @@ int media_uv_recorder_get_property(void* handle, const char* target, const char*
 int media_uv_recorder_reset(void* handle, media_uv_callback on_reset, void* cookie);
 ```
 
-重置 录制器, clear the origin record and record new one。
+重置录制器，清除当前录制内容以准备新的录制。
 
 **参数**：
 
 - `handle` 异步录制器句柄。
-- `cb` 结果回调函数。
-- `cookie` 一次性回调上下文。
+- `on_reset` 重置完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
@@ -559,7 +557,7 @@ int media_uv_recorder_reset(void* handle, media_uv_callback on_reset, void* cook
 int media_uv_recorder_take_picture(void* loop, char* params, char* filename, size_t number, media_uv_callback on_complete, void* cookie);
 ```
 
-从摄像头拍照。
+从摄像头异步拍照。
 
 **参数**：
 
@@ -567,11 +565,9 @@ int media_uv_recorder_take_picture(void* loop, char* params, char* filename, siz
 - `params` 相机打开路径参数。
 - `filename` 新图片的存储路径。
 - `number` 拍摄图片的数量。
-- `on_complete` 处理结果的回调函数。
-- `cookie` 用户私有数据。
+- `on_complete` 拍照完成后的结果回调函数。
+- `cookie` 回调上下文参数。
 
 **返回值**：
 
 成功时返回 `0`，失败时返回负的 errno。
-
-

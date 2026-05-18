@@ -9,7 +9,7 @@ Header: `#include <media_utils.h>`
 ## openvela Implementation Notes
 
 - **DTMF**: Generates DTMF dual-tone multi-frequency signals for `0-9` / `*#ABCD` keys, with a fixed audio format of `format=s16le:sample_rate=8000:ch_layout=mono` (defined by the `MEDIA_TONE_DTMF_FORMAT` macro)
-- **Debug Interfaces**: `media_graph_dump` and `media_policy_dump` print internal state for troubleshooting
+- **Debug Interfaces**: `media_graph_dump`, `media_player_dump`, `media_recorder_dump` and `media_policy_dump` print internal state for troubleshooting
 - **Generic Command**: `media_process_command` sends custom commands to the media server for extended capabilities (e.g., triggering an operation on a specific filter within a graph)
 - **Event Name Lookup**: `media_event_get_name` converts `MEDIA_EVENT_*` numeric values to human-readable strings for log output
 
@@ -102,6 +102,33 @@ Prints the current state of the media policy for debugging.
 **Parameters**:
 
 - `options` Dump options string.
+
+
+### media_player_dump
+
+```c
+void media_player_dump(const char* options);
+```
+
+Prints the internal state of the media player for debugging.
+
+**Parameters**:
+
+- `options` Dump options string.
+
+
+### media_recorder_dump
+
+```c
+void media_recorder_dump(const char* options);
+```
+
+Prints the internal state of the media recorder for debugging.
+
+**Parameters**:
+
+- `options` Dump options string.
+
 
 ## Generic Command
 

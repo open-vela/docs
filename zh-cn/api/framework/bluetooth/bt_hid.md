@@ -25,12 +25,12 @@ bool bt_hid_device_unregister_callbacks(bt_instance_t* ins, void* cookie);
 
 **参数**：
 
-- `cookie` 用户上下文。
 - `ins` 蓝牙客户端实例, 参见 bt_instance_t.
+- `cookie` 用户上下文。
 
 **返回值**：
 
-取消注册回调函数。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_hid_device_register_app
@@ -59,7 +59,7 @@ bt_status_t bt_hid_device_register_app(bt_instance_t* ins, hid_device_sdp_settin
 bt_status_t bt_hid_device_unregister_app(bt_instance_t* ins);
 ```
 
-取消注册操作。
+取消注册 HID 设备应用。
 
 **参数**：
 
@@ -68,7 +68,7 @@ bt_status_t bt_hid_device_unregister_app(bt_instance_t* ins);
 
 **返回值**：
 
-bt_hid_device_unregister_app 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_hid_device_connect
@@ -147,6 +147,10 @@ bt_status_t bt_hid_device_response_report(bt_instance_t* ins, bt_address_t* addr
 - `rpt_data` HID 报告数据。
 - `rpt_size` 报告数据大小（字节）。
 
+**返回值**：
+
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+
 
 ### bt_hid_device_report_error
 
@@ -160,13 +164,11 @@ bt_status_t bt_hid_device_report_error(bt_instance_t* ins, bt_address_t* addr, h
 
 - `ins` 蓝牙客户端实例。
 - `addr` 远程设备蓝牙地址。
-- `error` 错误码。
+- `error` 错误码，参见 `hid_status_error_t`。
 
+**返回值**：
 
-
-- `ins` 蓝牙客户端实例, 参见 bt_instance_t.
-- `addr` Address of the peer device, 参见 bt_address_t.
-- `error` Error code, 参见 hid_status_error_t.
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_hid_device_virtual_unplug
@@ -181,3 +183,7 @@ bt_status_t bt_hid_device_virtual_unplug(bt_instance_t* ins, bt_address_t* addr)
 
 - `ins` 蓝牙客户端实例。
 - `addr` 远程设备蓝牙地址。
+
+**返回值**：
+
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。

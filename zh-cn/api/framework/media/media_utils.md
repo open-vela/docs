@@ -9,7 +9,7 @@
 ## openvela 实现说明
 
 - **DTMF**：生成 `0-9` / `*#ABCD` 对应的 DTMF 双音多频信号，音频格式固定为 `format=s16le:sample_rate=8000:ch_layout=mono`（由 `MEDIA_TONE_DTMF_FORMAT` 宏定义）
-- **调试接口**：`media_graph_dump` 和 `media_policy_dump` 用于打印内部状态，便于问题定位
+- **调试接口**：`media_graph_dump`、`media_player_dump`、`media_recorder_dump` 和 `media_policy_dump` 用于打印内部状态，便于问题定位
 - **通用命令**：`media_process_command` 向 media server 发送自定义命令，用于扩展能力（如触发 graph 内某个 filter 的操作）
 - **事件名查询**：`media_event_get_name` 把 `MEDIA_EVENT_*` 数值转成可读字符串，便于日志输出
 
@@ -102,6 +102,33 @@ void media_policy_dump(const char* options);
 **参数**：
 
 - `options` dump 选项字符串。
+
+
+### media_player_dump
+
+```c
+void media_player_dump(const char* options);
+```
+
+打印 media player 内部状态，用于调试。
+
+**参数**：
+
+- `options` dump 选项字符串。
+
+
+### media_recorder_dump
+
+```c
+void media_recorder_dump(const char* options);
+```
+
+打印 media recorder 内部状态，用于调试。
+
+**参数**：
+
+- `options` dump 选项字符串。
+
 
 ## 通用命令
 

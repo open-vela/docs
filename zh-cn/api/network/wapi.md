@@ -216,7 +216,7 @@ int wapi_freq2chan(int sock, const char *ifname, double freq, int *chan);
 
 - `sock` 套接字描述符（用于 ioctl 操作）。
 - `ifname` 网络接口名称。
-- `freq` 频率, in Hz, to be converted to a 信道编号.
+- `freq` 频率（Hz），将被转换为信道编号。
 - `chan` 输出参数。
 
 ### wapi_chan2freq
@@ -229,7 +229,7 @@ int wapi_chan2freq(int sock, const char *ifname, int chan, double *freq);
 
 - `sock` 套接字描述符（用于 ioctl 操作）。
 - `ifname` 信道。
-- `chan` 信道 number to be converted to a frequency.
+- `chan` 信道编号，将被转换为频率。
 - `freq` 输出参数。
 
 ### wapi_get_essid
@@ -487,7 +487,7 @@ int wapi_scan_channel_init(int sock, const char *ifname, const char *essid, uint
 - `sock` 套接字描述符.
 - `ifname` 网络接口名称。
 - `essid` 要扫描的 ESSID。
-- `channels` 指向 an array of 信道编号s to scan.
+- `channels` 要扫描的信道编号数组。
 - `num_channels` 信道。
 
 **返回值**：
@@ -523,7 +523,7 @@ int wapi_escan_channel_init(int sock, const char *ifname, uint8_t scan_type, con
 - `ifname` 网络接口名称。
 - `scan_type` 扫描类型。
 - `essid` 要扫描的 ESSID。
-- `channels` 指向 an array of 信道编号s to scan.
+- `channels` 要扫描的信道编号数组。
 - `num_channels` 信道。
 
 **返回值**：

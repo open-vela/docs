@@ -48,7 +48,7 @@ bool bt_a2dp_sink_unregister_callbacks(bt_instance_t* ins, void* cookie);
 
 **返回值**：
 
-成功时返回回调 cookie，失败或已注册时返回 NULL。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_a2dp_sink_is_connected
@@ -57,16 +57,16 @@ bool bt_a2dp_sink_unregister_callbacks(bt_instance_t* ins, void* cookie);
 bool bt_a2dp_sink_is_connected(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+查询指定设备的 A2DP Sink 是否已连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-检查是否已连接。
+已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_a2dp_sink_is_playing
@@ -75,16 +75,16 @@ bool bt_a2dp_sink_is_connected(bt_instance_t* ins, bt_address_t* addr);
 bool bt_a2dp_sink_is_playing(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-检查是否正在播放。
+查询指定设备的 A2DP Sink 是否正在播放音频流。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-检查是否正在播放。
+正在播放时返回 `true`，未播放时返回 `false`。
 
 
 ### bt_a2dp_sink_get_connection_state
@@ -93,7 +93,7 @@ bool bt_a2dp_sink_is_playing(bt_instance_t* ins, bt_address_t* addr);
 profile_connection_state_t bt_a2dp_sink_get_connection_state(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+获取指定设备的 A2DP Sink 连接状态。
 
 **参数**：
 
@@ -103,6 +103,8 @@ profile_connection_state_t bt_a2dp_sink_get_connection_state(bt_instance_t* ins,
 
 **返回值**：
 
+返回当前连接状态枚举值，参见 `profile_connection_state_t`。
+
 
 
 ### bt_a2dp_sink_connect
@@ -111,16 +113,16 @@ profile_connection_state_t bt_a2dp_sink_get_connection_state(bt_instance_t* ins,
 bt_status_t bt_a2dp_sink_connect(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+发起与远程设备的 A2DP Sink 连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-建立连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_a2dp_sink_disconnect
@@ -129,16 +131,16 @@ bt_status_t bt_a2dp_sink_connect(bt_instance_t* ins, bt_address_t* addr);
 bt_status_t bt_a2dp_sink_disconnect(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-断开与远程设备的连接。
+断开与远程设备的 A2DP Sink 连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-断开连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_a2dp_source_unregister_callbacks
@@ -157,7 +159,7 @@ bool bt_a2dp_source_unregister_callbacks(bt_instance_t* ins, void* cookie);
 
 **返回值**：
 
-成功时返回回调 cookie，失败或已注册时返回 NULL。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_a2dp_source_is_connected
@@ -166,16 +168,16 @@ bool bt_a2dp_source_unregister_callbacks(bt_instance_t* ins, void* cookie);
 bool bt_a2dp_source_is_connected(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+查询指定设备的 A2DP Source 是否已连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-检查是否已连接。
+已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_a2dp_source_is_playing
@@ -184,16 +186,16 @@ bool bt_a2dp_source_is_connected(bt_instance_t* ins, bt_address_t* addr);
 bool bt_a2dp_source_is_playing(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-检查是否正在播放。
+查询指定设备的 A2DP Source 是否正在播放音频流。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-检查是否正在播放。
+正在播放时返回 `true`，未播放时返回 `false`。
 
 
 ### bt_a2dp_source_get_connection_state
@@ -202,7 +204,7 @@ bool bt_a2dp_source_is_playing(bt_instance_t* ins, bt_address_t* addr);
 profile_connection_state_t bt_a2dp_source_get_connection_state(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+获取指定设备的 A2DP Source 连接状态。
 
 **参数**：
 
@@ -212,6 +214,8 @@ profile_connection_state_t bt_a2dp_source_get_connection_state(bt_instance_t* in
 
 **返回值**：
 
+返回当前连接状态枚举值，参见 `profile_connection_state_t`。
+
 
 
 ### bt_a2dp_source_connect
@@ -220,16 +224,16 @@ profile_connection_state_t bt_a2dp_source_get_connection_state(bt_instance_t* in
 bt_status_t bt_a2dp_source_connect(bt_instance_t* ins, bt_address_t* addr);
 ```
 
-发起与远程设备的连接。
+发起与远程设备的 A2DP Source 连接。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `addr` 蓝牙地址 of the peer device.
+- `addr` 对端设备蓝牙地址。
 
 **返回值**：
 
-建立连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_a2dp_source_disconnect
