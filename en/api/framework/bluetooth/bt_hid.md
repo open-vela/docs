@@ -30,7 +30,7 @@ Unregister callback functions and stop receiving state change notifications.
 
 **Returns**:
 
-Returns the callback cookie on success, or NULL on failure.
+Returns `true` on success, `false` on failure.
 
 
 ### bt_hid_device_register_app
@@ -148,6 +148,11 @@ Respond to a host HID report request.
 - `rpt_size` Report data size in bytes.
 
 
+**Returns**:
+
+Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+
+
 ### bt_hid_device_report_error
 
 ```c
@@ -163,6 +168,11 @@ Report an HID error to the host.
 - `error` Error code.
 
 
+**Returns**:
+
+Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+
+
 ### bt_hid_device_virtual_unplug
 
 ```c
@@ -175,3 +185,8 @@ Send a virtual unplug request to disconnect the HID connection.
 
 - `ins` Bluetooth client instance.
 - `addr` Bluetooth address of the remote device.
+
+
+**Returns**:
+
+Returns BT_STATUS_SUCCESS on success, or an error code on failure.

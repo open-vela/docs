@@ -200,15 +200,13 @@ Sets the scan mode.
 **Parameters**:
 
 - `ins` Bluetooth client instance.
-- `mode` Mode.
+- `mode` Scan mode.
 - `bondable` Whether pairing is allowed.
-- `name` Output parameter, stores the adapter name.
-- `length` Buffer length.
 
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or a negative error code on failure.
+Returns BT_STATUS_SUCCESS on success, or an error code on failure.
 
 
 #### bt_adapter_get_scan_mode
@@ -381,19 +379,12 @@ Gets the BLE IO capability.
 
 **Parameters**:
 
-- `ins` Bluetooth client instance, see bt_instance_t.
-- `mode` Debug mode.
-- `operation` Debug operation.
-- `appearance` BLE appearance value.
-- `addr` Device address.
-- `type` Address type.
-- `cap` IO capability value.
-- `num` Output parameter, stores the number of devices.
+- `ins` Bluetooth client instance.
 
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns the BLE IO capability value.
 
 
 ## BLE Management

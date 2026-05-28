@@ -230,6 +230,10 @@ Request to set the volume.
 
 Returns 0 on success, or a negative error code on failure.
 
+**Note**:
+
+- This API is not implemented yet.
+
 
 ## Controller Interfaces - State Queries
 
@@ -632,6 +636,10 @@ Request to set the volume.
 
 Returns 0 on success, or a negative error code on failure.
 
+**Note**:
+
+- This API is not implemented yet.
+
 
 ### media_uv_session_query
 
@@ -670,6 +678,10 @@ Get the current state.
 
 Returns 0 on success, or a negative error code on failure.
 
+**Note**:
+
+- This API is not implemented yet. Use `media_uv_session_query` instead.
+
 
 ### media_uv_session_get_position
 
@@ -688,6 +700,10 @@ Get the current playback position.
 **Returns**:
 
 Returns 0 on success, or a negative error code on failure.
+
+**Note**:
+
+- This API is not implemented yet. Use `media_uv_session_query` instead.
 
 
 ### media_uv_session_get_duration
@@ -708,6 +724,10 @@ Get the current duration.
 
 Returns 0 on success, or a negative error code on failure.
 
+**Note**:
+
+- This API is not implemented yet. Use `media_uv_session_query` instead.
+
 
 ### media_uv_session_get_volume
 
@@ -726,6 +746,10 @@ Get the current volume.
 **Returns**:
 
 Returns 0 on success, or a negative error code on failure.
+
+**Note**:
+
+- This API is not implemented yet. Use `media_uv_session_query` instead.
 
 
 ### media_uv_session_register

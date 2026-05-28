@@ -83,7 +83,7 @@ Sets the SMSC (Short Message Service Center) address.
 
 **Returns**:
 
-Returns 0 on success, or a negative error code on failure.
+Returns `true` on success, `false` on failure.
 
 
 

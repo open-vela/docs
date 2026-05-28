@@ -114,6 +114,11 @@ Initiate an insecure connection to the remote device.
 - `port` Port number.
 
 
+**Returns**:
+
+Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+
+
 ### bt_spp_disconnect
 
 ```c

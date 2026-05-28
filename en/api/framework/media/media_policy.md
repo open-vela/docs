@@ -965,6 +965,10 @@ Set the HFP (Hands-Free Profile) sampling rate.
 
 Returns 0 on success, or a negative error code on failure.
 
+**Note**:
+
+- This API is deprecated. The `rate` parameter will be changed to `int` type in the future.
+
 
 ### media_uv_policy_set_devices_available
 

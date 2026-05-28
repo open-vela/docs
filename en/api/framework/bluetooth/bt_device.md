@@ -72,6 +72,7 @@ Gets the type of a remote device (Classic Bluetooth/BLE/Dual-mode).
 
 **Returns**:
 
+Returns the device type, see `bt_device_type_t`.
 
 
 ### bt_device_get_name
@@ -92,7 +93,7 @@ Gets the Bluetooth name of a remote device.
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns `true` on success, `false` on failure.
 
 
 ### bt_device_get_device_class
@@ -110,6 +111,7 @@ Gets the Class of Device of a remote device, containing major device class, mino
 
 **Returns**:
 
+Returns the 24-bit Class of Device value.
 
 
 ### bt_device_get_uuids
@@ -180,7 +182,7 @@ Gets the user-defined alias of a remote device; returns the device name if no al
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns `true` on success, `false` on failure.
 
 
 ### bt_device_set_alias
@@ -219,7 +221,7 @@ Check whether the connection to the remote device is established.
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns `true` if connected, `false` otherwise.
 
 
 ### bt_device_is_encrypted
@@ -238,7 +240,7 @@ Query whether the connection to the remote device is encrypted.
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns `true` if encrypted, `false` otherwise.
 
 
 ### bt_device_is_bond_initiate_local
@@ -257,7 +259,7 @@ Query whether the pairing with the remote device was initiated locally.
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns `true` if bonding was initiated locally, `false` otherwise.
 
 
 ### bt_device_get_bond_state
@@ -297,7 +299,7 @@ Query whether the remote device is bonded.
 
 **Returns**:
 
-Returns BT_STATUS_SUCCESS on success, or an error code on failure.
+Returns `true` if bonded, `false` otherwise.
 
 
 ### bt_device_create_bond

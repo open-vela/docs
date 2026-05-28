@@ -32,7 +32,7 @@ Open a Telephony connection and obtain a context handle.
 
 **Returns**:
 
-Returns 0 on success, or a negative error code on failure.
+Returns a valid `tapi_context` handle on success, or `NULL` on failure.
 
 
 
@@ -42,7 +42,7 @@ Returns 0 on success, or a negative error code on failure.
 tapi_context tapi_open_service(const char* client_name, tapi_client_ready_function callback, void* user_data, unsigned int tapi_service);
 ```
 
-Open a Telephony connection.
+Open a Telephony connection with a specified service type.
 
 **Parameters**:
 
@@ -53,7 +53,7 @@ Open a Telephony connection.
 
 **Returns**:
 
-Returns 0 on success, or a negative error code on failure.
+Returns a valid `tapi_context` handle on success, or `NULL` on failure.
 
 
 
@@ -87,11 +87,11 @@ Query whether a specified feature is supported.
 
 **Parameters**:
 
-- `feature` Feature name.
+- `feature` Feature type enum value.
 
 **Returns**:
 
-Returns 0 on success, or a negative error code on failure.
+Returns `true` if supported, `false` otherwise.
 
 
 

@@ -25,12 +25,12 @@ bool bt_pan_unregister_callbacks(bt_instance_t* ins, void* cookie);
 
 **参数**：
 
-- `cookie` 用户上下文。
 - `ins` 蓝牙客户端实例。
+- `cookie` 用户上下文。
 
 **返回值**：
 
-取消注册回调函数。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_pan_connect

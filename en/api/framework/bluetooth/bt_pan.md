@@ -30,7 +30,7 @@ Unregister callback functions and stop receiving state change notifications.
 
 **Returns**:
 
-Returns the callback cookie on success, or NULL on failure.
+Returns `true` on success, `false` on failure.
 
 
 ### bt_pan_connect

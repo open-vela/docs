@@ -22,7 +22,7 @@ openvela 蓝牙 GATT（通用属性规范）接口，支持 BLE 数据属性的�
 bt_status_t bt_gattc_create_connect(bt_instance_t* ins, gattc_handle_t* phandle, gattc_callbacks_t* callbacks);
 ```
 
-发起与远程设备的连接。
+创建 GATT 客户端连接实例。
 
 **参数**：
 
@@ -33,7 +33,7 @@ bt_status_t bt_gattc_create_connect(bt_instance_t* ins, gattc_handle_t* phandle,
 
 **返回值**：
 
-无返回值。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gattc_delete_connect
@@ -42,7 +42,7 @@ bt_status_t bt_gattc_create_connect(bt_instance_t* ins, gattc_handle_t* phandle,
 bt_status_t bt_gattc_delete_connect(gattc_handle_t conn_handle);
 ```
 
-发起与远程设备的连接。
+删除 GATT 客户端连接实例，释放相关资源。
 
 **参数**：
 
@@ -51,7 +51,7 @@ bt_status_t bt_gattc_delete_connect(gattc_handle_t conn_handle);
 
 **返回值**：
 
-建立连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gattc_connect
@@ -89,7 +89,7 @@ bt_status_t bt_gattc_disconnect(gattc_handle_t conn_handle);
 
 **返回值**：
 
-断开连接。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gattc_discover_service
@@ -107,7 +107,7 @@ bt_status_t bt_gattc_discover_service(gattc_handle_t conn_handle, bt_uuid_t* fil
 
 **返回值**：
 
-bt_gattc_discover_service 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gattc_get_attribute_by_handle
@@ -287,7 +287,7 @@ bt_status_t bt_gattc_exchange_mtu(gattc_handle_t conn_handle, uint32_t mtu);
 
 **返回值**：
 
-bt_gattc_exchange_mtu 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gattc_update_connection_parameter
@@ -296,7 +296,7 @@ bt_gattc_exchange_mtu 操作。
 bt_status_t bt_gattc_update_connection_parameter(gattc_handle_t conn_handle, uint32_t min_interval, uint32_t max_interval, uint32_t latency, uint32_t timeout, uint32_t min_connection_event_length, uint32_t max_connection_event_length);
 ```
 
-发起与远程设备的连接。
+更新 BLE 连接参数。
 
 **参数**：
 
@@ -320,7 +320,7 @@ bt_status_t bt_gattc_update_connection_parameter(gattc_handle_t conn_handle, uin
 bt_status_t bt_gattc_read_phy(gattc_handle_t conn_handle);
 ```
 
-读取远程设备的 GATT 特征值或描述符，结果通过回调异步返回。
+读取当前连接的 PHY 配置，结果通过回调异步返回。
 
 **参数**：
 
@@ -329,7 +329,7 @@ bt_status_t bt_gattc_read_phy(gattc_handle_t conn_handle);
 
 **返回值**：
 
-bt_gattc_read_phy 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gattc_update_phy
@@ -358,7 +358,7 @@ PHY 配置操作。
 bt_status_t bt_gattc_read_rssi(gattc_handle_t conn_handle);
 ```
 
-读取远程设备的 GATT 特征值或描述符，结果通过回调异步返回。
+读取远程设备的 RSSI 值，结果通过回调异步返回。
 
 **参数**：
 
@@ -367,7 +367,7 @@ bt_status_t bt_gattc_read_rssi(gattc_handle_t conn_handle);
 
 **返回值**：
 
-bt_gattc_read_rssi 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gatts_register_service
@@ -376,16 +376,18 @@ bt_gattc_read_rssi 操作。
 bt_status_t bt_gatts_register_service(bt_instance_t* ins, gatts_handle_t* phandle, gatts_callbacks_t* callbacks);
 ```
 
-注册GATT 服务。
+注册 GATT 服务。
 
 **参数**：
 
 - `ins` 蓝牙客户端实例。
-- `phandle` 输出参数，存储 GATT 客户端句柄。
+- `phandle` 输出参数，存储 GATT 服务句柄。
 - `callbacks` 回调函数集合。
 
 
 **返回值**：
+
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 
@@ -395,7 +397,7 @@ bt_status_t bt_gatts_register_service(bt_instance_t* ins, gatts_handle_t* phandl
 bt_status_t bt_gatts_unregister_service(gatts_handle_t srv_handle);
 ```
 
-取消注册GATT 服务。
+取消注册 GATT 服务。
 
 **参数**：
 
@@ -404,7 +406,7 @@ bt_status_t bt_gatts_unregister_service(gatts_handle_t srv_handle);
 
 **返回值**：
 
-bt_gatts_unregister_service 操作。
+成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
 
 
 ### bt_gatts_connect

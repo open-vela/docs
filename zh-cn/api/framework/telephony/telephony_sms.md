@@ -73,17 +73,17 @@ int tapi_sms_send_data_message(tapi_context context, int slot_id, int sms_id, ch
 bool tapi_sms_set_service_center_address(tapi_context context, int slot_id, char* number);
 ```
 
-发送数据短信。
+设置短信服务中心地址。
 
 **参数**：
 
 - `context` Telephony 上下文句柄。
 - `slot_id` SIM 卡槽 ID（0 或 1）。
-- `number` 电话号码。
+- `number` 服务中心号码。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回 `true`，失败时返回 `false`。
 
 
 

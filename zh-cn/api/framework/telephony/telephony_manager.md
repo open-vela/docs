@@ -32,7 +32,7 @@ tapi_context tapi_open(const char* client_name, tapi_client_ready_function callb
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回有效的 `tapi_context` 句柄，失败时返回 `NULL`。
 
 
 
@@ -42,7 +42,7 @@ tapi_context tapi_open(const char* client_name, tapi_client_ready_function callb
 tapi_context tapi_open_service(const char* client_name, tapi_client_ready_function callback, void* user_data, unsigned int tapi_service);
 ```
 
-打开 Telephony 连接。
+打开 Telephony 连接，指定服务类型。
 
 **参数**：
 
@@ -53,7 +53,7 @@ tapi_context tapi_open_service(const char* client_name, tapi_client_ready_functi
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+成功时返回有效的 `tapi_context` 句柄，失败时返回 `NULL`。
 
 
 
@@ -87,11 +87,11 @@ bool tapi_is_feature_supported(tapi_feature_type feature);
 
 **参数**：
 
-- `feature` 功能名称。
+- `feature` 功能类型枚举值。
 
 **返回值**：
 
-成功时返回 0，失败时返回负的错误码。
+支持时返回 `true`，不支持时返回 `false`。
 
 
 

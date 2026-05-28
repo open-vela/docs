@@ -71,6 +71,8 @@ bt_device_type_t bt_device_get_device_type(bt_instance_t* ins, bt_address_t* add
 
 **返回值**：
 
+返回设备类型枚举值，参见 `bt_device_type_t`。
+
 
 
 ### bt_device_get_name
@@ -85,13 +87,13 @@ bool bt_device_get_name(bt_instance_t* ins, bt_address_t* addr, char* name, uint
 
 - `ins` 蓝牙客户端实例。
 - `addr` 远程设备蓝牙地址。
-- `name` 名称。
-- `length` 长度。
+- `name` 输出缓冲区，用于存储设备名称。
+- `length` 缓冲区长度。
 
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_device_get_device_class
@@ -108,6 +110,8 @@ uint32_t bt_device_get_device_class(bt_instance_t* ins, bt_address_t* addr);
 - `addr` 远程设备地址.
 
 **返回值**：
+
+返回 24 位 Class of Device 值，包含主设备类、子设备类和服务类信息。
 
 
 
@@ -172,12 +176,13 @@ bool bt_device_get_alias(bt_instance_t* ins, bt_address_t* addr, char* alias, ui
 
 - `ins` 蓝牙客户端实例, 参见 bt_instance_t.
 - `addr` 远程设备地址.
-- `length` 长度。- `alias` 输出参数，存储别名字符串。
+- `length` 缓冲区长度。
+- `alias` 输出参数，存储别名字符串。
 
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+成功时返回 `true`，失败时返回 `false`。
 
 
 ### bt_device_set_alias
@@ -205,7 +210,7 @@ bt_status_t bt_device_set_alias(bt_instance_t* ins, bt_address_t* addr, const ch
 bool bt_device_is_connected(bt_instance_t* ins, bt_address_t* addr, bt_transport_t transport);
 ```
 
-发起与远程设备的连接。
+查询与远程设备是否已建立连接。
 
 **参数**：
 
@@ -215,7 +220,7 @@ bool bt_device_is_connected(bt_instance_t* ins, bt_address_t* addr, bt_transport
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+已连接时返回 `true`，未连接时返回 `false`。
 
 
 ### bt_device_is_encrypted
@@ -234,7 +239,7 @@ bool bt_device_is_encrypted(bt_instance_t* ins, bt_address_t* addr, bt_transport
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+已加密时返回 `true`，未加密时返回 `false`。
 
 
 ### bt_device_is_bond_initiate_local
@@ -253,7 +258,7 @@ bool bt_device_is_bond_initiate_local(bt_instance_t* ins, bt_address_t* addr, bt
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+由本地发起时返回 `true`，否则返回 `false`。
 
 
 ### bt_device_get_bond_state
@@ -293,7 +298,7 @@ bool bt_device_is_bonded(bt_instance_t* ins, bt_address_t* addr, bt_transport_t 
 
 **返回值**：
 
-成功时返回 BT_STATUS_SUCCESS，失败时返回错误码。
+已配对时返回 `true`，未配对时返回 `false`。
 
 
 ### bt_device_create_bond

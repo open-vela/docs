@@ -33,7 +33,7 @@ Create a GATT client connection instance.
 
 **Returns**:
 
-No return value.
+Returns BT_STATUS_SUCCESS on success, or an error code on failure.
 
 
 ### bt_gattc_delete_connect

@@ -48,7 +48,7 @@ Unregister callback functions and stop receiving state change notifications.
 
 **Returns**:
 
-Returns the callback cookie on success, or NULL on failure or if already registered.
+Returns `true` on success, `false` on failure.
 
 
 ### bt_a2dp_sink_is_connected
@@ -158,7 +158,7 @@ Unregister callback functions and stop receiving state change notifications.
 
 **Returns**:
 
-Returns the callback cookie on success, or NULL on failure or if already registered.
+Returns `true` on success, `false` on failure.
 
 
 ### bt_a2dp_source_is_connected
