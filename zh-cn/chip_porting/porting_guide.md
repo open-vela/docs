@@ -682,3 +682,12 @@ openvela 支持两种编译方式：CMake 和 Make。
 - 功能测试
 - 稳定性测试
 - 性能测试
+
+为了帮助开发者快速完成自测验证，openvela 社区提供了一份现成的 [xTS 测试用例精简集](/document?id=XXX&version=trunk&language=cn)，涵盖系统内核、驱动 BSP、文件系统、WiFi、蓝牙、音视频等基础能力的标准测试用例，可直接拷贝命令到 nsh 中执行，无需从零编写。
+
+测试用例分为两类：
+
+- **通用自测用例**（必测）：覆盖内存、调度、GPIO、I2C/SPI、UART、RTC、Watchdog 等基础能力，所有适配新平台的开发者都建议跑一遍。
+- **品类自测用例**（选测）：根据产品特性挑选，包括 WiFi、蓝牙、LCD、Audio、文件系统、OTA 等场景，按需测试。
+
+完成基础测试后，即可作为新平台适配验收的依据。如发现测试用例不适配或步骤有疑问，可在 [open-vela/docs](https://github.com/open-vela/docs/issues) 提 Issue 反馈，社区维护团队会定期审核处理。
