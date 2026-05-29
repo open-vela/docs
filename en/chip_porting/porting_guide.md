@@ -698,3 +698,12 @@ After the manufacturer completes the adaptation, it needs to be tested through t
 - Functional test
 - Stability test
 - Performance test
+
+To help developers quickly perform self-validation, the openvela community provides a ready-to-use [xTS Test Case Collection](/document?id=XXX&version=trunk&language=en) that covers standard test cases for system kernel, driver BSP, filesystem, WiFi, Bluetooth, audio/video and other fundamental capabilities. Commands can be copied directly into nsh for execution without writing tests from scratch.
+
+Test cases are divided into two categories:
+
+- **General self-tests** (mandatory): cover fundamental capabilities such as memory, scheduling, GPIO, I2C/SPI, UART, RTC, Watchdog. All developers porting a new platform are recommended to run them.
+- **Category-specific self-tests** (optional): selected based on product characteristics, including WiFi, Bluetooth, LCD, Audio, filesystem, OTA, etc.
+
+Once the basic tests pass, the results can serve as the acceptance criteria for the new platform port. If a test case does not apply to your platform or you have questions about the steps, please [file an issue on open-vela/docs](https://github.com/open-vela/docs/issues) — the community maintainers review feedback regularly.
