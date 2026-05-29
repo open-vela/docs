@@ -5694,11 +5694,11 @@ renew wlan0 ；
 
 ## 附件资源
 
-以下测试用例所需的测试资源文件存放于 `xts_lite/` 目录下：
+以下测试用例所需的测试资源文件存放于本目录下：
 
 | 资源文件 | 对应用例 | 说明 |
 |---------|---------|------|
-| `xts_lite/mediatool测试资源和测试步骤.zip` | 4.1.128~4.1.133 Audio/Video 测试 | 包含 audio_file.mp3, audio_file.opus, audio_file.aac, audio_file.wav, media_file_h264.mp4, media_file_h265.mp4 等测试资源 |
-| `xts_lite/SPI_I2C.zip` | 1.3.7 I2c/Spi功能测试, 4.1.119 Sensor驱动框架测试 | SPI_I2C 参考文档及 BMI160 传感器连接指导 |
-| `xts_lite/Ymodem测试.zip` | OTA 升级相关用例 | Ymodem 文件传输工具及参考文档 |
-| [`xts_lite/WiFi兼容性路由器列表.md`](WiFi兼容性路由器列表.md) | 6.1.1 路由器兼容性 | 路由器品牌型号及兼容性测试用例详情 |
+| [mediatool测试资源和测试步骤](mediatool测试资源和测试步骤/mediatool测试资源和测试步骤.md) | 4.1.128~4.1.133 Audio/Video 测试 | 包含 audio_file.mp3, audio_file.opus, audio_file.aac, audio_file.wav, media_file_h264.mp4, media_file_h265.mp4 等测试资源 |
+| [SPI_I2C](SPI_I2C/SPI_I2C.md) | 1.3.7 I2c/Spi功能测试, 4.1.119 Sensor驱动框架测试 | SPI_I2C 参考文档及 BMI160 传感器连接指导 |
+| [Ymodem测试](Ymodem测试/Ymodem测试.md) | OTA 升级相关用例 | Ymodem 文件传输工具及参考文档 |
+| [WiFi兼容性路由器列表](WiFi兼容性路由器列表.md) | 6.1.1 路由器兼容性 | 路由器品牌型号及兼容性测试用例详情 |
