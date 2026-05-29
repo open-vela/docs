@@ -170,41 +170,54 @@ Please decide based on the universality of the code:
 
 openvela follows the Apache license, so you can freely choose whether to open source it.
 
+### 28. After porting to a new development board, how can I verify the adaptation? Are there ready-to-use test cases?
+
+**Yes.**
+
+The openvela community provides a ready-to-use [xTS Test Case Collection](/document?id=XXX&version=trunk&language=en) that covers standard test cases for system kernel, driver BSP, filesystem, WiFi, Bluetooth, audio/video and other fundamental capabilities. Commands can be copied directly into nsh for execution without writing tests from scratch.
+
+Test cases are divided into two categories:
+
+- **General self-tests** (mandatory): cover fundamental capabilities such as memory, scheduling, GPIO, I2C/SPI, UART, RTC, Watchdog.
+- **Category-specific self-tests** (optional): selected based on product characteristics, including WiFi, Bluetooth, LCD, Audio, filesystem, OTA, etc.
+
+Once the basic tests pass, the results can serve as the acceptance criteria for the new platform port. If a test case does not apply to your platform or you have questions, please [file an issue on open-vela/docs](https://github.com/open-vela/docs/issues).
+
 ## VI. Application Framework and Multimedia
 
-### 28. Is the underlying engine for openvela Quick Apps Node.js or V8?
+### 29. Is the underlying engine for openvela Quick Apps Node.js or V8?
 
 Neither. The openvela device-side Quick App engine is based on **QuickJS**.
 
-### 29. What is the difference in running mechanisms between Quick Apps and Native Apps?
+### 30. What is the difference in running mechanisms between Quick Apps and Native Apps?
 
 - Quick Apps run in an independent container within the system, isolated from the system. A crash does not easily cause a system freeze, and they invoke underlying capabilities via JS interfaces.
 - Native Apps call system APIs directly, offering higher performance but also a higher degree of coupling with the system.
 
-### 30. Does openvela currently support running MPlayer?
+### 31. Does openvela currently support running MPlayer?
 
 Running MPlayer directly is currently not supported; the official team has not yet ported it.
 
-### 31. What multimedia development tools or frameworks are available under the current system?
+### 32. What multimedia development tools or frameworks are available under the current system?
 
 Currently available solutions include: ported FFmpeg, the system's built-in native multimedia toolkit (please refer to the [Sim Environment Audio Function Development Guide](../quickstart/emulator/sim_audio_guide.md)), and ported open-source codec libraries such as `libx264`, `openh264`, and `libopus`.
 
-### 32. Which common Linux multimedia tools are suitable for porting to openvela?
+### 33. Which common Linux multimedia tools are suitable for porting to openvela?
 
 Tools with a Pure Software implementation are usually easier to port. Tools that rely heavily on specific hardware drivers or hardware acceleration cannot be ported directly and must be adapted based on openvela's existing multimedia framework.
 
-### 33. Is there any reference case or path if third-party code needs to be ported?
+### 34. Is there any reference case or path if third-party code needs to be ported?
 
 Developers are advised to directly reference the `apps/external` folder in the source directory. This directory contains a large number of ported third-party libraries and serves as the best practice for understanding the build system and porting methods.
 
-### 34. For developing graphical interfaces on openvela, are Qt or GTK/JDK supported?
+### 35. For developing graphical interfaces on openvela, are Qt or GTK/JDK supported?
 
 **Not supported and not recommended.**
 
 - Qt and GTK frameworks are too heavy for embedded RTOS.
 - The official recommendation is to use **LVGL**, which the team has deeply optimized and integrated well with the NuttX system.
 
-### 35. Does openvela support IoT protocols like MQTT, CoAP, Matter?
+### 36. Does openvela support IoT protocols like MQTT, CoAP, Matter?
 
 **Yes.**
 
@@ -212,7 +225,7 @@ The system has integrated MQTT, CoAP, and Matter (partial versions).
 
 Relevant libraries are usually located in the `apps/netutils` or `external` directories and can be referenced directly in the source code.
 
-### 36. Is it necessary to deeply master kernel principles just to learn multimedia development?
+### 37. Is it necessary to deeply master kernel principles just to learn multimedia development?
 
 **No.**
 
