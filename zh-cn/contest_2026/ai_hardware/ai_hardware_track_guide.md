@@ -26,10 +26,10 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 > 代码统一基于 openvela 大赛分支 `dev-ai-contest-2026` 开发与提交。
 
-| 组件                                                                                          | 说明                         |
-| --------------------------------------------------------------------------------------------- | ---------------------------- |
-| [openvela](../../../README_zh-cn.md)                                                          | 嵌入式操作系统，基于 NuttX。 |
-| [ai_agent](https://github.com/open-vela/packages_ai_agent/blob/dev-ai-contest-2026/README.md) | AI Agent 框架。              |
+| 组件                                                                               | 说明                         |
+| ---------------------------------------------------------------------------------- | ---------------------------- |
+| [openvela](../../../README_zh-cn.md)                                               | 嵌入式操作系统，基于 NuttX。 |
+| [ai_agent](../../../../../../packages_ai_agent/blob/dev-ai-contest-2026/README.md) | AI Agent 框架。              |
 
 ### 2、应用开发模式
 
@@ -39,13 +39,13 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 - 不需要写 LVGL UI，通过 ai_agent 的 Skill + 工具体系扩展能力
 - 适合：语音助手、提醒服务、信息查询等场景
-- 入口：[ai_chat demo](https://github.com/open-vela/packages_demos/tree/dev-ai-contest-2026/ai_chat)
+- 入口：[ai_chat demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/ai_chat)
 
 **模式 B：开发独立 LVGL 应用（完整体验）**
 
 - 创建独立的 LVGL 应用，通过 ai_agent 的消息总线交互
 - 适合：需要自定义 UI 的场景（手表应用、IoT 控制面板等）
-- 入口：[music_player demo](https://github.com/open-vela/packages_demos/tree/dev-ai-contest-2026/music_player)（现成 UI 模板）+ mini-memo（参考《mini-memo 开发指引》手把手构建）
+- 入口：[music_player demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player)（现成 UI 模板）+ mini-memo（参考《mini-memo 开发指引》手把手构建）
 
 ---
 

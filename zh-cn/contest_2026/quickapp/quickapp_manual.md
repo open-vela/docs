@@ -220,13 +220,13 @@ vapp hap://app/com.vela.player
 
 ## 六、提交参赛代码
 
-参赛代码统一提交到 [packages_apps](https://github.com/open-vela/packages_apps/tree/dev-ai-contest-2026) 仓库（在 openvela 模拟器上运行），采用 **fork + PR** 的标准开源流程，目标分支为大赛分支 `dev-ai-contest-2026`。
+参赛代码统一提交到 [packages_apps](../../../../../../packages_apps/tree/dev-ai-contest-2026) 仓库（在 openvela 模拟器上运行），采用 **fork + PR** 的标准开源流程，目标分支为大赛分支 `dev-ai-contest-2026`。
 
 **提交内容**：源码工程 + 生产模式打包产物 `release.rpk`，二者都需提交。
 
 **提交步骤**：
 
-1. 在 GitHub 上 fork [open-vela/packages_apps](https://github.com/open-vela/packages_apps/tree/dev-ai-contest-2026)，并切换到大赛分支 `dev-ai-contest-2026`。
+1. 在 GitHub 上 fork [open-vela/packages_apps](../../../../../../packages_apps/tree/dev-ai-contest-2026)，并切换到大赛分支 `dev-ai-contest-2026`。
 2. 在对应设备形态目录（如 `wearable/`、`smartspeaker/`）下**新建你的应用目录**，放入：
    - 快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）
    - 生产模式打包产物 **release.rpk**

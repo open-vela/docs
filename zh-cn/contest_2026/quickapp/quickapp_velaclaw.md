@@ -202,6 +202,6 @@ velaclaw.ask({
 
 ## 十、相关仓库
 
-- [packages_ai_agent](https://github.com/open-vela/packages_ai_agent/tree/dev-ai-contest-2026)
-- [frameworks_runtimes_feature](https://github.com/open-vela/frameworks_runtimes_feature/tree/dev-ai-contest-2026)
-- [goldfish ARM64 模拟器 ai_agent 与快应用 velaclaw 集成指南](https://github.com/open-vela/packages_ai_agent/tree/dev-ai-contest-2026/defconfigs/goldfish-arm64-v8a-ap)
+- [packages_ai_agent](../../../../../../packages_ai_agent/tree/dev-ai-contest-2026)
+- [frameworks_runtimes_feature](../../../../../../frameworks_runtimes_feature/tree/dev-ai-contest-2026)
+- [goldfish ARM64 模拟器 ai_agent 与快应用 velaclaw 集成指南](../../../../../../packages_ai_agent/tree/dev-ai-contest-2026/defconfigs/goldfish-arm64-v8a-ap)
