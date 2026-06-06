@@ -10,24 +10,30 @@
 
 ## 参赛流程
 
-| 阶段 | 时间 |
-| ---- | ---- |
+| 阶段                | 时间                    |
+| ------------------- | ----------------------- |
 | 报名 + 提交作品方向 | 6 月 8 日起（长期开放） |
-| 提交作品 | 7 月 1 日 – 9 月 21 日 |
-| 作品初评 | 9 月 21 日 – 9 月 30 日 |
-| 决赛名单公示 | 10 月（待定） |
-| 线下决赛答辩 | 即将公布 |
-| 线下颁奖典礼 | 即将公布 |
+| 提交作品            | 7 月 1 日 – 9 月 21 日  |
+| 作品初评            | 9 月 21 日 – 9 月 30 日 |
+| 决赛名单公示        | 10 月（待定）           |
+| 线下决赛答辩        | 即将公布                |
+| 线下颁奖典礼        | 即将公布                |
+
+## 关于 openvela
+
+openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI 原生的智能硬件场景设计，已在智能手表、手环、音箱、耳机、机器人等亿级设备上落地验证。
+
+详细的技术架构、核心优势与快速入门，请参考：[openvela 项目介绍](../../README_zh-cn.md)
 
 ## 三个赛道方向
 
 本次大赛提供三个参赛指引方向（**不作为独立赛道，仅为选题参考**，鼓励多方向组合开发）：
 
-| 方向 | 说明 | 详细指引 |
-| ---- | ---- | -------- |
-| **AI 硬件产品创新** | 基于 openvela + ai_agent，开发「能主动、会执行」的嵌入式 AI Agent 应用。 | [进入](./ai_hardware/ai_hardware_guide_index.md) |
-| **手表应用创新** | 基于 openvela 快应用框架，开发智能手表/手环上的腕上创新应用。 | [进入](./quickapp/quickapp_guide_index.md) |
-| **新硬件平台适配**（重点鼓励） | 将 openvela 移植到全新芯片/开发板，完成 BSP 适配与驱动开发。 | [进入](./hardware_porting/hardware_porting_guide_index.md) |
+| 方向                           | 说明                                                                     | 详细指引                                                   |
+| ------------------------------ | ------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| **AI 硬件产品创新**            | 基于 openvela + ai_agent，开发「能主动、会执行」的嵌入式 AI Agent 应用。 | [进入](./ai_hardware/ai_hardware_guide_index.md)           |
+| **手表应用创新**               | 基于 openvela 快应用框架，开发智能手表/手环上的腕上创新应用。            | [进入](./quickapp/quickapp_guide_index.md)                 |
+| **新硬件平台适配**（重点鼓励） | 将 openvela 移植到全新芯片/开发板，完成 BSP 适配与驱动开发。             | [进入](./hardware_porting/hardware_porting_guide_index.md) |
 
 ## 参赛要求（通用）
 
@@ -45,12 +51,12 @@
 
 ## 开发资源
 
-| 资源 | 链接 |
-| ---- | ---- |
+| 资源              | 链接                                                                                                                                                       |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | openvela 代码仓库 | [GitHub](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/README_zh-cn.md) / [Gitee](https://gitee.com/open-vela/docs/tree/dev-ai-contest-2026/) |
-| 官方文档站 | https://doc.openvela.com/document |
-| 视频教程（B站） | https://www.bilibili.com/video/BV19PsAzCEuy |
-| MiMo API 配置 | https://platform.xiaomimimo.com/docs/zh-CN/integration/claudecode |
+| 官方文档站        | https://doc.openvela.com/document                                                                                                                          |
+| 视频教程（B站）   | https://www.bilibili.com/video/BV19PsAzCEuy                                                                                                                |
+| MiMo API 配置     | https://platform.xiaomimimo.com/docs/zh-CN/integration/claudecode                                                                                          |
 
 ## 作品提交要求
 
