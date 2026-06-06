@@ -45,7 +45,7 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 - 创建独立的 LVGL 应用，通过 ai_agent 的消息总线交互
 - 适合：需要自定义 UI 的场景（手表应用、IoT 控制面板等）
-- 入口：[music_player demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player)（现成 UI 模板）+ mini-memo（参考《mini-memo 开发指引》手把手构建）
+- 入口：[music_player demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player)（现成 UI 模板）+ mini-memo（参考 [mini-memo 应用开发指引](./mini_memo_guide.md) 手把手构建）
 
 ---
 
@@ -115,4 +115,4 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 ## 四、参赛教程
 
-- ai_agent 应用开发上手指南（详见 ai_agent 开发文档）
+- [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)
