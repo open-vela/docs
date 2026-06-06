@@ -125,6 +125,8 @@ ai_agent
 
 等待出现 `vela>` 提示符后，输入以下命令配置大模型：
 
+> 大赛发放的 Token Plan 只能注入到**当前没有 Token Plan 的 MiMo 账号**。若你的账号正处于订阅周期内，建议新建一个 MiMo 账号申领，或等套餐周期结束后再申领（详见 [大赛总览 - 常见问题](../contest_overview.md#常见问题)）。
+
 **方式一：Token Plan 套餐用户（tp- 开头的 key，大赛发放）**
 
 ```bash
