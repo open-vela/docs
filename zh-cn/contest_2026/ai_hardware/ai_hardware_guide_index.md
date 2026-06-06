@@ -9,6 +9,7 @@
 | [AI 硬件产品创新赛道详细指引](./ai_hardware_track_guide.md) | 赛道概述、赛题要求、技术平台、开发模式、评审加分项。                            |
 | [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)       | 从零搭建 openvela + ai_agent 环境、编译烧录、配置 LLM、开发 Skill 的完整教程。  |
 | [mini-memo 应用开发指引](./mini_memo_guide.md)              | 以 music_player 为模板构建 AI 记忆助手，演示主动任务、Router 路由、结构化输出。 |
+| [支持的硬件平台](../hardware_porting/supported_hardware.md) | 大赛提供的开发板清单（已支持 + 待适配），可选型号参考。                         |
 
 ## 如何选择
 

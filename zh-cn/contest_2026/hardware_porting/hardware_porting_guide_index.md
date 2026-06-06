@@ -7,6 +7,7 @@
 | 文档                                                                                | 说明                                                                                                     |
 | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | [新硬件适配赛道详细指引](./hardware_porting_track_guide.md)                         | 赛道概述、赛题要求、评分加分项、参考资源。                                                               |
+| [支持的硬件平台](./supported_hardware.md)                                           | 大赛提供的开发板清单（已支持 + 待适配），含芯片特点、适用场景、开发指南链接。                            |
 | [最小可运行 NSH 系统 defconfig 参考](./defconfig_reference/minimum_nsh_baseline.md) | L0 起步 defconfig：在新开发板上先启动到 NSH 命令行提示符，再按需逐步启用文件系统、网络、传感器等子系统。 |
 | [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                        | 从零完成 BSP 移植的完整流程。                                                                            |
 | [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)        | UART/SPI/I2C 等各类驱动的适配与使用。                                                                    |

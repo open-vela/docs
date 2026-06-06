@@ -39,12 +39,13 @@
 
 ## 参考资源
 
-| 资源                                                                              | 说明                                 |
-| --------------------------------------------------------------------------------- | ------------------------------------ |
-| [NuttX 已支持平台列表](https://nuttx.apache.org/docs/latest/platforms/index.html) | 选择目标硬件的参考                   |
-| [openvela 已适配硬件清单](../../dev_board/Development_Board.md)                   | 避免重复适配（已适配的不计入本赛道） |
-| [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)      | 板级适配与驱动开发参考               |
-| [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                      | 完整的芯片移植流程                   |
+| 资源                                                                              | 说明                                    |
+| --------------------------------------------------------------------------------- | --------------------------------------- |
+| [NuttX 已支持平台列表](https://nuttx.apache.org/docs/latest/platforms/index.html) | 选择目标硬件的参考                      |
+| [支持的硬件平台](./supported_hardware.md)                                         | 大赛提供的开发板清单（已支持 + 待适配） |
+| [openvela 已适配硬件清单](../../dev_board/Development_Board.md)                   | 避免重复适配（已适配的不计入本赛道）    |
+| [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)      | 板级适配与驱动开发参考                  |
+| [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                      | 完整的芯片移植流程                      |
 
 ## 适合人群
 
