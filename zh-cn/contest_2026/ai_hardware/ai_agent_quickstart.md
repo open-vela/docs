@@ -159,16 +159,17 @@ vela> voice_start
 
 在 menuconfig 中按需关闭：`Application Configuration → Packages → Vela AI Agent`
 
-| 模块         | Kconfig              | 默认 | 占用       | 关闭建议                            |
-| ------------ | -------------------- | ---- | ---------- | ----------------------------------- |
-| 飞书 Bot     | `AI_AGENT_FEISHU`    | 开启 | ~108KB     | 不用飞书就关                        |
-| 微信 Bot     | `AI_AGENT_WEIXIN`    | 开启 | ~45KB      | 不用微信就关                        |
-| MQTT         | `AI_AGENT_MQTT`      | 开启 | ~15KB      | 不做 IoT 就关                       |
-| 多设备协作   | `AI_AGENT_NODE`      | 开启 | ~20KB      | 不用 Hub/Node 就关                  |
-| MCP 协议     | `AI_AGENT_MCP`       | 开启 | ~10KB      | 不用远程工具就关                    |
-| LVGL UI      | `AI_AGENT_LVGL_UI`   | 关闭 | ~50KB      | 需要屏幕聊天才开                    |
-| 无 WiFi 网络 | `AI_AGENT_NET_RPMSG` | 关闭 | —          | 无板载 WiFi、靠手机蓝牙代理上网时开 |
-| 相机         | `AI_AGENT_CAMERA`    | 关闭 | 依赖 VIDEO | 视觉识别场景开                      |
+| 模块         | Kconfig             | 默认 | 占用       | 关闭建议                                    |
+| ------------ | ------------------- | ---- | ---------- | ------------------------------------------- |
+| 飞书 Bot     | `AI_AGENT_FEISHU`   | 开启 | ~108KB     | 不用飞书就关                                |
+| 微信 Bot     | `AI_AGENT_WEIXIN`   | 开启 | ~45KB      | 不用微信就关                                |
+| MQTT         | `AI_AGENT_MQTT`     | 开启 | ~15KB      | 不做 IoT 就关                               |
+| 多设备协作   | `AI_AGENT_NODE`     | 开启 | ~20KB      | 不用 Hub/Node 就关                          |
+| MCP 协议     | `AI_AGENT_MCP`      | 开启 | ~10KB      | 不用远程工具就关                            |
+| LVGL UI      | `AI_AGENT_LVGL_UI`  | 关闭 | ~50KB      | 需要屏幕聊天才开                            |
+| BLE GATT     | `AI_AGENT_BLE_GATT` | 关闭 | —          | 需要 BLE 数据通道（iOS/Android 客户端）时开 |
+| BLE 网络通道 | `AI_AGENT_BLE_NET`  | 关闭 | —          | 无 WiFi、经手机 App 蓝牙 SPP 代理上网时开   |
+| 相机         | `AI_AGENT_CAMERA`   | 关闭 | 依赖 VIDEO | 视觉识别场景开                              |
 
 最小配置（纯 CLI）：关闭飞书 + 微信 + MQTT + Node + MCP + LVGL_UI，可节省约 260KB 内存。
 
