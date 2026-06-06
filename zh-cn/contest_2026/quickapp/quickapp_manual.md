@@ -28,10 +28,10 @@
 
 ### 3、核心文件说明
 
-| 文件 | 作用 |
-| ---- | ---- |
-| `src/manifest.json` | 声明应用基本信息、系统接口权限、页面路由 |
-| `src/app.ux` | 应用入口，定义全局生命周期回调和全局数据 |
+| 文件                   | 作用                                            |
+| ---------------------- | ----------------------------------------------- |
+| `src/manifest.json`    | 声明应用基本信息、系统接口权限、页面路由        |
+| `src/app.ux`           | 应用入口，定义全局生命周期回调和全局数据        |
 | `src/pages/xxx/xxx.ux` | 页面文件，包含 template + style + script 三部分 |
 
 ---
@@ -78,7 +78,7 @@
 
 ### 1、模拟器环境准备
 
-参考[快速入门（Ubuntu）](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/zh-cn/quickstart/openvela_ubuntu_quick_start.md)完成 openvela 模拟器运行环境搭建编译。
+参考[快速入门（Ubuntu）](../../quickstart/openvela_ubuntu_quick_start.md)完成 openvela 模拟器运行环境搭建编译。
 
 > 大赛参赛者请统一基于大赛分支 `dev-ai-contest-2026` 拉取 openvela 代码（`repo init` 时通过 `-b dev-ai-contest-2026` 指定），不要使用 dev 或 trunk 分支，以确保与大赛环境一致。
 
@@ -105,6 +105,8 @@ adb devices
 ### 3、安装字体包
 
 模拟器默认不包含中文字体，下载字体包并解压，执行如下命令手动推送：
+
+> 字体包下载：[font.zip](attachment/font.zip)
 
 ```bash
 # font.zip 下载到任意目录均可，解压后得到一个 font 文件夹（里面是 MiSans、simhei 等 .ttf）
@@ -292,12 +294,12 @@ adb -s emulator-5554 push com.vela.player /data/app/com.vela.player
 
 ### A. 快应用与 LVGL 原生应用对比
 
-| 特性 | Vela 快应用 | LVGL 原生应用 |
-| ---- | ----------- | ------------- |
-| 开发语言 | HTML/CSS/JavaScript | C/C++ |
-| 开发门槛 | 低（前端技术栈） | 高（嵌入式开发经验） |
-| 部署方式 | rpk 包推送，无需重新编译固件 | 编译进固件，需重新烧录 |
-| 适用场景 | UI 交互类应用、快速原型 | 高性能需求、底层硬件控制 |
+| 特性     | Vela 快应用                  | LVGL 原生应用            |
+| -------- | ---------------------------- | ------------------------ |
+| 开发语言 | HTML/CSS/JavaScript          | C/C++                    |
+| 开发门槛 | 低（前端技术栈）             | 高（嵌入式开发经验）     |
+| 部署方式 | rpk 包推送，无需重新编译固件 | 编译进固件，需重新烧录   |
+| 适用场景 | UI 交互类应用、快速原型      | 高性能需求、底层硬件控制 |
 
 ### B. 相关资源链接
 

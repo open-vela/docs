@@ -85,6 +85,8 @@ CONFIG_MQ_MAXMSGSIZE=4096            # 消息队列最大消息大小设为 4096
 
 本节以示例应用包 `com.application.lyra.demo.debug.1.0.0.rpk` 为例（请替换为你自己应用的 rpk 文件名，包名需与 `manifest.json` 中的 `package` 字段一致）。`rpk` 是快应用的安装包，本质为 zip 包，可解压后推送到设备运行。
 
+> 附件下载：[示例 RPK 应用包](attachment/com.application.lyra.demo.debug.1.0.0.rpk) | [字体包 font.zip](attachment/font.zip)
+
 ```bash
 # 1. 解压字体包
 unzip font.zip -d font
@@ -184,7 +186,9 @@ velaclaw.ask({
 
 ## 七、运行效果
 
-（示例演示录屏见飞书文档附件）
+示例演示录屏：
+
+<video src="attachment/录屏 2026年05月27日 15时57分03秒.webm" controls></video>
 
 ## 八、常见问题
 
@@ -200,3 +204,4 @@ velaclaw.ask({
 
 - [packages_ai_agent](https://github.com/open-vela/packages_ai_agent/tree/dev-ai-contest-2026)
 - [frameworks_runtimes_feature](https://github.com/open-vela/frameworks_runtimes_feature/tree/dev-ai-contest-2026)
+- [goldfish ARM64 模拟器 ai_agent 与快应用 velaclaw 集成指南](https://github.com/open-vela/packages_ai_agent/tree/dev-ai-contest-2026/defconfigs/goldfish-arm64-v8a-ap)
