@@ -1,6 +1,6 @@
 # ai_agent 应用开发上手指南
 
-> 本文档面向 openvela AI 硬件大赛参赛者，介绍如何从零搭建 openvela + ai_agent 环境、配置 LLM、体验核心能力，并从模板创建你的第一个 Agent 应用。
+> 本文档面向 openvela AI 硬件大赛参赛者，介绍如何从零搭建 openvela + ai_agent 环境、配置 LLM、体验核心能力，并了解框架架构与开发板集成方式。
 
 ## 一、前置准备
 
@@ -292,31 +292,23 @@ vela> mcp_discover
 
 > 你已经用起来了。在开始开发具体的 Agent 应用之前，花几分钟了解一下 ai_agent 的运作原理和架构设计。
 
-```
-┌─────────────────────────────────────────────────┐
-│              你的 Agent 应用                       │
-│         （mini-memo / 你自己写的应用）              │
-├─────────────────────────────────────────────────┤
-│                  ai_agent 框架                     │
-│                                                   │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────┐    │
-│  │ Router   │  │ Tool Reg │  │ Proactive    │    │
-│  │ 意图路由  │  │ 工具注册  │  │ 主动任务      │    │
-│  └──────────┘  └──────────┘  └──────────────┘    │
-│                                                   │
-│  ┌──────────┐  ┌──────────┐  ┌──────────────┐    │
-│  │ Skills   │  │ Memory   │  │ Agent Loop   │    │
-│  │ 技能系统  │  │ 记忆管理  │  │ 推理循环      │    │
-│  └──────────┘  └──────────┘  └──────────────┘    │
-├─────────────────────────────────────────────────┤
-│  接入通道                                          │
-│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐     │
-│  │ CLI    │ │ 微信    │ │ 飞书    │ │ 语音    │    │
-│  └────────┘ └────────┘ └────────┘ └────────┘     │
-├─────────────────────────────────────────────────┤
-│  openvela + LVGL（显示/输入/事件循环）             │
-└─────────────────────────────────────────────────┘
-```
+### 1、Agent 的核心
+
+<img src="images/ai_agent_arch_core.png" alt="Agent 的核心" width="800" />
+
+### 2、工具扩展方式
+
+<img src="images/ai_agent_arch_tool_extension.png" alt="工具扩展方式" width="800" />
+
+### 3、实现场景示例
+
+**通过飞书来控制智能设备：**
+
+<img src="images/ai_agent_arch_feishu_control.png" alt="通过飞书控制智能设备" width="450" />
+
+**和桌面端智能体联动：**
+
+<img src="images/ai_agent_arch_desktop_collab.png" alt="和桌面端智能体联动" width="600" />
 
 开发应用时，你主要和这三层打交道：
 
@@ -360,7 +352,9 @@ esptool.py -c esp32s3 -p /dev/ttyACM0 -b 460800 \
   write_flash 0x0 nuttx/nuttx.bin
 ```
 
-> `fix_esp32s3.sh` 修复了 ESP-IDF 与 NuttX 的 mbedtls 头文件冲突、CCM 密码套件兼容性、自旋锁初始化等上游兼容问题（无法通过 defconfig 表达，必须用脚本打补丁）。已知可忽略警告：`ccache: error: execute_noreturn`、`expr: syntax error`，设置 `export CCACHE_DISABLE=1` 可消除。
+> `fix_esp32s3.sh` 修复了 ESP-IDF 与 NuttX 的 mbedtls 头文件冲突、CCM 密码套件兼容性、自旋锁初始化等上游兼容问题（无法通过 defconfig 表达，必须用脚本打补丁）。
+> 
+> 已知可忽略警告：`ccache: error: execute_noreturn`、`expr: syntax error`，设置 `export CCACHE_DISABLE=1` 可消除。
 
 ### 2、Gemini-S1（全志 R528）
 
@@ -395,7 +389,13 @@ bash packages/ai_agent/fix_gemini_s1.sh
     -e -Wno-error -j"$(nproc)"
 ```
 
-> `fix_gemini_s1.sh` 做两件事：(1) 用最小化音频图替换原厂全功能 smart-speaker 管线（只保留录音、播放两条路径）；(2) 应用 PTT 录音修复补丁（DMA 中断 use-after-free、media server 非阻塞处理、abufsink 采样率协商等）。运行 mini_memo：ai_agent 启动后在屏幕 launcher 找到 mini_memo 入口，按住 PTT 按钮录音，松开后自动分类存储。
+> `fix_gemini_s1.sh` 做两件事：
+> 
+> (1) 用最小化音频图替换原厂全功能 smart-speaker 管线（只保留录音、播放两条路径）；
+> 
+> (2) 应用 PTT 录音修复补丁（DMA 中断 use-after-free、media server 非阻塞处理、abufsink 采样率协商等）。
+> 
+> 运行 mini_memo：ai_agent 启动后在屏幕 launcher 找到 mini_memo 入口，按住 PTT 按钮录音，松开后自动分类存储。
 
 ### 3、QEMU 模拟器（goldfish-arm64-v8a-ap）
 
@@ -406,6 +406,8 @@ bash packages/ai_agent/fix_gemini_s1.sh
 | defconfig | `defconfigs/goldfish-arm64-v8a-ap/goldfish-arm64-v8a-ap_defconfig` |
 
 该配置验证三项能力组合：QuickApp 安装运行、ai_agent 启用、QuickApp 通过 `system.velaclaw` 调用 ai_agent。
+
+**集成步骤：**
 
 ```bash
 # 1. 复制 defconfig
@@ -420,7 +422,39 @@ rm -rf cmake_out/vela_goldfish-arm64-v8a-ap
 ./emulator.sh cmake_out/vela_goldfish-arm64-v8a-ap/
 ```
 
-> 该模拟器与快应用调用 velaclaw 的完整流程，另见 [快应用调用 velaclaw 教程](../quickapp/quickapp_velaclaw.md)。QEMU 默认有 NAT 网络（eth0 自动获取 `10.0.2.15`），无需 WiFi 配网；`set_llm`、`ask` 等是 `vela>` 提示符下的命令，需前台运行 `ai_agent` 进入 vela CLI。
+**安装 demo QuickApp：**
+
+```bash
+# 解压并推送 QuickApp 到模拟器
+adb connect 127.0.0.1:5555
+mkdir -p /tmp/agent && \
+  unzip -o packages/ai_agent/defconfigs/goldfish-arm64-v8a-ap/com.application.agent.demo.debug.1.0.0.rpk \
+  -d /tmp/agent
+adb shell mkdir -p /data/app/com.application.agent.demo
+adb push /tmp/agent/. /data/app/com.application.agent.demo/
+
+# 推送字体
+adb push vendor/openvela/boards/vela/resource/font /data/
+```
+
+**在 QuickApp 中调用 ai_agent：**
+
+```javascript
+import velaclaw from '@system.velaclaw'
+
+velaclaw.ask({
+  query: '北京今天天气怎么样',
+  success: function (res) { console.log('AI reply:', res.reply) },
+  fail:    function (data, code) { console.log('fail, code:', code) }
+})
+```
+
+> 💡 QEMU 模拟器默认有 NAT 网络（eth0 自动获取 `10.0.2.15`），无需 WiFi 配网。
+
+**注意事项：**
+
+- `router_set`、`ask` 等是 `vela>` 提示符下的命令，不是 NSH 命令。前台运行 `ai_agent` 进入 vela CLI，或提前推送 config 文件。
+- 该模拟器与快应用调用 velaclaw 的完整流程，另见 [快应用调用 velaclaw 教程](../quickapp/quickapp_velaclaw.md)。
 
 ### 4、添加新开发板
 
@@ -431,311 +465,7 @@ rm -rf cmake_out/vela_goldfish-arm64-v8a-ap
 3. 添加 `README.md` 描述配置与补丁说明
 4. 提交 PR 到 `packages_ai_agent` 仓库
 
-## 七、从模板创建你的第一个应用
-
-> 目标：屏幕上显示你的应用界面。
-
-以 music_player 为模板，创建一个最简单的 LVGL 应用——「Hello Agent」。
-
-### 1、创建目录结构
-
-```
-packages/demos/hello_agent/
-├── hello_agent_main.c    # 程序入口
-├── hello_agent.c         # 应用逻辑
-├── hello_agent.h         # 头文件
-├── Kconfig               # 配置
-├── Makefile              # 编译规则
-└── Make.defs             # 构建配置
-```
-
-### 2、编写构建配置
-
-**Kconfig：**
-
-```
-config LVX_USE_DEMO_HELLO_AGENT
-    bool "Hello Agent"
-    default n
-    select GRAPHICS_LVGL
-    ---help---
-        Enable Hello Agent - a minimal ai_agent LVGL application.
-```
-
-**Makefile：**
-
-```makefile
-include $(APPDIR)/Make.defs
-
-ifeq ($(CONFIG_LVX_USE_DEMO_HELLO_AGENT), y)
-    PROGNAME = hello_agent
-    PRIORITY = 100
-    STACKSIZE = 32768
-    MODULE = $(CONFIG_LVX_USE_DEMO_HELLO_AGENT)
-
-    CSRCS = hello_agent.c
-    MAINSRC = hello_agent_main.c
-endif
-
-include $(APPDIR)/Application.mk
-```
-
-**Make.defs：**
-
-```makefile
-ifneq ($(CONFIG_LVX_USE_DEMO_HELLO_AGENT),)
-    CONFIGURED_APPS += $(APPDIR)/packages/demos/hello_agent
-endif
-```
-
-### 3、编写入口代码
-
-**hello_agent_main.c：**
-
-```c
-#include <nuttx/config.h>
-#include <unistd.h>
-#include <uv.h>
-#include <lvgl/lvgl.h>
-#include <syslog.h>
-
-#include "hello_agent.h"
-
-int main(int argc, FAR char* argv[])
-{
-    lv_nuttx_dsc_t info;
-    lv_nuttx_result_t result;
-    uv_loop_t ui_loop;
-
-    syslog(LOG_INFO, "Hello Agent starting...\n");
-
-    /* 检查 LVGL 是否已初始化 */
-    if (lv_is_initialized()) {
-        LV_LOG_ERROR("LVGL already initialized!");
-        return -1;
-    }
-
-    /* 初始化 LVGL */
-    lv_init();
-    lv_nuttx_dsc_init(&info);
-    lv_nuttx_init(&info, &result);
-
-    if (result.disp == NULL) {
-        LV_LOG_ERROR("Display init failed!");
-        return 1;
-    }
-
-    /* 创建应用 UI */
-    hello_agent_create();
-
-    /* 进入事件循环 */
-    lv_nuttx_uv_loop(&ui_loop, &result);
-
-    /* 清理 */
-    lv_nuttx_deinit(&result);
-    lv_deinit();
-    return 0;
-}
-```
-
-**hello_agent.c：**
-
-```c
-#include "hello_agent.h"
-#include <lvgl/lvgl.h>
-#include <syslog.h>
-
-void hello_agent_create(void)
-{
-    lv_obj_t* screen = lv_obj_create(NULL);
-    lv_obj_set_style_bg_color(screen, lv_color_hex(0x121220), 0);
-
-    lv_obj_t* label = lv_label_create(screen);
-    lv_label_set_text(label, "Hello Agent!");
-    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-    lv_obj_center(label);
-
-    lv_scr_load(screen);
-}
-```
-
-**hello_agent.h：**
-
-```c
-#pragma once
-
-void hello_agent_create(void);
-```
-
-### 4、编译运行
-
-```bash
-# 启用你的应用
-./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/ --cmake menuconfig
-# 在 menuconfig 中找到 Hello Agent 并启用
-
-# 编译
-./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/ --cmake -j8
-
-# 运行
-nsh> hello_agent &
-```
-
-### 验证点
-
-屏幕上显示 "Hello Agent!" 文字 → 你的第一个 LVGL 应用跑起来了。
-
-### 常见问题
-
-| 问题                                    | 原因                    | 解决                                                  |
-| --------------------------------------- | ----------------------- | ----------------------------------------------------- |
-| menuconfig 里找不到 Hello Agent         | Make.defs 没生效        | 检查路径是否正确，确认 `CONFIGURED_APPS` 指向你的目录 |
-| 编译报 `undefined reference to lv_init` | LVGL 没启用             | Kconfig 里加上 `select GRAPHICS_LVGL`                 |
-| 运行报 `LVGL already initialized`       | LVGL 被别的应用初始化了 | 先 kill 掉其他 LVGL 应用                              |
-| 屏幕黑屏                                | 显示驱动没配置          | 确认开发板的 display 配置正确                         |
-
-## 八、给应用加 Router（意图路由）
-
-> 目标：应用能区分不同类型的用户输入，走不同处理流程。
-
-Router 是 ai_agent 的「前台」——用户说的话先过 Router，再分发到对应的处理逻辑。
-
-### 1、Router 是什么
-
-```
-用户说："记一下买牛奶"    → ACTION_SAVE    → 直接存储
-用户说："提醒我明早开会"  → ACTION_TODO    → 解析时间，存为待办
-用户说："总结一下今天"    → ACTION_SUMMARY → 汇总数据，生成摘要
-```
-
-### 2、实现一个最简 Router
-
-在 `hello_agent.c` 中添加：
-
-```c
-/* 意图类型 */
-typedef enum {
-    ACTION_DEFAULT = 0,
-    ACTION_TODO    = 1,
-    ACTION_SAVE    = 2,
-    ACTION_SUMMARY = 3,
-} action_type_t;
-
-/* Router：根据关键词判断意图 */
-static action_type_t router_intent(const char* text)
-{
-    if (!text) return ACTION_DEFAULT;
-
-    if (strstr(text, "提醒我") || strstr(text, "待办") || strstr(text, "todo"))
-        return ACTION_TODO;
-
-    if (strstr(text, "总结") || strstr(text, "摘要"))
-        return ACTION_SUMMARY;
-
-    return ACTION_SAVE;
-}
-```
-
-> 这是基于关键词的简单实现。实际项目中应调用 LLM 做更准确的意图识别，这里先跑通流程。
-
-### 3、根据 Router 结果执行不同逻辑
-
-```c
-/* 处理用户输入 */
-void hello_agent_handle_input(const char* text)
-{
-    action_type_t action = router_intent(text);
-
-    switch (action) {
-        case ACTION_TODO:
-            /* 解析时间，存储为待办 */
-            syslog(LOG_INFO, "TODO: %s\n", text);
-            update_ui_todo(text);
-            break;
-        case ACTION_SAVE:
-            /* 直接存储 */
-            syslog(LOG_INFO, "SAVE: %s\n", text);
-            update_ui_saved(text);
-            break;
-        case ACTION_SUMMARY:
-            /* 生成摘要 */
-            syslog(LOG_INFO, "SUMMARY requested\n");
-            update_ui_summary();
-            break;
-        default:
-            break;
-    }
-}
-```
-
-### 验证点
-
-- 输入「提醒我开会」→ 日志显示 `TODO: 提醒我开会`，UI 显示待办卡片
-- 输入「记一下买牛奶」→ 日志显示 `SAVE: 记一下买牛奶`，UI 显示已保存
-
-## 九、给应用加主动任务
-
-> 目标：应用会在特定条件下自己推送消息，不用等用户问。
-
-### 1、主动任务是什么
-
-普通应用是「用户点 → 应用做」，Agent 应用可以是「条件到了 → 应用自己推」。典型场景：
-
-- 定时提醒：每 24 小时主动推送「该回顾了」
-- 阈值触发：超过 10 条未读时主动提醒
-- 传感器监控：心率异常时主动告警
-
-### 2、实现定时检查
-
-```c
-#include <time.h>
-
-static time_t last_review_time = 0;
-static const int REVIEW_INTERVAL_HOURS = 24;
-
-/* 检查是否到了提醒时间 */
-void check_periodic_review(void)
-{
-    time_t now = time(NULL);
-
-    if (last_review_time == 0) {
-        last_review_time = now;
-        return;
-    }
-
-    if (now - last_review_time >= REVIEW_INTERVAL_HOURS * 3600) {
-        /* 触发主动推送 */
-        proactive_push("⏰ 定期提醒：你有未处理的待办");
-        last_review_time = now;
-    }
-}
-```
-
-### 3、把检查加入事件循环
-
-```c
-/* 在 LVGL 定时器中周期调用 */
-static void timer_cb(lv_timer_t* timer)
-{
-    check_periodic_review();
-}
-
-void hello_agent_create(void)
-{
-    /* ... 创建 UI ... */
-
-    /* 注册定时器，每 60 秒检查一次 */
-    lv_timer_create(timer_cb, 60000, NULL);
-}
-```
-
-### 验证点
-
-为了快速验证，把 `REVIEW_INTERVAL_HOURS` 临时改成 0（或几秒），运行后观察是否自动弹出提醒。验证完记得改回来。
-
-## 十、踩坑记录
-
-> 以下都是实际开发中遇到的问题，提前知道可以少走很多弯路。
+## 七、常见问题
 
 ### 1、defconfig 循环
 
@@ -814,7 +544,7 @@ void other_thread(void) {
 sudo apt install cmake ninja-build gcc g++ python3
 ```
 
-## 十一、进阶方向
+## 八、进阶方向
 
 ### 1、通过手机 App（com.agent.coapp）实现蓝牙配网和对话
 
@@ -828,47 +558,14 @@ sudo apt install cmake ninja-build gcc g++ python3
 
 适合不想在 NSH 里手敲配置的用户，同时也可挖掘更多跨设备协同的能力。
 
-### 2、结构化输出
-
-ai_agent 支持将自然语言转换为结构化数据：
-
-```
-输入："明天上午10点开会讨论项目进度"
-         ↓ LLM 解析
-输出：{
-  "type": "schedule",
-  "time": "2026-05-28 10:00",
-  "content": "开会讨论项目进度",
-  "reminder": true
-}
-```
-
-在代码中使用：
-
-```c
-/* 调用 LLM 解析自然语言为结构化数据 */
-int parse_natural_language(const char* text, parsed_data_t* parsed)
-{
-    char prompt[512];
-    snprintf(prompt, sizeof(prompt),
-        "用户说：%s\n请提取时间和内容，输出JSON格式。", text);
-
-    char* response = llm_call(prompt);
-    /* 解析 JSON 填入 parsed */
-    return 0;
-}
-```
-
-> `llm_call()` 是 ai_agent 框架提供的 API，具体调用方式参考 packages_ai_agent 源码。
-
-### 3、更多 Demo 参考
+### 2、更多 Demo 参考
 
 | Demo      | 说明                                            | 代码位置                                                     |
 | --------- | ----------------------------------------------- | ------------------------------------------------------------ |
 | ai_chat   | AI 对话助手，展示基础对话和 TTS                 | `packages/demos/ai_chat/`                                    |
 | mini-memo | AI 记忆助手，展示主动任务 + Router + 结构化输出 | 见 [mini-memo 应用开发指引](./mini_memo_guide.md) 手把手构建 |
 
-### 4、完整文档
+### 3、完整文档
 
 - [ai_agent 仓库](../../../../../../packages_ai_agent)：源码和更多文档
 - [openvela 主仓库](../../../../../../)：系统源码
