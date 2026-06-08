@@ -50,7 +50,7 @@
 
 ## AI 辅助开发（推荐）
 
-大赛要求"必须使用 AI Coding 完成开发，且至少沉淀 1 个有效 Skill"。openvela 官方提供了一套面向驱动开发的 AI 技能集（位于 [`.claude`](../../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md) 仓库），与本赛道高度契合，推荐配合使用：
+大赛鼓励使用 AI Coding 完成开发并沉淀有效 Skill。openvela 官方提供了一套面向驱动开发的 AI 技能集（位于 [`.claude`](../../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md) 仓库），与本赛道高度契合，推荐配合使用：
 
 - **`nuttx-driver-development`（skill）**：创建/更新/审查 NuttX 设备驱动，覆盖 sensor、char、network、fb/LCD、USB、audio、电源电池、MCAL、I2C/SPI 等子系统。
 - **`driver-code-reviewer`（skill）**：驱动代码质量审查（59 Pattern + 双轮交叉验证 + 量化评分），提交前自检。
