@@ -1,836 +1,679 @@
-# mini-memo 应用开发指引
+# mini_memo 应用介绍
 
-> 本指引是 mini-memo 的专项开发指南。通用开发知识（环境搭建、架构、核心能力详解等）请参阅 [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)。
+> **📖 本介绍面向参加 AI 应用开发大赛的选手**，以 mini_memo 为参考示例，展示如何运用 ai_agent 框架构建嵌入式 AI 应用。
+>
+> 通用开发知识（环境搭建、架构、核心能力详解等）请参阅 [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)。
 
 ## 一、概述
 
-### 1、本指引目的
+### 1、这份文档能帮到你什么
 
-本指引帮助开发者基于 ai_agent 框架，快速构建一个独立的 LVGL 应用——**mini-memo（AI 记忆助手）**。通过学习本指引，你将掌握：
+mini_memo 是基于 **ai_agent 框架**（VelaClaw）构建的 AI 记忆助手示例应用。如果你正在参加 AI 应用开发大赛，这份文档将帮助你：
 
-- 如何以 music_player demo 为模板创建新的 LVGL 应用
-- 如何展示 ai_agent 的「主动+执行」能力（区别于「被动对话」）
-- mini-memo 应用的核心实现细节
+- **理解 ai_agent 框架的核心能力**：主动任务、意图路由、NL→结构化输出、Shell/Tool 调用
+- **学会在自己的应用中集成这些能力**：通过 mini_memo 的真实代码，看懂每个 API 怎么调、怎么接
+- **掌握嵌入式 AI 应用的典型架构**：数据持久化、LLM + 本地 fallback、语音输入、主动推送
 
-### 2、mini-memo 核心能力
+> 💡 **mini_memo 不是要你照抄的产品**，而是一份「如何用 ai_agent 框架」的参考。重点在框架用法，不在产品功能。
 
-mini-memo 是一个基于 ai_agent 构建的 AI 记忆助手应用，核心能力包括：
+### 2、mini_memo 展示的 ai_agent 框架能力
 
-| 能力             | 说明                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| **系统信息总结** | 未读通知摘要、传感器数据汇总（步数/睡眠/心率）、应用状态变化 |
-| **语音速记分类** | PTT 语音录入 → AI Router 自动分类（待办/备忘/日程）          |
-| **主动推送**     | AI 判断「该提醒你了」就主动推送，不是用户问才答              |
-| **定时回顾**     | 定期提醒用户回顾记忆，主动维护个人数据                       |
+mini_memo 重点展示了 ai_agent 框架区别于普通聊天机器人的 4 大核心能力：
 
-### 3、展示的 ai_agent 独有能力
+| 能力           | mini_memo 中的体现                                              | 你可以借鉴到                               |
+| -------------- | --------------------------------------------------------------- | ------------------------------------------ |
+| **意图路由**   | LLM 分类 + 本地 fallback 双模式，确保离线可用                   | 任何需要理解用户意图并分发处理的场景       |
+| **NL→结构化**  | 语音输入 → LLM 解析 → JSON 结构化数据（type/content/remind_at） | 需要将自然语言转为可执行数据的场景         |
+| **Shell/Tool** | VelaClaw Client 连接远程 LLM + voice_channel 真实 PTT + ASR     | 需要调用远程 AI 服务或集成语音交互的场景   |
+| **主动任务**   | 当前用 LVGL Timer 轮询（🏆待优化：改用框架 cron_service）        | 健康提醒、运动检测、定时推送等主动服务场景 |
 
-mini-memo 重点展示 ai_agent 区别于普通聊天机器人的核心能力：
+### 3、mini_memo 应用简介
 
-1. **主动任务机制**：定时任务 + 阈值触发，Agent Loop 自动检查并推送
-2. **Router 意图路由**：区分「记一下」vs「提醒我」vs「总结一下」，路由到不同处理流程
-3. **自然语言→结构化输出**：LLM 解析语音输入，输出 JSON 结构化数据
-4. **Shell/Tool 调用**：读取传感器数据、写入存储、触发通知
+mini_memo 是一个 AI 记忆助手，用户通过 PTT 语音输入，应用自动分类（备忘/待办/日程）并存储，到期主动提醒。核心特性：
 
-### 4、适用场景
+- **VelaClaw LLM 意图分类**：PTT 语音录入 → LLM 自动分类 + 提取结构化数据
+- **本地 Fallback**：LLM 不可用时自动降级到本地关键词分类
+- **持久化存储**：cJSON + 文件系统，记忆持久化到 `memos.json`
+- **主动定时提醒**：LVGL Timer 轮询
+- **语音 PTT + ASR**：通过 voice_channel 集成真实语音识别
 
-- 智能手表上的 AI 记忆助手
-- 主动式健康/日程提醒应用
-- 带屏幕的 IoT 设备的主动服务界面
-- 任何需要 AI「主动+执行」能力的 LVGL 应用
+### 4、代码位置
 
-## 二、ai_agent 核心能力详解（mini-memo 应用示例）
+```plaintext
+仓库：https://github.com/open-vela/packages_demos
+分支：dev-ai-contest-2026
+目录：mini_memo/
 
-> 通用概念说明请参阅 [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)。以下为 **mini-memo 中的具体应用示例**。
+文件结构：
+mini_memo/
+├── mini_memo_core.h    # 核心 API 定义（数据结构、分类接口、Agent 接口）
+├── mini_memo_core.c    # 核心实现（持久化、分类、VelaClaw 集成、voice_channel）
+├── mini_memo_ui.h      # UI 接口定义
+├── mini_memo_ui.c      # LVGL UI 实现（tileview、PTT、提醒、通知）
+├── mini_memo_main.c    # 入口（LVGL 初始化、双循环、--ptt-selftest）
+├── Kconfig             # 构建配置
+├── Makefile            # 构建脚本
+└── CMakeLists.txt      # CMake 构建
+```
 
-### 1、主动任务机制
+> mini_memo 源码（相对路径，便于在 Gitee/GitHub 仓库内跳转）：[packages_demos/mini_memo](../../../../../../packages_demos/tree/dev-ai-contest-2026/mini_memo)
 
-mini-memo 中的应用：
+## 二、用 ai_agent 框架搭建你的应用
 
-- 定时回顾提醒：每 24 小时主动推送「该回顾记忆了」
-- 未读阈值触发：超过 10 条未读时主动提醒
+> **这是本文档的核心章节。** 以下每个小节对应 ai_agent 框架的一项核心能力，用 mini_memo 的真实代码展示「怎么用」，并给出你可以直接借鉴的要点。
+
+### 1、VelaClaw Client：连接远程 LLM
+
+**做什么**：`velaclaw_client_open()` 连接 VelaClaw Daemon，获得远程 LLM 调用能力。
+
+**mini_memo 怎么做的**：
 
 ```c
-// mini_memo_core.c - 主动任务检查
-void mini_memo_check_periodic_review(void)
+// mini_memo_core.c - VelaClaw Client 初始化
+int memo_agent_init(void)
 {
-    uint64_t now = get_timestamp();
-    uint64_t interval_sec = (uint64_t)review_interval_hours * 3600;
+    int voice_ret;
 
-    if (now - last_review_time >= interval_sec) {
-        // 触发主动推送
-        char push_msg[256];
-        snprintf(push_msg, 256, "⏰ 定期提醒：你有 %d 条未读记忆",
-                 mini_memo_get_unread_count());
-        mini_memo_trigger_push(push_msg);
+    // 初始化 voice_channel（本地，优先）
+    voice_ret = voice_channel_init();
+    if (voice_ret < 0) {
+        syslog(LOG_WARNING, "%s: voice_channel_init failed: %d\n",
+            MEMO_TAG, voice_ret);
+    }
 
-        last_review_time = now;
+    // 打开 VelaClaw Client（远程 LLM，可选）
+    g_client = velaclaw_client_open("mini_memo");
+    if (!g_client) {
+        syslog(LOG_WARNING, "%s: velaclaw_client_open failed\n", MEMO_TAG);
+        g_agent_connected = false;
+        return voice_ret;  // voice 初始化成功即可
+    }
+
+    g_agent_connected = true;
+    return 0;
+}
+```
+
+**你可以借鉴的要点**：
+
+1. **velaclaw_client_open("你的应用名")** 是入口，传入你的应用标识
+2. **LLM 是可选的**：即使 `velaclaw_client_open` 失败，应用仍可运行（降级到本地逻辑）
+3. **用 g_agent_connected 标记连接状态**，后续所有 LLM 调用都先检查此标志
+4. **voice_channel 和 VelaClaw Client 独立初始化**，voice 是本地能力，LLM 是远程能力
+
+### 2、意图路由：LLM 分类 + 本地 Fallback
+
+**做什么**：理解用户输入的意图，分发到不同处理逻辑。mini_memo 用 LLM 做智能分类，LLM 不可用时自动降级到本地关键词匹配。
+
+**mini_memo 怎么做的**：
+
+#### 异步分类（推荐）
+
+```c
+// mini_memo_core.h
+typedef void (*memo_classify_cb)(int status,
+    const classify_result_t* result, void* cookie);
+
+// 异步分类：LLM优先，失败自动降级到本地
+int memo_classify_async(const char* text, memo_classify_cb cb, void* cookie);
+```
+
+#### 同步分类
+
+```c
+// 同步分类（阻塞等待，最多20秒）
+int memo_classify_sync(const char* text, classify_result_t* result);
+```
+
+#### 本地 Fallback（关键词匹配）
+
+```c
+// mini_memo_core.c - 本地关键词分类
+memo_type_t memo_classify_local(const char* text)
+{
+    // TODO 关键词
+    if (strstr(text, "提醒") != NULL ||
+        strstr(text, "待办") != NULL ||
+        strstr(text, "todo") != NULL ||
+        strstr(text, "别忘了") != NULL ||
+        strstr(text, "记得") != NULL) {
+        return MEMO_TYPE_TODO;
+    }
+
+    // SCHEDULE 关键词
+    if (strstr(text, "几点") != NULL ||
+        strstr(text, "什么时候") != NULL ||
+        strstr(text, "约") != NULL ||
+        strstr(text, "日程") != NULL ||
+        strstr(text, "schedule") != NULL) {
+        return MEMO_TYPE_SCHEDULE;
+    }
+
+    // 默认: MEMO
+    return MEMO_TYPE_MEMO;
+}
+```
+
+#### 分类结果数据结构
+
+```c
+// mini_memo_core.h - 分类结果（LLM 返回）
+typedef struct {
+    memo_type_t type;
+    char content[200];
+    int64_t remind_at;
+} classify_result_t;
+```
+
+**分类效果示例**：
+
+| 输入示例            | 分类结果           | remind_at      |
+| ------------------- | ------------------ | -------------- |
+| "记一下买牛奶"      | MEMO_TYPE_MEMO     | 0              |
+| "提醒我明早8点开会" | MEMO_TYPE_TODO     | 解析后的时间戳 |
+| "明天下午3点约牙医" | MEMO_TYPE_SCHEDULE | 解析后的时间戳 |
+
+### 3、自然语言→结构化输出：LLM ask API + JSON prompt
+
+**做什么**：将用户自然语言输入，通过 LLM 解析为程序可处理的结构化 JSON 数据。
+
+**mini_memo 怎么做的**：
+
+```c
+// mini_memo_core.c - LLM 分类 prompt
+static const char* g_classify_prompt_fmt =
+    "You are a memo classifier. Given the user's voice input, "
+    "classify it and extract structured data.\n\n"
+    "Input: \"%s\"\n\n"
+    "Respond ONLY with JSON:\n"
+    "{\"type\":\"memo|todo|schedule\","
+    "\"content\":\"<cleaned content>\","
+    "\"remind_at\":<unix_timestamp_or_0>}\n\n"
+    "Rules:\n"
+    "- \"memo\": general notes\n"
+    "- \"todo\": tasks with reminders\n"
+    "- \"schedule\": appointments with times\n"
+    "- content: concise version of input\n"
+    "- remind_at: extract time if mentioned, else 0";
+
+// VelaClaw 调用
+static void classify_response_cb(int status, const char* response_json,
+    void* cookie)
+{
+    classify_ctx_t* ctx = (classify_ctx_t*)cookie;
+    classify_result_t result;
+
+    if (status != 0 || !response_json) {
+        // LLM 失败，自动降级到本地分类
+        result.type = memo_classify_local(ctx->input_text);
+        strncpy(result.content, ctx->input_text, sizeof(result.content)-1);
+        result.remind_at = 0;
+    } else {
+        // 解析 JSON
+        parse_classify_json(response_json, &result);
+        if (ret < 0) {
+            // JSON 解析失败，降级到本地
+            result.type = memo_classify_local(ctx->input_text);
+        }
+    }
+
+    ctx->user_cb(0, &result, ctx->user_cookie);
+    free(ctx);
+}
+```
+
+### 4、🏆 挑战项：实现主动任务
+
+**做什么**：应用不是被动等用户操作，而是主动检查条件并推送。mini_memo 当前用 LVGL Timer 实现了定时提醒，但这不是 ai_agent 框架推荐的做法——框架已经提供了更完善的 `cron_service` 机制。这个挑战项留给参赛选手：**把 mini_memo 的 LVGL Timer 提醒改为使用 ai_agent 的 cron_service**。
+
+#### 当前实现：LVGL Timer（需要改进）
+
+```c
+// mini_memo_ui.c - 60秒轮询检查提醒到期
+static void remind_timer_cb(lv_timer_t* timer)
+{
+    memo_item_t items[MEMO_MAX_DISPLAY];
+    int count;
+    int64_t now = (int64_t)time(NULL);
+
+    count = memo_store_get_due_reminders(now, items, MEMO_MAX_DISPLAY);
+    for (int i = 0; i < count; i++) {
+        memo_ui_show_notification("Reminder", items[i].content);
+        memo_store_mark_read(items[i].id);
     }
 }
+
+// 初始化时创建 timer
+g_remind_timer = lv_timer_create(remind_timer_cb, 60000, NULL);
 ```
 
-### 2、Router 意图路由
+#### 问题在哪
 
-mini-memo 中的应用：区分备忘类型。
+| 维度           | LVGL Timer（当前）     | cron_service（框架提供）              |
+| -------------- | ---------------------- | ------------------------------------- |
+| 独立于 UI      | ❌ 依赖 LVGL 事件循环   | ✅ 独立 pthread，UI 退出仍运行         |
+| 持久化         | ❌ 重启后重新轮询       | ✅ cJSON 文件持久化，重启恢复          |
+| 定时精度       | 60s 轮询，最坏延迟 60s | 精确到秒，cond_timedwait 唤醒         |
+| 支持 recurring | ❌ 仅隐含 AT            | ✅ EVERY（周期）+ AT（一次性）         |
+| 通知渠道       | 仅 lv_msgbox           | system / voice / feishu 等            |
+| LLM 可调用     | ❌                      | ✅ tool_cron_add/list/remove           |
+| 工具执行       | ❌                      | ✅ tool_registry_execute 直接执行 tool |
 
-| 输入示例            | 路由结果           | 处理方式             |
-| ------------------- | ------------------ | -------------------- |
-| "记一下买牛奶"      | MEMO_TYPE_MEMO     | 直接存储为备忘       |
-| "提醒我明早开会"    | MEMO_TYPE_TODO     | 解析时间，存储为待办 |
-| "明天下午3点约牙医" | MEMO_TYPE_SCHEDULE | 解析时间，存储为日程 |
-| "总结一下今天"      | MEMO_TYPE_SUMMARY  | 汇总系统数据生成摘要 |
+#### 挑战目标
+
+将 `g_remind_timer`（60s 轮询提醒）替换为 `cron_service`，实现：
+
+1. **用户创建带 remind_at 的 memo 时，自动注册 cron job**
+2. **cron job 到期后触发通知**（通过 message_bus 推送到 mini_memo channel）
+3. **无 daemon 连接时降级到 LVGL Timer 作为 fallback**（保证离线可用）
+
+#### 关键 API 参考
 
 ```c
-// mini_memo_core.c - Router 路由
-static memo_type_t router_intent(const char* text)
+// infra/cron_service.h - cron 服务核心 API
+int  cron_service_init(void);
+int  cron_service_start(void);
+int  cron_service_stop(void);
+
+// 添加/删除/列出 cron job
+int  cron_add_job(const cron_job_t* job);
+int  cron_remove_job(const char* name);
+int  cron_list_jobs(cron_job_t* out, int max);
+
+// cron_job_t 关键字段
+typedef struct {
+    char id[64];           // 唯一 ID
+    char name[128];        // 任务名（用于删除/查询）
+    bool enabled;          // 是否启用
+    int  kind;             // CRON_KIND_EVERY / CRON_KIND_AT
+    int  interval_s;       // EVERY 模式的间隔秒数
+    int64_t at_epoch;      // AT 模式的触发时间戳
+    char message[256];     // 触发时推送的消息内容
+    char channel[64];      // 推送渠道（如 "mini_memo"）
+    char chat_id[128];     // 推送目标
+    bool delete_after_run; // 一次性任务执行后自动删除
+    char action[128];      // 触发时执行的 tool 名（可选）
+    char action_args[256]; // tool 参数（可选）
+} cron_job_t;
+```
+
+### 5、语音集成：voice_channel PTT + ASR
+
+**做什么**：用户按住 PTT 按钮说话，松开后自动 ASR 识别为文本。
+
+**mini_memo 怎么做的**：
+
+```c
+// mini_memo_core.c - 语音 API 封装
+int memo_voice_start(void)
 {
-    if (strstr(text, "提醒我") || strstr(text, "待办") || strstr(text, "todo"))
-        return MEMO_TYPE_TODO;
+    return voice_channel_start();
+}
 
-    if (strstr(text, "日程") || strstr(text, "安排"))
-        return MEMO_TYPE_SCHEDULE;
-
-    if (strstr(text, "总结") || strstr(text, "摘要") || strstr(text, "今天"))
-        return MEMO_TYPE_SUMMARY;
-
-    return MEMO_TYPE_MEMO;  // 默认：备忘
+int memo_voice_stop(char* text_out, size_t text_cap)
+{
+    int ret = voice_channel_stop_with_text(text_out, text_cap);
+    if (ret >= 0) {
+        syslog(LOG_INFO, "%s: ASR result: \"%s\"\n", MEMO_TAG, text_out);
+    }
+    return ret;
 }
 ```
 
-### 3、自然语言→结构化输出
+**你可以借鉴的要点**：
 
-mini-memo 中的应用：语音输入自动分类存储。
+1. **voice_channel_start() / voice_channel_stop_with_text()** 是核心 API，start 录音、stop 返回 ASR 文本
+2. **PTT 按钮事件**：在 LVGL 按钮的 `LV_EVENT_PRESSED` / `LV_EVENT_RELEASED` 中分别调用 start/stop
+3. **--ptt-selftest 参数**：调试时用 `mini_memo --ptt-selftest` 自动触发 PTT 流程测试
+4. **voice_channel 和 VelaClaw Client 是独立的**：voice 是本地能力，LLM 是远程能力，可以只启用其中一个
+
+### 6、数据持久化：cJSON + 文件系统
+
+**做什么**：将应用数据持久化到文件系统，确保重启后数据不丢失。
+
+**mini_memo 怎么做的**：
 
 ```c
-// 语音输入 → 结构化记忆
-int mini_memo_voice_input(const char* voice_text)
+// mini_memo_core.h - 存储初始化
+int  memo_store_init(const char* data_dir);
+void memo_store_deinit(void);
+int  memo_store_add(const memo_item_t* item);
+int  memo_store_delete(uint32_t id);
+int  memo_store_get_count(memo_type_t type, bool unread_only);
+int  memo_store_get_recent(memo_item_t* out, int max_items);
+int  memo_store_get_due_reminders(int64_t now, memo_item_t* out, int max_out);
+void memo_store_clear_all(void);
+```
+
+**持久化文件格式**（`memos.json`）：
+
+```json
 {
-    // 1. Router 路由判断类型
-    memo_type_t type = router_intent(voice_text);
-
-    // 2. LLM 解析时间和关键信息（实际应调用 LLM）
-    parsed_memo_t parsed;
-    parse_voice_input(voice_text, &parsed);
-
-    // 3. 存储为结构化记忆
-    return mini_memo_add_memo(parsed.type, parsed.content);
+    "version": 1,
+    "next_id": 5,
+    "items": [
+        {
+            "id": 1,
+            "type": 1,
+            "content": "提醒我明早8点开会",
+            "timestamp": 1709913600,
+            "remind_at": 1709942400,
+            "is_read": false
+        }
+    ]
 }
 ```
 
-### 4、Shell/Tool 调用
+**你可以借鉴的要点**：
 
-mini-memo 中的应用：
+1. **cJSON 序列化/反序列化**：`cJSON_CreateObject` / `cJSON_Parse` + 文件读写
+2. **脏标记 + 定时 flush**：修改数据时标记 dirty，5s timer 统一写盘，避免频繁 I/O
+3. **memo_store_init() 加载已有数据**：启动时从文件恢复，实现跨重启持久化
+4. **select NETUTILS_CJSON**：在 Kconfig 中自动引入 cJSON 库
 
-| 工具         | 功能         | mini-memo 用途 |
-| ------------ | ------------ | -------------- |
-| Shell        | 执行系统命令 | 读取传感器数据 |
-| Storage      | 持久化存储   | 保存记忆数据   |
-| Notification | 发送通知     | 主动推送提醒   |
-| Time         | 时间服务     | 定时任务调度   |
+## 三、整体架构与代码流程
+
+### 1、架构总览
+
+```plaintext
+mini_memo
+├── main 入口（mini_memo_main.c）
+│   ├── libuv/poll 事件循环
+│   └── 命令行参数解析（--ptt-selftest）
+├── mini_memo_core（数据层，mini_memo_core.c/h）
+│   ├── memo_store：cJSON + 文件系统持久化
+│   ├── memo_classify_local：本地关键词分类
+│   └── memo_agent：VelaClaw LLM 集成
+├── mini_memo_ui（表现层，mini_memo_ui.c/h）
+│   ├── lv_tileview：4页面水平滑动
+│   ├── LVGL Timer：flush(5s) + remind(60s)
+│   └── PTT 按钮：voice_channel 集成
+└── VelaClaw Client（远程服务）
+    ├── velaclaw_ask：LLM 分类
+    └── voice_channel：PTT + ASR
+```
+
+### 2、启动流程
 
 ```c
-// 读取传感器数据（通过 Shell 或直接 API）
-static int read_sensor_data(system_info_t* info)
+// mini_memo_main.c
+int main(int argc, FAR char* argv[])
 {
-    // 实际应用中通过 Tool Registry 调用
-    // tool_registry_execute("shell_read_sensors", &result);
+    bool ptt_selftest = false;
 
-    info->steps = 3200;
-    info->heart_rate = 72;
-    info->sleep_hours = 7;
+    // 1. 解析命令行参数
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--ptt-selftest") == 0) {
+            ptt_selftest = true;
+        }
+    }
+
+    // 2. 初始化 LVGL
+    lv_init();
+    lv_nuttx_dsc_init(&info);
+    lv_nuttx_init(&info, &result);
+
+    // 3. 初始化数据存储
+    memo_store_init(CONFIG_MINI_MEMO_DATA_DIR);
+
+    // 4. 初始化 VelaClaw Agent（LLM + voice）
+    memo_agent_init();
+
+    // 5. 初始化 UI（含 timer）
+    memo_ui_init();
+
+    // 6. 自检模式
+    if (ptt_selftest) {
+        memo_ui_start_ptt_selftest(1500);
+    }
+
+    // 7. 进入事件循环
+#ifdef CONFIG_LV_USE_NUTTX_LIBUV
+    lv_nuttx_uv_loop(&ui_loop, &result);
+#else
+    lv_nuttx_loop();
+#endif
 
     return 0;
 }
 ```
 
-### 5、数据结构
+### 3、核心数据结构
 
 ```c
-// 记忆类型
+// mini_memo_core.h - 记忆类型
 typedef enum {
-    MEMO_TYPE_TODO = 0,       // 待办事项
-    MEMO_TYPE_MEMO = 1,       // 备忘
-    MEMO_TYPE_SCHEDULE = 2,   // 日程
-    MEMO_TYPE_SUMMARY = 3,    // 系统摘要
+    MEMO_TYPE_MEMO = 0,       // 普通备忘
+    MEMO_TYPE_TODO = 1,        // 待办事项
+    MEMO_TYPE_SCHEDULE = 2,    // 日程安排
 } memo_type_t;
 
 // 单条记忆
 typedef struct {
-    char id[32];              // 唯一标识
-    memo_type_t type;         // 类型
-    char content[256];        // 内容
-    uint64_t timestamp;       // 创建时间
-    bool is_read;             // 是否已读
+    uint32_t id;               // 唯一标识
+    memo_type_t type;          // 类型
+    char content[200];         // 内容
+    int64_t timestamp;         // 创建时间
+    int64_t remind_at;         // 提醒时间（0=不提醒）
+    bool is_read;              // 是否已读
 } memo_item_t;
 ```
 
-### 6、LVGL UI 界面设计
+## 四、构建与运行
 
-mini-memo 的 LVGL 界面针对 466x466 圆形手表屏幕设计，包含首页（今日摘要）、速记页（PTT 语音录入）、回顾页、设置页。
+### 1、Kconfig 配置
 
-<img src="images/mini-memo%20首页界面.jpg" alt="mini-memo 首页界面" width="300" />
-
-<img src="images/mini-memo%20速记页界面.jpg" alt="mini-memo 速记页界面" width="300" />
-
-## 三、手把手教程：构建 mini-memo
-
-### 1、目标
-
-创建一个名为 `mini_memo` 的独立 LVGL 应用，展示 ai_agent 的主动任务、Router 路由、结构化输出等能力。
-
-### 2、创建目录结构
-
-```
-apps/packages/demos/mini_memo/
-├── mini_memo_main.c           # 程序入口
-├── mini_memo_core.c           # 核心逻辑
-├── mini_memo_core.h           # 核心头文件
-├── mini_memo_ui.c             # LVGL 界面
-├── mini_memo_ui.h             # UI 头文件
-├── Kconfig                    # 配置
-├── Makefile                   # 编译规则
-└── Make.defs                  # 构建配置
-```
-
-### 3、编写配置文件
-
-**Kconfig：**
-
-```
+```plaintext
+# packages/demos/mini_memo/Kconfig
 config LVX_USE_DEMO_MINI_MEMO
-    bool "Mini Memo (AI 记忆助手)"
+    bool "Mini Memo - AI Memory Assistant"
     default n
-    select GRAPHICS_LVGL
+    depends on GRAPHICS_LVGL
+    depends on LV_USE_NUTTX
+    depends on EXAMPLES_AI_AGENT_VELA || VELACLAW_DAEMON
+    select NETUTILS_CJSON
     ---help---
-        Enable Mini Memo application - an AI memory assistant
-        based on ai_agent.
+        AI-powered memory assistant with voice input,
+        intent classification, and proactive reminders.
+        Requires VelaClaw framework for LLM and tools.
 
 if LVX_USE_DEMO_MINI_MEMO
 
-config LVX_MINI_MEMO_VOICE_ENABLED
-    bool "Enable Voice Input"
-    default y
-    ---help---
-        Enable PTT voice input for quick memo.
+config MINI_MEMO_DATA_DIR
+    string "Mini Memo data directory"
+    default "/data/mini_memo"
 
-config LVX_MINI_MEMO_PROACTIVE_ENABLED
-    bool "Enable Proactive Push"
-    default y
-    ---help---
-        Enable AI-driven proactive notifications.
-
-config LVX_MINI_MEMO_REVIEW_INTERVAL
-    int "Review reminder interval (hours)"
-    default 24
-    range 1 168
-    ---help---
-        How often to remind user for memory review.
+config MINI_MEMO_REVIEW_INTERVAL
+    int "Default periodic review interval (seconds)"
+    default 14400
 
 endif
 ```
 
-**Makefile：**
+**关键配置说明**：
+
+- `depends on EXAMPLES_AI_AGENT_VELA || VELACLAW_DAEMON`：需要 ai_agent 框架
+- `select NETUTILS_CJSON`：自动选中 cJSON 库
+- `STACKSIZE = 40960`：LLM 调用需要更大栈空间
+
+### 2、Makefile
 
 ```makefile
+# packages/demos/mini_memo/Makefile
 include $(APPDIR)/Make.defs
 
 ifeq ($(CONFIG_LVX_USE_DEMO_MINI_MEMO), y)
-    PROGNAME = mini_memo
-    PRIORITY = 100
-    STACKSIZE = 32768
-    MODULE = $(CONFIG_LVX_USE_DEMO_MINI_MEMO)
+PROGNAME  = mini_memo
+PRIORITY  = 100
+STACKSIZE = 40960
+MODULE    = $(CONFIG_LVX_USE_DEMO_MINI_MEMO)
 
-    # ai_agent 源码路径
-    AI_AGENT_DIR = $(APPDIR)/packages_ai_agent
-    CFLAGS += -I$(AI_AGENT_DIR)/include
-    CFLAGS += -I$(AI_AGENT_DIR)/src
+# AI Agent client SDK include path
+CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/packages/ai_agent/include
+CFLAGS += ${INCDIR_PREFIX}$(APPDIR)/packages/ai_agent/src
 
-    # 源文件
-    CSRCS = mini_memo_core.c mini_memo_ui.c
-    MAINSRC = mini_memo_main.c
+CSRCS   = mini_memo_core.c mini_memo_ui.c
+MAINSRC = mini_memo_main.c
 endif
 
 include $(APPDIR)/Application.mk
 ```
 
-**Make.defs：**
+### 3、编译和运行
 
-```makefile
-ifneq ($(CONFIG_LVX_USE_DEMO_MINI_MEMO),)
-    CONFIGURED_APPS += $(APPDIR)/packages/demos/mini_memo
-endif
-```
-
-### 4、编写入口代码
-
-**mini_memo_main.c：**
-
-```c
-/**
- * mini_memo_main.c - Mini Memo Entry Point
- *
- * 本示例演示如何基于 ai_agent 构建独立的 LVGL 应用
- * 核心能力：主动推送 + 系统信息汇总 + 语音速记分类
- */
-
-#include <nuttx/config.h>
-#include <unistd.h>
-#include <uv.h>
-#include <lvgl/lvgl.h>
-#include <syslog.h>
-
-#include "mini_memo_core.h"
-#include "mini_memo_ui.h"
-
-static void lv_nuttx_uv_loop(uv_loop_t* loop, lv_nuttx_result_t* result)
-{
-    lv_nuttx_uv_t uv_info;
-    void* data;
-
-    uv_loop_init(loop);
-    lv_memset(&uv_info, 0, sizeof(uv_info));
-    uv_info.loop = loop;
-    uv_info.disp = result->disp;
-    uv_info.indev = result->indev;
-
-    data = lv_nuttx_uv_init(&uv_info);
-    uv_run(loop, UV_RUN_DEFAULT);
-    lv_nuttx_uv_deinit(&data);
-}
-
-int main(int argc, FAR char* argv[])
-{
-    lv_nuttx_dsc_t info;
-    lv_nuttx_result_t result;
-    uv_loop_t ui_loop;
-
-    syslog(LOG_INFO, "Mini Memo (AI 记忆助手) starting...\n");
-
-    /* 检查 LVGL 是否已初始化 */
-    if (lv_is_initialized()) {
-        LV_LOG_ERROR("LVGL already initialized!");
-        return -1;
-    }
-
-    /* 初始化 LVGL */
-    lv_init();
-    lv_nuttx_dsc_init(&info);
-    lv_nuttx_init(&info, &result);
-
-    if (result.disp == NULL) {
-        LV_LOG_ERROR("LVGL display initialization failed!");
-        return 1;
-    }
-
-    /* 初始化 mini_memo 核心逻辑 */
-    mini_memo_core_init();
-
-    /* 创建应用 UI */
-    mini_memo_ui_init();
-
-    /* 进入事件循环 */
-    lv_nuttx_uv_loop(&ui_loop, &result);
-
-    /* 清理 */
-    mini_memo_core_deinit();
-    mini_memo_ui_deinit();
-    lv_nuttx_deinit(&result);
-    lv_deinit();
-
-    return 0;
-}
-```
-
-### 5、编写核心逻辑
-
-**mini_memo_core.h：**
-
-```c
-#pragma once
-
-#include <stdbool.h>
-#include <stdint.h>
-
-/* 记忆类型 */
-typedef enum {
-    MEMO_TYPE_TODO = 0,       /* 待办事项 */
-    MEMO_TYPE_MEMO = 1,       /* 备忘 */
-    MEMO_TYPE_SCHEDULE = 2,   /* 日程 */
-    MEMO_TYPE_SUMMARY = 3,    /* 系统摘要 */
-} memo_type_t;
-
-/* 记忆结构 */
-typedef struct {
-    char id[32];
-    memo_type_t type;
-    char content[256];
-    uint64_t timestamp;
-    bool is_read;
-} memo_item_t;
-
-/* 主动推送回调：内容 + 用户数据 */
-typedef void (*proactive_callback_t)(const char* content, void* user_data);
-
-/* 核心初始化 */
-void mini_memo_core_init(void);
-void mini_memo_core_deinit(void);
-
-/* 记忆管理 */
-int mini_memo_add_memo(memo_type_t type, const char* content);
-int mini_memo_get_memos(memo_type_t type, memo_item_t* items, int max_count);
-int mini_memo_get_unread_count(void);
-
-/* 语音速记 */
-int mini_memo_voice_input(const char* voice_text);
-
-/* 主动任务 */
-void mini_memo_check_periodic_review(void);
-void mini_memo_trigger_push(const char* content);
-void mini_memo_set_proactive_callback(proactive_callback_t cb, void* user_data);
-```
-
-**mini_memo_core.c：**
-
-```c
-/**
- * mini_memo_core.c - Mini Memo Core Logic
- *
- * 展示 ai_agent 的主动任务机制、Router 路由、结构化输出能力
- */
-
-#include "mini_memo_core.h"
-#include <pthread.h>
-#include <string.h>
-#include <stdlib.h>
-#include <syslog.h>
-#include <time.h>
-
-static const char* TAG = "mini_memo_core";
-
-#define MAX_MEMOS 100
-
-/* 内部状态 */
-typedef struct {
-    memo_item_t memos[MAX_MEMOS];
-    int count;
-    pthread_mutex_t lock;
-    bool periodic_review_enabled;
-    uint64_t last_review_time;
-    int review_interval_hours;
-    proactive_callback_t push_callback;
-    void* push_user_data;
-} core_state_t;
-
-static core_state_t s_state = {
-    .count = 0,
-    .lock = PTHREAD_MUTEX_INITIALIZER,
-    .periodic_review_enabled = true,
-    .review_interval_hours = 24,
-};
-
-/* Router 意图路由 */
-static memo_type_t router_intent(const char* text)
-{
-    if (!text) return MEMO_TYPE_MEMO;
-
-    if (strstr(text, "提醒我") || strstr(text, "待办"))
-        return MEMO_TYPE_TODO;
-
-    if (strstr(text, "日程") || strstr(text, "安排"))
-        return MEMO_TYPE_SCHEDULE;
-
-    if (strstr(text, "总结") || strstr(text, "今天"))
-        return MEMO_TYPE_SUMMARY;
-
-    return MEMO_TYPE_MEMO;
-}
-
-/* 核心 API 实现 */
-void mini_memo_core_init(void)
-{
-    syslog(LOG_INFO, "[%s] Initializing\n", TAG);
-    s_state.last_review_time = time(NULL);
-}
-
-int mini_memo_add_memo(memo_type_t type, const char* content)
-{
-    if (!content || s_state.count >= MAX_MEMOS) return -1;
-
-    pthread_mutex_lock(&s_state.lock);
-
-    memo_item_t* memo = &s_state.memos[s_state.count];
-    snprintf(memo->id, sizeof(memo->id), "memo_%ld_%d",
-             time(NULL), s_state.count);
-    memo->type = type;
-    strncpy(memo->content, content, sizeof(memo->content) - 1);
-    memo->timestamp = time(NULL);
-    memo->is_read = false;
-
-    s_state.count++;
-    pthread_mutex_unlock(&s_state.lock);
-
-    syslog(LOG_INFO, "[%s] Added memo: type=%d, content=%s\n",
-           TAG, type, content);
-
-    return 0;
-}
-
-int mini_memo_get_unread_count(void)
-{
-    int count = 0;
-    pthread_mutex_lock(&s_state.lock);
-    for (int i = 0; i < s_state.count; i++) {
-        if (!s_state.memos[i].is_read) count++;
-    }
-    pthread_mutex_unlock(&s_state.lock);
-    return count;
-}
-
-int mini_memo_voice_input(const char* voice_text)
-{
-    if (!voice_text) return -1;
-
-    /* Router 路由 */
-    memo_type_t type = router_intent(voice_text);
-
-    /* 根据类型处理 */
-    if (type == MEMO_TYPE_SUMMARY) {
-        /* 生成系统摘要 */
-        char summary[256];
-        snprintf(summary, sizeof(summary),
-                 "📊 今日摘要：步数 3200，心率 72，未读 %d 条",
-                 mini_memo_get_unread_count());
-        return mini_memo_add_memo(type, summary);
-    }
-
-    return mini_memo_add_memo(type, voice_text);
-}
-
-void mini_memo_check_periodic_review(void)
-{
-    uint64_t now = time(NULL);
-    uint64_t interval = s_state.review_interval_hours * 3600;
-
-    if (now - s_state.last_review_time >= interval) {
-        int unread = mini_memo_get_unread_count();
-        char push[256];
-        snprintf(push, sizeof(push),
-                 "⏰ 定期提醒：你有 %d 条未读记忆", unread);
-        mini_memo_trigger_push(push);
-        s_state.last_review_time = now;
-    }
-}
-
-void mini_memo_trigger_push(const char* content)
-{
-    if (s_state.push_callback) {
-        s_state.push_callback(content, s_state.push_user_data);
-    }
-}
-
-void mini_memo_set_proactive_callback(proactive_callback_t cb, void* user_data)
-{
-    s_state.push_callback = cb;
-    s_state.push_user_data = user_data;
-}
-```
-
-### 6、编写 LVGL UI
-
-**mini_memo_ui.c（关键部分）：**
-
-```c
-/**
- * mini_memo_ui.c - Mini Memo LVGL UI
- *
- * 展示 ai_agent 主动+执行能力在手表屏幕上的呈现
- */
-
-#include "mini_memo_ui.h"
-#include "mini_memo_core.h"
-#include <lvgl/lvgl.h>
-#include <pthread.h>
-#include <string.h>
-#include <syslog.h>
-
-static const char* TAG = "mini_memo_ui";
-
-#define SCREEN_W 466
-#define SCREEN_H 466
-#define PADDING 24
-
-/* UI 状态 */
-typedef struct {
-    lv_obj_t* pages[4];  /* 首页/速记页/回顾页/设置页 */
-    int current_page;
-    lv_obj_t* ptt_button;
-    bool is_recording;
-} ui_state_t;
-
-static ui_state_t s_ui;
-
-/* 创建主页 */
-static void create_home_page(void)
-{
-    lv_obj_t* page = s_ui.pages[0];
-    lv_obj_set_flex_flow(page, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_flex_align(page, LV_FLEX_ALIGN_CENTER,
-                          LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_set_style_pad_row(page, 16, 0);  /* 子项间距 */
-
-    /* 标题 */
-    lv_obj_t* title = lv_label_create(page);
-    lv_label_set_text(title, "今日摘要");
-    lv_obj_set_style_text_color(title, lv_color_white(), 0);
-
-    /* 摘要卡片 */
-    lv_obj_t* card = lv_obj_create(page);
-    lv_obj_set_size(card, 200, 120);
-    lv_obj_set_style_radius(card, 16, 0);
-    lv_obj_set_style_bg_color(card, lv_color_hex(0x2a2a40), 0);
-
-    /* 未读数量 */
-    int unread = mini_memo_get_unread_count();
-    char buf[64];
-    snprintf(buf, sizeof(buf), "💬 %d 条未读记忆", unread);
-    lv_obj_t* label = lv_label_create(card);
-    lv_label_set_text(label, buf);
-    lv_obj_set_style_text_color(label, lv_color_hex(0x3a7bd5), 0);
-    lv_obj_center(label);
-}
-
-/* 创建速记页 */
-static void create_voice_page(void)
-{
-    lv_obj_t* page = s_ui.pages[1];
-    lv_obj_set_flex_flow(page, LV_FLEX_FLOW_COLUMN);
-    lv_obj_set_flex_align(page, LV_FLEX_ALIGN_CENTER,
-                          LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-
-    /* 提示 */
-    lv_obj_t* hint = lv_label_create(page);
-    lv_label_set_text(hint, "按住说话");
-    lv_obj_set_style_text_color(hint, lv_color_white(), 0);
-
-    /* PTT 按钮 */
-    s_ui.ptt_button = lv_obj_create(page);
-    lv_obj_set_size(s_ui.ptt_button, 120, 120);
-    lv_obj_set_style_radius(s_ui.ptt_button, 60, 0);
-    lv_obj_set_style_bg_color(s_ui.ptt_button, lv_color_hex(0x3a7bd5), 0);
-
-    /* 快捷示例 */
-    lv_obj_t* example = lv_label_create(page);
-    lv_label_set_text(example, "\"记一下买牛奶\"");
-    lv_obj_set_style_text_color(example, lv_color_hex(0x3a7bd5), 0);
-}
-
-/* UI API */
-void mini_memo_ui_init(void)
-{
-    syslog(LOG_INFO, "[%s] Initializing\n", TAG);
-
-    /* 创建根屏幕 */
-    lv_obj_t* screen = lv_obj_create(NULL);
-    lv_obj_set_size(screen, SCREEN_W, SCREEN_H);
-    lv_obj_set_style_bg_color(screen, lv_color_hex(0x121220), 0);
-
-    /* 创建页面 */
-    for (int i = 0; i < 4; i++) {
-        s_ui.pages[i] = lv_obj_create(screen);
-        lv_obj_set_size(s_ui.pages[i], SCREEN_W, SCREEN_H - 60);
-        lv_obj_set_style_bg_color(s_ui.pages[i], lv_color_hex(0x121220), 0);
-        if (i != 0) lv_obj_add_flag(s_ui.pages[i], LV_OBJ_FLAG_HIDDEN);
-    }
-
-    create_home_page();
-    create_voice_page();
-    /* 创建回顾页和设置页... */
-
-    lv_scr_load(screen);
-}
-
-void mini_memo_ui_goto_page(int page)
-{
-    for (int i = 0; i < 4; i++) {
-        if (i == page) {
-            lv_obj_remove_flag(s_ui.pages[i], LV_OBJ_FLAG_HIDDEN);
-        } else {
-            lv_obj_add_flag(s_ui.pages[i], LV_OBJ_FLAG_HIDDEN);
-        }
-    }
-    s_ui.current_page = page;
-}
-
-void mini_memo_ui_start_voice_record(void)
-{
-    s_ui.is_recording = true;
-    lv_obj_set_style_bg_color(s_ui.ptt_button,
-                               lv_color_hex(0xe74c3c), 0);  /* 红色 */
-}
-
-void mini_memo_ui_stop_voice_record(void)
-{
-    s_ui.is_recording = false;
-    lv_obj_set_style_bg_color(s_ui.ptt_button,
-                               lv_color_hex(0x3a7bd5), 0);
-
-    /* 模拟语音识别并添加记忆 */
-    mini_memo_voice_input("记一下明天买牛奶");
-}
-```
-
-### 7、编译和运行
+#### 步骤 1：配置项目
 
 ```bash
-# 1. 配置项目
+cd /path/to/openvela
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/ --cmake menuconfig
-# 在 menuconfig 中启用 LVX_USE_DEMO_MINI_MEMO=y
+```
 
-# 2. 编译
+在 menuconfig 中启用：
+
+```plaintext
+LVX_USE_DEMO_MINI_MEMO=y
+EXAMPLES_AI_AGENT_VELA=y  # 或 VELACLAW_DAEMON=y
+NETUTILS_CJSON=y
+```
+
+#### 步骤 2：编译
+
+```bash
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/ -j$(nproc)
+```
 
-# 3. 运行
+#### 步骤 3：运行
+
+```bash
 nsh> mini_memo &
+# 或带自检参数
+nsh> mini_memo --ptt-selftest
 ```
 
-### 8、完整代码架构
+## 五、常见问题
 
-<img src="images/Mini%20Memo%20App%20模块架构.jpeg" alt="Mini Memo App 模块架构" width="600" />
+### Q1：LLM 分类失败时如何处理？
 
-## 四、常见问题
+**原因**：VelaClaw Daemon 未连接或网络异常。
 
-### Q1：Router 路由不准确
-
-**原因**：关键词匹配过于简单。
-
-**解决**：实际应用中应调用 LLM：
+**解决**：mini_memo 内置自动降级机制：
 
 ```c
-int router_with_llm(const char* text, memo_type_t* type)
+int memo_classify_async(const char* text, memo_classify_cb cb, void* cookie)
 {
-    char prompt[512];
-    snprintf(prompt, sizeof(prompt),
-        "用户说：%s\n请判断是待办(0)、备忘(1)、日程(2)还是总结(3)，"
-        "只输出一个数字。", text);
-
-    char* response = llm_call(prompt);
-    *type = atoi(response);
-
-    return 0;
-}
-```
-
-### Q2：主动推送不触发
-
-**原因**：定时任务未注册或检查逻辑有误。
-
-**解决**：
-
-1. 确保 `mini_memo_check_periodic_review()` 被定时调用
-2. 检查时间间隔计算是否正确
-3. 确认回调函数已注册
-
-```c
-// 在定时器回调中调用
-void timer_callback(void* arg)
-{
-    mini_memo_check_periodic_review();
-}
-```
-
-### Q3：LVGL 控件创建崩溃
-
-**原因**：在非 LVGL 线程中创建了控件。
-
-**解决**：使用 `lv_async_call()` 进行线程安全调用：
-
-```c
-// 错误
-void other_thread(void) {
-    lv_obj_t* btn = lv_button_create(screen);  // 可能崩溃
-}
-
-// 正确
-lv_async_call(create_btn_async_cb, NULL);
-```
-
-### Q4：如何区分 ai_chat 和 mini-memo
-
-| 特性     | ai_chat                      | mini-memo                         |
-| -------- | ---------------------------- | --------------------------------- |
-| 交互模式 | 被动对话（用户问，Agent 答） | 主动执行（Agent 主动推送）        |
-| 核心能力 | 对话理解、TTS 播报           | Router 路由、定时任务、结构化存储 |
-| 典型场景 | "今天天气怎么样？"           | "你该回顾记忆了"                  |
-
-### Q5：如何添加新的记忆类型
-
-1. 在 `memo_type_t` 枚举中添加新类型
-2. 在 Router 中添加对应的意图关键词
-3. 在 UI 中添加对应的图标显示
-4. 在存储逻辑中处理新类型
-
-### Q6：如何持久化存储记忆
-
-实际应用中应使用文件系统或 KV 存储：
-
-```c
-int mini_memo_save_all(void)
-{
-    // 使用 cJSON 序列化
-    cJSON* root = cJSON_CreateArray();
-    for (int i = 0; i < s_state.count; i++) {
-        cJSON* item = cJSON_CreateObject();
-        cJSON_AddStringToObject(item, "id", s_state.memos[i].id);
-        cJSON_AddNumberToObject(item, "type", s_state.memos[i].type);
-        cJSON_AddStringToObject(item, "content", s_state.memos[i].content);
-        cJSON_AddItemToArray(root, item);
+    // LLM 不可用时，直接用本地分类
+    if (!g_agent_connected || !g_client) {
+        classify_result_t result;
+        result.type = memo_classify_local(text);
+        strncpy(result.content, text, sizeof(result.content)-1);
+        cb(0, &result, cookie);
+        return 0;
     }
 
-    char* json = cJSON_Print(root);
-    write_to_file("/data/mini_memo.json", json);
-
-    cJSON_Delete(root);
-    free(json);
-    return 0;
+    // LLM 调用失败时也降级
+    if (ret < 0) {
+        result.type = memo_classify_local(text);
+        cb(0, &result, cookie);
+    }
 }
 ```
+
+### Q2：PTT 语音不工作？
+
+**排查步骤**：
+
+1. 检查 `voice_channel_init()` 返回值
+2. 确认 `CONFIG_EXAMPLES_AI_AGENT_VELA` 已启用
+3. 使用 `--ptt-selftest` 参数运行自检
+4. 检查日志中的 ASR 结果输出
+
+```bash
+nsh> mini_memo --ptt-selftest
+# 查看日志
+Mini Memo: voice_start
+Mini Memo: voice_stop
+Mini Memo: ASR result: "记一下买牛奶"
+```
+
+### Q3：记忆数据持久化失败？
+
+**排查步骤**：
+
+1. 确认数据目录存在且可写
+2. 检查 cJSON 序列化是否成功
+3. 查看 `memo_store_save()` 返回值
+
+```c
+// 调试日志
+syslog(LOG_INFO, "%s: save: %d items to %s\n",
+    MEMO_TAG, g_store.count, g_store.file_path);
+```
+
+### Q4：如何在自己的应用中添加新的意图类型？
+
+1. 在 `memo_type_t` 枚举中添加新类型
+2. 在 `memo_classify_local()` 中添加对应的意图关键词
+3. 在 LLM prompt 中添加新类型说明
+4. 在 `parse_classify_json()` 中处理 LLM 返回的新类型
 
 ## 附录
 
-### A、相关资源链接
+### A、相关资源
 
-- [ai_agent 仓库](../../../../../../packages_ai_agent)
-- [music_player 示例](../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player)
-- [ai_chat demo](../../../../../../packages_demos/blob/dev-ai-contest-2026/ai_chat/README.md)
-- [ai_agent LVGL UI 源码](../../../../../../packages_ai_agent/blob/dev-ai-contest-2026/src/ui/lvgl_ui_channel.c)
-- [LVGL 官方文档](https://lvgl.io/documentation)
+- [ai_agent 框架仓库](../../../../../../packages_ai_agent)
+- [mini_memo 源码](../../../../../../packages_demos/tree/dev-ai-contest-2026/mini_memo)
+- [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)（前置知识、Demo 解析、核心能力详解）
 
-### B、关键 API 速查表
+### B、API 速查表
 
-| API                                 | 模块           | 说明            |
-| ----------------------------------- | -------------- | --------------- |
-| `mini_memo_core_init()`             | mini_memo_core | 初始化核心模块  |
-| `mini_memo_add_memo()`              | mini_memo_core | 添加记忆        |
-| `mini_memo_voice_input()`           | mini_memo_core | 语音输入 + 分类 |
-| `mini_memo_check_periodic_review()` | mini_memo_core | 检查定时任务    |
-| `mini_memo_ui_init()`               | mini_memo_ui   | 初始化 UI       |
-| `mini_memo_ui_goto_page()`          | mini_memo_ui   | 切换页面        |
+#### 数据存储 API
+
+| API                                           | 说明                     |
+| --------------------------------------------- | ------------------------ |
+| `memo_store_init(data_dir)`                   | 初始化存储，加载已有数据 |
+| `memo_store_deinit()`                         | 关闭存储，保存脏数据     |
+| `memo_store_add(item)`                        | 添加记忆                 |
+| `memo_store_delete(id)`                       | 删除记忆                 |
+| `memo_store_get_count(type, unread_only)`     | 获取指定类型记忆数量     |
+| `memo_store_get_due_reminders(now, out, max)` | 获取到期提醒             |
+
+#### 意图分类 API
+
+| API                                     | 说明                                   |
+| --------------------------------------- | -------------------------------------- |
+| `memo_agent_init()`                     | 初始化 VelaClaw Client + voice_channel |
+| `memo_agent_is_connected()`             | 检查 LLM 连接状态                      |
+| `memo_classify_async(text, cb, cookie)` | 异步分类（LLM优先）                    |
+| `memo_classify_sync(text, result)`      | 同步分类（阻塞）                       |
+| `memo_classify_local(text)`             | 本地关键词分类（始终可用）             |
+
+#### 语音 API
+
+| API                              | 说明                    |
+| -------------------------------- | ----------------------- |
+| `memo_voice_start()`             | 开始 PTT 录音           |
+| `memo_voice_stop(text_out, cap)` | 停止录音，获取 ASR 结果 |
+
+#### UI API
+
+| API                                      | 说明                            |
+| ---------------------------------------- | ------------------------------- |
+| `memo_ui_init()`                         | 初始化 LVGL UI（创建 tileview） |
+| `memo_ui_deinit()`                       | 销毁 UI，删除 timers            |
+| `memo_ui_show_notification(title, body)` | 弹出通知                        |
+| `memo_ui_refresh_home()`                 | 刷新首页统计数字                |
+| `memo_ui_navigate_to(page)`              | 切换到指定页面                  |
+| `memo_ui_start_ptt_selftest(hold_ms)`    | 启动 PTT 自检                   |
 
 ### C、内存占用参考
 
-启用 mini-memo 的内存开销：
+| 项目                      | 预估 RAM   |
+| ------------------------- | ---------- |
+| LVGL UI（4页面 tileview） | ~50KB      |
+| 记忆存储（100条，cJSON）  | ~40KB      |
+| VelaClaw Client           | ~20KB      |
+| 字体缓存                  | ~20KB      |
+| LVGL Timer × 2            | ~5KB       |
+| **总计**                  | **~135KB** |
 
-| 项目               | 预估 RAM   |
-| ------------------ | ---------- |
-| LVGL UI            | ~50KB      |
-| 记忆存储（100 条） | ~30KB      |
-| 字体缓存           | ~20KB      |
-| 定时任务           | ~5KB       |
-| **总计**           | **~105KB** |
-
-### D、文档关联
-
-| 文档                                                  | 说明                                         |
-| ----------------------------------------------------- | -------------------------------------------- |
-| [ai_agent 应用开发上手指南](./ai_agent_quickstart.md) | 通用开发知识（环境搭建、架构、核心能力详解） |
-| mini-memo 应用开发指引（本文档）                      | mini-memo 专项开发教程                       |
+> 注：STACKSIZE 配置为 40960（40KB），以支持 LLM 调用。
