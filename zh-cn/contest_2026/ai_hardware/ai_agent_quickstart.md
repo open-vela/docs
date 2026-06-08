@@ -26,7 +26,7 @@ ai_agent 需要连接大语言模型才能工作，你只需准备一个 LLM 的
 
 | 服务      | 申请地址                              | 推荐度     |
 | --------- | ------------------------------------- | ---------- |
-| 小米 MiMo | https://platform.xiaomimimo.com/      | ⭐ 优先推荐 |
+| 小米 MiMo | https://mimo.mi.com/                  | ⭐ 优先推荐 |
 | DeepSeek  | https://platform.deepseek.com/        | 备选       |
 | 通义千问  | https://dashscope.console.aliyun.com/ | 备选       |
 | Kimi      | https://platform.moonshot.cn/         | 备选       |

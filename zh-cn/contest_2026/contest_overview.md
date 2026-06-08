@@ -45,7 +45,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 ## 赋能支持（报名审核通过即解锁）
 
 - **硬件免费**：申领官方开发板（缴纳小额押金）。提交作品者全额退还押金、开发板免费留存；未提交作品者需归还开发板。可选型号详见 [支持的硬件平台](./hardware_porting/supported_hardware.md)。
-- **AI 算力**：免费发放 Xiaomi MiMo Token 套餐。
+- **AI 算力**：免费发放 Xiaomi MiMo Token Plan。
 - **硬件制作补贴**：嘉立创免费打样券包（PCB + SMT + 3D 打印，价值 400 元）。详见 [嘉立创打样券包申请与使用指南](./jlc_pcb_voucher_guide.md)。
 - **技术培训**：系列课程、实操教学、官方直播、社群答疑。
 
@@ -83,8 +83,8 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 - 报名审核通过后，请扫码进入官方技术交流群，赛事期间将定期开展直播答疑、同步技术指导。
 - 参赛作品须基于 openvela 大赛专属分支 `dev-ai-contest-2026` 开发，遵循 Apache 2.0 开源协议（特殊情况需与组委会单独说明）。
-- 报名审核通过的队伍，可领取比赛提供的开发板及 Xiaomi MiMo Token。
-- 赛事发放的 Xiaomi MiMo Token 仅可用于本次大赛开发，严禁挪作他用。
+- 报名审核通过的队伍，可领取比赛提供的开发板及 Xiaomi MiMo Token Plan。
+- 赛事发放的 Xiaomi MiMo Token Plan 仅可用于本次大赛开发，严禁挪作他用。
 - 鼓励使用 AI Coding（如 Claude Code + openvela AI Skills）完成开发；如使用 AI Coding，请按要求上传开发日志，并沉淀至少 1 个有效 Skill。
 - 若项目包含 AI 语音唤醒功能，统一使用指定唤醒词：你好，openvela / Hello，openvela。
 - 基于 openvela 开发的判定标准：项目须使用 openvela 开源项目（NuttX 内核仓库除外）提供的系统能力，且至少落地图形、AI、多媒体三项核心能力之一。
@@ -108,15 +108,15 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 大赛发放的是 **Token Plan** 套餐，我们只能为**当前没有 Token Plan 的账号**注入。如果你的 MiMo 账号正处于订阅周期内，建议**新建一个 MiMo 账号**用于申领大赛 Token Plan；或等当前套餐周期结束后再来申领。
 
-**发放的 Xiaomi MiMo Token 是什么套餐？**
+**发放的 Xiaomi MiMo Token Plan 是什么套餐？**
 
 默认提供 Lite 套餐，如果超额，可联系大赛工作人员继续申请。
 
-**发放的 Xiaomi MiMo Token 只能用于大赛作品开发吗？**
+**发放的 Xiaomi MiMo Token Plan 只能用于大赛作品开发吗？**
 
-是的，免费领取的 MiMo Token 仅限本次大赛使用。初赛未入围者将停止 Token 赠送，决赛结束后将停止所有参赛者的 Token 使用。提交作品时需上传 AI Coding 日志文件。
+是的，免费领取的 MiMo Token Plan 仅限本次大赛使用。初赛未入围者将停止 Token 赠送，决赛结束后将停止所有参赛者的 Token 使用。提交作品时需上传 AI Coding 日志文件。
 
-**发放的 Xiaomi MiMo Token 是发给团队还是个人？**
+**发放的 Xiaomi MiMo Token Plan 是发给团队还是个人？**
 
 发放到团队成员每个人的个人账户。
 
