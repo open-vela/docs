@@ -44,7 +44,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 ## 赋能支持（报名审核通过即解锁）
 
-- **硬件免费**：免费申领官方开发板，可选型号详见 [支持的硬件平台](./hardware_porting/supported_hardware.md)。
+- **硬件免费**：申领官方开发板（缴纳小额押金）。提交作品者全额退还押金、开发板免费留存；未提交作品者需归还开发板。可选型号详见 [支持的硬件平台](./hardware_porting/supported_hardware.md)。
 - **AI 算力**：免费发放 Xiaomi MiMo Token 套餐。
 - **硬件制作补贴**：嘉立创免费打样券包（PCB + SMT + 3D 打印，价值 400 元）。详见 [嘉立创打样券包申请与使用指南](./jlc_pcb_voucher_guide.md)。
 - **技术培训**：系列课程、实操教学、官方直播、社群答疑。
