@@ -33,19 +33,18 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 ### 2、应用开发模式
 
-基于 ai_agent 开发应用，以下是两种推荐的常见模式（不限于此，可自由发挥）：
+开发 AI 应用有两种参考模式（不限于此，可自由发挥）：
 
-**模式 A：基于 ai_agent 的对话通道开发（推荐入门）**
+**模式 A：基于设备的通信协议和云端大模型，独立开发 AI 场景应用**
 
-- 不需要写 LVGL UI，通过 ai_agent 的 Skill + 工具体系扩展能力
-- 适合：语音助手、提醒服务、信息查询等场景
-- 入口：[ai_chat demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/ai_chat)
+- 适合：熟悉 LLM 云端通信以及设备端通信协议的使用
+- 参考实现：[ai_chat demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/ai_chat)
 
-**模式 B：开发独立 LVGL 应用（完整体验）**
+**模式 B：基于 ai_agent 框架开发 LVGL 应用或快应用**
 
-- 创建独立的 LVGL 应用，通过 ai_agent 的消息总线交互
-- 适合：需要自定义 UI 的场景（手表应用、IoT 控制面板等）
-- 入口：[music_player demo](../../../../../../packages_demos/tree/dev-ai-contest-2026/music_player)（现成 UI 模板）+ mini-memo（参考 [mini-memo 应用开发指引](./mini_memo_guide.md) 手把手构建）
+- 创建独立的 LVGL 应用或快应用，通过 ai_agent 的消息总线交互
+- 适合：了解 agent 开发、需要更灵活的 LLM 调用和丰富的工具扩展能力
+- 参考实现：[mini-memo 应用开发指引](./mini_memo_guide.md)（LVGL 应用）+ [快应用调用 ai_agent](../quickapp/quickapp_velaclaw.md)（快应用）
 
 ---
 
@@ -109,7 +108,6 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 - ❌ 纯云端应用（不运行在 openvela 设备上的不算）
 - ❌ 纯对话机器人（没有主动能力、没有工具调用的不算）
-- ❌ 不基于 ai_agent 框架的方案（本赛题要求基于 ai_agent 开发）
 
 ---
 

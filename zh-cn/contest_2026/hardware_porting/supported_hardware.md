@@ -47,6 +47,7 @@
 
 - **芯片特点**：Cortex-A7 + HiFi4 DSP + WiFi/BLE + LCD + 音频
 - **适用场景**：工业控制、智能显示、AIoT 音视频、教学开发
+- **设备介绍**：[百问网 DShanPixVela-Devkit](https://www.100ask.net/hardware/detail/16)
 
 ### 6、BES 2800BP — 恒玄科技
 
@@ -78,6 +79,7 @@
 - **芯片特点**：Cortex-M4 240MHz，内置高级 DSP 硬件加速器与单精度 FPU；3072KB Flash（含 1024KB Code-Flash）+ 768KB SRAM；EXMC 支持 SDRAM/SRAM/NOR/NAND；8×U(S)ART、3×I2C、6×SPI、2×I2S；USB FS+HS OTG、Ethernet、CAN2.0B；TFT-LCD/Camera/IPA；3×12bit ADC、2×12bit DAC
 - **适用场景**：物联网与智能家居、机器人与关节驱动、工业自动化与电机控制、高精度数据采集与仪器仪表、HMI 人机界面、四轴飞行器
 - **说明**：GD32F4 系列已成功适配 Xiaomi Vela OS，支持 I2C、SPI、USART 等基础外设。
+- **设备介绍**：[GD32F4xx Demo Suites 下载](https://www.gd32mcu.com/cn/download?kw=GD32F4xx+Demo+Suites&lan=cn)
 
 ## 二、待适配开发板
 

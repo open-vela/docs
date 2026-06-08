@@ -59,7 +59,7 @@ vela> set_wifi <wifi_ssid> <wifi_password>
 
 ```bash
 # 以 MiMo 为例
-vela> set_llm mimo <api_key>
+vela> router_set mimo <api_key>
 
 # 验证设置成功
 vela> router_status
@@ -79,11 +79,11 @@ vela> ask 你好，请介绍一下你自己
 
 如果一切正常，你会看到 AI 的回复。
 
-### 验证点
+### 4、验证点
 
 收到 AI 的文字回复 → 说明网络 + LLM 都配置成功。
 
-### 没收到回复？
+### 5、没收到回复？
 
 按这个顺序排查：
 
@@ -100,6 +100,19 @@ vela> set_wifi <wifi_ssid> <wifi_password>
 ```
 
 > 到这里你已经能用了。下面的配置都是按产品需求来追加，不配不影响大模型调用功能。
+
+### 6、想让 AI 联网搜索？→ 配置搜索 API Key
+
+配置搜索 API Key 后，ai_agent 内置的 `web_search` 工具即可联网查信息。支持 3 种搜索后端，按优先级自动回退；不配置不影响对话和其他工具。
+
+| 后端              | CLI 命令               | 申请地址             | 说明                                                 |
+| ----------------- | ---------------------- | -------------------- | ---------------------------------------------------- |
+| Tavily ⭐推荐      | `set_tavily_key <key>` | https://tavily.com/  | AI 优化搜索，POST 请求，TLS 兼容性好，嵌入式设备友好 |
+| SerpAPI（Google） | `set_search_key <key>` | https://serpapi.com/ | Google 搜索结果，GET 请求，国内网络可能有路由问题    |
+| Exa AI            | `set_exa_key <key>`    | https://exa.ai/      | 语义搜索引擎，适合知识型查询                         |
+
+> 另有 `set_news_key <key>` 配置 NewsAPI（新闻专用），申请地址：https://newsapi.org/。
+> 推荐 Tavily：POST + JSON、TLS 握手更稳定、直接返回 AI 优化的内容摘要；SerpAPI 依赖 Google，国内网络可能连接受阻。搜索 Key 与 LLM Key 一样加密保存，重启不丢失，可用 `config_show` 查看（脱敏显示）；未配置时 `web_search` 不可用，但不影响对话和其他工具。
 
 ## 三、更多功能的配置
 
@@ -277,7 +290,112 @@ vela> mcp_discover
 
 **和普通嵌入式应用的区别**：普通应用是「用户点按钮 → 代码执行」；Agent 应用是「用户说话 → AI 理解 → 选择工具 → 执行 → 可能还主动推送」。
 
-## 六、从模板创建你的第一个应用
+## 六、开发板集成方式
+
+ai_agent 提供了预置的 defconfig 文件，支持不同开发板快速集成。每个开发板的 defconfig 目录（`packages/ai_agent/defconfigs/<board>/`）下都有对应的 README 说明。
+
+### 1、ESP32-S3-EYE
+
+| 项目      | 说明                                           |
+| --------- | ---------------------------------------------- |
+| 芯片      | ESP32-S3（Xtensa 双核）                        |
+| 屏幕      | ST7789 240×240 LCD                             |
+| 内存      | PSRAM 8MB                                      |
+| 特性      | WiFi、LCD，无 BLE                              |
+| defconfig | `defconfigs/esp32s3-eye/esp32s3-eye_defconfig` |
+
+```bash
+# 1. 复制 defconfig 到板子配置目录
+cp packages/ai_agent/defconfigs/esp32s3-eye/esp32s3-eye_defconfig \
+   nuttx/boards/xtensa/esp32s3/esp32s3-eye/configs/ai_agent/defconfig
+
+# 2. 加载 ESP-IDF 环境
+source /path/to/esp-idf/export.sh
+export CCACHE_DISABLE=1
+
+# 3. 清理 + 编译（fix 脚本需在编译过程中后台执行）
+./build.sh esp32s3-eye:ai_agent distclean
+bash packages/ai_agent/fix_esp32s3.sh &
+./build.sh esp32s3-eye:ai_agent
+
+# 4. 烧录
+esptool.py -c esp32s3 -p /dev/ttyACM0 -b 460800 \
+  --before default_reset --after hard_reset \
+  write_flash 0x0 nuttx/nuttx.bin
+```
+
+> `fix_esp32s3.sh` 修复了 ESP-IDF 与 NuttX 的 mbedtls 头文件冲突、CCM 密码套件兼容性、自旋锁初始化等上游兼容问题（无法通过 defconfig 表达，必须用脚本打补丁）。已知可忽略警告：`ccache: error: execute_noreturn`、`expr: syntax error`，设置 `export CCACHE_DISABLE=1` 可消除。
+
+### 2、Gemini-S1（全志 R528）
+
+| 项目      | 说明                                         |
+| --------- | -------------------------------------------- |
+| 芯片      | R528S3（ARM Cortex-A7）                      |
+| 屏幕      | ILI9341 LCD                                  |
+| 特性      | WiFi、BLE GATT、media server、mini_memo demo |
+| defconfig | `defconfigs/gemini-s1/gemini-s1_defconfig`   |
+
+关键 Kconfig 选项：
+
+```
+CONFIG_EXAMPLES_AI_AGENT_VELA=y   # 启用 ai_agent
+CONFIG_LVX_USE_DEMO_MINI_MEMO=y   # 启用 mini_memo LVGL demo
+CONFIG_AI_AGENT_BLE_GATT=y        # BLE GATT 数据通道
+CONFIG_MEDIA=y                    # media 框架
+CONFIG_MEDIA_SERVER=y             # media server（录音+播放）
+CONFIG_LIB_FFMPEG=y               # PCM/WAV 管线
+```
+
+```bash
+# 1. 复制 defconfig
+cp packages/ai_agent/defconfigs/gemini-s1/gemini-s1_defconfig \
+   vendor/allwinnertech/boards/r528/r528s3-gemini-s1/configs/nsh_minidisplay/defconfig
+
+# 2. 应用音频框架补丁
+bash packages/ai_agent/fix_gemini_s1.sh
+
+# 3. 编译
+./build.sh vendor/allwinnertech/boards/r528/r528s3-gemini-s1/configs/nsh_minidisplay/ \
+    -e -Wno-error -j"$(nproc)"
+```
+
+> `fix_gemini_s1.sh` 做两件事：(1) 用最小化音频图替换原厂全功能 smart-speaker 管线（只保留录音、播放两条路径）；(2) 应用 PTT 录音修复补丁（DMA 中断 use-after-free、media server 非阻塞处理、abufsink 采样率协商等）。运行 mini_memo：ai_agent 启动后在屏幕 launcher 找到 mini_memo 入口，按住 PTT 按钮录音，松开后自动分类存储。
+
+### 3、QEMU 模拟器（goldfish-arm64-v8a-ap）
+
+| 项目      | 说明                                                               |
+| --------- | ------------------------------------------------------------------ |
+| 平台      | QEMU ARM64 模拟器                                                  |
+| 特性      | QuickApp ↔ ai_agent 联动（`system.velaclaw`）、ADB 调试            |
+| defconfig | `defconfigs/goldfish-arm64-v8a-ap/goldfish-arm64-v8a-ap_defconfig` |
+
+该配置验证三项能力组合：QuickApp 安装运行、ai_agent 启用、QuickApp 通过 `system.velaclaw` 调用 ai_agent。
+
+```bash
+# 1. 复制 defconfig
+cp packages/ai_agent/defconfigs/goldfish-arm64-v8a-ap/goldfish-arm64-v8a-ap_defconfig \
+   vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap/defconfig
+
+# 2. 清理 + 编译（defconfig 变更后必须 clean build）
+rm -rf cmake_out/vela_goldfish-arm64-v8a-ap
+./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap --cmake -j8
+
+# 3. 启动模拟器
+./emulator.sh cmake_out/vela_goldfish-arm64-v8a-ap/
+```
+
+> 该模拟器与快应用调用 velaclaw 的完整流程，另见 [快应用调用 velaclaw 教程](../quickapp/quickapp_velaclaw.md)。QEMU 默认有 NAT 网络（eth0 自动获取 `10.0.2.15`），无需 WiFi 配网；`set_llm`、`ask` 等是 `vela>` 提示符下的命令，需前台运行 `ai_agent` 进入 vela CLI。
+
+### 4、添加新开发板
+
+如果你的开发板不在上述列表，可参考已有 defconfig 创建：
+
+1. 在 `defconfigs/<device-name>/` 下创建 `<device-name>_defconfig`
+2. 如需额外补丁（不能通过 Kconfig 表达的），创建 `fix_<device>.sh` 脚本
+3. 添加 `README.md` 描述配置与补丁说明
+4. 提交 PR 到 `packages_ai_agent` 仓库
+
+## 七、从模板创建你的第一个应用
 
 > 目标：屏幕上显示你的应用界面。
 
@@ -440,7 +558,7 @@ nsh> hello_agent &
 | 运行报 `LVGL already initialized`       | LVGL 被别的应用初始化了 | 先 kill 掉其他 LVGL 应用                              |
 | 屏幕黑屏                                | 显示驱动没配置          | 确认开发板的 display 配置正确                         |
 
-## 七、给应用加 Router（意图路由）
+## 八、给应用加 Router（意图路由）
 
 > 目标：应用能区分不同类型的用户输入，走不同处理流程。
 
@@ -519,7 +637,7 @@ void hello_agent_handle_input(const char* text)
 - 输入「提醒我开会」→ 日志显示 `TODO: 提醒我开会`，UI 显示待办卡片
 - 输入「记一下买牛奶」→ 日志显示 `SAVE: 记一下买牛奶`，UI 显示已保存
 
-## 八、给应用加主动任务
+## 九、给应用加主动任务
 
 > 目标：应用会在特定条件下自己推送消息，不用等用户问。
 
@@ -579,7 +697,7 @@ void hello_agent_create(void)
 
 为了快速验证，把 `REVIEW_INTERVAL_HOURS` 临时改成 0（或几秒），运行后观察是否自动弹出提醒。验证完记得改回来。
 
-## 九、踩坑记录
+## 十、踩坑记录
 
 > 以下都是实际开发中遇到的问题，提前知道可以少走很多弯路。
 
@@ -660,7 +778,7 @@ void other_thread(void) {
 sudo apt install cmake ninja-build gcc g++ python3
 ```
 
-## 十、进阶方向
+## 十一、进阶方向
 
 ### 1、通过手机 App（com.agent.coapp）实现蓝牙配网和对话
 
