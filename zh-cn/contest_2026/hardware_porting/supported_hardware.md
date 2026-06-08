@@ -82,6 +82,8 @@
 ## 二、待适配开发板
 
 > 以下平台 openvela 尚未完成适配，主办方提供芯片手册、硬件设计文档、参考代码等技术资料，适合「新硬件平台适配」赛道挑战（重点加分方向）。
+>
+> **提交方式**：适配代码通过 fork + PR 提交到下方各板对应的 vendor 仓库的 `dev-ai-contest-2026` 分支，板级代码放 `boards/<芯片>/<开发板>/` 目录（参照已适配板的目录结构）。部分仓库的大赛分支仍在创建中，以仓库实际为准。
 
 ### 1、ESP32-P4X-Function-EV-Board — 乐鑫
 
@@ -90,6 +92,7 @@
 - **芯片特点**：双核 400MHz RISC-V + AI 加速 + MIPI CSI/DSI
 - **适用场景**：AI 视觉终端、多媒体网关、高性能 IoT 边缘设备
 - **设备介绍**：基于 ESP32-P4 的多媒体开发板，双核 RISC-V，最大 32MB PSRAM，支持 USB 2.0、MIPI-CSI/DSI、H264 编码；板载 ESP32-C6-MINI-1（Wi-Fi 6 + BLE 5）、7 寸 1024×600 触摸屏、200 万像素 MIPI CSI 摄像头，适用于可视门铃、网络摄像头、智能家居中控屏等。[官方文档](https://docs.espressif.com/projects/esp-dev-kits/zh_CN/latest/esp32p4/esp32-p4x-function-ev-board/index.html)
+- **提交仓库**：`vendor_espressif`（`dev-ai-contest-2026` 分支，`boards/` 目录，fork + PR）
 
 ### 2、BK7258 DevKit — 博通集成
 
@@ -98,6 +101,7 @@
 - **芯片特点**：双核 480MHz Armv8-M Wi-Fi SoC + 低功耗 + 硬件音视频编解码 + 丰富显示接口
 - **适用场景**：智能门锁、AI 玩具、AI 眼镜、智能家电
 - **设备介绍**：面向端侧 AI 的全功能评估/量产参考平台，BK7258 Wi-Fi 6 AI-SoC（480MHz ARMv8-M），板载双 QSPI 屏、DVP 摄像头、麦克风阵列、陀螺仪、NFC、震动马达、Nand Flash 等；支持端侧语音唤醒（KWS）、AEC、NS、G711/G722 编码及 H.264/MJPEG 硬件编解码，可对接 OpenAI、豆包、DeepSeek 等大模型。[官方文档](https://docs.bekencorp.com/arminodoc/bk_ai_smp/bk7258/zh_CN/v3.1.1/intro/index.html)
+- **提交仓库**：`vendor_beken`（`dev-ai-contest-2026` 分支，`boards/` 目录，fork + PR）
 
 ### 3、D13x 系列 EVM 评估板 — 匠芯创
 
@@ -106,6 +110,7 @@
 - **芯片特点**：RISC-V 架构、国产自主、显控一体 MCU
 - **适用场景**：工业 HMI、网关、串口屏等泛工业领域及智慧家居
 - **技术资料**：[匠芯创开发板资料.zip](../attachment/匠芯创开发板资料.zip)
+- **提交仓库**：`vendor_artinchip`（`dev-ai-contest-2026` 分支创建中，`boards/` 目录，fork + PR）
 
 ### 4、STM32N647 开发板 — 意法半导体
 
@@ -114,12 +119,14 @@
 - **芯片特点**：CM55 800MHz CPU / 600GOPS 算力 NPU；MIPI CSI-2 接口和 ISP / 图形加速器 / 超大容量存储
 - **适用场景**：边缘 AI 应用开发 / 音视频处理 / 嵌入式学习
 - **设备介绍**：[STM32N6 系列](https://www.st.com.cn/zh/microcontrollers-microprocessors/stm32n6-series.html) ｜ [正点原子 DNN647 资料](https://wiki.alientek.com/docs/Boards/STM32/DNN647/TOC/)
+- **提交仓库**：`vendor_st`（`dev-ai-contest-2026` 分支，`boards/` 目录，fork + PR）
 
 ### 5、RK3588 开发板 — 瑞芯微（适配中）
 
 - **芯片特点**：高性能多核 SoC（详见数据手册）
 - **状态**：适配进行中。
 - **技术资料**：[RK3588 开发板资料.zip](../attachment/RK3588%20开发板资料.zip) ｜ [百度网盘（提取码 gff2）](https://pan.baidu.com/s/1GxmBTRQScAm-h79onpWidA?pwd=gff2)
+- **提交仓库**：`vendor_rockchip`（`dev-ai-contest-2026` 分支，`boards/` 目录，fork + PR）
 
 ## 三、相关资源
 
