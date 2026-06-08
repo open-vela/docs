@@ -53,7 +53,7 @@ vela> set_wifi <wifi_ssid> <wifi_password>
 
 验证：`vela> net_test` 显示成功。
 
-> 如果你的开发板没有 WiFi 模块（如 QEMU 模拟器），网络连接相关说明见 [开发者技术 FAQ（第 19 条：QEMU goldfish 网络接口）](../../faq/devoloper_tech_faq.md)，可跳过这步。
+> 如果你的开发板没有 WiFi 模块（如 QEMU 模拟器），可跳过这步——大赛使用的 `goldfish-arm64-v8a-ap` 配置自带 NAT 网络（eth0 自动获取 `10.0.2.15`），开机即联网，详见本文「六、3 QEMU 模拟器（goldfish-arm64-v8a-ap）」。
 
 ### 2、设置 LLM
 
@@ -112,7 +112,43 @@ vela> set_wifi <wifi_ssid> <wifi_password>
 | Exa AI            | `set_exa_key <key>`    | https://exa.ai/      | 语义搜索引擎，适合知识型查询                         |
 
 > 另有 `set_news_key <key>` 配置 NewsAPI（新闻专用），申请地址：https://newsapi.org/。
-> 推荐 Tavily：POST + JSON、TLS 握手更稳定、直接返回 AI 优化的内容摘要；SerpAPI 依赖 Google，国内网络可能连接受阻。搜索 Key 与 LLM Key 一样加密保存，重启不丢失，可用 `config_show` 查看（脱敏显示）；未配置时 `web_search` 不可用，但不影响对话和其他工具。
+
+**为什么推荐 Tavily：**
+
+- POST 请求 + JSON body，TLS 握手更稳定，嵌入式设备上兼容性好
+- AI 优化的搜索结果，直接返回内容摘要，不需要二次提取
+- SerpAPI 依赖 Google 搜索，在国内网络环境可能遇到连接问题
+
+**配置示例**（只需配 1 个就能用，推荐 Tavily）：
+
+```bash
+# 推荐：Tavily
+vela> set_tavily_key tvly-xxxxxxxxxxxxxxxx
+
+# 备选：SerpAPI（Google 搜索）
+vela> set_search_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# 备选：Exa AI（语义搜索）
+vela> set_exa_key exa-xxxxxxxxxxxxxxxx
+
+# 新闻搜索（可选，独立配置）
+vela> set_news_key xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+**验证：**
+
+```bash
+vela> ask 今天北京天气怎么样
+vela> ask 搜索一下最新的AI Agent开源项目
+```
+
+如果 AI 返回了实时搜索结果，说明搜索 Key 配置成功。
+
+> 验证点：AI 回复包含实时信息（天气、新闻等），不再只说「我无法访问互联网」。
+>
+> 💡 搜索 Key 和 LLM Key 一样，加密保存在设备存储中，重启不丢失。可用 `config_show` 查看配置状态（Key 会脱敏显示）。
+>
+> ⚠️ 不配置搜索 Key 时，`web_search` 工具不可用，AI 无法联网搜索，但不影响对话和其他工具功能。
 
 ## 三、更多功能的配置
 
