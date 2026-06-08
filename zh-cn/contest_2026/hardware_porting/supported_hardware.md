@@ -20,7 +20,7 @@
 
 - **芯片特点**：双核 240MHz + WiFi/BLE + 摄像头 + LCD + 麦克风（AIoT 视觉/语音一体化板）
 - **适用场景**：人脸检测、物体识别、语音交互、智能门禁、扫码识别
-- **设备介绍**：搭载 ESP32-S3 与 ESP-WHO AI 框架，配 200 万像素摄像头、LCD 与麦克风，板载 8MB PSRAM + 8MB flash，支持 Wi-Fi 图传与 USB 调试，适用于图像识别、音频处理等 AIoT 应用。[官方入门指南](https://documentation.espressif.com/esp-who/master/docs/en/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
+- **设备介绍**：搭载 ESP32-S3 与 ESP-WHO AI 框架，配 200 万像素摄像头、LCD 与麦克风，板载 8MB PSRAM + 8MB flash，支持 Wi-Fi 图传与 USB 调试，适用于图像识别、音频处理等 AIoT 应用。[官方入门指南](https://documentation.espressif.com/esp-who/master/docs/zh_CN/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
 - **开发指南**：[ESP32-S3-EYE README](../../../../../../vendor_espressif/blob/dev-ai-contest-2026/boards/esp32s3/esp32s3-eye/README_zh-cn.md)
 
 ### 3、黄山派 SF32LB52 — 思澈科技
@@ -69,6 +69,7 @@
 
 - **芯片特点**：Cortex-M7 280MHz + 大容量 Flash/RAM
 - **适用场景**：AIoT 边缘节点、低功耗 HMI、可穿戴主控、工业控制器
+- **开发指南**：[NUCLEO-H7A3ZI-Q README](../../../../../../vendor_st/blob/dev-ai-contest-2026/boards/stm32h7a3/nucleo-h7a3zi-q/README_zh-cn.md)
 
 ### 9、GD32F470V-START — 兆易创新
 
