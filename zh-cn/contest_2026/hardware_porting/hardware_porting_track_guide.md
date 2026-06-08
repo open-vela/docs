@@ -28,6 +28,13 @@
 1. **完成系统移植**：实现 openvela 在目标硬件上的启动引导、基础外设驱动（至少包含 UART 控制台输出）、系统正常运行
 2. **提交适配代码**：将适配代码提交至 openvela 开源社区，包含 defconfig 配置、板级初始化代码、必要的驱动适配
 
+## 提交方式
+
+适配代码通过 **fork + PR** 的标准开源流程提交到**对应芯片厂商的 vendor 仓库**（如 `vendor_st`、`vendor_espressif`、`vendor_rockchip`、`vendor_artinchip` 等）的大赛分支 `dev-ai-contest-2026`。
+
+- 各开发板对应的具体仓库，见 [《支持的硬件平台》](./supported_hardware.md) 中每块板的"开发指南"链接。
+- 提交内容：defconfig 配置、板级初始化代码（`boards/`）、必要的驱动适配，以及便于复现的适配说明。
+
 ## 评分加分项
 
 本赛道作品在评分体系「技术难度」维度（30 分）中具备显著优势：
