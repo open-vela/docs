@@ -118,7 +118,7 @@
 
 - **芯片特点**：高性能多核 SoC（详见数据手册）
 - **状态**：适配进行中。
-- **技术资料**：[RK3588 开发板资料.zip](../attachment/RK3588%20开发板资料.zip)
+- **技术资料**：[RK3588 开发板资料.zip](../attachment/RK3588%20开发板资料.zip) ｜ [百度网盘（提取码 gff2）](https://pan.baidu.com/s/1GxmBTRQScAm-h79onpWidA?pwd=gff2)
 
 ## 三、相关资源
 

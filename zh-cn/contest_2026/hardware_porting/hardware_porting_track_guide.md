@@ -39,13 +39,26 @@
 
 ## 参考资源
 
-| 资源                                                                              | 说明                                    |
-| --------------------------------------------------------------------------------- | --------------------------------------- |
-| [NuttX 已支持平台列表](https://nuttx.apache.org/docs/latest/platforms/index.html) | 选择目标硬件的参考                      |
-| [支持的硬件平台](./supported_hardware.md)                                         | 大赛提供的开发板清单（已支持 + 待适配） |
-| [openvela 已适配硬件清单](../../dev_board/Development_Board.md)                   | 避免重复适配（已适配的不计入本赛道）    |
-| [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)      | 板级适配与驱动开发参考                  |
-| [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                      | 完整的芯片移植流程                      |
+| 资源                                                                                             | 说明                                                                                                 |
+| ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| [NuttX 已支持平台列表](https://nuttx.apache.org/docs/latest/platforms/index.html)                | 选择目标硬件的参考                                                                                   |
+| [支持的硬件平台](./supported_hardware.md)                                                        | 大赛提供的开发板清单（已支持 + 待适配）                                                              |
+| [openvela 已适配硬件清单](../../dev_board/Development_Board.md)                                  | 避免重复适配（已适配的不计入本赛道）                                                                 |
+| [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)                     | 板级适配与驱动开发参考                                                                               |
+| [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                                     | 完整的芯片移植流程                                                                                   |
+| [openvela AI 驱动开发技能集](../../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md) | AI 辅助驱动开发：`nuttx-driver-development` / `driver-code-reviewer` skill + `driver-workflow` agent |
+
+## AI 辅助开发（推荐）
+
+大赛要求"必须使用 AI Coding 完成开发，且至少沉淀 1 个有效 Skill"。openvela 官方提供了一套面向驱动开发的 AI 技能集（位于 [`.claude`](../../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md) 仓库），与本赛道高度契合，推荐配合使用：
+
+- **`nuttx-driver-development`（skill）**：创建/更新/审查 NuttX 设备驱动，覆盖 sensor、char、network、fb/LCD、USB、audio、电源电池、MCAL、I2C/SPI 等子系统。
+- **`driver-code-reviewer`（skill）**：驱动代码质量审查（59 Pattern + 双轮交叉验证 + 量化评分），提交前自检。
+- **`driver-workflow`（agent）**：驱动开发端到端工作流，覆盖新驱动开发、改进现有驱动、代码审查、测试生成四种模式（6 步流程 / 3 次交互，从需求到提交）。
+
+将 `.claude` 仓库克隆到 openvela 项目根目录下，AI 助手即可自动发现并在驱动开发任务中调用这些能力。详细用法见 [`.claude/README_zh-cn.md`](../../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)。
+
+> 注意：这些驱动相关的 skill 与 agent 仅提供**基线驱动适配**，生成结果需要参赛者进一步优化与贡献，才能达到可用、可合入主线的质量。
 
 ## 适合人群
 

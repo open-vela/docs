@@ -38,7 +38,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 ## 参赛要求（通用）
 
 - 代码统一基于 openvela 大赛分支 **`dev-ai-contest-2026`** 开发与提交。
-- 参赛须使用 AI Coding 完成开发，至少完成 1 个有效 Skills 沉淀。
+- 参赛须使用 AI Coding 完成开发，至少完成 1 个有效 Skills 沉淀（可参考官方 [AI 开发技能集 `.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)）。
 - 参赛作品须为原创，遵循 Apache 2.0 开源协议。
 - 每支队伍 1–5 人，每人仅限加入一支队伍。
 
@@ -57,6 +57,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 | 官方文档站        | https://doc.openvela.com/document                                                                                                                                                                                                                   |
 | 视频教程          | [B站](https://www.bilibili.com/video/BV19PsAzCEuy) / [YouTube](https://www.youtube.com/@openvela)                                                                                                                                                   |
 | MiMo API 配置     | https://platform.xiaomimimo.com/docs/zh-CN/integration/claudecode                                                                                                                                                                                   |
+| AI 开发技能集     | [`.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)：驱动开发等 AI Skills 与 Agent，配合 Claude Code 等工具使用                                                                                                            |
 
 ## 作品提交要求
 
@@ -107,9 +108,9 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 大赛发放的是 **Token Plan** 套餐，我们只能为**当前没有 Token Plan 的账号**注入。如果你的 MiMo 账号正处于订阅周期内，建议**新建一个 MiMo 账号**用于申领大赛 Token Plan；或等当前套餐周期结束后再来申领。
 
-**发放的 Xiaomi MiMo Token 是 Pro 还是 Max？**
+**发放的 Xiaomi MiMo Token 是什么套餐？**
 
-默认提供 Pro 套餐，如果超额，可联系大赛工作人员继续申请。
+默认提供 Lite 套餐，如果超额，可联系大赛工作人员继续申请。
 
 **发放的 Xiaomi MiMo Token 只能用于大赛作品开发吗？**
 
