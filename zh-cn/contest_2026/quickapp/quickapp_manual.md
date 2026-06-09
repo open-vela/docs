@@ -1,6 +1,6 @@
 # 快应用开发指南（手动开发）
 
-> 本文档面向 openvela AI 硬件开发者大赛参赛者，帮助开发者在最短时间内完成 Vela 快应用的环境搭建、项目创建、开发调试、打包提交及真机部署全流程。
+> 本文档面向 2026 首届 openvela AI 硬件开发者大赛参赛者，帮助开发者在最短时间内完成 Vela 快应用的环境搭建、项目创建、开发调试、打包提交及真机部署全流程。
 
 > 如果你希望用 AI 辅助自动生成代码和调试，请参考《快应用开发指南（AI 工作流）》。
 
@@ -220,19 +220,13 @@ vapp hap://app/com.vela.player
 
 ## 六、提交参赛代码
 
-参赛代码统一提交到 [packages_apps](../../../../../../packages_apps/tree/dev-ai-contest-2026) 仓库（在 openvela 模拟器上运行），采用 **fork + PR** 的标准开源流程，目标分支为大赛分支 `dev-ai-contest-2026`。
+参赛代码在赛事为每支队伍分配的 **GitHub private demo 仓**内开发与提交：直接 push 到 demo 仓 main（无需 PR），AI Coding 日志由插件自动归集到仓内 `logs/` 目录。
 
-**提交内容**：源码工程 + 生产模式打包产物 `release.rpk`，二者都需提交。
+**提交内容**：快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）+ 生产模式打包产物 **release.rpk**，二者都放入 demo 仓。
 
-**提交步骤**：
-
-1. 在 GitHub 上 fork [open-vela/packages_apps](../../../../../../packages_apps/tree/dev-ai-contest-2026)，并切换到大赛分支 `dev-ai-contest-2026`。
-2. 在对应设备形态目录（如 `wearable/`、`smartspeaker/`）下**新建你的应用目录**，放入：
-   - 快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）
-   - 生产模式打包产物 **release.rpk**
-3. 提交改动并向 `open-vela/packages_apps` 的 `dev-ai-contest-2026` 分支发起 **Pull Request**。
-
-> 注意区分：本仓库（packages_apps）在 openvela 模拟器上运行，是参赛代码的提交目标；packages_fe_examples 在 AIoT IDE 内置模拟器中运行，仅供学习参考，参赛代码不提交至此。
+> 大赛仅在 GitHub 进行（不在 Gitee）；demo 仓为选手 sandbox，直接 push 即可。**获奖后**需按要求将作品 PR 至 openvela 上游 `packages_apps` 仓库的 `dev-ai-contest-2026` 分支，走标准 PR + CI 流程。
+>
+> 运行环境区分：`packages_apps` 在 openvela 模拟器上运行；`packages_fe_examples` 在 AIoT IDE 内置模拟器中运行，仅供学习参考。
 
 ---
 

@@ -1,4 +1,4 @@
-# 首届 openvela AI 硬件全球开发者大赛
+# 2026 首届 openvela AI 硬件开发者大赛
 
 > 一文读懂本次大赛：赛道方向、参赛流程、开发资源，帮助你快速上手。
 
@@ -13,7 +13,7 @@
 | 阶段                | 时间                    |
 | ------------------- | ----------------------- |
 | 报名 + 提交作品方向 | 6 月 8 日起（长期开放） |
-| 提交作品            | 7 月 1 日 – 9 月 21 日  |
+| 提交作品            | 7 月 1 日 – 9 月 20 日  |
 | 作品初评            | 9 月 21 日 – 9 月 30 日 |
 | 决赛名单公示        | 10 月（待定）           |
 | 线下决赛答辩        | 即将公布                |
@@ -37,7 +37,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 ## 参赛要求（通用）
 
-- 代码统一基于 openvela 大赛分支 **`dev-ai-contest-2026`** 开发与提交。
+- 代码在赛事为每支队伍分配的 **GitHub private demo 仓**内开发与提交（直接 push，无需 PR）；获奖后再按要求 PR 至 openvela 上游 `dev-ai-contest-2026` 分支。
 - 鼓励使用 AI Coding 完成开发，并沉淀有效的开发 Skill（可参考官方 [AI 开发技能集 `.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)）。
 - 参赛作品须为原创，遵循 Apache 2.0 开源协议。
 - 每支队伍 1–5 人，每人仅限加入一支队伍。
@@ -61,9 +61,11 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 ## 作品提交要求
 
-- 作品以压缩包提交，命名：`2026 openvela AI硬件开发赛 - 队伍名称 - 作品名称`
-- 压缩包包含：介绍文档 + 项目代码 + Demo 演示视频（不超过 5 分钟）
-- 源码须提交至 openvela 社区大赛分支 `dev-ai-contest-2026`
+- 参赛作品在赛事为每支队伍分配的 **GitHub private demo 仓**内开发与提交：代码直接 push 到 demo 仓，AI Coding 日志由插件自动归集到仓内 `logs/` 目录，**无需自行打包代码与日志**。
+- 另需提交：作品介绍文档（.docx / .pdf / .pptx）、演示视频（不超过 5 分钟，mp4 / mov 等常见格式）、demo 仓地址。
+- 大赛仅在 GitHub 进行（不在 Gitee）；demo 仓为选手 sandbox，**直接 push 即可，无需 PR**。
+- **获奖后**需按要求将作品 PR 至 openvela 上游对应仓库的 `dev-ai-contest-2026` 分支，遵循 Apache 2.0 开源协议，此步骤走标准 PR + CI 流程。
+- 涉及修改 openvela 其他仓库（如 vendor / nuttx）的跨仓需求，须先向赛事组申请、由 SCM 单独开仓后开发（详见各赛道指引）。
 
 ## 评分规则
 
@@ -82,7 +84,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 ## 参赛须知与规则
 
 - 报名审核通过后，请扫码进入官方技术交流群，赛事期间将定期开展直播答疑、同步技术指导。
-- 参赛作品须基于 openvela 大赛专属分支 `dev-ai-contest-2026` 开发，遵循 Apache 2.0 开源协议（特殊情况需与组委会单独说明）。
+- 参赛作品须在赛事分配的 private demo 仓内开发（大赛仅在 GitHub 进行，不在 Gitee），遵循 Apache 2.0 开源协议（特殊情况需与组委会单独说明）。
 - 报名审核通过的队伍，可领取比赛提供的开发板及 Xiaomi MiMo Token Plan。
 - 赛事发放的 Xiaomi MiMo Token Plan 仅可用于本次大赛开发，严禁挪作他用。
 - 鼓励使用 AI Coding（如 Claude Code + openvela AI Skills）完成开发；如使用 AI Coding，请按要求上传开发日志，并沉淀至少 1 个有效 Skill。
@@ -114,7 +116,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 **发放的 Xiaomi MiMo Token Plan 只能用于大赛作品开发吗？**
 
-是的，免费领取的 MiMo Token Plan 仅限本次大赛使用。初赛未入围者将停止 Token 赠送，决赛结束后将停止所有参赛者的 Token 使用。提交作品时需上传 AI Coding 日志文件。
+是的，免费领取的 MiMo Token Plan 仅限本次大赛使用。初赛未入围者将停止 Token 赠送，决赛结束后将停止所有参赛者的 Token 使用。AI Coding 日志由插件自动归集到 demo 仓 `logs/` 目录。
 
 **发放的 Xiaomi MiMo Token Plan 是发给团队还是个人？**
 

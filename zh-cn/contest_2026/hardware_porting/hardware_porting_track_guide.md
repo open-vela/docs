@@ -30,10 +30,15 @@
 
 ## 提交方式
 
-适配代码通过 **fork + PR** 的标准开源流程提交到**对应芯片厂商的 vendor 仓库**（如 `vendor_st`、`vendor_espressif`、`vendor_rockchip`、`vendor_artinchip` 等）的大赛分支 `dev-ai-contest-2026`。
+本赛道涉及修改 openvela 的 vendor / nuttx 等仓库（跨仓适配），须走**跨仓需求单独审批**流程：
 
-- 各开发板对应的具体仓库，见 [《支持的硬件平台》](./supported_hardware.md) 中每块板的"开发指南"链接。
-- 提交内容：defconfig 配置、板级初始化代码（`boards/`）、必要的驱动适配，以及便于复现的适配说明。
+1. **申请**：向赛事组报备需求（要适配哪块板、需改动哪些仓库）。
+2. **评估**：赛事组确认需求合理性。
+3. **开仓**：由 SCM 为该需求单独建仓并配置权限。
+4. **开发**：在分配的仓库内完成适配（defconfig 配置、板级初始化代码 `boards/`、必要的驱动适配，以及便于复现的适配说明）。
+5. **日志归集**：AI Coding 日志仍由插件统一写入本队 demo 仓的 `logs/` 目录。
+
+> 大赛仅在 GitHub 进行（不在 Gitee）。**获奖后**，适配代码按要求 PR 至 openvela 上游对应 vendor 仓库（如 `vendor_st`、`vendor_espressif`、`vendor_rockchip`、`vendor_artinchip` 等）的 `dev-ai-contest-2026` 分支，走标准 PR + CI 流程。各开发板对应的具体仓库，见 [《支持的硬件平台》](./supported_hardware.md) 中每块板的"开发指南"链接。
 
 ## 评分加分项
 

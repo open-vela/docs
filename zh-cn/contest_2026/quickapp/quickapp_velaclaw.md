@@ -1,6 +1,6 @@
 # openvela 快应用调用 velaclaw（端侧 AI Agent）教程
 
-> 本教程面向 openvela AI 硬件大赛参赛者，介绍如何在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答），实现从环境配置、编译、部署到调用的完整流程。
+> 本教程面向 2026 首届 openvela AI 硬件开发者大赛参赛者，介绍如何在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答），实现从环境配置、编译、部署到调用的完整流程。
 
 ## 一、简介
 
@@ -185,6 +185,24 @@ velaclaw.ask({
 - `success`：成功回调，`res.reply` 为 AI 的回复内容。
 - `fail`：失败回调，`code` 为错误码。
 - `complete`：调用结束回调（无论成功失败都会触发）。
+
+也支持 Promise 方式调用：
+
+```javascript
+const res = await velaclaw.ask({ query: '今天天气怎么样' })
+console.log('AI reply:', res.reply)
+```
+
+**错误码：**
+
+| code | 说明                             |
+| ---- | -------------------------------- |
+| 200  | 系统通用错误                     |
+| 202  | 参数错误（query 缺失或类型错误） |
+| 203  | 功能不支持（设备不支持 AI 能力） |
+| 204  | 请求超时（AI Agent 响应超时）    |
+| 1000 | AI 服务不可用                    |
+| 1001 | 对话内容被拒绝（内容安全策略）   |
 
 ## 七、运行效果
 
