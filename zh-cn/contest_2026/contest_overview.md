@@ -37,7 +37,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 ## 参赛要求（通用）
 
-- 代码在赛事为每支队伍分配的 **GitHub private demo 仓**内开发与提交（直接 push，无需 PR）；获奖后再按要求 PR 至 openvela 上游 `dev-ai-contest-2026` 分支。
+- 代码在赛事为每支队伍分配的 **GitHub public demo 仓**内开发与提交（直接 push，无需 PR）；获奖后再按要求 PR 至 openvela 上游 `dev-ai-contest-2026` 分支。
 - 鼓励使用 AI Coding 完成开发，并沉淀有效的开发 Skill（可参考官方 [AI 开发技能集 `.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)）。
 - 参赛作品须为原创，遵循 Apache 2.0 开源协议。
 - 每支队伍 1–5 人，每人仅限加入一支队伍。
@@ -61,7 +61,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 ## 作品提交要求
 
-- 参赛作品在赛事为每支队伍分配的 **GitHub private demo 仓**内开发与提交：代码直接 push 到 demo 仓，AI Coding 日志由插件自动归集到仓内 `logs/` 目录，**无需自行打包代码与日志**。
+- 参赛作品在赛事为每支队伍分配的 **GitHub public demo 仓**内开发与提交：代码直接 push 到 demo 仓，AI Coding 日志由插件自动归集到仓内 `logs/` 目录，**无需自行打包代码与日志**。
 - 另需提交：作品介绍文档（.docx / .pdf / .pptx）、演示视频（不超过 5 分钟，mp4 / mov 等常见格式）、demo 仓地址。
 - 大赛仅在 GitHub 进行（不在 Gitee）；demo 仓为选手 sandbox，**直接 push 即可，无需 PR**。
 - **获奖后**需按要求将作品 PR 至 openvela 上游对应仓库的 `dev-ai-contest-2026` 分支，遵循 Apache 2.0 开源协议，此步骤走标准 PR + CI 流程。
@@ -84,7 +84,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 ## 参赛须知与规则
 
 - 报名审核通过后，请扫码进入官方技术交流群，赛事期间将定期开展直播答疑、同步技术指导。
-- 参赛作品须在赛事分配的 private demo 仓内开发（大赛仅在 GitHub 进行，不在 Gitee），遵循 Apache 2.0 开源协议（特殊情况需与组委会单独说明）。
+- 参赛作品须在赛事分配的 public demo 仓内开发（大赛仅在 GitHub 进行，不在 Gitee），遵循 Apache 2.0 开源协议（特殊情况需与组委会单独说明）。
 - 报名审核通过的队伍，可领取比赛提供的开发板及 Xiaomi MiMo Token Plan。
 - 赛事发放的 Xiaomi MiMo Token Plan 仅可用于本次大赛开发，严禁挪作他用。
 - 鼓励使用 AI Coding（如 Claude Code + openvela AI Skills）完成开发；如使用 AI Coding，请按要求上传开发日志，并沉淀至少 1 个有效 Skill。
