@@ -55,6 +55,7 @@
 
 - **芯片特点**：M55 + HiFi4 + 2×M33 / BT6.0 / Wi-Fi 6 / 8.3MB SRAM / 64MB PSRAM / 40MB Nor Flash / Audio CODEC / 2.5D GPU
 - **适用场景**：TWS 耳机、智能手表/手环、低功耗蓝牙音频终端
+- **技术资料**：[BES2800BP.zip](../attachment/BES2800BP.zip)
 
 ### 7、STM32H750VBT6 — 意法半导体
 

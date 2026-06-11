@@ -55,7 +55,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 大赛官网          | https://www.openvela.com/#/contest                                                                                                                                                                                                                  |
 | openvela 代码仓库 | [GitHub](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/README_zh-cn.md) / [Gitee](https://gitee.com/open-vela/docs/tree/dev-ai-contest-2026/) / [GitCode](https://gitcode.com/open-vela/docs/blob/dev-ai-contest-2026/README_zh-cn.md) |
-| 官方文档站        | https://doc.openvela.com/document                                                                                                                                                                                                                   |
+| 官方文档站        | https://doc.openvela.com/document?id=1423&version=dev-ai-contest-2026&language=cn                                                                                                                                                                   |
 | 视频教程          | [B站](https://www.bilibili.com/video/BV19PsAzCEuy) / [YouTube](https://www.youtube.com/@openvela)                                                                                                                                                   |
 | MiMo API 配置     | https://platform.xiaomimimo.com/docs/zh-CN/integration/claudecode                                                                                                                                                                                   |
 | AI 开发技能集     | [`.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)：驱动开发等 AI Skills 与 Agent，配合 Claude Code 等工具使用                                                                                                            |
@@ -107,7 +107,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 **如果我是个人，没有队友可以参赛吗？**
 
-可以。本次大赛以队伍为单位参赛，组队规则为每支队伍 1–5 人，个人可独立成队。无队友可直接以个人队伍名义报名、开发、提交作品、评奖；若想组队，也可加入官方交流群，由主办方协助匹配队友。
+可以。本次大赛以队伍为单位参赛，组队规则为每支队伍 1–5 人，个人可独立成队。无队友可直接以个人队伍名义报名、开发、提交作品、评奖；若想组队，可加入官方交流群发布组队信息、寻找队友。
 
 **已有 MiMo 订阅套餐，还能申领大赛的 Token Plan 吗？**
 
@@ -119,7 +119,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 **发放的 Xiaomi MiMo Token Plan 只能用于大赛作品开发吗？**
 
-是的，免费领取的 MiMo Token Plan 仅限本次大赛使用。初赛未入围者将停止 Token 赠送，决赛结束后将停止所有参赛者的 Token 使用。AI Coding 日志由插件自动归集到 demo 仓 `logs/` 目录。
+是的，免费领取的 MiMo Token Plan 仅限本次大赛使用。初赛未入围者将停止 Token 赠送，决赛结束后将停止所有参赛者的 Token 使用。
 
 **发放的 Xiaomi MiMo Token Plan 是发给团队还是个人？**
 

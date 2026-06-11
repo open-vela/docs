@@ -114,3 +114,9 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 ## 四、参赛教程
 
 - [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)
+
+## 五、提交代码
+
+参赛作品在赛事为你创建的 **GitHub 专属仓库**（`packages_demos` 应用 / Demo、`packages_ai_agent` 框架能力）内开发并 push，无需 PR；AI Coding 日志由插件自动归集到仓内 `logs/` 目录。完整的仓库获取、提交流程与分赛道仓库说明，见 [《参赛代码提交指南》](../code_submission_guide.md)。
+
+> 若需改动 `vendor_<厂商>`（上真机改板级配置 / 加外设驱动）或 `nuttx` 等公共仓，处理方式见提交指南的「四、分赛道说明」。
