@@ -10,6 +10,7 @@
 | [快应用开发指南（AI 工作流）](./quickapp_ai_workflow.md)                    | 使用 Claude Code + VelaJS MCP 实现从需求描述到代码生成到模拟器调试的全流程自动化。适合希望快速出原型、让 AI 代劳写代码的参赛者。 |
 | [openvela 快应用调用 velaclaw（端侧 AI Agent）教程](./quickapp_velaclaw.md) | 在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答）。适合需要在应用中集成 AI 对话功能的参赛者。           |
 | [支持的硬件平台](../hardware_porting/supported_hardware.md)                 | 大赛提供的开发板清单（已支持 + 待适配），可选型号参考。                                                                          |
+| [参赛代码提交指南](../code_submission_guide.md)                             | 比赛期间如何获取仓库、提交代码、分赛道仓库说明（适用于所有赛道）。                                                               |
 
 ## 如何选择
 

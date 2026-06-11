@@ -11,6 +11,7 @@
 | [最小可运行 NSH 系统 defconfig 参考](./defconfig_reference/minimum_nsh_baseline.md) | L0 起步 defconfig：在新开发板上先启动到 NSH 命令行提示符，再按需逐步启用文件系统、网络、传感器等子系统。 |
 | [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                        | 从零完成 BSP 移植的完整流程。                                                                            |
 | [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)        | UART/SPI/I2C 等各类驱动的适配与使用。                                                                    |
+| [参赛代码提交指南](../code_submission_guide.md)                                     | 比赛期间如何获取仓库、提交代码、分赛道仓库说明（适用于所有赛道）。                                       |
 
 ## 如何开始
 

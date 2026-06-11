@@ -220,6 +220,8 @@ vapp hap://app/com.vela.player
 
 ## 六、提交参赛代码
 
+> 完整的提交流程、仓库获取方式、分赛道仓库说明，详见 [《参赛代码提交指南》](../code_submission_guide.md)。
+
 参赛代码在赛事为每支队伍分配的 **GitHub public demo 仓**内开发与提交：直接 push 到 demo 仓 main（无需 PR），AI Coding 日志由插件自动归集到仓内 `logs/` 目录。
 
 **提交内容**：快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）+ 生产模式打包产物 **release.rpk**，二者都放入 demo 仓。

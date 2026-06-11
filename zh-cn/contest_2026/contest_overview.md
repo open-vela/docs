@@ -53,6 +53,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 
 | 资源              | 链接                                                                                                                                                                                                                                                |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 大赛官网          | https://www.openvela.com/#/contest                                                                                                                                                                                                                  |
 | openvela 代码仓库 | [GitHub](https://github.com/open-vela/docs/blob/dev-ai-contest-2026/README_zh-cn.md) / [Gitee](https://gitee.com/open-vela/docs/tree/dev-ai-contest-2026/) / [GitCode](https://gitcode.com/open-vela/docs/blob/dev-ai-contest-2026/README_zh-cn.md) |
 | 官方文档站        | https://doc.openvela.com/document                                                                                                                                                                                                                   |
 | 视频教程          | [B站](https://www.bilibili.com/video/BV19PsAzCEuy) / [YouTube](https://www.youtube.com/@openvela)                                                                                                                                                   |
@@ -60,6 +61,8 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 | AI 开发技能集     | [`.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)：驱动开发等 AI Skills 与 Agent，配合 Claude Code 等工具使用                                                                                                            |
 
 ## 作品提交要求
+
+> 完整的提交流程、仓库获取方式、分赛道仓库说明，详见 [《参赛代码提交指南》](./code_submission_guide.md)。
 
 - 参赛作品在赛事为每支队伍分配的 **GitHub public demo 仓**内开发与提交：代码直接 push 到 demo 仓，AI Coding 日志由插件自动归集到仓内 `logs/` 目录，**无需自行打包代码与日志**。
 - 另需提交：作品介绍文档（.docx / .pdf / .pptx）、演示视频（不超过 5 分钟，mp4 / mov 等常见格式）、demo 仓地址。
