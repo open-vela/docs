@@ -117,6 +117,6 @@ ai_agent 是运行在 openvela 嵌入式系统上的 AI Agent 框架，专为手
 
 ## 五、提交代码
 
-参赛作品在赛事为你创建的 **GitHub 专属仓库**（`packages_demos` 应用 / Demo、`packages_ai_agent` 框架能力）内开发并 push，无需 PR；AI Coding 日志由插件自动归集到仓内 `logs/` 目录。完整的仓库获取、提交流程与分赛道仓库说明，见 [《参赛代码提交指南》](../code_submission_guide.md)。
+参赛作品在赛事为你创建的 **GitHub 专属仓库**（`packages_demos` 应用 / Demo、`packages_ai_agent` 框架能力）内开发并提交。AI Coding 对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录（详见 [《AI 大赛选手使用手册》](../../../../../../.claude/blob/dev-ai-contest-2026/skills/contest-log-collector/onboarding/USAGE.md)）。完整的仓库获取与提交流程，见 [《参赛代码提交指南》](../code_submission_guide.md)。
 
-> 若需改动 `vendor_<厂商>`（上真机改板级配置 / 加外设驱动）或 `nuttx` 等公共仓，处理方式见提交指南的「四、分赛道说明」。
+> 若需改动 `vendor_<厂商>`（上真机改板级配置 / 加外设驱动）或 `nuttx` 等公共仓，处理方式见 [《参赛代码提交指南》](../code_submission_guide.md)。

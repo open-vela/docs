@@ -50,10 +50,12 @@ fork 专属仓库开发 → 发起 PR → 自行 review 合入
 ## 三、如何提交代码
 
 1. 在 fork 出的仓库内完成开发，`git commit` 并推送后，向你的专属仓库发起 **PR**，可自行 review 并合入。
-2. 建议的仓库目录约定（便于评委定位）：
+2. **AI Coding 日志**：与 AI 工具的对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交。详见 [《AI 大赛选手使用手册》](../../../../../.claude/blob/dev-ai-contest-2026/skills/contest-log-collector/onboarding/USAGE.md)。
+3. 建议的仓库目录约定（便于评委定位）：
 
 ```text
 /            # 作品代码
+/logs/       # AI Coding 日志（主动导出后提交）
 README.md    # 作品名称、所属赛道、运行方式、简介
 ```
 
