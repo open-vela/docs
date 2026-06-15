@@ -13,6 +13,7 @@
 | [openvela 快应用调用 velaclaw（端侧 AI Agent）教程](./quickapp_velaclaw.md) | 在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答）。适合需要在应用中集成 AI 对话功能的参赛者。           |
 | [支持的硬件平台](../hardware_porting/supported_hardware.md)                 | 大赛提供的开发板清单（已支持 + 待适配），可选型号参考。                                                                          |
 | [参赛代码提交指南](../code_submission_guide.md)                             | 比赛期间如何获取仓库、提交代码、分赛道仓库说明（适用于所有赛道）。                                                               |
+| [AI Coding 日志归集与提交手册](../ai_coding_log_guide.md)                   | 如何安装日志工具、把与 AI 的对话导出并提交到比赛仓（适用于所有赛道）。                                                           |
 
 ## 如何选择
 

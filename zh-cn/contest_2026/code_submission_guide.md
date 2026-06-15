@@ -41,7 +41,7 @@ fork 专属仓库开发 → 发起 PR → 自行 review 合入
 
 1. 队长确认队伍组建完成（个人参赛者本人确认即可）。
 2. 运营收集：队长 / 个人参赛者的 **GitHub 账号**、**队伍 / 个人名称**、（如需）**开发板需求**。
-3. 组委会按统一规则创建仓库，采用**匿名编号**命名。
+3. 组委会按统一规则为每支队伍创建**一个** GitHub 仓库，命名为 `contest2026-<编号>-<队伍名>`（编号三位零填充；队名用 slug：全小写、英文 / 拼音、连字符）。例：`contest2026-042-openvela`。不同作品形态（应用 / 快应用 / 板级适配等）以**子目录**形式组织在该仓内，由 manifest 映射到 openvela 工程对应位置——**每队仅一个仓，不按形态另开仓**。
 4. 组委会向你提供一条 `repo init -u <manifest 仓库地址> -b dev-ai-contest-2026` 命令（该 manifest 仓库内的清单文件已登记好「openvela 全量源码 + 你的专属仓库」），执行后再 `repo sync` 即可一键拉取完整工程；同时把你的 GitHub 账号加为仓库协作者（开通 push 权限）。
 5. 你即可 clone 仓库、开始开发与提交。
 
@@ -50,7 +50,7 @@ fork 专属仓库开发 → 发起 PR → 自行 review 合入
 ## 三、如何提交代码
 
 1. 在 fork 出的仓库内完成开发，`git commit` 并推送后，向你的专属仓库发起 **PR**，可自行 review 并合入。
-2. **AI Coding 日志**：与 AI 工具的对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交。详见 [《AI 大赛选手使用手册》](../../../../../.claude/blob/dev-ai-contest-2026/skills/contest-log-collector/onboarding/USAGE.md)。
+2. **AI Coding 日志**：与 AI 工具的对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交。详见 [《AI Coding 日志归集与提交手册》](./ai_coding_log_guide.md)。
 3. 建议的仓库目录约定（便于评委定位）：
 
 ```text

@@ -12,6 +12,7 @@
 | [openvela 芯片移植指南](../../chip_porting/porting_guide.md)                        | 从零完成 BSP 移植的完整流程。                                                                            |
 | [openvela 驱动开发指南](../../device_dev_guide/driver/driver_development.md)        | UART/SPI/I2C 等各类驱动的适配与使用。                                                                    |
 | [参赛代码提交指南](../code_submission_guide.md)                                     | 比赛期间如何获取仓库、提交代码、分赛道仓库说明（适用于所有赛道）。                                       |
+| [AI Coding 日志归集与提交手册](../ai_coding_log_guide.md)                           | 如何安装日志工具、把与 AI 的对话导出并提交到比赛仓（适用于所有赛道）。                                   |
 
 ## 如何开始
 

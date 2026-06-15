@@ -11,6 +11,7 @@
 | [mini-memo 应用开发指引](./mini_memo_guide.md)              | 以 music_player 为模板构建 AI 记忆助手，演示主动任务、Router 路由、结构化输出。 |
 | [支持的硬件平台](../hardware_porting/supported_hardware.md) | 大赛提供的开发板清单（已支持 + 待适配），可选型号参考。                         |
 | [参赛代码提交指南](../code_submission_guide.md)             | 比赛期间如何获取仓库、提交代码、分赛道仓库说明（适用于所有赛道）。              |
+| [AI Coding 日志归集与提交手册](../ai_coding_log_guide.md)   | 如何安装日志工具、把与 AI 的对话导出并提交到比赛仓（适用于所有赛道）。          |
 
 ## 如何选择
 
