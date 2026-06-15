@@ -28,16 +28,16 @@
 完成 [《参赛代码提交指南》](./code_submission_guide.md) 中的 `repo init` 与 `repo sync` 后，在参赛专属仓库目录内执行一次：
 
 ```bash
-cd <你的 demo 仓>     # 例如 contest2026-042-openvela
+cd <你的 demo 仓>     # 例如 contest2026_042_openvela
 bash ../.claude/skills/contest-log-collector/onboarding/install.sh \
-  --team-id contest2026-042-openvela \
+  --team-id contest2026_042_openvela \
   --github-login <你的 GitHub username>
 ```
 
 `install.sh` 将自动创建身份信息文件 `~/.claude/contest-collector.env`（内容为 TEAM_ID 与 GITHUB_LOGIN），无需手动创建。执行完成后可通过以下命令核对：
 
 ```text
-TEAM_ID=contest2026-042-openvela
+TEAM_ID=contest2026_042_openvela
 GITHUB_LOGIN=<你的 GitHub username>
 ```
 
@@ -339,7 +339,7 @@ git add logs/ && git commit -s -m "logs: final batch" && git push
 │           ├── USAGE.md                # 本文件（源）
 │           └── JUDGE_GUIDE.md          # 评委指南（源）
 ├── nuttx/  apps/  vendor/  ...         # openvela 全量源码
-└── <你的 demo 仓>/                      # 例如 contest2026-042-openvela
+└── <你的 demo 仓>/                      # 例如 contest2026_042_openvela
     ├── .gitignore
     ├── .claude/  .opencode/  tools/  schema/   # 安装后生成
     ├── USAGE.md  JUDGE_GUIDE.md

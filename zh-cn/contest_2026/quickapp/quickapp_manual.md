@@ -142,7 +142,7 @@ vapp hap://app/com.vela.player
 
 以润芯微 7 寸 MIPI 屏开发板（R528S3-Gemini-S1）为例，说明从固件打包到应用运行的完整流程。
 
-> 前置条件：已完成开发板 SDK 拉取、编译环境搭建及固件编译。编译说明见下方。
+> 前置条件：已完成开发板 SDK 拉取、编译环境搭建及固件编译。参考[《快速入门（Ubuntu）》](../../quickstart/openvela_ubuntu_quick_start.md)完成环境搭建与代码拉取，编译说明见下方。
 
 ### 1、开发板编译说明
 
@@ -175,54 +175,66 @@ vendor/allwinnertech/
 
 ### 2、配置字体
 
-将字体包中的所有字体文件复制到：
+在目录 `vendor/allwinnertech/lichee/board/common/data/UDISK` 下新建 `font` 文件夹，将字体包中的所有字体文件复制到 `font` 下。
 
-```
-vendor/allwinnertech/lichee/board/common/data/res/fonts/
-```
+> 字体包：[font.zip](./attachment/font.zip)
 
 ### 3、部署应用文件
 
-1. 在 `vendor/allwinnertech/lichee/board/common/data/res/` 下新建 `app` 文件夹
+1. 在 `vendor/allwinnertech/lichee/board/common/data/UDISK/` 下新建 `app` 文件夹
 2. 将 rpk 文件解压，将解压后的应用文件夹放入该目录：
 
 ```bash
 unzip com.vela.player.release.1.0.0.rpk -d com.vela.player
-cp -r com.vela.player vendor/allwinnertech/lichee/board/common/data/res/app/
+cp -r com.vela.player vendor/allwinnertech/lichee/board/common/data/UDISK/app/
 ```
 
 ### 4、打包固件
 
 ```bash
+# 在 bash 终端依次执行以下命令
 cd vendor/allwinnertech/lichee/
 source envsetup.sh
 lunch_nuttx  # 选择 2 r528s3-gemini-s1
 pack
+# 打包产物在 vendor/allwinnertech/lichee/out/r528s3/gemini-s1_nand/rtos_nuttx_r528s3-gemini-s1_uart0_128Mnand.img
 ```
 
 > 打包只需几分钟，不需要重新编译内核。只有修改了 defconfig 或源码才需要重新执行 build.sh 编译。
 
 ### 5、烧录并启动应用
 
-烧录固件到开发板后，通过串口终端（nsh shell）执行：
+烧录固件到开发板后，通过串口终端进入 nsh shell：
 
 ```bash
-# 将应用从 resource 分区拷贝到 data 分区
-cp -r /resource/app/com.vela.player /data/app/com.vela.player
+# 在 bash 终端进入串口
+sudo minicom -D /dev/ttyUSB0 -b 1500000
+```
 
-# 启动快应用
+![串口终端进入开发板](figures/board_minicom.png)
+
+进入 nsh 终端后，启动快应用：
+
+```bash
+# nsh 终端启动快应用
 vapp hap://app/com.vela.player
 ```
 
+![nsh 终端启动快应用](figures/board_vapp.png)
+
 > 启动成功后，开发板屏幕上会显示你的应用界面。
+
+![开发板屏幕显示应用界面](figures/board_app_ui.png)
 
 ---
 
 ## 六、提交参赛代码
 
-> 完整的提交流程、仓库获取方式、分赛道仓库说明，详见 [《参赛代码提交指南》](../code_submission_guide.md)。
+> 完整的提交流程、仓库获取方式、时间与权限说明，以 [《参赛代码提交指南》](../code_submission_guide.md) 为准。
 
-参赛代码在赛事为每支队伍分配的 **GitHub public demo 仓**内开发与提交：直接 push 到 demo 仓 main（无需 PR）。AI Coding 对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录（详见 [《AI Coding 日志归集与提交手册》](../ai_coding_log_guide.md)）。
+组委会会为每支队伍 / 每位参赛者创建专属的 GitHub 代码仓库（命名 `contest2026_<编号>_<队伍名>`，默认 public）。比赛期间，你 **fork 自己的专属仓** 进行开发，再以 **PR** 形式提交回专属仓，可**自行 review 并合入**（无需等待组委会审核）。
+
+AI Coding 对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交（详见 [《AI Coding 日志归集与提交手册》](../ai_coding_log_guide.md)）。
 
 **提交内容**：快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）+ 生产模式打包产物 **release.rpk**，二者都放入 demo 仓。
 
