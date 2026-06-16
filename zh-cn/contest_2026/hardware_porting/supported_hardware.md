@@ -83,6 +83,15 @@
 - **开发指南**：[GD32F470V-START README](../../../../../../vendor_gigadevice/blob/dev-ai-contest-2026/boards/gd32f4/gd32f470v_start/README_zh-cn.md)
 - **设备介绍**：[GD32F4xx Demo Suites 下载](https://www.gd32mcu.com/cn/download?kw=GD32F4xx+Demo+Suites&lan=cn)
 
+### 10、D12x 系列 EVM 评估板 — 匠芯创
+
+<img src="../images/aic_d12x.png" alt="匠芯创 D12x 系列 EVM 评估板" width="360" />
+
+- **芯片特点**：RISC-V 架构、国产自主、显控一体 MCU
+- **适用场景**：工业 HMI、网关、串口屏等泛工业领域及智慧家居
+- **设备介绍**：[匠芯创D12x开发板资料.zip](../attachment/匠芯创D12x开发板资料.zip)
+- **开发指南**：待补充
+
 ## 二、待适配开发板
 
 > 以下平台 openvela 尚未完成适配，主办方提供芯片手册、硬件设计文档、参考代码等技术资料，适合「新硬件平台适配」赛道挑战（重点加分方向）。
@@ -125,7 +134,16 @@
 - **设备介绍**：[STM32N6 系列](https://www.st.com.cn/zh/microcontrollers-microprocessors/stm32n6-series.html) ｜ [正点原子 DNN647 资料](https://wiki.alientek.com/docs/Boards/STM32/DNN647/TOC/)
 - **上游目标仓（获奖后 PR）**：`vendor_st`（`dev-ai-contest-2026` 分支，`boards/` 目录）
 
-### 5、RK3588 开发板 — 瑞芯微（适配中）
+### 5、逻极派 LogicPi A1 边缘 AI 开发板 — Amlogic
+
+<img src="../images/logicpi_a1.png" alt="逻极派 LogicPi A1 边缘 AI 开发板" width="360" />
+
+- **芯片特点**：基于 Amlogic A311Y2 6nm AI SoC，四核 Cortex-A510，集成 RISC-V 控制核、Mali-G310 GPU 与 4TOPS NPU；配备 8GB LPDDR5 + 16GB eMMC；内置 HOX SDK 与 Device Agent，支持自然语言生成硬件控制代码。
+- **适用场景**：物理智能体、AI 编程教育、机器人控制、多模态感知、智能硬件原型验证、多智能体协同
+- **技术资料**：[LogicPi A1 开发板资料.zip](../attachment/LogicPi%20A1%20开发板资料.zip)
+- **上游目标仓（获奖后 PR）**：`vendor_amlogic`（仓库 / 大赛分支待创建，`boards/` 目录）
+
+### 6、RK3588 开发板 — 瑞芯微（适配中）
 
 - **芯片特点**：高性能多核 SoC（详见数据手册）
 - **状态**：适配进行中。
