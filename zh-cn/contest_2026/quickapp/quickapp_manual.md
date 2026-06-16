@@ -236,9 +236,9 @@ vapp hap://app/com.vela.player
 
 AI Coding 对话会自动记录到本机 staging（不会自动上传），需由你**主动导出/打包**选定会话到仓内 `logs/` 目录后一并提交（详见 [《AI Coding 日志归集与提交手册》](../ai_coding_log_guide.md)）。
 
-**提交内容**：快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）+ 生产模式打包产物 **release.rpk**，二者都放入 demo 仓。
+**提交内容**：快应用**源码工程**（`src/`、`package.json`、`manifest.json` 等）+ 生产模式打包产物 **release.rpk**，二者都放入你的专属仓。
 
-> 大赛仅在 GitHub 进行（不在 Gitee）；demo 仓为选手 sandbox，直接 push 即可。**获奖后**需按要求将作品 PR 至 openvela 上游 `packages_apps` 仓库的 `dev-ai-contest-2026` 分支，走标准 PR + CI 流程。
+> 大赛仅在 GitHub 进行（不在 Gitee）；专属仓通过 **fork → PR → 自行 review 合入** 提交。**获奖后**需按要求将作品 PR 至 openvela 上游 `packages_apps` 仓库的 `dev-ai-contest-2026` 分支，走标准 PR + CI 流程。
 >
 > 运行环境区分：`packages_apps` 在 openvela 模拟器上运行；`packages_fe_examples` 在 AIoT IDE 内置模拟器中运行，仅供学习参考。
 
