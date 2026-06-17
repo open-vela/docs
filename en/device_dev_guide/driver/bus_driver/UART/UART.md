@@ -404,7 +404,7 @@ In the UART driver, the typical implementation of the file operation structure `
 static const struct file_operations g_serialops =
 {
   uart_open,  /* open */
-  uart_close, /* close *
+  uart_close, /* close */
   uart_read,  /* read */
   uart_write, /* write */
   0,          /* seek */
@@ -497,8 +497,8 @@ fs/vfs/fs_write.c
 
 Through `poll`, applications can monitor changes in the device's status (such as whether the device is readable or writable) in non-blocking mode.
 
-```Rust
-fs/vfs/fs_poll
+```text
+fs/vfs/fs_poll.c
 |_ poll_setup(kfds, nfds, &sem);
    |_ poll_fdsetup(fds[i].fd, &fds[i], true)
       |_ file_poll(filep, fds, setup);
@@ -523,7 +523,7 @@ fs/vfs/fs_poll
 
 When the serial port hardware undergoes a status change (new data is received or buffer space is released), the wake-up mechanism is triggered by an interrupt event. The following is the typical interrupt handling process for `uart_poll`:
 
-```Rust
+```text
 arch/risc-v/src/esp32c3/esp32c3_serial.c
 |_ int_status = getreg32(UART_INT_ST_REG(priv->id));
 |_ if (int_status & tx_mask)

@@ -64,6 +64,10 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## What's New
 
+- **On-Device AI Agent Capability Upgrade**: openvela provides the **[ai_agent](../../../packages_ai_agent/blob/dev/README.md)** AI Agent framework, supporting multiple LLM backends, 35+ built-in tools, a Skills system, proactive tasks, and multi-channel access. It runs on-device intelligent applications on small devices such as watches, glasses, and speakers with only about 256KB of RAM.
+
+- **Enhanced AI-Assisted Development**: openvela introduces the official AI development skill set **[.claude](https://github.com/open-vela/.claude)**. Combined with AI coding tools like Claude Code, you can set up the environment, build, adapt drivers, and debug using natural language, significantly lowering the development barrier.
+
 - **openvela Official Website Launched**: openvela now has its own official website, providing developers with a more convenient channel for accessing project information, documentation, community updates, and more. Visit the [openvela Official Website](https://openvela.com).
 
 - **First openvela Officially Certified Development Board**: The **[Gemini-S1](https://rivotek.feishu.cn/wiki/Onndw4lmniFBnEk0Rb7cDbwOnTc)** development board, independently developed by Runxinwei Intelligent Technology Co., Ltd., has become the first development board to pass the openvela official compatibility certification, marking a significant milestone in the openvela ecosystem.
@@ -98,6 +102,7 @@ To maximize efficiency and ensure code stability, we offer the following recomme
 
 - **Recommended Baseline**: We strongly recommend **basing your development on the latest openvela release version** (i.e., Release Tags on the `trunk` branch).
 - **Risk Warning**: The current **`dev` branch** is undergoing rapid iteration with frequent code updates. It may be subject to underlying interface changes or temporary instability. Therefore, it is **NOT recommended** as a baseline for hardware adaptation.
+- **Self-Validation**: After porting, you can use the community-provided [xTS Test Case Collection (Chinese)](./zh-cn/test_dev_guide/openvela_xts_test_cases.md) for self-validation. It covers fundamental capabilities such as the system kernel, driver BSP, filesystem, WiFi, Bluetooth, and audio/video. Commands can be copied directly into nsh for execution without writing tests from scratch.
 - **Get Support**: If you have adaptation requirements or encounter technical difficulties, please feel free to **submit an Issue** or contact us via the **WeChat Community**. The openvela team is ready to provide the necessary development support.
 
 ### Version Maintenance Strategy
@@ -134,11 +139,23 @@ If you want to experience openvela, we provide a fully functional emulator that 
 
 [Quick Start (Ubuntu)](./en/quickstart/openvela_ubuntu_quick_start.md)
 
-> **AI-Assisted Setup**: If you use an AI coding assistant, simply run `git clone https://github.com/open-vela/.claude.git .claude`, then tell the AI "Help me set up the openvela development environment" to automate the entire setup process. See [openvela AI Skills](https://github.com/open-vela/.claude) for details.
+> **AI-Assisted Setup**: If you use an AI coding assistant, you can quickly set up the development environment with openvela's official AI skill set. See the [AI-Assisted Development](#ai-assisted-development-openvela-ai-skills) section below for details.
 
 ### Quick App Development
 
 [Quick App Quick Start](https://iot.mi.com/vela/quickapp/zh/guide/start/use-ide.html)
+
+## AI-Assisted Development (openvela AI Skills)
+
+[.claude](https://github.com/open-vela/.claude) is openvela's officially maintained AI development skill set (Skills), providing AI coding assistants with domain knowledge for openvela environment setup, build, driver adaptation, debugging, and optimization. It is the recommended entry point for developing openvela with an AI coding workflow.
+
+Use it together with AI coding tools like Claude Code:
+
+```bash
+git clone https://github.com/open-vela/.claude.git .claude
+```
+
+After cloning, describe your needs to the AI (e.g., "Help me set up the openvela development environment"), and the AI will leverage these Skills to automatically complete tasks such as environment setup, build, and debugging.
 
 ## List of Sub-repositories
 
@@ -151,6 +168,11 @@ If you want to experience openvela, we provide a fully functional emulator that 
 | [external](../../../../open-vela/external)     | Third-party libraries introduced by openvela.                                                                                                                                                                                                                                                                                                                                                                       |
 | [tests](../../../../open-vela/tests)           | This repository contains interface tests, specifically including core API tests for multimedia, file systems, memory management, and socket communication.                                                                                                                                                                                                                                                          |
 | [docs](../../../../open-vela/docs)             | Developer documentation for openvela.                                                                                                                                                                                                                                                                                                                                                                               |
+| [packages](../../../../open-vela/packages)     | A collection of openvela application and example packages, including the AI Agent framework (ai_agent), native app and game examples (demos), Quick App examples (fe_examples), and the Quick App framework. Contest-related examples and frameworks are mainly located in this repository.                                                                                                                         |
+| [build](../../../../open-vela/build)           | The openvela build system, providing `build.sh`, CMake/Kconfig build scripts, and build configurations.                                                                                                                                                                                                                                                                                                             |
+| [.claude](../../../../open-vela/.claude)       | openvela's official AI development skill set (Skills), used with AI coding tools to assist environment setup, build, driver adaptation, and debugging. See the [AI-Assisted Development](#ai-assisted-development-openvela-ai-skills) section for details.                                                                                                                                                          |
+
+> Note: After `repo sync`, a `prebuilts/` directory is also generated in the workspace, holding platform prebuilt binaries such as the build toolchain, QEMU, and the emulator. This directory is fetched per-platform automatically by `repo` and requires no manual maintenance or a separate repository.
 
 ## Developer Documentation
 
@@ -173,6 +195,12 @@ Here are some typical native application examples demonstrating the usage of dif
 - [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev/Whackmole/README.md): Demonstrates a game loop, random number generation, and animation effects.
 
 To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/dev/README_zh-cn.md).
+
+### AI Agent Apps
+
+An on-device AI Agent framework running on openvela, supporting multiple LLM backends, 35+ built-in tools, a Skills system, proactive tasks, and multi-channel access. It runs on small devices with around 256KB of RAM.
+
+- [ai_agent](../../../packages_ai_agent/blob/dev/README.md): An AI Agent framework providing conversation, tool calling, Skills, proactive tasks, the MCP protocol, multi-device collaboration, and more. It serves as the core foundation for AI hardware application development.
 
 ### Quick Apps
 

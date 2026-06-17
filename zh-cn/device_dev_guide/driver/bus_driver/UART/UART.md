@@ -404,7 +404,7 @@ int register_driver(FAR const char *path,
 static const struct file_operations g_serialops =
 {
   uart_open,  /* open */
-  uart_close, /* close *
+  uart_close, /* close */
   uart_read,  /* read */
   uart_write, /* write */
   0,          /* seek */
@@ -468,7 +468,8 @@ fs/vfs/fs_read.c
 `uart_write` 用于将数据写入串口设备的发送缓冲区 (`dev->xmit->buffer`)，通过调用 `uart_putxmitchar` 函数实现具体数据的写入，并根据需要触发中断或 DMA 操作。
 
 ```C
-fs/vfs/fs_write.cwrite
+fs/vfs/fs_write.c
+write
 |_ nx_write
    |_ file_write
       |_ inode->u.i_ops->write(filep, buf, nbytes) == uart_write
@@ -497,7 +498,7 @@ fs/vfs/fs_write.cwrite
 
 通过 `poll`，应用程序可以在非阻塞模式下监听设备的状态变化（如设备是否可读或可写）。
 
-```Rust
+```text
 fs/vfs/fs_poll.c
 |_ poll_setup(kfds, nfds, &sem);
    |_ poll_fdsetup(fds[i].fd, &fds[i], true)
@@ -523,7 +524,7 @@ fs/vfs/fs_poll.c
 
 当串口硬件发生状态变化（接收到新数据或缓冲区释放空间）时，通过中断事件触发唤醒机制。以下为 `uart_poll` 的典型中断处理流程：
 
-```Rust
+```text
 arch/risc-v/src/esp32c3/esp32c3_serial.c
 |_ int_status = getreg32(UART_INT_ST_REG(priv->id));
 |_ if (int_status & tx_mask)
@@ -575,7 +576,7 @@ arch/risc-v/src/esp32c3/esp32c3_serial.c
 
 `uart_close` 函数用于释放 UART 设备和相关的系统资源。在 openvela 系统中，`uart_close` 是设备关闭流程的核心操作，包括禁用中断、清空发送缓冲区以及回收硬件资源。
 
-```Swift
+```text
  fs/inode/fs_files.c
  int close(int fd)
  |_ nx_close(fd)

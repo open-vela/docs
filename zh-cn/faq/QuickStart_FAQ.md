@@ -222,3 +222,72 @@ No Qt platform plugin could be initialized
     ```
 
 `build.sh` 脚本对编译流程进行了优化，操作更简便，建议优先使用。
+
+## 8、repo init 卡住或镜像源返回 404
+
+### 问题描述
+
+执行 `repo init` 时长时间无输出、卡在下载 repo 工具阶段，或使用清华源时报类似如下错误：
+
+```Bash
+repo init -u ssh://git@github.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --repo-url=https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/ --git-lfs
+```
+
+`.repo/repo.tmp` 长时间为空，或镜像地址返回 HTTP 404。
+
+### 问题原因
+
+`--repo-url` 指定的是下载 **repo 工具本身**（git-repo）的地址，与源码仓库地址无关。镜像站存在临时不可用、路径调整或区域限制时，会导致 repo 工具无法下载，`repo init` 因此卡住。
+
+### 解决方案
+
+按以下顺序排查：
+
+1. 先验证镜像地址是否可访问：
+
+    ```Bash
+    curl -sS -o /dev/null -w "%{http_code}\n" https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/
+    ```
+
+    返回 `404` 或连接失败说明该镜像当前不可用。
+
+2. 切换到备用镜像（中科大源）：
+
+    ```Bash
+    repo init -u ssh://git@github.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --repo-url=https://mirrors.ustc.edu.cn/aosp/git-repo --git-lfs
+    ```
+
+3. 若网络可直连，也可去掉 `--repo-url` 使用默认源：
+
+    ```Bash
+    repo init -u ssh://git@github.com/open-vela/manifests.git -b dev-ai-contest-2026 -m openvela.xml --git-lfs
+    ```
+
+> **说明**：重新 `repo init` 前，如 `.repo` 目录残留不完整内容，可先删除当前目录下的 `.repo` 再重试。
+
+## 9、repo sync 出现大量 administratively prohibited 警告或同步缓慢
+
+### 问题描述
+
+执行 `repo sync` 时输出中频繁出现如下警告，且同步速度明显偏慢：
+
+```Bash
+channel 10: open failed: administratively prohibited:
+channel 12: open failed: administratively prohibited:
+```
+
+### 问题原因
+
+该警告由远程服务器（如 GitHub）对**单条 SSH 连接的并发通道数**做了限制引起。`repo sync` 的并发数（`-j`）较高时，部分通道会被拒绝。**这是非致命警告**，repo 会自动重试，不会导致同步失败，但频繁重试可能拖慢整体速度。
+
+### 解决方案
+
+- 适当降低并发数后重试（加 `-c` 只同步当前分支，传输数据更少、速度更快；`repo sync` 支持增量，可直接重跑）：
+
+    ```Bash
+    repo sync -c -j4
+    ```
+
+- 若仍不稳定，可进一步降低到 `-j2`。
+
+> **说明**：并发数并非越低越好，网络状况良好时保持默认 `-j8` 通常更快；仅在出现上述警告或同步明显变慢时再调低。

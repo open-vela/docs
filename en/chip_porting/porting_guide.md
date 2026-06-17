@@ -699,7 +699,7 @@ After the manufacturer completes the adaptation, it needs to be tested through t
 - Stability test
 - Performance test
 
-To help developers quickly perform self-validation, the openvela community provides a ready-to-use [xTS Test Case Collection](/document?id=XXX&version=trunk&language=en) that covers standard test cases for system kernel, driver BSP, filesystem, WiFi, Bluetooth, audio/video and other fundamental capabilities. Commands can be copied directly into nsh for execution without writing tests from scratch.
+To help developers quickly perform self-validation, the openvela community provides a ready-to-use [xTS Test Case Collection (Chinese)](../../zh-cn/test_dev_guide/openvela_xts_test_cases.md) that covers standard test cases for system kernel, driver BSP, filesystem, WiFi, Bluetooth, audio/video and other fundamental capabilities. Commands can be copied directly into nsh for execution without writing tests from scratch.
 
 Test cases are divided into two categories:
 
