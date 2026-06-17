@@ -90,7 +90,7 @@
 - **芯片特点**：RISC-V 架构、国产自主、显控一体 MCU
 - **适用场景**：工业 HMI、网关、串口屏等泛工业领域及智慧家居
 - **设备介绍**：[匠芯创D12x开发板资料.zip](../attachment/匠芯创D12x开发板资料.zip)
-- **开发指南**：待补充
+- **开发指南**：[D12X-Demo68-nor README](../../../../../../vendor_artinchip/blob/dev-ai-contest-2026/README.md)
 
 ## 二、待适配开发板
 
