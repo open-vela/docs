@@ -327,6 +327,17 @@ git add logs/ && git commit -s -m "logs: final sync" && git push
 
 不可以。直接调用 API 的对话不在 session transcript 中，工具无法采集。请务必使用上述 4 种官方支持的工具。
 
+### Q11：安装 hook 之前的 Claude Code 历史对话能补回来吗？
+
+可以。Claude Code 的历史对话保存在本机 `~/.claude/projects/` 目录。在选手仓内执行以下命令即可一键补回：
+
+```bash
+contest-snapshot --backfill
+git add logs/ && git commit -s -m "logs: backfill history" && git push
+```
+
+命令会自动扫描所有历史 transcript，跳过已采集的，将未采集的补导进 `logs/`。可多次执行，不会产生重复。
+
 ## 七、反馈与支持
 
 - 技术问题：大赛技术支持群（由组委会拉入）。
