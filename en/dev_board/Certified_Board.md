@@ -1,0 +1,9 @@
+# openvela Compatibility-Certified Boards
+
+[ English | [简体中文](../../zh-cn/dev_board/Certified_Board.md) ]
+
+> This page lists the boards / products that have passed openvela official compatibility certification (XTS). For uncertified development board porting examples, see [openvela Development Board Examples](./Development_Board.md).
+
+| Board                                                                                                    | Manufacturer | Chip Model                           | Certified Version | Porting Guide                                                                                                       | Certificate                                                                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------- | ------------ | ------------------------------------ | ----------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="../../zh-cn/dev_board/images/gemini-s1.png" alt="Gemini-S1 board" width="140" /><br/>Gemini-S1 | Rivotek      | Allwinner R528 (dual-core Cortex-A7) | openvela 5.2      | [Board README](../../../../../vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-gemini-s1/README.md) | [<img src="../../zh-cn/dev_board/images/certificate-gemini-s1.png" alt="Gemini-S1 compatibility certificate No. OV20260412" width="100" />](../../zh-cn/dev_board/images/certificate-gemini-s1.png)<br/>No. OV20260412 |
