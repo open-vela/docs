@@ -61,6 +61,12 @@ CONFIG_MQ_MAXMSGSIZE=4096            # 消息队列最大消息大小设为 4096
 ./build.sh vendor/openvela/boards/vela/configs/goldfish-arm64-v8a-ap --cmake -j8
 ```
 
+**改了配置后必须先清理再编译**：通过 `menuconfig` 调整配置（或修改了 defconfig）后，需先清理构建缓存再编译，否则 openvela 的 CMake 缓存会沿用旧配置、导致新开启的配置项不生效：
+
+```bash
+rm -rf cmake_out/vela_goldfish-arm64-v8a-ap
+```
+
 其他常用命令：
 
 ```bash
@@ -87,9 +93,14 @@ CONFIG_MQ_MAXMSGSIZE=4096            # 消息队列最大消息大小设为 4096
 
 > 附件下载：[示例 RPK 应用包](attachment/com.application.lyra.demo.debug.1.0.0.rpk) | [字体包 font.zip](attachment/font.zip)
 
+以下命令在**宿主机的另一个终端**中执行（不是模拟器的 `goldfish-armv8a-ap>`，也不是 `vela>`）——因为第 1 步的 `emulator.sh` 已占用第一个终端。请确保**当前终端在 openvela 工程根目录**，下面第 0 步会切到附件目录：
+
 ```bash
-# 1. 解压字体包
-unzip font.zip -d font
+# 0. 切换到 font.zip 与 .rpk 所在目录（已随仓库提供，从 openvela 工程根目录执行）
+cd docs/zh-cn/contest_2026/quickapp/attachment
+
+# 1. 解压字体包（不要加 -d font，font.zip 内已自带 font/ 目录；多加一层会导致双层嵌套，最终字体路径错位、中文渲染为方框 □）
+unzip font.zip
 
 # 2. 推送字体
 adb push ./font /data/
@@ -105,7 +116,7 @@ adb push com.application.lyra.demo /data/app/com.application.lyra.demo
 
 goldfish 模拟器通过虚拟以太网（eth0）自动获得网络连接，**无需手动配置，此步骤可跳过**。`ai_agent` 启动时会自动执行 `ifup eth0`。
 
-以下 WiFi 配置命令仅适用于带 WiFi 模块的真机开发板，模拟器中执行会提示 Failed：
+以下 WiFi 配置命令在模拟器的 NSH 终端（`goldfish-armv8a-ap>` 提示符）中执行，且仅适用于带 WiFi 模块的真机开发板；在 goldfish 模拟器中执行会提示 Failed，可直接跳过本步：
 
 ```bash
 ifup wlan0
@@ -117,7 +128,7 @@ renew wlan0
 
 ### 4、配置大模型（LLM）
 
-先以前台方式启动 ai_agent，在 `vela>` 提示符下完成大模型配置：
+以下命令在模拟器的 NSH 终端（即第 1 步启动模拟器后出现的 `goldfish-armv8a-ap>` 提示符）中输入。先以前台方式启动 ai_agent，在 `vela>` 提示符下完成大模型配置：
 
 ```bash
 ai_agent
@@ -141,7 +152,9 @@ set_llm https://api.xiaomimimo.com/v1 <model> sk-你的API_KEY
 
 > `<model>` 请填写你的账户支持的模型名称，具体值请参考 [MiMo 官方文档](https://platform.xiaomimimo.com/docs/zh-CN/integration/claudecode) 或 [订阅管理](https://platform.xiaomimimo.com/console/token-plan) 页面。提示：在 `vela>` 下输入 `set_llm`（不带参数）可查看完整用法说明。
 
-**配置搜索 Key（可选，不配也能正常使用）**：如果你的应用需要 AI 回答实时信息（如天气、新闻等），需要配置 Tavily 搜索 API Key，让 ai_agent 具备联网搜索能力。不需要实时搜索功能的应用可跳过此步。
+所有配置（`set_llm`、`set_tavily_key` 等）会**自动持久化保存在设备的 `/data/ai_agent/config/` 目录**，重启 ai_agent 进程或虚拟机后自动加载，无需重复配置。仅当**重新执行 clean build**（重生成 `vela_data.bin`、丢弃 `userdata-qemu.img`）、重刷固件或清空 `/data` 分区时才会丢失，届时需要在 `vela>` 中重新 set 一次。可在 `vela>` 中通过 `config_show` 查看当前已配置项（key 会脱敏显示）。
+
+**配置搜索 Key（可选，不配也能正常使用）**：大模型（`set_llm` 配置的）只能回答其训练知识范围内的问题，**无法获取实时信息**（如天气、新闻、股价等）。如果你的应用需要回答这类实时问题，需额外配置 Tavily 搜索 API Key——**Tavily 是面向 AI 的联网搜索服务**，配置后 ai_agent 即可在回答前先联网搜索、再让大模型基于搜索结果作答。只做普通对话、不需要实时信息的应用可跳过此步。
 
 ```bash
 set_tavily_key <your_tavily_key>
@@ -204,23 +217,17 @@ console.log('AI reply:', res.reply)
 | 1000 | AI 服务不可用                    |
 | 1001 | 对话内容被拒绝（内容安全策略）   |
 
-## 七、运行效果
-
-示例演示录屏：
-
-<video src="attachment/录屏 2026年05月27日 15时57分03秒.webm" controls></video>
-
-## 八、常见问题
+## 七、常见问题
 
 - **快应用启动后无 AI 回复**：确认 `ai_agent` 已在后台运行（`ai_agent &`），且已通过 `set_llm` 正确配置大模型。
 - **联网类问答失败**：确认网络可用，并已配置 `set_tavily_key`（如需联网搜索）。
 - **应用无法加载**：确认应用包已推送到 `/data/app/包名/`，且包名与 `manifest.json` 中的 `package` 字段一致。
 
-## 九、提交参赛代码
+## 八、提交参赛代码
 
 请参见[快应用开发指南（AI 工作流）](./quickapp_ai_workflow.md)。
 
-## 十、相关仓库
+## 九、相关仓库
 
 - [packages_ai_agent](../../../../../../packages_ai_agent/tree/dev-ai-contest-2026)
 - [frameworks_runtimes_feature](../../../../../../frameworks_runtimes_feature/tree/dev-ai-contest-2026)
