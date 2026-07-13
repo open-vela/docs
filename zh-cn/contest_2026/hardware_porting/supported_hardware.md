@@ -45,9 +45,10 @@
 
 <img src="../images/dshanpix_vela.png" alt="百问网 DShanPixVela-Devkit" width="360" />
 
-- **芯片特点**：Cortex-A7 + HiFi4 DSP + WiFi/BLE + LCD + 音频
+- **芯片特点**：Cortex-A7 + HiFi4 DSP + WiFi/BLE + 3.5 寸 SPI 屏（电容触摸）+ 音频 + RS485×2 + CAN×2
 - **适用场景**：工业控制、智能显示、AIoT 音视频、教学开发
 - **设备介绍**：[百问网 DShanPixVela-Devkit](https://www.100ask.net/hardware/detail/16)
+- **开发指南**：[r528s3-dshanpi README](../../../../../../vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-dshanpi/README_zh-cn.md)
 
 ### 6、BES 2800BP — 恒玄科技
 
