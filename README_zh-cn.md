@@ -65,7 +65,7 @@ Vela 的命名源自拉丁语中船帆的含义，也是南方星空中船帆星
 
 ## 最新动态
 
-- 端侧 AI Agent 能力升级：openvela 提供 **[ai_agent](../../../packages_ai_agent/blob/dev/README.md)** AI Agent 框架，支持多 LLM 后端、35+ 内置工具、Skills 技能系统、主动任务与多渠道接入，仅需约 256KB RAM 即可在手表、眼镜、音箱等小型设备上运行端侧智能应用。
+- 端侧 AI Agent 能力升级：openvela 提供 **[ai_agent](../../../../open-vela/packages_ai_agent/blob/dev/README.md)** AI Agent 框架，支持多 LLM 后端、35+ 内置工具、Skills 技能系统、主动任务与多渠道接入，仅需约 256KB RAM 即可在手表、眼镜、音箱等小型设备上运行端侧智能应用。
 
 - AI 辅助开发体验升级：openvela 推出官方 AI 开发技能集 **[.claude](https://github.com/open-vela/.claude)**，配合 Claude Code 等 AI 编程工具，用自然语言即可完成环境搭建、编译构建、驱动适配与调试，显著降低开发门槛。
 
@@ -195,21 +195,21 @@ git clone https://github.com/open-vela/.claude.git .claude
 - [亲戚计算器](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme_zh-cn.md)：演示复杂的条件逻辑与算法实现。
 - [打地鼠](../../../../open-vela/packages_demos/blob/dev/Whackmole/README_zh-cn.md)：演示游戏循环、随机数生成和动画效果。
 
-查看完整的原生应用列表，请访问[原生应用示例仓库](../../../packages_demos/blob/dev/README_zh-cn.md)。
+查看完整的原生应用列表，请访问[原生应用示例仓库](../../../../open-vela/packages_demos/blob/dev/README_zh-cn.md)。
 
 ### AI Agent 应用
 
 运行在 openvela 上的端侧 AI Agent 框架，支持多 LLM 后端、35+ 内置工具、Skills 技能系统、主动任务与多渠道接入，可在约 256KB RAM 的小型设备上运行。
 
-- [ai_agent](../../../packages_ai_agent/blob/dev/README.md)：AI Agent 框架，提供对话、工具调用、Skills、主动任务、MCP 协议、多设备协作等能力，是 AI 硬件应用开发的核心基座。
+- [ai_agent](../../../../open-vela/packages_ai_agent/blob/dev/README.md)：AI Agent 框架，提供对话、工具调用、Skills、主动任务、MCP 协议、多设备协作等能力，是 AI 硬件应用开发的核心基座。
 
 ### 快应用（Quick Apps）
 
-- [小米手环天气预报应用](../../.././packages_fe_examples/blob/dev/weather/README.md)：提供简洁直观的未来七日天气信息展示。
-- [音乐播放器](../../.././packages_fe_examples/blob/dev/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
-- [日历](../../.././packages_fe_examples/blob/dev/calendar/README.md)：演示一个基础的日历。
+- [小米手环天气预报应用](../../../../open-vela/packages_fe_examples/blob/dev/weather/README.md)：提供简洁直观的未来七日天气信息展示。
+- [音乐播放器](../../../../open-vela/packages_fe_examples/blob/dev/player/README.md)：演示一个基础的音乐播放器，包含音乐的播放，音量调节，歌单查看。
+- [日历](../../../../open-vela/packages_fe_examples/blob/dev/calendar/README.md)：演示一个基础的日历。
 
-快应用相关示例正在持续丰富中。查看所有示例，请访问[快应用示例仓库](../../../packages_fe_examples)。
+快应用相关示例正在持续丰富中。查看所有示例，请访问[快应用示例仓库](../../../../open-vela/packages_fe_examples)。
 
 ## 参与贡献
 

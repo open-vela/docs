@@ -64,7 +64,7 @@ The name "Vela" is originated from the Latin term for "sail," which is also the 
 
 ## What's New
 
-- **On-Device AI Agent Capability Upgrade**: openvela provides the **[ai_agent](../../../packages_ai_agent/blob/dev/README.md)** AI Agent framework, supporting multiple LLM backends, 35+ built-in tools, a Skills system, proactive tasks, and multi-channel access. It runs on-device intelligent applications on small devices such as watches, glasses, and speakers with only about 256KB of RAM.
+- **On-Device AI Agent Capability Upgrade**: openvela provides the **[ai_agent](../../../../open-vela/packages_ai_agent/blob/dev/README.md)** AI Agent framework, supporting multiple LLM backends, 35+ built-in tools, a Skills system, proactive tasks, and multi-channel access. It runs on-device intelligent applications on small devices such as watches, glasses, and speakers with only about 256KB of RAM.
 
 - **Enhanced AI-Assisted Development**: openvela introduces the official AI development skill set **[.claude](https://github.com/open-vela/.claude)**. Combined with AI coding tools like Claude Code, you can set up the environment, build, adapt drivers, and debug using natural language, significantly lowering the development barrier.
 
@@ -194,21 +194,21 @@ Here are some typical native application examples demonstrating the usage of dif
 - [Relation Calculator](../../../../open-vela/packages_demos/blob/dev/relation_calculator/Readme.md): Demonstrates complex conditional logic and algorithm implementation.
 - [Whack-a-Mole](../../../../open-vela/packages_demos/blob/dev/Whackmole/README.md): Demonstrates a game loop, random number generation, and animation effects.
 
-To see the full list of native apps, please visit the [Native App Examples Repository](../../../packages_demos/blob/dev/README_zh-cn.md).
+To see the full list of native apps, please visit the [Native App Examples Repository](../../../../open-vela/packages_demos/blob/dev/README.md).
 
 ### AI Agent Apps
 
 An on-device AI Agent framework running on openvela, supporting multiple LLM backends, 35+ built-in tools, a Skills system, proactive tasks, and multi-channel access. It runs on small devices with around 256KB of RAM.
 
-- [ai_agent](../../../packages_ai_agent/blob/dev/README.md): An AI Agent framework providing conversation, tool calling, Skills, proactive tasks, the MCP protocol, multi-device collaboration, and more. It serves as the core foundation for AI hardware application development.
+- [ai_agent](../../../../open-vela/packages_ai_agent/blob/dev/README.md): An AI Agent framework providing conversation, tool calling, Skills, proactive tasks, the MCP protocol, multi-device collaboration, and more. It serves as the core foundation for AI hardware application development.
 
 ### Quick Apps
 
-- [Mi Band Weather App](../../.././packages_fe_examples/blob/dev/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
-- [Music Player](../../.././packages_fe_examples/blob/dev/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
-- [Calendar](../../.././packages_fe_examples/blob/dev/calendar/README.md): Demonstrates a basic calendar.
+- [Mi Band Weather App](../../../../open-vela/packages_fe_examples/blob/dev/weather/README.md): Presents a clean and intuitive seven-day weather forecast.
+- [Music Player](../../../../open-vela/packages_fe_examples/blob/dev/player/README.md): Demonstrates a basic music player, including playback, volume control, and playlist viewing.
+- [Calendar](../../../../open-vela/packages_fe_examples/blob/dev/calendar/README.md): Demonstrates a basic calendar.
 
-More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../packages_fe_examples).
+More Quick App examples are continuously being added. To see all examples, please visit the [Quick App Examples Repository](../../../../open-vela/packages_fe_examples).
 
 ## Code contribution
 
