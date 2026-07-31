@@ -338,7 +338,66 @@ git add logs/ && git commit -s -m "logs: backfill history" && git push
 
 命令会自动扫描所有历史 transcript，跳过已采集的，将未采集的补导进 `logs/`。可多次执行，不会产生重复。
 
-## 七、反馈与支持
+## 七、Windows 用户操作指南
+
+Windows 用户无需 WSL，只需 **Python 3 + Git** 即可使用全部功能。所有操作在 **Git Bash** 中执行。
+
+### 1、环境准备（一次性）
+
+1. **安装 Python 3**：从 [python.org](https://www.python.org/downloads/) 下载，安装时勾选 **Add Python to PATH**。
+2. **安装 Git for Windows**：从 [git-scm.com](https://git-scm.com/download/win) 下载，安装时自带 **Git Bash**。
+3. **安装 Claude Code**（如使用）：`npm install -g @anthropic-ai/claude-code`
+
+> 如果已安装 WSL，可直接在 WSL 中按 Linux 流程操作，跳过本节。
+
+### 2、拉取 openvela 工程
+
+打开 **Git Bash**，执行：
+
+```bash
+# 如未安装 repo 工具
+mkdir -p ~/.bin
+curl https://storage.googleapis.com/git-repo-downloads/repo > ~/.bin/repo
+chmod +x ~/.bin/repo
+export PATH=~/.bin:$PATH
+
+# 拉取工程
+repo init -u https://github.com/open-vela/contest2026_XXX_yourteam \
+  -b dev-ai-contest-2026 -m contest2026_XXX_yourteam.xml
+repo sync -c -j8
+```
+
+### 3、安装日志工具
+
+在 **Git Bash** 中进入选手仓执行：
+
+```bash
+cd contest2026_XXX_yourteam
+bash ../.claude/skills/contest-log-collector/onboarding/install.sh \
+  --team-id contest2026_XXX_yourteam \
+  --github-login <你的GitHub用户名>
+```
+
+安装脚本会自动检测 Python 路径（`python3` / `python` / `py`），并在 `settings.json` 中用 Python 直接调用采集脚本 —— **hook 不依赖 bash 执行**，因此 Claude Code 的 hook 在 Windows 上也能正常触发。
+
+### 4、开发与提交
+
+在 Git Bash 中启动 AI 工具（`claude` / `opencode` / `mimo`）即可。首次对话结束时会询问是否上传日志，回答 `yes` 后后续自动上传。提交方式与 Mac/Linux 完全一致：
+
+```bash
+git add logs/ && git commit -s -m "logs: capture session" && git push
+```
+
+### 与 Mac/Linux 的区别
+
+| 项目 | Mac/Linux | Windows |
+| --- | --- | --- |
+| 终端 | Terminal | **Git Bash** |
+| Python | 系统自带 | 安装 Python 3（勾选 Add to PATH） |
+| hook 执行 | bash 调用 | **Python 直接调用**（不依赖 bash） |
+| 其他 | — | **无区别** |
+
+## 八、反馈与支持
 
 - 技术问题：大赛技术支持群（由组委会拉入）。
 - 工具缺陷：<https://github.com/open-vela/.claude/issues>
