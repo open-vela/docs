@@ -382,7 +382,7 @@ bash ../.claude/skills/contest-log-collector/onboarding/install.sh \
 
 ### 4、开发与提交
 
-在 Git Bash 中启动 AI 工具（`claude` / `opencode` / `mimo`）即可。首次对话结束时会询问是否上传日志，回答 `yes` 后后续自动上传。提交方式与 Mac/Linux 完全一致：
+在 Git Bash 中启动 AI 工具（`claude` / `opencode` / `mimo`）即可。**进入 openvela 工作区（含 `.repo/` 目录）即视为同意采集**，对话结束时日志会自动写入本地仓的 `logs/` 目录，工具不会自动 push。不想被采集的对话，请在 openvela 工作区**外**进行。提交方式与 Mac/Linux 完全一致：
 
 ```bash
 git add logs/ && git commit -s -m "logs: capture session" && git push
