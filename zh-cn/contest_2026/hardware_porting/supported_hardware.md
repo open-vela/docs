@@ -18,9 +18,27 @@
 
 <img src="../images/esp32s3_eye.png" alt="ESP32-S3-EYE 开发板" width="360" />
 
-- **芯片特点**：双核 240MHz + WiFi/BLE + 摄像头 + LCD + 麦克风（AIoT 视觉/语音一体化板）
+- **芯片特点**：双核 240MHz + WiFi/BLE + 摄像头 + LCD + 麦克风 + 加速度计（AIoT 视觉/语音一体化板）
 - **适用场景**：人脸检测、物体识别、语音交互、智能门禁、扫码识别
-- **设备介绍**：搭载 ESP32-S3 与 ESP-WHO AI 框架，配 200 万像素摄像头、LCD 与麦克风，板载 8MB PSRAM + 8MB flash，支持 Wi-Fi 图传与 USB 调试，适用于图像识别、音频处理等 AIoT 应用。[官方入门指南](https://documentation.espressif.com/esp-who/master/docs/zh_CN/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
+- **设备介绍**：搭载 ESP32-S3，配 200 万像素摄像头、LCD 与麦克风，板载 8MB PSRAM + 8MB flash，支持 Wi-Fi 图传与 USB 调试，适用于图像识别、音频处理等 AIoT 应用。[官方入门指南](https://documentation.espressif.com/esp-who/master/docs/zh_CN/get-started/ESP32-S3-EYE_Getting_Started_Guide.md)
+- **openvela 已适配外设**：
+
+  | 外设                               | 设备节点             |
+  | ---------------------------------- | -------------------- |
+  | OV2640 摄像头（DVP，QVGA RGB565）  | `/dev/video0`        |
+  | ST7789 LCD（1.3" 240×240 SPI）     | `/dev/lcd0`          |
+  | MSM261S4030H0 PDM 麦克风           | `/dev/audio/pcm_in0` |
+  | QMA7981 三轴加速度计（I2C0 @0x12） | `/dev/accel0`        |
+  | microSD（1-bit SDIO）              | `/dev/mmcsd1`        |
+  | Wi-Fi 4 (b/g/n) STA                | `wlan0`              |
+  | BLE 5 LE                           | `bnep0`              |
+  | BOOT 按键                          | `/dev/buttons`       |
+  | Power LED                          | `/dev/userleds`      |
+
+- **选型注意**：
+  - 板上**无触摸硬件**，`/dev/input0` 返回 `ENOENT` 属预期行为；交互输入可用 BOOT 按键、加速度计（敲击/翻转）或摄像头。
+  - 板上**无扬声器/功放**，openvela defconfig 只启用 I2S0 RX（麦克风），无音频输出通路；需要语音播报的方案请另选带 Codec 的开发板或外接功放。
+  - ESP-WHO / ESP-DL 是 ESP-IDF 私有 AI 栈，**不能在 openvela 上使用**；端侧推理请使用 `apps/mlearning/tflite-micro` 自行部署量化模型，openvela 侧的 camera 例程只做采集与显示，不含推理。
 - **开发指南**：[ESP32-S3-EYE README](../../../../../../vendor_espressif/blob/dev-ai-contest-2026/boards/esp32s3/esp32s3-eye/README_zh-cn.md)
 
 ### 3、黄山派 SF32LB52 — 思澈科技
