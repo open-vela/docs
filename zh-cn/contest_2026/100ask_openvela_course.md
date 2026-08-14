@@ -1,4 +1,4 @@
-# openvela 快速入门与工程实践课程（百问网）
+# openvela 快速入门与工程实践课程
 
 > 百问网（100ASK）韦东山团队与 openvela 官方联合推出的 openvela 完整实战课程。课程从开发环境搭建讲起，最终落地一台能听、会说、带动态表情的 AI 语音机器人。
 
@@ -31,4 +31,4 @@
 - **通用能力不限开发板**：第 3、4、6、8 章（多任务与 IPC、驱动开发、构建系统、调试技术）适用于所有 openvela 开发板。
 - **语音类作品的参考实现**：第 9 章的完整链路（麦克风采集 → Opus 编码 → WebSocket 上云 → 解码播放 → LVGL 表情渲染）与多数语音交互类作品的技术路径一致。
 
-> 课程与配套资料由百问网维护并持续更新（当前配套文档为 Rev 1.2）。开发板购买与课程咨询请访问[百问网官网](https://www.100ask.net/)，资料下载见[百问网 r528s3-dshanpi 资料页](https://download.100ask.net/project/item7/index.html)。
+> 课程与配套资料由百问网维护并持续更新（当前配套文档为 Rev 1.2）。完整资料下载见[百问网 r528s3-dshanpi 资料页](https://download.100ask.net/project/item7/index.html)。
