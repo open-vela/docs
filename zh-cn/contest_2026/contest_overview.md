@@ -34,7 +34,7 @@
 4. **拿到专属仓**：
     - 组委会按 `contest2026_<编号>_<队伍名>` 为你创建 GitHub 专属仓库并开通 push 权限。
     - 仓库创建后请**及时登录 GitHub 接受协作邀请**（邀请默认 7 天内有效，过期需重新申请）。请使用**报名时提交的 GitHub 账号**登录后接受；若打开邀请显示 404，多为登录了其他账号，切换后重试。详见 [《参赛代码提交指南》](./code_submission_guide.md)。
-5. **拉取工程**：用组委会提供的 `repo init` + `repo sync` 一键拉取「openvela 全量源码 + 你的专属仓」。详见 [《参赛代码提交指南》](./code_submission_guide.md)。
+5. **拉取工程**：用组委会提供的 `repo init` + `repo sync` 一键拉取「openvela 全量源码 + 你的专属仓」。**注意：`repo init` 需带 `--git-lfs` 参数**（否则含 Git LFS 大文件的预编译库无法正确拉取，编译时可能报 `libgui_wrapper.a` 等链接失败），完整命令详见 [《参赛代码提交指南》](./code_submission_guide.md)。
 6. **开发**：选择你的赛道指引（见下方「三个赛道方向」），鼓励使用 AI Coding；只在专属仓子目录内开发。
 7. **部署验证**：在 openvela 模拟器 / 真机上运行验证（详见各赛道指引）。
 8. **归集 AI 日志**：将与 AI 的对话主动导出到专属仓 `logs/` 目录。详见 [《AI Coding 日志归集与提交手册》](./ai_coding_log_guide.md)。
