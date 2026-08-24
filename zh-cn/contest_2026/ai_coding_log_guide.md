@@ -314,29 +314,49 @@ git add logs/ && git commit -s -m "logs: final sync" && git push
 
 ### Q9：可以使用 ChatGPT / Cursor / Cody 等其他工具吗？
 
-暂不支持。本届官方支持且能自动采集日志的工具为：
+本届支持的工具为：
 
-- Claude Code（主推，含 AIoT-IDE 内嵌）
-- AIoT-IDE
-- OpenCode
-- Codex
+- **实时 hook 采集**：Claude Code（主推，含 AIoT-IDE 内嵌）、AIoT-IDE、OpenCode、Codex、MiMo Code
+- **仅支持 backfill 补导**：Cursor（详见下方 Cursor 特别说明）
 
-使用其他三方工具产生的对话无法被采集，将无法计入有效工时。
+ChatGPT / Cody 及其他未在列的工具**不支持**，产生的对话无法进入 staging，将无法计入有效工时。
+
+**Cursor 特别说明**：
+
+- Cursor 没有实时 hook，只能通过 `contest-snapshot --backfill --source cursor` 从本机 Cursor SQLite（`~/.config/Cursor/User/globalStorage/state.vscdb`）补导历史 Composer 对话
+- 只解析 Cursor 当前 Composer 格式（2025 年后新版），旧格式（2024 年前 `aichat.chatdata` / `aiService.prompts`）不支持
+- 每次 backfill 会自动记录 Cursor `state.vscdb` 的 SHA256 与 mtime 到 manifest 的 `source_integrity` 字段，便于事后审计
+- 建议 Cursor 用户开发时每天跑一次 `contest-snapshot --backfill --source cursor` 增量补进 logs
+- 更完整的做法是同时用 Claude Code / OpenCode / MiMo Code，它们的实时 hook 不会漏对话
 
 ### Q10：直接调用 Anthropic API / OpenAI API 可以吗？
 
-不可以。直接调用 API 的对话不在 session transcript 中，工具无法采集。请务必使用上述 4 种官方支持的工具。
+不可以。直接调用 API 的对话不在 session transcript 中，工具无法采集。请务必使用上述官方支持的工具。
 
-### Q11：安装 hook 之前的 Claude Code 历史对话能补回来吗？
+### Q11：安装 hook 之前的历史对话能补回来吗？
 
-可以。Claude Code 的历史对话保存在本机 `~/.claude/projects/` 目录。在选手仓内执行以下命令即可一键补回：
+可以。工具支持从以下 4 种数据源补回历史对话：
 
 ```bash
+# 补回所有支持工具的历史（推荐一次性跑）
 contest-snapshot --backfill
+
+# 只补回单一工具（可选）
+contest-snapshot --backfill --source claude     # Claude Code (~/.claude/projects/)
+contest-snapshot --backfill --source opencode   # OpenCode SQLite
+contest-snapshot --backfill --source mimocode   # MiMo Code SQLite
+contest-snapshot --backfill --source cursor     # Cursor state.vscdb
+```
+
+跑完后：
+
+```bash
 git add logs/ && git commit -s -m "logs: backfill history" && git push
 ```
 
-命令会自动扫描所有历史 transcript，跳过已采集的，将未采集的补导进 `logs/`。可多次执行，不会产生重复。
+命令会自动扫描各工具的历史数据，跳过已采集的，将未采集的补导进 `logs/`。可多次执行，不会产生重复。
+
+> **Cursor 用户注意**：Cursor 没有实时 hook，建议每天跑一次 `contest-snapshot --backfill --source cursor` 保持 logs 增量最新。
 
 ## 七、Windows 用户操作指南
 
