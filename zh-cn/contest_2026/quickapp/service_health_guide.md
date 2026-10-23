@@ -1,6 +1,6 @@
 # openvela 快应用健康数据接口（service.health）使用手册
 
-> 本文档面向 2026 首届 openvela AI 硬件开发者大赛参赛者，介绍如何在快应用中通过 `service.health` 读取手表健康数据（心率 / 血氧 / 压力）。
+> 本文档面向 2026 首届 openvela AI 硬件全球开发者大赛参赛者，介绍如何在快应用中通过 `service.health` 读取手表健康数据（心率 / 血氧 / 压力）。
 
 ## 一、概述
 
