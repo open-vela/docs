@@ -1,5 +1,7 @@
 # ai_agent 应用开发上手指南
 
+\[ [English](../../../en/edge_ai_dev/ai_agent/ai_agent_quickstart.md) | 简体中文 \]
+
 > 本文介绍如何从零搭建 openvela + ai_agent 环境、配置 LLM、体验核心能力，并了解框架架构与开发板集成方式。
 
 ## 一、前置准备

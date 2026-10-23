@@ -1,5 +1,7 @@
 # mini_memo 应用介绍
 
+\[ [English](../../../en/edge_ai_dev/ai_agent/mini_memo_guide.md) | 简体中文 \]
+
 > 本文以 mini_memo 为参考示例，展示如何运用 ai_agent 框架构建嵌入式 AI 应用。
 >
 > 通用开发知识（环境搭建、架构、核心能力详解等）请参阅 [ai_agent 应用开发上手指南](./ai_agent_quickstart.md)。
