@@ -22,11 +22,11 @@ mini_memo is an AI memory assistant example application built on the **ai_agent 
 
 mini_memo highlights the 4 core capabilities that set the ai_agent framework apart from an ordinary chatbot:
 
-| Capability          | How mini_memo uses it                                                                          | Where you can apply it                                                           |
-| ------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| **Intent routing**  | Dual mode of LLM classification + local fallback, so it works offline                          | Any scenario that needs to understand user intent and dispatch the handling      |
-| **NL→structured**   | Voice input → LLM parsing → structured JSON data (type/content/remind_at)                      | Scenarios that turn natural language into executable data                        |
-| **Shell/Tool**      | openvelaClaw Client connecting to a remote LLM + voice_channel real PTT + ASR                  | Scenarios that call remote AI services or integrate voice interaction            |
+| Capability          | How mini_memo uses it                                                                         | Where you can apply it                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **Intent routing**  | Dual mode of LLM classification + local fallback, so it works offline                         | Any scenario that needs to understand user intent and dispatch the handling      |
+| **NL→structured**   | Voice input → LLM parsing → structured JSON data (type/content/remind_at)                     | Scenarios that turn natural language into executable data                        |
+| **Shell/Tool**      | openvelaClaw Client connecting to a remote LLM + voice_channel real PTT + ASR                 | Scenarios that call remote AI services or integrate voice interaction            |
 | **Proactive tasks** | Currently polls with an LVGL Timer (🏆 To be improved: switch to the framework's cron_service) | Proactive services such as health reminders, motion detection and scheduled push |
 
 ### 3. About the mini_memo Application
@@ -169,11 +169,13 @@ typedef struct {
 
 **Classification examples**:
 
-| Example input                                     | Classification     | remind_at        |
-| ------------------------------------------------- | ------------------ | ---------------- |
-| "Note: buy milk"                                  | MEMO_TYPE_MEMO     | 0                |
-| "Remind me about a meeting at 8 tomorrow morning" | MEMO_TYPE_TODO     | Parsed timestamp |
-| "Dentist appointment at 3 tomorrow afternoon"     | MEMO_TYPE_SCHEDULE | Parsed timestamp |
+| Example input (English gloss)                                      | Classification     | remind_at        |
+| ------------------------------------------------------------------ | ------------------ | ---------------- |
+| "记一下买牛奶" (Note: buy milk)                                    | MEMO_TYPE_MEMO     | 0                |
+| "提醒我明早8点开会" (Remind me of a meeting at 8 tomorrow morning) | MEMO_TYPE_TODO     | Parsed timestamp |
+| "明天下午3点约牙医" (Dentist appointment at 3 tomorrow afternoon)  | MEMO_TYPE_SCHEDULE | Parsed timestamp |
+
+> The example inputs are kept in Chinese because the code samples, ASR logs and the local keyword fallback in mini_memo all work on Chinese utterances.
 
 ### 3. Natural Language → Structured Output: LLM ask API + JSON Prompt
 
@@ -251,13 +253,13 @@ g_remind_timer = lv_timer_create(remind_timer_cb, 60000, NULL);
 
 #### What's the Problem
 
-| Aspect               | LVGL Timer (current)                 | cron_service (provided by the framework)              |
-| -------------------- | ------------------------------------ | ----------------------------------------------------- |
+| Aspect               | LVGL Timer (current)                | cron_service (provided by the framework)             |
+| -------------------- | ----------------------------------- | ---------------------------------------------------- |
 | Independent of UI    | ❌ Depends on the LVGL event loop    | ✅ Separate pthread, keeps running after the UI exits |
 | Persistence          | ❌ Starts polling again after reboot | ✅ cJSON file persistence, restored after reboot      |
-| Timing precision     | 60s polling, worst-case delay 60s    | Precise to the second, woken by cond_timedwait        |
+| Timing precision     | 60s polling, worst-case delay 60s   | Precise to the second, woken by cond_timedwait       |
 | Recurring support    | ❌ Implicit AT only                  | ✅ EVERY (periodic) + AT (one-shot)                   |
-| Notification channel | lv_msgbox only                       | system / voice / feishu and more                      |
+| Notification channel | lv_msgbox only                      | system / voice / feishu and more                     |
 | Callable by the LLM  | ❌                                   | ✅ tool_cron_add/list/remove                          |
 | Tool execution       | ❌                                   | ✅ tool_registry_execute runs a tool directly         |
 

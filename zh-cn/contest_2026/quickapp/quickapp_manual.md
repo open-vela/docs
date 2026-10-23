@@ -5,7 +5,7 @@
 ## 大赛环境要求
 
 > 大赛参赛者请统一基于大赛分支 `dev-ai-contest-2026` 拉取 openvela 代码（`repo init` 时通过 `-b dev-ai-contest-2026` 指定），不要使用 dev 或 trunk 分支，以确保与大赛环境一致。
-
+>
 > 注意：debug.rpk 仅用于开发调试阶段，参赛提交时请使用 release.rpk（生产模式打包）。
 
 ## 提交参赛代码
