@@ -177,3 +177,4 @@
 
 - [新硬件适配赛道详细指引](./hardware_porting_track_guide.md)
 - [openvela 芯片移植指南](../../chip_porting/porting_guide.md)
+- [openvela 开发板案例](../../dev_board/Development_Board.md)
