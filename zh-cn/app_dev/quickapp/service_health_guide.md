@@ -1,5 +1,7 @@
 # openvela 快应用健康数据接口（service.health）使用手册
 
+\[ [English](../../../en/app_dev/quickapp/service_health_guide.md) | 简体中文 \]
+
 > 本文介绍如何在快应用中通过 `service.health` 读取手表健康数据（心率 / 血氧 / 压力）。
 
 ## 一、概述

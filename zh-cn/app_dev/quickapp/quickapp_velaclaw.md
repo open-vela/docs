@@ -1,5 +1,7 @@
 # openvela 快应用调用端侧 AI Agent（@system.velaclaw）教程
 
+\[ [English](../../../en/app_dev/quickapp/quickapp_velaclaw.md) | 简体中文 \]
+
 > 本教程介绍如何在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答），实现从环境配置、编译、部署到调用的完整流程。
 
 ## 一、简介

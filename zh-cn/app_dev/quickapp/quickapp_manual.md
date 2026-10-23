@@ -1,5 +1,7 @@
 # 快应用开发指南（手动开发）
 
+\[ [English](../../../en/app_dev/quickapp/quickapp_manual.md) | 简体中文 \]
+
 > 本文档帮助开发者在最短时间内完成 Vela 快应用的环境搭建、项目创建、开发调试、打包发布及真机部署全流程。
 
 > 如果你希望用 AI 辅助自动生成代码和调试，请参考[《快应用开发指南（AI 工作流）》](./quickapp_ai_workflow.md)。
