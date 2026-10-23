@@ -1,14 +1,14 @@
 # Minimum Bootable NSH System defconfig Reference
 
-\[ English | [简体中文](../../../../zh-cn/contest_2026/hardware_porting/defconfig_reference/minimum_nsh_baseline.md) \]
+\[ English | [简体中文](../../zh-cn/chip_porting/minimum_nsh_baseline.md) \]
 
-This document targets contestants of the Hardware Porting Track. The goal is to help contestants **boot to the NSH command-line prompt on their development board first**. The recommended workflow is: start from the minimum set provided in this document, verify that the serial console and NSH work correctly, and then incrementally enable subsystems such as filesystem, networking, and sensors.
+This document is for developers bringing openvela up on a new development board. The goal is to help developers **boot to the NSH command-line prompt on their development board first**. The recommended workflow is: start from the minimum set provided in this document, verify that the serial console and NSH work correctly, and then incrementally enable subsystems such as filesystem, networking, and sensors.
 
 ## 1. Overview
 
 ### 1.1 Document goal
 
-When a contestant receives a development board not yet supported by openvela, the most critical first step is to bring the system up to the NSH command-line prompt. This document provides a **bare-minimum** reference defconfig that contains only the configuration items required to boot NSH, helping contestants quickly identify:
+When a developer receives a development board not yet supported by openvela, the most critical first step is to bring the system up to the NSH command-line prompt. This document provides a **bare-minimum** reference defconfig that contains only the configuration items required to boot NSH, helping developers quickly identify:
 
 - Which CONFIGs **must be modified** (strongly tied to target hardware);
 - Which CONFIGs **can be reused as-is** (hardware-independent runtime support);
@@ -181,7 +181,7 @@ CONFIG_INTELHEX_BINARY=y
 CONFIG_RAW_BINARY=y
 ```
 
-Contestants only need to fill in the hardware-specific items marked "Must be replaced per target hardware" in Section 2 (architecture identity, memory layout, serial console) to form a complete L0 defconfig.
+Developers only need to fill in the hardware-specific items marked "Must be replaced per target hardware" in Section 2 (architecture identity, memory layout, serial console) to form a complete L0 defconfig.
 
 ## 4. Reference implementations
 
@@ -193,7 +193,7 @@ Full defconfig path:
 nuttx/boards/arm/stm32/nucleo-f303re/configs/nsh/defconfig
 ```
 
-This board is built around the STM32F303RE (Cortex-M4F @ 72 MHz, 512 KB Flash, 64 KB SRAM) and integrates the ST-Link/V2-1 debugger with a USB virtual serial port. With a single USB cable, contestants can perform both flashing and serial communication, making it the most convenient hardware reference for verifying the minimum-NSH workflow.
+This board is built around the STM32F303RE (Cortex-M4F @ 72 MHz, 512 KB Flash, 64 KB SRAM) and integrates the ST-Link/V2-1 debugger with a USB virtual serial port. With a single USB cable, developers can perform both flashing and serial communication, making it the most convenient hardware reference for verifying the minimum-NSH workflow.
 
 ### 4.2 Other minimal NSH defconfigs for reference
 
@@ -218,7 +218,7 @@ Once L0 boots successfully (the NSH prompt is visible on the serial console), su
 | Audio | `CONFIG_AUDIO` |
 | Power management | `CONFIG_PM` |
 
-Contestants may also refer to `vendor/openvela/boards/vela/configs/goldfish-x86_64-ap/defconfig` (253 lines) as a reference example of openvela's full CONFIG set with all subsystems enabled, useful as a comparison baseline when adding subsystems incrementally.
+Developers may also refer to `vendor/openvela/boards/vela/configs/goldfish-x86_64-ap/defconfig` (253 lines) as a reference example of openvela's full CONFIG set with all subsystems enabled, useful as a comparison baseline when adding subsystems incrementally.
 
 ## 6. Functional validation
 
@@ -240,11 +240,11 @@ Once subsystems are enabled, it is recommended to validate functional completene
 | Wi-Fi compatibility | Verified-router list and connection-stability validation |
 | Self-test framework (cmocka) | How to use the framework when authoring custom unit tests |
 
-For detailed test steps, test resources, and dependency configurations, refer to the [openvela Community Developer xTS Test Case Collection (zh-cn)](../../../../zh-cn/test_dev_guide/openvela_xts_test_cases.md) and the [openvela Test Framework Usage Guide](../../../test_dev_guide/openvela_testcase_dev_guide.md). The xTS test case collection is currently available in Chinese only.
+For detailed test steps, test resources, and dependency configurations, refer to the [openvela Community Developer xTS Test Case Collection (zh-cn)](../../zh-cn/test_dev_guide/openvela_xts_test_cases.md) and the [openvela Test Framework Usage Guide](../test_dev_guide/openvela_testcase_dev_guide.md). The xTS test case collection is currently available in Chinese only.
 
 ## 7. New-hardware adaptation Checklist
 
-After completing BSP porting, contestants are advised to validate the defconfig and target-hardware compatibility against the following checklist:
+After completing BSP porting, developers are advised to validate the defconfig and target-hardware compatibility against the following checklist:
 
 - [ ] `CONFIG_ARCH`, `CONFIG_ARCH_CHIP`, and `CONFIG_ARCH_BOARD` have been replaced with target-hardware identifiers
 - [ ] `CONFIG_RAM_START` and `CONFIG_RAM_SIZE` have been filled in per the target chip's datasheet
@@ -270,11 +270,10 @@ After passing the checklist, run `./build.sh <vendor>:<config> -j` to build. Aft
 | `nuttx/boards/arm/nrf52/nrf52840-dk/configs/nsh/defconfig` | Minimum NSH reference for the nRF52 platform |
 | `nuttx/boards/sim/sim/sim/configs/nsh/defconfig` | Toolchain self-check reference |
 | `vendor/openvela/boards/vela/configs/goldfish-x86_64-ap/defconfig` | Full-subsystem example (253 lines), useful as a reference when enabling subsystems incrementally |
-| [openvela Chip Porting Guide](../../../chip_porting/porting_guide.md) | Complete BSP porting workflow from scratch |
-| [Hardware Porting Track Guide (zh-cn)](../../../../zh-cn/contest_2026/hardware_porting/hardware_porting_track_guide.md) | Track description, scoring criteria and reference resources (Chinese only at this stage) |
-| [Kconfig Usage Guide](../../../device_dev_guide/build/Kconfig.md) | Detailed explanation of the relationship between menuconfig, defconfig, and .config |
-| [openvela Community Developer xTS Test Case Collection (zh-cn)](../../../../zh-cn/test_dev_guide/openvela_xts_test_cases.md) | Functional validation test cases for subsystems after enablement (covers peripherals, filesystem, networking, media, etc., Chinese only at this stage) |
-| [openvela Test Framework Usage Guide](../../../test_dev_guide/openvela_testcase_dev_guide.md) | Setup and usage of the test framework (cmocka, etc.) |
+| [openvela Chip Porting Guide](./porting_guide.md) | Complete BSP porting workflow from scratch |
+| [Kconfig Usage Guide](../device_dev_guide/build/Kconfig.md) | Detailed explanation of the relationship between menuconfig, defconfig, and .config |
+| [openvela Community Developer xTS Test Case Collection (zh-cn)](../../zh-cn/test_dev_guide/openvela_xts_test_cases.md) | Functional validation test cases for subsystems after enablement (covers peripherals, filesystem, networking, media, etc., Chinese only at this stage) |
+| [openvela Test Framework Usage Guide](../test_dev_guide/openvela_testcase_dev_guide.md) | Setup and usage of the test framework (cmocka, etc.) |
 
 ### 8.2 External references
 

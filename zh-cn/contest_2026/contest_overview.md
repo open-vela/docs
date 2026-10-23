@@ -106,7 +106,7 @@ openvela 是小米开源的 AIoT 操作系统，专为轻量化、低功耗、AI
 | 官方文档站        | https://doc.openvela.com/document?id=1423&version=dev-ai-contest-2026&language=cn                                                                                                                                                                   |
 | 视频教程          | [B站](https://www.bilibili.com/video/BV19PsAzCEuy) / [YouTube](https://www.youtube.com/@openvela)                                                                                                                                                   |
 | MiMo API 配置     | https://platform.xiaomimimo.com/docs/zh-CN/integration/claudecode                                                                                                                                                                                   |
-| AI 辅助开发       | 遇到复杂技术问题，善用大模型「全局提问」快速找 BUG、理思路：openvela 推荐用 VS Code，快应用推荐用 AIoT IDE。大模型配置方法见 [配置大模型](./quickapp/quickapp_ai_workflow.md#步骤四配置大模型)                                                      |
+| AI 辅助开发       | 遇到复杂技术问题，善用大模型「全局提问」快速找 BUG、理思路：openvela 推荐用 VS Code，快应用推荐用 AIoT IDE。大模型配置方法见 [配置大模型](../app_dev/quickapp/quickapp_ai_workflow.md#步骤四配置大模型)                                             |
 | AI 开发技能集     | [`.claude`](../../../../../.claude/blob/dev-ai-contest-2026/README_zh-cn.md)：驱动开发等 AI Skills 与 Agent，配合 Claude Code 等工具使用                                                                                                            |
 
 ## 作品提交要求
