@@ -1,5 +1,7 @@
 # 快应用开发指南（AI 工作流）
 
+\[ [English](../../../en/app_dev/quickapp/quickapp_ai_workflow.md) | 简体中文 \]
+
 > 本文档面向开发者，介绍如何使用 openvela 快应用工作流，实现从需求到代码到调试的全流程自动化开发。
 
 ## 一、概述
