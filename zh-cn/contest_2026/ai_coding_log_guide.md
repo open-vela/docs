@@ -300,6 +300,8 @@ contest-snapshot --list
 git add logs/ && git commit -s -m "logs: final sync" && git push
 ```
 
+决赛阶段的提交安排以决赛群通知为准。
+
 ### Q6：工具异常或未采集到日志怎么办？
 
 排查步骤见“五、验证与排错”第 4 条。

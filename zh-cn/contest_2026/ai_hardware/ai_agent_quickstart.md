@@ -1,6 +1,6 @@
 # ai_agent 应用开发上手指南
 
-> 本文档面向 2026 首届 openvela AI 硬件开发者大赛参赛者，介绍如何从零搭建 openvela + ai_agent 环境、配置 LLM、体验核心能力，并了解框架架构与开发板集成方式。
+> 本文档面向 2026 首届 openvela AI 硬件全球开发者大赛参赛者，介绍如何从零搭建 openvela + ai_agent 环境、配置 LLM、体验核心能力，并了解框架架构与开发板集成方式。
 
 ## 一、前置准备
 
@@ -111,7 +111,7 @@ vela> set_wifi <wifi_ssid> <wifi_password>
 | SerpAPI（Google） | `set_search_key <key>` | https://serpapi.com/ | Google 搜索结果，GET 请求，国内网络可能有路由问题    |
 | Exa AI            | `set_exa_key <key>`    | https://exa.ai/      | 语义搜索引擎，适合知识型查询                         |
 
-> 另有 `set_news_key <key>` 配置 NewsAPI（新闻专用），申请地址：https://newsapi.org/。
+> 另有 `set_news_key <key>` 配置 NewsAPI（新闻专用），申请地址：[NewsAPI](https://newsapi.org/)。
 
 **为什么推荐 Tavily：**
 

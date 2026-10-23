@@ -1,6 +1,6 @@
 # openvela 快应用调用端侧 AI Agent（@system.velaclaw）教程
 
-> 本教程面向 2026 首届 openvela AI 硬件开发者大赛参赛者，介绍如何在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答），实现从环境配置、编译、部署到调用的完整流程。
+> 本教程面向 2026 首届 openvela AI 硬件全球开发者大赛参赛者，介绍如何在快应用中通过 `@system.velaclaw` 调用端侧 AI Agent 能力（如自然语言问答），实现从环境配置、编译、部署到调用的完整流程。
 
 ## 一、简介
 
