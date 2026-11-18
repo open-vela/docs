@@ -400,7 +400,7 @@ struct usbdevclass_driver_s
 
 本节以 openvela 的模拟（SIM）USB 驱动为例，演示如何适配一个 `usbdev_controller` 驱动。SIM 驱动是一个纯软件实现，它不涉及具体硬件，因此是理解驱动框架的绝佳参考。
 
-关于 SIM 驱动的详细配置和使用方法，请参考[USB 设备模拟 (SIM) 驱动程序指南](./usb_sim_guide.md) 文档。
+关于 SIM 驱动的详细配置和使用方法，请参考[USB 设备模拟 (SIM) 驱动程序指南](./sim/usb_device_sim_guide.md) 文档。
 
 要启用详细的 USB 日志输出，请在配置中设置以下选项：
 
@@ -608,4 +608,4 @@ static const struct usbdev_ops_s g_devops =
 
 ## 五、参考文档
 
-- [USB 设备模拟 (SIM) 驱动程序指南](./usb_sim_guide.md)
+- [USB 设备模拟 (SIM) 驱动程序指南](./sim/usb_device_sim_guide.md)

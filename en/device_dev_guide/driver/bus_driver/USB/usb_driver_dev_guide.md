@@ -400,7 +400,7 @@ Once the device is enumerated and configured, data endpoints can be used for com
 
 This section uses openvela's simulation (SIM) USB driver as an example to demonstrate how to adapt a `usbdev_controller` driver. The SIM driver is a pure software implementation that does not involve specific hardware, making it an excellent reference for understanding the driver framework.
 
-For detailed configuration and usage of the SIM driver, please refer to the [USB Device Simulation (SIM) Driver Guide](./usb_sim_guide.md) documentation.
+For detailed configuration and usage of the SIM driver, please refer to the [USB Device Simulation (SIM) Driver Guide](./sim/usb_device_sim_guide.md) documentation.
 
 To enable detailed USB log output, set the following options in your configuration:
 
@@ -608,4 +608,4 @@ If you need to implement dynamic initialization or hot-plug functionality, you c
 
 ## V. References
 
-- [USB Device Simulation (SIM) Driver Guide](./usb_sim_guide.md)
+- [USB Device Simulation (SIM) Driver Guide](./sim/usb_device_sim_guide.md)
