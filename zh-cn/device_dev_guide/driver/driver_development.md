@@ -44,7 +44,7 @@ openvela 支持多种设备驱动，主要分为以下几种类型：
 
 - 无匹配和探测机制：openvela 中不存在 `bus`、`device`和`driver`的匹配（match）和探测（probe）过程。
 - 无设备类型和设备号：不使用设备类型或设备号（major/minor）的概念。
-- 无module_init初始化函数：需要在board代码中显示调用驱动初始化函数进行初始化
+- 无module_init初始化函数：需要在board代码中显式调用驱动初始化函数进行初始化
 - 设备节点注册：openvela中无`cdev_add`、`device_create`这类接口，驱动通过`register_driver()`或`register_blockdriver()`接口注册。
 
 这种设计显著降低了驱动模型的复杂性，使 openvela 更适合资源受限的 MCU（Microcontroller Unit） 环境。
