@@ -15,7 +15,7 @@
 | 顯示     | 480×480 MIPI DSI 屏（ST7701S）                                            |
 | 觸摸     | GT911 電容觸摸（I2C）                                                     |
 | 音頻     | NS4150B 功放 + 左右喇叭，兩路麥克風輸入（MIC1、MIC2），3.5mm 耳機口       |
-| 無線     | Wi-Fi（SDIO）+ 藍牙（UART）                                               |
+| 無線     | Wi-Fi（RTL8733BS，2.4G/5G 雙頻，SDIO）+ 藍牙（UART）                      |
 | 傳感器   | ICM20948 九軸傳感器（SPI）                                                |
 | 其他     | 紅外收發，3 個 LRADC 按鍵，PWM 調光 LED，RTC（32.768kHz 晶振 + 紐扣電池） |
 | 擴展     | 排針引出 UART、I2C、SPI、PWM、ADC、GPIO                                   |

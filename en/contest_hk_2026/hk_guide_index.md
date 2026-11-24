@@ -1,0 +1,25 @@
+# Hong Kong University Track openvela Guide Index
+\[ English | [简体中文](../../zh-cn/contest_hk_2026/hk_guide_index.md) | [繁體中文](../../zh-cn/contest_hk_2026/hk_guide_index_zh-hk.md) \]
+
+> This page is for university-track teams that use openvela in the 《三十港章 慧智北都》 AIoT competition. It lists the documents in this directory and related resources, and says which one to read first.
+
+## Guides
+
+Read them in this order:
+
+| Order | Document | Content |
+| ----- | -------- | ------- |
+| 1 | [openvela Development Guide for the Hong Kong University Track](./hk_university_track_dev_guide.md) | Which development environment to choose, how to prepare your computer and code, how to build the two kinds of apps, and how to connect AI |
+| 2 | [R528 MIBOX-X1 Development Board Guide](./mibox_x1_board_guide.md) | Hardware specifications, interfaces and DIP switches, building and flashing, peripheral tests, and a first application |
+| 3 | [Code Submission Guide for the Hong Kong University Track](./hk_code_submission_guide.md) | Fork, then open a Pull Request to submit Quick Apps and native apps to the matching repository |
+
+## Development Board Resources
+
+- [R528 openvela Development Board](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW): a page from the board vendor with the specifications and downloads (board introduction, hardware schematic, user development manual, configuration tools). For flashing, use the MIBOX-X1 image you build by following the [Development Board Guide](./mibox_x1_board_guide.md) (configuration `nsh`).
+- [Board support code and README](https://github.com/open-vela/vendor_allwinnertech/tree/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1): the `r528s3-mibox-x1` directory in the `vendor_allwinnertech` repository, which has its own [README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README.md).
+
+## How to Choose
+
+- First time with openvela: read the Development Guide, then the Development Board Guide.
+- You already have the board and want to flash and run right away: go straight to Sections III and IV of the Development Board Guide.
+- Your project is ready and you need to submit the code: read the Code Submission Guide.

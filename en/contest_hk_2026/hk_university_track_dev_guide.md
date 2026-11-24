@@ -9,11 +9,11 @@
 
 You can build your project on the development board, or only in an emulator. The three environments differ as follows:
 
-| Environment | What you can do | What you cannot do | Best for |
-| ----------- | --------------- | ------------------ | -------- |
-| R528 MIBOX-X1 development board | Command line, LVGL UI, all onboard peripherals (buttons, LED, touch screen, audio, infrared, Bluetooth, Wi-Fi, 9-axis sensor, SD card), external parts on the header pins | The `nsh` configuration enables the JS app runtime (QuickJS) but does not include ai_agent | Projects that need hardware |
-| openvela emulator | Command line, LVGL UI, JS apps, ai_agent (the emulator has its own network), JS apps that call AI | No GPIO, sensors, infrared, Bluetooth, or other hardware | No board, or UI and AI only |
-| Emulator built into AIoT-IDE | Write, preview, and debug JS apps without rebuilding the system each time | It is not the openvela system, so behavior can differ from the real system | JS apps only, with fast edit-and-preview cycles |
+| Environment                     | What you can do                                                                                                                                                           | What you cannot do                                                                         | Best for                                        |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------- |
+| R528 MIBOX-X1 development board | Command line, LVGL UI, all onboard peripherals (buttons, LED, touch screen, audio, infrared, Bluetooth, Wi-Fi, 9-axis sensor, SD card), external parts on the header pins | The `nsh` configuration enables the JS app runtime (QuickJS) but does not include ai_agent | Projects that need hardware                     |
+| openvela emulator               | Command line, LVGL UI, JS apps, ai_agent (the emulator has its own network), JS apps that call AI                                                                         | No GPIO, sensors, infrared, Bluetooth, or other hardware                                   | No board, or UI and AI only                     |
+| Emulator built into AIoT-IDE    | Write, preview, and debug JS apps without rebuilding the system each time                                                                                                 | It is not the openvela system, so behavior can differ from the real system                 | JS apps only, with fast edit-and-preview cycles |
 
 If you build with JS apps, run your app on the openvela emulator once before you submit. See Chapter IV of the [Quick App Development Guide](../app_dev/quickapp/quickapp_manual.md).
 
@@ -58,13 +58,13 @@ To use ai_agent in the emulator, switch to the ai_agent emulator configuration a
 
 A JS app is called a Quick App in the official documentation.
 
-| | Native app (C + LVGL) | JS app |
-| -- | --------------------- | ------ |
-| How you build it | Write C and build it into the system firmware | Write JS, edit and preview in AIoT-IDE |
-| Runs on | Development board, emulator | Development board (runtime enabled), emulator |
-| Hardware control | Yes, directly through onboard peripherals and header pins | Mainly UI and system capabilities |
-| Connecting AI | Call ai_agent, starting from `velaclaw_client_open()` | Call `@system.velaclaw` |
-| References | [mini_memo Example Application](../edge_ai_dev/ai_agent/mini_memo_guide.md), [Section VI of the board guide](./mibox_x1_board_guide.md) | [Quick App Development Guide](../app_dev/quickapp/quickapp_manual.md) |
+|                  | Native app (C + LVGL)                                                                                                                   | JS app                                                                |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| How you build it | Write C and build it into the system firmware                                                                                           | Write JS, edit and preview in AIoT-IDE                                |
+| Runs on          | Development board, emulator                                                                                                             | Development board (runtime enabled), emulator                         |
+| Hardware control | Yes, directly through onboard peripherals and header pins                                                                               | Mainly UI and system capabilities                                     |
+| Connecting AI    | Call ai_agent, starting from `velaclaw_client_open()`                                                                                   | Call `@system.velaclaw`                                               |
+| References       | [mini_memo Example Application](../edge_ai_dev/ai_agent/mini_memo_guide.md), [Section VI of the board guide](./mibox_x1_board_guide.md) | [Quick App Development Guide](../app_dev/quickapp/quickapp_manual.md) |
 
 ## VII. Connect AI
 
@@ -89,7 +89,11 @@ In the current official configurations, only the ai_agent configuration for the 
 
 ## VIII. Document Index
 
+- [Hong Kong University Track openvela Guide Index](./hk_guide_index.md)
 - [R528 MIBOX-X1 Development Board Guide](./mibox_x1_board_guide.md)
+- [Code Submission Guide for the Hong Kong University Track](./hk_code_submission_guide.md)
+- [R528 openvela Development Board](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW) (from the board vendor: specifications and downloads)
+- [Board README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README.md)
 - [Quick Start (Ubuntu)](../quickstart/openvela_ubuntu_quick_start.md)
 - [ai_agent Application Development Quick Start](../edge_ai_dev/ai_agent/ai_agent_quickstart.md)
 - [mini_memo Example Application](../edge_ai_dev/ai_agent/mini_memo_guide.md)

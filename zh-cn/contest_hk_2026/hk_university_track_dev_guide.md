@@ -89,7 +89,11 @@ ai_agent（openvelaClaw）需要一个大模型 API Key，申请见 [ai_agent �
 
 ## 八、文档索引
 
+- [香港高校组 openvela 教程导航](./hk_guide_index.md)
 - [R528 MIBOX-X1 开发板使用指南](./mibox_x1_board_guide.md)
+- [香港高校组作品代码提交指南](./hk_code_submission_guide.md)
+- [R528 openvela 开发板](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW)（开发板厂商提供，规格和资料下载）
+- [板级说明 README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README_zh-cn.md)
 - [快速入门（Ubuntu）](../quickstart/openvela_ubuntu_quick_start.md)
 - [ai_agent 应用开发上手指南](../edge_ai_dev/ai_agent/ai_agent_quickstart.md)
 - [mini_memo 应用介绍](../edge_ai_dev/ai_agent/mini_memo_guide.md)

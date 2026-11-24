@@ -58,12 +58,12 @@ repo sync -c -j4
 
 JS 應用在官方文檔中叫「快應用」。
 
-|          | 原生應用（C + LVGL）                                                                                                | JS 應用                                                  |
-| -------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| 開發方式 | 用 C 語言開發，編進系統固件                                                                                         | 用 JS 開發，在 AIoT-IDE 裏編寫和預覽                     |
-| 運行在   | 開發板、模擬器                                                                                                      | 開發板（運行時已啟用）、模擬器                           |
-| 控制硬件 | 可以，直接使用板載外設和排針                                                                                        | 以界面和系統能力為主                                     |
-| 接入 AI  | 調用 ai_agent，入口是 `velaclaw_client_open()`                                                                      | 調用 `@system.velaclaw`                                  |
+|          | 原生應用（C + LVGL）                                                                                                      | JS 應用                                                  |
+| -------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| 開發方式 | 用 C 語言開發，編進系統固件                                                                                               | 用 JS 開發，在 AIoT-IDE 裏編寫和預覽                     |
+| 運行在   | 開發板、模擬器                                                                                                            | 開發板（運行時已啟用）、模擬器                           |
+| 控制硬件 | 可以，直接使用板載外設和排針                                                                                              | 以界面和系統能力為主                                     |
+| 接入 AI  | 調用 ai_agent，入口是 `velaclaw_client_open()`                                                                            | 調用 `@system.velaclaw`                                  |
 | 參考     | [mini_memo 應用介紹](../edge_ai_dev/ai_agent/mini_memo_guide.md)、[開發板使用指南第六節](./mibox_x1_board_guide_zh-hk.md) | [快應用開發指南](../app_dev/quickapp/quickapp_manual.md) |
 
 ## 七、接入 AI
@@ -89,7 +89,11 @@ ai_agent（openvelaClaw）需要一個大模型 API Key，申請見 [ai_agent �
 
 ## 八、文檔索引
 
+- [香港高校組 openvela 教程導航](./hk_guide_index_zh-hk.md)
 - [R528 MIBOX-X1 開發板使用指南](./mibox_x1_board_guide_zh-hk.md)
+- [香港高校組作品代碼提交指南](./hk_code_submission_guide_zh-hk.md)
+- [R528 openvela 開發板](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW)（開發板廠商提供，規格和資料下載）
+- [板級説明 README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README_zh-cn.md)
 - [快速入門（Ubuntu）](../quickstart/openvela_ubuntu_quick_start.md)
 - [ai_agent 應用開發上手指南](../edge_ai_dev/ai_agent/ai_agent_quickstart.md)
 - [mini_memo 應用介紹](../edge_ai_dev/ai_agent/mini_memo_guide.md)
