@@ -15,7 +15,7 @@
 
 ## 开发板资料
 
-- [R528 openvela 开发板](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW)：开发板厂商提供的页面，有规格介绍和资料下载（开发板介绍、硬件原理图、用户开发手册、配置工具）。烧录用的镜像，请使用按[开发板使用指南](./mibox_x1_board_guide.md)编译出的 MIBOX-X1 镜像（配置 `nsh`）。
+- [R528 openvela 开发板](https://my.feishu.cn/wiki/BLn6w3By0i8yuNk62GOcxnbfnmh)：开发板厂商提供的页面，有规格介绍和资料下载（开发板介绍、硬件原理图、用户开发手册、配置工具）。烧录用的镜像，请使用按[开发板使用指南](./mibox_x1_board_guide.md)编译出的 MIBOX-X1 镜像（配置 `nsh`）。
 - [板级代码和说明](https://github.com/open-vela/vendor_allwinnertech/tree/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1)：`vendor_allwinnertech` 仓库里的 `r528s3-mibox-x1` 目录，目录里有 [README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README_zh-cn.md)。
 
 ## 如何选择
