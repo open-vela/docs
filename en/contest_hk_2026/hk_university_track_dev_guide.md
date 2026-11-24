@@ -92,7 +92,7 @@ In the current official configurations, only the ai_agent configuration for the 
 - [Hong Kong University Track openvela Guide Index](./hk_guide_index.md)
 - [R528 MIBOX-X1 Development Board Guide](./mibox_x1_board_guide.md)
 - [Code Submission Guide for the Hong Kong University Track](./hk_code_submission_guide.md)
-- [R528 openvela Development Board](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW) (from the board vendor: specifications and downloads)
+- [R528 openvela Development Board](https://my.feishu.cn/wiki/BLn6w3By0i8yuNk62GOcxnbfnmh) (from the board vendor: specifications and downloads)
 - [Board README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README.md)
 - [Quick Start (Ubuntu)](../quickstart/openvela_ubuntu_quick_start.md)
 - [ai_agent Application Development Quick Start](../edge_ai_dev/ai_agent/ai_agent_quickstart.md)

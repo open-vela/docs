@@ -15,7 +15,7 @@
 
 ## 開發板資料
 
-- [R528 openvela 開發板](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW)：開發板廠商提供的頁面，有規格介紹和資料下載（開發板介紹、硬件原理圖、用户開發手冊、配置工具）。燒錄用的鏡像，請使用按[開發板使用指南](./mibox_x1_board_guide_zh-hk.md)編譯出的 MIBOX-X1 鏡像（配置 `nsh`）。
+- [R528 openvela 開發板](https://my.feishu.cn/wiki/BLn6w3By0i8yuNk62GOcxnbfnmh)：開發板廠商提供的頁面，有規格介紹和資料下載（開發板介紹、硬件原理圖、用户開發手冊、配置工具）。燒錄用的鏡像，請使用按[開發板使用指南](./mibox_x1_board_guide_zh-hk.md)編譯出的 MIBOX-X1 鏡像（配置 `nsh`）。
 - [板級代碼和説明](https://github.com/open-vela/vendor_allwinnertech/tree/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1)：`vendor_allwinnertech` 倉庫裏的 `r528s3-mibox-x1` 目錄，目錄裏有 [README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README_zh-cn.md)。
 
 ## 如何選擇

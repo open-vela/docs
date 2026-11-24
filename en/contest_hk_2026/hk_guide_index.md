@@ -15,7 +15,7 @@ Read them in this order:
 
 ## Development Board Resources
 
-- [R528 openvela Development Board](https://mi-p.feishu.cn/wiki/UCO2wOYXUiR2xzkI8rscLbUWnVW): a page from the board vendor with the specifications and downloads (board introduction, hardware schematic, user development manual, configuration tools). For flashing, use the MIBOX-X1 image you build by following the [Development Board Guide](./mibox_x1_board_guide.md) (configuration `nsh`).
+- [R528 openvela Development Board](https://my.feishu.cn/wiki/BLn6w3By0i8yuNk62GOcxnbfnmh): a page from the board vendor with the specifications and downloads (board introduction, hardware schematic, user development manual, configuration tools). For flashing, use the MIBOX-X1 image you build by following the [Development Board Guide](./mibox_x1_board_guide.md) (configuration `nsh`).
 - [Board support code and README](https://github.com/open-vela/vendor_allwinnertech/tree/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1): the `r528s3-mibox-x1` directory in the `vendor_allwinnertech` repository, which has its own [README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README.md).
 
 ## How to Choose
