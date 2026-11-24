@@ -7,49 +7,49 @@
 
 ## I. Hardware Specifications
 
-| Item | Specification |
-| ---- | ------------- |
-| SoC | Allwinner R528-S3, dual-core Arm Cortex-A7, 1.2 GHz |
-| Memory | 128 MB DDR3 |
-| Storage | 256 MB SPI NAND (W25N02KVZEIR), TF card slot |
-| Display | 480×480 MIPI DSI panel (ST7701S) |
-| Touch | GT911 capacitive touch (I2C) |
-| Audio | NS4150B amplifier with left and right speakers, two microphone inputs (MIC1, MIC2), 3.5 mm headphone jack |
-| Wireless | Wi-Fi (SDIO) and Bluetooth (UART) |
-| Sensor | ICM20948 9-axis sensor (SPI) |
-| Other | Infrared transmitter and receiver, 3 LRADC buttons, PWM-dimmable LED, RTC (32.768 kHz crystal and coin cell) |
-| Expansion | Header pins expose UART, I2C, SPI, PWM, ADC, and GPIO |
-| Debug serial port | Onboard USB-to-serial (CH340), 1500000, 8, N, 1 |
+| Item              | Specification                                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| SoC               | Allwinner R528-S3, dual-core Arm Cortex-A7, 1.2 GHz                                                          |
+| Memory            | 128 MB DDR3                                                                                                  |
+| Storage           | 256 MB SPI NAND (W25N02KVZEIR), TF card slot                                                                 |
+| Display           | 480×480 MIPI DSI panel (ST7701S)                                                                             |
+| Touch             | GT911 capacitive touch (I2C)                                                                                 |
+| Audio             | NS4150B amplifier with left and right speakers, two microphone inputs (MIC1, MIC2), 3.5 mm headphone jack    |
+| Wireless          | Wi-Fi (RTL8733BS, 2.4 GHz and 5 GHz dual band, SDIO) and Bluetooth (UART)                                    |
+| Sensor            | ICM20948 9-axis sensor (SPI)                                                                                 |
+| Other             | Infrared transmitter and receiver, 3 LRADC buttons, PWM-dimmable LED, RTC (32.768 kHz crystal and coin cell) |
+| Expansion         | Header pins expose UART, I2C, SPI, PWM, ADC, and GPIO                                                        |
+| Debug serial port | Onboard USB-to-serial (CH340), 1500000, 8, N, 1                                                              |
 
 ## II. Interfaces and DIP Switches
 
 ![MIBOX-X1 interface diagram](../../zh-cn/contest_hk_2026/images/mibox_x1_interfaces.png)
 
-| No. | Interface / component | Description |
-| --- | --------------------- | ----------- |
-| 1 | Touch screen FPC connector | Connects the MIPI DSI display and the GT911 capacitive touch panel |
-| 2 | Speaker (right channel) | Right-channel speaker output |
-| 3 | Speaker (left channel) | Left-channel speaker output |
-| 4 | MIC2 | Second microphone input |
-| 5 | MIC1 | First microphone input, switchable between an external MIC and the headset MIC |
-| 6 | Header pins | Expose GPIO, ADC, UART, I2C, and SPI |
-| 7 | Buttons (3) | LRADC buttons |
-| 8 | DIP switch | 4 positions, see the table below |
-| 9 | SD card slot | TF card, detected as `/dev/mmcsd1` |
-| 10 | Headphone jack | 3.5 mm headphone output |
-| 11 | USB firmware flashing / adb port | USB-D port, used for firmware flashing and adb debugging |
-| 12 | Debug serial port | Onboard USB-to-serial (UART0), 1500000, 8, N, 1 |
-| 13 | Reset button | RESET (SW1) |
-| 14 | USB-A ports (2) | Labeled USB-H1 and USB-H2 on the board, not covered in this guide |
+| No. | Interface / component            | Description                                                                    |
+| --- | -------------------------------- | ------------------------------------------------------------------------------ |
+| 1   | Touch screen FPC connector       | Connects the MIPI DSI display and the GT911 capacitive touch panel             |
+| 2   | Speaker (right channel)          | Right-channel speaker output                                                   |
+| 3   | Speaker (left channel)           | Left-channel speaker output                                                    |
+| 4   | MIC2                             | Second microphone input                                                        |
+| 5   | MIC1                             | First microphone input, switchable between an external MIC and the headset MIC |
+| 6   | Header pins                      | Expose GPIO, ADC, UART, I2C, and SPI                                           |
+| 7   | Buttons (3)                      | LRADC buttons                                                                  |
+| 8   | DIP switch                       | 4 positions, see the table below                                               |
+| 9   | SD card slot                     | TF card, detected as `/dev/mmcsd1`                                             |
+| 10  | Headphone jack                   | 3.5 mm headphone output                                                        |
+| 11  | USB firmware flashing / adb port | USB-D port, used for firmware flashing and adb debugging                       |
+| 12  | Debug serial port                | Onboard USB-to-serial (UART0), 1500000, 8, N, 1                                |
+| 13  | Reset button                     | RESET (SW1)                                                                    |
+| 14  | USB-A ports (2)                  | Labeled USB-H1 and USB-H2 on the board, not covered in this guide              |
 
 The DIP switch (SW3) is described below as printed on the board. The physical board takes precedence.
 
-| Position | ON | OFF |
-| -------- | -- | --- |
-| DIP1 | MIC1 uses the external MIC1 input | MIC1 uses the headset MIC |
-| DIP2 | Echo-reference (loopback) data comes from the left speaker channel (SPKL) | Echo-reference data comes from the right speaker channel (SPKR) |
-| DIP3 | SPI1 goes to the header pins (PD10 to PD13) | SPI1 goes to the onboard 9-axis sensor |
-| DIP4 | Pins are used as the UART0 debug serial port (JTAG UART0) | Pins are used for the SD card |
+| Position | ON                                                                        | OFF                                                             |
+| -------- | ------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| DIP1     | MIC1 uses the external MIC1 input                                         | MIC1 uses the headset MIC                                       |
+| DIP2     | Echo-reference (loopback) data comes from the left speaker channel (SPKL) | Echo-reference data comes from the right speaker channel (SPKR) |
+| DIP3     | SPI1 goes to the header pins (PD10 to PD13)                               | SPI1 goes to the onboard 9-axis sensor                          |
+| DIP4     | Pins are used as the UART0 debug serial port (JTAG UART0)                 | Pins are used for the SD card                                   |
 
 DIP3 and DIP4 are either-or settings. The header SPI and the 9-axis sensor cannot be used at the same time, and the UART0 debug serial port and the SD card cannot be used at the same time.
 
@@ -89,10 +89,10 @@ vendor/allwinnertech/lichee/out/r528s3/mibox-x1_nand/rtos_nuttx_r528s3-mibox-x1_
 
 ### 3. The Two Configurations
 
-| Configuration | Console | SD card | Build command |
-| ------------- | ------- | ------- | ------------- |
-| `nsh` (default) | UART0 (onboard USB serial port) | Disabled | `m nsh` |
-| `nsh_sd` | UART2 (pins PC00 and PC01) | Enabled | `m nsh_sd` |
+| Configuration   | Console                         | SD card  | Build command |
+| --------------- | ------------------------------- | -------- | ------------- |
+| `nsh` (default) | UART0 (onboard USB serial port) | Disabled | `m nsh`       |
+| `nsh_sd`        | UART2 (pins PC00 and PC01)      | Enabled  | `m nsh_sd`    |
 
 The SD card and the UART0 debug port share pins PF2 and PF4. With `nsh_sd`, the onboard USB serial port is therefore unavailable. Connect a USB-to-serial cable to the UART2 pins, and set DIP4 to OFF.
 
