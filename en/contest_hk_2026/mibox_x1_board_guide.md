@@ -12,14 +12,16 @@
 | SoC               | Allwinner R528-S3, dual-core Arm Cortex-A7, 1.2 GHz                                                          |
 | Memory            | 128 MB DDR3                                                                                                  |
 | Storage           | 256 MB SPI NAND (W25N02KVZEIR), TF card slot                                                                 |
-| Display           | 480×480 MIPI DSI panel (ST7701S)                                                                             |
+| Display           | 3.95-inch 480×480 MIPI DSI panel (ST7701S)                                                                             |
 | Touch             | GT911 capacitive touch (I2C)                                                                                 |
-| Audio             | NS4150B amplifier with left and right speakers, two microphone inputs (MIC1, MIC2), 3.5 mm headphone jack    |
+| Audio             | NS4150B amplifier with left and right speakers, two microphone inputs (MIC1, MIC2), 3.5 mm headphone jack, AEC echo cancellation supported |
 | Wireless          | Wi-Fi (RTL8733BS, 2.4 GHz and 5 GHz dual band, SDIO) and Bluetooth (UART)                                    |
 | Sensor            | ICM20948 9-axis sensor (SPI)                                                                                 |
-| Other             | Infrared transmitter and receiver, 3 LRADC buttons, PWM-dimmable LED, RTC (32.768 kHz crystal and coin cell) |
+| Other             | 38 kHz infrared transmitter and receiver, 10-pin JTAG, 3 LRADC buttons, PWM-dimmable LED, RTC (32.768 kHz crystal and coin cell) |
 | Expansion         | Header pins expose UART, I2C, SPI, PWM, ADC, and GPIO                                                        |
 | Debug serial port | Onboard USB-to-serial (CH340), 1500000, 8, N, 1                                                              |
+| Power             | 5 V / 3 A, Type-C                                                                                            |
+| Size              | 15.51 cm × 10.15 cm                                                                                          |
 
 ## II. Interfaces and DIP Switches
 
@@ -37,7 +39,7 @@
 | 8   | DIP switch                       | 4 positions, see the table below                                               |
 | 9   | SD card slot                     | TF card, detected as `/dev/mmcsd1`                                             |
 | 10  | Headphone jack                   | 3.5 mm headphone output                                                        |
-| 11  | USB firmware flashing / adb port | USB-D port, used for firmware flashing and adb debugging                       |
+| 11  | USB firmware flashing / adb port | USB-D port (called USB OTG on the vendor page), used for firmware flashing and adb debugging                       |
 | 12  | Debug serial port                | Onboard USB-to-serial (UART0), 1500000, 8, N, 1                                |
 | 13  | Reset button                     | RESET (SW1)                                                                    |
 | 14  | USB-A ports (2)                  | Labeled USB-H1 and USB-H2 on the board, not covered in this guide              |

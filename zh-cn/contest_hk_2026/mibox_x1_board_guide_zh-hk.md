@@ -12,14 +12,16 @@
 | 主控     | 全志 R528-S3，雙核 Arm Cortex-A7，主頻 1.2GHz                             |
 | 內存     | 128MB DDR3                                                                |
 | 存儲     | 256MB SPI NAND（W25N02KVZEIR），TF 卡槽                                   |
-| 顯示     | 480×480 MIPI DSI 屏（ST7701S）                                            |
+| 顯示     | 3.95 英寸 480×480 MIPI DSI 屏（ST7701S）                                            |
 | 觸摸     | GT911 電容觸摸（I2C）                                                     |
-| 音頻     | NS4150B 功放 + 左右喇叭，兩路麥克風輸入（MIC1、MIC2），3.5mm 耳機口       |
+| 音頻     | NS4150B 功放 + 左右喇叭，兩路麥克風輸入（MIC1、MIC2），3.5mm 耳機口，支持 AEC 回聲消除 |
 | 無線     | Wi-Fi（RTL8733BS，2.4G/5G 雙頻，SDIO）+ 藍牙（UART）                      |
 | 傳感器   | ICM20948 九軸傳感器（SPI）                                                |
-| 其他     | 紅外收發，3 個 LRADC 按鍵，PWM 調光 LED，RTC（32.768kHz 晶振 + 紐扣電池） |
+| 其他     | 38kHz 紅外收發，10Pin JTAG，3 個 LRADC 按鍵，PWM 調光 LED，RTC（32.768kHz 晶振 + 紐扣電池） |
 | 擴展     | 排針引出 UART、I2C、SPI、PWM、ADC、GPIO                                   |
 | 調試串口 | 板載 USB 轉串口（CH340），1500000、8、N、1                                |
+| 供電     | 5V/3A，Type-C                                                             |
+| 尺寸     | 15.51cm × 10.15cm                                                         |
 
 ## 二、接口與撥碼開關
 
@@ -37,7 +39,7 @@
 | 8    | 撥碼開關              | 4 位，功能見下表                            |
 | 9    | SD 卡槽               | TF 卡，識別為 `/dev/mmcsd1`                 |
 | 10   | 耳機接口              | 3.5mm 耳機輸出                              |
-| 11   | USB 固件燒寫 / adb 口 | USB-D 口，用於固件燒寫與 adb 調試           |
+| 11   | USB 固件燒寫 / adb 口 | USB-D 口（廠商頁面稱 USB OTG），用於固件燒寫、adb 調試           |
 | 12   | 調試串口              | 板載 USB 轉串口（UART0），1500000、8、N、1  |
 | 13   | 復位按鍵              | RESET（SW1）                                |
 | 14   | USB-A 接口（2 個）    | 板上絲印為 USB-H1、USB-H2，本文不涉及       |
