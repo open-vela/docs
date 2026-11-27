@@ -92,6 +92,7 @@ In the current official configurations, only the ai_agent configuration for the 
 - [Hong Kong University Track openvela Guide Index](./hk_guide_index.md)
 - [R528 MIBOX-X1 Development Board Guide](./mibox_x1_board_guide.md)
 - [Connecting to the R528 MIBOX-X1 Board](./mibox_x1_connect_guide.md)
+- [Running the AI Agent on the R528 MIBOX-X1 (Experimental)](./mibox_x1_ai_agent_guide.md)
 - [Code Submission Guide for the Hong Kong University Track](./hk_code_submission_guide.md)
 - [R528 openvela Development Board](https://my.feishu.cn/wiki/BLn6w3By0i8yuNk62GOcxnbfnmh) (from the board vendor: specifications and downloads)
 - [Board README](https://github.com/open-vela/vendor_allwinnertech/blob/dev-ai-contest-2026/boards/r528/r528s3-mibox-x1/README.md)
