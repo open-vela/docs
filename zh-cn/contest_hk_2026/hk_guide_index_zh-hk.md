@@ -12,7 +12,8 @@
 | 1 | [香港高校組 openvela 開發指南](./hk_university_track_dev_guide_zh-hk.md) | 選哪種開發環境、準備電腦和代碼、兩種應用怎麼開發、怎麼接入 AI |
 | 2 | [R528 MIBOX-X1 開發板使用指南](./mibox_x1_board_guide_zh-hk.md) | 硬件規格、接口和撥碼開關、編譯和燒錄、外設測試、第一個應用 |
 | 3 | [連接 R528 MIBOX-X1 開發板（串口與聯網）](./mibox_x1_connect_guide_zh-hk.md) | 用 MobaXterm 連串口、確認系統啟動、連接 Wi-Fi、常見問題 |
-| 4 | [香港高校組作品代碼提交指南](./hk_code_submission_guide_zh-hk.md) | fork 後發 Pull Request，把快應用和原生應用提交到對應倉庫 |
+| 4 | [在 R528 MIBOX-X1 上運行 AI Agent（實驗）](./mibox_x1_ai_agent_guide_zh-hk.md) | 新建帶 ai_agent 的配置並編譯、聯網、設置大模型、和 Agent 對話、讀日誌排錯 |
+| 5 | [香港高校組作品代碼提交指南](./hk_code_submission_guide_zh-hk.md) | fork 後發 Pull Request，把快應用和原生應用提交到對應倉庫 |
 
 ## 開發板資料
 
@@ -24,4 +25,5 @@
 - 第一次接觸 openvela：先讀開發指南，再讀開發板使用指南。
 - 已經有開發板，想馬上燒錄運行：直接看開發板使用指南的第三、四節。
 - 板子燒錄好了，想用電腦連上看日誌、聯網：看連接開發板指南。
+- 想在開發板上試一試 AI Agent：看在開發板上運行 AI Agent 的指南（實驗性質，需要自己編譯固件）。
 - 作品做好了，要提交代碼：看作品代碼提交指南。
