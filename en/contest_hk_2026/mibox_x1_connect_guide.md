@@ -34,13 +34,15 @@ The port number changes with the computer and the USB port. If you do not see th
    | Data bits | 8 |
    | Stop bits | 1 |
    | Parity | None |
-   | Flow control | None |
+   | Flow control | Xon/Xoff |
 
    The Speed drop-down list may not contain 1500000. Type it into the box. Data bits, Stop bits, Parity and Flow control are on the **Advanced Serial settings** tab.
 4. Click **OK** to open the session.
 5. Press the RESET button on the board (SW1, item 13 in the interface diagram). The boot log scrolls in the window. If nothing appears, press Enter once in the window first.
 
-Set Flow control to None (no flow control).
+The screenshot below shows the settings we used. The Speed box in the picture cuts off the number; the value entered is `1500000`. The COM port number differs from computer to computer. We used Xon/Xoff for Flow control, and with these settings we saw the complete boot log.
+
+![MobaXterm serial session settings](../../zh-cn/contest_hk_2026/images/mobaxterm_serial_settings.png)
 
 ## III. Confirm That the System Has Started
 
@@ -57,7 +59,11 @@ NuttShell (NSH)
 nsh>
 ```
 
-Earlier in the log you can also find these lines, which tell you whether each part works:
+The screenshot below shows the boot log in MobaXterm, from the display driver to `nsh>`:
+
+![Boot log of the board](../../zh-cn/contest_hk_2026/images/mibox_x1_boot_log.png)
+
+The log also contains these lines, which tell you whether each part works:
 
 | Log content | Meaning |
 | ----------- | ------- |
@@ -116,9 +122,9 @@ The board can also act as a hotspot (AP mode). See the Wi-Fi part of Section V o
 | The port cannot be opened, or access is denied | Another program holds the COM port. Close it first. |
 | Output appears but is garbled | Whether Speed is `1500000`, with 8 data bits, 1 stop bit and no parity |
 | Nothing appears in the window | Whether DIP4 is ON; whether the cable is in port 12; press Enter once; then press the RESET button |
-| Keyboard input has no effect and the output is stuck | Whether Flow control is None; press the RESET button to restart, then look at the log again |
+| Keyboard input has no effect and the output is stuck | Press the RESET button to restart, then look at the log again. You can also try changing Flow control to None. |
 | The board does not start after flashing | Whether the flashing cable (port 11) has been unplugged; see Section IV of the [Development Board Guide](./mibox_x1_board_guide.md) |
 
 ## VI. Using Other Serial Tools
 
-The serial parameters are the same as above (1500000, 8 data bits, no parity, 1 stop bit, no flow control), so tools such as PuTTY and picocom also work. Just pick the right COM port or device name. The tool we have actually used and verified on Windows is MobaXterm.
+The serial parameters are the same as above (1500000, 8 data bits, no parity, 1 stop bit), so tools such as PuTTY and picocom also work. Just pick the right COM port or device name. The tool we have actually used and verified on Windows is MobaXterm.
