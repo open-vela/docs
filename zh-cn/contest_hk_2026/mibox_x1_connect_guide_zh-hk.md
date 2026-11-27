@@ -34,13 +34,15 @@
    | Data bits | 8 |
    | Stop bits | 1 |
    | Parity | None |
-   | Flow control | None |
+   | Flow control | Xon/Xoff |
 
    Speed 下拉列表裏不一定有 1500000，直接在輸入框裏輸入即可。Data bits、Stop bits、Parity 和 Flow control 在 **Advanced Serial settings** 頁籤裏。
 4. 點擊 **OK**，會話就打開了。
 5. 按開發板上的 RESET 鍵（SW1，接口圖 13 號），窗口裏會滾動出開機日誌。沒有日誌時，先在窗口裏按一下回車。
 
-Flow control 請選 None（不使用流控）。
+下圖是我們測試時的設置。圖中 Speed 框裏的數字顯示不全，實際填的是 `1500000`，COM 口號會因電腦而不同。Flow control 我們用的是 Xon/Xoff，在這個設置下看到了完整的啟動日誌。
+
+![MobaXterm 串口會話設置](images/mobaxterm_serial_settings.png)
 
 ## 三、確認系統啟動成功
 
@@ -57,7 +59,11 @@ NuttShell (NSH)
 nsh>
 ```
 
-在這之前的日誌裏還能看到這些信息，可以用來判斷各個部分是否正常：
+下圖是 MobaXterm 裏看到的啟動日誌，從屏幕驅動開始，到 `nsh>` 結束：
+
+![開發板啟動日誌](images/mibox_x1_boot_log.png)
+
+日誌裏還能看到這些信息，可以用來判斷各個部分是否正常：
 
 | 日誌內容 | 説明 |
 | -------- | ---- |
@@ -116,9 +122,9 @@ nsh> ping 8.8.8.8
 | 提示端口打不開或拒絕訪問 | COM 口被其他程序佔用，先關閉它們 |
 | 窗口裏有輸出，但全是亂碼 | Speed 是否是 `1500000`，數據位 8、停止位 1、校驗 None |
 | 窗口裏沒有任何輸出 | DIP4 是否在 ON；線是否接在 12 號口；先按一下回車；再按 RESET 鍵 |
-| 鍵盤輸入沒有反應，輸出停住不動 | Flow control 是否是 None；按 RESET 鍵重新啟動，再看日誌 |
+| 鍵盤輸入沒有反應，輸出停住不動 | 按 RESET 鍵重新啟動，再看日誌；也可以把 Flow control 換成 None 試一下 |
 | 燒錄完成後開發板起不來 | 燒寫線（11 號口）是否已經拔掉，見[開發板使用指南](./mibox_x1_board_guide_zh-hk.md)第四節 |
 
 ## 六、使用其他串口工具
 
-串口參數與上面相同（1500000、8 位數據位、無校驗、1 位停止位、無流控），所以 PuTTY、picocom 等工具也可以使用，只需要選對 COM 口或設備名。我們在 Windows 上實際使用並驗證過的是 MobaXterm。
+串口參數與上面相同（1500000、8 位數據位、無校驗、1 位停止位），所以 PuTTY、picocom 等工具也可以使用，只需要選對 COM 口或設備名。我們在 Windows 上實際使用並驗證過的是 MobaXterm。
